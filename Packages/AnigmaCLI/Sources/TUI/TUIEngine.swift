@@ -445,4 +445,20 @@ public actor TUIEngine {
 
         addToFrame(row: row, col: col, text: text)
     }
+
+    // MARK: - Error and Warning Display
+
+    public func renderError(row: Int, col: Int, message: String, maxWidth: Int? = nil) {
+        let fullText = "✗ Error: \(message)"
+        let displayMessage = maxWidth != nil ? String(fullText.prefix(maxWidth!)) : fullText
+        let errorText = styled(displayMessage, color: .red, style: .dim)
+        addToFrame(row: row, col: col, text: errorText)
+    }
+
+    public func renderWarning(row: Int, col: Int, message: String, maxWidth: Int? = nil) {
+        let fullText = "⚠ Warning: \(message)"
+        let displayMessage = maxWidth != nil ? String(fullText.prefix(maxWidth!)) : fullText
+        let warningText = styled(displayMessage, color: .yellow)
+        addToFrame(row: row, col: col, text: warningText)
+    }
 }
