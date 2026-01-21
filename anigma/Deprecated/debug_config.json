@@ -1,4 +1,0 @@
-{
-    "daemon": { "unix_socket": "/tmp/anigmad_debug.sock" },
-    "vault": { "root_path": "/tmp/anigmad_debug_vault" }
-}

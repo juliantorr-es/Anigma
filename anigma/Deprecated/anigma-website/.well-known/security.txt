@@ -1,5 +1,0 @@
-Contact: mailto:security@anigma.app
-Expires: 2026-12-31T23:59:59Z
-Preferred-Languages: en
-Policy: https://anigma.app/privacy
-Canonical: https://anigma.app/.well-known/security.txt

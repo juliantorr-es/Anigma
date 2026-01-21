@@ -78,6 +78,30 @@ run_*.swift
 dump-package.json
 Artifacts/
 
+# Transient/workflow artifacts
+.accessum-artifacts/
+.ml-worker-output/
+.remediation/
+.tools/
+.letta/
+bridge.pid
+build_bridge.pid
+build_mcp.pid
+diagnostic_output.txt
+diagnostic_output_v2.txt
+documentprocessing
+filtered_plan_summary.json
+function_params_*.json
+gemini.config.json
+.session-*.md
+session_*.json
+mcp_request.jsonl
+refactoring_analysis.json
+swiftlint_baseline.txt
+swiftlint_execution_summary.md
+swiftlint_master_execution_report.md
+swiftlint_progress_report.md
+
 # opencode scratch
 .opencode/.tmp/
 .opencode/worktrees/
