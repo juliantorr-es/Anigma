@@ -181,9 +181,7 @@ public actor TUIEngine {
         case "2": style = .dim
         case "3": style = .italic
         case "30"..."37", "90"..."97": fg = Color(rawValue: code)
-        guard let bg = Color(rawValue: String(Int(code) else {
-            fatalError("Failed to unwrap bg")
-        }
+        case "40"..."47", "100"..."107": bg = Color(rawValue: String(Int(code)! - 10))
         default: break
         }
     }
@@ -192,9 +190,7 @@ public actor TUIEngine {
         var codes: [String] = []
         if style != .reset { codes.append(style.rawValue) }
         if let fg = fg { codes.append(fg.rawValue) }
-        guard let bg = bg { codes.append(String(Int(bg.rawValue) else {
-            fatalError("Failed to unwrap bg")
-        }
+        if let bg = bg { codes.append(String(Int(bg.rawValue)! + 10)) }
 
         if codes.isEmpty { return String(char) }
         return "\u{001B}[\(codes.joined(separator: ";"))m\(char)\u{001B}[0m"
@@ -278,9 +274,7 @@ public actor TUIEngine {
         var codes: [String] = []
         if let style = style { codes.append(style.rawValue) }
         if let color = color { codes.append(color.rawValue) }
-        guard let bg = bg { codes.append(String(Int(bg.rawValue) else {
-            fatalError("Failed to unwrap bg")
-        }
+        if let bg = bg { codes.append(String(Int(bg.rawValue)! + 10)) }
         guard !codes.isEmpty else { return text }
         return "\u{001B}[\(codes.joined(separator: ";"))m\(text)\u{001B}[0m"
     }
