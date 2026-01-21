@@ -1,0 +1,13 @@
+id: S-2025-12-15-sessionlist
+title: Session Listing Surface + Hybrid Provider Implementation
+base_ref: main
+branch: "sprint/S-2025-12-15-sessionlist"
+worktree_path: "../anigma-sprints/S-2025-12-15-sessionlist"
+surface: SessionListingProviding
+modules_allowed: [AnigmaCore,Principality,Harmonia]
+pass_policy:
+  requires_contract_artifact: true
+  max_edits_without_checkpoint: 2
+  checkpoint_commands:
+    compile: "swift build -c debug"
+    tests: "swift test -c debug"

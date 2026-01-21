@@ -1,0 +1,51 @@
+graph TB
+    subgraph "Executables"
+        E1[harmonia-surface]
+        E2[harmonia]
+        E3[ml-worker]
+        E4[accessum-flow]
+    end
+    
+    subgraph "Capability Modules"
+        CM1[HarmoniaModule<br/>AI Governance]
+        CM2[DiaplasionModule<br/>Media Processing]
+        CM3[CodexModule<br/>Knowledge Management]
+        CM4[TranscriptumModule<br/>Education]
+        CM5[PragmaModule<br/>Project Management]
+        CM6[ConexusModule<br/>CRM]
+        CM7[ObservatoriumModule<br/>Monitoring]
+        CM8[PolytroposModule<br/>Media Processing]
+    end
+    
+    subgraph "Core Governance Layer"
+        CG1[AnigmaCore<br/>ECS Framework]
+        CG2[DatabaseCore<br/>SQLite Storage]
+        CG3[ContractsCore<br/>Contract Validation]
+        CG4[AnigmaPrimitives<br/>Base Types]
+    end
+    
+    E1 --> CM1
+    E2 --> CM1
+    E3 --> CM1
+    E4 --> CM1
+    
+    CM1 --> CG1
+    CM2 --> CG1
+    CM3 --> CG1
+    CM4 --> CG1
+    CM5 --> CG1
+    CM6 --> CG1
+    CM7 --> CG1
+    CM8 --> CG1
+    
+    CG1 --> CG2
+    CG1 --> CG3
+    CG1 --> CG4
+    
+    classDef core fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    classDef capability fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef executable fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    
+    class CG1,CG2,CG3,CG4 core
+    class CM1,CM2,CM3,CM4,CM5,CM6,CM7,CM8 capability
+    class E1,E2,E3,E4 executable

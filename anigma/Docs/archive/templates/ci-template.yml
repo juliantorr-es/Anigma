@@ -1,0 +1,52 @@
+name: Anigma Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Lint & Format
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: SwiftLint
+        run: swiftlint lint
+      - name: Swift Format Check
+        run: swift format lint -r Sources/ Packages/
+
+  tier-1-tests:
+    name: Tier 1 Tests (Governance)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Tier 1 Tests
+        run: ./Scripts/test_tier.sh 1
+
+  tier-2-tests:
+    name: Tier 2 Tests (Runtime)
+    runs-on: macos-latest
+    needs: tier-1-tests
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Tier 2 Tests
+        run: ./Scripts/test_tier.sh 2
+
+  tier-3-tests:
+    name: Tier 3 Tests (Capability)
+    runs-on: macos-latest
+    needs: tier-2-tests
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Tier 3 Tests
+        run: ./Scripts/test_tier.sh 3
+
+  build-products:
+    name: Build Executables
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build All Products
+        run: swift build -c release

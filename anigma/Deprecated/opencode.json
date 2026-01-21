@@ -1,0 +1,132 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "conductor",
+  "tools": {
+    "read": true,
+    "grep": true,
+    "glob": true,
+    "list": true,
+
+    "bash": false,
+    "write": false,
+    "edit": false,
+    "patch": false,
+
+    "inspect_repo": true,
+    "generate_patch": true,
+    "propose_patch": true,
+    "validate_patch": true,
+    "apply_patch": true,
+    "diagnose_patch_failure": true,
+
+    "swiftpm": true,
+    "swiftpm_log": true,
+    "build_binary": true,
+    "docs_patch": true,
+    "scratch_worktree": true,
+    "vitepress_build": true,
+    "worktree_create": true,
+    "worktree_remove": true,
+    "inspiration_patterns": true,
+    "binary_build_preflight": true,
+    "repo_clean_check": true,
+    "quarantine_patch": true,
+    "rollback_last_apply": true,
+    "commit_changes": true
+  },
+  "agent": {
+    "conductor": {
+      "mode": "primary",
+      "description": "Orchestrates Scout→Judge→Migrator→Integrator automatically; user stays in one seat",
+      "temperature": 0.1,
+      "tools": { "write": true, "edit": true, "bash": true },
+      "permission": { "edit": "ask", "bash": "ask" }
+    },
+
+    "build": { "disable": true },
+    "plan": { "disable": true }
+  },
+  "permission": {
+    "edit": "deny",
+    "bash": "deny",
+    "webfetch": "deny",
+    "doom_loop": "ask",
+    "external_directory": "ask",
+    
+    "anigma_swift6_check": "allow",
+    "anigma_type_authority_check": "allow", 
+    "anigma_deps_check": "allow",
+    "anigma_escape_hatches_check": "allow",
+    "anigma_macro_expansion_check": "allow",
+    "anigma_mainactor_drift_report": "allow",
+    "anigma_ci_all": "allow",
+    "gates": "allow",
+    "repo_diff": "allow",
+    "format_suggest": "allow",
+    "embeddings_single": "allow",
+    "embeddings_many": "allow",
+    
+    "inspect_repo": "allow",
+    "generate_patch": "allow",
+    "propose_patch": "allow",
+    "validate_patch": "allow",
+    "apply_patch": "allow",
+    "diagnose_patch_failure": "allow"
+  },
+  "agent": {
+    "plan": {
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "deny",
+        
+        "anigma_swift6_check": "allow",
+        "anigma_type_authority_check": "allow",
+        "anigma_deps_check": "allow",
+        "anigma_escape_hatches_check": "allow", 
+        "anigma_macro_expansion_check": "allow",
+        "anigma_mainactor_drift_report": "allow",
+        "anigma_ci_all": "allow",
+        "gates": "allow",
+        "repo_diff": "allow",
+        "format_suggest": "allow",
+        "embeddings_single": "allow",
+        "embeddings_many": "allow",
+        
+        "inspect_repo": "allow",
+        "generate_patch": "allow",
+        "propose_patch": "allow",
+        "validate_patch": "allow",
+        "apply_patch": "deny",
+        "diagnose_patch_failure": "allow"
+      }
+    },
+    "exec": {
+      "permission": {
+        "edit": "deny", 
+        "bash": "deny",
+        "webfetch": "deny",
+        
+        "anigma_swift6_check": "allow",
+        "anigma_type_authority_check": "allow",
+        "anigma_deps_check": "allow", 
+        "anigma_escape_hatches_check": "allow",
+        "anigma_macro_expansion_check": "allow",
+        "anigma_mainactor_drift_report": "allow",
+        "anigma_ci_all": "allow",
+        "gates": "allow",
+        "repo_diff": "allow",
+        "format_suggest": "allow",
+        "embeddings_single": "allow",
+        "embeddings_many": "allow",
+        
+        "inspect_repo": "allow",
+        "generate_patch": "allow",
+        "propose_patch": "allow",
+        "validate_patch": "allow",
+        "apply_patch": "allow",
+        "diagnose_patch_failure": "allow"
+      }
+    }
+  }
+}

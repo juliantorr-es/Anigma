@@ -1,0 +1,1334 @@
+[0/1] Planning build
+Building for debugging...
+[0/7] Write smoke-test-renderer-entitlement.plist
+[1/8] Write sources
+[5/9] Write swift-version--4D71668B4A4A6836.txt
+[7/10] Emitting module AnigmaPrimitives
+[8/12] Emitting module ContractsCore
+[9/12] Compiling ContractsCore UIContracts.swift
+[10/41] Compiling DatabaseCore GovernanceInvariantChecker.swift
+[11/41] Compiling DatabaseCore Hashing.swift
+[12/41] Compiling DatabaseCore JobQueue.swift
+[13/41] Compiling DatabaseCore MLOutputCache.swift
+[14/44] Compiling DatabaseCore ArtifactStore.swift
+[15/44] Compiling DatabaseCore ContentAddressedStore.swift
+[16/44] Compiling DatabaseCore ContentHashing.swift
+[17/44] Compiling DatabaseCore DatabaseActor+ContentAddressed.swift
+[18/44] Compiling DatabaseCore DatabaseActor+GarbageCollection.swift
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+GarbageCollection.swift:41:13: warning: no 'async' operations occur within 'await' expression
+39 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+40 |         
+41 |         try await execute("""
+   |             `- warning: no 'async' operations occur within 'await' expression
+42 |             INSERT INTO invariant_checks (
+43 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeLedgerSegmentationSchema() async throws {
+  8 |         // Create segment metadata table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS ledger_segments (
+ 11 |                 segment_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:22:13: warning: no 'async' operations occur within 'await' expression
+ 20 |         
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:23:13: warning: no 'async' operations occur within 'await' expression
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+ 25 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:24:13: warning: no 'async' operations occur within 'await' expression
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 25 |     }
+ 26 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:54:13: warning: variable 'currentSegmentDate' was written to, but never read
+ 52 |         // Process events into time-based segments
+ 53 |         var currentSegmentId: String?
+ 54 |         var currentSegmentDate: Date?
+    |             `- warning: variable 'currentSegmentDate' was written to, but never read
+ 55 |         
+ 56 |         for eventRow in eventRows {
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:87:17: warning: no 'async' operations occur within 'await' expression
+ 85 |             
+ 86 |             // Insert event into segment
+ 87 |             try await execute("""
+    |                 `- warning: no 'async' operations occur within 'await' expression
+ 88 |                 INSERT INTO ledger_segment_\(segmentId) (
+ 89 |                     event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:107:13: warning: no 'async' operations occur within 'await' expression
+105 |         
+106 |         // Close all migrated segments
+107 |         try await execute("UPDATE ledger_segments SET closed_at = ?, status = 'closed' WHERE closed_at IS NULL")
+    |             `- warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:110:13: warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+110 |         try await execute("ALTER TABLE master_ledger RENAME TO master_ledger_legacy_backup")
+    |             `- warning: no 'async' operations occur within 'await' expression
+111 |         
+112 |         let duration = Date().timeIntervalSince(startTime)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:132:13: warning: no 'async' operations occur within 'await' expression
+130 |         
+131 |         // Insert event into the active segment
+132 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+133 |             INSERT OR REPLACE INTO ledger_segment_\(activeSegment.segmentId) (
+134 |                 event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:149:13: warning: no 'async' operations occur within 'await' expression
+147 |         
+148 |         // Update segment event count
+149 |         try await execute(
+    |             `- warning: no 'async' operations occur within 'await' expression
+150 |             "UPDATE ledger_segments SET event_count = event_count + 1 WHERE segment_id = ?",
+151 |             parameters: [.text(activeSegment.segmentId)]
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:174:13: warning: no 'async' operations occur within 'await' expression
+172 |     private func createLedgerSegment(segmentId: String, createdAt: Date) async throws {
+173 |         // Create segment table
+174 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+175 |             CREATE TABLE IF NOT EXISTS ledger_segment_\(segmentId) (
+176 |                 event_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:188:13: warning: no 'async' operations occur within 'await' expression
+186 |         
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:189:13: warning: no 'async' operations occur within 'await' expression
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:190:13: warning: no 'async' operations occur within 'await' expression
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+192 |         
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:191:13: warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:194:13: warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+194 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+195 |             INSERT INTO ledger_segments (segment_id, created_at)
+196 |             VALUES (?, ?)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeMaintenanceSchema() async throws {
+  8 |         // Create maintenance history table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS maintenance_history (
+ 11 |                 operation_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:21:13: warning: no 'async' operations occur within 'await' expression
+ 19 |         
+ 20 |         // Create invariant checks table for governance compliance
+ 21 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 22 |             CREATE TABLE IF NOT EXISTS invariant_checks (
+ 23 |                 check_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:32:13: warning: no 'async' operations occur within 'await' expression
+ 30 |         
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+ 34 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:33:13: warning: no 'async' operations occur within 'await' expression
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 34 |     }
+ 35 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:143:13: warning: no 'async' operations occur within 'await' expression
+141 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+142 |         
+143 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+144 |             INSERT INTO invariant_checks (
+145 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+MasterLedger.swift:129:13: warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+127 |         // Compute hashes
+128 |         let preconditionHash = preconditionData.map { ContentHashing.computeSHA256($0) }
+129 |         let fileHashBefore = fileBeforeData.map { ContentHashing.computeSHA256($0) }
+    |             `- warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+130 |         
+131 |         var resultContentHash: String?
+[19/44] Compiling DatabaseCore DatabaseActor+LedgerSegmentation.swift
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+GarbageCollection.swift:41:13: warning: no 'async' operations occur within 'await' expression
+39 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+40 |         
+41 |         try await execute("""
+   |             `- warning: no 'async' operations occur within 'await' expression
+42 |             INSERT INTO invariant_checks (
+43 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeLedgerSegmentationSchema() async throws {
+  8 |         // Create segment metadata table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS ledger_segments (
+ 11 |                 segment_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:22:13: warning: no 'async' operations occur within 'await' expression
+ 20 |         
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:23:13: warning: no 'async' operations occur within 'await' expression
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+ 25 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:24:13: warning: no 'async' operations occur within 'await' expression
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 25 |     }
+ 26 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:54:13: warning: variable 'currentSegmentDate' was written to, but never read
+ 52 |         // Process events into time-based segments
+ 53 |         var currentSegmentId: String?
+ 54 |         var currentSegmentDate: Date?
+    |             `- warning: variable 'currentSegmentDate' was written to, but never read
+ 55 |         
+ 56 |         for eventRow in eventRows {
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:87:17: warning: no 'async' operations occur within 'await' expression
+ 85 |             
+ 86 |             // Insert event into segment
+ 87 |             try await execute("""
+    |                 `- warning: no 'async' operations occur within 'await' expression
+ 88 |                 INSERT INTO ledger_segment_\(segmentId) (
+ 89 |                     event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:107:13: warning: no 'async' operations occur within 'await' expression
+105 |         
+106 |         // Close all migrated segments
+107 |         try await execute("UPDATE ledger_segments SET closed_at = ?, status = 'closed' WHERE closed_at IS NULL")
+    |             `- warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:110:13: warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+110 |         try await execute("ALTER TABLE master_ledger RENAME TO master_ledger_legacy_backup")
+    |             `- warning: no 'async' operations occur within 'await' expression
+111 |         
+112 |         let duration = Date().timeIntervalSince(startTime)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:132:13: warning: no 'async' operations occur within 'await' expression
+130 |         
+131 |         // Insert event into the active segment
+132 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+133 |             INSERT OR REPLACE INTO ledger_segment_\(activeSegment.segmentId) (
+134 |                 event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:149:13: warning: no 'async' operations occur within 'await' expression
+147 |         
+148 |         // Update segment event count
+149 |         try await execute(
+    |             `- warning: no 'async' operations occur within 'await' expression
+150 |             "UPDATE ledger_segments SET event_count = event_count + 1 WHERE segment_id = ?",
+151 |             parameters: [.text(activeSegment.segmentId)]
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:174:13: warning: no 'async' operations occur within 'await' expression
+172 |     private func createLedgerSegment(segmentId: String, createdAt: Date) async throws {
+173 |         // Create segment table
+174 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+175 |             CREATE TABLE IF NOT EXISTS ledger_segment_\(segmentId) (
+176 |                 event_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:188:13: warning: no 'async' operations occur within 'await' expression
+186 |         
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:189:13: warning: no 'async' operations occur within 'await' expression
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:190:13: warning: no 'async' operations occur within 'await' expression
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+192 |         
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:191:13: warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:194:13: warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+194 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+195 |             INSERT INTO ledger_segments (segment_id, created_at)
+196 |             VALUES (?, ?)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeMaintenanceSchema() async throws {
+  8 |         // Create maintenance history table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS maintenance_history (
+ 11 |                 operation_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:21:13: warning: no 'async' operations occur within 'await' expression
+ 19 |         
+ 20 |         // Create invariant checks table for governance compliance
+ 21 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 22 |             CREATE TABLE IF NOT EXISTS invariant_checks (
+ 23 |                 check_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:32:13: warning: no 'async' operations occur within 'await' expression
+ 30 |         
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+ 34 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:33:13: warning: no 'async' operations occur within 'await' expression
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 34 |     }
+ 35 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:143:13: warning: no 'async' operations occur within 'await' expression
+141 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+142 |         
+143 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+144 |             INSERT INTO invariant_checks (
+145 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+MasterLedger.swift:129:13: warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+127 |         // Compute hashes
+128 |         let preconditionHash = preconditionData.map { ContentHashing.computeSHA256($0) }
+129 |         let fileHashBefore = fileBeforeData.map { ContentHashing.computeSHA256($0) }
+    |             `- warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+130 |         
+131 |         var resultContentHash: String?
+[20/44] Compiling DatabaseCore DatabaseActor+Maintenance.swift
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+GarbageCollection.swift:41:13: warning: no 'async' operations occur within 'await' expression
+39 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+40 |         
+41 |         try await execute("""
+   |             `- warning: no 'async' operations occur within 'await' expression
+42 |             INSERT INTO invariant_checks (
+43 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeLedgerSegmentationSchema() async throws {
+  8 |         // Create segment metadata table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS ledger_segments (
+ 11 |                 segment_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:22:13: warning: no 'async' operations occur within 'await' expression
+ 20 |         
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:23:13: warning: no 'async' operations occur within 'await' expression
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+ 25 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:24:13: warning: no 'async' operations occur within 'await' expression
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 25 |     }
+ 26 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:54:13: warning: variable 'currentSegmentDate' was written to, but never read
+ 52 |         // Process events into time-based segments
+ 53 |         var currentSegmentId: String?
+ 54 |         var currentSegmentDate: Date?
+    |             `- warning: variable 'currentSegmentDate' was written to, but never read
+ 55 |         
+ 56 |         for eventRow in eventRows {
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:87:17: warning: no 'async' operations occur within 'await' expression
+ 85 |             
+ 86 |             // Insert event into segment
+ 87 |             try await execute("""
+    |                 `- warning: no 'async' operations occur within 'await' expression
+ 88 |                 INSERT INTO ledger_segment_\(segmentId) (
+ 89 |                     event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:107:13: warning: no 'async' operations occur within 'await' expression
+105 |         
+106 |         // Close all migrated segments
+107 |         try await execute("UPDATE ledger_segments SET closed_at = ?, status = 'closed' WHERE closed_at IS NULL")
+    |             `- warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:110:13: warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+110 |         try await execute("ALTER TABLE master_ledger RENAME TO master_ledger_legacy_backup")
+    |             `- warning: no 'async' operations occur within 'await' expression
+111 |         
+112 |         let duration = Date().timeIntervalSince(startTime)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:132:13: warning: no 'async' operations occur within 'await' expression
+130 |         
+131 |         // Insert event into the active segment
+132 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+133 |             INSERT OR REPLACE INTO ledger_segment_\(activeSegment.segmentId) (
+134 |                 event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:149:13: warning: no 'async' operations occur within 'await' expression
+147 |         
+148 |         // Update segment event count
+149 |         try await execute(
+    |             `- warning: no 'async' operations occur within 'await' expression
+150 |             "UPDATE ledger_segments SET event_count = event_count + 1 WHERE segment_id = ?",
+151 |             parameters: [.text(activeSegment.segmentId)]
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:174:13: warning: no 'async' operations occur within 'await' expression
+172 |     private func createLedgerSegment(segmentId: String, createdAt: Date) async throws {
+173 |         // Create segment table
+174 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+175 |             CREATE TABLE IF NOT EXISTS ledger_segment_\(segmentId) (
+176 |                 event_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:188:13: warning: no 'async' operations occur within 'await' expression
+186 |         
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:189:13: warning: no 'async' operations occur within 'await' expression
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:190:13: warning: no 'async' operations occur within 'await' expression
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+192 |         
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:191:13: warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:194:13: warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+194 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+195 |             INSERT INTO ledger_segments (segment_id, created_at)
+196 |             VALUES (?, ?)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeMaintenanceSchema() async throws {
+  8 |         // Create maintenance history table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS maintenance_history (
+ 11 |                 operation_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:21:13: warning: no 'async' operations occur within 'await' expression
+ 19 |         
+ 20 |         // Create invariant checks table for governance compliance
+ 21 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 22 |             CREATE TABLE IF NOT EXISTS invariant_checks (
+ 23 |                 check_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:32:13: warning: no 'async' operations occur within 'await' expression
+ 30 |         
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+ 34 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:33:13: warning: no 'async' operations occur within 'await' expression
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 34 |     }
+ 35 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:143:13: warning: no 'async' operations occur within 'await' expression
+141 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+142 |         
+143 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+144 |             INSERT INTO invariant_checks (
+145 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+MasterLedger.swift:129:13: warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+127 |         // Compute hashes
+128 |         let preconditionHash = preconditionData.map { ContentHashing.computeSHA256($0) }
+129 |         let fileHashBefore = fileBeforeData.map { ContentHashing.computeSHA256($0) }
+    |             `- warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+130 |         
+131 |         var resultContentHash: String?
+[21/44] Compiling DatabaseCore DatabaseActor+MasterLedger.swift
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+GarbageCollection.swift:41:13: warning: no 'async' operations occur within 'await' expression
+39 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+40 |         
+41 |         try await execute("""
+   |             `- warning: no 'async' operations occur within 'await' expression
+42 |             INSERT INTO invariant_checks (
+43 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeLedgerSegmentationSchema() async throws {
+  8 |         // Create segment metadata table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS ledger_segments (
+ 11 |                 segment_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:22:13: warning: no 'async' operations occur within 'await' expression
+ 20 |         
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:23:13: warning: no 'async' operations occur within 'await' expression
+ 21 |         // Create indexes for segment metadata
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+ 25 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:24:13: warning: no 'async' operations occur within 'await' expression
+ 22 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+ 23 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+ 24 |         try await execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 25 |     }
+ 26 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:54:13: warning: variable 'currentSegmentDate' was written to, but never read
+ 52 |         // Process events into time-based segments
+ 53 |         var currentSegmentId: String?
+ 54 |         var currentSegmentDate: Date?
+    |             `- warning: variable 'currentSegmentDate' was written to, but never read
+ 55 |         
+ 56 |         for eventRow in eventRows {
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:87:17: warning: no 'async' operations occur within 'await' expression
+ 85 |             
+ 86 |             // Insert event into segment
+ 87 |             try await execute("""
+    |                 `- warning: no 'async' operations occur within 'await' expression
+ 88 |                 INSERT INTO ledger_segment_\(segmentId) (
+ 89 |                     event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:107:13: warning: no 'async' operations occur within 'await' expression
+105 |         
+106 |         // Close all migrated segments
+107 |         try await execute("UPDATE ledger_segments SET closed_at = ?, status = 'closed' WHERE closed_at IS NULL")
+    |             `- warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:110:13: warning: no 'async' operations occur within 'await' expression
+108 |         
+109 |         // Rename original master ledger table as backup before replacement
+110 |         try await execute("ALTER TABLE master_ledger RENAME TO master_ledger_legacy_backup")
+    |             `- warning: no 'async' operations occur within 'await' expression
+111 |         
+112 |         let duration = Date().timeIntervalSince(startTime)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:132:13: warning: no 'async' operations occur within 'await' expression
+130 |         
+131 |         // Insert event into the active segment
+132 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+133 |             INSERT OR REPLACE INTO ledger_segment_\(activeSegment.segmentId) (
+134 |                 event_id, agent_id, workflow_id, event_type, timestamp,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:149:13: warning: no 'async' operations occur within 'await' expression
+147 |         
+148 |         // Update segment event count
+149 |         try await execute(
+    |             `- warning: no 'async' operations occur within 'await' expression
+150 |             "UPDATE ledger_segments SET event_count = event_count + 1 WHERE segment_id = ?",
+151 |             parameters: [.text(activeSegment.segmentId)]
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:174:13: warning: no 'async' operations occur within 'await' expression
+172 |     private func createLedgerSegment(segmentId: String, createdAt: Date) async throws {
+173 |         // Create segment table
+174 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+175 |             CREATE TABLE IF NOT EXISTS ledger_segment_\(segmentId) (
+176 |                 event_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:188:13: warning: no 'async' operations occur within 'await' expression
+186 |         
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:189:13: warning: no 'async' operations occur within 'await' expression
+187 |         // Create indexes on segment
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:190:13: warning: no 'async' operations occur within 'await' expression
+188 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+192 |         
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:191:13: warning: no 'async' operations occur within 'await' expression
+189 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+190 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+191 |         try await execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+LedgerSegmentation.swift:194:13: warning: no 'async' operations occur within 'await' expression
+192 |         
+193 |         // Register segment in metadata table
+194 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+195 |             INSERT INTO ledger_segments (segment_id, created_at)
+196 |             VALUES (?, ?)
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:9:13: warning: no 'async' operations occur within 'await' expression
+  7 |     func initializeMaintenanceSchema() async throws {
+  8 |         // Create maintenance history table
+  9 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 10 |             CREATE TABLE IF NOT EXISTS maintenance_history (
+ 11 |                 operation_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:21:13: warning: no 'async' operations occur within 'await' expression
+ 19 |         
+ 20 |         // Create invariant checks table for governance compliance
+ 21 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 22 |             CREATE TABLE IF NOT EXISTS invariant_checks (
+ 23 |                 check_id TEXT PRIMARY KEY,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:32:13: warning: no 'async' operations occur within 'await' expression
+ 30 |         
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+ 34 |     }
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:33:13: warning: no 'async' operations occur within 'await' expression
+ 31 |         // Create indexes
+ 32 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+ 33 |         try await execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 34 |     }
+ 35 |     
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+Maintenance.swift:143:13: warning: no 'async' operations occur within 'await' expression
+141 |         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
+142 |         
+143 |         try await execute("""
+    |             `- warning: no 'async' operations occur within 'await' expression
+144 |             INSERT INTO invariant_checks (
+145 |                 check_id, timestamp, passed, details_json,
+
+/Users/user/Developer/GitHub/Anigma/Sources/DatabaseCore/DatabaseActor+MasterLedger.swift:129:13: warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+127 |         // Compute hashes
+128 |         let preconditionHash = preconditionData.map { ContentHashing.computeSHA256($0) }
+129 |         let fileHashBefore = fileBeforeData.map { ContentHashing.computeSHA256($0) }
+    |             `- warning: initialization of immutable value 'fileHashBefore' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+130 |         
+131 |         var resultContentHash: String?
+[22/44] Compiling DatabaseCore MasterLedgerSegmentation.swift
+[23/44] Compiling DatabaseCore MasterLedgerStore.swift
+[24/44] Compiling DatabaseCore ReceiptStore.swift
+[25/44] Compiling DatabaseCore RetentionPolicySupport.swift
+[26/44] Compiling DatabaseCore DatabaseMaintenanceScheduler.swift
+[27/44] Compiling DatabaseCore DatabaseParameter+Extensions.swift
+[28/44] Compiling DatabaseCore DatabaseValue+Extensions.swift
+[29/44] Compiling DatabaseCore GarbageCollectorEngine.swift
+[30/44] Compiling DatabaseCore HybridRetrieveQuery.swift
+[31/44] Compiling DatabaseCore RetrievalModels.swift
+[32/44] Compiling DatabaseCore SQLitePolicy.swift
+[33/44] Compiling DatabaseCore SemanticSearchManager.swift
+[34/44] Emitting module DatabaseCore
+[35/44] Compiling DatabaseCore DatabaseActor.swift
+[36/44] Compiling DatabaseCore DatabaseConfiguration.swift
+[37/44] Compiling DatabaseCore DatabaseHousekeeping.swift
+[38/44] Compiling DatabaseCore DatabaseLoopEvidenceRecorder.swift
+[39/44] Compiling DatabaseCore SessionDatabaseMerger.swift
+[40/44] Compiling DatabaseCore SessionDatabaseStore.swift
+[41/44] Compiling DatabaseCore TestDatabase.swift
+[42/133] Compiling AnigmaCore PDFProcessing.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[43/133] Compiling AnigmaCore PipelineContractRegistry.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[44/133] Compiling AnigmaCore PipelineECS.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[45/133] Compiling AnigmaCore PipelineGraph.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[46/133] Compiling AnigmaCore PipelineModule.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[47/133] Compiling AnigmaCore PipelineRunner.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[48/133] Compiling AnigmaCore PipelineStatus.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[49/133] Compiling AnigmaCore PipelineStatusSerializer.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[50/133] Compiling AnigmaCore PluginSystem.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[51/133] Compiling AnigmaCore AccessControl.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[52/133] Compiling AnigmaCore AuditLog.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[53/133] Compiling AnigmaCore DataLifecycle.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[54/145] Compiling AnigmaCore System.swift
+[55/145] Compiling AnigmaCore World.swift
+[56/145] Compiling AnigmaCore Governance.swift
+[57/145] Compiling AnigmaCore StateAccess.swift
+[58/145] Compiling AnigmaCore Identity.swift
+[59/145] Compiling AnigmaCore AnigmaPlatform.swift
+[60/145] Compiling AnigmaCore SecuredWorld.swift
+[61/145] Compiling AnigmaCore Job.swift
+[62/145] Compiling AnigmaCore Scheduler.swift
+[63/145] Compiling AnigmaCore Workflow.swift
+[64/145] Compiling AnigmaCore AINodes.swift
+[65/145] Compiling AnigmaCore ArtifactStore.swift
+[66/145] Compiling AnigmaCore EmbedTextContract.swift
+[67/145] Compiling AnigmaCore HardeningAttestationContract.swift
+[68/145] Compiling AnigmaCore HybridSearchContract.swift
+[69/145] Compiling AnigmaCore IndexEmbeddingsContract.swift
+[70/145] Compiling AnigmaCore PDFExtractContract.swift
+[71/145] Compiling AnigmaCore PDFIngestContract.swift
+[72/145] Compiling AnigmaCore PDFQACheckContract.swift
+[73/145] Compiling AnigmaCore PDFSegmentContract.swift
+[74/145] Compiling AnigmaCore RunSwiftTestsContract.swift
+[75/145] Compiling AnigmaCore SharedPDFTypes.swift
+[76/145] Compiling AnigmaCore GrapheneCore.swift
+[77/145] Compiling AnigmaCore GrapheneEngine.swift
+[78/145] Compiling AnigmaCore GrapheneInferenceBridge.swift
+[79/145] Compiling AnigmaCore GraphenePrimitives.swift
+[80/145] Compiling AnigmaCore GrapheneProfiling.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[81/145] Compiling AnigmaCore GrapheneRegistry.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[82/145] Compiling AnigmaCore GrapheneStreaming.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[83/145] Compiling AnigmaCore GrapheneSubgraph.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[84/145] Compiling AnigmaCore GrapheneVerticalSlice.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[85/145] Compiling AnigmaCore MLWorkerEmbeddingComputer.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[86/145] Compiling AnigmaCore MLWorkerInterface.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[87/145] Compiling AnigmaCore MetopticonDashboard.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[88/145] Compiling AnigmaCore MetopticonIntegration.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[89/145] Compiling AnigmaCore MetopticonManifest.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[90/145] Compiling AnigmaCore MetopticonModule.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[91/145] Compiling AnigmaCore MetopticonRBAC.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[92/145] Compiling AnigmaCore MetopticonRunner.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[93/145] Compiling AnigmaCore LifecycleManagerDebug.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[94/145] Compiling AnigmaCore AdversarialScenarios.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[95/145] Compiling AnigmaCore ContinuousReasoning.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[96/145] Compiling AnigmaCore DomainPuzzleBuilders.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[97/145] Compiling AnigmaCore DomainReasoningIntegration.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[98/145] Compiling AnigmaCore IRService.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[99/145] Compiling AnigmaCore MakerEngine.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[100/145] Compiling AnigmaCore MakerEnhancementLayer.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[101/145] Compiling AnigmaCore MakerEnhancementSupport.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[102/145] Compiling AnigmaCore MakerReceipt.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[103/145] Compiling AnigmaCore MetaPuzzles.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[104/145] Compiling AnigmaCore PuzzleBuilders.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:269:20: warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 267 |             // Execute selected candidate or return failure
+ 268 |             let output: StepOutput
+ 269 |             if let selectedCandidateId = decision.selectedCandidate {
+     |                    `- warning: value 'selectedCandidateId' was defined but never used; consider replacing with boolean test [#no-usage]
+ 270 |                 guard let selectedCandidate else {
+ 271 |                     throw MakerEngineError.selectedCandidateNotFound
+
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Reasoning/MakerEngine.swift:1047:13: warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1045 |         let inputHash = enhancementContext.inputHash
+1046 |         let deterministicStepId = enhancementContext.deterministicStepId
+1047 |         let determinismContext = enhancementContext.determinismContext
+     |             `- warning: initialization of immutable value 'determinismContext' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+1048 | 
+1049 |         let adapterIdentifiers = currentAdapterIdentifiers()
+[105/145] Compiling AnigmaCore ReasoningIntegration.swift
+[106/145] Compiling AnigmaCore ReasoningKernel.swift
+[107/145] Compiling AnigmaCore ReasoningOrchestrator.swift
+[108/145] Compiling AnigmaCore TwoTierReasoning.swift
+[109/145] Compiling AnigmaCore CryptographicSecurity.swift
+[110/145] Compiling AnigmaCore ExplainableAI.swift
+[111/145] Compiling AnigmaCore ModelIntegrity.swift
+[112/145] Compiling AnigmaCore PolicyEnforcement.swift
+[113/145] Compiling AnigmaCore Security.swift
+[114/145] Compiling AnigmaCore SecurityHardening.swift
+[115/145] Compiling AnigmaCore VulnerabilityDisclosure.swift
+[116/145] Compiling AnigmaCore Storage.swift
+[117/145] Emitting module AnigmaCore
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Pipeline/PipelineRunner.swift:62:24: warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 60 |     
+ 61 |     /// Convenience initializer for lightweight test setups.
+ 62 |     public convenience init(engine: GrapheneEngine) async throws {
+    |                        `- warning: initializers in actors are not marked with 'convenience'; this is an error in the Swift 6 language mode
+ 63 |         let database = DatabaseActor(dbPath: ":memory:")
+ 64 |         let plan = PipelinePlan(
+[118/145] Compiling AnigmaCore AnigmaCoreAdapters.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[119/145] Compiling AnigmaCore CampaignPlanners.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[120/145] Compiling AnigmaCore PatternDetectors.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[121/145] Compiling AnigmaCore ReflexiveAnalytics.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[122/145] Compiling AnigmaCore AnigmaCore.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[123/145] Compiling AnigmaCore Automation.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[124/145] Compiling AnigmaCore Compliance.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[125/145] Compiling AnigmaCore ContinuousMonitoring.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[126/145] Compiling AnigmaCore ControlCatalog.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[127/145] Compiling AnigmaCore ControlImplementation.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[128/145] Compiling AnigmaCore DocumentGeneration.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[129/145] Compiling AnigmaCore SharedComponents.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[130/145] Compiling AnigmaCore EntityId.swift
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaCore/Analytics/ReflexiveAnalytics.swift:369:9: warning: default will never be executed
+367 |         case .resourceExhausted, .timeout:
+368 |             return .resource
+369 |         default:
+    |         `- warning: default will never be executed
+370 |             return .other
+371 |         }
+[131/145] Compiling AnigmaCore SyncInfrastructure.swift
+[132/145] Compiling AnigmaCore Tenant.swift
+[133/145] Compiling AnigmaCore Checkpointing.swift
+[134/145] Compiling AnigmaCore MigrationEngine.swift
+[135/145] Compiling AnigmaCore UpdateCodexIntegration.swift
+[136/145] Compiling AnigmaCore UpdateIntegration.swift
+[137/145] Compiling AnigmaCore UpdateObservability.swift
+[138/145] Compiling AnigmaCore UpdateOrchestrator.swift
+[139/145] Compiling AnigmaCore UpdateService.swift
+[140/145] Compiling AnigmaCore VersionManagement.swift
+[141/145] Compiling AnigmaCore Errors.swift
+[142/145] Compiling AnigmaCore Logging.swift
+[143/147] Emitting module AnigmaClientKit
+[144/147] Compiling AnigmaClientKit AnigmaClient.swift
+[145/149] Compiling SmokeTestRenderer main.swift
+[146/149] Emitting module SmokeTestRenderer
+[146/149] Write Objects.LinkFileList
+[147/149] Linking smoke-test-renderer
+[148/149] Applying smoke-test-renderer
+Build of product 'smoke-test-renderer' complete! (15.78s)

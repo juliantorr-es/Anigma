@@ -1,0 +1,1776 @@
+// swift-tools-version: 5.9
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
+import PackageDescription
+
+let strictConcurrencySettings: [SwiftSetting] = [
+    .unsafeFlags(["-strict-concurrency=minimal"])
+]
+
+let coreProducts: [Product] = [
+    .library(name: "AnigmaCore", targets: ["AnigmaCore"]),
+    .library(name: "AnigmaPrimitives", targets: ["AnigmaPrimitives"]),
+    .library(name: "CapsuleCore", targets: ["CapsuleCore"]),
+    .library(name: "DatabaseCore", targets: ["DatabaseCore"]),
+    .library(name: "ContractsCore", targets: ["ContractsCore"]),
+    .library(name: "StorageCore", targets: ["StorageCore"]),
+    .library(name: "CapabilityCore", targets: ["CapabilityCore"]),
+    .library(name: "DoctrineCore", targets: ["DoctrineCore"]),
+    .library(name: "SecurityEventsManager", targets: ["SecurityEventsManager"]),
+    .library(name: "TelemetryCore", targets: ["TelemetryCore"]),
+    .library(name: "ExecutionCore", targets: ["ExecutionCore"]),
+    .library(name: "InferenceCore", targets: ["InferenceCore"]),
+    .library(name: "CanonicalTokenizer", targets: ["CanonicalTokenizer"]),
+    .library(name: "AnigmaASTServices", targets: ["AnigmaASTServicesCore"]),
+    .library(name: "AnigmaASTServicesCore", targets: ["AnigmaASTServicesCore"]),
+    .library(name: "PlatformCore", targets: ["PlatformCore"]),
+    .library(name: "AnigmaClientKit", targets: ["AnigmaClientKit"]),
+    .library(name: "AnigmaHostKit", targets: ["AnigmaHostKit"]),
+    .library(name: "AnigmaHostMac", targets: ["AnigmaHostMac"]),
+    .library(name: "AnigmaSidecar", targets: ["AnigmaSidecar"]),
+    .library(name: "AnigmaSystemSpine", targets: ["AnigmaSystemSpine"]),
+    .library(name: "DataCore", targets: ["DataCore"]),
+    .library(name: "DataEngine", targets: ["DataEngine"]),
+    .library(name: "RendererKit", targets: ["RendererKit"]),
+    .library(name: "DataUI", targets: ["DataUI"]),
+    .library(name: "AnigmaTUI", targets: ["AnigmaTUI"]),
+    .library(name: "Workflows", targets: ["Workflows"]),
+    .library(name: "ExportCore", targets: ["ExportCore"]),
+    .library(name: "ExportUI", targets: ["ExportUI"]),
+    .library(name: "AnigmaWork", targets: ["AnigmaWork"]),
+    // Native Capability Modules
+    .library(name: "DocumentIRKit", targets: ["DocumentIRKit"]),
+    .library(name: "ContainerKit", targets: ["ContainerKit"]),
+    .library(name: "OOXMLKit", targets: ["OOXMLKit"]),
+    .library(name: "DocumentRenderKit", targets: ["DocumentRenderKit"]), // Native PDF/Vector
+    .library(name: "TypographyKit", targets: ["TypographyKit"]),
+    .library(name: "ColorKit", targets: ["ColorKit"]),
+    .library(name: "VectorOpsKit", targets: ["VectorOpsKit"]),
+    .library(name: "CompressionKit", targets: ["CompressionKit"]),
+    .library(name: "TextChunkingCapsule", targets: ["TextChunkingCapsule"]),
+    .library(name: "AnimationKit", targets: ["AnimationKit"]),
+    .library(name: "ObservabilityKit", targets: ["ObservabilityKit"]),
+    // Sidecar Capability Modules
+    .library(name: "SidecarOfficeService", targets: ["SidecarOfficeService"]),
+    .library(name: "SidecarPDFService", targets: ["SidecarPDFService"]),
+    .library(name: "SidecarTranslateService", targets: ["SidecarTranslateService"]),
+    .library(name: "AnigmaNativeShims", targets: ["AnigmaNativeShims"])
+]
+
+let executableProducts: [Product] = [
+    .executable(name: "harmonia-surface", targets: ["HarmoniaSurface"]),
+    .executable(name: "doctrine", targets: ["DoctrineCLI"]),
+    .executable(name: "outlineum-zine", targets: ["OutlineumZine"]),
+    .executable(name: "diaplasion-pipeline", targets: ["DiaplasionPipeline"]),
+    .executable(name: "accessum-flow", targets: ["AccessumFlow"]),
+    .executable(name: "ml-worker", targets: ["MLWorkerExecutable"]),
+    .executable(name: "anigma-ast-services", targets: ["anigma-ast-services"]),
+    .executable(name: "anigma", targets: ["AnigmaCLIExecutable"]),
+    // .executable(name: "smoke-test-renderer", targets: ["SmokeTestRenderer"]),
+    .executable(name: "anigma-app", targets: ["AnigmaAppMac"]),
+    .executable(name: "anigma-mcp", targets: ["AnigmaMCPExecutable"]),
+    .executable(name: "anigma-gemini-bridge", targets: ["AnigmaGeminiBridge"])
+]
+
+let capabilityProducts: [Product] = [
+    .library(name: "HarmoniaModule", targets: ["HarmoniaModule"]),
+    .library(name: "DiaplasionModule", targets: ["DiaplasionModule"]),
+    .library(name: "AccessumModule", targets: ["AccessumModule"]),
+    .library(name: "OutlineumModule", targets: ["OutlineumModule"]),
+    .library(name: "PragmaModule", targets: ["PragmaModule"]),
+    .library(name: "ConexusModule", targets: ["ConexusModule"]),
+    .library(name: "CodexModule", targets: ["CodexModule"]),
+    .library(name: "TranscriptumModule", targets: ["TranscriptumModule"]),
+    .library(name: "ObservatoriumModule", targets: ["ObservatoriumModule"]),
+    .library(name: "PolytroposModule", targets: ["PolytroposModule"]),
+    .library(name: "VectorumModule", targets: ["VectorumModule"]),
+    .library(name: "PraxisCore", targets: ["PraxisCore"]),
+    .library(name: "CathedralModule", targets: ["CathedralModule"]),
+    .library(name: "ContextumModule", targets: ["ContextumModule"]),
+    .library(name: "ArtifactStoreModule", targets: ["ArtifactStoreModule"]),
+    .library(name: "ModelRegistryModule", targets: ["ModelRegistryModule"]),
+    .library(name: "AnigmaAgents", targets: ["AnigmaAgents"]),
+    .library(name: "AnigmaAIConsole", targets: ["AnigmaAIConsole"]),
+    .executable(name: "harmonia", targets: ["HarmoniaCLI"]),
+    .executable(name: "anigmad", targets: ["AnigmaDaemon"]),
+    .library(name: "AnigmaMCPModule", targets: ["AnigmaMCPModule"])
+]
+
+let testSupportTargets: [Target] = [
+    .target(
+        name: "AnigmaTestSupport",
+        dependencies: [
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            "ContractsCore",
+            "DatabaseCore",
+            "PolytroposModule"
+        ],
+        path: "Packages/AnigmaTestSupport",
+        swiftSettings: strictConcurrencySettings
+    )
+]
+
+let coreTargets: [Target] = [
+    // System library targets for C bindings
+    .systemLibrary(
+        name: "CHarfBuzz", path: "Packages/CHarfBuzz",
+        pkgConfig: "harfbuzz",
+        providers: [
+            .apt(["libharfbuzz-dev"]),
+            .brew(["harfbuzz"])
+        ]
+    ),
+    .systemLibrary(
+        name: "CFreeType", path: "Packages/CFreeType",
+        pkgConfig: "freetype2",
+        providers: [
+            .apt(["libfreetype6-dev"]),
+            .brew(["freetype"])
+        ]
+    ),
+    .target(
+        name: "CClipper2",
+        dependencies: [],
+        path: "Packages/CClipper2",
+        sources: [
+            "clipper2_wrapper.cpp",
+            "Clipper2/CPP/Clipper2Lib/src/clipper.engine.cpp",
+            "Clipper2/CPP/Clipper2Lib/src/clipper.offset.cpp",
+            "Clipper2/CPP/Clipper2Lib/src/clipper.triangulation.cpp",
+            "Clipper2/CPP/Clipper2Lib/src/clipper.rectclip.cpp",
+            "Clipper2/CPP/Utils/clipper.svg.cpp",
+        ],
+        publicHeadersPath: ".",
+        cxxSettings: [
+            .headerSearchPath("Clipper2/CPP/Clipper2Lib/include"),
+            .headerSearchPath("Clipper2/CPP/Utils"),
+            .unsafeFlags(["-Wno-sign-conversion", "-Wno-float-conversion", "-Wno-unused-parameter"]),
+        ]
+    ),
+    .target(
+        name: "CPDFium",
+        dependencies: [],
+        path: "Packages/CPDFium",
+        publicHeadersPath: ".",
+        cSettings: [
+            .headerSearchPath("../../Vendor/include"),
+        ],
+        cxxSettings: [
+            .headerSearchPath("../../Vendor/include"),
+        ],
+        linkerSettings: [
+            .linkedLibrary("pdfium"),
+            .unsafeFlags(["-L", "../../Vendor/lib"]),
+        ]
+    ),
+    .target(
+        name: "CSQLiteVec",
+        path: "Packages/CSQLiteVec",
+        sources: ["sqlite-vec.c"],
+        publicHeadersPath: ".",
+        cSettings: [
+            .define("SQLITE_CORE"),
+            .define("SQLITE_VEC_VERSION", to: "\"0.1.7-alpha.2\""),
+            .define("SQLITE_VEC_VERSION_MAJOR", to: "0"),
+            .define("SQLITE_VEC_VERSION_MINOR", to: "1"),
+            .define("SQLITE_VEC_VERSION_PATCH", to: "7"),
+            .define("SQLITE_VEC_DATE", to: "\"2024-01-10\""),
+            .define("SQLITE_VEC_SOURCE", to: "\"anigma-cli\""),
+            .define("SQLITE_VEC_API", to: ""),
+            // Only enable AVX on x86 platforms
+            .define("SQLITE_VEC_ENABLE_AVX", .when(platforms: [.linux], configuration: .release)),
+            // Enable NEON on ARM platforms (macOS uses ARM now)
+            .define("SQLITE_VEC_ENABLE_NEON", .when(platforms: [.macOS, .iOS, .tvOS, .watchOS])),
+            .unsafeFlags(["-Wno-c23-extensions"]),
+        ]
+    ),
+    .target(
+        name: "AnigmaCore",
+        dependencies: [
+            "AnigmaPrimitives",
+            "ContractsCore",
+            "DatabaseCore",
+            "StorageCore",
+            "InferenceCore",
+            "GovernanceCore",
+            "SecurityEventsManager",
+            "TextChunkingCapsule",
+            "LayoutEngineCapsule",
+            .product(name: "Toml", package: "swift-toml"),
+            .product(name: "Crypto", package: "swift-crypto"),
+            .product(name: "BLAKE3", package: "blake3-swift")
+        ],
+        path: "Packages/AnigmaCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaPrimitives",
+        dependencies: [
+            .product(name: "BLAKE3", package: "blake3-swift")
+        ],
+        path: "Packages/AnigmaPrimitives",
+        exclude: [
+            "ToolContracts/ToolContracts/README.md"
+        ],
+        resources: [.copy("README.md")],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "DatabaseCore",
+        dependencies: [
+            "ContractsCore",
+            .product(name: "GRDB", package: "GRDB.swift")
+        ],
+        path: "Packages/DatabaseCore",
+        resources: [
+            .copy("Schema_BuildDiagnostics.sql"),
+            .copy("Schema_CourtSafe.sql"),
+            .copy("Schema_DocumentUnits.sql"),
+            .copy("Schema_Evidence.sql"),
+            .copy("Schema_EvidenceBundle.sql"),
+            .copy("Schema_Master.sql"),
+            .copy("README.md")
+        ],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ContractsCore",
+        dependencies: [
+            "AnigmaPrimitives",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/ContractsCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ModelRegistry",
+        dependencies: [
+            "ContractsCore"
+        ],
+        path: "Packages/ModelRegistry/Sources",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "CapabilityCore",
+        dependencies: ["AnigmaPrimitives", "AnigmaCore"],
+        path: "Packages/CapabilityCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "DoctrineCore",
+        dependencies: [],
+        path: "Packages/DoctrineCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "TelemetryCore",
+        dependencies: [
+            "AnigmaPrimitives"
+        ],
+        path: "Packages/TelemetryCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ExecutionCore",
+        dependencies: [
+            "TelemetryCore",
+            "AnigmaPrimitives",
+            .product(name: "BLAKE3", package: "blake3-swift")
+        ],
+        path: "Packages/ExecutionCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "InferenceCore",
+        dependencies: [],
+        path: "Packages/InferenceCore",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "CanonicalTokenizer",
+        dependencies: [
+            .product(name: "Crypto", package: "swift-crypto")
+        ],
+        path: "Packages/CanonicalTokenizer",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "GovernanceCore",
+        dependencies: [
+            "AnigmaPrimitives",
+            "DatabaseCore",
+            "ContractsCore",
+            .product(name: "Toml", package: "swift-toml")
+        ],
+        path: "Packages/GovernanceCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "StorageCore",
+        dependencies: [
+            "DatabaseCore",
+            "GovernanceCore"
+        ],
+        path: "Packages/StorageCore",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "GovernedMigrationCore",
+        dependencies: ["DoctrineCore", "SecurityEventsManager", "DatabaseCore"],
+        path: "Packages/GovernedMigrationCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaASTServicesCore",
+        dependencies: [
+            "AnigmaPrimitives",
+            .product(name: "SwiftSyntax", package: "swift-syntax"),
+            .product(name: "SwiftParser", package: "swift-syntax")
+        ],
+        path: "Packages/AnigmaASTServices",
+        exclude: ["main.swift", "README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "anigma-ast-services",
+        dependencies: [
+            "AnigmaASTServicesCore",
+            .product(name: "SwiftSyntax", package: "swift-syntax"),
+            .product(name: "SwiftParser", package: "swift-syntax"),
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/AnigmaASTServicesCLI",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "SecurityEventsManager",
+        dependencies: [],
+        path: "Packages/SecurityEventsManager",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaClientKit",
+        dependencies: ["ContractsCore"],
+        path: "Packages/AnigmaClientKit",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    // .testTarget(
+    //     name: "MLWorkerExecutableTests",
+    //     dependencies: [
+    //         "MLWorkerCommon",
+    //         "AnigmaCore",
+    //         .product(name: "GRPCCore", package: "grpc-swift"),
+    //     ],
+    //     path: "Tests/MLWorkerExecutableTests",
+    //     swiftSettings: strictConcurrencySettings
+    // ),
+
+    .target(
+        name: "AnigmaSidecar",
+        dependencies: [
+            "AnigmaDaemonCore",
+            "AnigmaPrimitives",
+            .product(name: "AsyncHTTPClient", package: "async-http-client")
+        ],
+        path: "Packages/AnigmaSidecar",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .target(
+        name: "AnigmaSystemSpine",
+        dependencies: [],
+        path: "Packages/AnigmaSystemSpine",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .target(
+        name: "DataCore",
+        dependencies: ["AnigmaPrimitives"],
+        path: "Packages/DataCore",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .target(
+        name: "DataEngine",
+        dependencies: ["DataCore", "AnigmaPrimitives", "AnigmaSystemSpine"],
+        path: "Packages/DataEngine",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .target(
+        name: "RendererKit",
+        dependencies: ["DataCore"],
+        path: "Packages/RendererKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+        .target(
+
+            name: "DataUI",
+
+            dependencies: ["DataCore", "DataEngine", "RendererKit", "AnigmaClientKit"],
+
+            path: "Packages/DataUI",
+
+            swiftSettings: strictConcurrencySettings
+
+        ),
+
+        .target(
+
+            name: "AnigmaTUI",
+
+            dependencies: [],
+
+            path: "Packages/AnigmaTUI/Sources/AnigmaTUI",
+
+            swiftSettings: strictConcurrencySettings
+
+        ),
+
+        .target(
+
+            name: "Workflows",
+
+            dependencies: ["DataCore", "DataEngine", "AnigmaSystemSpine"],
+
+            path: "Packages/Workflows",
+
+            swiftSettings: strictConcurrencySettings
+
+        ),
+    .target(
+        name: "ExportCore",
+        dependencies: ["AnigmaSystemSpine", "DataCore"],
+        path: "Packages/ExportCore",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ExportUI",
+        dependencies: ["ExportCore", "AnigmaSystemSpine", "DataCore"],
+        path: "Packages/ExportUI",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaWork",
+        dependencies: [
+            "AnigmaCore",
+            "DataCore",
+            "DataEngine",
+            "AnigmaSystemSpine",
+            "ExportCore",
+            "RendererKit"
+        ],
+        path: "Packages/AnigmaWork",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .target(
+        name: "AnigmaCorporate",
+        dependencies: ["AnigmaCore", "HarmoniaModule", "AnigmaSystemSpine"],
+        path: "Packages/AnigmaCorporate",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaEducation",
+        dependencies: ["AnigmaCore", "AnigmaSystemSpine"],
+        path: "Packages/AnigmaEducation",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaAgents",
+        dependencies: [
+            "AnigmaCore",
+            "AnigmaSystemSpine",
+            "DataCore",
+            "DataEngine",
+            "AnigmaCorporate",
+            "AnigmaEducation",
+            "HarmoniaModule",
+            "PraxisCore"
+        ],
+        path: "Packages/AnigmaAgents",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaAIConsole",
+        dependencies: ["AnigmaCore", "AnigmaSystemSpine", "AnigmaAgents", "DataCore"],
+        path: "Packages/AnigmaAIConsole",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaWidgets",
+        dependencies: ["AnigmaSystemSpine"],
+        path: "Packages/AnigmaExtensions/Widgets",
+        exclude: ["Resources/Info.plist"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaShare",
+        dependencies: ["AnigmaSystemSpine"],
+        path: "Packages/AnigmaExtensions/Share",
+        exclude: ["Resources/Info.plist"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaFileProvider",
+        dependencies: ["AnigmaSystemSpine"],
+        path: "Packages/AnigmaExtensions/FileProvider",
+        exclude: ["Resources/Info.plist"],
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    // MARK: - Native Capability Modules (App Context)
+    .target(
+        name: "DocumentIRKit",
+        dependencies: [],
+        path: "Packages/DocumentIRKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ContainerKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/ContainerKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "OOXMLKit",
+        dependencies: ["ContainerKit", "AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/OOXMLKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "DocumentRenderKit",
+        dependencies: ["DataCore", "AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/DocumentRenderKit",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "TypographyKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/TypographyKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ColorKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/ColorKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "VectorOpsKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"],
+        path: "Packages/VectorOpsKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaNativeShims",
+        dependencies: ["CClipper2", "CPDFium"],
+        path: "Native/Shims",
+        sources: ["src/common", "src/compression", "src/compression_capsule", "src/render", "src/typography", "src/color", "src/vector_ops", "src/vector_capsule", "src/rank_fusion_capsule", "src/cosine_similarity_capsule", "src/text_chunking_capsule", "src/container", "src/xml", "src/animation", "src/observability", "src/layout_engine_capsule"],
+        publicHeadersPath: "include",
+        cSettings: [
+            .define("ANIGMA_BUILDING_SHIMS"),
+            .headerSearchPath("include"),
+            .headerSearchPath("../../Vendor/include"),
+            .unsafeFlags(["-Wno-sign-conversion", "-Wno-float-conversion", "-Wno-unused-parameter", "-Wno-c23-extensions"]),
+        ],
+        cxxSettings: [
+            .define("ANIGMA_BUILDING_SHIMS"),
+            .headerSearchPath("include"),
+            .headerSearchPath("../../Vendor/include"),
+            .unsafeFlags(["-Wno-sign-conversion", "-Wno-float-conversion", "-Wno-unused-parameter", "-Wno-c23-extensions"]),
+        ]
+    ),
+    .target(
+        name: "CapsuleCore",
+        dependencies: ["AnigmaPrimitives", "AnigmaNativeShims"],
+        path: "Packages/CapsuleCore/Sources/CapsuleCore",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "CompressionKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"],
+        path: "Packages/CompressionKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "TextChunkingCapsule",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"],
+        path: "Packages/TextChunkingCapsule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "LayoutEngineCapsule",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"],
+        path: "Packages/LayoutEngineCapsule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnimationKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/AnimationKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ObservabilityKit",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"],
+        path: "Packages/ObservabilityKit",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    // MARK: - Native Sidecar Modules (Copyleft/Heavy Context)
+    .target(
+        name: "SidecarOfficeService",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], // Will use Office shims
+        path: "Packages/SidecarOfficeService",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "SidecarPDFService",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], // Will use PDF shims
+        path: "Packages/SidecarPDFService",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "SidecarTranslateService",
+        dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], // Will use Translate shims
+        path: "Packages/SidecarTranslateService",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .target(
+        name: "AnigmaHostKit",
+        dependencies: [
+            "AnigmaClientKit",  // For AuthorityRouting protocol
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            "ContractsCore",
+            "AnigmaDaemonCore",
+            "AnigmaSidecar"
+        ],
+        path: "Packages/AnigmaHostKit",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaHostMac",
+        dependencies: [
+            "AnigmaClientKit",
+            "AnigmaHostKit",
+            "ContractsCore",
+            "AnigmaSidecar",
+            .product(name: "GRDB", package: "GRDB.swift"),
+            .product(name: "Crypto", package: "swift-crypto"),
+            .product(name: "BLAKE3", package: "blake3-swift"),
+            .product(name: "SwiftTreeSitter", package: "swift-tree-sitter"),
+            .product(name: "cmark-gfm", package: "swift-cmark")
+        ],
+        path: "Packages/AnigmaHostMac",
+        resources: [.copy("Resources/Monaco")],
+        swiftSettings: strictConcurrencySettings
+    )
+]
+
+let executableTargets: [Target] = [
+    .executableTarget(
+        name: "HarmoniaSurface",
+        dependencies: [
+            "AnigmaCore",
+            "MLWorkerCommon",
+            .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
+            .product(name: "MLXEmbedders", package: "mlx-swift-lm"),
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/HarmoniaSurface",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    // .target(
+    //     name: "HarmoniaCLI",
+    //     dependencies: [
+    //         "HarmoniaModule",
+    //         .product(name: "ArgumentParser", package: "swift-argument-parser"),
+    //     ]),
+    .executableTarget(
+        name: "DoctrineCLI",
+        dependencies: [
+            "HarmoniaModule",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/DoctrineCLI",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "OutlineumZine",
+        dependencies: [
+            "AnigmaCore",
+            "OutlineumModule",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/OutlineumZine",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "DiaplasionPipeline",
+        dependencies: [
+            "AnigmaCore",
+            "DiaplasionModule",
+            "ContractsCore",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/DiaplasionPipeline",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "AccessumFlow",
+        dependencies: [
+            "AnigmaCore",
+            "DatabaseCore",
+            "DiaplasionModule",
+            "OutlineumModule",
+            "HarmoniaModule",
+            "MLWorkerCommon",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/AccessumFlow",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "MLWorkerExecutable",
+        dependencies: [
+            "MLWorkerCommon",
+            "ContractsCore",
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
+            .product(name: "MLXEmbedders", package: "mlx-swift-lm"),
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/MLWorkerExecutable",
+        exclude: ["README.md", "Model/embedding-model.txt"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "SmokeTestRenderer",
+        dependencies: ["AnigmaClientKit", "AnigmaHostKit", "ContractsCore"],
+        path: "Packages/SmokeTestRenderer",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "AnigmaAppMac",
+        dependencies: [
+            "AnigmaClientKit",
+            "AnigmaHostMac",
+            "AnigmaSystemSpine",
+            "AnigmaCorporate",
+            "AnigmaEducation",
+            "DataUI",
+            "AnigmaAgents",
+            "AnigmaAIConsole",
+            "ExportCore",
+            "ExportUI",
+            "AnigmaWork",
+            "DataEngine",
+            "ContractsCore",
+            "ContextumModule",
+            "AnigmaMCPModule"
+        ],
+        path: "Sources/AnigmaAppMac",
+        // Strict concurrency disabled for SwiftUI target due to compiler hang
+        // Re-enable once Swift 6 type-checker improvements land
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "AnigmaMCPExecutable",
+        dependencies: [
+            "AnigmaMCPModule",
+            .product(name: "MCP", package: "swift-sdk")
+        ],
+        path: "Sources/AnigmaMCPExecutable",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "AnigmaGeminiBridge",
+        dependencies: [
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            .product(name: "Hummingbird", package: "hummingbird")
+        ],
+        path: "Packages/AnigmaGeminiBridge/Sources/AnigmaGeminiBridge",
+        swiftSettings: strictConcurrencySettings
+    )
+]
+
+let capabilityTargets: [Target] = [
+    .target(
+        name: "HarmoniaModule",
+        dependencies: [
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            "DatabaseCore",
+            "TelemetryCore",
+            "ExecutionCore",
+            "DoctrineCore",
+            "SecurityEventsManager",
+            "AnigmaASTServicesCore",
+            "MLWorkerCommon",
+            .product(name: "MLXEmbedders", package: "mlx-swift-lm"),
+            "CathedralModule",
+            "StorageCore",
+            "GovernedMigrationCore",
+            "AnigmaCLIProviders",
+            "AnigmaCLIRouter",
+            "AnigmaCLIOrchestrator",
+            "AnigmaCLIEventing",
+            "AnigmaCLIGovernance",
+            .product(name: "GRDB", package: "GRDB.swift"),
+            .product(name: "BLAKE3", package: "blake3-swift")
+        ],
+        path: "Packages/HarmoniaModule",
+        exclude: [
+            "Harness/Prompts/InitializerPrompt.md",
+            "Harness/Prompts/CodingAgentPrompt.md",
+            "Config/RetentionPolicy.toml",
+            "Config/RetentionPolicy.json",
+            "README.md"
+        ],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "HarmoniaMemory",
+        dependencies: ["AnigmaCore", "TelemetryCore", .product(name: "GRDB", package: "GRDB.swift")],
+        path: "Packages/HarmoniaMemory",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "DiaplasionModule",
+        dependencies: ["AnigmaCore", "TextChunkingCapsule"],
+        path: "Packages/DiaplasionModule",
+        resources: [
+            .copy("TestFiles/diaplasion-happy"),
+            .copy("README.md")
+        ],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AccessumModule",
+        dependencies: ["AnigmaCore", "ContractsCore", "TelemetryCore"],
+        path: "Packages/AccessumModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "OutlineumModule",
+        dependencies: ["AnigmaCore"],
+        path: "Packages/OutlineumModule",
+        resources: [
+            .copy("TestFiles/zine-minimal"),
+            .copy("README.md")
+        ],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "PragmaModule",
+        dependencies: ["AnigmaCore", "AnigmaPrimitives", "ContractsCore"],
+        path: "Packages/PragmaModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ConexusModule",
+        dependencies: ["AnigmaCore"],
+        path: "Packages/ConexusModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "CodexModule",
+        dependencies: ["AnigmaCore"],
+        path: "Packages/CodexModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "TranscriptumModule",
+        dependencies: ["AnigmaCore"],
+        path: "Packages/TranscriptumModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ObservatoriumModule",
+        dependencies: ["AnigmaCore", "TelemetryCore"],
+        path: "Packages/ObservatoriumModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "PolytroposModule",
+        dependencies: ["AnigmaCore"],
+        path: "Packages/PolytroposModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "VectorumModule",
+        dependencies: ["ContractsCore", "AnigmaCore"],
+        path: "Packages/VectorumModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "PraxisCore",
+        dependencies: [],
+        path: "Packages/PraxisCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "CathedralModule",
+        dependencies: ["AnigmaCore", "DatabaseCore"],
+        path: "Packages/CathedralModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ContextumModule",
+        dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "CapsuleCore", "TextChunkingCapsule"],
+        path: "Sources/ContextumModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ArtifactStoreModule",
+        dependencies: ["AnigmaCore", "ContractsCore", "DatabaseCore"],
+        path: "Sources/ArtifactStoreModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ModelRegistryModule",
+        dependencies: ["AnigmaCore", "ContractsCore", "DatabaseCore"],
+        path: "Sources/ModelRegistryModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "PraxisModule",
+        dependencies: ["PraxisCore", "ContractsCore"],
+        path: "Packages/PraxisModule",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLICore",
+        dependencies: [
+            "ContractsCore",
+            "AnigmaCore"
+        ],
+        path: "Packages/AnigmaCLI/Core",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIEventing",
+        dependencies: ["AnigmaCLICore"],
+        path: "Packages/AnigmaCLI/Eventing",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIProviders",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIDatabase",
+            "ContractsCore"
+        ],
+        path: "Packages/AnigmaCLI/Providers",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIRouter",
+        dependencies: ["AnigmaCLICore", "AnigmaCLIProviders"],
+        path: "Packages/AnigmaCLI/Router",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIGovernance",
+        dependencies: ["AnigmaCLICore", "AnigmaCLIProviders"],
+        path: "Packages/AnigmaCLI/Governance",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIOrchestrator",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIEventing",
+            "AnigmaCLIGovernance",
+            "AnigmaCLIProviders",
+            "AnigmaCLIRouter"
+        ],
+        path: "Packages/AnigmaCLI/Orchestrator",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIMCP",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIEventing",
+            "AnigmaCLIGovernance",
+            "AnigmaCLIProviders",
+            .product(name: "MCP", package: "swift-sdk")
+        ],
+        path: "Packages/AnigmaCLIMCP",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIOnboarding",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIDatabase",
+            "AnigmaCLIProviders",
+            "AnigmaCLIML",
+            "DatabaseCore",
+            "ModelManagement",
+            .product(name: "GRDB", package: "GRDB.swift")
+        ],
+        path: "Packages/AnigmaCLI/Onboarding",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIDatabase",
+        dependencies: [
+            "CSQLiteVec",
+            "AnigmaCLICore",
+            "TextChunkingCapsule",
+            .product(name: "Crypto", package: "swift-crypto")
+        ],
+        path: "Packages/AnigmaCLI/Database",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIRAG",
+        dependencies: ["CSQLiteVec", "TextChunkingCapsule"],
+        path: "Packages/AnigmaCLI/RAG",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIML",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIDatabase",
+            "AnigmaCLIMLIntegration",
+            "AnigmaCLIProviders",  // Cloud provider integration
+            "AnigmaCLILocalInference",  // Local MLX/llama.cpp backends
+            "AnigmaCLIRAG"  // For EmbeddingProviderProtocol
+            // MLX dependencies are optional - will use cloud providers as fallback
+            // .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
+            // .product(name: "MLXEmbedders", package: "mlx-swift-lm"),
+        ],
+        path: "Packages/AnigmaCLI/ML",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIUI",
+        dependencies: [],
+        path: "Packages/AnigmaCLI/UI",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLITUI",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIEventing",
+            "AnigmaCLIDatabase",
+            "AnigmaTUI"
+        ],
+        path: "Packages/AnigmaCLI/Sources/TUI",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLIMLIntegration",
+        dependencies: [
+            // No hard MLX dependency - uses conditional compilation
+        ],
+        path: "Packages/AnigmaCLI/MLIntegration",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "ModelManagement",
+        dependencies: [
+            "ModelRegistry",
+            .product(name: "Crypto", package: "swift-crypto")
+        ],
+        path: "Packages/AnigmaCLI/Sources/ModelManagement",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaCLILocalInference",
+        dependencies: [
+            // MLX for Apple Silicon inference
+            .product(name: "MLX", package: "mlx-swift"),
+            .product(name: "MLXNN", package: "mlx-swift"),
+            .product(name: "MLXRandom", package: "mlx-swift"),
+            .product(name: "MLXOptimizers", package: "mlx-swift")
+        ],
+        path: "Packages/AnigmaCLI/Sources/LocalInference",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "HarmoniaCLI",
+        dependencies: [
+            "AnigmaCLICore",
+            "AnigmaCLIEventing",
+            "AnigmaCLIGovernance",
+            "AnigmaCLIOrchestrator",
+            "AnigmaCLIProviders",
+            "AnigmaCLIRouter",
+            "AnigmaCore",
+            "ContractsCore",
+            "HarmoniaModule",
+            "PraxisModule",
+            "PraxisCore",
+            "MLWorkerCommon",
+            "HarmoniaMemory",
+            "TechDebtAudit",
+            "ExecutionCore",
+            "StorageCore",
+            "AnigmaDaemonCore",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/HarmoniaCLI",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "AnigmaCLIExecutable",
+        dependencies: [
+            // CLI Infrastructure
+            "AnigmaCLICore",
+            "AnigmaCLIEventing",
+            "AnigmaCLIOrchestrator",
+            "AnigmaCLIProviders",
+            "AnigmaCLIMCP",
+            "AnigmaCLIDatabase",
+            "AnigmaCLIRouter",
+            "AnigmaCLIGovernance",
+            "AnigmaCLIOnboarding",
+            "AnigmaCLIRAG",
+            "AnigmaCLIML",
+            "AnigmaCLIUI",
+            "AnigmaCLITUI",
+            "ModelManagement",
+
+            // Core System
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            "ContractsCore",
+            "DatabaseCore",
+
+            // Embedded MCP Server
+            "AnigmaMCPModule",
+
+            // ML Capabilities (disabled until MLX system installation)
+            "MLWorkerCommon",
+            "ModelRegistry",
+            "ModelRegistryModule",
+            // .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
+            // .product(name: "MLXEmbedders", package: "mlx-swift-lm"),
+
+            // Harmonia Governance
+            "HarmoniaModule",
+            "CathedralModule",
+            "StorageCore",
+            "ExecutionCore",
+            "TelemetryCore",
+
+            // Code Intelligence
+            "ContextumModule",
+            "ArtifactStoreModule",
+            "ObservatoriumModule",
+
+            // Capability Modules
+            "AccessumModule",
+            "DiaplasionModule",
+            "OutlineumModule",
+            "PolytroposModule",
+
+            // Dependencies
+            .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            .product(name: "GRDB", package: "GRDB.swift"),
+            .product(name: "MCP", package: "swift-sdk")
+        ],
+        path: "Packages/AnigmaCLI/Executable",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .executableTarget(
+        name: "AnigmaDaemon",
+        dependencies: [
+            "AnigmaDaemonCore",
+            "AnigmaSidecar",
+            "StorageCore",
+            "HarmoniaModule",
+            "SidecarOfficeService",
+            "SidecarPDFService",
+            "SidecarTranslateService"
+        ],
+        path: "Packages/AnigmaDaemon",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaDaemonCore",
+        dependencies: [
+            "AnigmaCore",
+            "DatabaseCore",
+            "ExecutionCore",
+            "GovernanceCore",
+            "StorageCore",
+            "TelemetryCore",
+            "ContractsCore",
+            "MLWorkerCommon",
+            "AnigmaPrimitives",
+            .product(name: "Hummingbird", package: "hummingbird"),
+            .product(name: "HummingbirdTLS", package: "hummingbird")
+        ],
+        path: "Packages/AnigmaDaemonCore",
+        exclude: ["Protos/anigma.proto", "JobKinds/README.md", "README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "MLWorkerCommon",
+        dependencies: [
+            "ContractsCore",
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
+        ],
+        path: "Packages/MLWorkerCommon",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "TechDebtAudit",
+        dependencies: [],
+        path: "Packages/TechDebtAudit",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "PlatformCore",
+        dependencies: ["AnigmaCore", "CapabilityCore", "ContractsCore"],
+        path: "Packages/PlatformCore",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .target(
+        name: "AnigmaMCPModule",
+        dependencies: [
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            "ContractsCore",
+            "HarmoniaModule",
+            "AccessumModule",
+            "DiaplasionModule",
+            "OutlineumModule",
+            "PolytroposModule",
+            "ContextumModule",
+            "ArtifactStoreModule",
+            "ModelRegistryModule",
+            "MLWorkerCommon",
+            "ModelRegistry",
+            "ObservatoriumModule",
+            "CathedralModule",
+            .product(name: "MCP", package: "swift-sdk")
+        ],
+        path: "Sources/AnigmaMCPModule",
+        exclude: ["README.md"],
+        swiftSettings: strictConcurrencySettings
+    )
+]
+
+let testTargets: [Target] = [
+
+    // .testTarget(
+    //     name: "AnigmaAppMacTests",
+    //     dependencies: ["AnigmaAppMac"],
+    //     path: "Tests/AnigmaAppMacTests",
+    //     swiftSettings: strictConcurrencySettings
+    // ),
+
+    .testTarget(
+        name: "DatabaseCoreTests",
+        dependencies: ["DatabaseCore", "ContractsCore"],
+        path: "Tests/DatabaseCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCoreTests",
+        dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "AnigmaTestSupport"],
+        path: "Tests/AnigmaCoreTests",
+        resources: [.copy("Fixtures")],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DiaplasionModuleTests",
+        dependencies: ["AnigmaCore", "DiaplasionModule"],
+        path: "Tests/DiaplasionModuleTests",
+        resources: [.copy("Fixtures")],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "PraxisCoreTests",
+        dependencies: ["PraxisCore", "PraxisModule"],
+        path: "Tests/PraxisCoreTests",
+        resources: [.copy("Fixtures")],
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "OutlineumModuleTests",
+        dependencies: ["AnigmaCore", "OutlineumModule"],
+        path: "Tests/OutlineumModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "PragmaModuleTests",
+        dependencies: ["AnigmaCore", "PragmaModule"],
+        path: "Tests/PragmaModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ConexusModuleTests",
+        dependencies: ["AnigmaCore", "ConexusModule"],
+        path: "Tests/ConexusModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "CodexModuleTests",
+        dependencies: ["AnigmaCore", "CodexModule"],
+        path: "Tests/CodexModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "TranscriptumModuleTests",
+        dependencies: ["AnigmaCore", "TranscriptumModule"],
+        path: "Tests/TranscriptumModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ObservatoriumModuleTests",
+        dependencies: ["AnigmaCore", "ObservatoriumModule"],
+        path: "Tests/ObservatoriumModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AccessumModuleTests",
+        dependencies: ["AnigmaCore", "AccessumModule"],
+        path: "Tests/AccessumModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "PolytroposModuleTests",
+        dependencies: ["AnigmaCore", "PolytroposModule", "AnigmaTestSupport"],
+        path: "Tests/PolytroposModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "TelemetryCoreTests",
+        dependencies: ["TelemetryCore"],
+        path: "Tests/TelemetryCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ExecutionCoreTests",
+        dependencies: ["ExecutionCore"],
+        path: "Tests/ExecutionCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    // .testTarget(
+    //     name: "MLWorkerExecutableTests",
+    //     dependencies: [
+    //         "MLWorkerExecutable",
+    //         "MLWorkerCommon",
+    //         .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
+    //         .product(name: "MLXEmbedders", package: "mlx-swift-lm"),
+    //     ],
+    //     path: "Tests/MLWorkerExecutableTests",
+    //     swiftSettings: strictConcurrencySettings
+    // ),
+    .testTarget(
+        name: "PlatformCoreTests",
+        dependencies: ["PlatformCore", "AnigmaCore", "CapabilityCore"],
+        path: "Tests/PlatformCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "CapabilityCoreTests",
+        dependencies: ["CapabilityCore"],
+        path: "Tests/CapabilityCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ContractsCoreTests",
+        dependencies: ["ContractsCore"],
+        path: "Tests/ContractsCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "StorageCoreTests",
+        dependencies: ["StorageCore", "DatabaseCore", "AnigmaCore", "GovernanceCore"],
+        path: "Tests/StorageCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "HarmoniaCLITests",
+        dependencies: [
+            "HarmoniaCLI",
+            "StorageCore",
+            "HarmoniaModule",
+            "DatabaseCore",
+            "AnigmaPrimitives"
+        ],
+        path: "Tests/HarmoniaCLITests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "HarmoniaModuleTests",
+        dependencies: [
+            "HarmoniaModule",
+            "AnigmaCore",
+            "DatabaseCore"
+        ],
+        path: "Tests/HarmoniaModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaDaemonTests",
+        dependencies: [
+            "AnigmaDaemonCore",
+            "AnigmaTestSupport",
+            "StorageCore",
+            "TelemetryCore",
+            .product(name: "GRPCCore", package: "grpc-swift"),
+            .product(name: "Numerics", package: "swift-numerics")
+        ],
+        path: "Tests/AnigmaDaemonTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .testTarget(
+        name: "NegativeCompilationTests",
+        dependencies: ["AnigmaClientKit"],
+        path: "Tests/NegativeCompilationTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaSystemSpineTests",
+        dependencies: ["AnigmaSystemSpine"],
+        path: "Tests/AnigmaSystemSpineTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DataEngineTests",
+        dependencies: ["DataEngine", "DataCore"],
+        path: "Tests/DataEngineTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ContextumModuleTests",
+        dependencies: ["ContextumModule", "DatabaseCore"],
+        path: "Tests/ContextumModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ModelDeterminismTests",
+        dependencies: ["ModelRegistry", "ContractsCore"],
+        path: "Tests/ModelDeterminismTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCorporateTests",
+        dependencies: ["AnigmaCorporate", "AnigmaCore", "AnigmaSystemSpine"],
+        path: "Tests/AnigmaCorporateTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaEducationTests",
+        dependencies: ["AnigmaEducation"],
+        path: "Tests/AnigmaEducationTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "GovernanceCoreTests",
+        dependencies: ["GovernanceCore", "DatabaseCore"],
+        path: "Tests/GovernanceCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaAgentsTests",
+        dependencies: ["AnigmaAgents", "AnigmaCore"],
+        path: "Tests/AnigmaAgentsTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaGeminiBridgeTests",
+        dependencies: ["AnigmaGeminiBridge"],
+        path: "Tests/AnigmaGeminiBridgeTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DocumentRenderKitTests",
+        dependencies: ["DocumentRenderKit"],
+        path: "Tests/DocumentRenderKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLICoreTests",
+        dependencies: ["AnigmaCLICore"],
+        path: "Tests/AnigmaCLICoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIDatabaseTests",
+        dependencies: ["AnigmaCLIDatabase", "AnigmaCLICore"],
+        path: "Tests/AnigmaCLIDatabaseTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIOrchestratorTests",
+        dependencies: ["AnigmaCLIOrchestrator", "AnigmaCLICore"],
+        path: "Tests/AnigmaCLIOrchestratorTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIProvidersTests",
+        dependencies: ["AnigmaCLIProviders"],
+        path: "Tests/AnigmaCLIProvidersTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIRouterTests",
+        dependencies: ["AnigmaCLIRouter"],
+        path: "Tests/AnigmaCLIRouterTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIGovernanceTests",
+        dependencies: ["AnigmaCLIGovernance"],
+        path: "Tests/AnigmaCLIGovernanceTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIEventingTests",
+        dependencies: ["AnigmaCLIEventing"],
+        path: "Tests/AnigmaCLIEventingTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLIMCPTests",
+        dependencies: ["AnigmaCLIMCP"],
+        path: "Tests/AnigmaCLIMCPTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaMCPModuleTests",
+        dependencies: [
+            "AnigmaMCPModule",
+            "AnigmaCore",
+            "AnigmaPrimitives",
+            .product(name: "MCP", package: "swift-sdk")
+        ],
+        path: "Tests/AnigmaMCPModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaCLITests",
+        dependencies: [
+            "AnigmaCLIDatabase",
+            "AnigmaCLICore",
+            "AnigmaCLIOrchestrator"
+        ],
+        path: "Tests/AnigmaCLITests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "CathedralModuleTests",
+        dependencies: ["CathedralModule", "AnigmaCore", "DatabaseCore"],
+        path: "Tests/CathedralModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ArtifactStoreModuleTests",
+        dependencies: ["ArtifactStoreModule", "AnigmaCore", "ContractsCore", "DatabaseCore"],
+        path: "Tests/ArtifactStoreModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ModelRegistryModuleTests",
+        dependencies: ["ModelRegistryModule", "AnigmaCore", "ContractsCore", "DatabaseCore"],
+        path: "Tests/ModelRegistryModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaPrimitivesTests",
+        dependencies: ["AnigmaPrimitives"],
+        path: "Tests/AnigmaPrimitivesTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DataCoreTests",
+        dependencies: ["DataCore", "AnigmaPrimitives"],
+        path: "Tests/DataCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "VectorumModuleTests",
+        dependencies: ["VectorumModule", "AnigmaCore", "DatabaseCore"],
+        path: "Tests/VectorumModuleTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "SecurityEventsManagerTests",
+        dependencies: ["SecurityEventsManager", "AnigmaPrimitives"],
+        path: "Tests/SecurityEventsManagerTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnigmaClientKitTests",
+        dependencies: ["AnigmaClientKit", "AnigmaPrimitives", "ContractsCore"],
+        path: "Tests/AnigmaClientKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "MLWorkerCommonTests",
+        dependencies: ["MLWorkerCommon", "AnigmaPrimitives"],
+        path: "Tests/MLWorkerCommonTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DoctrineCoreTests",
+        dependencies: ["DoctrineCore", "GovernanceCore", "AnigmaCore", "AnigmaPrimitives"],
+        path: "Tests/DoctrineCoreTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "HarmoniaMemoryTests",
+        dependencies: ["HarmoniaMemory", "AnigmaCore", "TelemetryCore"],
+        path: "Tests/HarmoniaMemoryTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "HarmoniaSurfaceTests",
+        dependencies: ["HarmoniaSurface"],
+        path: "Tests/HarmoniaSurfaceTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DoctrineCLITests",
+        dependencies: ["DoctrineCLI"],
+        path: "Tests/DoctrineCLITests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "DiaplasionPipelineTests",
+        dependencies: ["DiaplasionPipeline"],
+        path: "Tests/DiaplasionPipelineTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ObservabilityKitTests",
+        dependencies: ["ObservabilityKit"],
+        path: "Tests/ObservabilityKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "CompressionKitTests",
+        dependencies: ["CompressionKit"],
+        path: "Tests/CompressionKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "TypographyKitTests",
+        dependencies: ["TypographyKit"],
+        path: "Tests/TypographyKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "AnimationKitTests",
+        dependencies: ["AnimationKit"],
+        path: "Tests/AnimationKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ColorKitTests",
+        dependencies: ["ColorKit"],
+        path: "Tests/ColorKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "ContainerKitTests",
+        dependencies: ["ContainerKit"],
+        path: "Tests/ContainerKitTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "CanonicalTokenizerTests",
+        dependencies: ["CanonicalTokenizer"],
+        path: "Tests/CanonicalTokenizerTests",
+        swiftSettings: strictConcurrencySettings
+    ),
+    .testTarget(
+        name: "LayoutEngineCapsuleTests",
+        dependencies: ["LayoutEngineCapsule", "CapsuleCore"],
+        path: "Tests/LayoutEngineCapsuleTests",
+        resources: [.copy("TestResources")],
+        swiftSettings: strictConcurrencySettings
+    ),
+
+    .testTarget(
+        name: "EmbeddingStabilityTests",
+        dependencies: ["ContractsCore", "VectorumModule"],
+        path: "Tests/EmbeddingStability",
+        swiftSettings: strictConcurrencySettings
+    )
+]
+
+let package = Package(
+    name: "Anigma",
+    platforms: [
+        .macOS(.v14),
+        .iOS(.v17),
+        .tvOS(.v17),
+        .watchOS(.v10)
+    ],
+    products: coreProducts + executableProducts + capabilityProducts,
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0"),
+        .package(path: "Tools/Vendor/swift-syntax"),
+        .package(url: "https://github.com/ml-explore/mlx-swift.git", from: "0.29.1"),
+        .package(url: "https://github.com/ml-explore/mlx-swift-lm.git", from: "2.29.2"),
+        .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.0.0"),
+        .package(url: "https://github.com/nixberg/blake3-swift.git", from: "0.1.2"),
+        .package(url: "https://github.com/grpc/grpc-swift.git", from: "2.0.0"),
+        .package(url: "https://github.com/apple/swift-numerics.git", from: "1.1.0"),
+        .package(url: "https://github.com/jdfergason/swift-toml.git", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-crypto.git", from: "3.0.0"),
+        .package(url: "https://github.com/tree-sitter/swift-tree-sitter.git", from: "0.8.0"),
+        .package(url: "https://github.com/apple/swift-cmark.git", from: "0.5.0"),
+        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
+        .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.19.0"),
+        .package(path: "Deprecated/Inspiration/INBOX/swift-sdk")
+    ],
+    targets: testSupportTargets + coreTargets + executableTargets + capabilityTargets + testTargets,
+    cxxLanguageStandard: .cxx17
+)

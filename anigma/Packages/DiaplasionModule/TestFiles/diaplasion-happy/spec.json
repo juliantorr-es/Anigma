@@ -1,0 +1,14 @@
+{
+  "title": "Diaplasion HAPPY_PATH Fixture",
+  "description": "A tiny single-page input used by the Diaplasion pipeline runner",
+  "inputs": [
+    {
+      "path": "page-0.png",
+      "label": "Minimal fixture page"
+    }
+  ],
+  "metadata": {
+    "owner": "Sigma pipeline",
+    "note": "Keep intentionally small, see README"
+  }
+}

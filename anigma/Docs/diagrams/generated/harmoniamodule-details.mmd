@@ -1,0 +1,33 @@
+graph TB
+    subgraph "HarmoniaModule"
+        M["HarmoniaModule<br/><em>AI-assisted code orchestration with safety analysis</em>"]
+        
+        subgraph "Components"
+            CReasoningOrchestrator["ReasoningOrchestrator"]
+            CCICDGate["CICDGate"]
+            CThemisGovernance["ThemisGovernance"]
+            CBonkersInference["BonkersInference"]
+        end
+        
+        subgraph "Dependencies"
+            DAnigmaCore["AnigmaCore"]
+            DGRDB["GRDB"]
+            DSwiftSyntax["SwiftSyntax"]
+        end
+    end
+    
+        M --> DAnigmaCore
+        M --> DGRDB
+        M --> DSwiftSyntax
+        M --> CReasoningOrchestrator
+        M --> CCICDGate
+        M --> CThemisGovernance
+        M --> CBonkersInference
+    
+    classDef module fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef component fill:#f1f8e9,stroke:#558b2f,stroke-width:2px
+    classDef dependency fill:#fff8e1,stroke:#ff8f00,stroke-width:2px
+    
+    class M module
+    class CReasoningOrchestrator,CCICDGate,CThemisGovernance,CBonkersInference component
+    class DAnigmaCore,DGRDB,DSwiftSyntax dependency

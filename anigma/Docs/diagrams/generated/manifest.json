@@ -1,0 +1,29 @@
+{
+  "generated": "2025-12-26T10:17:41.761Z",
+  "diagrams": [
+    {
+      "name": "Two Tier Overview",
+      "category": "architecture",
+      "svg": "/diagrams/generated/svg/two-tier-overview.svg",
+      "png": "/diagrams/generated/png/two-tier-overview.png"
+    },
+    {
+      "name": "Agent Pipeline",
+      "category": "workflows",
+      "svg": "/diagrams/generated/svg/agent-pipeline.svg",
+      "png": "/diagrams/generated/png/agent-pipeline.png"
+    },
+    {
+      "name": "Core Layer Components",
+      "category": "architecture",
+      "svg": "/diagrams/generated/svg/core-layer-components.svg",
+      "png": "/diagrams/generated/png/core-layer-components.png"
+    },
+    {
+      "name": "Ml Evidence Generation",
+      "category": "data-flows",
+      "svg": "/diagrams/generated/svg/ml-evidence-generation.svg",
+      "png": "/diagrams/generated/png/ml-evidence-generation.png"
+    }
+  ]
+}

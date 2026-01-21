@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>anigma.dev | Builder Notes</title>
+    <meta name="description"
+        content="Architecture, interfaces, and proof of shipped work for Anigma builders and skeptics." />
+    <meta name="application-name" content="anigma.dev" />
+    <meta name="apple-mobile-web-app-title" content="anigma.dev" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://anigma.dev/" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <meta property="og:title" content="anigma.dev | Builder Notes" />
+    <meta property="og:description"
+        content="Interfaces, invariants, and proof of shipped work for Anigma builders and skeptics." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://anigma.dev/" />
+    <meta property="og:image" content="https://anigma.dev/images/og.svg" />
+    <meta property="og:site_name" content="anigma.dev" />
+    <meta property="og:image:alt" content="anigma.dev — Builder Notes" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="anigma.dev | Builder Notes" />
+    <meta name="twitter:description"
+        content="Interfaces, invariants, and proof of shipped work for Anigma builders and skeptics." />
+    <meta name="twitter:image" content="https://anigma.dev/images/og.svg" />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "anigma.dev",
+            "url": "https://anigma.dev/"
+        }
+    </script>
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="ambient-grid" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <div class="wrap nav-row">
+            <a class="logo" href="#home">
+                <span class="logo-dot"></span>
+                anigma.dev
+            </a>
+            <nav class="nav">
+                <a href="#roadmap">Roadmap</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#proof">Proof</a>
+                <a href="#atlas">Atlas</a>
+                <a href="#docs">Docs</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+        <section id="home" class="hero">
+            <div class="wrap section-panels h-scroll">
+                <div class="section-panel">
+                    <div class="hero-copy">
+                    <p class="eyebrow">Builder notebook</p>
+                    <h1>Interfaces, invariants, and shipped proof.</h1>
+                    <p class="lead">
+                        anigma.dev is the lab notebook: contracts, architecture seams, and evidence that the system
+                        behaves as claimed.
+                    </p>
+                    <p class="status-line">Now shipping: governance receipts + Sidecar boundary v1.</p>
+                    <div class="hero-actions">
+                        <a class="btn primary" href="#architecture">Read the architecture</a>
+                        <a class="btn ghost" href="#proof">See release proof</a>
+                    </div>
+                    <div class="trust-badges">
+                        <span>Contracted milestones</span>
+                        <span>Auditable surfaces</span>
+                        <span>Verified releases</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="section-panel">
+                    <div class="hero-panel">
+                    <div class="panel-card">
+                        <p class="panel-title">Integration boundary</p>
+                        <ul class="pipeline-list">
+                            <li><span>01</span> App shell</li>
+                            <li><span>02</span> Sidecar daemon</li>
+                            <li><span>03</span> Governance gate</li>
+                            <li><span>04</span> Capability modules</li>
+                        </ul>
+                        <div class="panel-footer">
+                            <div>
+                                <p class="panel-label">Surface</p>
+                                <p class="panel-value">Documented</p>
+                            </div>
+                            <div>
+                                <p class="panel-label">Invariants</p>
+                                <p class="panel-value">Enforced</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="signal-ribbon">Docs first · JS light</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="section">
+            <div class="wrap section-panels h-scroll">
+                <div class="section-panel">
+                    <h2>Roadmap as contracts.</h2>
+                    <p>
+                        Each milestone is a contract: surface, invariants, and acceptance tests. We ship in sequence,
+                        not vibes.
+                    </p>
+                    <div class="media-frame">
+                        <div class="media-placeholder">Roadmap timeline + contract cards</div>
+                    </div>
+                </div>
+                <div class="section-panel">
+                    <div class="metric-stack">
+                    <div class="metric-card">
+                        <p class="metric-title">Phase status</p>
+                        <p class="metric-value">Tracked</p>
+                        <p class="metric-caption">Every release ties to a spec and receipt.</p>
+                    </div>
+                    <div class="metric-card">
+                        <p class="metric-title">Constraints</p>
+                        <p class="metric-value">Explicit</p>
+                        <p class="metric-caption">No hidden transforms or silent calls.</p>
+                    </div>
+                    <div class="metric-card">
+                        <p class="metric-title">Delivery</p>
+                        <p class="metric-value">Incremental</p>
+                        <p class="metric-caption">Milestones map to interfaces.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="section evidence">
+            <div class="wrap section-panels h-scroll">
+                <div class="section-panel">
+                    <h2>Architecture: interfaces + invariants.</h2>
+                    <p>
+                        The Sidecar daemon is the open-source perimeter. Governance enforces policy gates before any
+                        capability runs. Capability modules plug in behind the boundary.
+                    </p>
+                    <pre><code>// Surface contract (example)
+interface Job {
+  inputs: Artifact[]
+  policy: PolicyRef
+  steps: Step[]
+}</code></pre>
+                </div>
+                <div class="section-panel">
+                    <div class="evidence-cards">
+                    <div class="evidence-card">
+                        <p class="evidence-title">Sidecar boundary</p>
+                        <p class="evidence-detail">Audit the execution perimeter.</p>
+                        <span class="pill">Open</span>
+                    </div>
+                    <div class="evidence-card">
+                        <p class="evidence-title">Governance gate</p>
+                        <p class="evidence-detail">Policies are code.</p>
+                        <span class="pill">Enforced</span>
+                    </div>
+                    <div class="evidence-card">
+                        <p class="evidence-title">Capability modules</p>
+                        <p class="evidence-detail">Composable, explicit, scoped.</p>
+                        <span class="pill">Scoped</span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="proof" class="section">
+            <div class="wrap section-panels h-scroll">
+                <div class="section-panel">
+                    <div class="section-header">
+                        <h2>Proof of shipped work.</h2>
+                        <p>Changelogs, receipts, and benchmarks that match the claims.</p>
+                    </div>
+                </div>
+                <div class="section-panel">
+                    <div class="module-grid">
+                    <article>
+                        <h3>Release notes</h3>
+                        <p>Tagged releases with links to receipts and diffs.</p>
+                    </article>
+                    <article>
+                        <h3>Benchmarks</h3>
+                        <p>Measured pipelines, hardware profiles, and constraints.</p>
+                    </article>
+                    <article>
+                        <h3>Receipts gallery</h3>
+                        <p>Audit artifacts tied to run IDs.</p>
+                    </article>
+                    <article>
+                        <h3>Validation</h3>
+                        <p>Proof that governance boundaries hold in practice.</p>
+                    </article>
+                    <article>
+                        <h3>Shipped this month</h3>
+                        <p>Short list of changes, linked to specs and tests.</p>
+                    </article>
+                    <article>
+                        <h3>Constraints log</h3>
+                        <p>Documented limits and guardrails for each module.</p>
+                    </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="atlas" class="section">
+            <div class="wrap section-panels h-scroll">
+                <div class="section-panel">
+                    <h2>Atlas: explore how it works.</h2>
+                    <p>Optional deep dive into the system map and flow topology.</p>
+                </div>
+                <div class="section-panel">
+                    <div class="module-grid">
+                    <article>
+                        <h3><a href="../anigma-website/atlas/index.html">Interactive map</a></h3>
+                        <p>Navigate subsystems and contracts.</p>
+                    </article>
+                    <article>
+                        <h3>Evidence flow</h3>
+                        <p>Trace how receipts are formed and verified.</p>
+                    </article>
+                    <article>
+                        <h3>Capabilities</h3>
+                        <p>See modules and job orchestration.</p>
+                    </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="docs" class="section">
+            <div class="wrap section-panels h-scroll">
+                <div class="section-panel">
+                    <div class="deploy">
+                        <div>
+                    <h2>Documentation-first.</h2>
+                    <p>Fast, searchable, and usable even on locked-down networks.</p>
+                        </div>
+                        <a class="btn primary" href="docs/index.html">Open docs</a>
+                    </div>
+                </div>
+                <div class="section-panel">
+                    <div class="panel-card">
+                        <p class="panel-title">Doc priorities</p>
+                        <ul class="pipeline-list">
+                            <li><span>01</span> Interfaces + invariants</li>
+                            <li><span>02</span> Governance contracts</li>
+                            <li><span>03</span> Proof + benchmarks</li>
+                            <li><span>04</span> Integration seams</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-grid">
+            <div>
+                <h3>anigma.dev</h3>
+                <p>Builder notes for interfaces, invariants, and proof.</p>
+            </div>
+            <div class="footer-links">
+                <a href="../anigma-website/index.html">anigma.app</a>
+                <a href="../anigma-solutions/index.html">anigma.solutions</a>
+                <a href="https://github.com/anigma/anigma">GitHub</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const sectionRails = document.querySelectorAll(".section-panels");
+        sectionRails.forEach((rail) => {
+            const panels = rail.querySelectorAll(":scope > .section-panel");
+            if (panels.length < 2) return;
+
+            const indicator = document.createElement("div");
+            indicator.className = "slider-indicator";
+
+            panels.forEach((panel, index) => {
+                const dot = document.createElement("button");
+                dot.type = "button";
+                dot.className = "slider-dot";
+                dot.setAttribute("aria-label", `Slide ${index + 1}`);
+                dot.addEventListener("click", () => {
+                    panel.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+                });
+                indicator.appendChild(dot);
+            });
+
+            rail.parentNode.insertBefore(indicator, rail.nextSibling);
+
+            const dots = indicator.querySelectorAll(".slider-dot");
+            let rafId;
+            const updateActive = () => {
+                let activeIndex = 0;
+                let minDistance = Infinity;
+                panels.forEach((panel, index) => {
+                    const distance = Math.abs(panel.offsetLeft - rail.scrollLeft);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        activeIndex = index;
+                    }
+                });
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle("is-active", index === activeIndex);
+                });
+            };
+
+            updateActive();
+
+            rail.addEventListener("scroll", () => {
+                if (rafId) return;
+                rafId = requestAnimationFrame(() => {
+                    rafId = null;
+                    updateActive();
+                });
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>

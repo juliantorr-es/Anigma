@@ -1,0 +1,35 @@
+graph TB
+    subgraph "AnigmaCore"
+        M["AnigmaCore<br/><em>Central ECS framework and governance substrate</em>"]
+        
+        subgraph "Components"
+            CWorld["World"]
+            CEntityId["EntityId"]
+            CComponent["Component"]
+            CSystem["System"]
+            CAuditLog["AuditLog"]
+            CReasoningOrchestrator["ReasoningOrchestrator"]
+        end
+        
+        subgraph "Dependencies"
+            DAnigmaPrimitives["AnigmaPrimitives"]
+            DContractsCore["ContractsCore"]
+        end
+    end
+    
+        M --> DAnigmaPrimitives
+        M --> DContractsCore
+        M --> CWorld
+        M --> CEntityId
+        M --> CComponent
+        M --> CSystem
+        M --> CAuditLog
+        M --> CReasoningOrchestrator
+    
+    classDef module fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef component fill:#f1f8e9,stroke:#558b2f,stroke-width:2px
+    classDef dependency fill:#fff8e1,stroke:#ff8f00,stroke-width:2px
+    
+    class M module
+    class CWorld,CEntityId,CComponent,CSystem,CAuditLog,CReasoningOrchestrator component
+    class DAnigmaPrimitives,DContractsCore dependency

@@ -1,0 +1,174 @@
+{
+  "model": "gemini-1.5-pro",
+  "system_instruction": "You are Anigma, a governed, local-first Swift stack for institutional AI. You have access to 17 specialized tools for code analysis, building, testing, and governance. Always prioritize local execution and adhere to governance policies.",
+  "tools": [
+    {
+      "function_declarations": [
+        {
+          "name": "trace_query",
+          "description": "Queries the system's execution history.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "limit": { "type": "integer", "default": 10 },
+              "offset": { "type": "integer", "default": 0 },
+              "taskId": { "type": "string" }
+            }
+          }
+        },
+        {
+          "name": "digest_codebase",
+          "description": "Crawls and indexes the entire project for searchable knowledge.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" }
+            }
+          }
+        },
+        {
+          "name": "list_models",
+          "description": "Lists all registered local ML models.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "task": { "type": "string", "enum": ["llmChat", "embedding", "transcription"] }
+            }
+          }
+        },
+        {
+          "name": "get_system_health",
+          "description": "Retrieves overall system health summary.",
+          "parameters": { "type": "object", "properties": {} }
+        },
+        {
+          "name": "create_tool_contract",
+          "description": "Dynamically registers a new tool capability.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "input_schema_json": { "type": "string" },
+              "capabilities": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["name", "description", "input_schema_json"]
+          }
+        },
+        {
+          "name": "list_artifacts",
+          "description": "Lists items in the project's artifact repository.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "limit": { "type": "integer", "default": 50 },
+              "media_type": { "type": "string" }
+            }
+          }
+        },
+        {
+          "name": "context_purge",
+          "description": "Clears the search index.",
+          "parameters": { "type": "object", "properties": {} }
+        },
+        {
+          "name": "get_module_status",
+          "description": "Returns initialization status of MCP server modules.",
+          "parameters": { "type": "object", "properties": {} }
+        },
+        {
+          "name": "context_search",
+          "description": "Semantic and full-text search across project context.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": { "type": "string" },
+              "limit": { "type": "integer", "default": 10 }
+            },
+            "required": ["query"]
+          }
+        },
+        {
+          "name": "apply_patch",
+          "description": "Applies a unified diff patch to the project.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "patch": { "type": "string", "description": "The unified diff patch content to apply" }
+            },
+            "required": ["patch"]
+          }
+        },
+        {
+          "name": "database_query",
+          "description": "Executes read-only SQL query against project database.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "sql": { "type": "string" },
+              "parameters": { "type": "object", "additionalProperties": { "type": "string" } }
+            },
+            "required": ["sql"]
+          }
+        },
+        {
+          "name": "read_file",
+          "description": "Securely reads the content of a file within the project directory.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "file_path": { "type": "string", "description": "Relative path to the file to read" }
+            },
+            "required": ["file_path"]
+          }
+        },
+        {
+          "name": "swift_test",
+          "description": "Executes the project test suite.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "filter": { "type": "string", "description": "Specific test pattern to run" }
+            }
+          }
+        },
+        {
+          "name": "git_diff",
+          "description": "Inspects current changes in the repository.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string", "description": "Optional path filter" }
+            }
+          }
+        },
+        {
+          "name": "swift_build",
+          "description": "Triggers a deterministic build of a Swift package.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "package_path": { "type": "string", "description": "Path to the directory containing Package.swift" }
+            }
+          }
+        },
+        {
+          "name": "list_active_alerts",
+          "description": "Lists active system alerts.",
+          "parameters": { "type": "object", "properties": {} }
+        },
+        {
+          "name": "verify_evidence_chain",
+          "description": "Verifies integrity of operation history for a session.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "session_id": { "type": "string" }
+            },
+            "required": ["session_id"]
+          }
+        }
+      ]
+    }
+  ]
+}

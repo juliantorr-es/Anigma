@@ -1,0 +1,62 @@
+# Harmonia Retention Policy
+# Version 1.0
+#
+# Governs how long different types of data are retained
+# and when cleanup operations may run
+
+[metadata]
+version = "1.0"
+description = "Conservative default retention policy for Harmonia evidence"
+created_at = "2024-12-14T00:00:00Z"
+
+# Session database lifecycle
+[session_db]
+# Session DBs are temporary and can be cleaned up aggressively
+ttl_days = 7                    # Delete session DBs after 7 days
+max_size_mb = 100               # Max size per session DB
+cleanup_interval_hours = 24       # Check for cleanup every 24 hours
+
+# Master ledger retention (append-only events are never deleted)
+[master_ledger]
+# Evidence chain events are kept forever (append-only)
+events_retention_days = -1       # -1 means keep forever
+min_events_before_cleanup = 1000   # Don't consider cleanup until we have this many events
+
+# Artifact payload retention (content-addressed blobs)
+[artifacts]
+# Large payloads can be expired while keeping hashes for audit
+default_ttl_days = 90            # Default retention for most artifacts
+large_payload_threshold_mb = 10   # Payloads larger than this get shorter TTL
+large_payload_ttl_days = 30       # Shorter retention for large payloads
+max_total_storage_gb = 50         # Maximum total artifact storage
+compression_enabled = true          # Enable compression for large artifacts
+
+# Artifact-specific retention rules
+[[artifacts.rules]]
+pattern = "tool_result_*"
+ttl_days = 30
+description = "Tool output results (often large, less critical long-term)"
+
+[[artifacts.rules]]
+pattern = "build_artifact_*"
+ttl_days = 60
+description = "Build artifacts (medium retention for reproducibility)"
+
+[[artifacts.rules]]
+pattern = "diff_*"
+ttl_days = 365
+description = "Diffs (keep longer for change tracking)"
+
+[[artifacts.rules]]
+pattern = "error_log_*"
+ttl_days = 14
+description = "Error logs (short retention, keep hashes only)"
+
+# GC operation settings
+[gc]
+dry_run_default = true           # Safety: default to dry-run
+max_delete_per_run = 10000     # Limit deletions per run to avoid long operations
+min_age_hours = 1              # Don't delete artifacts newer than this
+require_policy_hash_match = true  # Only run if policy hash matches stored state
+vacuum_threshold_mb = 100        # Run VACUUM when this much space can be reclaimed
+checkpoint_wal_mb = 50         # WAL checkpoint size threshold

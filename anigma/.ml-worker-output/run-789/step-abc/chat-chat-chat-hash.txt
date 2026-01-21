@@ -1,0 +1,1 @@
+Mock llama.cpp response to: Hello world test document for chat.

@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CCTVEvent",
+  "description": "Schema for a structured event logged by Anigma's governance (CCTV) system.",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "event_type",
+    "source_module",
+    "action_id",
+    "decision",
+    "governance_layer",
+    "details"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 formatted timestamp of when the event occurred."
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "capability_blocked",
+        "capability_granted",
+        "doctrine_violation",
+        "research_inadequate",
+        "trust_degraded",
+        "trust_promoted",
+        "trust_recalculation",
+        "mode_change",
+        "action_proposed",
+        "action_executed",
+        "action_denied",
+        "preflight_status",
+        "ci_check_failure",
+        "ci_check_success",
+        "agent_contract_violation",
+        "human_override",
+        "kill_switch_activated",
+        "other"
+      ],
+      "description": "The type of governance event."
+    },
+    "source_module": {
+      "type": "string",
+      "description": "The module or component that initiated or was affected by the event (e.g., `GovernedMigrationCore`, `HarmoniaCLI`, `AI_Agent`)."
+    },
+    "action_id": {
+      "type": "string",
+      "description": "Unique ID of the action or proposal associated with this event (e.g., Task ID from ActionProposal)."
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["allowed", "denied", "confirmed", "blocked", "escalated", "info"],
+      "description": "The outcome of the governance evaluation."
+    },
+    "governance_layer": {
+      "type": "string",
+      "enum": ["Security", "Doctrine", "Research", "System", "Human_Review"],
+      "description": "The governance layer responsible for the decision or primary involvement."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical", "info"],
+      "description": "The severity level of the event."
+    },
+    "details": {
+      "type": "string",
+      "description": "A human-readable description of the event, including context."
+    },
+    "policy_violated": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific policies or rules violated (e.g., `ADR/0003-no-python-or-node-at-runtime.md`, `LLM-GUIDELINES-NO_PYTHON`)."
+    },
+    "required_evidence": {
+      "type": "object",
+      "description": "References to evidence required for decision (e.g., research bundle ID, test report hash)."
+    },
+    "resulting_debt_task_id": {
+      "type": "string",
+      "description": "If applicable, the ID of a technical debt task created as a result of this event."
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Additional structured data relevant to the event (e.g., trust score delta, rule ID)."
+    }
+  },
+  "additionalProperties": false
+}

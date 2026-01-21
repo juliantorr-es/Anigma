@@ -1,0 +1,66 @@
+graph TB
+    subgraph "AnigmaCore ECS Foundation"
+        direction TB
+        World[World Actor]
+        Entity[Entity System]
+        Component[Component System]
+        System[System Registry]
+        Scheduler[Job Scheduler]
+        
+        World --> Entity
+        World --> Component
+        World --> System
+        World --> Scheduler
+    end
+    
+    subgraph "DatabaseCore"
+        direction TB
+        DBActor[Database Actor]
+        SQLite[SQLite Backend]
+        Migrations[Schema Migrations]
+        Queries[Query Interface]
+        
+        DBActor --> SQLite
+        DBActor --> Migrations
+        DBActor --> Queries
+    end
+    
+    subgraph "HarmoniaSpine Governance"
+        direction TB
+        Governance[Governance Engine]
+        Policies[Policy Enforcement]
+        Audit[Audit Trail]
+        KillSwitch[Kill Switch]
+        
+        Governance --> Policies
+        Governance --> Audit
+        Governance --> KillSwitch
+    end
+    
+    subgraph "ML Worker Integration"
+        direction TB
+        MLWorker[ML Worker]
+        Evidence[Evidence Generation]
+        Signing[Hardware Signing]
+        Timestamp[Trusted Timestamping]
+        
+        MLWorker --> Evidence
+        Evidence --> Signing
+        Evidence --> Timestamp
+    end
+    
+    %% Inter-layer connections
+    Entity --> DBActor
+    System --> Governance
+    Scheduler --> MLWorker
+    
+    %% Styling
+    classDef coreComponent fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef databaseComponent fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef governanceComponent fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef mlComponent fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    
+    class World,Entity,Component,System,Scheduler coreComponent
+    class DBActor,SQLite,Migrations,Queries databaseComponent
+    class Governance,Policies,Audit,KillSwitch governanceComponent
+    class MLWorker,Evidence,Signing,Timestamp mlComponent

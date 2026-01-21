@@ -1,0 +1,213 @@
+{
+  "generated": "2025-12-26T10:17:58.303Z",
+  "phase": "Phase 2 - Enhanced Module Visualization",
+  "moduleStructure": {
+    "core": {
+      "name": "Core Governance Layer",
+      "description": "Production-hardened, court-safe substrate",
+      "modules": {
+        "AnigmaPrimitives": {
+          "purpose": "Foundational types and contracts",
+          "components": [
+            "GovernanceMode",
+            "TrustTier",
+            "MigrationTaskRow",
+            "AstAnchor"
+          ],
+          "dependencies": []
+        },
+        "AnigmaCore": {
+          "purpose": "Central ECS framework and governance substrate",
+          "components": [
+            "World",
+            "EntityId",
+            "Component",
+            "System",
+            "AuditLog",
+            "ReasoningOrchestrator"
+          ],
+          "dependencies": [
+            "AnigmaPrimitives",
+            "ContractsCore"
+          ]
+        },
+        "DatabaseCore": {
+          "purpose": "Thread-safe SQLite database access",
+          "components": [
+            "DatabaseActor",
+            "DatabaseConfiguration",
+            "DatabaseMetrics"
+          ],
+          "dependencies": []
+        },
+        "ContractsCore": {
+          "purpose": "Universal contract definitions and validation",
+          "components": [
+            "ContractID",
+            "WorkflowContract",
+            "TrustTier",
+            "SecurityZone"
+          ],
+          "dependencies": [
+            "ArgumentParser"
+          ]
+        }
+      }
+    },
+    "capability": {
+      "name": "Capability Modules",
+      "description": "Feature-rich ecosystem modules",
+      "modules": {
+        "HarmoniaModule": {
+          "purpose": "AI-assisted code orchestration with safety analysis",
+          "components": [
+            "ReasoningOrchestrator",
+            "CICDGate",
+            "ThemisGovernance",
+            "BonkersInference"
+          ],
+          "dependencies": [
+            "AnigmaCore",
+            "GRDB",
+            "SwiftSyntax"
+          ],
+          "category": "ai-governance"
+        },
+        "DiaplasionModule": {
+          "purpose": "Document transformation for accessibility",
+          "components": [
+            "OCREngine",
+            "TextChunker",
+            "EPUBExport",
+            "BrailleExport",
+            "AudioExport"
+          ],
+          "dependencies": [
+            "AnigmaCore",
+            "Vision",
+            "PDFKit"
+          ],
+          "category": "media-processing"
+        },
+        "CodexModule": {
+          "purpose": "Documentation and knowledge management",
+          "components": [
+            "Space",
+            "Page",
+            "Template",
+            "VersionControl",
+            "SearchEngine"
+          ],
+          "dependencies": [
+            "AnigmaCore"
+          ],
+          "category": "knowledge-management"
+        },
+        "TranscriptumModule": {
+          "purpose": "Academic records management",
+          "components": [
+            "StudentRecord",
+            "CourseCatalog",
+            "GradeBook",
+            "TranscriptGenerator"
+          ],
+          "dependencies": [
+            "AnigmaCore"
+          ],
+          "category": "education"
+        },
+        "PragmaModule": {
+          "purpose": "Project and task management",
+          "components": [
+            "Project",
+            "Task",
+            "Workflow",
+            "Timeline",
+            "ResourceAllocation"
+          ],
+          "dependencies": [
+            "AnigmaCore"
+          ],
+          "category": "project-management"
+        },
+        "ConexusModule": {
+          "purpose": "Contact and relationship management",
+          "components": [
+            "Contact",
+            "Relationship",
+            "NetworkGraph",
+            "CommunicationLog"
+          ],
+          "dependencies": [
+            "AnigmaCore"
+          ],
+          "category": "crm"
+        },
+        "ObservatoriumModule": {
+          "purpose": "Telemetry and monitoring",
+          "components": [
+            "TelemetryService",
+            "AlertService",
+            "MetricsCollector",
+            "Dashboard"
+          ],
+          "dependencies": [
+            "AnigmaCore"
+          ],
+          "category": "monitoring"
+        },
+        "PolytroposModule": {
+          "purpose": "Media processing and editing",
+          "components": [
+            "MediaProcessor",
+            "EditProfile",
+            "ExportService",
+            "SyncService"
+          ],
+          "dependencies": [
+            "AnigmaCore"
+          ],
+          "category": "media-processing"
+        }
+      }
+    }
+  },
+  "diagrams": [
+    {
+      "name": "Module Hierarchy",
+      "filename": "module-hierarchy",
+      "svg": "/diagrams/generated/svg/module-hierarchy.svg",
+      "png": "/diagrams/generated/png/module-hierarchy.png"
+    },
+    {
+      "name": "Dependency Flow",
+      "filename": "dependency-flow",
+      "svg": "/diagrams/generated/svg/dependency-flow.svg",
+      "png": "/diagrams/generated/png/dependency-flow.png"
+    },
+    {
+      "name": "Capability Categories",
+      "filename": "capability-categories",
+      "svg": "/diagrams/generated/svg/capability-categories.svg",
+      "png": "/diagrams/generated/png/capability-categories.png"
+    },
+    {
+      "name": "HarmoniaModule Details",
+      "filename": "harmoniamodule-details",
+      "svg": "/diagrams/generated/svg/harmoniamodule-details.svg",
+      "png": "/diagrams/generated/png/harmoniamodule-details.png"
+    },
+    {
+      "name": "DiaplasionModule Details",
+      "filename": "diaplasionmodule-details",
+      "svg": "/diagrams/generated/svg/diaplasionmodule-details.svg",
+      "png": "/diagrams/generated/png/diaplasionmodule-details.png"
+    },
+    {
+      "name": "AnigmaCore Details",
+      "filename": "anigmacore-details",
+      "svg": "/diagrams/generated/svg/anigmacore-details.svg",
+      "png": "/diagrams/generated/png/anigmacore-details.png"
+    }
+  ]
+}

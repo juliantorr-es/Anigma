@@ -1,0 +1,241 @@
+   5 error: Unable to find module dependency: 'CGRPCZlib'
+   2 /Users/user/Developer/GitHub/Anigma/Sources/ModelRegistryModule/ModelRegistrySystem.swift:27:14: error: type 'ModelRegistrySystem' does not conform to protocol 'System'
+   2 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:80:14: error: type 'MultiStageRetrievalSystem' does not conform to protocol 'System'
+   2 /Users/user/Developer/GitHub/Anigma/Sources/AnigmaMCPModule/MCPServerImpl.swift:17:58: error: cannot find type 'MCPTransport' in scope
+   2 /Users/user/Developer/GitHub/Anigma/Sources/AnigmaMCPModule/MCPServerImpl.swift:15:32: error: cannot find type 'MCPTransport' in scope
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Storage/Storage.swift:574:17: error: 'ExportFormat' is ambiguous for type lookup in this context
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Storage/Storage.swift:554:24: error: 'ExportFormat' is ambiguous for type lookup in this context
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Storage/Storage.swift:528:15: error: type 'DataExportRequestComponent' does not conform to protocol 'Encodable'
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Storage/Storage.swift:528:15: error: type 'DataExportRequestComponent' does not conform to protocol 'Decodable'
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Storage/DocumentExportSystem.swift:20:24: error: 'ExportFormat' is ambiguous for type lookup in this context
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Storage/DocumentExportSystem.swift:12:13: error: invalid redeclaration of 'ExportFormat'
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/MCPConductor.swift:85:39: error: cannot find type 'MCPTransport' in scope
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/MCPConductor.swift:14:48: error: cannot find type 'MCPTransport' in scope
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Inference/TranslatorRegistry.swift:38:9: warning: actor-isolated instance method 'setupDefaultTranslators()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Inference/AuthConductor.swift:27:15: error: type 'RoundRobinSelector' does not conform to protocol 'AccountSelector'
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Components/MemorySystem.swift:12:14: error: type 'MemorySystem' does not conform to protocol 'System'
+   2 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/TelemetrySystem.swift:24:14: error: type 'TelemetrySystem' does not conform to protocol 'System'
+   1 error: Unable to find module dependency: 'CGRPCZlib' (in target 'AnigmaSidecar' from project 'Anigma')
+   1 error: Unable to find module dependency: 'CGRPCZlib' (in target 'AnigmaHostMac' from project 'Anigma')
+   1 error: Unable to find module dependency: 'CGRPCZlib' (in target 'AnigmaHostKit' from project 'Anigma')
+   1 error: Unable to find module dependency: 'CGRPCZlib' (in target 'AnigmaDaemonCore' from project 'Anigma')
+   1 error: Unable to find module dependency: 'CGRPCZlib' (in target 'anigma-app' from project 'Anigma')
+   1 error: Module dependency cycle: 'AnigmaDaemonCore (Source Target) -> AnigmaSidecar.swiftmodule -> AnigmaDaemonCore (Source Target)' (in target 'AnigmaDaemonCore' from project 'Anigma')
+   1 error: module dependency cycle: 'AnigmaDaemonCore (Source Target) -> AnigmaSidecar.swiftmodule -> AnigmaDaemonCore (Source Target)'
+   1 error: lstat(/Users/user/Library/Developer/Xcode/DerivedData/Anigma-crgzsypkgjlvjwgwphgwbonwnbzi/Build/Intermediates.noindex/Anigma.build/Debug/anigma-app.build/Objects-normal/arm64/anigma_app.swiftsourceinfo): No such file or directory (2) (in target 'anigma-app' from project 'Anigma')
+   1 error: lstat(/Users/user/Library/Developer/Xcode/DerivedData/Anigma-crgzsypkgjlvjwgwphgwbonwnbzi/Build/Intermediates.noindex/Anigma.build/Debug/anigma-app.build/Objects-normal/arm64/anigma_app.swiftmodule): No such file or directory (2) (in target 'anigma-app' from project 'Anigma')
+   1 error: lstat(/Users/user/Library/Developer/Xcode/DerivedData/Anigma-crgzsypkgjlvjwgwphgwbonwnbzi/Build/Intermediates.noindex/Anigma.build/Debug/anigma-app.build/Objects-normal/arm64/anigma_app.swiftdoc): No such file or directory (2) (in target 'anigma-app' from project 'Anigma')
+   1 error: lstat(/Users/user/Library/Developer/Xcode/DerivedData/Anigma-crgzsypkgjlvjwgwphgwbonwnbzi/Build/Intermediates.noindex/Anigma.build/Debug/anigma-app.build/Objects-normal/arm64/anigma_app.abi.json): No such file or directory (2) (in target 'anigma-app' from project 'Anigma')
+   1 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:47:32: error: type 'RuntimeError' has no member 'executionFailed'
+   1 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:46:55: error: cannot infer contextual base in reference to member 'utf8'
+   1 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:43:42: error: value of type 'any RuntimeServices' has no member 'inference'
+   1 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:39:39: error: type 'Any' has no member 'number'
+   1 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:37:20: error: cannot infer contextual base in reference to member 'textGeneration'
+   1 /Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/GraphRAGSystem.swift:36:23: error: cannot find 'InferenceRequest' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Sources/AnigmaMCPModule/MCPServerImpl.swift:53:24: error: heterogeneous collection literal could only be inferred to '[String : Any]'; add explicit type annotation if this is intentional
+   1 /Users/user/Developer/GitHub/Anigma/Packages/DataUI/Lenses/Diagram/DiagramLens.swift:130:52: warning: 'appendInterpolation' is deprecated: Localized string interpolation produces an unlocalized, debug description for this type of value. Use a type supported by LocalizedStringKey.StringInterpolation or initialize a LocalizedStringResource instead with an interpolated value that conforms to CustomLocalizedStringResourceConvertible.
+   1 /Users/user/Developer/GitHub/Anigma/Packages/DataUI/Lenses/Browser/BrowserLens.swift:231:21: warning: reference to captured var 'self' in concurrently-executing code
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9551:47: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9538:31: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9462:56: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9462:24: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9459:30: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9457:29: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9454:28: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9451:33: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9439:43: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:9434:41: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8506:76: warning: implicit conversion loses integer precision: 'u64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8499:71: warning: implicit conversion loses integer precision: 'u64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8494:70: warning: implicit conversion loses integer precision: 'u64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8489:70: warning: implicit conversion loses integer precision: 'u64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8484:75: warning: implicit conversion loses integer precision: 'u64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8351:37: warning: implicit conversion loses integer precision: 'u64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8043:101: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8031:76: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8026:78: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8021:78: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:8016:75: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7930:40: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7848:68: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7814:40: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7813:20: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7810:40: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7809:20: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7806:40: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7805:20: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7767:28: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7765:44: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7695:26: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7686:42: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7403:9: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:7195:22: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6757:17: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6636:54: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6559:22: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6538:38: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6514:32: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6505:41: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6498:38: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6491:37: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6484:34: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6439:83: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:6379:31: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:615:25: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:5867:22: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:5659:34: warning: implicit conversion loses integer precision: 'sqlite3_uint64' (aka 'unsigned long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4811:43: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4780:57: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4753:58: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4735:53: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4708:55: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4675:44: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4093:100: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4084:77: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4075:77: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:4065:77: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3937:22: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3923:43: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3917:24: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3915:29: warning: implicit conversion loses integer precision: 'unsigned long long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3313:29: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3284:29: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3066:21: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:3005:45: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2994:19: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2974:7: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2963:27: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'i32' (aka 'int') [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2944:7: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2749:38: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2399:35: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2378:31: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2320:26: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2225:54: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2215:58: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2203:41: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2200:61: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2198:55: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2190:34: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2139:21: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2130:34: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2078:62: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2076:41: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2073:63: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2071:41: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2068:61: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2066:55: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2058:34: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2010:54: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:2000:60: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1988:41: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1985:61: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1983:55: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1975:34: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1932:27: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1918:25: warning: implicit conversion loses integer precision: 'long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1784:48: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1764:28: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1671:21: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1648:21: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1633:21: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1564:39: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1555:30: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1549:39: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1540:31: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1506:39: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1497:30: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1491:39: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1482:31: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1452:48: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1430:23: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1376:23: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1264:33: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1126:40: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1109:51: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1091:51: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/CSQLiteVec/sqlite-vec.c:1048:60: warning: implicit conversion loses integer precision: 'i64' (aka 'long long') to 'int' [-Wshorten-64-to-32]
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaWork/Views/WorkbenchView.swift:38:25: warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaWork/Views/WorkbenchView.swift:28:25: warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaWork/Views/WorkbenchView.swift:18:25: warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/SandboxAuthorityImpl.swift:35:53: error: cannot find 'runtime' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/MCPConductor.swift:53:32: error: type 'RuntimeError' has no member 'executionFailed'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/MCPConductor.swift:46:60: error: type 'RuntimeError' has no member 'executionFailed'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/MCPConductor.swift:21:13: warning: no 'async' operations occur within 'await' expression
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:789:39: error: value of type 'InferenceOptionValue' has no member 'asBool'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:735:33: error: 'nil' requires a contextual type
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:731:23: error: cannot infer contextual base in reference to member 'custom'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:729:25: error: cannot infer contextual base in reference to member 'custom'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:728:23: error: cannot find 'evidenceAuthority' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:710:63: error: value of type 'SpeculativeConfiguration' has no member 'minDraftTokens'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:709:63: error: value of type 'SpeculativeConfiguration' has no member 'draftModelId'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Runtime/AuthorityImplementations.swift:403:22: error: cannot find 'BLAKE3' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:340:28: error: cannot infer contextual base in reference to member 'error'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:339:24: error: cannot infer contextual base in reference to member 'stepFailed'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:337:29: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:336:43: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:336:43: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:302:32: error: cannot infer contextual base in reference to member 'error'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:301:28: error: cannot infer contextual base in reference to member 'stepFailed'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:299:33: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:298:47: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:298:47: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:284:32: error: cannot infer contextual base in reference to member 'info'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:283:28: error: cannot infer contextual base in reference to member 'stepCompleted'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:281:33: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:280:47: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:280:47: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:219:28: error: cannot infer contextual base in reference to member 'info'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:218:24: error: cannot infer contextual base in reference to member 'candidateSelected'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:216:29: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:215:43: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:215:43: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:198:28: error: cannot infer contextual base in reference to member 'info'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:197:24: error: cannot infer contextual base in reference to member 'candidateGenerated'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:195:29: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:194:43: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:194:43: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:135:32: error: cannot infer contextual base in reference to member 'warning'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:134:28: error: cannot infer contextual base in reference to member 'quarantineTriggered'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:132:33: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:131:47: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:131:47: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:112:32: error: cannot infer contextual base in reference to member 'info'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:111:28: error: cannot infer contextual base in reference to member 'stepStarted'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:109:33: error: cannot convert value of type 'EventId' to expected argument type 'UUID'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:108:27: error: missing arguments for parameters 'name', 'duration', 'metadata', 'level' in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:108:27: error: extra arguments at positions #3, #4, #5, #6, #7 in call
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift:108:17: error: cannot convert value of type 'TraceEvent' to expected element type 'Array<TraceEvent>.ArrayLiteralElement' (aka 'TraceEvent')
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/GovernedResearchWorkflow.swift:56:39: error: type 'Any' has no member 'number'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/GovernedResearchWorkflow.swift:54:20: error: cannot infer contextual base in reference to member 'textGeneration'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/GovernedResearchWorkflow.swift:53:32: error: cannot find 'InferenceRequest' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/GovernedResearchWorkflow.swift:36:39: error: type 'Any' has no member 'number'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/GovernedResearchWorkflow.swift:34:20: error: cannot infer contextual base in reference to member 'textGeneration'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/GovernedResearchWorkflow.swift:33:27: error: cannot find 'InferenceRequest' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/AgenticLoopExecutor.swift:50:39: error: type 'Any' has no member 'number'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/AgenticLoopExecutor.swift:48:20: error: cannot infer contextual base in reference to member 'chat'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Jobs/AgenticLoopExecutor.swift:47:23: error: cannot find 'InferenceRequest' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Inference/ContextCompressionService.swift:44:38: error: type 'Any' has no member 'integer'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Inference/ContextCompressionService.swift:42:20: error: cannot infer contextual base in reference to member 'textGeneration'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Inference/ContextCompressionService.swift:41:23: error: cannot find 'InferenceRequest' in scope
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Components/MemorySystem.swift:54:23: error: call to actor-isolated instance method 'removeComponent' in a synchronous actor-isolated context
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Components/MemorySystem.swift:49:30: error: call to actor-isolated instance method 'query' in a synchronous actor-isolated context
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Components/MemorySystem.swift:38:15: error: actor-isolated instance method 'addComponent' cannot be called from outside of the actor
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:51:64: error: cannot convert value of type '[ContractsCore.TraceEvent]' to expected argument type '[AnigmaCore.TraceEvent]'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:394:25: error: cannot infer contextual base in reference to member 'stepStarted'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:393:36: error: cannot call value of non-function type 'TraceEvent?'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:388:62: error: cannot infer contextual base in reference to member 'stepFailed'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:388:53: error: value of type 'TraceEvent' has no member 'type'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:388:30: error: cannot infer contextual base in reference to member 'stepCompleted'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:388:21: error: value of type 'TraceEvent' has no member 'type'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:294:48: error: value of type 'TraceEvent' has no member 'data'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:293:49: error: value of type 'TraceEvent' has no member 'message'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:292:53: error: value of type 'TraceEvent' has no member 'component'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:289:51: error: value of type 'TraceEvent' has no member 'severity'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:288:49: error: value of type 'TraceEvent' has no member 'type'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/ReflexiveAnalytics.swift:286:27: error: cannot convert value of type 'UUID' to expected argument type 'EventId'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/PatternDetectors.swift:443:80: error: contextual closure type '(_) throws -> String' expects 1 argument, but 2 were used in closure body
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/PatternDetectors.swift:438:46: error: cannot infer contextual base in reference to member 'quarantineTriggered'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/PatternDetectors.swift:438:37: error: value of type 'TraceEvent' has no member 'type'
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/PatternDetectors.swift:346:82: error: contextual closure type '(_) throws -> String' expects 1 argument, but 2 were used in closure body
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Analytics/PatternDetectors.swift:339:43: error: trailing closure passed to parameter of type 'Predicate<NormalizedEvent>' that does not accept a closure
+   1 /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCLI/Providers/CloudProviders.swift:409:13: warning: passing closure as a 'sending' parameter risks causing data races between code in the current task and concurrent execution of the closure; this is an error in the Swift 6 language mode

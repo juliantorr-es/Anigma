@@ -1,0 +1,238 @@
+syntax = "proto3";
+
+package anigma.sidecar.v1;
+
+option swift_prefix = "Anigma";
+
+message RequestContext {
+  string client_id = 1;
+  bytes capability_token = 2;
+  string nonce = 3;
+}
+
+message ErrorStatus {
+  string code = 1;         // stable machine code, e.g. "AUTH_DENIED", "QUOTA_EXCEEDED"
+  string message = 2;      // human-readable
+  string detail_json = 3;  // optional structured detail (canonical JSON)
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  bool ok = 1;
+  string message = 2;
+  string api_version = 3;
+}
+
+message StatusRequest {
+  RequestContext ctx = 1;
+}
+
+message StatusResponse {
+  string api_version = 1;
+  string daemon_version = 2;
+  string build_hash = 3;
+  string socket_path = 4;
+  bool tcp_enabled = 5;
+  uint32 worker_processes = 6;
+  uint64 vault_size_bytes = 7;
+  uint64 vault_quota_bytes = 8;
+  string extra_json = 9;
+}
+
+message OpenSessionRequest {
+  string requested_client_name = 1;
+  repeated string requested_scopes = 2; // e.g. "vault.read", "vault.write", "job.submit"
+}
+
+message OpenSessionResponse {
+  string client_id = 1;
+  bytes capability_token = 2;
+  uint64 expires_unix_ms = 3;
+  repeated string granted_scopes = 4;
+}
+
+message ArtifactRef {
+  string hash = 1;          // hex content hash
+  string media_type = 2;    // e.g. "application/pdf", "text/plain"
+  uint64 size_bytes = 3;
+}
+
+message IngestBegin {
+  RequestContext ctx = 1;
+  string media_type = 2;
+  string filename_hint = 3;
+}
+
+message IngestChunk {
+  bytes data = 1;
+}
+
+message IngestRequest {
+  oneof part {
+    IngestBegin begin = 1;
+    IngestChunk chunk = 2;
+  }
+}
+
+message IngestResponse {
+  ArtifactRef artifact = 1;
+  string receipt_hash = 2;
+  ErrorStatus error = 3;
+}
+
+message RetrieveRequest {
+  RequestContext ctx = 1;
+  string hash = 2;
+}
+
+message RetrieveChunk {
+  bytes data = 1;
+}
+
+message RetrieveResponse {
+  ArtifactRef artifact = 1;
+  ErrorStatus error = 2;
+}
+
+message ListRequest {
+  RequestContext ctx = 1;
+  string page_token = 2;
+  uint32 page_size = 3;
+}
+
+message ListResponse {
+  repeated ArtifactRef artifacts = 1;
+  string next_page_token = 2;
+  ErrorStatus error = 3;
+}
+
+message JobSpec {
+  string kind = 1;                 // e.g. "artifact.copy"
+  bytes config_canonical = 2;      // canonical JSON or canonical CBOR; format is defined per kind
+  repeated ArtifactRef inputs = 3;
+}
+
+// A Job represents a unit of work processed by the daemon.
+message Job {
+  string job_id = 1;
+  JobSpec spec = 2;
+  string state = 3;           // "QUEUED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELED"
+  uint32 progress_permille = 4;
+  repeated ArtifactRef outputs = 5;
+  string final_receipt_hash = 6; // present when terminal
+}
+
+message SubmitJobRequest {
+  RequestContext ctx = 1;
+  JobSpec spec = 2;
+}
+
+message SubmitJobResponse {
+  string job_id = 1;
+  string receipt_hash = 2; // receipt for job submission / scheduling decision
+  ErrorStatus error = 3;
+}
+
+message GetJobStatusRequest {
+  RequestContext ctx = 1;
+  string job_id = 2;
+}
+
+message GetJobStatusResponse {
+  Job job = 1;
+  ErrorStatus error = 2;
+}
+
+message ListJobsRequest {
+  RequestContext ctx = 1;
+  string page_token = 2;
+  uint32 page_size = 3;
+  repeated string filter_by_state = 4; // e.g. ["SUCCEEDED", "FAILED"]
+}
+
+message ListJobsResponse {
+  repeated Job jobs = 1;
+  string next_page_token = 2;
+  ErrorStatus error = 3;
+}
+
+message StreamJobEventsRequest {
+  RequestContext ctx = 1;
+  string job_id = 2;
+}
+
+message JobEvent {
+  string job_id = 1;
+  string type = 2;            // "STATE", "PROGRESS", "LOG", "OUTPUT"
+  string message = 3;
+  uint32 progress_permille = 4;
+  ArtifactRef output = 5;
+  string receipt_hash = 6;    // optional per-event receipt if you want intermediate receipts later
+  ErrorStatus error = 7;
+}
+
+message CancelJobRequest {
+  RequestContext ctx = 1;
+  string job_id = 2;
+}
+
+message CancelJobResponse {
+  bool canceled = 1;
+  string receipt_hash = 2;
+  ErrorStatus error = 3;
+}
+
+message ReceiptRequest {
+  RequestContext ctx = 1;
+  string receipt_hash = 2;
+}
+
+message ReceiptResponse {
+  string receipt_canonical_json = 1;
+  ErrorStatus error = 2;
+}
+
+message VerifyChainRequest {
+  RequestContext ctx = 1;
+  string head_receipt_hash = 2;
+}
+
+message VerifyChainResponse {
+  bool ok = 1;
+  string message = 2;
+  ErrorStatus error = 3;
+}
+
+message TelemetryEvent {
+  string type = 1;
+  string payload_json = 2; // canonical JSON
+  uint64 at_unix_ms = 3;
+}
+
+message TelemetryAck {
+  bool ok = 1;
+  ErrorStatus error = 2;
+  string receipt_hash = 3;
+}
+
+service AnigmaService {
+  rpc HealthCheck(HealthRequest) returns (HealthResponse);
+  rpc OpenSession(OpenSessionRequest) returns (OpenSessionResponse);
+  rpc GetStatus(StatusRequest) returns (StatusResponse);
+
+  rpc IngestArtifact(stream IngestRequest) returns (IngestResponse);
+  rpc RetrieveArtifact(RetrieveRequest) returns (stream RetrieveChunk);
+  rpc ListArtifacts(ListRequest) returns (ListResponse);
+
+  rpc SubmitJob(SubmitJobRequest) returns (SubmitJobResponse);
+  rpc GetJobStatus(GetJobStatusRequest) returns (GetJobStatusResponse);
+  rpc ListJobs(ListJobsRequest) returns (ListJobsResponse);
+  rpc StreamJobEvents(StreamJobEventsRequest) returns (stream JobEvent);
+  rpc CancelJob(CancelJobRequest) returns (CancelJobResponse);
+
+  rpc GetReceipt(ReceiptRequest) returns (ReceiptResponse);
+  rpc VerifyChain(VerifyChainRequest) returns (VerifyChainResponse);
+
+  rpc StreamTelemetry(stream TelemetryEvent) returns (TelemetryAck);
+}

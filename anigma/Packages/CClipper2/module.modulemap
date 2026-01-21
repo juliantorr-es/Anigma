@@ -1,0 +1,4 @@
+module CClipper2 {
+    header "clipper2_wrapper.h"
+    export *
+}

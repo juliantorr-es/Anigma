@@ -1,0 +1,118 @@
+# SwiftLint configuration for capsule marshalling validation
+# Only applied to capsule boundary Swift files
+
+custom_rules:
+  capsule_string_usage:
+    name: "Capsule String Usage"
+    message: "Avoid String type in capsule boundaries; use UnsafePointer<CChar> or CapsuleBuffer"
+    regex: '\bString\b'
+    match_kinds:
+      - typeidentifier
+    severity: error
+    excluded: ".*Test.*|.*Mock.*"
+    
+  capsule_json_marshalling:
+    name: "Capsule JSON Marshalling"
+    message: "Avoid JSONEncoder/JSONDecoder in capsule boundaries; use binary serialization"
+    regex: '\bJSONEncoder\b|\bJSONDecoder\b'
+    match_kinds:
+      - identifier
+    severity: error
+    excluded: ".*Test.*|.*Mock.*"
+    
+  capsule_per_item_abi_call:
+    name: "Capsule Per-Item ABI Call"
+    message: "Avoid per-item ABI calls in loops; use batch APIs"
+    regex: 'for\s+\w+\s+in\s+.*\{[^}]*anigma_[a-z_]*\([^}]*\}'
+    severity: warning
+    excluded: ".*Test.*|.*Mock.*"
+
+# Only include capsule boundary Swift files
+included:
+  - Packages/CapsuleCore/Sources/**/*.swift
+  - Packages/AnigmaNativeShims/Sources/**/*.swift
+  - Packages/TypographyKit/Sources/**/*.swift
+  - Sources/ContextumModule/**/*.swift
+  - Sources/**/*Capsule*.swift
+
+# Exclude test files
+excluded:
+  - .build
+  - Deprecated
+  - ThirdParty
+  - Tools/Vendor
+  - **/Tests/**/*.swift
+  - **/*Test*.swift
+  - **/*Mock*.swift
+
+# Standard SwiftLint rules to enable
+opt_in_rules:
+  - explicit_init
+  - explicit_type_interface
+  - explicit_acl
+  - explicit_top_level_acl
+  - strict_fileprivate
+  - closure_spacing
+  - empty_count
+  - empty_string
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - joined_default_parameter
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_parameters
+  - operator_usage_whitespace
+  - overridden_super_call
+  - private_action
+  - private_outlet
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - sorted_first_last
+  - toggle_bool
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+
+# Rule configurations
+identifier_name:
+  min_length: 1
+  max_length: 60
+  excluded:
+    - id
+    - url
+    - URL
+    - x
+    - y
+    - z
+    - i
+    - j
+    - k
+
+type_name:
+  min_length: 3
+  max_length: 50
+  excluded:
+    - IR
+
+file_length:
+  warning: 500
+  error: 1000
+
+function_parameter_count:
+  warning: 6
+  error: 8
+
+nesting:
+  type_level: 2
+  statement_level: 5
+
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+reporter: "xcode"

@@ -1,0 +1,35 @@
+graph TB
+    subgraph "DiaplasionModule"
+        M["DiaplasionModule<br/><em>Document transformation for accessibility</em>"]
+        
+        subgraph "Components"
+            COCREngine["OCREngine"]
+            CTextChunker["TextChunker"]
+            CEPUBExport["EPUBExport"]
+            CBrailleExport["BrailleExport"]
+            CAudioExport["AudioExport"]
+        end
+        
+        subgraph "Dependencies"
+            DAnigmaCore["AnigmaCore"]
+            DVision["Vision"]
+            DPDFKit["PDFKit"]
+        end
+    end
+    
+        M --> DAnigmaCore
+        M --> DVision
+        M --> DPDFKit
+        M --> COCREngine
+        M --> CTextChunker
+        M --> CEPUBExport
+        M --> CBrailleExport
+        M --> CAudioExport
+    
+    classDef module fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef component fill:#f1f8e9,stroke:#558b2f,stroke-width:2px
+    classDef dependency fill:#fff8e1,stroke:#ff8f00,stroke-width:2px
+    
+    class M module
+    class COCREngine,CTextChunker,CEPUBExport,CBrailleExport,CAudioExport component
+    class DAnigmaCore,DVision,DPDFKit dependency

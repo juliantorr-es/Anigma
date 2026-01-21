@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Conservative default retention policy for Harmonia evidence",
+    "created_at": "2024-12-14T00:00:00Z"
+  },
+  "session_db": {
+    "ttl_days": 7,
+    "max_size_mb": 100,
+    "cleanup_interval_hours": 24
+  },
+  "master_ledger": {
+    "events_retention_days": -1,
+    "min_events_before_cleanup": 1000
+  },
+  "artifacts": {
+    "default_ttl_days": 90,
+    "large_payload_threshold_mb": 10,
+    "large_payload_ttl_days": 30,
+    "max_total_storage_gb": 50,
+    "compression_enabled": true,
+    "rules": [
+      {
+        "pattern": "tool_result_*",
+        "ttl_days": 30,
+        "description": "Tool output results (often large, less critical long-term)"
+      },
+      {
+        "pattern": "build_artifact_*",
+        "ttl_days": 60,
+        "description": "Build artifacts (medium retention for reproducibility)"
+      },
+      {
+        "pattern": "diff_*",
+        "ttl_days": 365,
+        "description": "Diffs (keep longer for change tracking)"
+      },
+      {
+        "pattern": "error_log_*",
+        "ttl_days": 14,
+        "description": "Error logs (short retention, keep hashes only)"
+      }
+    ]
+  },
+  "gc": {
+    "dry_run_default": true,
+    "max_delete_per_run": 10000,
+    "min_age_hours": 1,
+    "require_policy_hash_match": true,
+    "vacuum_threshold_mb": 100,
+    "checkpoint_wal_mb": 50
+  }
+}

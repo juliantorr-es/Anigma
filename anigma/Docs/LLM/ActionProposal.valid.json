@@ -1,0 +1,15 @@
+{
+  "task_id": "GH-Issue-123",
+  "action_type": "code_change",
+  "description": "Refactor TrustScoreCalculator to use DatabaseCore and remove duplicate definitions.",
+  "scope": {
+    "files_affected": [
+      "Sources/HarmoniaModule/Security/TrustScoreCalculator.swift"
+    ],
+    "modules_affected": ["HarmoniaModule", "DatabaseCore"]
+  },
+  "justification": "Removing duplicate definitions to resolve build errors and ambiguity, aligning with canonical definitions in TrustScoringConfig.swift. (see Docs/ADR/0001-single-ecs-in-anigmacore.md)",
+  "adrs_referenced": ["ADR/0001-single-ecs-in-anigmacore.md"],
+  "test_plan": "Run existing HarmoniaModuleTests and create new unit tests for TrustScoreCalculator to ensure functionality is preserved after refactoring.",
+  "rollback_plan": "Revert git commit <commit-hash>."
+}

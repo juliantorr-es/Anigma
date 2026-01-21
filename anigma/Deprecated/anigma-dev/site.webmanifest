@@ -1,0 +1,8 @@
+{
+  "name": "anigma.dev",
+  "short_name": "anigma",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f0e8",
+  "theme_color": "#f4f0e8"
+}

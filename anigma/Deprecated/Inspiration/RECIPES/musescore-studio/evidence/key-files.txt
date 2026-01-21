@@ -1,0 +1,102 @@
+# Key Files from MuseScore Studio (Evidence)
+
+This file lists specific files within the MuseScore Studio inspiration repository that were particularly insightful for understanding its architecture, key abstractions, or implementation details. These serve as direct evidence for the analysis provided in the recipe bundle.
+
+## List of Key Files
+
+### Build System Core Files
+- `CMakeLists.txt` - Main build configuration with comprehensive feature flags
+- `build.cmake` - Cross-platform build script implementing unified build workflow
+- `SetupConfigure.cmake` - Build environment configuration and dependency management
+- `SetupBuildEnvironment.cmake` - Compiler and build tool configuration
+
+### Module Configuration Files
+- `src/framework/cmake/MuseDeclareOptions.cmake` - Central feature flag declarations
+- `buildscripts/cmake/GetUtilsFunctions.cmake` - Build utility functions
+- `buildscripts/cmake/GetPlatformInfo.cmake` - Platform detection and configuration
+
+### Build Mode Configuration
+- `CMakePresets.json` - Build configuration presets for different scenarios
+- `build_overrides.cmake` - Local build customization system
+- `vtest/CMakeLists.txt` - Visual testing build configuration
+- `share/CMakeLists.txt` - Shared resources build configuration
+
+### Import/Export Module Files
+- `src/importexport/musicxml/CMakeLists.txt` - MusicXML format module build
+- `src/importexport/midi/CMakeLists.txt` - MIDI format module build
+- `src/importexport/mei/CMakeLists.txt` - MEI format module build
+- `src/importexport/guitarpro/CMakeLists.txt` - GuitarPro format module build
+
+### Module Structure Examples
+- `src/notation/CMakeLists.txt` - Core notation module build configuration
+- `src/playback/CMakeLists.txt` - Playback module build configuration
+- `src/project/CMakeLists.txt` - Project management module build
+- `src/inspector/CMakeLists.txt` - Inspector UI module build
+
+### Testing Infrastructure Files
+- `src/framework/testing/CMakeLists.txt` - Testing framework integration
+- `buildscripts/cmake/SetupTesting.cmake` - Test configuration and setup
+- `vtest/CMakeLists.txt` - Visual regression testing configuration
+- `src/framework/testing/MuseTestMain.cpp` - Test main entry point
+
+### Cross-Platform Support Files
+- `packaging/Linux+BSD/SetupAppImagePackaging.cmake` - Linux packaging configuration
+- `packaging/Windows/SetupWindowsPackaging.cmake` - Windows packaging configuration
+- `buildscripts/cmake/SetupQt6.cmake` - Qt6 integration and configuration
+
+### Configuration and Governance Files
+- `share/palette/` - Palette configuration and definitions
+- `share/instruments/` - Instrument definitions and configurations
+- `share/soundfonts/` - Audio resource configuration
+- `src/framework/musescore.rc` - Resource configuration for builds
+
+### Documentation and Metadata
+- `README.md` - Project overview and build instructions
+- `CONTRIBUTING.md` - Development workflow and contribution guidelines
+- `CODE_OF_CONDUCT.md` - Community governance and behavior guidelines
+- `LICENSE.txt` - GPLv3 license terms and conditions
+
+### Build Optimization Files
+- `buildscripts/tools/cmake_wrapper.bat` - Windows build wrapper script
+- `ninja_build.sh` - Ninja build system integration
+- `ninja_build.bat` - Windows Ninja build script
+- `buildscripts/cmake/SetupCompilerCache.cmake` - Compiler cache configuration
+
+### Quality Assurance Files
+- `hooks/install.sh` - Pre-commit hook installation
+- `hooks/uninstall.sh` - Pre-commit hook removal
+- `Doxyfile.plugins` - Documentation generation configuration
+- `buildscripts/cmake/SetupDownloadSoundFont.cmake` - Asset download management
+
+### Integration and Workflow Files
+- `src/mscore/main.cpp` - Application entry point
+- `src/appshell/CMakeLists.txt` - Application shell module build
+- `src/framework/global/CMakeLists.txt` - Global framework configuration
+- `src/framework/muse/CMakeLists.txt` - Core framework module build
+
+## Key Architectural Insights from Files
+
+### Modular Build System
+- Feature flag system implemented through comprehensive CMake options
+- Each functional area has independent build configuration
+- Optional compilation allows customized builds per deployment scenario
+
+### Cross-Platform Architecture
+- Single build script works across all supported platforms
+- Platform-specific optimizations isolated in separate configuration files
+- Unified workflow for configure, build, install, and run operations
+
+### Plugin System Pattern
+- Import/export functionality implemented as separate modules
+- Consistent build configuration pattern across all format modules
+- Format-specific dependencies and optimizations
+
+### Testing Integration
+- Testing deeply integrated into build process
+- Separate build configurations for different test types
+- Quality gates implemented as build-time checks
+
+### Configuration Management
+- Build configuration can be customized per environment
+- Override system allows local customization
+- Configuration validation prevents invalid builds

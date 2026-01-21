@@ -1,0 +1,24 @@
+# Manifest for Anigma Inspiration Repositories
+# This file tracks the status of each inspiration repository.
+
+# Each entry should correspond to a folder in INBOX/, WORKING/, or LEGACY/.
+#
+# status: inbox, working, legacy
+# recipe_path: Path to the generated recipe bundle in RECIPES/<repo-slug>/ (only for 'legacy' status)
+
+[repos]
+
+[musescore_studio]
+status = "legacy"
+name = "MuseScore Studio"
+description = "Professional music notation software demonstrating advanced build system architecture, modular design, and plugin-based import/export system."
+last_updated = "2025-12-17"
+recipe_path = "RECIPES/musescore-studio"
+
+# Example entry:
+# [repos.my_inspiration_repo]
+# status = "inbox"
+# name = "my_inspiration_repo"
+# description = "A brief description of what this repo is."
+# last_updated = "YYYY-MM-DD"
+

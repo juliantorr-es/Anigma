@@ -1,0 +1,397 @@
+#include "../../include/anigma_capsule_core.h"
+#include "../../include/anigma_rank_fusion_capsule.h"
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <algorithm>
+#include <cstring>
+#include <memory>
+#include <cmath>
+
+// ============================================================================
+// Internal Types
+// ============================================================================
+
+namespace {
+
+struct RankFusionCapsuleImpl {
+    // Store each rank list as vector of (id, rank) pairs
+    std::vector<std::vector<std::pair<uint64_t, uint32_t>>> rank_lists;
+    
+    // Temporary map for score accumulation (cleared per fusion)
+    mutable std::unordered_map<uint64_t, double> score_map;
+    
+    RankFusionCapsuleImpl() = default;
+    ~RankFusionCapsuleImpl() = default;
+    
+    // Clear all rank lists
+    void clear() {
+        rank_lists.clear();
+        score_map.clear();
+    }
+    
+    // Add a rank list (ids and ranks arrays)
+    bool add_rank_list(const uint64_t* ids, const uint32_t* ranks, size_t count) {
+        if (!ids || !ranks) return false;
+        try {
+            std::vector<std::pair<uint64_t, uint32_t>> list;
+            list.reserve(count);
+            for (size_t i = 0; i < count; ++i) {
+                list.emplace_back(ids[i], ranks[i]);
+            }
+            rank_lists.push_back(std::move(list));
+            return true;
+        } catch (...) {
+            return false;
+        }
+    }
+    
+    // Get number of unique IDs across all rank lists
+    size_t get_unique_count() const {
+        std::unordered_set<uint64_t> unique_ids;
+        for (const auto& list : rank_lists) {
+            for (const auto& entry : list) {
+                unique_ids.insert(entry.first);
+            }
+        }
+        return unique_ids.size();
+    }
+    
+    // Perform reciprocal rank fusion
+    // Returns false on error (e.g., out of memory)
+    bool fuse(uint32_t k, double* out_scores, uint64_t* out_ids, size_t max_results, size_t* out_actual) const {
+        if (!out_scores || !out_ids || !out_actual) return false;
+        
+        // Early exit if no rank lists
+        if (rank_lists.empty()) {
+            *out_actual = 0;
+            return true;
+        }
+        
+        // Clear temporary map and reserve buckets for performance
+        score_map.clear();
+        size_t total_ids = 0;
+        for (const auto& list : rank_lists) total_ids += list.size();
+        score_map.reserve(total_ids);
+        
+        // Accumulate scores from each rank list
+        for (const auto& list : rank_lists) {
+            for (const auto& entry : list) {
+                double contribution = 1.0 / (static_cast<double>(k) + static_cast<double>(entry.second));
+                score_map[entry.first] += contribution;
+            }
+        }
+        
+        // Extract results into vector for sorting
+        std::vector<std::pair<uint64_t, double>> results;
+        try {
+            results.reserve(score_map.size());
+            for (const auto& entry : score_map) {
+                results.emplace_back(entry.first, entry.second);
+            }
+        } catch (...) {
+            return false;
+        }
+        
+        // Sort descending by score, then ascending by ID for deterministic ordering
+        std::sort(
+            results.begin(),
+            results.end(),
+            [](const auto& a, const auto& b) {
+                if (a.second != b.second) {
+                    return a.second > b.second; // higher score first
+                }
+                return a.first < b.first; // tie-break by ID
+            }
+        );
+        
+        // Limit to max_results
+        size_t actual = std::min(results.size(), max_results);
+        *out_actual = actual;
+        
+        // Copy to output buffers
+        for (size_t i = 0; i < actual; ++i) {
+            out_ids[i] = results[i].first;
+            out_scores[i] = results[i].second;
+        }
+        
+        // Clear temporary map for next operation
+        score_map.clear();
+        return true;
+    }
+};
+
+} // anonymous namespace
+
+// ============================================================================
+// C API Implementation
+// ============================================================================
+
+extern "C" {
+
+// ----------------------------------------------------------------------------
+// Identity
+// ----------------------------------------------------------------------------
+
+anigma_capsule_identity_t anigma_rank_fusion_capsule_get_identity(void) {
+    static const char* capsule_id = "rank_fusion_capsule";
+    static const char* build_hash = "dev_20250112_1";  // Should be generated from build
+    static const char* algo_version = "1.0.0";
+    
+    return (anigma_capsule_identity_t) {
+        .capsule_id = capsule_id,
+        .build_hash = build_hash,
+        .algo_version = algo_version,
+        .determinism_tier = ANIGMA_DETERMINISM_TIER_2_CANONICAL_BOUNDARY
+    };
+}
+
+// ----------------------------------------------------------------------------
+// Core Capsule Functions
+// ----------------------------------------------------------------------------
+
+anigma_status_t anigma_rank_fusion_capsule_create(
+    anigma_rank_fusion_capsule_t* out_handle,
+    anigma_capsule_error_t* err
+) {
+    if (!out_handle) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid output handle pointer";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    auto* impl = new (std::nothrow) RankFusionCapsuleImpl;
+    if (!impl) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Failed to allocate rank fusion capsule";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+    
+    *out_handle = impl;
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_rank_fusion_capsule_destroy(
+    anigma_rank_fusion_capsule_t handle,
+    anigma_capsule_error_t* err
+) {
+    if (!handle) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid handle";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    delete static_cast<RankFusionCapsuleImpl*>(handle);
+    return ANIGMA_OK;
+}
+
+// ----------------------------------------------------------------------------
+// Rank Fusion Operations
+// ----------------------------------------------------------------------------
+
+anigma_status_t anigma_rank_fusion_capsule_add_rank_list(
+    anigma_rank_fusion_capsule_t handle,
+    const uint64_t* ids,
+    const uint32_t* ranks,
+    size_t count,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !ids || !ranks) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    auto* impl = static_cast<RankFusionCapsuleImpl*>(handle);
+    if (!impl->add_rank_list(ids, ranks, count)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Failed to add rank list";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+    
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_rank_fusion_capsule_fuse(
+    anigma_rank_fusion_capsule_t handle,
+    uint32_t k,
+    double* out_scores,
+    uint64_t* out_ids,
+    size_t max_results,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !out_scores || !out_ids) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    // Validate k to avoid division by zero (rank can be zero)
+    if (k == 0) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "k must be positive";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    auto* impl = static_cast<RankFusionCapsuleImpl*>(handle);
+    size_t actual = 0;
+    if (!impl->fuse(k, out_scores, out_ids, max_results, &actual)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Failed to perform rank fusion";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+    
+    // If max_results larger than actual results, we still return OK
+    // Caller can check by comparing actual with max_results (or use get_unique_count)
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_rank_fusion_capsule_fuse_top_k(
+    anigma_rank_fusion_capsule_t handle,
+    uint32_t k,
+    size_t top_k,
+    double* out_scores,
+    uint64_t* out_ids,
+    anigma_capsule_error_t* err
+) {
+    // Simple wrapper around fuse with max_results = top_k
+    return anigma_rank_fusion_capsule_fuse(handle, k, out_scores, out_ids, top_k, err);
+}
+
+anigma_status_t anigma_rank_fusion_capsule_clear(
+    anigma_rank_fusion_capsule_t handle,
+    anigma_capsule_error_t* err
+) {
+    if (!handle) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid handle";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    auto* impl = static_cast<RankFusionCapsuleImpl*>(handle);
+    impl->clear();
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_rank_fusion_capsule_get_unique_count(
+    anigma_rank_fusion_capsule_t handle,
+    size_t* out_count,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !out_count) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+            err->detail = NULL;
+            err->aux = 0;
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    auto* impl = static_cast<RankFusionCapsuleImpl*>(handle);
+    *out_count = impl->get_unique_count();
+    return ANIGMA_OK;
+}
+
+} // extern "C"
+
+// ============================================================================
+// Swift Integration Example
+// ============================================================================
+/*
+ // Example Swift wrapper for rank fusion capsule
+ import AnigmaNativeShims
+ 
+ class RankFusion {
+     private var handle: OpaquePointer?
+     
+     init() throws {
+         var error = anigma_capsule_error_t()
+         let status = anigma_rank_fusion_capsule_create(&handle, &error)
+         guard status == ANIGMA_OK else {
+             throw NSError(domain: "RankFusion", code: Int(status.rawValue),
+                           userInfo: [NSLocalizedDescriptionKey: String(cString: error.message)])
+         }
+     }
+     
+     deinit {
+         if let handle = handle {
+             var error = anigma_capsule_error_t()
+             anigma_rank_fusion_capsule_destroy(handle, &error)
+         }
+     }
+     
+     func addRankList(ids: [UInt64], ranks: [UInt32]) throws {
+         precondition(ids.count == ranks.count)
+         var error = anigma_capsule_error_t()
+         let status = anigma_rank_fusion_capsule_add_rank_list(handle, ids, ranks, ids.count, &error)
+         guard status == ANIGMA_OK else { throw ... }
+     }
+     
+     func fuse(k: UInt32, maxResults: Int) throws -> [(id: UInt64, score: Double)] {
+         var scores = [Double](repeating: 0, count: maxResults)
+         var ids = [UInt64](repeating: 0, count: maxResults)
+         var error = anigma_capsule_error_t()
+         let status = anigma_rank_fusion_capsule_fuse(handle, k, &scores, &ids, maxResults, &error)
+         guard status == ANIGMA_OK else { throw ... }
+         let count = min(maxResults, Int(try uniqueCount()))
+         return (0..<count).map { (ids[$0], scores[$0]) }
+     }
+     
+     func uniqueCount() throws -> Int {
+         var count: size_t = 0
+         var error = anigma_capsule_error_t()
+         let status = anigma_rank_fusion_capsule_get_unique_count(handle, &count, &error)
+         guard status == ANIGMA_OK else { throw ... }
+         return Int(count)
+     }
+     
+     func clear() throws { ... }
+ }
+ 
+ // Mapping string chunk IDs to 64-bit integers (using stable hash)
+ func stableHash(_ str: String) -> UInt64 {
+     var hash: UInt64 = 14695981039346656037 // FNV offset basis
+     for byte in str.utf8 {
+         hash ^= UInt64(byte)
+         hash = hash &* 1099511628211 // FNV prime
+     }
+     return hash
+ }
+ */

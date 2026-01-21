@@ -1,0 +1,7 @@
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ProjectPlanningView.swift:54:                    Picker("Active Context", selection: $selectedContextId) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ProjectPlanningView.swift:66:                    Picker("Trust Boundary", selection: $governanceLevel) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:43:                Picker("Mode", selection: Binding(
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:807:                Picker("Provider", selection: $selectedProviderId) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:816:                Picker("Network Stance", selection: $stance) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:291:                Picker("Schedule", selection: $source.computePolicy.schedule) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:49:                Picker("Filter", selection: $filter) {

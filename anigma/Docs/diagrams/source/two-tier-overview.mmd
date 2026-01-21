@@ -1,0 +1,46 @@
+graph TB
+    subgraph "Core Governance Layer"
+        direction TB
+        Core[AnigmaCore ECS]
+        DB[DatabaseCore]
+        Harmonia[HarmoniaSpine]
+        ML[ML Worker]
+        Security[Security & Evidence]
+        
+        Core --> DB
+        Core --> Harmonia
+        Harmonia --> ML
+        ML --> Security
+    end
+    
+    subgraph "Capability Modules"
+        direction LR
+        HarmoniaMod[HarmoniaModule<br/>Governed Inference]
+        Diaplasion[DiaplasionModule<br/>Alt-Media]
+        Accessum[AccessumModule<br/>Client Workflows]
+        Outlineum[OutlineumModule<br/>Creative]
+        Pragma[PragmaModule<br/>Work Management]
+        Conexus[ConexusModule<br/>CRM]
+        Codex[CodexModule<br/>Knowledge]
+        Transcriptum[TranscriptumModule<br/>Academic]
+        Observatorium[ObservatoriumModule<br/>Telemetry]
+        Polytropos[PolytroposModule<br/>Video]
+    end
+    
+    Core -.->|ECS Foundation| HarmoniaMod
+    Core -.->|ECS Foundation| Diaplasion
+    Core -.->|ECS Foundation| Accessum
+    Core -.->|ECS Foundation| Outlineum
+    Core -.->|ECS Foundation| Pragma
+    Core -.->|ECS Foundation| Conexus
+    Core -.->|ECS Foundation| Codex
+    Core -.->|ECS Foundation| Transcriptum
+    Core -.->|ECS Foundation| Observatorium
+    Core -.->|ECS Foundation| Polytropos
+    
+    classDef coreLayer fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    classDef capabilityLayer fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef securityBoundary stroke:#ff5722,stroke-width:2px,stroke-dasharray: 5 5
+    
+    class Core,DB,Harmonia,ML,Security coreLayer
+    class HarmoniaMod,Diaplasion,Accessum,Outlineum,Pragma,Conexus,Codex,Transcriptum,Observatorium,Polytropos capabilityLayer

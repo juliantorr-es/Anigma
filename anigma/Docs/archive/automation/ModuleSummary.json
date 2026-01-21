@@ -1,0 +1,187 @@
+{
+  "lastVerified": "2025-12-13T16:36:24.394Z",
+  "moduleCount": 18,
+  "modules": [
+    {
+      "name": "AccessumFlow",
+      "path": "Sources/AccessumFlow",
+      "files": [
+        "main.swift"
+      ],
+      "lineCount": 1413
+    },
+    {
+      "name": "AccessumModule",
+      "path": "Sources/AccessumModule",
+      "files": [
+        "AccessumModule.swift",
+        "Components",
+        "Pipelines",
+        "Systems"
+      ],
+      "lineCount": 89
+    },
+    {
+      "name": "AnigmaASTServices",
+      "path": "Sources/AnigmaASTServices",
+      "files": [
+        "AgSearchService.swift",
+        "AnigmaASTServices.swift",
+        "RewritePipeline.swift",
+        "RewriteRule.swift",
+        "SwiftAstLens.swift"
+      ],
+      "lineCount": 1476
+    },
+    {
+      "name": "AnigmaCore",
+      "path": "Sources/AnigmaCore",
+      "files": [
+        "AnigmaCore.swift",
+        "Components",
+        "ECS",
+        "Jobs",
+        "Utilities"
+      ],
+      "lineCount": 80
+    },
+    {
+      "name": "DatabaseCore",
+      "path": "Sources/DatabaseCore",
+      "files": [
+        "DatabaseActor.swift"
+      ],
+      "lineCount": 258
+    },
+    {
+      "name": "DiaplasionModule",
+      "path": "Sources/DiaplasionModule",
+      "files": [
+        "Components",
+        "DiaplasionModule.swift",
+        "Pipelines",
+        "Resources",
+        "Systems",
+        "TestFiles"
+      ],
+      "lineCount": 130
+    },
+    {
+      "name": "DiaplasionPipeline",
+      "path": "Sources/DiaplasionPipeline",
+      "files": [
+        "main.swift"
+      ],
+      "lineCount": 572
+    },
+    {
+      "name": "DoctrineCore",
+      "path": "Sources/DoctrineCore",
+      "files": [
+        "DoctrineTypes.swift"
+      ],
+      "lineCount": 118
+    },
+    {
+      "name": "GovernedMigrationCore",
+      "path": "Sources/GovernedMigrationCore",
+      "files": [
+        "CSDoctrineGuard.swift",
+        "ConcurrencyDoctrinePack.swift",
+        "DoctrineViolationLogger.swift",
+        "GovernedMigrationAPI.swift"
+      ],
+      "lineCount": 722
+    },
+    {
+      "name": "HarmoniaCLI",
+      "path": "Sources/HarmoniaCLI",
+      "files": [
+        "Main.swift"
+      ],
+      "lineCount": 785
+    },
+    {
+      "name": "HarmoniaModule",
+      "path": "Sources/HarmoniaModule",
+      "files": [
+        "Components",
+        "Doctrine",
+        "HarmoniaModule.swift",
+        "Inspiration",
+        "MigrationRules",
+        "Models",
+        "Pipelines",
+        "Research",
+        "ScoutRegistry.swift",
+        "Security",
+        "Systems",
+        "TestFiles",
+        "Utilities",
+        "Workers"
+      ],
+      "lineCount": 844
+    },
+    {
+      "name": "HarmoniaSurface",
+      "path": "Sources/HarmoniaSurface",
+      "files": [
+        "main.swift"
+      ],
+      "lineCount": 319
+    },
+    {
+      "name": "MLWorkerCommon",
+      "path": "Sources/MLWorkerCommon",
+      "files": [
+        "MLWorkerCommon.swift"
+      ],
+      "lineCount": 159
+    },
+    {
+      "name": "MLWorkerExecutable",
+      "path": "Sources/MLWorkerExecutable",
+      "files": [
+        "Model",
+        "main.swift"
+      ],
+      "lineCount": 181
+    },
+    {
+      "name": "OutlineumModule",
+      "path": "Sources/OutlineumModule",
+      "files": [
+        "Components",
+        "OutlineumModule.swift",
+        "Pipelines",
+        "Systems",
+        "TestFiles"
+      ],
+      "lineCount": 110
+    },
+    {
+      "name": "OutlineumZine",
+      "path": "Sources/OutlineumZine",
+      "files": [
+        "main.swift"
+      ],
+      "lineCount": 161
+    },
+    {
+      "name": "SecurityEventsManager",
+      "path": "Sources/SecurityEventsManager",
+      "files": [
+        "SecurityEventsManager.swift"
+      ],
+      "lineCount": 513
+    },
+    {
+      "name": "Swift6Harness",
+      "path": "Sources/Swift6Harness",
+      "files": [
+        "main.swift"
+      ],
+      "lineCount": 188
+    }
+  ]
+}

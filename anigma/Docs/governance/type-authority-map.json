@@ -1,0 +1,27 @@
+{
+  "contractAuthority": {
+    "owner": "HarmoniaModule",
+    "scope": "All public APIs and cross-boundary contracts",
+    "enforcement": "Contracts are single source of truth - no alternative implementations allowed"
+  },
+  "stateAuthority": {
+    "owner": "DatabaseCore",
+    "scope": "SQLite persistence, transactions, schema migrations",
+    "enforcement": "All database operations must go through DatabaseCore interfaces"
+  },
+  "typeAuthority": {
+    "owner": "AnigmaCore", 
+    "scope": "ECS primitives (World, EntityId, Component, System), Sendable types",
+    "enforcement": "Core types cannot be redefined or shadowed in capability modules"
+  },
+  "governanceAuthority": {
+    "owner": "HarmoniaCLI",
+    "scope": "CLI surface, security events, trust state, automation output",
+    "enforcement": "Only CLI wrapper scripts may invoke Harmonia binaries directly"
+  },
+  "provenanceAuthority": {
+    "owner": "AccessumModule",
+    "scope": "Artifact containerization, hash computation, ledger structure", 
+    "enforcement": "All evidence and receipt generation must use Accessum contracts"
+  }
+}

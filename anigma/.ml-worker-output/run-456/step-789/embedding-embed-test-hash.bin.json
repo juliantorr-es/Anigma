@@ -1,0 +1,1 @@
+{"containerHash":"4b7fbf5b2988844a2f2e16a4c727d44d010d17cfd79556494fa7c984125d1716","dataPath":"embedding-embed-test-hash.bin","dtype":"float32","inputHash":"test-hash","modelHash":"placeholder-model-hash","ordering":"row-major","requestId":"test-123","schemaVersion":1,"shape":[1,384],"timestamp":"test-123","tokenizer":"mlx-tokenizer-v1"}

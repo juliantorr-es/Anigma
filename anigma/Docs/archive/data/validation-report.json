@@ -1,0 +1,356 @@
+{
+  "timestamp": "2025-12-15T11:51:21.343Z",
+  "summary": {
+    "passed": 31,
+    "failed": 4,
+    "warnings": 47,
+    "total": 51
+  },
+  "rules": {
+    "coreLayerOnly": {
+      "name": "Core Layer Dependencies",
+      "description": "Core modules should only depend on other core modules",
+      "severity": "error"
+    },
+    "capabilityToCore": {
+      "name": "Capability Dependencies",
+      "description": "Capability modules should only depend on Core Governance layer",
+      "severity": "error"
+    },
+    "noCircularDependencies": {
+      "name": "Circular Dependencies",
+      "description": "No circular dependencies allowed between modules",
+      "severity": "error"
+    },
+    "ecsConsistency": {
+      "name": "ECS Pattern Consistency",
+      "description": "Modules should follow ECS patterns consistently",
+      "severity": "warning"
+    },
+    "namingConventions": {
+      "name": "Naming Conventions",
+      "description": "Modules should follow Anigma naming conventions",
+      "severity": "warning"
+    },
+    "moduleStructure": {
+      "name": "Module Structure",
+      "description": "Modules should have proper directory structure",
+      "severity": "warning"
+    }
+  },
+  "issues": [
+    {
+      "rule": "capabilityToCore",
+      "module": "HarmoniaModule",
+      "dependency": "AnigmaASTServices",
+      "message": "Capability module HarmoniaModule depends on another capability module AnigmaASTServices",
+      "severity": "error"
+    },
+    {
+      "rule": "capabilityToCore",
+      "module": "HarmoniaModuleExperimental",
+      "dependency": "AnigmaASTServices",
+      "message": "Capability module HarmoniaModuleExperimental depends on another capability module AnigmaASTServices",
+      "severity": "error"
+    },
+    {
+      "rule": "capabilityToCore",
+      "module": "HarmoniaSpine",
+      "dependency": "AnigmaASTServices",
+      "message": "Capability module HarmoniaSpine depends on another capability module AnigmaASTServices",
+      "severity": "error"
+    },
+    {
+      "rule": "noCircularDependencies",
+      "module": "AnigmaCore",
+      "cycle": [
+        "AnigmaCore",
+        "AnigmaCore"
+      ],
+      "message": "Circular dependency detected: AnigmaCore → AnigmaCore",
+      "severity": "error"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "AccessumFlow",
+      "message": "Capability module AccessumFlow should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "AnigmaASTServices",
+      "message": "Capability module AnigmaASTServices should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "BuildIngest",
+      "message": "Capability module BuildIngest should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "DiaplasionPipeline",
+      "message": "Capability module DiaplasionPipeline should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "DoctrineCLI",
+      "message": "Capability module DoctrineCLI should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "DoctrineCore",
+      "message": "Capability module DoctrineCore should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "GovernedMigrationCore",
+      "message": "Capability module GovernedMigrationCore should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "HarmoniaCLI",
+      "message": "Capability module HarmoniaCLI should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "HarmoniaModuleExperimental",
+      "message": "Capability module HarmoniaModuleExperimental should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "HarmoniaSurface",
+      "message": "Capability module HarmoniaSurface should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "MLOutputCache",
+      "message": "Capability module MLOutputCache should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "MLWorkerCommon",
+      "message": "Capability module MLWorkerCommon should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "MLWorkerExecutable",
+      "message": "Capability module MLWorkerExecutable should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "OutlineumZine",
+      "message": "Capability module OutlineumZine should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "ProvenanceSigning",
+      "message": "Capability module ProvenanceSigning should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "Scripts",
+      "message": "Capability module Scripts should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "SecurityEventsManager",
+      "message": "Capability module SecurityEventsManager should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "Swift6Harness",
+      "message": "Capability module Swift6Harness should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "ecsConsistency",
+      "module": "TechDebtAudit",
+      "message": "Capability module TechDebtAudit should use ECS patterns",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "AccessumFlow",
+      "message": "Module AccessumFlow should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "AnigmaASTServices",
+      "message": "Module AnigmaASTServices should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "AnigmaPrimitives",
+      "message": "Module AnigmaPrimitives should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "BuildIngest",
+      "message": "Module BuildIngest should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "DiaplasionPipeline",
+      "message": "Module DiaplasionPipeline should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "HarmoniaMemory",
+      "message": "Module HarmoniaMemory should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "HarmoniaModuleExperimental",
+      "message": "Module HarmoniaModuleExperimental should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "HarmoniaSpine",
+      "message": "Module HarmoniaSpine should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "HarmoniaSurface",
+      "message": "Module HarmoniaSurface should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "MLOutputCache",
+      "message": "Module MLOutputCache should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "MLWorkerCommon",
+      "message": "Module MLWorkerCommon should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "MLWorkerExecutable",
+      "message": "Module MLWorkerExecutable should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "OutlineumZine",
+      "message": "Module OutlineumZine should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "ProvenanceSigning",
+      "message": "Module ProvenanceSigning should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "Scripts",
+      "message": "Module Scripts should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "SecurityEventsManager",
+      "message": "Module SecurityEventsManager should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "Swift6Harness",
+      "message": "Module Swift6Harness should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "namingConventions",
+      "module": "TechDebtAudit",
+      "message": "Module TechDebtAudit should follow naming convention (end with Module, Core, or CLI)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "AccessumFlow",
+      "message": "Module AccessumFlow should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "AnigmaASTServices",
+      "message": "Module AnigmaASTServices should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "AnigmaPrimitives",
+      "message": "Module AnigmaPrimitives should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "BuildIngest",
+      "message": "Module BuildIngest should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "ContractsCore",
+      "message": "Module ContractsCore should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "DatabaseCore",
+      "message": "Module DatabaseCore should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "GovernedMigrationCore",
+      "message": "Module GovernedMigrationCore should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "HarmoniaCLI",
+      "message": "Module HarmoniaCLI should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "HarmoniaModuleExperimental",
+      "message": "Module HarmoniaModuleExperimental should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    },
+    {
+      "rule": "moduleStructure",
+      "module": "TechDebtAudit",
+      "message": "Module TechDebtAudit should have proper directory structure (Components/, Systems/, etc.)",
+      "severity": "warning"
+    }
+  ]
+}

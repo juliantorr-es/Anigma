@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git shortlog:*)",
+      "Bash(git config:*)",
+      "Grep(**)",
+      "Read(Deprecated/Inspiration/INBOX/swift-sdk/Sources/MCP/Server/**)"
+    ]
+  }
+}

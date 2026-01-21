@@ -1,0 +1,150 @@
+# SwiftLint Custom Rules for Contract Enforcement
+
+# Enforce Bauhaus Color Token Usage
+custom_rules:
+  bauhaus_color_tokens:
+    name: "Bauhaus Color Tokens"
+    message: "Use Bauhaus.Color tokens instead of hardcoded colors"
+    regex: '(Color\.(red|blue|green|orange|purple|yellow|pink|gray|black|white)(?!\.))|Color\(red:|Color\(hue:)'
+    match_kinds:
+      - identifier
+    severity: error
+    
+  bauhaus_font_tokens:
+    name: "Bauhaus Font Tokens"
+    message: "Use Bauhaus.Font tokens instead of hardcoded fonts"
+    regex: '\.font\(\.system\(|Font\.system\('
+    match_kinds:
+      - identifier
+    severity: error
+    
+  bauhaus_spacing_tokens:
+    name: "Bauhaus Spacing Tokens"
+    message: "Use Bauhaus.Grid tokens for spacing (e.g., Bauhaus.Grid.x2)"
+    regex: '\.padding\([0-9]+\)|\.frame\(.*(?:width|height):\s*[0-9]+\)'
+    match_kinds:
+      - identifier
+    severity: warning
+    
+  operation_result_async:
+    name: "OperationResult for Async Operations"
+    message: "Long-running async operations should return OperationResult<T>"
+    regex: 'func\s+\w+.*async\s*->\s*(?!OperationResult|Receipt|Void)'
+    match_kinds:
+      - keyword
+    severity: warning
+    
+  anigma_error_schema:
+    name: "AnigmaError Schema"
+    message: "Use AnigmaError with stable error codes instead of generic Error"
+    regex: 'throw\s+(?!AnigmaError)'
+    match_kinds:
+      - keyword
+    severity: warning
+    
+  accessibility_label_required:
+    name: "Accessibility Label Required"
+    message: "Interactive elements must have accessibility labels"
+    regex: 'Button\(|TextField\(|Toggle\('
+    match_kinds:
+      - identifier
+    severity: warning
+    
+  standardized_button_styles:
+    name: "Standardized Button Styles"
+    message: "Use .primaryButtonStyle(), .secondaryButtonStyle(), or .destructiveButtonStyle()"
+    regex: 'Button\([^)]+\)\s*\{[^}]+\}\s*(?!\.(?:primary|secondary|destructive)ButtonStyle)'
+    match_kinds:
+      - identifier
+    severity: warning
+
+# Standard SwiftLint Rules
+disabled_rules:
+  - line_length  # We have long lines in some places
+  - function_body_length  # Some complex views are unavoidable
+  - type_body_length  # AppStore is legitimately large
+
+opt_in_rules:
+  - explicit_init
+  - explicit_type_interface
+  - explicit_acl
+  - explicit_top_level_acl
+  - strict_fileprivate
+  - closure_spacing
+  - empty_count
+  - empty_string
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - joined_default_parameter
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_parameters
+  - operator_usage_whitespace
+  - overridden_super_call
+  - private_action
+  - private_outlet
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - sorted_first_last
+  - toggle_bool
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+
+# Exclusions
+excluded:
+  - .build
+  - Deprecated
+  - ThirdParty
+  - Tools/Vendor
+  - Native/ThirdParty
+  - Packages/CHarfBuzz
+  - Packages/CFreeType
+  - Packages/CPDFium
+  - Packages/CSQLiteVec
+  - Packages/AnigmaNativeShims
+
+# Specific Rule Configurations
+identifier_name:
+  min_length: 1  # Allow single-letter variables in closures
+  max_length: 60
+  excluded:
+    - id
+    - url
+    - URL
+    - x
+    - y
+    - z
+    - i
+    - j
+    - k
+
+type_name:
+  min_length: 3
+  max_length: 50
+  excluded:
+    - IR  # PresentationIR
+
+file_length:
+  warning: 500
+  error: 1000
+
+function_parameter_count:
+  warning: 6
+  error: 8
+
+nesting:
+  type_level: 2
+  statement_level: 5
+
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+# Contract-specific settings
+reporter: "xcode"  # For Xcode integration

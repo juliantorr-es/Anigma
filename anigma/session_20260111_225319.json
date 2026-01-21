@@ -1,0 +1,9 @@
+{
+  "violations_before": 35808,
+  "violations_after": 35737,
+  "fixes_applied": 15,
+  "refactorings_applied": 0,
+  "files_modified": [],
+  "time_started": "2026-01-11T22:53:19.499696",
+  "time_ended": "2026-01-11T22:54:35.983814"
+}

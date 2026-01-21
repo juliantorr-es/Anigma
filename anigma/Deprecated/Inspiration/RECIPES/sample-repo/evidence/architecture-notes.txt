@@ -1,0 +1,9 @@
+# Architecture Notes from Sample Repo (Evidence)
+
+This file contains raw notes, observations, or excerpts related to the architectural patterns, design decisions, or implementation choices found within the inspiration repository. These notes serve as direct evidence supporting the analysis in the recipe bundle.
+
+## Notes
+
+*   [e.g., "Observation: Actor model used for state management in 'Core' component."]
+*   [e.g., "Pattern: Data flows through stateless processors, avoiding shared mutable state."]
+*   [e.g., "Decision: Uses a custom plugin system for extensibility."]

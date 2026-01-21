@@ -1,0 +1,36 @@
+{
+  "generated_at": "2025-12-10",
+  "repos": [
+    {
+      "name": "Anigma",
+      "path": ".",
+      "role": "Swift Package monorepo for core ECS + domain modules + Harmonia CLI/Memory"
+    }
+  ],
+  "modules": [
+    { "name": "AnigmaCore", "path": "Sources/AnigmaCore", "role": "ECS, jobs/workflows, governance/security types", "status": "implemented-core/governance-partial" },
+    { "name": "HarmoniaModule", "path": "Sources/HarmoniaModule", "role": "AI orchestration (requests, concurrency, transparency)", "status": "partial" },
+    { "name": "HarmoniaMemory", "path": "Sources/HarmoniaMemory", "role": "GRDB-backed observation memory", "status": "partial" },
+    { "name": "HarmoniaCLI", "path": "Sources/HarmoniaCLI", "role": "Harness CLI stub", "status": "scaffolding" },
+    { "name": "DiaplasionModule", "path": "Sources/DiaplasionModule", "role": "Alt-media ingest/OCR/EPUB/Braille/audio pipelines", "status": "implemented" },
+    { "name": "PolytroposModule", "path": "Sources/PolytroposModule", "role": "Video pipeline with renderer backends and interchange", "status": "partial" },
+    { "name": "OutlineumModule", "path": "Sources/OutlineumModule", "role": "Outline/zine generation", "status": "scaffolding" },
+    { "name": "AccessumModule", "path": "Sources/AccessumModule", "role": "Accessibility intake/client workflows", "status": "scaffolding" },
+    { "name": "PragmaModule", "path": "Sources/PragmaModule", "role": "Work management (tasks/projects/workflows)", "status": "implemented-core/unused-runtime" },
+    { "name": "ConexusModule", "path": "Sources/ConexusModule", "role": "CRM (contacts/orgs/deals/cases)", "status": "implemented-core/unused-runtime" },
+    { "name": "CodexModule", "path": "Sources/CodexModule", "role": "Knowledge/documentation spaces", "status": "scaffolding" },
+    { "name": "TranscriptumModule", "path": "Sources/TranscriptumModule", "role": "Academic records overlay", "status": "scaffolding" },
+    { "name": "ObservatoriumModule", "path": "Sources/ObservatoriumModule", "role": "Telemetry/alerts/feedback", "status": "scaffolding" }
+  ],
+  "features": {
+    "governance": "partial",
+    "ecs": "implemented",
+    "mlx_integration": "partial-not-invoked",
+    "cli": "scaffolding",
+    "daemon": "missing",
+    "alt_media": "implemented-diapsion-core",
+    "video_pipeline": "partial",
+    "code_tools": "scaffolding",
+    "ci": "missing"
+  }
+}

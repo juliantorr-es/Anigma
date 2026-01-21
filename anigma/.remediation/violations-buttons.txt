@@ -1,0 +1,60 @@
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/CompassView.swift:193:                        Button("View Progress") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/CompassView.swift:210:                        Button("Review Inbox") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/CompassView.swift:368:                    Button("View Logs") { store.userSurface = .activity }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/CompassView.swift:407:                        Button(action: {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/CompassView.swift:441:                    Button("Manage Contexts") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/AskView.swift:103:                            Button("Manage Contexts...") { store.isSourceConnectionPresented = true }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/AskView.swift:137:                            Button("Manage Contexts...") { store.isSourceConnectionPresented = true }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/AskView.swift:156:                Button("Connect Sources") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/AskView.swift:180:        Button(action: action) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/JobCenterView.swift:155:                Button("Stop") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:28:                Button(action: { isWizardPresented = true }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:34:                Button(action: { startGoogleAuth() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:41:                Button(action: { dismiss() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:158:            Button("Connect Source", action: action)
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:219:                    Button(action: { isPaused.toggle() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:227:                        Button(role: .destructive, action: { /* Revoke logic */ }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:232:                        Button(role: .destructive, action: { /* Purge logic */ }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/PreflightGate.swift:32:                Button(action: onCancel) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/PreflightGate.swift:98:                Button("Cancel", action: onCancel)
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/PreflightGate.swift:105:                Button("Authorize & Run") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ProjectPlanningView.swift:88:                Button("Cancel") { dismiss() }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ProjectPlanningView.swift:94:                Button("Create Project") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ProjectPlanningView.swift:109:            Button("OK") { dismiss() }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:116:                    Button(action: {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:263:            Button(action: { isCreatingProfile = true }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:295:                Button("Enable & Trust") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:417:                        Button("Grant Access") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:716:                                Button("Reject") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:722:                                Button("Apply Change") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:825:                Button("Cancel") { isPresented = false }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/DevelopView.swift:828:                Button("Create Profile") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/StudioView.swift:269:                Button(action: onRegister) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:37:                Button(action: { dismiss() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:93:                    Button(action: {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:141:                    Button("Change Type") { step = .typeSelection }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:150:                    Button(action: {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:202:                Button("Looks Useful, Proceed") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:225:                Button(action: { source.depth = depth }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:259:            Button("Next: Policies") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:332:            Button("Start Digestion") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:435:            Button("Done") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/InboxView.swift:110:                Button("Connect Sources") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ProjectsView.swift:101:                Button("Activate Workspace") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ActivityView.swift:62:                    Button("Connect Sources") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ContractDashboardView.swift:39:            Button(action: refreshData) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/ContractDashboardView.swift:265:        Button(action: onSelect) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TrustBoundaryPanel.swift:26:                Button(action: { dismiss() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TrustBoundaryPanel.swift:75:                Button("View Audit Log") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TrustBoundaryPanel.swift:84:                Button("Lockdown Mode") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TransformPreview.swift:195:                Button("Cancel", role: .cancel, action: onCancel)
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TransformPreview.swift:203:                Button(action: onConfirm) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:39:                    Button(action: {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:146:                        Button("View Receipt") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:160:                    Button("Cancel", role: .destructive) { }
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:179:                    Button("Resolve") {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:23:            Button(action: { /* Navigate to Role Switcher (future) */  }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:43:            Button(action: { isJobCenterPresented.toggle() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:71:                Button(action: { showGovernanceDetails.toggle() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:95:                Button(action: { store.isSourceConnectionPresented.toggle() }) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:176:            Button("View Policy Log") {

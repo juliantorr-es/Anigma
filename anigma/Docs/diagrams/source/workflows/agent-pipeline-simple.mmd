@@ -1,0 +1,52 @@
+flowchart TD
+    Start([Start Task]) --> Architect{Agent Type}
+    
+    Architect -->|Architect| A1[Analyze Requirements]
+    A1 --> A2[Search Existing Abstractions]
+    A2 --> A3[Create Structured Spec]
+    A3 --> A4[No File Writes]
+    A4 --> Handoff1[Handoff to Builder]
+    
+    Architect -->|Builder| B1[Receive Spec from Architect]
+    B1 --> B2[Implement Using Core Patterns]
+    B2 --> B3[Reuse Existing Abstractions]
+    B3 --> B4[Run Tests]
+    B4 --> B5[Validate Implementation]
+    B5 --> Handoff2[Handoff to Validator]
+    
+    Architect -->|Validator| V1[Receive Implementation]
+    V1 --> V2[Compare vs Spec]
+    V2 --> V3[Check Security Boundaries]
+    V3 --> V4[Verify Core Integration]
+    V4 --> V5[Validate Tests]
+    V5 --> Handoff3[Handoff to Scribe]
+    
+    Architect -->|Scribe| S1[Receive Validation Results]
+    S1 --> S2[Update AGENTS.md]
+    S2 --> S3[Update Documentation]
+    S3 --> S4[Record Architectural Decisions]
+    S4 --> S5[Update TechDebt.md]
+    S5 --> Handoff4[Handoff to Tech-Debt Scout]
+    
+    Architect -->|Tech-Debt Scout| T1[Receive Documentation Updates]
+    T1 --> T2[Scan for Duplication]
+    T2 --> T3[Identify Consolidation Opportunities]
+    T3 --> T4[Record in TechDebt.md]
+    T4 --> T5[Create Consolidation Tasks]
+    T5 --> Complete([Task Complete])
+    
+    Handoff1 --> B1
+    Handoff2 --> V1
+    Handoff3 --> S1
+    Handoff4 --> T1
+    
+    %% Styling
+    classDef agentNode fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef processNode fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef handoffNode fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef startEndNode fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class Architect,B1,V1,S1,T1 agentNode
+    class A1,A2,A3,A4,B2,B3,B4,B5,V2,V3,V4,V5,S2,S3,S4,S5,T2,T3,T4,T5 processNode
+    class Handoff1,Handoff2,Handoff3,Handoff4 handoffNode
+    class Start,Complete startEndNode

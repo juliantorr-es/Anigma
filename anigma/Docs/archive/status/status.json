@@ -1,0 +1,290 @@
+{
+  "canonicalMergedRoadmap": "Merged-Roadmap-v4.0",
+  "mergedRoadmapPath": "/Docs/governance/Merged-Roadmap-v4.0.md",
+  "currentStage": "Phase 9 – Deterministic Replay & Concurrency Hardening",
+  "stageDefinition": "Anigma is closing Phase 9 with deterministic replay gates, Stage 0 enumeration, concurrency hardening, and evidence-backed stop conditions.",
+  "phasesCompleted": {
+    "phase0": {
+      "name": "Repo hygiene guardrails",
+      "status": "COMPLETED",
+      "notes": "Gitignore and CI enforcement implemented"
+    },
+    "phase1": {
+      "name": "Outlineum deterministic zine pipeline",
+      "status": "COMPLETED",
+      "notes": "outlineum-zine runner produces deterministic artifacts with provenance"
+    },
+    "phase2": {
+      "name": "Diaplasion happy-path spine",
+      "status": "COMPLETED",
+      "notes": "OCR → normalize → export pipeline with trace.json and replay support"
+    },
+    "phase3": {
+      "name": "Harmonia deterministic surface",
+      "status": "COMPLETED",
+      "notes": "Minimal Harmonia systems (slot/session/request) registered and tested"
+    },
+    "phase4": {
+      "name": "Accessum operator shell",
+      "status": "COMPLETED",
+      "notes": "AccessumFlow orchestrates pipelines, cross-module demo operational"
+    },
+    "phase5": {
+      "name": "Production hardening",
+      "status": "COMPLETED",
+      "completionDate": "2025-12-29",
+      "notes": [
+        "Accessum daemon with launchd integration",
+        "Persistent run ledger with admin command",
+        "Replay and verdict recording in accessum.db",
+        "Log rotation and lifecycle management",
+        "Governed patch helper scripts",
+        "Production-hardening acceptance criteria met"
+      ]
+    }
+  },
+  "stageDefinition": "Anigma is closing Phase 9 with deterministic replay gates, Stage 0 enumeration, concurrency hardening, and evidence-backed stop conditions.",
+  "roadmapLinks": [
+    { "label": "Merged roadmap v4.0 (canonical)", "href": "/governance/Merged-Roadmap-v4.0" },
+    { "label": "Phase 6 database governance", "href": "/phase6/database-governance" },
+    { "label": "Phase 7 tool router", "href": "/phase7/tool-router" }
+  ],
+  "phase6": {
+    "planPath": "/Docs/DatabaseGovernancePlan.md",
+    "title": "Production Database Governance & Retention",
+    "description": "Implement governed data lifecycle that keeps infinite audit story without infinite bytes through content-addressed storage, retention policies, and tamper-evident garbage collection.",
+    "status": "COMPLETED",
+    "completionDate": "2025-12-29",
+    "startDate": "2025-12-29",
+    "acceptance": [
+      "Content-addressed artifact store with strong hash keys and deduplication",
+      "Master ledger thinning with hash references instead of embedded payloads",
+      "Machine-readable retention policy loaded alongside existing policy packs",
+      "Deterministic garbage collector with dry-run mode and eligibility proof",
+      "SQLite housekeeping with WAL management and scheduled VACUUM/ANALYZE",
+      "Master ledger segmentation with time-sliced segments and stable index",
+      "Semantic search integration with DatabaseCore storage and inference separation",
+      "Evidence for housekeeping operations with retention event logging",
+      "Comprehensive testing suite with deduplication, expiration, and invariant tests",
+      "Gradual rollout path from hash references to automated retention"
+    ],
+    "notes": [
+      "COMPLETED: Phase 6A-6G - All subphases complete (implementation, documentation, testing)",
+      "Phase 6A: DatabaseCore data model enhancement with artifact store and master ledger thinning",
+      "Phase 6B: Retention policy contract as first-class governed configuration",
+      "Phase 6C: Garbage collector command with deterministic flow and dry-run reporting",
+      "Phase 6D: SQLite housekeeping with WAL checkpointing and scheduled compaction",
+      "Phase 6E: Master ledger segmentation to prevent infinite file growth",
+      "Phase 6F: Semantic search storage in DatabaseCore with inference separation",
+      "Phase 6G: Evidence logging for housekeeping operations",
+      "Phase 6H: Testing and governance invariants for data lifecycle (implemented as 6G in final version)",
+      "Phase 6I: Controlled rollout path from dev to production"
+    ]
+  },
+  "phase2": {
+    "runnerScript": "/Scripts/run_diaplasion_pipeline.sh",
+    "specPath": "Sources/DiaplasionModule/TestFiles/diaplasion-happy/spec.json",
+    "artifactTemplate": "Artifacts/diaplasion/{pipelineVersion}/{inputHash}/",
+    "traceTemplate": "Artifacts/diaplasion/{pipelineVersion}/{inputHash}/trace.json",
+    "lastRun": {
+      "pipelineVersion": "0.2.0",
+      "inputHash": "71dba3a29733dc26c8de647ee021fb75cde7e313dd9085af6e54f0da08e3d830"
+    },
+    "notes": [
+      "Vision OCR → normalized text → searchable PDF records OCR knobs, normalized text hashes, and both raw + normalized PDF hashes.",
+      "Plain text, searchable PDF, and trace.json live under the artifact template above so replay can verify the same hashes.",
+      "Replay command (--replay) reuses the recorded spec, input hash, and pipeline version to prove determinism."
+    ]
+  },
+  "phase3": {
+    "harnessScript": "/Scripts/run_harmonia_surface.sh",
+    "artifactTemplate": "Artifacts/harmonia-surface/{timestamp}/report.json",
+    "lastRun": {
+      "timestamp": "2025-12-13T04:07:15Z",
+      "artifactPath": "Artifacts/harmonia-surface/20251213T040715Z/report.json"
+    },
+    "notes": [
+      "The surface harness spins up the minimal slot/session/request stack and records the deterministic state transitions in report.json.",
+      "Every report includes registered systems, concurrency state, and an explicit contract version so QA can diff runs."
+    ]
+  },
+  "phase4": {
+    "runnerScript": "/Scripts/run_accessum_flow.sh",
+    "artifactTemplate": "Artifacts/accessum/{runId}/trace.json",
+    "lastRun": {
+      "runId": "sha256:ce8db5036ea7708f808b2c5739ea8aa6fde42cc93568181f93820e4dd1669016",
+      "artifactPath": "Artifacts/accessum/sha256:ce8db5036ea7708f808b2c5739ea8aa6fde42cc93568181f93820e4dd1669016/trace.json"
+    },
+    "notes": [
+      "AccessumFlow orchestrates Diaplasion → Outlineum, emits the standard CLI envelope, and writes trace.json plus per-step hashes.",
+      "Replay commands compare registered hashes and artifacts so operators can prove the same pipeline produces the same outcome."
+    ]
+  },
+  "phase5": {
+    "runnerScript": "/Scripts/run_accessum_daemon.sh",
+    "artifactTemplate": "Artifacts/accessum/{runId}/trace.json",
+    "databasePath": "Artifacts/accessum/accessum.db",
+    "lastRun": {
+      "runId": "sha256:ce8db5036ea7708f808b2c5739ea8aa6fde42cc93568181f93820e4dd1669016",
+      "artifactPath": "Artifacts/accessum/sha256:ce8db5036ea7708f808b2c5739ea8aa6fde42cc93568181f93820e4dd1669016/trace.json"
+    },
+    "adminCommand": "accessum flow admin",
+    "docPath": "/phase5/accessum-daemon",
+    "notes": [
+      "AccessumFlow writes every run/step/artifact record into accessum.db so observability, retention, and replay decisions live in one ledger.",
+      "Retention-cleanup is part of the daemon and can be triggered manually or scheduled; it records removed runs/artifacts in the ledger.",
+      "Daemon packaging guidance covers the Application Support paths, launchd plist, log rotation, and how to keep stdout/stderr machine-readable."
+    ]
+  },
+  "phase7": {
+    "title": "Harmonia Tool Router & Session Management",
+    "description": "Implement tool router layer with versioned contracts, loop-breaking policy, evidence recording, and session DB support for agent governance.",
+    "acceptance": [
+      "Tool contracts with versioning primitives in AnigmaPrimitives/ToolContracts/",
+      "Loop breaker for tool calls with deterministic blocking and recovery strategies",
+      "Tool router plumbing with evidence recording and JSON response format",
+      "Specialized tool implementation (read_file, apply_patch, swift_build, swift_test, git_diff, trace_query)",
+      "Session DBs with merge-to-master capability using ATTACH DATABASE",
+      "Snap out of loop recovery UX with deterministic next action templates",
+      "BuildIngest recovery via ToolRouter operations",
+      "Constraints compliance: no external runtime deps, JSON-first, no string-match edit APIs"
+    ],
+    "notes": [
+      "Phase 7.1: Tool contracts + versioning primitives",
+      "Phase 7.2: Loop breaker for tool calls (harness-side enforcement)",
+      "Phase 7.3: ToolRouter plumbing + evidence recording",
+      "Phase 7.4: Specialized tools implementation (MVP set)",
+      "Phase 7.5: Session DBs + merge-to-master (safe, append-only)",
+      "Phase 7.6: Snap out of loop recovery UX (agent-facing)",
+      "Phase 7.7: BuildIngest recovery via tools",
+      "Phase 7.8: Constraints & quality gates compliance"
+    ]
+  },
+  "phase9": {
+    "title": "Deterministic self-improvement loop hardening",
+    "description": "Phase 9 enforces deterministic replay verification, Stage 0 enumeration, concurrency hardening, policy evolution staging, and evidence hooks for autonomous loops.",
+    "status": "IN_PROGRESS",
+    "acceptance": [
+      "Stage 0 deterministic enumeration produces canonical event logs for replay verification",
+      "Replay verifier is a merge gate on canonical fixtures and real session traces",
+      "Concurrency hardening with deterministic scheduling and stable replay under stress",
+      "Policy evolution staging with evidence-backed propose/validate/adopt lifecycle and stop conditions",
+      "Evidence hooks across autonomous loop steps with offline-verifiable bundles",
+      "Single-commit invariant for autonomous proposals with deterministic identity and rollback plan"
+    ],
+    "notes": [
+      "Phase 9.1: Stage 0 enumeration determinism and verifier integration",
+      "Phase 9.2: Concurrency hardening with pinned policy and A/B inputs",
+      "Phase 9.3: Policy evolution staging with evidence-backed stop conditions",
+      "Canonical replay fixture at Artifacts/phase9-fixtures/canonical-fixture.json exercised via ci-phase9-verifier Phase9ReplayVerifier gate",
+      "Stage artifact fixture at Artifacts/phase9-fixtures/stage-artifacts.json compared via Phase9RecomputePlan/StageArtifactComparator"
+    ],
+    "blockers": [
+      "CI verifier needs canonical fixture generation when invoking Phase9ReplayVerifier (Scripts/ci-phase9-verifier.sh) to gate merges",
+      "Governed harness runs needed to confirm deterministic IDs/timestamps in IRSchema and Stage 0 enumerators under Scripts/harmonia.sh swift6 --test filters"
+    ]
+  },
+  "phase6": {
+    "planPath": "/Docs/DatabaseGovernancePlan.md",
+    "title": "Production Database Governance & Retention",
+    "description": "Implement governed data lifecycle that keeps infinite audit story without infinite bytes through content-addressed storage, retention policies, and tamper-evident garbage collection.",
+    "acceptance": [
+      "Content-addressed artifact store with strong hash keys and deduplication",
+      "Master ledger thinning with hash references instead of embedded payloads",
+      "Machine-readable retention policy loaded alongside existing policy packs",
+      "Deterministic garbage collector with dry-run mode and eligibility proof",
+      "SQLite housekeeping with WAL management and scheduled VACUUM/ANALYZE",
+      "Master ledger segmentation with time-sliced segments and stable index",
+      "Semantic search integration with DatabaseCore storage and inference separation",
+      "Evidence for housekeeping operations with retention event logging",
+      "Comprehensive testing suite with deduplication, expiration, and invariant tests",
+      "Gradual rollout path from hash references to automated retention"
+    ],
+    "notes": [
+      "Phase 6A: DatabaseCore data model enhancement with artifact store and master ledger thinning",
+      "Phase 6B: Retention policy contract as first-class governed configuration",
+      "Phase 6C: Garbage collector command with deterministic flow and dry-run reporting",
+      "Phase 6D: SQLite housekeeping with WAL checkpointing and scheduled compaction",
+      "Phase 6E: Master ledger segmentation to prevent infinite file growth",
+      "Phase 6F: Semantic search storage in DatabaseCore with inference separation",
+      "Phase 6G: Evidence logging for housekeeping operations",
+      "Phase 6H: Testing and governance invariants for data lifecycle",
+      "Phase 6I: Controlled rollout path from dev to production"
+    ]
+  },
+  "sprintBacklog": [
+    {
+      "title": "COMPLETED – HarmoniaModule Build Error Resolution",
+      "details": "Systematic incident response eliminated 73 build errors through MLOutputCache fixes, BuildIngest ArgumentParser resolution, and NameSpecification type creation.",
+      "acceptance": [
+        "MLOutputCache: Fixed 7 critical compilation errors (optional unwrapping, async error handling, DatabaseRow API)",
+        "BuildIngest: Resolved 20+ NameSpecification type conversion failures with ArgumentParser",
+        "NameSpecification: Created reusable type-safe build specifications in AnigmaPrimitives",
+        "Build verification: Achieved 0 compilation errors from initial 73",
+        "Documentation: All fixes recorded in TechDebt.md and governance-logbook.md"
+      ],
+      "date": "2025-12-14"
+    },
+    {
+      "title": "COMPLETED – ML Worker Production Infrastructure",
+      "details": "Implemented court-safe ML execution substrate with cryptographic provenance tracking and deterministic containerization for local MLX and llama.cpp inference.",
+      "acceptance": [
+        "Real binary and model hashing with SHA256 verification (worker: a725031e35269a837ea15b0e0d6badeb080500cfb610bf6d94ad9bcc0adf080e)",
+        "Deterministic container boundaries with honest cross-platform claims",
+        "Complete Accessum ledger integration with runId/ml/stepId/ artifact structure",
+        "Production MLX wrapper (anigma-mlx-backend) with stable CLI contract",
+        "Comprehensive test suite: 34 artifacts generated, hash stability verified",
+        "Resource protection: timeouts, size limits, environment sandboxing",
+        "Mock mode fallback for development without backend binaries"
+      ]
+    },
+    {
+      "title": "Phase 0 – Repo hygiene guardrails",
+      "details": "Document and enforce ignored Inspiration/INBOX corpora plus vendored node_modules so agent snapshots stay lean.",
+      "acceptance": [
+        "Inspiration/INBOX/** and node_modules directories under Docs/ or Inspiration appear in `.gitignore` (or repo lint) so tooling filters them.",
+        "CI fails if stray corpora or node_modules leak back into tracked paths."
+      ]
+    },
+    {
+      "title": "Phase 1 – Outlineum deterministic zine pipeline",
+      "details": "Produce deterministic Zine PDF + provenance from `Sources/OutlineumModule/TestFiles/zine-minimal/` via a release `outlineum-zine` runner.",
+      "acceptance": [
+        "One command runs the Outlineum runner and produces `Artifacts/outlineum/zine/{pipelineVersion}/{inputHash}/` with the PDF + provenance JSON.",
+        "Provenance includes pipeline version, input hash, git commit (when available), and normalized metadata to keep the PDF deterministic."
+      ]
+    },
+    {
+      "title": "Phase 2 – Diaplasion happy-path spine",
+      "details": "Ingest → OCR → normalize → export pipeline that emits searchable PDF, plain text, trace, and replay metadata.",
+      "acceptance": [
+        "Trace captures input hash, pipeline version, OCR configuration, and normalized text hash.",
+        "Replay command reuses the recorded metadata to regenerate the artifacts and compare the hashes."
+      ]
+    },
+    {
+      "title": "Phase 3 – Harmonia deterministic surface",
+      "details": "Ship the minimal Harmonia systems that the CLI surface uses and ban [[String: Any]] across actor boundaries via typed Sendable rows.",
+      "acceptance": [
+        "Smoke harness registers the slot/session/request systems, ticks the world, and asserts deterministic state.",
+        "Database queries return typed row structs so Swift 6 concurrency doesn’t reject the actor boundaries."
+      ]
+    },
+    {
+      "title": "Phase 4 – Accessum operator shell",
+      "details": "Deliver an operator shell that selects canonical inputs, runs pipelines, and reports provenance + errors via the shared CLI envelope.",
+      "acceptance": [
+        "AccessumFlow writes one trace per run, surfaces per-step hashes, and supports `accessum flow --replay` on the same runId.",
+        "Cross-module demo: Diaplasion output feeds Outlineum preview and the trace records both sides of the handoff."
+      ]
+    },
+    {
+      "title": "Phase 5 – Production hardening",
+      "details": "Make Accessum a deployable node with persisted run ledger, structured admin surface, retention, and launchd-ready documentation.",
+      "acceptance": [
+        "Runs/steps/artifacts live in `Artifacts/accessum/accessum.db` plus trace exports; replay and retention decisions write back to the ledger.",
+        "Admin command returns the same envelope as the CLI, reports stuck runs and retention stats, and honors `--retention-days` policies."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+module CPDFium {
+    header "pdfium_wrapper.h"
+    link "pdfium"
+    export *
+}

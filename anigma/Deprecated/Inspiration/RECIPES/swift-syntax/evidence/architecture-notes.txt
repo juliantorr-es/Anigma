@@ -1,0 +1,111 @@
+# Architecture Notes: swift-syntax
+
+## Core Design Principles
+
+1. **Immutable Syntax Trees**: All syntax nodes are immutable value types, enabling safe sharing and caching.
+2. **Arena Allocation**: RawSyntax nodes are allocated in arenas for performance and memory efficiency.
+3. **Visitor Pattern**: Double-dispatch via generated visitor methods for type-safe traversal.
+4. **Rewriter Pattern**: Subclassable SyntaxRewriter for transforming syntax trees with minimal copying.
+5. **Source Location Mapping**: AbsolutePosition and SourceLocationConverter for precise source mapping.
+6. **Incremental Parsing**: ParseTransition for reusing unchanged parts of syntax trees.
+7. **Diagnostic Framework**: Structured diagnostics with FixIts for suggested changes.
+
+## Key Patterns to Adapt
+
+### AST Lens Service
+- **Queryable AST Views**: SwiftSyntax provides `SyntaxProtocol` with `children`, `parent`, `ancestors`, `descendants`.
+- **Location-based Lookup**: `SourceLocationConverter` converts line/column to `AbsolutePosition`.
+- **Caching Strategy**: `IncrementalParseTransition` caches parsed trees for unchanged files.
+- **Thread Safety**: Syntax trees are immutable and thread-safe; parsing is not.
+
+### Rewrite Rule Protocol
+- **SyntaxRewriter Base Class**: Override `visit` methods to transform specific node types.
+- **Idempotent Transformations**: Rewriters can be applied multiple times safely.
+- **Change Tracking**: `SourceEdit` records precise changes (old range, new text).
+- **Composition**: Multiple rewriters can be chained; order matters.
+
+### Receipt-Based Rewriting
+- **Diagnostic Reporting**: Every transformation can emit `Diagnostic` messages.
+- **FixIt Suggestions**: `FixIt` provides suggested edits with source ranges.
+- **Evidence Collection**: `SourceEdit` can be collected into a "receipt" of changes.
+- **Validation**: Apply changes, verify round-trip, generate hash of before/after.
+
+## Governance Integration Points
+
+### Policy Enforcement
+- **Trust Tiers**: Different rewrite rules require different trust levels (bronze, silver, gold, platinum).
+- **Harmonia Validation**: All AST transformations must pass Harmonia's policy checks.
+- **CCTV Events**: Each rewrite generates audit events with before/after state.
+- **Accessum Signing**: Transformation receipts cryptographically signed by Accessum.
+
+### Contract Boundaries
+- **ASTLensProtocol**: Queryable AST views with caching and location lookup.
+- **RewriteRuleProtocol**: Idempotent transformation rules with trust tier requirements.
+- **TransformationReceiptProtocol**: Signed evidence of transformations with hash chain.
+- **SyntaxAnalysisContract**: Existing contract for syntax analysis (needs extension).
+
+## Implementation Strategy
+
+### Phase 1: Contract Definition
+- Define protocols in ContractsCore with authority boundaries.
+- Specify governance hooks (policy checks, audit events, evidence requirements).
+- Create contract artifacts in Docs/governance/contract-artifacts/.
+
+### Phase 2: Implementation
+- Implement AST lens service in AnigmaASTServices (extend existing SwiftAstLens).
+- Create rewrite rule registry in ContractsCore (extend existing RewriteRule protocol).
+- Integrate receipt generation with Accessum signing (use existing ML worker integration).
+
+### Phase 3: Validation
+- Contract compliance tests (round-trip validation, trust tier enforcement).
+- Harmonia governance integration tests (policy checks, CCTV events).
+- Receipt verification workflow tests (signature verification, hash chain validation).
+
+### Phase 4: Documentation
+- Update AGENTS.md with new AST transformation capabilities.
+- Document rewrite rule DSL in Architecture docs.
+- Create integration examples in Demo/.
+
+## Risks and Mitigations
+
+### Code Copying Risk
+- **DO NOT COPY**: SwiftSyntax library dependencies, parsing pipelines, source file readers.
+- **DO NOT COPY**: Swift compiler integration, build system hooks.
+- **REIMPLEMENT REQUIRED**: AST tree structure as AnigmaCore entities, transformation logic as ECS systems.
+
+### Performance Risk
+- SwiftSyntax is optimized for compiler use; our adaptation may be slower.
+- Mitigation: Use caching, incremental updates, and arena allocation patterns.
+
+### Governance Risk
+- AST transformations are powerful; must be tightly controlled.
+- Mitigation: Strict trust tiers, Harmonia validation, signed receipts.
+
+## Integration with Existing Anigma Modules
+
+### AnigmaASTServices
+- Extend `SwiftAstLens` with `ASTLensProtocol` compliance.
+- Add caching and incremental parsing inspired by `IncrementalParseTransition`.
+- Integrate with `AgSearchService` for fast code search.
+
+### ContractsCore
+- Extend `RewriteRule` protocol with `RewriteRuleProtocol` compliance.
+- Add trust tier enforcement and governance hooks.
+- Create `TransformationReceipt` type with Accessum signing.
+
+### AnigmaCore
+- Represent AST nodes as ECS entities for query performance.
+- Use `World` and `Component` system for AST transformations.
+- Integrate with `HarmoniaMemory` for persistence.
+
+### Harmonia
+- Add policy checks for AST transformations.
+- Generate CCTV events for each rewrite.
+- Validate transformation receipts.
+
+## Next Steps
+1. Create contract artifacts for ASTLensProtocol, RewriteRuleProtocol, TransformationReceiptProtocol.
+2. Implement prototypes in isolated worktrees.
+3. Run governance gates to ensure compliance.
+4. Integrate with existing code search and transformation pipelines.
+5. Document patterns in Architecture docs and AGENTS.md.

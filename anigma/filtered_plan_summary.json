@@ -1,0 +1,1202 @@
+{
+  "total": 237,
+  "our_code": [
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/AppStore.swift",
+      "line": 2456,
+      "description": "Extract config object for executeGovernedMLRun (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "executeGovernedMLRun",
+        "config_name": "ExecutegovernedmlrunConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// executeGovernedMLRun(\n//     modelId: value,\n//     taskKind: value,\n//     inputs: value,\n//     backend: value,\n//     seed: value,\n//     temperature: value,\n//     topP: value,\n//     maxTokens: value,\n// )\n//\n// New call:\n// let config = ExecutegovernedmlrunConfiguration(\n//     modelId: value,\n//     taskKind: value,\n//     inputs: value,\n//     backend: value,\n//     seed: value,\n//     temperature: value,\n//     topP: value,\n//     maxTokens: value,\n// )\n// executeGovernedMLRun(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/AnigmaMCPModule/MCPStreamingSupport.swift",
+      "line": 150,
+      "description": "Extract config object for emitUpdate (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "emitUpdate",
+        "config_name": "EmitupdateConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// emitUpdate(\n//     phase: value,\n//     progress: value,\n//     message: value,\n//     itemsProcessed: value,\n//     totalItems: value,\n//     estimatedTimeRemaining: value,\n//     currentItem: value,\n//     error: value,\n// )\n//\n// New call:\n// let config = EmitupdateConfiguration(\n//     phase: value,\n//     progress: value,\n//     message: value,\n//     itemsProcessed: value,\n//     totalItems: value,\n//     estimatedTimeRemaining: value,\n//     currentItem: value,\n//     error: value,\n// )\n// emitUpdate(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Database/ContextumDatabase.swift",
+      "line": 484,
+      "description": "Extract config object for insertEmbedding (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "insertEmbedding",
+        "config_name": "InsertembeddingConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// insertEmbedding(\n//     embeddingId: value,\n//     chunkHash: value,\n//     modelHash: value,\n//     modelId: value,\n//     vectorDimensions: value,\n//     vector: value,\n//     receiptId: value,\n// )\n//\n// New call:\n// let config = InsertembeddingConfiguration(\n//     embeddingId: value,\n//     chunkHash: value,\n//     modelHash: value,\n//     modelId: value,\n//     vectorDimensions: value,\n//     vector: value,\n//     receiptId: value,\n// )\n// insertEmbedding(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Database/ContextumDatabase.swift",
+      "line": 661,
+      "description": "Extract config object for insertAnalyticsRollup (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "insertAnalyticsRollup",
+        "config_name": "InsertanalyticsrollupConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// insertAnalyticsRollup(\n//     windowStart: value,\n//     windowEnd: value,\n//     groupKeyHash: value,\n//     rollupSpecHash: value,\n//     eventRangeStart: value,\n//     eventRangeEnd: value,\n//     eventCount: value,\n//     reportArtifactHash: value,\n//     receiptID: value,\n// )\n//\n// New call:\n// let config = InsertanalyticsrollupConfiguration(\n//     windowStart: value,\n//     windowEnd: value,\n//     groupKeyHash: value,\n//     rollupSpecHash: value,\n//     eventRangeStart: value,\n//     eventRangeEnd: value,\n//     eventCount: value,\n//     reportArtifactHash: value,\n//     receiptID: value,\n// )\n// insertAnalyticsRollup(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Database/ContextumDatabase.swift",
+      "line": 697,
+      "description": "Extract config object for insertAnomaly (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "insertAnomaly",
+        "config_name": "InsertanomalyConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// insertAnomaly(\n//     detectorID: value,\n//     windowStart: value,\n//     windowEnd: value,\n//     groupKeyHash: value,\n//     anomalySpecHash: value,\n//     subjectKey: value,\n//     severity: value,\n//     evidenceRollupIDs: value,\n//     reportArtifactHash: value,\n//     receiptID: value,\n// )\n//\n// New call:\n// let config = InsertanomalyConfiguration(\n//     detectorID: value,\n//     windowStart: value,\n//     windowEnd: value,\n//     groupKeyHash: value,\n//     anomalySpecHash: value,\n//     subjectKey: value,\n//     severity: value,\n//     evidenceRollupIDs: value,\n//     reportArtifactHash: value,\n//     receiptID: value,\n// )\n// insertAnomaly(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/IdempotencyGuard.swift",
+      "line": 104,
+      "description": "Extract config object for recordIngestState (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordIngestState",
+        "config_name": "RecordingeststateConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordIngestState(\n//     stateKey: value,\n//     artifactID: value,\n//     contentHash: value,\n//     chunkerVersion: value,\n//     embeddingModelID: value,\n//     chunkingNeeded: value,\n//     embeddingNeeded: value,\n// )\n//\n// New call:\n// let config = RecordingeststateConfiguration(\n//     stateKey: value,\n//     artifactID: value,\n//     contentHash: value,\n//     chunkerVersion: value,\n//     embeddingModelID: value,\n//     chunkingNeeded: value,\n//     embeddingNeeded: value,\n// )\n// recordIngestState(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/IdempotencyGuard.swift",
+      "line": 264,
+      "description": "Extract config object for insertIndexState (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "insertIndexState",
+        "config_name": "InsertindexstateConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// insertIndexState(\n//     id: value,\n//     stateKey: value,\n//     artifactID: value,\n//     contentHash: value,\n//     chunkerVersion: value,\n//     embeddingModelID: value,\n//     status: value,\n//     chunkingNeeded: value,\n//     embeddingNeeded: value,\n// )\n//\n// New call:\n// let config = InsertindexstateConfiguration(\n//     id: value,\n//     stateKey: value,\n//     artifactID: value,\n//     contentHash: value,\n//     chunkerVersion: value,\n//     embeddingModelID: value,\n//     status: value,\n//     chunkingNeeded: value,\n//     embeddingNeeded: value,\n// )\n// insertIndexState(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/ContextumModule/Systems/SemanticSearchSystem.swift",
+      "line": 125,
+      "description": "Extract config object for insertEmbedding (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "insertEmbedding",
+        "config_name": "InsertembeddingConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// insertEmbedding(\n//     database: value,\n//     embeddingId: value,\n//     chunkHash: value,\n//     modelHash: value,\n//     modelId: value,\n//     vectorDimensions: value,\n//     vector: value,\n//     receiptId: value,\n// )\n//\n// New call:\n// let config = InsertembeddingConfiguration(\n//     database: value,\n//     embeddingId: value,\n//     chunkHash: value,\n//     modelHash: value,\n//     modelId: value,\n//     vectorDimensions: value,\n//     vector: value,\n//     receiptId: value,\n// )\n// insertEmbedding(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Stores/MLStore.swift",
+      "line": 207,
+      "description": "Extract config object for executeGovernedMLRun (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "executeGovernedMLRun",
+        "config_name": "ExecutegovernedmlrunConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// executeGovernedMLRun(\n//     modelId: value,\n//     taskKind: value,\n//     inputs: value,\n//     backend: value,\n//     seed: value,\n//     temperature: value,\n//     topP: value,\n//     maxTokens: value,\n// )\n//\n// New call:\n// let config = ExecutegovernedmlrunConfiguration(\n//     modelId: value,\n//     taskKind: value,\n//     inputs: value,\n//     backend: value,\n//     seed: value,\n//     temperature: value,\n//     topP: value,\n//     maxTokens: value,\n// )\n// executeGovernedMLRun(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift",
+      "line": 625,
+      "description": "Extract config object for contextumPostflight (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "contextumPostflight",
+        "config_name": "ContextumpostflightConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// contextumPostflight(\n//     agentId: value,\n//     taskTaxonomy: value,\n//     durationMs: value,\n//     outcome: value,\n//     errorCode: value,\n//     workflowID: value,\n//     runID: value,\n//     jobID: value,\n// )\n//\n// New call:\n// let config = ContextumpostflightConfiguration(\n//     agentId: value,\n//     taskTaxonomy: value,\n//     durationMs: value,\n//     outcome: value,\n//     errorCode: value,\n//     workflowID: value,\n//     runID: value,\n//     jobID: value,\n// )\n// contextumPostflight(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Services/HarmoniaCommandHistory.swift",
+      "line": 91,
+      "description": "Extract config object for record (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "record",
+        "config_name": "RecordConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// record(\n//     command: value,\n//     arguments: value,\n//     exitCode: value,\n//     duration: value,\n//     success: value,\n//     output: value,\n//     error: value,\n// )\n//\n// New call:\n// let config = RecordConfiguration(\n//     command: value,\n//     arguments: value,\n//     exitCode: value,\n//     duration: value,\n//     success: value,\n//     output: value,\n//     error: value,\n// )\n// record(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Model/Registry/ModelRegistryTypes.swift",
+      "line": 154,
+      "description": "Extract config object for fromLegacy (15 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "fromLegacy",
+        "config_name": "FromlegacyConfiguration",
+        "parameter_count": 15,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// fromLegacy(\n//     modelId: value,\n//     sourceType: value,\n//     sourceLocation: value,\n//     sourceRevision: value,\n//     licenseDeclared: value,\n//     licenseDecision: value,\n//     artifactHash: value,\n//     tokenizerHash: value,\n//     conversionReceiptId: value,\n//     backendCompatibility: value,\n//     importedAt: value,\n//     trustTier: value,\n//     taskKind: value,\n//     backendFormat: value,\n//     dimension: value,\n// )\n//\n// New call:\n// let config = FromlegacyConfiguration(\n//     modelId: value,\n//     sourceType: value,\n//     sourceLocation: value,\n//     sourceRevision: value,\n//     licenseDeclared: value,\n//     licenseDecision: value,\n//     artifactHash: value,\n//     tokenizerHash: value,\n//     conversionReceiptId: value,\n//     backendCompatibility: value,\n//     importedAt: value,\n//     trustTier: value,\n//     taskKind: value,\n//     backendFormat: value,\n//     dimension: value,\n// )\n// fromLegacy(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ExecutionCore/ReceiptTypes.swift",
+      "line": 162,
+      "description": "Extract config object for create (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "create",
+        "config_name": "CreateConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// create(\n//     actionName: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     timestampMs: value,\n//     inputsHash: value,\n//     outputsHash: value,\n//     signature: value,\n//     previousReceiptHash: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = CreateConfiguration(\n//     actionName: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     timestampMs: value,\n//     inputsHash: value,\n//     outputsHash: value,\n//     signature: value,\n//     previousReceiptHash: value,\n//     metadata: value,\n// )\n// create(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ExecutionCore/ReceiptTypes.swift",
+      "line": 304,
+      "description": "Extract config object for create (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "create",
+        "config_name": "CreateConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// create(\n//     fromPhase: value,\n//     toPhase: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     timestampMs: value,\n//     contextHash: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = CreateConfiguration(\n//     fromPhase: value,\n//     toPhase: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     timestampMs: value,\n//     contextHash: value,\n//     metadata: value,\n// )\n// create(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ExecutionCore/ReceiptEngine.swift",
+      "line": 30,
+      "description": "Extract config object for recordDecision (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordDecision",
+        "config_name": "RecorddecisionConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordDecision(\n//     receiptID: value,\n//     actionName: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     inputs: value,\n//     outputs: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = RecorddecisionConfiguration(\n//     receiptID: value,\n//     actionName: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     inputs: value,\n//     outputs: value,\n//     metadata: value,\n// )\n// recordDecision(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ExecutionCore/ReceiptEngine.swift",
+      "line": 86,
+      "description": "Extract config object for recordPhaseTransition (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordPhaseTransition",
+        "config_name": "RecordphasetransitionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordPhaseTransition(\n//     transitionID: value,\n//     fromPhase: value,\n//     toPhase: value,\n//     authority: value,\n//     policyResult: value,\n//     context: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = RecordphasetransitionConfiguration(\n//     transitionID: value,\n//     fromPhase: value,\n//     toPhase: value,\n//     authority: value,\n//     policyResult: value,\n//     context: value,\n//     metadata: value,\n// )\n// recordPhaseTransition(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ExecutionCore/ReceiptEngine.swift",
+      "line": 169,
+      "description": "Extract config object for recordActionExecution (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordActionExecution",
+        "config_name": "RecordactionexecutionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordActionExecution(\n//     actionName: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     inputs: value,\n//     outputs: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = RecordactionexecutionConfiguration(\n//     actionName: value,\n//     authority: value,\n//     decision: value,\n//     reasonCode: value,\n//     inputs: value,\n//     outputs: value,\n//     metadata: value,\n// )\n// recordActionExecution(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/DatabaseCore/MasterLedgerStore.swift",
+      "line": 176,
+      "description": "Extract config object for recordToolCallEvent (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordToolCallEvent",
+        "config_name": "RecordtoolcalleventConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordToolCallEvent(\n//     toolName: value,\n//     sessionID: value,\n//     status: value,\n//     preconditionHash: value,\n//     resultContentHash: value,\n//     errorSignature: value,\n//     durationMs: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = RecordtoolcalleventConfiguration(\n//     toolName: value,\n//     sessionID: value,\n//     status: value,\n//     preconditionHash: value,\n//     resultContentHash: value,\n//     errorSignature: value,\n//     durationMs: value,\n//     metadata: value,\n// )\n// recordToolCallEvent(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/DatabaseCore/DatabaseActor+MasterLedger.swift",
+      "line": 122,
+      "description": "Extract config object for recordToolCallWithVerification (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordToolCallWithVerification",
+        "config_name": "RecordtoolcallwithverificationConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordToolCallWithVerification(\n//     toolName: value,\n//     sessionID: value,\n//     status: value,\n//     preconditionData: value,\n//     fileBeforeData: value,\n//     resultContent: value,\n//     durationMs: value,\n// )\n//\n// New call:\n// let config = RecordtoolcallwithverificationConfiguration(\n//     toolName: value,\n//     sessionID: value,\n//     status: value,\n//     preconditionData: value,\n//     fileBeforeData: value,\n//     resultContent: value,\n//     durationMs: value,\n// )\n// recordToolCallWithVerification(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/BuildIngest/main.swift",
+      "line": 242,
+      "description": "Extract config object for createBuildSession (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "createBuildSession",
+        "config_name": "CreatebuildsessionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// createBuildSession(\n//     dbActor: value,\n//     sessionId: value,\n//     gitState: value,\n//     target: value,\n//     configuration: value,\n//     toolchain: value,\n//     workingDirectory: value,\n// )\n//\n// New call:\n// let config = CreatebuildsessionConfiguration(\n//     dbActor: value,\n//     sessionId: value,\n//     gitState: value,\n//     target: value,\n//     configuration: value,\n//     toolchain: value,\n//     workingDirectory: value,\n// )\n// createBuildSession(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/BuildIngest/main.swift",
+      "line": 377,
+      "description": "Extract config object for updateBuildSession (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "updateBuildSession",
+        "config_name": "UpdatebuildsessionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// updateBuildSession(\n//     dbActor: value,\n//     sessionId: value,\n//     exitCode: value,\n//     endTime: value,\n//     totalErrors: value,\n//     totalWarnings: value,\n//     artifactPath: value,\n// )\n//\n// New call:\n// let config = UpdatebuildsessionConfiguration(\n//     dbActor: value,\n//     sessionId: value,\n//     exitCode: value,\n//     endTime: value,\n//     totalErrors: value,\n//     totalWarnings: value,\n//     artifactPath: value,\n// )\n// updateBuildSession(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/DiaplasionPipeline/DiaplasionPipeline.swift",
+      "line": 215,
+      "description": "Extract config object for verifyReplay (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "verifyReplay",
+        "config_name": "VerifyreplayConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// verifyReplay(\n//     traceURL: value,\n//     spec: value,\n//     specURL: value,\n//     specSourceDescription: value,\n//     artifactDir: value,\n//     pipelineVersion: value,\n//     inputHash: value,\n// )\n//\n// New call:\n// let config = VerifyreplayConfiguration(\n//     traceURL: value,\n//     spec: value,\n//     specURL: value,\n//     specSourceDescription: value,\n//     artifactDir: value,\n//     pipelineVersion: value,\n//     inputHash: value,\n// )\n// verifyReplay(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaASTServicesCLI/AnigmaASTServicesCLI.swift",
+      "line": 362,
+      "description": "Extract config object for parse (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "parse",
+        "config_name": "ParseConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// parse(\n//     schemaVersion: value,\n//     requestId: value,\n//     ok: value,\n//     filePath: value,\n//     sourceSize: value,\n//     nodeCount: value,\n//     parseTime: value,\n// )\n//\n// New call:\n// let config = ParseConfiguration(\n//     schemaVersion: value,\n//     requestId: value,\n//     ok: value,\n//     filePath: value,\n//     sourceSize: value,\n//     nodeCount: value,\n//     parseTime: value,\n// )\n// parse(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaASTServicesCLI/AnigmaASTServicesCLI.swift",
+      "line": 366,
+      "description": "Extract config object for analyze (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "analyze",
+        "config_name": "AnalyzeConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// analyze(\n//     schemaVersion: value,\n//     requestId: value,\n//     ok: value,\n//     filePath: value,\n//     sourceSize: value,\n//     visitors: value,\n//     findings: value,\n//     analysisTime: value,\n// )\n//\n// New call:\n// let config = AnalyzeConfiguration(\n//     schemaVersion: value,\n//     requestId: value,\n//     ok: value,\n//     filePath: value,\n//     sourceSize: value,\n//     visitors: value,\n//     findings: value,\n//     analysisTime: value,\n// )\n// analyze(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaDaemonCore/DaemonServer.swift",
+      "line": 276,
+      "description": "Extract config object for handleIngestArtifact (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "handleIngestArtifact",
+        "config_name": "HandleingestartifactConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// handleIngestArtifact(\n//     ctx: value,\n//     kind: value,\n//     mime: value,\n//     data: value,\n//     plaintextSha256: value,\n//     chunkCount: value,\n//     byteCount: value,\n//     filenameHint: value,\n// )\n//\n// New call:\n// let config = HandleingestartifactConfiguration(\n//     ctx: value,\n//     kind: value,\n//     mime: value,\n//     data: value,\n//     plaintextSha256: value,\n//     chunkCount: value,\n//     byteCount: value,\n//     filenameHint: value,\n// )\n// handleIngestArtifact(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaDaemonCore/DaemonServer.swift",
+      "line": 952,
+      "description": "Extract config object for emitJobEvent (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "emitJobEvent",
+        "config_name": "EmitjobeventConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// emitJobEvent(\n//     jobId: value,\n//     type: value,\n//     message: value,\n//     progressPermille: value,\n//     output: value,\n//     receiptHash: value,\n//     error: value,\n// )\n//\n// New call:\n// let config = EmitjobeventConfiguration(\n//     jobId: value,\n//     type: value,\n//     message: value,\n//     progressPermille: value,\n//     output: value,\n//     receiptHash: value,\n//     error: value,\n// )\n// emitJobEvent(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AccessumFlow/main.swift",
+      "line": 317,
+      "description": "Extract config object for runDiaplasionStep (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "runDiaplasionStep",
+        "config_name": "RundiaplasionstepConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// runDiaplasionStep(\n//     specURL: value,\n//     specSource: value,\n//     repoRoot: value,\n//     pipelineVersion: value,\n//     inputContext: value,\n//     artifactDir: value,\n//     env: value,\n// )\n//\n// New call:\n// let config = RundiaplasionstepConfiguration(\n//     specURL: value,\n//     specSource: value,\n//     repoRoot: value,\n//     pipelineVersion: value,\n//     inputContext: value,\n//     artifactDir: value,\n//     env: value,\n// )\n// runDiaplasionStep(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AccessumFlow/main.swift",
+      "line": 374,
+      "description": "Extract config object for runMLStep (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "runMLStep",
+        "config_name": "RunmlstepConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// runMLStep(\n//     runId: value,\n//     repoRoot: value,\n//     artifactDir: value,\n//     pipelineVersion: value,\n//     diTrace: value,\n//     pipelineArtifactDir: value,\n//     env: value,\n//     supervisor: value,\n// )\n//\n// New call:\n// let config = RunmlstepConfiguration(\n//     runId: value,\n//     repoRoot: value,\n//     artifactDir: value,\n//     pipelineVersion: value,\n//     diTrace: value,\n//     pipelineArtifactDir: value,\n//     env: value,\n//     supervisor: value,\n// )\n// runMLStep(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaMemory/Models/MemoryObservation.swift",
+      "line": 245,
+      "description": "Extract config object for toolResult (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "toolResult",
+        "config_name": "ToolresultConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// toolResult(\n//     sessionId: value,\n//     tenantId: value,\n//     source: value,\n//     toolCall: value,\n//     result: value,\n//     metadata: value,\n//     tags: value,\n// )\n//\n// New call:\n// let config = ToolresultConfiguration(\n//     sessionId: value,\n//     tenantId: value,\n//     source: value,\n//     toolCall: value,\n//     result: value,\n//     metadata: value,\n//     tags: value,\n// )\n// toolResult(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaMemory/Models/MemoryObservation.swift",
+      "line": 268,
+      "description": "Extract config object for toolError (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "toolError",
+        "config_name": "ToolerrorConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// toolError(\n//     sessionId: value,\n//     tenantId: value,\n//     source: value,\n//     toolCall: value,\n//     error: value,\n//     metadata: value,\n//     tags: value,\n// )\n//\n// New call:\n// let config = ToolerrorConfiguration(\n//     sessionId: value,\n//     tenantId: value,\n//     source: value,\n//     toolCall: value,\n//     error: value,\n//     metadata: value,\n//     tags: value,\n// )\n// toolError(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaMemory/Models/MemoryObservation.swift",
+      "line": 291,
+      "description": "Extract config object for decision (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "decision",
+        "config_name": "DecisionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// decision(\n//     sessionId: value,\n//     tenantId: value,\n//     source: value,\n//     decisionType: value,\n//     decisionData: value,\n//     metadata: value,\n//     tags: value,\n// )\n//\n// New call:\n// let config = DecisionConfiguration(\n//     sessionId: value,\n//     tenantId: value,\n//     source: value,\n//     decisionType: value,\n//     decisionData: value,\n//     metadata: value,\n//     tags: value,\n// )\n// decision(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ObservatoriumModule/Components/FeedbackComponent.swift",
+      "line": 228,
+      "description": "Extract config object for bugReport (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "bugReport",
+        "config_name": "BugreportConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// bugReport(\n//     title: value,\n//     description: value,\n//     severity: value,\n//     module: value,\n//     reporterId: value,\n//     currentPath: value,\n//     sessionId: value,\n// )\n//\n// New call:\n// let config = BugreportConfiguration(\n//     title: value,\n//     description: value,\n//     severity: value,\n//     module: value,\n//     reporterId: value,\n//     currentPath: value,\n//     sessionId: value,\n// )\n// bugReport(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ObservatoriumModule/Services/FeedbackService.swift",
+      "line": 82,
+      "description": "Extract config object for submitBugReport (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "submitBugReport",
+        "config_name": "SubmitbugreportConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// submitBugReport(\n//     title: value,\n//     description: value,\n//     severity: value,\n//     module: value,\n//     reporterId: value,\n//     currentPath: value,\n//     sessionId: value,\n// )\n//\n// New call:\n// let config = SubmitbugreportConfiguration(\n//     title: value,\n//     description: value,\n//     severity: value,\n//     module: value,\n//     reporterId: value,\n//     currentPath: value,\n//     sessionId: value,\n// )\n// submitBugReport(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ObservatoriumModule/Services/ErrorService.swift",
+      "line": 59,
+      "description": "Extract config object for recordError (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordError",
+        "config_name": "RecorderrorConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordError(\n//     type: value,\n//     message: value,\n//     severity: value,\n//     module: value,\n//     component: value,\n//     stackTrace: value,\n//     context: value,\n//     correlationId: value,\n//     principalId: value,\n//     maySensitive: value,\n// )\n//\n// New call:\n// let config = RecorderrorConfiguration(\n//     type: value,\n//     message: value,\n//     severity: value,\n//     module: value,\n//     component: value,\n//     stackTrace: value,\n//     context: value,\n//     correlationId: value,\n//     principalId: value,\n//     maySensitive: value,\n// )\n// recordError(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift",
+      "line": 85,
+      "description": "Extract config object for runProcess (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "runProcess",
+        "config_name": "RunprocessConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// runProcess(\n//     executable: value,\n//     arguments: value,\n//     workingDirectory: value,\n//     inputData: value,\n//     environment: value,\n//     timeout: value,\n//     sandboxProfile: value,\n// )\n//\n// New call:\n// let config = RunprocessConfiguration(\n//     executable: value,\n//     arguments: value,\n//     workingDirectory: value,\n//     inputData: value,\n//     environment: value,\n//     timeout: value,\n//     sandboxProfile: value,\n// )\n// runProcess(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift",
+      "line": 184,
+      "description": "Extract config object for runProcessAsync (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "runProcessAsync",
+        "config_name": "RunprocessasyncConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// runProcessAsync(\n//     executable: value,\n//     arguments: value,\n//     workingDirectory: value,\n//     inputData: value,\n//     environment: value,\n//     timeout: value,\n//     sandboxProfile: value,\n// )\n//\n// New call:\n// let config = RunprocessasyncConfiguration(\n//     executable: value,\n//     arguments: value,\n//     workingDirectory: value,\n//     inputData: value,\n//     environment: value,\n//     timeout: value,\n//     sandboxProfile: value,\n// )\n// runProcessAsync(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/DiaplasionModule/Systems/DiaplasionSystems.swift",
+      "line": 81,
+      "description": "Extract config object for appendProcessingError (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "appendProcessingError",
+        "config_name": "AppendprocessingerrorConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// appendProcessingError(\n//     world: value,\n//     entity: value,\n//     stage: value,\n//     code: value,\n//     message: value,\n//     retryPolicy: value,\n//     context: value,\n//     isRetryable: value,\n// )\n//\n// New call:\n// let config = AppendprocessingerrorConfiguration(\n//     world: value,\n//     entity: value,\n//     stage: value,\n//     code: value,\n//     message: value,\n//     retryPolicy: value,\n//     context: value,\n//     isRetryable: value,\n// )\n// appendProcessingError(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Pipeline/ArtifactStore.swift",
+      "line": 121,
+      "description": "Extract config object for storeEnvelopeData (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "storeEnvelopeData",
+        "config_name": "StoreenvelopedataConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// storeEnvelopeData(\n//     envelopeData: value,\n//     schemaVersion: value,\n//     contractID: value,\n//     sessionID: value,\n//     artifactKey: value,\n//     payloadData: value,\n//     evidenceData: value,\n//     metricsData: value,\n//     receiptData: value,\n// )\n//\n// New call:\n// let config = StoreenvelopedataConfiguration(\n//     envelopeData: value,\n//     schemaVersion: value,\n//     contractID: value,\n//     sessionID: value,\n//     artifactKey: value,\n//     payloadData: value,\n//     evidenceData: value,\n//     metricsData: value,\n//     receiptData: value,\n// )\n// storeEnvelopeData(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Pipeline/ArtifactStore.swift",
+      "line": 228,
+      "description": "Extract config object for storeEnvelopeData (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "storeEnvelopeData",
+        "config_name": "StoreenvelopedataConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// storeEnvelopeData(\n//     envelopeData: value,\n//     schemaVersion: value,\n//     contractID: value,\n//     sessionID: value,\n//     artifactKey: value,\n//     payloadData: value,\n//     evidenceData: value,\n//     metricsData: value,\n//     receiptData: value,\n// )\n//\n// New call:\n// let config = StoreenvelopedataConfiguration(\n//     envelopeData: value,\n//     schemaVersion: value,\n//     contractID: value,\n//     sessionID: value,\n//     artifactKey: value,\n//     payloadData: value,\n//     evidenceData: value,\n//     metricsData: value,\n//     receiptData: value,\n// )\n// storeEnvelopeData(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Security/VulnerabilityDisclosure.swift",
+      "line": 478,
+      "description": "Extract config object for reportVulnerability (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "reportVulnerability",
+        "config_name": "ReportvulnerabilityConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// reportVulnerability(\n//     title: value,\n//     description: value,\n//     severity: value,\n//     affectedComponents: value,\n//     reporter: value,\n//     reporterOrganization: value,\n//     cweId: value,\n//     attackVector: value,\n// )\n//\n// New call:\n// let config = ReportvulnerabilityConfiguration(\n//     title: value,\n//     description: value,\n//     severity: value,\n//     affectedComponents: value,\n//     reporter: value,\n//     reporterOrganization: value,\n//     cweId: value,\n//     attackVector: value,\n// )\n// reportVulnerability(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Security/ExplainableAI.swift",
+      "line": 377,
+      "description": "Extract config object for query (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "query",
+        "config_name": "QueryConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// query(\n//     decisionType: value,\n//     outcome: value,\n//     minConfidence: value,\n//     maxConfidence: value,\n//     since: value,\n//     until: value,\n//     limit: value,\n// )\n//\n// New call:\n// let config = QueryConfiguration(\n//     decisionType: value,\n//     outcome: value,\n//     minConfidence: value,\n//     maxConfidence: value,\n//     since: value,\n//     until: value,\n//     limit: value,\n// )\n// query(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Security/SecurityHardening.swift",
+      "line": 642,
+      "description": "Extract config object for record (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "record",
+        "config_name": "RecordConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// record(\n//     eventType: value,\n//     principal: value,\n//     module: value,\n//     entityId: value,\n//     componentType: value,\n//     sensitivity: value,\n//     description: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = RecordConfiguration(\n//     eventType: value,\n//     principal: value,\n//     module: value,\n//     entityId: value,\n//     componentType: value,\n//     sensitivity: value,\n//     description: value,\n//     metadata: value,\n// )\n// record(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Security/SecurityHardening.swift",
+      "line": 803,
+      "description": "Extract config object for createSandbox (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "createSandbox",
+        "config_name": "CreatesandboxConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// createSandbox(\n//     executionId: value,\n//     agentId: value,\n//     operatingMode: value,\n//     allowedDomains: value,\n//     maxSensitivity: value,\n//     allowedCapabilities: value,\n//     timeoutSeconds: value,\n// )\n//\n// New call:\n// let config = CreatesandboxConfiguration(\n//     executionId: value,\n//     agentId: value,\n//     operatingMode: value,\n//     allowedDomains: value,\n//     maxSensitivity: value,\n//     allowedCapabilities: value,\n//     timeoutSeconds: value,\n// )\n// createSandbox(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Integration/SecuredWorld.swift",
+      "line": 323,
+      "description": "Extract config object for recordAIDecision (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordAIDecision",
+        "config_name": "RecordaidecisionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordAIDecision(\n//     modelId: value,\n//     decisionType: value,\n//     outcome: value,\n//     confidence: value,\n//     features: value,\n//     principal: value,\n//     entityId: value,\n// )\n//\n// New call:\n// let config = RecordaidecisionConfiguration(\n//     modelId: value,\n//     decisionType: value,\n//     outcome: value,\n//     confidence: value,\n//     features: value,\n//     principal: value,\n//     entityId: value,\n// )\n// recordAIDecision(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/ReasoningKernel.swift",
+      "line": 944,
+      "description": "Extract config object for makeResult (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "makeResult",
+        "config_name": "MakeresultConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// makeResult(\n//     puzzle: value,\n//     outcome: value,\n//     path: value,\n//     finalState: value,\n//     violatedConstraints: value,\n//     confidence: value,\n//     stepsExplored: value,\n//     startTime: value,\n//     explanation: value,\n//     truncated: value,\n// )\n//\n// New call:\n// let config = MakeresultConfiguration(\n//     puzzle: value,\n//     outcome: value,\n//     path: value,\n//     finalState: value,\n//     violatedConstraints: value,\n//     confidence: value,\n//     stepsExplored: value,\n//     startTime: value,\n//     explanation: value,\n//     truncated: value,\n// )\n// makeResult(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift",
+      "line": 751,
+      "description": "Extract config object for persistAdapterReceipt (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "persistAdapterReceipt",
+        "config_name": "PersistadapterreceiptConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// persistAdapterReceipt(\n//     adapterId: value,\n//     adapterVersion: value,\n//     inputHash: value,\n//     outputHash: value,\n//     policyDecision: value,\n//     resourceLimitExceeded: value,\n//     quarantineDecision: value,\n//     enhancementContext: value,\n//     input: value,\n//     observational: value,\n// )\n//\n// New call:\n// let config = PersistadapterreceiptConfiguration(\n//     adapterId: value,\n//     adapterVersion: value,\n//     inputHash: value,\n//     outputHash: value,\n//     policyDecision: value,\n//     resourceLimitExceeded: value,\n//     quarantineDecision: value,\n//     enhancementContext: value,\n//     input: value,\n//     observational: value,\n// )\n// persistAdapterReceipt(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift",
+      "line": 1034,
+      "description": "Extract config object for recordEnhancementReceipt (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordEnhancementReceipt",
+        "config_name": "RecordenhancementreceiptConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordEnhancementReceipt(\n//     input: value,\n//     output: value,\n//     decision: value,\n//     enhancementContext: value,\n//     resourceLimitExceeded: value,\n//     quarantineDecision: value,\n//     determinismObservation: value,\n//     startedAt: value,\n//     finishedAt: value,\n// )\n//\n// New call:\n// let config = RecordenhancementreceiptConfiguration(\n//     input: value,\n//     output: value,\n//     decision: value,\n//     enhancementContext: value,\n//     resourceLimitExceeded: value,\n//     quarantineDecision: value,\n//     determinismObservation: value,\n//     startedAt: value,\n//     finishedAt: value,\n// )\n// recordEnhancementReceipt(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Reasoning/MakerEngine.swift",
+      "line": 1223,
+      "description": "Extract config object for buildDeterminismReceipt (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "buildDeterminismReceipt",
+        "config_name": "BuilddeterminismreceiptConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// buildDeterminismReceipt(\n//     input: value,\n//     output: value,\n//     enhancementContext: value,\n//     decision: value,\n//     wasQuarantined: value,\n//     determinismObservation: value,\n//     determinismCheckPassed: value,\n//     resourceLimitExceeded: value,\n// )\n//\n// New call:\n// let config = BuilddeterminismreceiptConfiguration(\n//     input: value,\n//     output: value,\n//     enhancementContext: value,\n//     decision: value,\n//     wasQuarantined: value,\n//     determinismObservation: value,\n//     determinismCheckPassed: value,\n//     resourceLimitExceeded: value,\n// )\n// buildDeterminismReceipt(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Utilities/Logging.swift",
+      "line": 149,
+      "description": "Extract config object for log (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "log",
+        "config_name": "LogConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// log(\n//     level: value,\n//     message: value,\n//     category: value,\n//     metadata: value,\n//     file: value,\n//     function: value,\n//     line: value,\n// )\n//\n// New call:\n// let config = LogConfiguration(\n//     level: value,\n//     message: value,\n//     category: value,\n//     metadata: value,\n//     file: value,\n//     function: value,\n//     line: value,\n// )\n// log(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Pipeline/Metopticon/MetopticonModule.swift",
+      "line": 161,
+      "description": "Extract config object for startWorkload (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "startWorkload",
+        "config_name": "StartworkloadConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// startWorkload(\n//     graphId: value,\n//     templateName: value,\n//     category: value,\n//     ownerId: value,\n//     ownerOrgUnit: value,\n//     ownerDepartment: value,\n//     deviceId: value,\n//     invokingFrontend: value,\n//     sessionId: value,\n// )\n//\n// New call:\n// let config = StartworkloadConfiguration(\n//     graphId: value,\n//     templateName: value,\n//     category: value,\n//     ownerId: value,\n//     ownerOrgUnit: value,\n//     ownerDepartment: value,\n//     deviceId: value,\n//     invokingFrontend: value,\n//     sessionId: value,\n// )\n// startWorkload(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Pipeline/Metopticon/MetopticonIntegration.swift",
+      "line": 711,
+      "description": "Extract config object for updateFromTrace (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "updateFromTrace",
+        "config_name": "UpdatefromtraceConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// updateFromTrace(\n//     id: value,\n//     nodeCount: value,\n//     nodesExecuted: value,\n//     cacheHits: value,\n//     cacheMisses: value,\n//     errorCount: value,\n//     backends: value,\n//     durationMs: value,\n// )\n//\n// New call:\n// let config = UpdatefromtraceConfiguration(\n//     id: value,\n//     nodeCount: value,\n//     nodesExecuted: value,\n//     cacheHits: value,\n//     cacheMisses: value,\n//     errorCount: value,\n//     backends: value,\n//     durationMs: value,\n// )\n// updateFromTrace(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ConexusModule/Components/ActivityComponent.swift",
+      "line": 170,
+      "description": "Extract config object for meeting (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "meeting",
+        "config_name": "MeetingConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// meeting(\n//     subject: value,\n//     notes: value,\n//     duration: value,\n//     location: value,\n//     attendees: value,\n//     contactIds: value,\n//     createdBy: value,\n// )\n//\n// New call:\n// let config = MeetingConfiguration(\n//     subject: value,\n//     notes: value,\n//     duration: value,\n//     location: value,\n//     attendees: value,\n//     contactIds: value,\n//     createdBy: value,\n// )\n// meeting(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ConexusModule/Components/ActivityComponent.swift",
+      "line": 213,
+      "description": "Extract config object for task (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "task",
+        "config_name": "TaskConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// task(\n//     subject: value,\n//     description: value,\n//     dueDate: value,\n//     priority: value,\n//     assignedTo: value,\n//     contactIds: value,\n//     createdBy: value,\n// )\n//\n// New call:\n// let config = TaskConfiguration(\n//     subject: value,\n//     description: value,\n//     dueDate: value,\n//     priority: value,\n//     assignedTo: value,\n//     contactIds: value,\n//     createdBy: value,\n// )\n// task(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/ContractsCore/Contracts/ContractRuntimeTypes.swift",
+      "line": 380,
+      "description": "Extract config object for placeholder (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "placeholder",
+        "config_name": "PlaceholderConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// placeholder(\n//     contractID: value,\n//     runID: value,\n//     sessionID: value,\n//     status: value,\n//     startedAt: value,\n//     endedAt: value,\n//     inputRefs: value,\n//     outputRefs: value,\n//     evidenceRefs: value,\n//     metrics: value,\n// )\n//\n// New call:\n// let config = PlaceholderConfiguration(\n//     contractID: value,\n//     runID: value,\n//     sessionID: value,\n//     status: value,\n//     startedAt: value,\n//     endedAt: value,\n//     inputRefs: value,\n//     outputRefs: value,\n//     evidenceRefs: value,\n//     metrics: value,\n// )\n// placeholder(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Artifacts/ArtifactAnalyzer.swift",
+      "line": 119,
+      "description": "Extract config object for analyzeArtifact (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "analyzeArtifact",
+        "config_name": "AnalyzeartifactConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// analyzeArtifact(\n//     artifactId: value,\n//     filePath: value,\n//     sizeBytes: value,\n//     createdAt: value,\n//     lastAccessedAt: value,\n//     usageCount: value,\n//     buildTarget: value,\n// )\n//\n// New call:\n// let config = AnalyzeartifactConfiguration(\n//     artifactId: value,\n//     filePath: value,\n//     sizeBytes: value,\n//     createdAt: value,\n//     lastAccessedAt: value,\n//     usageCount: value,\n//     buildTarget: value,\n// )\n// analyzeArtifact(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Security/EvidenceRedactionSystem.swift",
+      "line": 342,
+      "description": "Extract config object for createRedactionAuditTrail (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "createRedactionAuditTrail",
+        "config_name": "CreateredactionaudittrailConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// createRedactionAuditTrail(\n//     originalBundle: value,\n//     redactedComponents: value,\n//     plan: value,\n//     sessionId: value,\n//     requestedBy: value,\n//     authorizedBy: value,\n//     legalHoldReference: value,\n//     privilegeLog: value,\n// )\n//\n// New call:\n// let config = CreateredactionaudittrailConfiguration(\n//     originalBundle: value,\n//     redactedComponents: value,\n//     plan: value,\n//     sessionId: value,\n//     requestedBy: value,\n//     authorizedBy: value,\n//     legalHoldReference: value,\n//     privilegeLog: value,\n// )\n// createRedactionAuditTrail(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Harness/ProjectHarnessStoreExtensions.swift",
+      "line": 15,
+      "description": "Extract config object for updateFeatureBehavioralHistory (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "updateFeatureBehavioralHistory",
+        "config_name": "UpdatefeaturebehavioralhistoryConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// updateFeatureBehavioralHistory(\n//     featureId: value,\n//     sessionIndex: value,\n//     healthScore: value,\n//     analysisRatio: value,\n//     editCalls: value,\n//     analysisCalls: value,\n//     testCalls: value,\n//     testsPassed: value,\n//     workSummary: value,\n// )\n//\n// New call:\n// let config = UpdatefeaturebehavioralhistoryConfiguration(\n//     featureId: value,\n//     sessionIndex: value,\n//     healthScore: value,\n//     analysisRatio: value,\n//     editCalls: value,\n//     analysisCalls: value,\n//     testCalls: value,\n//     testsPassed: value,\n//     workSummary: value,\n// )\n// updateFeatureBehavioralHistory(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Harness/ToolUsageInspector.swift",
+      "line": 426,
+      "description": "Extract config object for generateJudgementalVerdict (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "generateJudgementalVerdict",
+        "config_name": "GeneratejudgementalverdictConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// generateJudgementalVerdict(\n//     healthRateA: value,\n//     healthRateB: value,\n//     healthRateDiff: value,\n//     criticalA: value,\n//     criticalB: value,\n//     analysisRatioA: value,\n//     analysisRatioB: value,\n//     analysisRatioDiff: value,\n//     labelA: value,\n//     labelB: value,\n// )\n//\n// New call:\n// let config = GeneratejudgementalverdictConfiguration(\n//     healthRateA: value,\n//     healthRateB: value,\n//     healthRateDiff: value,\n//     criticalA: value,\n//     criticalB: value,\n//     analysisRatioA: value,\n//     analysisRatioB: value,\n//     analysisRatioDiff: value,\n//     labelA: value,\n//     labelB: value,\n// )\n// generateJudgementalVerdict(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Doctrine/DoctrinalScouts.swift",
+      "line": 216,
+      "description": "Extract config object for makeScoutViolation (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "makeScoutViolation",
+        "config_name": "MakescoutviolationConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// makeScoutViolation(\n//     domain: value,\n//     ruleId: value,\n//     severity: value,\n//     filePath: value,\n//     lineNumber: value,\n//     columnNumber: value,\n//     message: value,\n//     context: value,\n// )\n//\n// New call:\n// let config = MakescoutviolationConfiguration(\n//     domain: value,\n//     ruleId: value,\n//     severity: value,\n//     filePath: value,\n//     lineNumber: value,\n//     columnNumber: value,\n//     message: value,\n//     context: value,\n// )\n// makeScoutViolation(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Doctrine/ConcreteLawCompliancePack.swift",
+      "line": 658,
+      "description": "Extract config object for lawViolation (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "lawViolation",
+        "config_name": "LawviolationConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// lawViolation(\n//     ruleId: value,\n//     severity: value,\n//     filePath: value,\n//     lineNumber: value,\n//     columnNumber: value,\n//     message: value,\n//     context: value,\n// )\n//\n// New call:\n// let config = LawviolationConfiguration(\n//     ruleId: value,\n//     severity: value,\n//     filePath: value,\n//     lineNumber: value,\n//     columnNumber: value,\n//     message: value,\n//     context: value,\n// )\n// lawViolation(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Retrieval/RetrievalEvidenceManager.swift",
+      "line": 29,
+      "description": "Extract config object for storeRetrievalEvidence (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "storeRetrievalEvidence",
+        "config_name": "StoreretrievalevidenceConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// storeRetrievalEvidence(\n//     queryId: value,\n//     queryText: value,\n//     embeddingRecipe: value,\n//     similarityThreshold: value,\n//     maxResults: value,\n//     results: value,\n//     executionTimeMs: value,\n//     engineMetadata: value,\n// )\n//\n// New call:\n// let config = StoreretrievalevidenceConfiguration(\n//     queryId: value,\n//     queryText: value,\n//     embeddingRecipe: value,\n//     similarityThreshold: value,\n//     maxResults: value,\n//     results: value,\n//     executionTimeMs: value,\n//     engineMetadata: value,\n// )\n// storeRetrievalEvidence(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Inference/ProcessingReceipt.swift",
+      "line": 583,
+      "description": "Extract config object for generateReceipt (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "generateReceipt",
+        "config_name": "GeneratereceiptConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// generateReceipt(\n//     task: value,\n//     result: value,\n//     stages: value,\n//     engines: value,\n//     policy: value,\n//     blockedActions: value,\n//     reasoningExplanation: value,\n// )\n//\n// New call:\n// let config = GeneratereceiptConfiguration(\n//     task: value,\n//     result: value,\n//     stages: value,\n//     engines: value,\n//     policy: value,\n//     blockedActions: value,\n//     reasoningExplanation: value,\n// )\n// generateReceipt(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Inference/InferenceTypes.swift",
+      "line": 417,
+      "description": "Extract config object for createInferenceEvent (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "createInferenceEvent",
+        "config_name": "CreateinferenceeventConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// createInferenceEvent(\n//     tenantId: value,\n//     environmentId: value,\n//     modelId: value,\n//     taskKind: value,\n//     tokensIn: value,\n//     tokensOut: value,\n//     latencyMs: value,\n//     success: value,\n//     architectureType: value,\n// )\n//\n// New call:\n// let config = CreateinferenceeventConfiguration(\n//     tenantId: value,\n//     environmentId: value,\n//     modelId: value,\n//     taskKind: value,\n//     tokensIn: value,\n//     tokensOut: value,\n//     latencyMs: value,\n//     success: value,\n//     architectureType: value,\n// )\n// createInferenceEvent(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Inference/DataFlowTransparency.swift",
+      "line": 537,
+      "description": "Extract config object for completeTracking (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "completeTracking",
+        "config_name": "CompletetrackingConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// completeTracking(\n//     task: value,\n//     result: value,\n//     stages: value,\n//     engines: value,\n//     policy: value,\n//     blockedActions: value,\n//     reasoningExplanation: value,\n// )\n//\n// New call:\n// let config = CompletetrackingConfiguration(\n//     task: value,\n//     result: value,\n//     stages: value,\n//     engines: value,\n//     policy: value,\n//     blockedActions: value,\n//     reasoningExplanation: value,\n// )\n// completeTracking(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Phase9/VerificationTypes.swift",
+      "line": 217,
+      "description": "Extract config object for from (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "from",
+        "config_name": "FromConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// from(\n//     payload: value,\n//     stage: value,\n//     stageNumber: value,\n//     evidenceId: value,\n//     workspaceSnapshotHash: value,\n//     encoder: value,\n//     hasher: value,\n// )\n//\n// New call:\n// let config = FromConfiguration(\n//     payload: value,\n//     stage: value,\n//     stageNumber: value,\n//     evidenceId: value,\n//     workspaceSnapshotHash: value,\n//     encoder: value,\n//     hasher: value,\n// )\n// from(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Phase9/RuntimeEvidenceCollector.swift",
+      "line": 47,
+      "description": "Extract config object for captureStageEvidence (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "captureStageEvidence",
+        "config_name": "CapturestageevidenceConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// captureStageEvidence(\n//     stage: value,\n//     stageName: value,\n//     evidenceType: value,\n//     workspaceSnapshotHash: value,\n//     inputs: value,\n//     outputs: value,\n//     artifacts: value,\n//     metrics: value,\n//     governance: value,\n// )\n//\n// New call:\n// let config = CapturestageevidenceConfiguration(\n//     stage: value,\n//     stageName: value,\n//     evidenceType: value,\n//     workspaceSnapshotHash: value,\n//     inputs: value,\n//     outputs: value,\n//     artifacts: value,\n//     metrics: value,\n//     governance: value,\n// )\n// captureStageEvidence(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Phase9/StageArtifactComparator.swift",
+      "line": 89,
+      "description": "Extract config object for analyzeByteOffDivergence (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "analyzeByteOffDivergence",
+        "config_name": "AnalyzebyteoffdivergenceConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// analyzeByteOffDivergence(\n//     stage: value,\n//     stageName: value,\n//     expectedPayload: value,\n//     actualPayload: value,\n//     expectedDigest: value,\n//     actualDigest: value,\n//     evidenceId: value,\n// )\n//\n// New call:\n// let config = AnalyzebyteoffdivergenceConfiguration(\n//     stage: value,\n//     stageName: value,\n//     expectedPayload: value,\n//     actualPayload: value,\n//     expectedDigest: value,\n//     actualDigest: value,\n//     evidenceId: value,\n// )\n// analyzeByteOffDivergence(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Build/PatchAuditor.swift",
+      "line": 129,
+      "description": "Extract config object for logAction (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "logAction",
+        "config_name": "LogactionConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// logAction(\n//     action: value,\n//     actor: value,\n//     targetFile: value,\n//     patchId: value,\n//     beforeState: value,\n//     afterState: value,\n//     outcome: value,\n//     details: value,\n// )\n//\n// New call:\n// let config = LogactionConfiguration(\n//     action: value,\n//     actor: value,\n//     targetFile: value,\n//     patchId: value,\n//     beforeState: value,\n//     afterState: value,\n//     outcome: value,\n//     details: value,\n// )\n// logAction(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Systems/DocumentUnitDatabase.swift",
+      "line": 23,
+      "description": "Extract config object for createDocumentUnit (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "createDocumentUnit",
+        "config_name": "CreatedocumentunitConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// createDocumentUnit(\n//     sourceArtifactPath: value,\n//     sourceArtifactHash: value,\n//     content: value,\n//     contentType: value,\n//     acquisitionMethod: value,\n//     filePath: value,\n//     chunkStart: value,\n//     chunkEnd: value,\n//     chunkType: value,\n// )\n//\n// New call:\n// let config = CreatedocumentunitConfiguration(\n//     sourceArtifactPath: value,\n//     sourceArtifactHash: value,\n//     content: value,\n//     contentType: value,\n//     acquisitionMethod: value,\n//     filePath: value,\n//     chunkStart: value,\n//     chunkEnd: value,\n//     chunkType: value,\n// )\n// createDocumentUnit(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Systems/DocumentUnitDatabase.swift",
+      "line": 104,
+      "description": "Extract config object for getOrCreateEmbeddingRecipe (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "getOrCreateEmbeddingRecipe",
+        "config_name": "GetorcreateembeddingrecipeConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// getOrCreateEmbeddingRecipe(\n//     engine: value,\n//     modelHash: value,\n//     argv: value,\n//     options: value,\n//     binaryHash: value,\n//     dimensions: value,\n//     tokenizerIdentity: value,\n// )\n//\n// New call:\n// let config = GetorcreateembeddingrecipeConfiguration(\n//     engine: value,\n//     modelHash: value,\n//     argv: value,\n//     options: value,\n//     binaryHash: value,\n//     dimensions: value,\n//     tokenizerIdentity: value,\n// )\n// getOrCreateEmbeddingRecipe(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Systems/ForensicMetadataTracker.swift",
+      "line": 92,
+      "description": "Extract config object for recordTransformation (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordTransformation",
+        "config_name": "RecordtransformationConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordTransformation(\n//     sourceAcquisitionId: value,\n//     transformationType: value,\n//     transformingActor: value,\n//     transformationTool: value,\n//     toolVersion: value,\n//     inputHash: value,\n//     outputData: value,\n//     outputPath: value,\n//     transformationParameters: value,\n//     purpose: value,\n// )\n//\n// New call:\n// let config = RecordtransformationConfiguration(\n//     sourceAcquisitionId: value,\n//     transformationType: value,\n//     transformingActor: value,\n//     transformationTool: value,\n//     toolVersion: value,\n//     inputHash: value,\n//     outputData: value,\n//     outputPath: value,\n//     transformationParameters: value,\n//     purpose: value,\n// )\n// recordTransformation(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Systems/ForensicMetadataTracker.swift",
+      "line": 143,
+      "description": "Extract config object for recordTransmission (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordTransmission",
+        "config_name": "RecordtransmissionConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordTransmission(\n//     sourceAcquisitionId: value,\n//     transmissionType: value,\n//     transmittingActor: value,\n//     recipient: value,\n//     transmissionMethod: value,\n//     protocolVersion: value,\n//     transmissionMetadata: value,\n// )\n//\n// New call:\n// let config = RecordtransmissionConfiguration(\n//     sourceAcquisitionId: value,\n//     transmissionType: value,\n//     transmittingActor: value,\n//     recipient: value,\n//     transmissionMethod: value,\n//     protocolVersion: value,\n//     transmissionMetadata: value,\n// )\n// recordTransmission(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Systems/BuildOutputIngestionPipeline.swift",
+      "line": 406,
+      "description": "Extract config object for storeDiagnostics (11 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "storeDiagnostics",
+        "config_name": "StorediagnosticsConfiguration",
+        "parameter_count": 11,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// storeDiagnostics(\n//     sessionId: value,\n//     gitStateId: value,\n//     target: value,\n//     configuration: value,\n//     buildCommand: value,\n//     workingDirectory: value,\n//     diagnostics: value,\n//     startTime: value,\n//     endTime: value,\n//     exitCode: value,\n//     outputPath: value,\n// )\n//\n// New call:\n// let config = StorediagnosticsConfiguration(\n//     sessionId: value,\n//     gitStateId: value,\n//     target: value,\n//     configuration: value,\n//     buildCommand: value,\n//     workingDirectory: value,\n//     diagnostics: value,\n//     startTime: value,\n//     endTime: value,\n//     exitCode: value,\n//     outputPath: value,\n// )\n// storeDiagnostics(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Systems/RetrievalExplainabilitySystem.swift",
+      "line": 34,
+      "description": "Extract config object for explainableSemanticSearch (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "explainableSemanticSearch",
+        "config_name": "ExplainablesemanticsearchConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// explainableSemanticSearch(\n//     queryText: value,\n//     embeddingRecipeId: value,\n//     similarityThreshold: value,\n//     maxResults: value,\n//     requestingActor: value,\n//     sessionContext: value,\n//     searchPurpose: value,\n// )\n//\n// New call:\n// let config = ExplainablesemanticsearchConfiguration(\n//     queryText: value,\n//     embeddingRecipeId: value,\n//     similarityThreshold: value,\n//     maxResults: value,\n//     requestingActor: value,\n//     sessionContext: value,\n//     searchPurpose: value,\n// )\n// explainableSemanticSearch(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Capability/ExecutorProfiles/ExecutorProfileRegistry.swift",
+      "line": 172,
+      "description": "Extract config object for applyOverrides (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "applyOverrides",
+        "config_name": "ApplyoverridesConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// applyOverrides(\n//     overrides: value,\n//     modelId: value,\n//     mlTaskOptions: value,\n//     permissions: value,\n//     granularCapabilities: value,\n//     budgets: value,\n//     governance: value,\n// )\n//\n// New call:\n// let config = ApplyoverridesConfiguration(\n//     overrides: value,\n//     modelId: value,\n//     mlTaskOptions: value,\n//     permissions: value,\n//     granularCapabilities: value,\n//     budgets: value,\n//     governance: value,\n// )\n// applyOverrides(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Spine/Systems/MigrationEngine.swift",
+      "line": 386,
+      "description": "Extract config object for recordTrace (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordTrace",
+        "config_name": "RecordtraceConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordTrace(\n//     taskId: value,\n//     rewritePath: value,\n//     ruleId: value,\n//     verifyStatus: value,\n//     rollbackStatus: value,\n//     rollbackReason: value,\n//     backupPath: value,\n//     diffArtifactPath: value,\n//     detail: value,\n// )\n//\n// New call:\n// let config = RecordtraceConfiguration(\n//     taskId: value,\n//     rewritePath: value,\n//     ruleId: value,\n//     verifyStatus: value,\n//     rollbackStatus: value,\n//     rollbackReason: value,\n//     backupPath: value,\n//     diffArtifactPath: value,\n//     detail: value,\n// )\n// recordTrace(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCLI/Database/CLIReceiptManager.swift",
+      "line": 354,
+      "description": "Extract config object for storeReceipt (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "storeReceipt",
+        "config_name": "StorereceiptConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// storeReceipt(\n//     receiptID: value,\n//     runID: value,\n//     stepID: value,\n//     type: value,\n//     requestHash: value,\n//     responseHash: value,\n//     metadata: value,\n//     timestamp: value,\n// )\n//\n// New call:\n// let config = StorereceiptConfiguration(\n//     receiptID: value,\n//     runID: value,\n//     stepID: value,\n//     type: value,\n//     requestHash: value,\n//     responseHash: value,\n//     metadata: value,\n//     timestamp: value,\n// )\n// storeReceipt(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaCLI/ML/MLBackendCoordinator.swift",
+      "line": 407,
+      "description": "Extract config object for chatStreamWithBackend (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "chatStreamWithBackend",
+        "config_name": "ChatstreamwithbackendConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// chatStreamWithBackend(\n//     backend: value,\n//     prompt: value,\n//     systemPrompt: value,\n//     maxTokens: value,\n//     temperature: value,\n//     continuation: value,\n//     onProgress: value,\n// )\n//\n// New call:\n// let config = ChatstreamwithbackendConfiguration(\n//     backend: value,\n//     prompt: value,\n//     systemPrompt: value,\n//     maxTokens: value,\n//     temperature: value,\n//     continuation: value,\n//     onProgress: value,\n// )\n// chatStreamWithBackend(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/AnigmaTestSupport/Compat/Audit/AuditCompat.swift",
+      "line": 82,
+      "description": "Extract config object for recordLegacy (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "recordLegacy",
+        "config_name": "RecordlegacyConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// recordLegacy(\n//     eventType: value,\n//     principal: value,\n//     module: value,\n//     entityId: value,\n//     componentType: value,\n//     sensitivity: value,\n//     description: value,\n//     metadata: value,\n// )\n//\n// New call:\n// let config = RecordlegacyConfiguration(\n//     eventType: value,\n//     principal: value,\n//     module: value,\n//     entityId: value,\n//     componentType: value,\n//     sensitivity: value,\n//     description: value,\n//     metadata: value,\n// )\n// recordLegacy(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Packages/PragmaModule/Services/WorkService.swift",
+      "line": 170,
+      "description": "Extract config object for createTask (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "createTask",
+        "config_name": "CreatetaskConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// createTask(\n//     projectId: value,\n//     title: value,\n//     description: value,\n//     itemType: value,\n//     priority: value,\n//     assigneeId: value,\n//     reporterId: value,\n//     dueDate: value,\n//     tags: value,\n//     principal: value,\n// )\n//\n// New call:\n// let config = CreatetaskConfiguration(\n//     projectId: value,\n//     title: value,\n//     description: value,\n//     itemType: value,\n//     priority: value,\n//     assigneeId: value,\n//     reporterId: value,\n//     dueDate: value,\n//     tags: value,\n//     principal: value,\n// )\n// createTask(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/.opencode/worktrees/agent/migrator-phase1-concurrency-93a7ed08/Sources/AccessumFlow/main.swift",
+      "line": 310,
+      "description": "Extract config object for runDiaplasionStep (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "runDiaplasionStep",
+        "config_name": "RundiaplasionstepConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// runDiaplasionStep(\n//     specURL: value,\n//     specSource: value,\n//     repoRoot: value,\n//     pipelineVersion: value,\n//     inputContext: value,\n//     artifactDir: value,\n//     env: value,\n// )\n//\n// New call:\n// let config = RundiaplasionstepConfiguration(\n//     specURL: value,\n//     specSource: value,\n//     repoRoot: value,\n//     pipelineVersion: value,\n//     inputContext: value,\n//     artifactDir: value,\n//     env: value,\n// )\n// runDiaplasionStep(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/.opencode/worktrees/agent/migrator-phase1-concurrency-93a7ed08/Sources/AccessumFlow/main.swift",
+      "line": 367,
+      "description": "Extract config object for runMLStep (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "runMLStep",
+        "config_name": "RunmlstepConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// runMLStep(\n//     runId: value,\n//     repoRoot: value,\n//     artifactDir: value,\n//     pipelineVersion: value,\n//     diTrace: value,\n//     pipelineArtifactDir: value,\n//     env: value,\n//     supervisor: value,\n// )\n//\n// New call:\n// let config = RunmlstepConfiguration(\n//     runId: value,\n//     repoRoot: value,\n//     artifactDir: value,\n//     pipelineVersion: value,\n//     diTrace: value,\n//     pipelineArtifactDir: value,\n//     env: value,\n//     supervisor: value,\n// )\n// runMLStep(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/.opencode/worktrees/agent/migrator-phase1-concurrency-93a7ed08/Sources/DiaplasionModule/Systems/DiaplasionSystems.swift",
+      "line": 80,
+      "description": "Extract config object for appendProcessingError (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "appendProcessingError",
+        "config_name": "AppendprocessingerrorConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// appendProcessingError(\n//     world: value,\n//     entity: value,\n//     stage: value,\n//     code: value,\n//     message: value,\n//     retryPolicy: value,\n//     context: value,\n//     isRetryable: value,\n// )\n//\n// New call:\n// let config = AppendprocessingerrorConfiguration(\n//     world: value,\n//     entity: value,\n//     stage: value,\n//     code: value,\n//     message: value,\n//     retryPolicy: value,\n//     context: value,\n//     isRetryable: value,\n// )\n// appendProcessingError(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftParserDiagnostics/ParseDiagnosticsGenerator.swift",
+      "line": 131,
+      "description": "Extract config object for addDiagnostic (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "addDiagnostic",
+        "config_name": "AdddiagnosticConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// addDiagnostic(\n//     node: value,\n//     position: value,\n//     message: value,\n//     highlights: value,\n//     notes: value,\n//     fixIts: value,\n//     handledNodes: value,\n// )\n//\n// New call:\n// let config = AdddiagnosticConfiguration(\n//     node: value,\n//     position: value,\n//     message: value,\n//     highlights: value,\n//     notes: value,\n//     fixIts: value,\n//     handledNodes: value,\n// )\n// addDiagnostic(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/Macros.swift",
+      "line": 135,
+      "description": "Extract config object for expandAttachedMacro (10 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "expandAttachedMacro",
+        "config_name": "ExpandattachedmacroConfiguration",
+        "parameter_count": 10,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// expandAttachedMacro(\n//     macro: value,\n//     macroRole: value,\n//     discriminator: value,\n//     staticBuildConfiguration: value,\n//     attributeSyntax: value,\n//     declSyntax: value,\n//     parentDeclSyntax: value,\n//     extendedTypeSyntax: value,\n//     conformanceListSyntax: value,\n//     lexicalContext: value,\n// )\n//\n// New call:\n// let config = ExpandattachedmacroConfiguration(\n//     macro: value,\n//     macroRole: value,\n//     discriminator: value,\n//     staticBuildConfiguration: value,\n//     attributeSyntax: value,\n//     declSyntax: value,\n//     parentDeclSyntax: value,\n//     extendedTypeSyntax: value,\n//     conformanceListSyntax: value,\n//     lexicalContext: value,\n// )\n// expandAttachedMacro(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntaxMacroExpansion/MacroExpansion.swift",
+      "line": 215,
+      "description": "Extract config object for expandAttachedMacroWithoutCollapsing (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "expandAttachedMacroWithoutCollapsing",
+        "config_name": "ExpandattachedmacrowithoutcollapsingConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// expandAttachedMacroWithoutCollapsing(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     declarationNode: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n//\n// New call:\n// let config = ExpandattachedmacrowithoutcollapsingConfiguration(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     declarationNode: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n// expandAttachedMacroWithoutCollapsing(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntaxMacroExpansion/MacroExpansion.swift",
+      "line": 255,
+      "description": "Extract config object for expandAttachedMacroWithoutCollapsing (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "expandAttachedMacroWithoutCollapsing",
+        "config_name": "ExpandattachedmacrowithoutcollapsingConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// expandAttachedMacroWithoutCollapsing(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     node: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n//\n// New call:\n// let config = ExpandattachedmacrowithoutcollapsingConfiguration(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     node: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n// expandAttachedMacroWithoutCollapsing(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntaxMacroExpansion/MacroExpansion.swift",
+      "line": 431,
+      "description": "Extract config object for expandAttachedMacro (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "expandAttachedMacro",
+        "config_name": "ExpandattachedmacroConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// expandAttachedMacro(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     declarationNode: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n//\n// New call:\n// let config = ExpandattachedmacroConfiguration(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     declarationNode: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n// expandAttachedMacro(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntaxMacroExpansion/MacroExpansion.swift",
+      "line": 471,
+      "description": "Extract config object for expandAttachedMacro (9 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "expandAttachedMacro",
+        "config_name": "ExpandattachedmacroConfiguration",
+        "parameter_count": 9,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// expandAttachedMacro(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     node: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n//\n// New call:\n// let config = ExpandattachedmacroConfiguration(\n//     definition: value,\n//     macroRole: value,\n//     attributeNode: value,\n//     node: value,\n//     parentDeclNode: value,\n//     extendedType: value,\n//     conformanceList: value,\n//     context: value,\n//     indentationWidth: value,\n// )\n// expandAttachedMacro(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Raw/RawSyntax.swift",
+      "line": 612,
+      "description": "Extract config object for materializedToken (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "materializedToken",
+        "config_name": "MaterializedtokenConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// materializedToken(\n//     kind: value,\n//     text: value,\n//     triviaPieces: value,\n//     numLeadingTrivia: value,\n//     byteLength: value,\n//     presence: value,\n//     tokenDiagnostic: value,\n//     arena: value,\n// )\n//\n// New call:\n// let config = MaterializedtokenConfiguration(\n//     kind: value,\n//     text: value,\n//     triviaPieces: value,\n//     numLeadingTrivia: value,\n//     byteLength: value,\n//     presence: value,\n//     tokenDiagnostic: value,\n//     arena: value,\n// )\n// materializedToken(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Raw/RawSyntax.swift",
+      "line": 646,
+      "description": "Extract config object for makeMaterializedToken (8 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "makeMaterializedToken",
+        "config_name": "MakematerializedtokenConfiguration",
+        "parameter_count": 8,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// makeMaterializedToken(\n//     kind: value,\n//     text: value,\n//     leadingTriviaPieceCount: value,\n//     trailingTriviaPieceCount: value,\n//     presence: value,\n//     tokenDiagnostic: value,\n//     arena: value,\n//     initializingLeadingTriviaWith: value,\n// )\n//\n// New call:\n// let config = MakematerializedtokenConfiguration(\n//     kind: value,\n//     text: value,\n//     leadingTriviaPieceCount: value,\n//     trailingTriviaPieceCount: value,\n//     presence: value,\n//     tokenDiagnostic: value,\n//     arena: value,\n//     initializingLeadingTriviaWith: value,\n// )\n// makeMaterializedToken(config: config)"
+      }
+    },
+    {
+      "type": "extract_config",
+      "file": "/Users/user/Developer/GitHub/Anigma/Tools/Vendor/swift-syntax/SwiftSyntaxDevUtils/Sources/swift-syntax-dev-utils/common/SwiftPMBuilder.swift",
+      "line": 72,
+      "description": "Extract config object for invokeSwiftPM (7 params)",
+      "confidence": 0.85,
+      "metadata": {
+        "function_name": "invokeSwiftPM",
+        "config_name": "InvokeswiftpmConfiguration",
+        "parameter_count": 7,
+        "migration_guide": "// Migration Guide:\n// Old call:\n// invokeSwiftPM(\n//     action: value,\n//     packageDir: value,\n//     warningsAsErrors: value,\n//     additionalArguments: value,\n//     additionalEnvironment: value,\n//     captureStdout: value,\n//     captureStderr: value,\n// )\n//\n// New call:\n// let config = InvokeswiftpmConfiguration(\n//     action: value,\n//     packageDir: value,\n//     warningsAsErrors: value,\n//     additionalArguments: value,\n//     additionalEnvironment: value,\n//     captureStdout: value,\n//     captureStderr: value,\n// )\n// invokeSwiftPM(config: config)"
+      }
+    }
+  ],
+  "filtered_count": 92
+}

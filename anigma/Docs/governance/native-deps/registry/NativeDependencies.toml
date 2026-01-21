@@ -1,0 +1,124 @@
+# Native Dependencies Registry
+# Canonical source of truth for all native library dependencies in Anigma
+
+[metadata]
+version = "1.0.0"
+last_updated = "2025-12-21T00:00:00Z"
+governance_version = "1.0.0"
+
+# Registry of native dependencies with their status and metadata
+[dependencies]
+
+# SQLite - Database storage engine
+[dependencies.SQLite]
+name = "SQLite"
+status = "APPROVED"
+intake_date = "2024-01-15T00:00:00Z"
+approval_date = "2024-01-20T00:00:00Z"
+category = "Storage"
+linking_model = "systemLibrary"
+version = "3.45.0+"
+license = "Public Domain"
+license_url = "https://www.sqlite.org/copyright.html"
+app_store_suitable = true
+risk_score = 2
+business_score = 9
+compliance_score = 10
+idr_file = "IDR-SQLITE.md"
+contract_file = "NATIVE.SQLite.md"
+attribution_file = "Docs/licenses/SQLite.txt"
+native_surface = "Sources/ExternalC/Storage/SQLite"
+swift_wrapper = "Sources/DatabaseCore"
+allowed_call_sites = ["DatabaseCore"]
+last_security_review = "2024-11-01T00:00:00Z"
+next_security_review = "2025-02-01T00:00:00Z"
+monitoring_enabled = true
+vulnerability_scanning = true
+notes = "Core database engine, critical infrastructure"
+
+# libgit2 - Git operations
+[dependencies.libgit2]
+name = "libgit2"
+status = "APPROVED"
+intake_date = "2024-03-10T00:00:00Z"
+approval_date = "2024-03-15T00:00:00Z"
+category = "VersionControl"
+linking_model = "systemLibrary"
+version = "1.8.0+"
+license = "GPLv2 with linking exception"
+license_url = "https://github.com/libgit2/libgit2/blob/main/COPYING"
+app_store_suitable = true
+risk_score = 4
+business_score = 8
+compliance_score = 8
+idr_file = "IDR-libgit2.md"
+contract_file = "NATIVE.libgit2.md"
+attribution_file = "Docs/licenses/libgit2.txt"
+native_surface = "Sources/ExternalC/VersionControl/libgit2"
+swift_wrapper = "Sources/MakerEngine"
+allowed_call_sites = ["MakerEngine"]
+last_security_review = "2024-10-15T00:00:00Z"
+next_security_review = "2025-01-15T00:00:00Z"
+monitoring_enabled = true
+vulnerability_scanning = true
+notes = "Git operations for version control integration"
+
+# Pending entries (for reference)
+[dependencies.example-pending]
+name = "ExampleLibrary"
+status = "PENDING_IDR"
+intake_date = "2025-12-21T00:00:00Z"
+category = "Unknown"
+linking_model = "unknown"
+license = "Unknown"
+risk_score = 0
+business_score = 0
+compliance_score = 0
+notes = "Template entry for pending dependencies"
+
+# Status definitions
+[status_definitions]
+APPROVED = "Fully approved and in production use"
+PENDING_IDR = "Intake Decision Record required"
+PENDING_REVIEW = "Under security/legal/architecture review"
+REJECTED = "Rejected - not suitable for inclusion"
+DEPRECATED = "Approved but deprecated - removal planned"
+UNDER_EVALUATION = "Initial evaluation in progress"
+
+# Risk scoring
+[risk_scoring]
+low = 1-3
+medium = 4-6
+high = 7-10
+
+# Business scoring
+[business_scoring]
+low = 1-3
+medium = 4-6
+high = 7-10
+
+# Compliance scoring
+[compliance_scoring]
+low = 1-3
+medium = 4-7
+high = 8-10
+
+# Linking models
+[linking_models]
+systemLibrary = "System-provided library"
+vendored = "Full source vendored in repository"
+custom = "Custom build with managed artifacts"
+binary = "Pre-compiled binary with verification"
+
+# Categories
+[categories]
+Storage = "Data persistence and retrieval"
+VersionControl = "Git and version control operations"
+Graphics = "2D/3D graphics and rendering"
+Text = "Text processing and layout"
+Network = "Network protocols and communication"
+Security = "Cryptography and security operations"
+Media = "Audio/video processing"
+Compression = "Data compression and decompression"
+Parsing = "Data format parsing and generation"
+Unknown = "Category not yet determined"

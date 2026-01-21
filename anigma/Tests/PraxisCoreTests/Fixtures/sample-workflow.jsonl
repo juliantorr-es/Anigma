@@ -1,0 +1,5 @@
+{"kind":"inspection","ts":"2025-12-19T10:00:00Z","meta":{"sessionID":"sess-1","patchHash":"patch-a","messageID":"msg-inspect"},"patchHash":"patch-a"}
+{"kind":"generation","ts":"2025-12-19T10:01:00Z","meta":{"sessionID":"sess-1","patchHash":"patch-a","messageID":"msg-gen","gate":"generate"},"patchHash":"patch-a"}
+{"kind":"validation","ts":"2025-12-19T10:02:00Z","meta":{"sessionID":"sess-1","patchHash":"patch-a","messageID":"msg-val","gate":"validate"},"patchHash":"patch-a"}
+{"kind":"apply","ts":"2025-12-19T10:03:00Z","meta":{"sessionID":"sess-1","patchHash":"patch-a","messageID":"msg-apply","gate":"apply"},"patchHash":"patch-a"}
+{"kind":"generation","ts":"2025-12-19T10:05:00Z","meta":{"sessionID":"sess-2","patchHash":"patch-b","messageID":"msg-gen2"},"patchHash":"patch-b"}

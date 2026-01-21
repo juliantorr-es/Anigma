@@ -1,0 +1,359 @@
+
+[1m[0;34m================================================================================[0m
+[1m[0;34m ANIGMA CONCURRENCY & DATA INTEGRITY DIAGNOSTIC[0m
+[1m[0;34m================================================================================[0m
+
+[1;33m[WARNING] Detected manual locking mechanism.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/HarmoniaModule/Inference/ThemisInfrastructure.swift:603
+  [1mContext:[0m private let lock = NSLock()
+  [1mRemediation:[0m Replace manual locks with 'actor' isolation or 'Mutex' (Swift 6.0+).
+
+[1;33m[WARNING] Detected manual locking mechanism.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/ContainerKit/Sources/ContainerKit/ContainerKit.swift:22
+  [1mContext:[0m private let lock = NSLock()
+  [1mRemediation:[0m Replace manual locks with 'actor' isolation or 'Mutex' (Swift 6.0+).
+
+[1;33m[WARNING] Detected manual locking mechanism.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/AnimationKit/Sources/AnimationKit/AnimationKit.swift:21
+  [1mContext:[0m private let lock = NSLock()
+  [1mRemediation:[0m Replace manual locks with 'actor' isolation or 'Mutex' (Swift 6.0+).
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/ConexusModule/Components/OrganizationComponent.swift:12
+  [1mContext:[0m public struct OrganizationComponent: Component, Sendable {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[1;33m[WARNING] Detected manual locking mechanism.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Pipeline/PluginSystem.swift:664
+  [1mContext:[0m private let lock = NSLock()
+  [1mRemediation:[0m Replace manual locks with 'actor' isolation or 'Mutex' (Swift 6.0+).
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/AnigmaCore/Components/MemoryComponent.swift:12
+  [1mContext:[0m public struct MemoryComponent: SensitiveComponent {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[1;33m[WARNING] Detected manual locking mechanism.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Packages/DocumentRenderKit/Sources/DocumentRenderKit/DocumentRenderKit.swift:19
+  [1mContext:[0m private let lock = NSLock()
+  [1mRemediation:[0m Replace manual locks with 'actor' isolation or 'Mutex' (Swift 6.0+).
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/HarmoniaBackgroundSyncSettingsView.swift:10
+  [1mContext:[0m struct HarmoniaBackgroundSyncSettingsView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/HarmoniaBackgroundSyncSettingsView.swift:10
+  [1mContext:[0m struct HarmoniaBackgroundSyncSettingsView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:10
+  [1mContext:[0m struct BinaryTestView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:10
+  [1mContext:[0m struct BinaryTestView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:117
+  [1mContext:[0m struct BinaryStatusCard: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:117
+  [1mContext:[0m struct BinaryStatusCard: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:154
+  [1mContext:[0m struct ResultView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:154
+  [1mContext:[0m struct ResultView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:211
+  [1mContext:[0m struct BinaryExecutionErrorView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/BinaryTestView.swift:211
+  [1mContext:[0m struct BinaryExecutionErrorView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PipelineMonitorView.swift:11
+  [1mContext:[0m struct PipelineMonitorView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PipelineMonitorView.swift:11
+  [1mContext:[0m struct PipelineMonitorView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TechDebtDashboardView.swift:11
+  [1mContext:[0m struct TechDebtDashboardView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TechDebtDashboardView.swift:11
+  [1mContext:[0m struct TechDebtDashboardView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/MLWorkerStatusView.swift:11
+  [1mContext:[0m struct MLWorkerStatusView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/MLWorkerStatusView.swift:11
+  [1mContext:[0m struct MLWorkerStatusView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DoctrineViolationsDashboardView.swift:11
+  [1mContext:[0m struct DoctrineViolationsDashboardView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DoctrineViolationsDashboardView.swift:11
+  [1mContext:[0m struct DoctrineViolationsDashboardView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DaemonStatusView.swift:11
+  [1mContext:[0m struct DaemonStatusView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DaemonStatusView.swift:11
+  [1mContext:[0m struct DaemonStatusView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TransformPreview.swift:14
+  [1mContext:[0m struct TransformProposal {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TransformPreview.swift:14
+  [1mContext:[0m struct TransformProposal {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TransformPreview.swift:31
+  [1mContext:[0m struct TransformPreview: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/TransformPreview.swift:31
+  [1mContext:[0m struct TransformPreview: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:3
+  [1mContext:[0m struct JobCenterPanel: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:3
+  [1mContext:[0m struct JobCenterPanel: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:116
+  [1mContext:[0m struct JobCenterRow: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/JobCenterPanel.swift:116
+  [1mContext:[0m struct JobCenterRow: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/HarmoniaSearchView.swift:11
+  [1mContext:[0m struct HarmoniaSearchView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/HarmoniaSearchView.swift:11
+  [1mContext:[0m struct HarmoniaSearchView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DoctrinePackManagerView.swift:11
+  [1mContext:[0m struct DoctrinePackManagerView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DoctrinePackManagerView.swift:11
+  [1mContext:[0m struct DoctrinePackManagerView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/MLWorkerTaskSubmissionView.swift:14
+  [1mContext:[0m struct MLWorkerTaskSubmissionView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/MLWorkerTaskSubmissionView.swift:14
+  [1mContext:[0m struct MLWorkerTaskSubmissionView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ConsoleView.swift:10
+  [1mContext:[0m struct ConsoleView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ConsoleView.swift:76
+  [1mContext:[0m struct ConsoleEntry: Identifiable, Codable {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:12
+  [1mContext:[0m struct GovernanceStrip: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:12
+  [1mContext:[0m struct GovernanceStrip: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:154
+  [1mContext:[0m struct GovernanceDetailsPanel: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/GovernanceStrip.swift:154
+  [1mContext:[0m struct GovernanceDetailsPanel: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ToolRunnerView.swift:13
+  [1mContext:[0m struct ToolRunnerView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:11
+  [1mContext:[0m struct PrimaryButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:11
+  [1mContext:[0m struct PrimaryButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:29
+  [1mContext:[0m struct SecondaryButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:29
+  [1mContext:[0m struct SecondaryButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:50
+  [1mContext:[0m struct DestructiveButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:50
+  [1mContext:[0m struct DestructiveButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:71
+  [1mContext:[0m struct GhostButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ButtonStyles.swift:71
+  [1mContext:[0m struct GhostButtonStyle: ButtonStyle {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DoctrineScannerView.swift:11
+  [1mContext:[0m struct DoctrineScannerView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/DoctrineScannerView.swift:11
+  [1mContext:[0m struct DoctrineScannerView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PrivacyConsole.swift:11
+  [1mContext:[0m struct PrivacyConsole: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PrivacyConsole.swift:11
+  [1mContext:[0m struct PrivacyConsole: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:10
+  [1mContext:[0m struct ModelRegistryCardView: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:10
+  [1mContext:[0m struct ModelRegistryCardView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:170
+  [1mContext:[0m struct ModelRow: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:170
+  [1mContext:[0m struct ModelRow: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:323
+  [1mContext:[0m struct ModelDetailsSheet: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:323
+  [1mContext:[0m struct ModelDetailsSheet: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[0;31m[CRITICAL] Component is missing Sendable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:447
+  [1mContext:[0m struct ModelImportCardSheet: View {
+  [1mRemediation:[0m Add ': Sendable' to the definition. All ECS components must be thread-safe.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:447
+  [1mContext:[0m struct ModelImportCardSheet: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[1;33m[WARNING] Component is missing Codable conformance.[0m
+  [1mFile:[0m /Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/HarmoniaCommandHistoryView.swift:11
+  [1mContext:[0m struct HarmoniaCommandHistoryView: View {
+  [1mRemediation:[0m Add ': Codable' for persistence. If this component should not be saved, add '// NonPersistent'.
+
+[1m[0;34m================================================================================[0m
+[1m[0;34m DIAGNOSTIC SUMMARY[0m
+[1m[0;34m================================================================================[0m
+  Files Scanned: 1292
+  Total Violations: 69
+
+[0;31m❌ Action Required: 69 concurrency/integrity issues found.[0m
+[0;31mPlease address the CRITICAL violations before committing.[0m
+

@@ -1,0 +1,53 @@
+{
+  "projectionName": "page-1-remediation-ui",
+  "dtmVersion": "dtm-0001",
+  "policyState": {
+    "trustMode": "strict",
+    "capabilityGates": ["alt-text-write", "annotation-edit"]
+  },
+  "schemaSnapshot": {
+    "root": {
+      "nodeId": "remediation-screen",
+      "type": "Panel",
+      "layout": { "stack": "vertical", "gap": 16 },
+      "children": [
+        {
+          "nodeId": "document-preview",
+          "type": "DocumentPreview",
+          "sourcePage": "page-1",
+          "accessibility": {
+            "role": "document",
+            "label": "Page 1 preview"
+          }
+        },
+        {
+          "nodeId": "alt-text-editor",
+          "type": "InspectorPane",
+          "title": "Alt text remediation",
+          "children": [
+            {
+              "nodeId": "alt-text-field",
+              "type": "FormField",
+              "label": "Figure description",
+              "action": {
+                "verb": "update-alt-text",
+                "target": "obj-figure-1",
+                "capability": "write:alt-text"
+              }
+            }
+          ]
+        },
+        {
+          "nodeId": "policy-status",
+          "type": "PolicyPrompt",
+          "text": "Strict trust requires verification before writing."
+        }
+      ]
+    }
+  },
+  "cacheMetadata": {
+    "generatedAt": "2024-04-10T19:25:00Z",
+    "validIfDtmVersion": "dtm-0001",
+    "expiresAt": "2024-04-10T20:25:00Z"
+  }
+}

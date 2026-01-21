@@ -1,0 +1,254 @@
+{
+  "name": "anigma-mcp",
+  "version": "1.1.0",
+  "description": "Anigma-MCP System Integration",
+  "main": "index.js",
+  "tools": [
+    {
+      "name": "trace_query",
+      "description": "Queries the system's execution history.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "limit": {
+            "type": "INTEGER",
+            "description": "Max results"
+          },
+          "offset": {
+            "type": "INTEGER",
+            "description": "Pagination offset"
+          },
+          "taskId": {
+            "type": "STRING",
+            "description": "Filter by task ID"
+          }
+        }
+      }
+    },
+    {
+      "name": "digest_codebase",
+      "description": "Crawls and indexes the entire project for searchable knowledge.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "path": {
+            "type": "STRING",
+            "description": "Root path to crawl"
+          }
+        }
+      }
+    },
+    {
+      "name": "list_models",
+      "description": "Lists all registered local ML models.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "task": {
+            "type": "STRING",
+            "description": "Filter by task",
+            "enum": [
+              "llmChat",
+              "embedding",
+              "transcription"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "get_system_health",
+      "description": "Retrieves overall system health summary.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {}
+      }
+    },
+    {
+      "name": "create_tool_contract",
+      "description": "Dynamically registers a new tool capability.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "name": {
+            "type": "STRING"
+          },
+          "description": {
+            "type": "STRING"
+          },
+          "input_schema_json": {
+            "type": "STRING"
+          },
+          "capabilities": {
+            "type": "ARRAY",
+            "items": {
+              "type": "STRING"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "input_schema_json"
+        ]
+      }
+    },
+    {
+      "name": "list_artifacts",
+      "description": "Lists items in the project's artifact repository.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "limit": {
+            "type": "INTEGER"
+          },
+          "media_type": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    {
+      "name": "context_purge",
+      "description": "Clears the search index.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {}
+      }
+    },
+    {
+      "name": "get_module_status",
+      "description": "Returns initialization status of MCP server modules.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {}
+      }
+    },
+    {
+      "name": "context_search",
+      "description": "Semantic and full-text search across project context.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "query": {
+            "type": "STRING"
+          },
+          "limit": {
+            "type": "INTEGER"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "name": "apply_patch",
+      "description": "Applies a unified diff patch to the project.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "patch": {
+            "type": "STRING",
+            "description": "The unified diff patch content"
+          }
+        },
+        "required": [
+          "patch"
+        ]
+      }
+    },
+    {
+      "name": "database_query",
+      "description": "Executes read-only SQL query against project database.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "sql": {
+            "type": "STRING"
+          },
+          "parameters": {
+            "type": "OBJECT"
+          }
+        },
+        "required": [
+          "sql"
+        ]
+      }
+    },
+    {
+      "name": "read_file",
+      "description": "Securely reads the content of a file within the project directory.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "file_path": {
+            "type": "STRING"
+          }
+        },
+        "required": [
+          "file_path"
+        ]
+      }
+    },
+    {
+      "name": "swift_test",
+      "description": "Executes the project test suite.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "filter": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    {
+      "name": "git_diff",
+      "description": "Inspects current changes in the repository.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "path": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    {
+      "name": "swift_build",
+      "description": "Triggers a deterministic build of a Swift package.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "package_path": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    {
+      "name": "list_active_alerts",
+      "description": "Lists active system alerts.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {}
+      }
+    },
+    {
+      "name": "verify_evidence_chain",
+      "description": "Verifies integrity of operation history for a session.",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "session_id": {
+            "type": "STRING"
+          }
+        },
+        "required": [
+          "session_id"
+        ]
+      }
+    }
+  ]
+}

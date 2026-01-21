@@ -1,0 +1,21 @@
+CHAPTER ONE
+
+Introduction to Accessible Publishing
+
+This is the first paragraph of the sample document. It contains multiple sentences that should be chunked appropriately. The text chunking system should recognize this as body text.
+
+Accessible publishing is important for ensuring that content reaches all readers, regardless of their abilities. This includes people who use screen readers, braille displays, or other assistive technologies.
+
+THE IMPORTANCE OF STRUCTURE
+
+Proper document structure is essential for accessibility. Headings help readers navigate through content. Lists and tables should be properly marked up.
+
+Key Points:
+- Use semantic markup
+- Provide alt text for images
+- Ensure proper reading order
+- Test with assistive technologies
+
+CONCLUSION
+
+This sample document demonstrates the basic structure that the Diaplasion module should recognize and process correctly.

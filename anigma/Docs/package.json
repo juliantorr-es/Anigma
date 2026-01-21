@@ -1,0 +1,36 @@
+{
+  "name": "anigma-docs-viz",
+  "version": "1.0.0",
+  "description": "Documentation visualization pipeline for Anigma project",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "generate-diagrams": "node scripts/generate-fixed-diagrams.js",
+    "generate-enhanced-modules": "node scripts/generate-enhanced-modules.js",
+    "generate-module-docs": "node scripts/generate-module-docs.js",
+    "watch": "node scripts/phase3/git-watcher.js watch",
+    "watch-status": "node scripts/phase3/git-watcher.js status",
+    "incremental-update": "node scripts/phase3/incremental-builder.js",
+    "validate": "node scripts/phase3/architecture-validator.js validate",
+    "phase3-build": "npm run generate-diagrams && npm run generate-enhanced-modules && npm run generate-module-docs && npm run validate",
+    "clean": "rm -rf .vitepress/dist && rm -rf .vitepress/cache && rm -rf diagrams/generated && rm -rf data"
+  },
+  "keywords": [
+    "documentation",
+    "visualization",
+    "mermaid",
+    "vue",
+    "vitepress"
+  ],
+  "author": "Anigma Team",
+  "license": "MIT",
+  "dependencies": {
+    "mermaid": "^10.6.1"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.6.1",
+    "@vue/compiler-sfc": "^3.3.8",
+    "vitepress": "^1.0.0-rc.20"
+  }
+}

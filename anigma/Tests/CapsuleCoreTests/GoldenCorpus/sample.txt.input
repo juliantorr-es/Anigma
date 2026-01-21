@@ -1,0 +1,1 @@
+This is a sample text document that will be used for testing the determinism of text chunking capsules. It contains multiple sentences and some punctuation. The goal is to ensure that chunk boundaries remain identical across multiple runs, platforms, and compiler versions. This is crucial for receipt-grade determinism (Tier 1).

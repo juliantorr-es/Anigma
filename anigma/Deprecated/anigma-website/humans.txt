@@ -1,0 +1,9 @@
+Anigma
+Local-first, auditable document intelligence
+
+Contact: hello@anigma.app
+Website: https://anigma.app/
+GitHub: https://github.com/anigma/anigma
+
+Design: Bauhaus-inspired, intentional whitespace
+Last updated: 2026-01-15

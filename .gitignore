@@ -1,2 +1,12 @@
 .DS_Store
-.cache/
+
+# Shrink the upward tree down to the canonical directories.
+*
+!.gitignore
+!.gitattributes
+!README.md
+!LICENSE
+!docs/
+!docs/**
+!anigma/
+!anigma/**

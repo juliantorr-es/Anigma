@@ -1,0 +1,6 @@
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:281:                Toggle("Digest only when plugged into power", isOn: $source.computePolicy.allowOnBattery.inverted)
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:317:                Toggle("Store extracted text locally", isOn: $source.storagePolicy.storeExtractedText)
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionWizard.swift:319:                Toggle("Store embeddings (for search/atlas)", isOn: $source.storagePolicy.storeEmbeddings)
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PrivacyConsole.swift:41:                        Toggle(isOn: $bindableStore.privacySettings.allowCloudAI) {
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PrivacyConsole.swift:103:                        Toggle(
+/Users/user/Developer/GitHub/Anigma/Sources/AnigmaAppMac/Components/PrivacyConsole.swift:106:                        Toggle("Share Anonymous Usage", isOn: $bindableStore.privacySettings.allowAnalytics)
