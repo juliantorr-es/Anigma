@@ -1,2 +1,5 @@
 .DS_Store
 .cache/
+
+# Auto Claude data directory
+.auto-claude/
