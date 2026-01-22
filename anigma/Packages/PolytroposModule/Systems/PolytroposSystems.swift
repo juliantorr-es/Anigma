@@ -8,6 +8,7 @@
 import AnigmaCore
 import Foundation
 import AnigmaPrimitives
+import MediaContainerCapsule
 
 // MARK: - Media Ingest System
 
@@ -18,9 +19,17 @@ public struct MediaIngestSystem: System {
     private let workDirectory: URL
     private let supportedVideoExtensions = ["mp4", "mov", "m4v", "mkv", "avi", "mxf", "mts"]
     private let supportedAudioExtensions = ["wav", "mp3", "m4a", "aac", "flac", "aiff"]
+    private let containerCapsule: MediaContainerCapsuleWrapper?
+    private let telemetryEmitter: ((String, [String: TelemetryValue]) async -> Void)?
 
-    public init(workDirectory: URL) {
+    public init(
+        workDirectory: URL,
+        containerCapsule: MediaContainerCapsuleWrapper? = nil,
+        telemetryEmitter: ((String, [String: TelemetryValue]) async -> Void)? = nil
+    ) {
         self.workDirectory = workDirectory
+        self.containerCapsule = containerCapsule
+        self.telemetryEmitter = telemetryEmitter
     }
 
     public func update(world: World) async {
@@ -69,57 +78,214 @@ public struct MediaIngestSystem: System {
         asset: MediaAssetComponent,
         world: World
     ) async {
-        let durationEstimate = estimateDurationSeconds(for: asset)
-        let sampleRate = asset.mediaType == .video ? 48000 : 44100
+        let fileURL = URL(fileURLWithPath: asset.originalPath)
+        let startTime = Date()
 
-        // Create temporal metadata
+        let (duration, frameRate, sampleRate, videoMetadata, audioMetadata) = await analyzeWithCapsule(
+            fileURL: fileURL,
+            mediaType: asset.mediaType
+        )
+
+        let analysisTime = Date().timeIntervalSince(startTime)
+
+        await emitTelemetry(
+            operation: "media_analysis",
+            duration: analysisTime,
+            success: videoMetadata != nil || audioMetadata != nil,
+            mediaType: asset.mediaType.rawValue,
+            capsuleUsed: containerCapsule != nil
+        )
+
         let temporalMetadata = TemporalMetadataComponent(
-            duration: durationEstimate,
+            duration: duration,
             captureStartTime: nil,
-            frameRate: asset.mediaType == .video ? 30.0 : nil,
+            frameRate: asset.mediaType == .video ? frameRate : nil,
             sampleRate: Double(sampleRate)
         )
         await world.addComponent(entityId, temporalMetadata)
 
-        // Create video metadata if applicable
-        if asset.mediaType == .video {
-            let videoMetadata = VideoMetadataComponent(
-                width: 1920,
-                height: 1080,
-                codec: "H.264",
-                isHDR: false
-            )
+        if let videoMetadata = videoMetadata {
             await world.addComponent(entityId, videoMetadata)
         }
 
-        // Create audio metadata
-        let audioMetadata = AudioMetadataComponent(
-            channelCount: 2,
-            sampleRate: Double(sampleRate),
-            codec: "AAC"
-        )
-        await world.addComponent(entityId, audioMetadata)
+        if let audioMetadata = audioMetadata {
+            await world.addComponent(entityId, audioMetadata)
+        }
 
-        // Mark asset as ready
         var updatedAsset = asset
         updatedAsset.status = .ready
         await world.addComponent(entityId, updatedAsset)
 
         await Logger.shared.debug(
-            "Extracted metadata for asset: \(asset.originalPath)",
+            "Extracted metadata for asset: \(asset.originalPath) (analysis time: \(String(format: "%.3f", analysisTime))s)",
             category: "Polytropos"
         )
     }
 
-    private func estimateDurationSeconds(for asset: MediaAssetComponent) -> TimeInterval {
-        let fileURL = URL(fileURLWithPath: asset.originalPath)
+    private func analyzeWithCapsule(
+        fileURL: URL,
+        mediaType: MediaType
+    ) async -> (
+        duration: TimeInterval,
+        frameRate: Double,
+        sampleRate: UInt32,
+        videoMetadata: VideoMetadataComponent?,
+        audioMetadata: AudioMetadataComponent?
+    ) {
+        var duration: TimeInterval = 0
+        var frameRate: Double = mediaType == .video ? 30.0 : 0
+        var sampleRate: UInt32 = mediaType == .video ? 48000 : 44100
+        var videoMeta: VideoMetadataComponent?
+        var audioMeta: AudioMetadataComponent?
+
+        if let capsule = containerCapsule {
+            do {
+                let report = try capsule.analyzeFile(at: fileURL)
+
+                duration = Double(report.totalDurationUs) / 1_000_000.0
+
+                for stream in report.streams where stream.type == .video {
+                    if let videoInfo = try? capsule.getVideoStreamInfo(at: stream.index) {
+                        frameRate = Double(videoInfo.frameRate.num) / Double(videoInfo.frameRate.den)
+                        sampleRate = videoInfo.sampleRate
+
+                        videoMeta = VideoMetadataComponent(
+                            width: Int(videoInfo.width),
+                            height: Int(videoInfo.height),
+                            codec: videoCodecName(videoInfo.codec),
+                            bitrate: Int(videoInfo.bitRate) > 0 ? Int(videoInfo.bitRate) : nil,
+                            isHDR: false
+                        )
+                    }
+                    break
+                }
+
+                for stream in report.streams where stream.type == .audio {
+                    if let audioInfo = try? capsule.getAudioStreamInfo(at: stream.index) {
+                        sampleRate = audioInfo.sampleRate
+
+                        audioMeta = AudioMetadataComponent(
+                            channelCount: Int(audioInfo.channels),
+                            sampleRate: Double(audioInfo.sampleRate),
+                            codec: audioCodecName(audioInfo.codec),
+                            bitrate: Int(audioInfo.bitRate) > 0 ? Int(audioInfo.bitRate) : nil
+                        )
+                    }
+                    break
+                }
+
+                if videoMeta == nil && mediaType == .video {
+                    videoMeta = VideoMetadataComponent(
+                        width: 1920,
+                        height: 1080,
+                        codec: "H.264",
+                        isHDR: false
+                    )
+                }
+
+                if audioMeta == nil {
+                    audioMeta = AudioMetadataComponent(
+                        channelCount: 2,
+                        sampleRate: Double(sampleRate),
+                        codec: "AAC"
+                    )
+                }
+
+                return (duration, frameRate, sampleRate, videoMeta, audioMeta)
+
+            } catch {
+                await Logger.shared.warning(
+                    "Capsule analysis failed for \(fileURL.path), using fallback: \(error.localizedDescription)",
+                    category: "Polytropos"
+                )
+            }
+        }
+
+        return fallbackAnalysis(mediaType: mediaType, fileURL: fileURL)
+    }
+
+    private func fallbackAnalysis(
+        mediaType: MediaType,
+        fileURL: URL
+    ) -> (
+        duration: TimeInterval,
+        frameRate: Double,
+        sampleRate: UInt32,
+        videoMetadata: VideoMetadataComponent?,
+        audioMetadata: AudioMetadataComponent?
+    ) {
+        let durationEstimate = estimateDurationSeconds(for: mediaType, fileURL: fileURL)
+        let sampleRateValue: UInt32 = mediaType == .video ? 48000 : 44100
+
+        let videoMeta: VideoMetadataComponent? = mediaType == .video
+            ? VideoMetadataComponent(
+                width: 1920,
+                height: 1080,
+                codec: "H.264",
+                isHDR: false
+            )
+            : nil
+
+        let audioMeta = AudioMetadataComponent(
+            channelCount: 2,
+            sampleRate: Double(sampleRateValue),
+            codec: "AAC"
+        )
+
+        return (durationEstimate, mediaType == .video ? 30.0 : 0, sampleRateValue, videoMeta, audioMeta)
+    }
+
+    private func videoCodecName(_ codec: VideoCodec) -> String {
+        switch codec {
+        case .h264: return "H.264"
+        case .h265: return "HEVC"
+        case .vp9: return "VP9"
+        case .av1: return "AV1"
+        case .mpeg2: return "MPEG-2"
+        case .mpeg4: return "MPEG-4"
+        case .vc1: return "VC-1"
+        case .theora: return "Theora"
+        case .unknown: return "Unknown"
+        }
+    }
+
+    private func audioCodecName(_ codec: AudioCodec) -> String {
+        switch codec {
+        case .aac: return "AAC"
+        case .mp3: return "MP3"
+        case .opus: return "Opus"
+        case .vorbis: return "Vorbis"
+        case .flac: return "FLAC"
+        case .pcmS16LE: return "PCM 16-bit"
+        case .pcmF32LE: return "PCM 32-bit float"
+        case .unknown: return "Unknown"
+        }
+    }
+
+    private func emitTelemetry(
+        operation: String,
+        duration: TimeInterval,
+        success: Bool,
+        mediaType: String,
+        capsuleUsed: Bool
+    ) async {
+        guard let emitter = telemetryEmitter else { return }
+        await emitter(operation, [
+            "duration_ms": .double(duration * 1000),
+            "success": .bool(success),
+            "media_type": .string(mediaType),
+            "capsule_used": .bool(capsuleUsed)
+        ])
+    }
+
+    private func estimateDurationSeconds(for mediaType: MediaType, fileURL: URL) -> TimeInterval {
         if let size = (try? FileManager.default.attributesOfItem(atPath: fileURL.path)[.size])
             as? NSNumber {
             let bytes = size.doubleValue
-            let bytesPerSecond: Double = asset.mediaType == .video ? 5_000_000 : 320_000
+            let bytesPerSecond: Double = mediaType == .video ? 5_000_000 : 320_000
             return max(1, bytes / bytesPerSecond)
         }
-        return asset.mediaType == .video ? 30 : 10
+        return mediaType == .video ? 30 : 10
     }
 }
 

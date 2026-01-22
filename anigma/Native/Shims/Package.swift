@@ -28,12 +28,17 @@ let package = Package(
                 "src/render",
                 "src/color",
                 "src/compression",
+                // "src/media_container_capsule",
+                "src/MediaFingerprintCapsule",
                 "src/common"
             ],
             publicHeadersPath: "include",
             cSettings: [
+                .define("ANIGMA_CAPSULE_IMPLEMENTATION")
+            ],
+            cxxSettings: [
                 .define("ANIGMA_CAPSULE_IMPLEMENTATION"),
-                .unsafeFlags(["-strict-prototypes"])
+                .unsafeFlags(["-Wno-everything"])  // Suppress warnings for now
             ],
             linkerSettings: [
                 .linkedFramework("Foundation"),

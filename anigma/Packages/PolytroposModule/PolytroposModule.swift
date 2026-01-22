@@ -48,6 +48,7 @@
 
 import AnigmaCore
 import Foundation
+import MediaContainerCapsule
 
 // MARK: - Module Info
 
@@ -80,17 +81,22 @@ public enum PolytroposModule: CapabilityModule {
     ///   - runner: Optional workflow runner to register systems for execution.
     ///   - workDirectory: Base directory for Polytropos outputs (defaults to temp).
     ///   - enableLegacyBackends: Whether to register MLT/FFmpeg fallback backends.
+    ///   - mediaContainerCapsule: Optional pre-configured MediaContainerCapsuleWrapper for media analysis.
     public static func register(
         world: World,
         registry: WorkflowRegistry,
         runner: WorkflowRunner? = nil,
         workDirectory: URL? = nil,
-        enableLegacyBackends: Bool = true
+        enableLegacyBackends: Bool = true,
+        mediaContainerCapsule: MediaContainerCapsuleWrapper? = nil
     ) async throws {
         let workDir = workDirectory ?? defaultWorkDirectory()
 
-        // Register systems
-        await world.registerSystem(MediaIngestSystem(workDirectory: workDir.appendingPathComponent("ingest")))
+        let ingestSystem = MediaIngestSystem(
+            workDirectory: workDir.appendingPathComponent("ingest"),
+            containerCapsule: mediaContainerCapsule
+        )
+        await world.registerSystem(ingestSystem)
         await world.registerSystem(AudioSyncSystem())
         await world.registerSystem(AudioAnalysisSystem())
         await world.registerSystem(VideoAnalysisSystem())
@@ -101,9 +107,11 @@ public enum PolytroposModule: CapabilityModule {
         await world.registerSystem(ExportSystem(workDirectory: workDir.appendingPathComponent("exports")))
         await world.registerSystem(MLModelProvisioningSystem(workDirectory: workDir.appendingPathComponent("models")))
 
-        // Register with workflow runner if provided
         if let runner = runner {
-            await runner.registerSystem(MediaIngestSystem(workDirectory: workDir.appendingPathComponent("ingest")))
+            await runner.registerSystem(MediaIngestSystem(
+                workDirectory: workDir.appendingPathComponent("ingest"),
+                containerCapsule: mediaContainerCapsule
+            ))
             await runner.registerSystem(AudioSyncSystem())
             await runner.registerSystem(AudioAnalysisSystem())
             await runner.registerSystem(VideoAnalysisSystem())
@@ -157,10 +165,16 @@ public enum PolytroposModule: CapabilityModule {
     }
 
     /// Creates a pre-configured pipeline for quick mobile clips.
-    public static func createQuickClipPipeline(workDirectory: URL? = nil) -> [any System] {
+    /// - Parameters:
+    ///   - workDirectory: Base directory for outputs.
+    ///   - mediaContainerCapsule: Optional pre-configured MediaContainerCapsuleWrapper for media analysis.
+    public static func createQuickClipPipeline(
+        workDirectory: URL? = nil,
+        mediaContainerCapsule: MediaContainerCapsuleWrapper? = nil
+    ) -> [any System] {
         let workDir = workDirectory ?? defaultWorkDirectory()
         return [
-            MediaIngestSystem(workDirectory: workDir.appendingPathComponent("ingest")),
+            MediaIngestSystem(workDirectory: workDir.appendingPathComponent("ingest"), containerCapsule: mediaContainerCapsule),
             AudioSyncSystem(),
             AudioAnalysisSystem(),
             AutoEditSystem(),

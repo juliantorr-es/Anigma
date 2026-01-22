@@ -15,6 +15,25 @@ extern "C" {
 typedef anigma_capsule_handle_t anigma_rank_fusion_capsule_t;
 
 // ============================================================================
+// Rank Fusion Types
+// ============================================================================
+
+// Fusion strategy types
+typedef enum {
+    ANIGMA_FUSION_STRATEGY_RRF = 1,           // Reciprocal Rank Fusion
+    ANIGMA_FUSION_STRATEGY_WEIGHTED_SUM = 2, // Weighted sum normalization
+    ANIGMA_FUSION_STRATEGY_HYBRID = 3          // Hybrid dense+sparse fusion
+} anigma_fusion_strategy_t;
+
+// Normalization methods
+typedef enum {
+    ANIGMA_NORMALIZATION_NONE = 1,               // No normalization
+    ANIGMA_NORMALIZATION_MIN_MAX = 2,            // Min-max normalization to [0,1]
+    ANIGMA_NORMALIZATION_Z_SCORE = 3,             // Z-score normalization
+    ANIGMA_NORMALIZATION_RANK_BASED = 4,          // Rank-based normalization
+} anigma_normalization_method_t;
+
+// ============================================================================
 // Core Capsule Functions
 // ============================================================================
 
@@ -104,10 +123,24 @@ anigma_status_t anigma_rank_fusion_capsule_fuse_top_k(
 );
 
 /**
+ * Perform advanced rank fusion with configurable strategy and normalization.
+ */
+anigma_status_t anigma_rank_fusion_capsule_fuse_advanced(
+    anigma_rank_fusion_capsule_t* handle,
+    anigma_fusion_strategy_t strategy,
+    anigma_normalization_method_t normalization,
+    uint32_t rrf_k,
+    double* out_scores,
+    uint64_t* out_ids,
+    size_t max_results,
+    anigma_capsule_error_t* err
+);
+
+/**
  * Clear all rank lists from the fusion context.
  */
 anigma_status_t anigma_rank_fusion_capsule_clear(
-    anigma_rank_fusion_capsule_t handle,
+    anigma_rank_fusion_capsule_t* handle,
     anigma_capsule_error_t* err
 );
 

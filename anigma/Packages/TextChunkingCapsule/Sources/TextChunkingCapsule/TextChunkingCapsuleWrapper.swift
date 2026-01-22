@@ -44,8 +44,8 @@ private func createError(code: anigma_status_t, message: String, detail: String?
     }
 }
 
-/// Swift wrapper for the text chunking capsule with Rabin fingerprinting.
-/// Provides both streaming and one-shot APIs for content-defined chunking.
+/// Swift wrapper for enhanced text chunking capsule with Rabin fingerprinting and TextPipeline integration.
+/// Provides stable chunk IDs and deterministic output for evidence chains.
 public final class TextChunkingCapsuleWrapper {
     /// Capsule identity information.
     public static var identity: anigma_capsule_identity_t {

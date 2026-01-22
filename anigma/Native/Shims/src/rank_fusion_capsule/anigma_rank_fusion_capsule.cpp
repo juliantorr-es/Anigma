@@ -291,7 +291,7 @@ anigma_status_t anigma_rank_fusion_capsule_fuse_top_k(
 }
 
 anigma_status_t anigma_rank_fusion_capsule_clear(
-    anigma_rank_fusion_capsule_t handle,
+    anigma_rank_fusion_capsule_t* handle,
     anigma_capsule_error_t* err
 ) {
     if (!handle) {
@@ -304,7 +304,7 @@ anigma_status_t anigma_rank_fusion_capsule_clear(
         return ANIGMA_ERR_INVALID_ARG;
     }
     
-    auto* impl = static_cast<RankFusionCapsuleImpl*>(handle);
+    auto* impl = static_cast<RankFusionCapsuleImpl*>(*handle);
     impl->clear();
     return ANIGMA_OK;
 }

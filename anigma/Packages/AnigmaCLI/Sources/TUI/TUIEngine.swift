@@ -11,7 +11,7 @@ struct TUICell: Equatable {
     var char: Character = " "
     var color: TUIEngine.Color?
     var bg: TUIEngine.Color?
-    var style = TUIEngine.Style()
+    var style = TUIEngine.Style.reset
 
     // We store the rendered ANSI string for fast comparison and output
     var rendered: String = " "
@@ -103,6 +103,7 @@ public actor TUIEngine {
         for r in 1...terminalSize.rows {
             for c in 1...terminalSize.cols {
                 let idx = (r - 1) * terminalSize.cols + (c - 1)
+                guard idx < backBuffer.count, idx < currentBuffer.count else { continue }
                 let backCell = backBuffer[idx]
                 let currentCell = currentBuffer[idx]
 
@@ -144,6 +145,7 @@ public actor TUIEngine {
             for char in plainText {
                 if currentCol > terminalSize.cols { break }
                 let idx = (row - 1) * terminalSize.cols + (currentCol - 1)
+                guard idx < backBuffer.count else { break }
 
                 let cellRendered = renderCell(char, style: currentStyle, fg: foreground, bg: background)
                 backBuffer[idx] = TUICell(char: char, color: foreground, bg: background, style: currentStyle, rendered: cellRendered)
@@ -181,9 +183,10 @@ public actor TUIEngine {
         case "2": style = .dim
         case "3": style = .italic
         case "30"..."37", "90"..."97": fg = Color(rawValue: code)
-        guard let bg = Color(rawValue: String(Int(code) else {
-            fatalError("Failed to unwrap bg")
-        }
+        case "40"..."47", "100"..."107":
+            if let c = Int(code) {
+                bg = Color(rawValue: String(c - 10))
+            }
         default: break
         }
     }
@@ -192,8 +195,8 @@ public actor TUIEngine {
         var codes: [String] = []
         if style != .reset { codes.append(style.rawValue) }
         if let fg = fg { codes.append(fg.rawValue) }
-        guard let bg = bg { codes.append(String(Int(bg.rawValue) else {
-            fatalError("Failed to unwrap bg")
+        if let bg = bg, let c = Int(bg.rawValue) {
+            codes.append(String(c + 10))
         }
 
         if codes.isEmpty { return String(char) }
@@ -265,8 +268,8 @@ public actor TUIEngine {
         if let color = style.color {
             codes.append(color.rawValue)
         }
-        if let bg = style.bg {
-            codes.append(String(Int(bg.rawValue)! + 10))
+        if let bg = style.bg, let c = Int(bg.rawValue) {
+            codes.append(String(c + 10))
         }
 
         guard !codes.isEmpty else { return text }
@@ -274,12 +277,11 @@ public actor TUIEngine {
     }
 
     public nonisolated func styled(_ text: String, color: Color? = nil, bg: Color? = nil, style: Style? = nil) -> String {
-        // Legacy method
         var codes: [String] = []
         if let style = style { codes.append(style.rawValue) }
         if let color = color { codes.append(color.rawValue) }
-        guard let bg = bg { codes.append(String(Int(bg.rawValue) else {
-            fatalError("Failed to unwrap bg")
+        if let bg = bg, let c = Int(bg.rawValue) {
+            codes.append(String(c + 10))
         }
         guard !codes.isEmpty else { return text }
         return "\u{001B}[\(codes.joined(separator: ";"))m\(text)\u{001B}[0m"
@@ -341,16 +343,9 @@ public actor TUIEngine {
     }
 
     private func formatInline(_ text: String, theme: Theme) -> String {
-        // Very basic parser: replace `code` and **bold**
-        // Note: This regex approach is naive and doesn't handle nested/escaped well, but suffices for a prototype.
         var result = text
 
-        // Inline Code `...`
-        // We use a manual loop to handle non-regex styling application to avoid messing up ANSI codes
-        // Actually, for simplicity in this iteration, let's just colorize the whole string segments.
-
         // Bold **...**
-        // Simple replacement logic
         let parts = result.components(separatedBy: "**")
         if parts.count > 1 {
             var newResult = ""
@@ -383,9 +378,9 @@ public actor TUIEngine {
         if let title = title, title.count < width - 4 {
             let titleStr = " \(title) "
             let pos = (width - titleStr.count) / 2
-            let start = topBorder.index(topBorder.startIndex, offsetBy: pos)
-            let end = topBorder.index(start, offsetBy: titleStr.count)
-            topBorder.replaceSubrange(start..<end, with: titleStr)
+            let startIndex = topBorder.index(topBorder.startIndex, offsetBy: pos)
+            let endIndex = topBorder.index(startIndex, offsetBy: titleStr.count)
+            topBorder.replaceSubrange(startIndex..<endIndex, with: titleStr)
         }
 
         if let color = color {
@@ -437,8 +432,6 @@ public actor TUIEngine {
         addToFrame(row: row, col: col, text: text)
     }
 
-    // Spinner state needs to be managed externally or frame-based now, 
-    // but for compatibility we provide the method.
     private let spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
     private var spinnerIndex = 0
 

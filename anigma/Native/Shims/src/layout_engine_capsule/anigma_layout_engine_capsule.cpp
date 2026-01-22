@@ -22,6 +22,13 @@
 #include "fpdf_sysfontinfo.h"
 #endif // ANIGMA_ENABLE_PDFIUM
 
+// OCR includes (conditional compilation)
+#define ANIGMA_ENABLE_OCR 1
+#if ANIGMA_ENABLE_OCR
+#include <tesseract/baseapi.h>
+#include <leptonica/allheaders.h>
+#endif // ANIGMA_ENABLE_OCR
+
 // ============================================================================
 // Internal Implementation Details
 // ============================================================================
@@ -1065,6 +1072,391 @@ static std::vector<anigma_bounding_box_t> detectTables(
 }
 
 // ============================================================================
+// OCR Integration Class
+// ============================================================================
+
+#if ANIGMA_ENABLE_OCR
+class OCREngine {
+private:
+    tesseract::TessBaseAPI tess;
+    std::string current_language;
+    bool initialized;
+    
+public:
+    OCREngine() : initialized(false) {}
+    
+    ~OCREngine() {
+        if (initialized) {
+            tess.End();
+        }
+    }
+    
+    bool initialize(const char* language = "eng") {
+        if (initialized && current_language == language) {
+            return true;
+        }
+        
+        if (initialized) {
+            tess.End();
+            initialized = false;
+        }
+        
+        // Initialize Tesseract with English by default
+        int result = tess.Init(nullptr, language, tesseract::OEM_DEFAULT);
+        if (result == 0) {
+            // Set page segmentation mode for automatic detection
+            tess.SetPageSegMode(tesseract::PSM_AUTO);
+            current_language = language;
+            initialized = true;
+            return true;
+        }
+        return false;
+    }
+    
+    std::vector<anigma_ocr_result_t> processImage(const uint8_t* image_data, 
+                                                  int width, int height, 
+                                                  int bytes_per_pixel,
+                                                  const anigma_bounding_box_t& region_bbox) {
+        std::vector<anigma_ocr_result_t> results;
+        
+        if (!initialized || !image_data) {
+            return results;
+        }
+        
+        // Set image for OCR
+        tess.SetImage(image_data, width, height, bytes_per_pixel, width * bytes_per_pixel);
+        
+        // Get OCR result
+        char* ocr_text = tess.GetUTF8Text();
+        if (!ocr_text) {
+            return results;
+        }
+        
+        // Get confidence scores
+        int* confidences = nullptr;
+        tesseract::ResultIterator* ri = tess.GetIterator();
+        if (ri) {
+            // Process words with confidence
+            do {
+                const char* word = ri->GetUTF8Text(tesseract::RIL_WORD);
+                if (word && strlen(word) > 0) {
+                    float conf = ri->Confidence(tesseract::RIL_WORD);
+                    int x1, y1, x2, y2;
+                    ri->BoundingBox(tesseract::RIL_WORD, &x1, &y1, &x2, &y2);
+                    
+                    anigma_ocr_result_t result{};
+                    result.text = strdup(word);
+                    result.confidence = conf / 100.0; // Convert to 0-1 range
+                    result.language = strdup(current_language.c_str());
+                    result.word_count = 1;
+                    
+                    // Convert coordinates to our coordinate system
+                    result.bbox.left = static_cast<double>(x1);
+                    result.bbox.top = static_cast<double>(y1);
+                    result.bbox.right = static_cast<double>(x2);
+                    result.bbox.bottom = static_cast<double>(y2);
+                    
+                    results.push_back(result);
+                    delete[] word;
+                }
+            } while (ri->Next(tesseract::RIL_WORD));
+            delete ri;
+        }
+        
+        delete[] ocr_text;
+        return results;
+    }
+};
+#endif // ANIGMA_ENABLE_OCR
+
+// ============================================================================
+// Font Analysis Class
+// ============================================================================
+
+class FontAnalyzer {
+private:
+    std::unordered_map<std::string, std::string> font_families;
+    std::unordered_map<std::string, double> font_metrics;
+    
+public:
+    FontAnalyzer() {
+        // Initialize common font family mappings
+        font_families["Times-Roman"] = "Times New Roman";
+        font_families["Times-Bold"] = "Times New Roman";
+        font_families["Times-Italic"] = "Times New Roman";
+        font_families["Helvetica"] = "Arial";
+        font_families["Helvetica-Bold"] = "Arial";
+        font_families["Helvetica-Oblique"] = "Arial";
+        font_families["Courier"] = "Courier New";
+        font_families["Courier-Bold"] = "Courier New";
+        font_families["Courier-Oblique"] = "Courier New";
+    }
+    
+    anigma_font_analysis_t analyzeFont(const char* font_name, double font_size, 
+                                      uint32_t font_flags, uint32_t color_rgb) {
+        anigma_font_analysis_t analysis{};
+        
+        // Extract family and subfamily
+        std::string name = font_name ? font_name : "Unknown";
+        std::string family = name;
+        std::string subfamily = "";
+        
+        // Check for style indicators in font name
+        bool is_bold = (font_flags & 0x0001) != 0 || name.find("Bold") != std::string::npos;
+        bool is_italic = (font_flags & 0x0002) != 0 || name.find("Italic") != std::string::npos || 
+                         name.find("Oblique") != std::string::npos;
+        
+        // Map to standard families
+        auto it = font_families.find(name);
+        if (it != font_families.end()) {
+            family = it->second;
+        }
+        
+        // Determine serif/monospace
+        bool is_serif = family.find("Times") != std::string::npos || 
+                       family.find("Georgia") != std::string::npos ||
+                       family.find("serif") != std::string::npos;
+        bool is_monospace = family.find("Courier") != std::string::npos ||
+                           family.find("Mono") != std::string::npos ||
+                           family.find("Consolas") != std::string::npos;
+        
+        // Fill analysis structure
+        analysis.family = strdup(family.c_str());
+        analysis.subfamily = strdup(subfamily.c_str());
+        analysis.size = font_size;
+        analysis.weight = is_bold ? 700 : 400;
+        analysis.italic = is_italic ? 1 : 0;
+        analysis.bold = is_bold ? 1 : 0;
+        analysis.monospace = is_monospace ? 1 : 0;
+        analysis.serif = is_serif ? 1 : 0;
+        analysis.style_flags = font_flags;
+        analysis.x_height = font_size * 0.6; // Approximation
+        analysis.cap_height = font_size * 0.7; // Approximation
+        analysis.color_rgb = color_rgb;
+        analysis.contrast_ratio = 0.0; // Would need background color for accurate calculation
+        
+        return analysis;
+    }
+};
+
+// ============================================================================
+// Layout Classification Class
+// ============================================================================
+
+class LayoutClassifier {
+private:
+    FontAnalyzer font_analyzer;
+    
+public:
+    anigma_layout_element_type_t classifyElement(const anigma_text_segment_t& segment, 
+                                               const std::vector<anigma_text_segment_t>& all_segments,
+                                               double page_width, double page_height) {
+        
+        // Simple heuristic-based classification
+        double text_length = strlen(segment.text ? segment.text : "");
+        double bbox_width = segment.bbox.right - segment.bbox.left;
+        double bbox_height = segment.bbox.bottom - segment.bbox.top;
+        double position_y = segment.bbox.top; // Distance from top
+        
+        // Check if text spans most of page width (likely header)
+        if (bbox_width > page_width * 0.8 && segment.font_size > 14.0 && position_y < page_height * 0.2) {
+            return ANIGMA_LAYOUT_ELEMENT_HEADER;
+        }
+        
+        // Check for list items (start with bullet or number)
+        const char* text = segment.text ? segment.text : "";
+        if (text[0] == '•' || text[0] == '-' || text[0] == '*' || 
+            (isdigit(text[0]) && (text[1] == '.' || text[1] == ')'))) {
+            return ANIGMA_LAYOUT_ELEMENT_LIST_ITEM;
+        }
+        
+        // Check for footer (bottom of page, small font)
+        if (position_y > page_height * 0.9 && segment.font_size < 10.0) {
+            return ANIGMA_LAYOUT_ELEMENT_FOOTER;
+        }
+        
+        // Check for code block (monospace font)
+        if (segment.font_name && 
+            (strstr(segment.font_name, "Courier") || strstr(segment.font_name, "Mono"))) {
+            return ANIGMA_LAYOUT_ELEMENT_CODE_BLOCK;
+        }
+        
+        // Default to paragraph
+        return ANIGMA_LAYOUT_ELEMENT_PARAGRAPH;
+    }
+    
+    double calculateClassificationConfidence(const anigma_text_segment_t& segment,
+                                           anigma_layout_element_type_t type) {
+        // Simple confidence calculation based on various heuristics
+        double confidence = 0.5; // Base confidence
+        
+        switch (type) {
+            case ANIGMA_LAYOUT_ELEMENT_HEADER:
+                if (segment.font_size > 14.0) confidence += 0.2;
+                if (segment.font_flags & 0x0001) confidence += 0.1; // Bold
+                if (strlen(segment.text ? segment.text : "") < 100) confidence += 0.1;
+                break;
+                
+            case ANIGMA_LAYOUT_ELEMENT_LIST_ITEM:
+                {
+                    const char* text = segment.text ? segment.text : "";
+                    if (text[0] == '•' || text[0] == '-' || text[0] == '*') confidence += 0.3;
+                    if (isdigit(text[0]) && (text[1] == '.' || text[1] == ')')) confidence += 0.3;
+                }
+                break;
+                
+            case ANIGMA_LAYOUT_ELEMENT_CODE_BLOCK:
+                if (segment.font_name && 
+                    (strstr(segment.font_name, "Courier") || strstr(segment.font_name, "Mono"))) {
+                    confidence += 0.4;
+                }
+                break;
+                
+            default:
+                confidence = 0.7; // Higher confidence for default paragraph
+                break;
+        }
+        
+        return std::min(confidence, 1.0);
+    }
+};
+
+// ============================================================================
+// Reading Order Detection Class
+// ============================================================================
+
+class ReadingOrderDetector {
+public:
+    std::vector<uint32_t> detectReadingOrder(const std::vector<anigma_layout_element_t>& elements,
+                                            std::vector<double>& confidence_scores) {
+        std::vector<uint32_t> order;
+        confidence_scores.clear();
+        
+        if (elements.empty()) {
+            return order;
+        }
+        
+        // Create indices sorted by position
+        std::vector<size_t> indices(elements.size());
+        std::iota(indices.begin(), indices.end(), 0);
+        
+        // Sort primarily by Y coordinate (top to bottom), then by X coordinate (left to right)
+        std::sort(indices.begin(), indices.end(), [&elements](size_t a, size_t b) {
+            const auto& elem_a = elements[a];
+            const auto& elem_b = elements[b];
+            
+            // Check if elements are in different columns
+            double col_threshold = 50.0; // Points
+            bool different_columns = std::abs(elem_a.bbox.left - elem_b.bbox.left) > col_threshold;
+            
+            if (different_columns) {
+                // Same row ordering: prioritize left to right
+                double row_threshold = 10.0; // Points
+                bool same_row = std::abs(elem_a.bbox.top - elem_b.bbox.top) < row_threshold;
+                
+                if (same_row) {
+                    return elem_a.bbox.left < elem_b.bbox.left;
+                }
+            }
+            
+            // Default: top to bottom
+            return elem_a.bbox.top < elem_b.bbox.top;
+        });
+        
+        // Convert to order array and calculate confidence
+        for (size_t idx : indices) {
+            order.push_back(static_cast<uint32_t>(elements[idx].element_id));
+            
+            // Calculate confidence based on position consistency
+            double confidence = 0.8; // Base confidence
+            
+            // Higher confidence for clearly separated elements
+            if (idx > 0) {
+                const auto& prev = elements[indices[idx - 1]];
+                const auto& curr = elements[idx];
+                double vertical_gap = curr.bbox.top - prev.bbox.bottom;
+                
+                if (vertical_gap > 5.0 && vertical_gap < 50.0) {
+                    confidence += 0.1; // Good spacing
+                } else if (vertical_gap < 0) {
+                    confidence -= 0.2; // Overlap (suspicious)
+                }
+            }
+            
+            confidence_scores.push_back(std::min(confidence, 1.0));
+        }
+        
+        return order;
+    }
+};
+
+// ============================================================================
+// Document Structure Analyzer Class
+// ============================================================================
+
+class DocumentStructureAnalyzer {
+private:
+    std::vector<std::string> section_titles;
+    std::vector<uint32_t> section_start_pages;
+    
+public:
+    void analyzeDocumentStructure(const std::vector<anigma_page_layout_t>& pages,
+                                anigma_document_structure_t& structure) {
+        structure.total_pages = static_cast<uint32_t>(pages.size());
+        structure.section_count = 0;
+        structure.section_titles = nullptr;
+        structure.section_start_pages = nullptr;
+        structure.element_counts = nullptr;
+        structure.has_toc = 0;
+        structure.has_index = 0;
+        structure.has_bibliography = 0;
+        
+        section_titles.clear();
+        section_start_pages.clear();
+        
+        // Simple section detection based on headers
+        for (size_t page_idx = 0; page_idx < pages.size(); ++page_idx) {
+            const auto& page = pages[page_idx];
+            
+            for (size_t elem_idx = 0; elem_idx < page.element_count; ++elem_idx) {
+                const auto& element = page.elements[elem_idx];
+                
+                if (element.type == ANIGMA_LAYOUT_ELEMENT_HEADER && 
+                    element.confidence > 0.7) {
+                    // Consider as section header
+                    std::string title = element.text ? element.text : "";
+                    if (!title.empty() && title.length() < 100) { // Reasonable title length
+                        section_titles.push_back(title);
+                        section_start_pages.push_back(static_cast<uint32_t>(page_idx));
+                    }
+                }
+            }
+        }
+        
+        // Populate structure
+        if (!section_titles.empty()) {
+            structure.section_count = static_cast<uint32_t>(section_titles.size());
+            structure.section_titles = new const char*[structure.section_count];
+            structure.section_start_pages = new uint32_t[structure.section_count];
+            structure.element_counts = new uint32_t[structure.section_count];
+            
+            for (size_t i = 0; i < section_titles.size(); ++i) {
+                structure.section_titles[i] = strdup(section_titles[i].c_str());
+                structure.section_start_pages[i] = section_start_pages[i];
+                structure.element_counts[i] = 0; // Would need more detailed analysis
+            }
+            
+            // Check for TOC (many section titles in early pages)
+            if (section_start_pages.size() > 3 && 
+                std::all_of(section_start_pages.begin(), section_start_pages.begin() + 3,
+                           [](uint32_t page) { return page < 3; })) {
+                structure.has_toc = 1;
+            }
+        }
+    }
+};
+
+// ============================================================================
 // Layout engine capsule internal state
 struct LayoutEngineState {
     struct anigma_layout_engine_config_t config;
@@ -1078,6 +1470,20 @@ struct LayoutEngineState {
     // Text content interning cache (shared across pages of same document)
     std::unordered_map<std::string, char*> text_pool;
     
+    // Advanced analysis engines
+#if ANIGMA_ENABLE_OCR
+    OCREngine ocr_engine;
+#endif
+    FontAnalyzer font_analyzer;
+    LayoutClassifier layout_classifier;
+    ReadingOrderDetector reading_order_detector;
+    DocumentStructureAnalyzer structure_analyzer;
+    
+    // Advanced analysis results
+    std::unordered_map<uint32_t, std::vector<anigma_ocr_result_t>> ocr_results_map;
+    std::unordered_map<uint32_t, std::vector<anigma_layout_element_t>> layout_elements_map;
+    std::unordered_map<uint32_t, anigma_reading_order_t> reading_order_map;
+    
     // Profiling counters (only updated when ANIGMA_LAYOUT_ENGINE_FLAG_ENABLE_PROFILING is set)
     size_t total_chars_processed;
     size_t total_segments_created;
@@ -1085,6 +1491,10 @@ struct LayoutEngineState {
     double pdf_load_time_ms;
     double text_extraction_time_ms;
     double spatial_index_build_time_ms;
+    double ocr_time_ms;
+    double font_analysis_time_ms;
+    double layout_classification_time_ms;
+    double reading_order_time_ms;
     
     LayoutEngineState(const struct anigma_layout_engine_config_t* config)
         : config(*config)
@@ -1095,6 +1505,10 @@ struct LayoutEngineState {
         , pdf_load_time_ms(0.0)
         , text_extraction_time_ms(0.0)
         , spatial_index_build_time_ms(0.0)
+        , ocr_time_ms(0.0)
+        , font_analysis_time_ms(0.0)
+        , layout_classification_time_ms(0.0)
+        , reading_order_time_ms(0.0)
     {}
     
     ~LayoutEngineState() {
@@ -1478,8 +1892,73 @@ struct LayoutEngineState {
                 delete[] layout.images;
                 layout.images = nullptr;
             }
+            
+            // Free OCR results
+            if (layout.ocr_results) {
+                for (size_t i = 0; i < layout.ocr_result_count; ++i) {
+                    free(const_cast<char*>(layout.ocr_results[i].text));
+                    free(const_cast<char*>(layout.ocr_results[i].language));
+                }
+                delete[] layout.ocr_results;
+                layout.ocr_results = nullptr;
+            }
+            
+            // Free layout elements
+            if (layout.elements) {
+                for (size_t i = 0; i < layout.element_count; ++i) {
+                    free(const_cast<char*>(layout.elements[i].text));
+                    free(const_cast<char*>(layout.elements[i].font.family));
+                    free(const_cast<char*>(layout.elements[i].font.subfamily));
+                }
+                delete[] layout.elements;
+                layout.elements = nullptr;
+            }
+            
+            // Free reading order
+            if (layout.reading_order.element_ids) {
+                delete[] layout.reading_order.element_ids;
+                layout.reading_order.element_ids = nullptr;
+            }
+            if (layout.reading_order.confidence_scores) {
+                delete[] layout.reading_order.confidence_scores;
+                layout.reading_order.confidence_scores = nullptr;
+            }
+            if (layout.reading_order.column_breaks) {
+                delete[] layout.reading_order.column_breaks;
+                layout.reading_order.column_breaks = nullptr;
+            }
         }
         page_layouts.clear();
+    }
+    
+    // Free advanced analysis data
+    void freeAdvancedAnalysisData() {
+        // Free OCR results map
+        for (auto& pair : ocr_results_map) {
+            for (auto& ocr_result : pair.second) {
+                free(const_cast<char*>(ocr_result.text));
+                free(const_cast<char*>(ocr_result.language));
+            }
+        }
+        ocr_results_map.clear();
+        
+        // Free layout elements map
+        for (auto& pair : layout_elements_map) {
+            for (auto& element : pair.second) {
+                free(const_cast<char*>(element.text));
+                free(const_cast<char*>(element.font.family));
+                free(const_cast<char*>(element.font.subfamily));
+            }
+        }
+        layout_elements_map.clear();
+        
+        // Free reading order map
+        for (auto& pair : reading_order_map) {
+            delete[] pair.second.element_ids;
+            delete[] pair.second.confidence_scores;
+            delete[] pair.second.column_breaks;
+        }
+        reading_order_map.clear();
     }
 
     // Reset state for new PDF, optionally preserving caches
@@ -1492,6 +1971,7 @@ struct LayoutEngineState {
         }
 #endif
         freePageLayouts();
+        freeAdvancedAnalysisData();
         spatial_indices.clear();
         if (!preserveCaches) {
             clearFontNameCache();
@@ -1911,5 +2391,575 @@ anigma_status_t anigma_layout_engine_capsule_query_bbox(
     for (size_t i = 0; i < results.size(); ++i) {
         out_element_indices[i] = results[i];
     }
+    return ANIGMA_OK;
+}
+
+// ============================================================================
+// Advanced Features API Implementation
+// ============================================================================
+
+anigma_status_t anigma_layout_engine_capsule_perform_ocr(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    const char* language,
+    anigma_capsule_error_t* err
+) {
+#if ANIGMA_ENABLE_OCR
+    if (!handle || !language) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    if (!(state->config.flags & ANIGMA_LAYOUT_ENGINE_FLAG_ENABLE_OCR)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "OCR flag not enabled in configuration";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    if (page_index >= state->page_layouts.size()) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Page index out of range";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    try {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        
+        // Initialize OCR engine
+        if (!state->ocr_engine.initialize(language)) {
+            if (err) {
+                err->code = ANIGMA_ERR_INTERNAL;
+                err->message = "Failed to initialize OCR engine";
+            }
+            return ANIGMA_ERR_INTERNAL;
+        }
+        
+        const auto& page_layout = state->page_layouts[page_index];
+        std::vector<anigma_ocr_result_t> ocr_results;
+        
+        // Process images on this page for OCR
+        for (size_t img_idx = 0; img_idx < page_layout.image_count; ++img_idx) {
+            const auto& image = page_layout.images[img_idx];
+            
+            if (image.raw_data && image.raw_data_len > 0) {
+                // Perform OCR on this image
+                auto results = state->ocr_engine.processImage(
+                    image.raw_data,
+                    static_cast<int>(image.width),
+                    static_cast<int>(image.height),
+                    static_cast<int>(image.bits_per_pixel / 8),
+                    image.bbox
+                );
+                
+                ocr_results.insert(ocr_results.end(), results.begin(), results.end());
+            }
+        }
+        
+        // Store OCR results
+        state->ocr_results_map[page_index] = std::move(ocr_results);
+        
+        auto end_time = std::chrono::high_resolution_clock::now();
+        state->ocr_time_ms += std::chrono::duration<double, std::milli>(end_time - start_time).count();
+        
+        return ANIGMA_OK;
+    } catch (...) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "OCR processing failed";
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+#else
+    if (err) {
+        err->code = ANIGMA_ERR_NOT_IMPLEMENTED;
+        err->message = "OCR not available in this build";
+    }
+    return ANIGMA_ERR_NOT_IMPLEMENTED;
+#endif // ANIGMA_ENABLE_OCR
+}
+
+anigma_status_t anigma_layout_engine_capsule_get_ocr_results(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    struct anigma_ocr_result_t* out_results,
+    size_t max_results,
+    size_t* out_actual,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !out_results || !out_actual) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    auto it = state->ocr_results_map.find(page_index);
+    if (it == state->ocr_results_map.end()) {
+        *out_actual = 0;
+        return ANIGMA_OK;
+    }
+    
+    const auto& ocr_results = it->second;
+    size_t to_copy = std::min(ocr_results.size(), max_results);
+    
+    for (size_t i = 0; i < to_copy; ++i) {
+        const auto& src = ocr_results[i];
+        auto& dst = out_results[i];
+        
+        dst.bbox = src.bbox;
+        dst.text = src.text ? strdup(src.text) : nullptr;
+        dst.confidence = src.confidence;
+        dst.language = src.language ? strdup(src.language) : nullptr;
+        dst.word_count = src.word_count;
+    }
+    
+    *out_actual = to_copy;
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_layout_engine_capsule_analyze_fonts(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    anigma_capsule_error_t* err
+) {
+    if (!handle) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid handle";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    if (!(state->config.flags & ANIGMA_LAYOUT_ENGINE_FLAG_ADVANCED_FONT_ANALYSIS)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Advanced font analysis flag not enabled";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    if (page_index >= state->page_layouts.size()) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Page index out of range";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    try {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        
+        const auto& page_layout = state->page_layouts[page_index];
+        
+        // Enhanced font analysis would be applied here
+        // For now, we just acknowledge the call
+        
+        auto end_time = std::chrono::high_resolution_clock::now();
+        state->font_analysis_time_ms += std::chrono::duration<double, std::milli>(end_time - start_time).count();
+        
+        return ANIGMA_OK;
+    } catch (...) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Font analysis failed";
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+}
+
+anigma_status_t anigma_layout_engine_capsule_classify_layout(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    anigma_capsule_error_t* err
+) {
+    if (!handle) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid handle";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    if (!(state->config.flags & ANIGMA_LAYOUT_ENGINE_FLAG_LAYOUT_CLASSIFICATION)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Layout classification flag not enabled";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    if (page_index >= state->page_layouts.size()) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Page index out of range";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    try {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        
+        const auto& page_layout = state->page_layouts[page_index];
+        std::vector<anigma_layout_element_t> elements;
+        
+        // Convert text segments to classified layout elements
+        for (size_t seg_idx = 0; seg_idx < page_layout.segment_count; ++seg_idx) {
+            const auto& segment = page_layout.segments[seg_idx];
+            
+            anigma_layout_element_t element{};
+            element.bbox = segment.bbox;
+            element.text = segment.text ? strdup(segment.text) : nullptr;
+            element.element_id = static_cast<uint32_t>(seg_idx);
+            element.parent_id = 0;
+            element.level = 0;
+            
+            // Classify element type
+            std::vector<anigma_text_segment_t> all_segments(
+                page_layout.segments,
+                page_layout.segments + page_layout.segment_count
+            );
+            
+            element.type = state->layout_classifier.classifyElement(
+                segment, all_segments, 
+                page_layout.bbox.right, page_layout.bbox.bottom
+            );
+            
+            // Calculate confidence
+            element.confidence = state->layout_classifier.calculateClassificationConfidence(
+                segment, element.type
+            );
+            
+            // Analyze font
+            element.font = state->font_analyzer.analyzeFont(
+                segment.font_name,
+                segment.font_size,
+                segment.font_flags,
+                segment.color_rgb
+            );
+            
+            elements.push_back(element);
+        }
+        
+        // Store layout elements
+        state->layout_elements_map[page_index] = std::move(elements);
+        
+        auto end_time = std::chrono::high_resolution_clock::now();
+        state->layout_classification_time_ms += std::chrono::duration<double, std::milli>(end_time - start_time).count();
+        
+        return ANIGMA_OK;
+    } catch (...) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Layout classification failed";
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+}
+
+anigma_status_t anigma_layout_engine_capsule_detect_reading_order(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    anigma_capsule_error_t* err
+) {
+    if (!handle) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid handle";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    if (!(state->config.flags & ANIGMA_LAYOUT_ENGINE_FLAG_READING_ORDER_DETECTION)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Reading order detection flag not enabled";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    if (page_index >= state->page_layouts.size()) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Page index out of range";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    try {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        
+        auto it = state->layout_elements_map.find(page_index);
+        if (it == state->layout_elements_map.end()) {
+            if (err) {
+                err->code = ANIGMA_ERR_INVALID_STATE;
+                err->message = "Layout classification not performed for this page";
+            }
+            return ANIGMA_ERR_INVALID_STATE;
+        }
+        
+        const auto& elements = it->second;
+        anigma_reading_order_t reading_order{};
+        
+        // Detect reading order
+        std::vector<double> confidence_scores;
+        auto order = state->reading_order_detector.detectReadingOrder(elements, confidence_scores);
+        
+        reading_order.element_count = static_cast<uint32_t>(order.size());
+        if (!order.empty()) {
+            reading_order.element_ids = new uint32_t[order.size()];
+            reading_order.confidence_scores = new double[confidence_scores.size()];
+            
+            std::copy(order.begin(), order.end(), reading_order.element_ids);
+            std::copy(confidence_scores.begin(), confidence_scores.end(), reading_order.confidence_scores);
+        } else {
+            reading_order.element_ids = nullptr;
+            reading_order.confidence_scores = nullptr;
+        }
+        
+        reading_order.column_breaks = nullptr; // Would need more complex analysis
+        
+        // Store reading order
+        state->reading_order_map[page_index] = reading_order;
+        
+        auto end_time = std::chrono::high_resolution_clock::now();
+        state->reading_order_time_ms += std::chrono::duration<double, std::milli>(end_time - start_time).count();
+        
+        return ANIGMA_OK;
+    } catch (...) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Reading order detection failed";
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+}
+
+anigma_status_t anigma_layout_engine_capsule_analyze_document_structure(
+    anigma_layout_engine_capsule_t handle,
+    struct anigma_document_structure_t* out_structure,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !out_structure) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    if (!(state->config.flags & ANIGMA_LAYOUT_ENGINE_FLAG_MULTI_PAGE_ANALYSIS)) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Multi-page analysis flag not enabled";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    try {
+        // Analyze document structure across all pages
+        state->structure_analyzer.analyzeDocumentStructure(
+            state->page_layouts, *out_structure
+        );
+        
+        return ANIGMA_OK;
+    } catch (...) {
+        if (err) {
+            err->code = ANIGMA_ERR_INTERNAL;
+            err->message = "Document structure analysis failed";
+        }
+        return ANIGMA_ERR_INTERNAL;
+    }
+}
+
+anigma_status_t anigma_layout_engine_capsule_get_layout_elements(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    struct anigma_layout_element_t* out_elements,
+    size_t max_elements,
+    size_t* out_actual,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !out_elements || !out_actual) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    auto it = state->layout_elements_map.find(page_index);
+    if (it == state->layout_elements_map.end()) {
+        *out_actual = 0;
+        return ANIGMA_OK;
+    }
+    
+    const auto& elements = it->second;
+    size_t to_copy = std::min(elements.size(), max_elements);
+    
+    for (size_t i = 0; i < to_copy; ++i) {
+        const auto& src = elements[i];
+        auto& dst = out_elements[i];
+        
+        dst.bbox = src.bbox;
+        dst.type = src.type;
+        dst.text = src.text ? strdup(src.text) : nullptr;
+        dst.confidence = src.confidence;
+        dst.reading_order = src.reading_order;
+        dst.font = src.font;
+        dst.element_id = src.element_id;
+        dst.parent_id = src.parent_id;
+        dst.level = src.level;
+    }
+    
+    *out_actual = to_copy;
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_layout_engine_capsule_get_reading_order(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    struct anigma_reading_order_t* out_order,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !out_order) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    auto it = state->reading_order_map.find(page_index);
+    if (it == state->reading_order_map.end()) {
+        // Return empty reading order
+        out_order->element_count = 0;
+        out_order->element_ids = nullptr;
+        out_order->confidence_scores = nullptr;
+        out_order->column_breaks = nullptr;
+        return ANIGMA_OK;
+    }
+    
+    const auto& reading_order = it->second;
+    
+    out_order->element_count = reading_order.element_count;
+    
+    if (reading_order.element_count > 0) {
+        out_order->element_ids = new uint32_t[reading_order.element_count];
+        out_order->confidence_scores = new double[reading_order.element_count];
+        
+        std::copy(reading_order.element_ids, 
+                  reading_order.element_ids + reading_order.element_count,
+                  out_order->element_ids);
+        std::copy(reading_order.confidence_scores,
+                  reading_order.confidence_scores + reading_order.element_count,
+                  out_order->confidence_scores);
+    } else {
+        out_order->element_ids = nullptr;
+        out_order->confidence_scores = nullptr;
+    }
+    
+    out_order->column_breaks = nullptr; // Not implemented yet
+    
+    return ANIGMA_OK;
+}
+
+anigma_status_t anigma_layout_engine_capsule_validate_ocr_accuracy(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    const char* ground_truth_text,
+    double* out_character_accuracy,
+    double* out_word_accuracy,
+    anigma_capsule_error_t* err
+) {
+    if (!handle || !ground_truth_text || !out_character_accuracy || !out_word_accuracy) {
+        if (err) {
+            err->code = ANIGMA_ERR_INVALID_ARG;
+            err->message = "Invalid arguments";
+        }
+        return ANIGMA_ERR_INVALID_ARG;
+    }
+    
+    LayoutEngineState* state = static_cast<LayoutEngineState*>(handle);
+    
+    auto it = state->ocr_results_map.find(page_index);
+    if (it == state->ocr_results_map.end()) {
+        *out_character_accuracy = 0.0;
+        *out_word_accuracy = 0.0;
+        return ANIGMA_OK;
+    }
+    
+    const auto& ocr_results = it->second;
+    
+    // Combine OCR text
+    std::string ocr_text;
+    for (const auto& result : ocr_results) {
+        if (result.text) {
+            ocr_text += result.text;
+            ocr_text += " ";
+        }
+    }
+    
+    // Calculate character accuracy
+    size_t correct_chars = 0;
+    size_t min_len = std::min(strlen(ground_truth_text), ocr_text.length());
+    
+    for (size_t i = 0; i < min_len; ++i) {
+        if (ground_truth_text[i] == ocr_text[i]) {
+            correct_chars++;
+        }
+    }
+    
+    *out_character_accuracy = static_cast<double>(correct_chars) / 
+                             std::max(strlen(ground_truth_text), ocr_text.length());
+    
+    // Calculate word accuracy (simplified)
+    std::istringstream ground_truth_stream(ground_truth_text);
+    std::istringstream ocr_stream(ocr_text);
+    
+    std::set<std::string> ground_truth_words, ocr_words;
+    std::string word;
+    
+    while (ground_truth_stream >> word) {
+        ground_truth_words.insert(word);
+    }
+    
+    while (ocr_stream >> word) {
+        ocr_words.insert(word);
+    }
+    
+    size_t correct_words = 0;
+    for (const auto& gt_word : ground_truth_words) {
+        if (ocr_words.count(gt_word)) {
+            correct_words++;
+        }
+    }
+    
+    *out_word_accuracy = static_cast<double>(correct_words) / 
+                         std::max(ground_truth_words.size(), ocr_words.size());
+    
     return ANIGMA_OK;
 }

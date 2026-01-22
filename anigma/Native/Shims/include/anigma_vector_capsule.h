@@ -154,6 +154,134 @@ anigma_status_t anigma_vector_capsule_get_bounds(
     anigma_capsule_error_t* err
 );
 
+// ============================================================================
+// Path Simplification Functions
+// ============================================================================
+
+/**
+ * Simplify path using Douglas-Peucker algorithm.
+ */
+anigma_status_t anigma_vector_capsule_simplify_douglas_peucker(
+    anigma_vector_capsule_t handle,
+    double tolerance,
+    anigma_vector_capsule_t* out_result,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Simplify path using Visvalingam algorithm.
+ */
+anigma_status_t anigma_vector_capsule_simplify_visvalingam(
+    anigma_vector_capsule_t handle,
+    double tolerance,
+    anigma_vector_capsule_t* out_result,
+    anigma_capsule_error_t* err
+);
+
+// ============================================================================
+// Transformation Functions
+// ============================================================================
+
+/**
+ * Apply affine transformation matrix to path.
+ * Matrix format: [a c e; b d f; 0 0 1]
+ */
+anigma_status_t anigma_vector_capsule_transform(
+    anigma_vector_capsule_t handle,
+    double a, double b, double c, double d, double e, double f,
+    anigma_vector_capsule_t* out_result,
+    anigma_capsule_error_t* err
+);
+
+// ============================================================================
+// Geometric Primitive Creation Functions
+// ============================================================================
+
+/**
+ * Create cubic Bezier curve.
+ */
+anigma_status_t anigma_vector_capsule_create_bezier(
+    double start_x, double start_y,
+    double control1_x, double control1_y,
+    double control2_x, double control2_y,
+    double end_x, double end_y,
+    anigma_vector_capsule_t* out_result,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Create circular arc.
+ */
+anigma_status_t anigma_vector_capsule_create_arc(
+    double center_x, double center_y,
+    double radius,
+    double start_angle,
+    double end_angle,
+    anigma_vector_capsule_t* out_result,
+    anigma_capsule_error_t* err
+);
+
+// ============================================================================
+// Geometric Predicate Functions
+// ============================================================================
+
+/**
+ * Test if point is inside polygon.
+ */
+anigma_status_t anigma_vector_capsule_point_in_polygon(
+    anigma_vector_capsule_t handle,
+    double x, double y,
+    bool* out_result,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Calculate intersection of two line segments.
+ */
+anigma_status_t anigma_vector_capsule_line_intersection(
+    double line1_start_x, double line1_start_y,
+    double line1_end_x, double line1_end_y,
+    double line2_start_x, double line2_start_y,
+    double line2_end_x, double line2_end_y,
+    bool* out_has_intersection,
+    double* out_x, double* out_y,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Calculate distance from point to line segment.
+ */
+anigma_status_t anigma_vector_capsule_point_to_line_distance(
+    double point_x, double point_y,
+    double line_start_x, double line_start_y,
+    double line_end_x, double line_end_y,
+    double* out_distance,
+    anigma_capsule_error_t* err
+);
+
+// ============================================================================
+// Additional Utility Functions
+// ============================================================================
+
+/**
+ * Get total length of path(s).
+ */
+anigma_status_t anigma_vector_capsule_get_length(
+    anigma_vector_capsule_t handle,
+    double* out_length,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Smooth path using curve fitting.
+ */
+anigma_status_t anigma_vector_capsule_smooth_path(
+    anigma_vector_capsule_t handle,
+    double factor,
+    anigma_vector_capsule_t* out_result,
+    anigma_capsule_error_t* err
+);
+
 #if defined(__cplusplus)
 }
 #endif

@@ -31,6 +31,11 @@ typedef struct anigma_layout_engine_config_t anigma_layout_engine_config_t;
 #define ANIGMA_LAYOUT_ENGINE_FLAG_EXTRACT_IMAGES         (1u << 3)
 #define ANIGMA_LAYOUT_ENGINE_FLAG_ENABLE_PROFILING       (1u << 4)
 #define ANIGMA_LAYOUT_ENGINE_FLAG_PRESERVE_CACHES        (1u << 5)
+#define ANIGMA_LAYOUT_ENGINE_FLAG_ENABLE_OCR             (1u << 6)
+#define ANIGMA_LAYOUT_ENGINE_FLAG_ADVANCED_FONT_ANALYSIS (1u << 7)
+#define ANIGMA_LAYOUT_ENGINE_FLAG_LAYOUT_CLASSIFICATION  (1u << 8)
+#define ANIGMA_LAYOUT_ENGINE_FLAG_READING_ORDER_DETECTION (1u << 9)
+#define ANIGMA_LAYOUT_ENGINE_FLAG_MULTI_PAGE_ANALYSIS    (1u << 10)
 
 // Profiling statistics structure
 struct anigma_layout_engine_profiling_stats_t {
@@ -79,6 +84,85 @@ struct anigma_image_data_t {
 };
 typedef struct anigma_image_data_t anigma_image_data_t;
 
+// OCR result structure
+struct anigma_ocr_result_t {
+    struct anigma_bounding_box_t bbox;
+    const char* text;           // OCR-extracted text (UTF-8, capsule-owned)
+    double confidence;          // Confidence score (0.0-1.0)
+    const char* language;       // Detected language (e.g., "eng", "fra")
+    uint32_t word_count;        // Number of words in this region
+};
+typedef struct anigma_ocr_result_t anigma_ocr_result_t;
+
+// Advanced font analysis
+struct anigma_font_analysis_t {
+    const char* family;         // Font family name with fallback detection
+    const char* subfamily;      // Font subfamily (e.g., "Bold", "Italic")
+    double size;               // Font size in points
+    uint32_t weight;           // Font weight (100-900)
+    uint8_t italic;            // 1 if italic detected
+    uint8_t bold;              // 1 if bold detected
+    uint8_t monospace;         // 1 if monospace detected
+    uint8_t serif;             // 1 if serif detected
+    uint32_t style_flags;      // Additional style flags
+    double x_height;           // X-height ratio (for advanced analysis)
+    double cap_height;         // Capital height ratio
+    uint32_t color_rgb;        // RGB color
+    double contrast_ratio;      // Contrast with background
+};
+typedef struct anigma_font_analysis_t anigma_font_analysis_t;
+
+// Layout element classification
+enum anigma_layout_element_type_t {
+    ANIGMA_LAYOUT_ELEMENT_UNKNOWN = 0,
+    ANIGMA_LAYOUT_ELEMENT_HEADER = 1,
+    ANIGMA_LAYOUT_ELEMENT_PARAGRAPH = 2,
+    ANIGMA_LAYOUT_ELEMENT_LIST_ITEM = 3,
+    ANIGMA_LAYOUT_ELEMENT_TABLE_CELL = 4,
+    ANIGMA_LAYOUT_ELEMENT_CAPTION = 5,
+    ANIGMA_LAYOUT_ELEMENT_FOOTER = 6,
+    ANIGMA_LAYOUT_ELEMENT_SIDEBAR = 7,
+    ANIGMA_LAYOUT_ELEMENT_QUOTE = 8,
+    ANIGMA_LAYOUT_ELEMENT_CODE_BLOCK = 9
+};
+typedef enum anigma_layout_element_type_t anigma_layout_element_type_t;
+
+// Layout element with classification
+struct anigma_layout_element_t {
+    struct anigma_bounding_box_t bbox;
+    anigma_layout_element_type_t type;
+    const char* text;           // Element text (capsule-owned)
+    double confidence;          // Classification confidence (0.0-1.0)
+    uint32_t reading_order;     // Reading order index
+    struct anigma_font_analysis_t font; // Font analysis
+    uint32_t element_id;        // Unique element ID within page
+    uint32_t parent_id;         // Parent element ID (0 if none)
+    uint32_t level;             // Hierarchy level (0=root)
+};
+typedef struct anigma_layout_element_t anigma_layout_element_t;
+
+// Multi-page document structure
+struct anigma_document_structure_t {
+    uint32_t total_pages;
+    uint32_t section_count;
+    const char** section_titles;  // Array of section titles (capsule-owned)
+    uint32_t* section_start_pages; // Starting page for each section
+    uint32_t* element_counts;     // Number of elements per section
+    uint8_t has_toc;             // 1 if table of contents detected
+    uint8_t has_index;            // 1 if index detected
+    uint8_t has_bibliography;     // 1 if bibliography detected
+};
+typedef struct anigma_document_structure_t anigma_document_structure_t;
+
+// Reading order chain
+struct anigma_reading_order_t {
+    uint32_t element_count;
+    uint32_t* element_ids;        // Elements in reading order (capsule-owned)
+    double* confidence_scores;    // Confidence for each ordering (capsule-owned)
+    uint32_t* column_breaks;      // Column break indices (capsule-owned)
+};
+typedef struct anigma_reading_order_t anigma_reading_order_t;
+
 // Page layout analysis result
 struct anigma_page_layout_t {
     uint32_t page_index;
@@ -90,6 +174,13 @@ struct anigma_page_layout_t {
     struct anigma_bounding_box_t* figure_bboxes; // Array of figure bounding boxes
     size_t image_count;
     struct anigma_image_data_t* images; // Array of image data (capsule-owned)
+    
+    // Advanced features
+    size_t ocr_result_count;
+    struct anigma_ocr_result_t* ocr_results; // OCR results (capsule-owned)
+    size_t element_count;
+    struct anigma_layout_element_t* elements; // Classified layout elements (capsule-owned)
+    struct anigma_reading_order_t reading_order; // Reading order information
 };
 typedef struct anigma_page_layout_t anigma_page_layout_t;
 
@@ -210,6 +301,116 @@ anigma_status_t anigma_layout_engine_capsule_query_bbox(
 anigma_status_t anigma_layout_engine_capsule_get_profiling_stats(
     anigma_layout_engine_capsule_t handle,
     struct anigma_layout_engine_profiling_stats_t* out_stats,
+    anigma_capsule_error_t* err
+);
+
+// ============================================================================
+// Advanced Features API
+// ============================================================================
+
+/**
+ * Perform OCR analysis on a page.
+ * Requires ANIGMA_LAYOUT_ENGINE_FLAG_ENABLE_OCR flag.
+ * Processes images and non-text regions to extract text using Tesseract.
+ */
+anigma_status_t anigma_layout_engine_capsule_perform_ocr(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    const char* language,  // ISO 639-3 language code (e.g., "eng", "fra")
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Get OCR results for a page.
+ * Returns OCR text regions with confidence scores and language detection.
+ */
+anigma_status_t anigma_layout_engine_capsule_get_ocr_results(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    struct anigma_ocr_result_t* out_results,
+    size_t max_results,
+    size_t* out_actual,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Perform advanced font analysis on text segments.
+ * Requires ANIGMA_LAYOUT_ENGINE_FLAG_ADVANCED_FONT_ANALYSIS flag.
+ * Enhances font detection with family recognition, style analysis, and metrics.
+ */
+anigma_status_t anigma_layout_engine_capsule_analyze_fonts(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Classify layout elements into semantic types.
+ * Requires ANIGMA_LAYOUT_ENGINE_FLAG_LAYOUT_CLASSIFICATION flag.
+ * Identifies headers, paragraphs, lists, captions, etc.
+ */
+anigma_status_t anigma_layout_engine_capsule_classify_layout(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Detect reading order for layout elements.
+ * Requires ANIGMA_LAYOUT_ENGINE_FLAG_READING_ORDER_DETECTION flag.
+ * Determines natural reading flow for complex multi-column layouts.
+ */
+anigma_status_t anigma_layout_engine_capsule_detect_reading_order(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Analyze multi-page document structure.
+ * Requires ANIGMA_LAYOUT_ENGINE_FLAG_MULTI_PAGE_ANALYSIS flag.
+ * Detects sections, table of contents, and document hierarchy.
+ */
+anigma_status_t anigma_layout_engine_capsule_analyze_document_structure(
+    anigma_layout_engine_capsule_t handle,
+    struct anigma_document_structure_t* out_structure,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Get classified layout elements for a page.
+ * Returns semantic layout elements with font analysis and reading order.
+ */
+anigma_status_t anigma_layout_engine_capsule_get_layout_elements(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    struct anigma_layout_element_t* out_elements,
+    size_t max_elements,
+    size_t* out_actual,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Get reading order information for a page.
+ * Returns the reading sequence of elements with confidence scores.
+ */
+anigma_status_t anigma_layout_engine_capsule_get_reading_order(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    struct anigma_reading_order_t* out_order,
+    anigma_capsule_error_t* err
+);
+
+/**
+ * Validate OCR accuracy against ground truth.
+ * Used for testing and quality assurance.
+ */
+anigma_status_t anigma_layout_engine_capsule_validate_ocr_accuracy(
+    anigma_layout_engine_capsule_t handle,
+    uint32_t page_index,
+    const char* ground_truth_text,
+    double* out_character_accuracy,
+    double* out_word_accuracy,
     anigma_capsule_error_t* err
 );
 

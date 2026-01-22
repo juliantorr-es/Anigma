@@ -3,14 +3,17 @@ import CryptoKit
 import CapsuleCore
 import AnigmaCore
 import ContractsCore
+import VectorCapsule
 
 public actor LayoutIndexingSystem {
     private let database: ContextumDatabase
     private let maxChunkSize: Int
+    private let vectorCapsule: VectorCapsuleWrapper?
     
-    public init(database: ContextumDatabase, maxChunkSize: Int = 512) {
+    public init(database: ContextumDatabase, maxChunkSize: Int = 512, vectorCapsule: VectorCapsuleWrapper? = nil) {
         self.database = database
         self.maxChunkSize = maxChunkSize
+        self.vectorCapsule = vectorCapsule
     }
     
     /// Process PDF layout output and create indexed chunks with layout metadata
@@ -90,6 +93,272 @@ public actor LayoutIndexingSystem {
         try await database.insertEvent(event)
         
         return allChunks
+    }
+    
+    // MARK: - Geometry Operations
+    
+    /// Convert layout bounding box to SVG path for visualization
+    /// - Parameter boundingBox: The layout bounding box
+    /// - Returns: SVG path string representing the bounding box
+    public func layoutRegionToSVG(boundingBox: BoundingBoxRef) -> String {
+        let x = boundingBox.x
+        let y = boundingBox.y
+        let width = boundingBox.width
+        let height = boundingBox.height
+        
+        if let capsule = vectorCapsule {
+            do {
+                let bounds = BoundingBox(minX: x, minY: y, maxX: x + width, maxY: y + height)
+                try recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: true)
+                return svgPathFromBounds(bounds)
+            } catch {
+                try? recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: false, error: error.localizedDescription)
+            }
+        }
+        return manualLayoutRegionToSVG(x: x, y: y, width: width, height: height)
+    }
+    
+    /// Union multiple layout regions using VectorCapsule
+    /// - Parameter regions: Array of bounding boxes to union
+    /// - Returns: Array of bounding boxes representing the union result
+    public func unionRegions(_ regions: [BoundingBoxRef]) -> [BoundingBoxRef] {
+        guard regions.count > 1 else { return regions }
+        
+        if let capsule = vectorCapsule {
+            do {
+                let svgPaths = regions.map { layoutRegionToSVG(boundingBox: $0) }
+                var resultPath = svgPaths[0]
+                for i in 1..<svgPaths.count {
+                    resultPath = try capsule.union(pathA: resultPath, pathB: svgPaths[i])
+                }
+                let bounds = try capsule.getBounds(path: resultPath)
+                try recordVectorCapsuleTelemetry(operation: "unionRegions", success: true)
+                return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
+            } catch {
+                try? recordVectorCapsuleTelemetry(operation: "unionRegions", success: false, error: error.localizedDescription)
+            }
+        }
+        return manualUnionRegions(regions)
+    }
+    
+    /// Intersect multiple layout regions using VectorCapsule
+    /// - Parameter regions: Array of bounding boxes to intersect
+    /// - Returns: Array of bounding boxes representing the intersection result
+    public func intersectRegions(_ regions: [BoundingBoxRef]) -> [BoundingBoxRef] {
+        guard regions.count > 1 else { return regions }
+        
+        if let capsule = vectorCapsule {
+            do {
+                let svgPaths = regions.map { layoutRegionToSVG(boundingBox: $0) }
+                var resultPath = svgPaths[0]
+                for i in 1..<svgPaths.count {
+                    resultPath = try capsule.intersection(pathA: resultPath, pathB: svgPaths[i])
+                }
+                let bounds = try capsule.getBounds(path: resultPath)
+                try recordVectorCapsuleTelemetry(operation: "intersectRegions", success: true)
+                return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
+            } catch {
+                try? recordVectorCapsuleTelemetry(operation: "intersectRegions", success: false, error: error.localizedDescription)
+            }
+        }
+        return manualIntersectRegions(regions)
+    }
+    
+    /// Simplify complex polygon boundary using Douglas-Peucker algorithm via VectorCapsule
+    /// - Parameters:
+    ///   - boundary: Array of points defining the polygon boundary
+    ///   - tolerance: Simplification tolerance
+    /// - Returns: Simplified array of points
+    public func simplifyRegionBoundary(_ boundary: [Point], tolerance: Float) -> [Point] {
+        guard boundary.count > 2 else { return boundary }
+        
+        if let capsule = vectorCapsule {
+            do {
+                let svgPath = pointsToSVGPath(boundary)
+                let simplifiedPath = try capsule.douglasPeuckerSimplify(path: svgPath, tolerance: Double(tolerance))
+                let bounds = try capsule.getBounds(path: simplifiedPath)
+                try recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: true)
+                return svgPathToPoints(simplifiedPath)
+            } catch {
+                try? recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: false, error: error.localizedDescription)
+            }
+        }
+        return manualSimplifyRegionBoundary(boundary, tolerance: tolerance)
+    }
+    
+    /// Check if a point is inside a region using VectorCapsule
+    /// - Parameters:
+    ///   - point: The point to check
+    ///   - region: The bounding box region
+    /// - Returns: True if point is inside the region
+    public func pointInRegion(point: PointRef, region: BoundingBoxRef) -> Bool {
+        if let capsule = vectorCapsule {
+            do {
+                let svgPath = layoutRegionToSVG(boundingBox: region)
+                let capsulePoint = Point(x: point.x, y: point.y)
+                let result = try capsule.pointInPolygon(point: capsulePoint, path: svgPath)
+                try recordVectorCapsuleTelemetry(operation: "pointInRegion", success: true)
+                return result
+            } catch {
+                try? recordVectorCapsuleTelemetry(operation: "pointInRegion", success: false, error: error.localizedDescription)
+            }
+        }
+        return manualPointInRegion(point: point, region: region)
+    }
+    
+    /// Calculate bounding box from an array of points
+    /// - Parameter points: Array of points
+    /// - Returns: Bounding box containing all points
+    public func calculateRegionBounds(_ points: [PointRef]) -> BoundingBoxRef {
+        guard !points.isEmpty else {
+            return BoundingBoxRef(x: 0, y: 0, width: 0, height: 0)
+        }
+        
+        if let capsule = vectorCapsule {
+            do {
+                let svgPath = pointsToSVGPath(points.map { Point(x: $0.x, y: $0.y) })
+                let bounds = try capsule.getBounds(path: svgPath)
+                try recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: true)
+                return BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)
+            } catch {
+                try? recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: false, error: error.localizedDescription)
+            }
+        }
+        return manualCalculateRegionBounds(points)
+    }
+    
+    // MARK: - Fallback Manual Implementations
+    
+    private func manualLayoutRegionToSVG(x: Double, y: Double, width: Double, height: Double) -> String {
+        return "M \(x) \(y) L \(x + width) \(y) L \(x + width) \(y + height) L \(x) \(y + height) Z"
+    }
+    
+    private func manualUnionRegions(_ regions: [BoundingBoxRef]) -> [BoundingBoxRef] {
+        guard !regions.isEmpty else { return [] }
+        
+        var minX = regions[0].x
+        var minY = regions[0].y
+        var maxX = regions[0].x + regions[0].width
+        var maxY = regions[0].y + regions[0].height
+        
+        for region in regions.dropFirst() {
+            minX = min(minX, region.x)
+            minY = min(minY, region.y)
+            maxX = max(maxX, region.x + region.width)
+            maxY = max(maxY, region.y + region.height)
+        }
+        
+        return [BoundingBoxRef(x: minX, y: minY, width: maxX - minX, height: maxY - minY)]
+    }
+    
+    private func manualIntersectRegions(_ regions: [BoundingBoxRef]) -> [BoundingBoxRef] {
+        guard !regions.isEmpty else { return [] }
+        
+        var intersect = regions[0]
+        
+        for region in regions.dropFirst() {
+            let newX = max(intersect.x, region.x)
+            let newY = max(intersect.y, region.y)
+            let newWidth = min(intersect.x + intersect.width, region.x + region.width) - newX
+            let newHeight = min(intersect.y + intersect.height, region.y + region.height) - newY
+            
+            if newWidth <= 0 || newHeight <= 0 {
+                return []
+            }
+            
+            intersect = BoundingBoxRef(x: newX, y: newY, width: newWidth, height: newHeight)
+        }
+        
+        return [intersect]
+    }
+    
+    private func manualSimplifyRegionBoundary(_ boundary: [Point], tolerance: Float) -> [Point] {
+        guard boundary.count > 2 else { return boundary }
+        return boundary
+    }
+    
+    private func manualPointInRegion(point: PointRef, region: BoundingBoxRef) -> Bool {
+        return point.x >= region.x && point.x <= region.x + region.width &&
+               point.y >= region.y && point.y <= region.y + region.height
+    }
+    
+    private func manualCalculateRegionBounds(_ points: [PointRef]) -> BoundingBoxRef {
+        guard !points.isEmpty else {
+            return BoundingBoxRef(x: 0, y: 0, width: 0, height: 0)
+        }
+        
+        var minX = points[0].x
+        var minY = points[0].y
+        var maxX = points[0].x
+        var maxY = points[0].y
+        
+        for point in points.dropFirst() {
+            minX = min(minX, point.x)
+            minY = min(minY, point.y)
+            maxX = max(maxX, point.x)
+            maxY = max(maxY, point.y)
+        }
+        
+        return BoundingBoxRef(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func svgPathFromBounds(_ bounds: BoundingBox) -> String {
+        return "M \(bounds.minX) \(bounds.minY) L \(bounds.maxX) \(bounds.minY) L \(bounds.maxX) \(bounds.maxY) L \(bounds.minX) \(bounds.maxY) Z"
+    }
+    
+    private func pointsToSVGPath(_ points: [Point]) -> String {
+        guard !points.isEmpty else { return "" }
+        var path = "M \(points[0].x) \(points[0].y)"
+        for point in points.dropFirst() {
+            path += " L \(point.x) \(point.y)"
+        }
+        path += " Z"
+        return path
+    }
+    
+    private func svgPathToPoints(_ path: String) -> [Point] {
+        let components = path.components(separatedBy: CharacterSet(charactersIn: "MLZ ").subtracting([""]))
+        var points: [Point] = []
+        var index = 0
+        var x: Double = 0
+        var y: Double = 0
+        
+        for component in components {
+            if index % 2 == 0 {
+                x = Double(component) ?? 0
+            } else {
+                y = Double(component) ?? 0
+                points.append(Point(x: x, y: y))
+            }
+            index += 1
+        }
+        
+        return points
+    }
+    
+    private func recordVectorCapsuleTelemetry(
+        operation: String,
+        success: Bool,
+        error: String? = nil
+    ) throws {
+        let event = TelemetryEventComponent(
+            eventId: UUID().uuidString,
+            eventType: .capsule,
+            outcome: success ? .success : .failure,
+            metadata: [
+                "capsule_type": "VectorCapsule",
+                "operation": operation,
+                "capsule_used": "true"
+            ]
+        )
+        
+        if !success, let errorMessage = error {
+            event.metadata["error"] = errorMessage
+        }
+        
+        try await database.insertEvent(event)
     }
     
     // MARK: - Text Segment Processing
@@ -365,5 +634,16 @@ public actor LayoutIndexingSystem {
         try await database.insertChunk(chunk, content: content, layoutMetadata: layoutMetadata)
         
         return chunk
+    }
+}
+
+/// Point reference for spatial coordinates.
+public struct PointRef: Hashable, Codable, Sendable {
+    public let x: Double
+    public let y: Double
+    
+    public init(x: Double, y: Double) {
+        self.x = x
+        self.y = y
     }
 }
