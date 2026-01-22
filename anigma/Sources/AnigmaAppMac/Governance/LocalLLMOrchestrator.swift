@@ -680,6 +680,8 @@ func contextumPostflight(config: ContextumPostflightConfiguration) async throws 
             throw OrchestratorError.toolNotAvailable(step.tool.displayName)
         }
 
+        let startTime = Date()
+        
         // Build and execute the command
         let process = Process()
         process.executableURL = URL(fileURLWithPath: binaryPath)
@@ -704,13 +706,42 @@ func contextumPostflight(config: ContextumPostflightConfiguration) async throws 
         try process.run()
         process.waitUntilExit()
 
+        let endTime = Date()
+        let executionTimeMs = Int64(endTime.timeIntervalSince(startTime) * 1000)
+
         let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
         let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
         var result = String(data: outputData, encoding: .utf8) ?? ""
-        if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
+        var errorOutput = ""
+        if let stderr = String(data: errorData, encoding: .utf8), !stderr.isEmpty {
+            errorOutput = stderr
             result += "\n⚠️ stderr: \(errorOutput)"
         }
+
+        // Record tool execution receipt
+        let inputs = [
+            "tool": step.tool.rawValue,
+            "instruction": step.instruction,
+            "working_directory": workspace.rootURL.path,
+            "step_order": step.order
+        ] as [String: Any]
+        
+        let outputs = [
+            "stdout": result,
+            "stderr": errorOutput,
+            "exit_code": process.terminationStatus
+        ] as [String: Any]
+        
+        await AIReceiptIntegration.shared.recordToolExecution(
+            toolName: step.tool.rawValue,
+            toolType: "cli",
+            inputs: inputs,
+            outputs: outputs,
+            executionTimeMs: executionTimeMs,
+            exitCode: process.terminationStatus,
+            workflowID: workflowID.uuidString
+        )
 
         if process.terminationStatus != 0 {
             throw OrchestratorError.toolFailed(step.tool.displayName, process.terminationStatus)

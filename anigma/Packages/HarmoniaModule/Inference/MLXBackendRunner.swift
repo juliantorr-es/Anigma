@@ -7,6 +7,7 @@
 
 import Foundation
 import AnigmaCore
+import MLWorkerCommon
 
 // MARK: - MLX Engine Protocol
 
@@ -101,6 +102,26 @@ public actor MLXBackendRunner: BackendRunner {
         var tokensIn = 0
         var tokensOut = 0
         
+        // Start AI operation receipt tracking
+        let operationID = UUID().uuidString
+        let taskType = request.kind.rawValue
+        let inputs = [
+            "model_id": request.model.id,
+            "task_kind": taskType,
+            "input_text": extractTextFromInput(request.input),
+            "max_tokens": request.parameters.maxTokens ?? 512,
+            "temperature": request.parameters.temperature,
+            "top_p": request.parameters.topP ?? 0.9
+        ] as [String : Any]
+        
+        let context = await AIReceiptIntegration.shared.recordAIOperationStart(
+            operationID: operationID,
+            modelID: request.model.id,
+            taskType: taskType,
+            inputs: inputs,
+            provider: "mlx"
+        )
+        
         let output: InferenceOutput
         
         switch request.kind {
@@ -164,6 +185,30 @@ public actor MLXBackendRunner: BackendRunner {
         default:
             throw InferenceError.notImplemented("Task type \(request.kind) not yet implemented for MLX")
         }
+        
+        let endTime = Date()
+        let inferenceTimeMs = Int64(endTime.timeIntervalSince(startTime) * 1000)
+        
+        // Prepare outputs for receipt
+        var outputs: [String: Any] = [:]
+        switch output {
+        case .text(let text):
+            outputs["text"] = text
+        case .embedding(let embedding):
+            outputs["embedding_dimension"] = embedding.count
+        case .classification(let label, let confidence):
+            outputs["label"] = label
+            outputs["confidence"] = confidence
+        }
+        
+        // Complete AI operation receipt
+        await AIReceiptIntegration.shared.recordAIOperationCompletion(
+            context: context,
+            outputs: outputs,
+            inputTokens: tokensIn > 0 ? tokensIn : nil,
+            outputTokens: tokensOut > 0 ? tokensOut : nil,
+            error: nil
+        )
         
         return BackendResponse(
             output: output,
