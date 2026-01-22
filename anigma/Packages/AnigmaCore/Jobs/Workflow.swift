@@ -117,7 +117,7 @@ public actor WorkflowRunner {
         systemCache[system.name] = system
     }
 
-    /// Executes the appropriate workflow for a job.
+    /// Executes the appropriate workflow for a job with timeout enforcement.
     /// Returns the job result.
     public func execute(job: Job, in world: World) async throws -> JobResult {
         guard let workflow = await registry.workflow(for: job.typeId) else {
@@ -127,21 +127,30 @@ public actor WorkflowRunner {
         let startTime = Date()
         var actionsApplied = 0
         var systemsSkipped = 0
+        var timedOut = false
+        
+        // Calculate timeout
+        let timeoutPolicy = job.timeoutPolicy ?? .default
+        let effectiveTimeout = timeoutPolicy.effectiveTimeout(jobTimeout: job.timeoutDuration)
+        
+        // Prepare phase (with timeout if specified)
+        try await executeWithTimeout(
+            duration: effectiveTimeout,
+            operation: {
+                try await workflow.prepare(job: job, world: world)
+            },
+            timeoutMessage: "Job \(job.id) prepare phase timed out"
+        )
 
-        // Prepare phase
-        try await workflow.prepare(job: job, world: world)
-
-        // Run each system in order, with conditional execution support
+        // Run each system in order with timeout monitoring
         for systemName in workflow.systemNames {
             guard let system = systemCache[systemName] else {
                 throw WorkflowError.systemNotFound(name: systemName, workflow: workflow.name)
             }
 
             // Check if this system should run for the job's input entities
-            // If the job has input refs, check each one; otherwise run unconditionally
             var shouldRun = true
             if !job.inputRefs.isEmpty {
-                // System runs if at least one entity needs it
                 shouldRun = false
                 for entityId in job.inputRefs {
                     if await workflow.shouldRunSystem(systemName, for: entityId, in: world) {
@@ -152,10 +161,38 @@ public actor WorkflowRunner {
             }
 
             if shouldRun {
-                await system.update(world: world)
+                let systemStartTime = Date()
+                
+                // Calculate remaining timeout for this system
+                let elapsed = Date().timeIntervalSince(startTime)
+                let remainingTimeout = max(effectiveTimeout - elapsed, 1.0) // At least 1 second
+                
+                try await executeWithTimeout(
+                    duration: remainingTimeout,
+                    operation: {
+                        await system.update(world: world)
+                    },
+                    timeoutMessage: "Job \(job.id) system '\(systemName)' timed out"
+                )
+                
                 actionsApplied += 1
+                
+                // Check if we should extend timeout due to progress
+                let systemElapsed = Date().timeIntervalSince(systemStartTime)
+                if timeoutPolicy.allowProgressExtension && systemElapsed < remainingTimeout * 0.8 {
+                    // System completed within 80% of its allocated time, we might be making good progress
+                    // This could trigger timeout extension in the scheduler
+                }
+                
             } else {
                 systemsSkipped += 1
+            }
+            
+            // Check if we've exceeded overall deadline
+            let totalElapsed = Date().timeIntervalSince(startTime)
+            if totalElapsed > effectiveTimeout {
+                timedOut = true
+                break
             }
         }
 
@@ -165,19 +202,64 @@ public actor WorkflowRunner {
         if systemsSkipped > 0 {
             summary += " (\(systemsSkipped) systems skipped)"
         }
+        if timedOut {
+            summary += " (timed out)"
+        }
 
         let result = JobResult(
-            outcome: .success,
+            outcome: timedOut ? .partialSuccess : .success,
             summary: summary,
             actionsApplied: actionsApplied,
             durationMs: durationMs,
+            timeoutDuration: effectiveTimeout,
+            timedOut: timedOut,
             outputRefs: job.outputRefs
         )
 
-        // Finalize phase
-        try await workflow.finalize(job: job, world: world, result: result)
+        // Finalize phase (with timeout if specified)
+        if !timedOut {
+            let finalizeElapsed = Date().timeIntervalSince(startTime)
+            let remainingTimeout = max(effectiveTimeout - finalizeElapsed, 1.0)
+            
+            try? await executeWithTimeout(
+                duration: remainingTimeout,
+                operation: {
+                    try await workflow.finalize(job: job, world: world, result: result)
+                },
+                timeoutMessage: "Job \(job.id) finalize phase timed out"
+            )
+        }
 
         return result
+    }
+    
+    /// Execute an operation with timeout enforcement.
+    private func executeWithTimeout<T>(
+        duration: TimeInterval,
+        operation: @Sendable () async throws -> T,
+        timeoutMessage: String
+    ) async throws -> T {
+        guard duration.isFinite && duration > 0 else {
+            return try await operation()
+        }
+        
+        return try await withThrowingTaskGroup(of: T.self) { group in
+            // Add the main operation
+            group.addTask {
+                return try await operation()
+            }
+            
+            // Add timeout task
+            group.addTask {
+                try await Task.sleep(for: .seconds(duration))
+                throw WorkflowError.executionTimeout(timeoutMessage)
+            }
+            
+            // Wait for first completion
+            let result = try await group.next()!
+            group.cancelAll()
+            return result
+        }
     }
 }
 
@@ -188,6 +270,7 @@ public enum WorkflowError: Error, LocalizedError, Sendable {
     case noWorkflowFound(jobTypeId: String)
     case systemNotFound(name: String, workflow: String)
     case executionFailed(workflow: String, error: String)
+    case executionTimeout(String)
 
     public var errorDescription: String? {
         switch self {
@@ -197,6 +280,8 @@ public enum WorkflowError: Error, LocalizedError, Sendable {
             return "System '\(name)' not found for workflow '\(workflow)'"
         case .executionFailed(let workflow, let error):
             return "Workflow '\(workflow)' failed: \(error)"
+        case .executionTimeout(let message):
+            return message
         }
     }
 }

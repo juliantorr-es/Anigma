@@ -132,6 +132,76 @@ public struct GenericJobType: JobType {
     public static let displayName = "Generic Job"
 }
 
+// MARK: - Timeout Policy
+
+/// Configuration for job timeout behavior.
+public struct TimeoutPolicy: Codable, Sendable, Equatable {
+    /// Default timeout duration in seconds.
+    public let defaultTimeout: TimeInterval
+    
+    /// Maximum timeout duration in seconds.
+    public let maxTimeout: TimeInterval
+    
+    /// Grace period before cancellation (for cleanup).
+    public let gracePeriod: TimeInterval
+    
+    /// Whether to extend timeout for progress.
+    public let allowProgressExtension: Bool
+    
+    /// Progress extension factor (multiplier of base timeout).
+    public let progressExtensionFactor: Double
+    
+    public init(
+        defaultTimeout: TimeInterval = 300, // 5 minutes
+        maxTimeout: TimeInterval = 3600, // 1 hour
+        gracePeriod: TimeInterval = 10, // 10 seconds
+        allowProgressExtension: Bool = true,
+        progressExtensionFactor: Double = 1.5
+    ) {
+        self.defaultTimeout = defaultTimeout
+        self.maxTimeout = maxTimeout
+        self.gracePeriod = gracePeriod
+        self.allowProgressExtension = allowProgressExtension
+        self.progressExtensionFactor = progressExtensionFactor
+    }
+    
+    /// No timeout policy.
+    public static let noTimeout = TimeoutPolicy(defaultTimeout: .infinity, maxTimeout: .infinity, gracePeriod: 0, allowProgressExtension: false, progressExtensionFactor: 1.0)
+    
+    /// Default timeout policy (5 minutes, 1 hour max, with progress extension).
+    public static let `default` = TimeoutPolicy()
+    
+    /// Quick timeout policy (30 seconds, 5 minutes max, no extension).
+    public static let quick = TimeoutPolicy(
+        defaultTimeout: 30,
+        maxTimeout: 300,
+        gracePeriod: 5,
+        allowProgressExtension: false,
+        progressExtensionFactor: 1.0
+    )
+    
+    /// Long-running policy (30 minutes, 4 hours max, with extension).
+    public static let longRunning = TimeoutPolicy(
+        defaultTimeout: 1800,
+        maxTimeout: 14400,
+        gracePeriod: 30,
+        allowProgressExtension: true,
+        progressExtensionFactor: 2.0
+    )
+    
+    /// Calculate effective timeout for a specific job, considering any job-specific override.
+    public func effectiveTimeout(jobTimeout: TimeInterval?) -> TimeInterval {
+        let base = jobTimeout ?? defaultTimeout
+        return min(base, maxTimeout)
+    }
+    
+    /// Calculate extended timeout if progress is detected.
+    public func extendedTimeout(baseTimeout: TimeInterval) -> TimeInterval {
+        guard allowProgressExtension else { return baseTimeout }
+        return min(baseTimeout * progressExtensionFactor, maxTimeout)
+    }
+}
+
 // MARK: - Retry Policy
 
 /// Configuration for job retry behavior.
@@ -202,6 +272,12 @@ public struct Job: Codable, Sendable, Identifiable {
     /// Deadline for completion (nil = no deadline).
     public let deadline: Date?
 
+    /// Timeout for execution (nil = no timeout).
+    public let timeoutDuration: TimeInterval?
+
+    /// Timeout policy for this job type.
+    public let timeoutPolicy: TimeoutPolicy?
+
     /// Retry configuration.
     public let retryPolicy: RetryPolicy
 
@@ -227,6 +303,8 @@ public struct Job: Codable, Sendable, Identifiable {
         createdAt: Date = Date(),
         scheduledFor: Date? = nil,
         deadline: Date? = nil,
+        timeoutDuration: TimeInterval? = nil,
+        timeoutPolicy: TimeoutPolicy? = nil,
         retryPolicy: RetryPolicy = .default,
         inputRefs: [EntityId] = [],
         outputRefs: [EntityId] = [],
@@ -240,6 +318,8 @@ public struct Job: Codable, Sendable, Identifiable {
         self.createdAt = createdAt
         self.scheduledFor = scheduledFor
         self.deadline = deadline
+        self.timeoutDuration = timeoutDuration
+        self.timeoutPolicy = timeoutPolicy
         self.retryPolicy = retryPolicy
         self.inputRefs = inputRefs
         self.outputRefs = outputRefs
@@ -352,6 +432,12 @@ public struct JobResult: Codable, Sendable {
     /// Duration of execution in milliseconds.
     public let durationMs: Int64
 
+    /// Timeout duration applied during execution (nil if no timeout).
+    public let timeoutDuration: TimeInterval?
+
+    /// Whether the job was cancelled due to timeout.
+    public let timedOut: Bool
+
     /// Output entity IDs created or modified.
     public let outputRefs: [EntityId]
 
@@ -360,12 +446,16 @@ public struct JobResult: Codable, Sendable {
         summary: String? = nil,
         actionsApplied: Int = 0,
         durationMs: Int64 = 0,
+        timeoutDuration: TimeInterval? = nil,
+        timedOut: Bool = false,
         outputRefs: [EntityId] = []
     ) {
         self.outcome = outcome
         self.summary = summary
         self.actionsApplied = actionsApplied
         self.durationMs = durationMs
+        self.timeoutDuration = timeoutDuration
+        self.timedOut = timedOut
         self.outputRefs = outputRefs
     }
 }
