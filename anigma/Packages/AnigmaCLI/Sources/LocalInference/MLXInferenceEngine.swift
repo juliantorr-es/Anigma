@@ -3,20 +3,32 @@ import Foundation
 import MLX
 import MLXNN
 import MLXRandom
+import MLXLM
 #endif
 
+// MARK: - MLX Engine Protocol
+
+/// Protocol to abstract MLX engine implementation
+public protocol MLXEngineProtocol {
+    func loadModel() async throws
+    func unload() async
+    func generate(prompt: String, maxTokens: Int, temperature: Float, topP: Float) async throws -> String
+    func embed(text: String) async throws -> [Float]
+}
+
 /// MLX-based local inference engine for Apple Silicon
-public actor MLXInferenceEngine {
+public actor MLXInferenceEngine: MLXEngineProtocol {
     #if canImport(MLX)
-    private var model: Module?
-    private var tokenizer: Tokenizer?
+    private var modelContainer: MLXLM.ModelContainer?
+    private var modelConfiguration: MLXLM.ModelConfiguration?
+    private var generateParams: MLXLM.GenerateParameters?
     #endif
 
-    private let modelPath: URL
+    private let modelId: String
     private var isLoaded = false
 
-    public init(modelPath: URL) {
-        self.modelPath = modelPath
+    public init(modelId: String) {
+        self.modelId = modelId
     }
 
     /// Load model into memory
@@ -24,19 +36,29 @@ public actor MLXInferenceEngine {
         #if canImport(MLX)
         guard !isLoaded else { return }
 
-        // Load model weights
-        let weightsPath = modelPath.appendingPathComponent("weights.safetensors")
-        guard FileManager.default.fileExists(atPath: weightsPath.path) else {
-            throw MLXError.modelNotFound(modelPath.path)
-        }
+        // Configure model loading with GPU acceleration
+        modelConfiguration = MLXLM.ModelConfiguration(id: modelId)
+        generateParams = MLXLM.GenerateParameters(
+            temperature: 0.7,
+            topP: 0.9,
+            repetitionPenalty: 1.1,
+            maxTokens: 512
+        )
 
-        // TODO: Load actual model architecture based on config.json
-        // For now, placeholder for model loading
-        print("Loading MLX model from \(modelPath.path)")
-
+        // Load model with MLX
+        print("Loading MLX model: \(modelId)")
+        modelContainer = try await MLXLM.loadModelContainer(configuration: modelConfiguration!)
+        
+        // Configure GPU acceleration for Apple Silicon
+        MLX.GPU.set(device: 0)
+        
+        // Optimize for Apple Silicon GPU
+        MLX.metal.setCacheLimit(bytes: 2_147_483_648) // 2GB cache
+        
         isLoaded = true
+        print("Model loaded successfully on Apple Silicon GPU")
         #else
-        throw MLXError.mlxNotAvailable
+        throw MLXError.notAvailable
         #endif
     }
 
@@ -52,16 +74,36 @@ public actor MLXInferenceEngine {
             throw MLXError.modelNotLoaded
         }
 
-        // TODO: Implement actual generation with MLX
-        // This requires:
-        // 1. Tokenize input
-        // 2. Run model forward pass
-        // 3. Sample from logits
-        // 4. Decode tokens to text
+        guard let container = modelContainer else {
+            throw MLXError.modelNotLoaded
+        }
 
-        return "MLX generation placeholder for: \(prompt)"
+        // Update generation parameters
+        var params = generateParams!
+        params.temperature = temperature
+        params.topP = topP
+        params.maxTokens = maxTokens
+
+        // Generate response using MLX
+        let result = try await container.perform { model, tokenizer in
+            let tokens = tokenizer.encode(text: prompt)
+            let input = MLX.array(tokens)
+            
+            // Generate text
+            let outputTokens = MLXLM.generate(
+                model,
+                input,
+                parameters: params,
+                tokenizer: tokenizer
+            )
+            
+            // Decode to text
+            return tokenizer.decode(tokens: outputTokens)
+        }
+
+        return result
         #else
-        throw MLXError.mlxNotAvailable
+        throw MLXError.notAvailable
         #endif
     }
 
@@ -72,40 +114,164 @@ public actor MLXInferenceEngine {
             throw MLXError.modelNotLoaded
         }
 
-        // TODO: Implement actual embedding generation
-        // This requires:
-        // 1. Tokenize input
-        // 2. Run model forward pass (usually mean pooling of last hidden state)
-        // 3. Return embedding vector
+        guard let container = modelContainer else {
+            throw MLXError.modelNotLoaded
+        }
 
-        // Placeholder: return 384-dimensional zero vector
-        return Array(repeating: 0.0, count: 384)
+        // Generate embeddings using the model
+        let embedding = try await container.perform { model, tokenizer in
+            let tokens = tokenizer.encode(text: text)
+            let input = MLX.array(tokens).reshaped([1, tokens.count])
+            
+            // Get model output (last hidden state)
+            let outputs = model.callAsModule(input)
+            
+            // Mean pooling across sequence dimension
+            let pooled = MLX.mean(outputs, axis: 1, keepDims: false)
+            
+            // Convert to Float array
+            return pooled.asArray(Float.self)
+        }
+
+        return Array(embedding)
         #else
-        throw MLXError.mlxNotAvailable
+        throw MLXError.notAvailable
         #endif
+    }
+
+    /// Generate embeddings for batch of texts
+    public func embedBatch(texts: [String]) async throws -> [[Float]] {
+        #if canImport(MLX)
+        guard isLoaded else {
+            throw MLXError.modelNotLoaded
+        }
+
+        guard let container = modelContainer else {
+            throw MLXError.modelNotLoaded
+        }
+
+        var embeddings: [[Float]] = []
+        
+        // Process in batch if possible, otherwise sequentially
+        for text in texts {
+            let embedding = try await embed(text: text)
+            embeddings.append(embedding)
+        }
+        
+        return embeddings
+        #else
+        throw MLXError.notAvailable
+        #endif
+    }
+
+    /// Stream text generation
+    public func generateStream(
+        prompt: String,
+        maxTokens: Int = 512,
+        temperature: Float = 0.7,
+        topP: Float = 0.9
+    ) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    #if canImport(MLX)
+                    guard isLoaded else {
+                        continuation.finish(throwing: MLXError.modelNotLoaded)
+                        return
+                    }
+
+                    guard let container = modelContainer else {
+                        continuation.finish(throwing: MLXError.modelNotLoaded)
+                        return
+                    }
+
+                    // Update generation parameters
+                    var params = generateParams!
+                    params.temperature = temperature
+                    params.topP = topP
+                    params.maxTokens = maxTokens
+
+                    // Stream generation
+                    let tokens = try await container.perform { model, tokenizer in
+                        return tokenizer.encode(text: prompt)
+                    }
+                    
+                    let input = MLX.array(tokens)
+                    
+                    for try await token in MLXLM.generateStreaming(
+                        model,
+                        input,
+                        parameters: params,
+                        tokenizer: container.tokenizer
+                    ) {
+                        let text = container.tokenizer.decode(tokens: [token])
+                        continuation.yield(text)
+                    }
+                    
+                    continuation.finish()
+                    #else
+                    continuation.finish(throwing: MLXError.notAvailable)
+                    #endif
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
     }
 
     /// Unload model from memory
     public func unload() {
         #if canImport(MLX)
-        model = nil
-        tokenizer = nil
+        modelContainer = nil
+        modelConfiguration = nil
+        generateParams = nil
         isLoaded = false
+        
+        // Comprehensive memory cleanup
+        MLX.eval() // Force evaluation of pending operations
+        MLX.metal.clearCache() // Clear GPU memory cache
+        
+        // Force garbage collection if available
+        if MLX.metal.isAvailable() {
+            MLX.metal.clearCache()
+        }
+        
+        print("Model unloaded from memory, GPU cache cleared")
         #endif
     }
-}
-
-// MARK: - Tokenizer (Placeholder)
-#if canImport(MLX)
-private struct Tokenizer {
-    func encode(_ text: String) -> [Int] {
-        // TODO: Implement actual tokenization
-        []
+    
+    /// Perform memory cleanup without unloading model
+    public func cleanupMemory() {
+        #if canImport(MLX)
+        MLX.eval()
+        if MLX.metal.isAvailable() {
+            MLX.metal.clearCache()
+        }
+        #endif
     }
 
-    func decode(_ tokens: [Int]) -> String {
-        // TODO: Implement actual detokenization
-        ""
+    /// Check if model is loaded
+    public var modelLoaded: Bool {
+        isLoaded
+    }
+
+    /// Get model info
+    public func getModelInfo() -> MLXEngineModelInfo? {
+        guard isLoaded else { return nil }
+        return MLXEngineModelInfo(
+            modelId: modelId,
+            loaded: true,
+            backend: "MLX",
+            device: "GPU (Apple Silicon)"
+        )
     }
 }
-#endif
+
+// MARK: - Model Info
+
+public struct MLXEngineModelInfo: Sendable {
+    public let modelId: String
+    public let loaded: Bool
+    public let backend: String
+    public let device: String
+}

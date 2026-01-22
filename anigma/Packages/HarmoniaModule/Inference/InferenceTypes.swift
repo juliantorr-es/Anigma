@@ -314,6 +314,7 @@ public enum BackendKind: String, Sendable, Codable, CaseIterable {
     case ollama  // Ollama daemon
     case coreML  // Core ML models
     case remoteAPI  // Remote API endpoints
+    case mock  // Mock backend for testing
 }
 
 /// Status of a backend instance.

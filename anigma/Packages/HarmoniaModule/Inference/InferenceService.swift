@@ -27,6 +27,11 @@ public actor InferenceService {
         self.registry = registry
         self.runnerManager = runnerManager
         self.scheduler = scheduler
+        
+        // Register available backends
+        Task {
+            await registerBackends()
+        }
     }
 
     /// Sets a telemetry handler for inference events.
@@ -306,6 +311,19 @@ public actor InferenceService {
 
     private func emitTelemetry(_ event: InferenceTelemetryEvent) async {
         await telemetryHandler?(event)
+    }
+    
+    /// Register available backends
+    private func registerBackends() async {
+        // Register MLX backend for Apple Silicon
+        let mlxRunner = MLXBackendRunner()
+        await runnerManager.registerRunner(mlxRunner)
+        
+        // Register mock backend as fallback
+        let mockRunner = MockBackendRunner(backend: .mock)
+        await runnerManager.registerRunner(mockRunner)
+        
+        print("Registered MLX and Mock backends")
     }
 }
 
