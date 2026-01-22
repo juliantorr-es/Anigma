@@ -13,6 +13,7 @@ import AnigmaCLIOrchestrator
 import AnigmaCLIProviders
 import ArgumentParser
 import Foundation
+import AnigmaSidecar
 
 public enum OutputFormat: String, CaseIterable, ExpressibleByArgument, Codable {
     case text
@@ -355,15 +356,61 @@ struct AnigmaCLI: AsyncParsableCommand {
                 RAGCommand.self,
                 ModelsUICommand.self
             ],
-            defaultSubcommand: AnigmaChatCommand.self,
             helpNames: [.long, .customShort("h")]
         )
     }
 
+    @Argument(help: "Task to execute (launches TUI if omitted).")
+    var task: String?
+
+    @Flag(name: .shortAndLong, help: "Show verbose output.")
+    var verbose: Bool = false
+
+    @Flag(name: .long, help: "Output in JSON format.")
+    var json: Bool = false
+
     mutating func run() async throws {
-        // This won't be called if defaultSubcommand is set and it has its own run()
+        // 1. Daemon Guardian - Ensure background services are active
+        let socketPath = ProcessInfo.processInfo.environment["ANIGMA_SOCKET"]
+        let guardian = DaemonGuardian(socketPath: socketPath)
+        
+        do {
+            try await guardian.ensureDaemonRunning()
+        } catch {
+            fputs("❌ Error: Could not start or connect to anigma daemon.\n", stderr)
+            throw exit(1)
+        }
+
+        if let taskDescription = task {
+            // 2. One-Shot Path (Remote Daemon Execution)
+            
+            // Connect to Sidecar
+            let bridge = try await SidecarBridge.create(clientName: "anigma-cli-oneshot")
+            
+            // Execute Remote Runner
+            let runner = RemoteOneShotRunner(bridge: bridge)
+            let context = makeContext() // Still needed for local repo awareness if we upload artifacts
+            
+            try await runner.execute(
+                task: taskDescription, 
+                context: context, 
+                options: RemoteOneShotRunner.RunOptions(verbose: verbose, json: json)
+            )
+        } else {
+            // 3. Interactive TUI Path (Default)
+            try await runTUISession(
+                summary: nil,
+                details: nil,
+                options: TUISessionOptions(mode: .plan, dryRun: true, enableMcp: true)
+            )
+        }
     }
 }
+
+private func exit(_ code: Int32) -> Error {
+    Darwin.exit(code)
+}
+
 
 private struct ProviderListPayload: Encodable {
     let providers: [ProviderStatus]

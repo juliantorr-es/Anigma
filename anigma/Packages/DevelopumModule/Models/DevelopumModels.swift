@@ -281,6 +281,71 @@ public struct IndexArtifactRecord: Codable, Sendable, TableRecord, FetchableReco
     }
 }
 
+// MARK: - VirtualDocumentRecord
+
+/// Record of a virtual document manifest.
+/// Promoted to first-class entity for efficient querying and lazy loading.
+public struct VirtualDocumentRecord: Codable, Sendable, TableRecord, FetchableRecord, PersistableRecord {
+    /// Unique identifier for the virtual document.
+    public var id: UUID
+    
+    /// Foreign key to the repository session.
+    public var repoId: UUID
+    
+    /// Virtual file path.
+    public var filePath: String
+    
+    /// Ordered list of chunk hashes (stored as JSON array).
+    public var chunksJson: String
+    
+    /// MIME type.
+    public var mimeType: String
+    
+    /// Last modified timestamp.
+    public var lastModified: Date
+    
+    /// Whether this is the active version of the document.
+    public var isActive: Bool
+    
+    public init(
+        id: UUID = UUID(),
+        repoId: UUID,
+        filePath: String,
+        chunks: [String],
+        mimeType: String = "text/plain",
+        lastModified: Date = Date(),
+        isActive: Bool = true
+    ) {
+        self.id = id
+        self.repoId = repoId
+        self.filePath = filePath
+        self.chunksJson = (try? String(data: JSONEncoder().encode(chunks), encoding: .utf8)) ?? "[]"
+        self.mimeType = mimeType
+        self.lastModified = lastModified
+        self.isActive = isActive
+    }
+    
+    public var chunks: [String] {
+        guard let data = chunksJson.data(using: .utf8) else { return [] }
+        return (try? JSONDecoder().decode([String].self, from: data)) ?? []
+    }
+    
+    // MARK: - GRDB Table Configuration
+    
+    public static var databaseTableName: String { "developum_virtual_documents" }
+    
+    /// Database columns definition.
+    public enum Columns {
+        public static let id = Column("id")
+        public static let repoId = Column("repo_id")
+        public static let filePath = Column("file_path")
+        public static let chunksJson = Column("chunks_json")
+        public static let mimeType = Column("mime_type")
+        public static let lastModified = Column("last_modified")
+        public static let isActive = Column("is_active")
+    }
+}
+
 // MARK: - Enums
 
 /// Status of a repository session.

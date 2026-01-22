@@ -7,7 +7,6 @@
 //  and restarting the daemon with proper error handling.
 //
 
-import AnigmaDaemonCore
 import Foundation
 
 /// Manages the lifecycle of the anigmad daemon process.
@@ -26,7 +25,7 @@ public actor DaemonLifecycle {
         socketPath: String? = nil,
         binaryPath: String? = nil
     ) async throws -> DaemonHandle {
-        let socket = socketPath ?? DaemonConfig.defaultUnixSocketPath()
+        let socket = socketPath ?? SidecarConfig.defaultUnixSocketPath()
         let binary = binaryPath ?? defaultBinaryPath()
 
         // Check if daemon is already running
@@ -94,7 +93,7 @@ public actor DaemonLifecycle {
     /// - Parameter socketPath: Optional custom Unix socket path.
     /// - Returns: The current daemon status.
     public static func status(socketPath: String? = nil) async -> DaemonStatus {
-        let socket = socketPath ?? DaemonConfig.defaultUnixSocketPath()
+        let socket = socketPath ?? SidecarConfig.defaultUnixSocketPath()
 
         // Check if socket file exists
         guard FileManager.default.fileExists(atPath: socket) else {

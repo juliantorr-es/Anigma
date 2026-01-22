@@ -6,10 +6,12 @@
 //
 
 import AnigmaCore
+import AnigmaMCPModule
 import DatabaseCore
 import ExecutionCore
 import Foundation
 import GovernanceCore
+import MCP
 import StorageCore
 import TelemetryCore
 
@@ -31,6 +33,7 @@ public actor DaemonServer {
     private let signalManager: SignalManager
     private let healthManager: HealthManager
     private let resourceMonitor: ResourceMonitor
+    private let mcpServer: AnigmaMCPServer
 
     private var isRunning: Bool = false
     private var startTime: Date?
@@ -100,6 +103,8 @@ public actor DaemonServer {
         await self.jobRegistry.register(worker: CPUBurnWorker())
         await self.jobRegistry.register(worker: PDFWorker())
         await self.jobRegistry.register(worker: LaTeXWorker())
+        await self.jobRegistry.register(worker: TextChunkingWorker())
+        await self.jobRegistry.register(worker: SemanticChunkingWorker())
         await self.jobRegistry.register(worker: NoOpWorker())
 
         // Initialize Worker Pool with Resource Limits (Pass 6)
@@ -146,6 +151,9 @@ public actor DaemonServer {
         
         // Initialize Health Manager
         self.healthManager = HealthManager(daemonStartTime: Date())
+
+        // Initialize MCP Server
+        self.mcpServer = AnigmaMCPServer()
         
         // Initialize Resource Monitor
         self.resourceMonitor = ResourceMonitor(
@@ -479,7 +487,12 @@ public actor DaemonServer {
                 )
             } catch {
                 print("Receipt warning: failed to record status receipt: \(error)")
-struct HandleIngestArtifactConfiguration: Sendable {
+            }
+        }
+        return response
+    }
+
+    struct HandleIngestArtifactConfiguration: Sendable {
     let ctx: DaemonRequestContext
     let kind: ArtifactKind
     let mime: String
@@ -490,41 +503,41 @@ struct HandleIngestArtifactConfiguration: Sendable {
     let filenameHint: String?
 }
 
-func handleIngestArtifact(config: HandleIngestArtifactConfiguration) async throws -> IngestResult {
-    if await !rateLimiter.allow(clientId: config.ctx.clientId) {
-        throw DaemonError.rateLimitExceeded
+    func handleIngestArtifact(config: HandleIngestArtifactConfiguration) async throws -> IngestResult {
+        if await !rateLimiter.allow(clientId: config.ctx.clientId) {
+            throw DaemonError.rateLimitExceeded
+        }
+        
+        _ = try await tokenManager.validateToken(config.ctx.capabilityToken, requiredScope: "vault.write")
+        
+        let vKind = StorageCore.VaultArtifactKind(rawValue: config.kind) ?? .original
+        let ref = try await vault.ingest(data: config.data, kind: vKind, mime: config.mime)
+        let receipt = try await receiptEngine.recordActionExecution(
+            actionName: "vault.ingest",
+            authority: "anigmad",
+            decision: .allowed,
+            reasonCode: "INGESTED",
+            inputs: [
+                "hash": ref.sha256Hex,
+                "mime": ref.mime,
+                "kind": ref.kind.rawValue,
+                "bytes": ref.byteLen,
+                "plaintext_sha256": config.plaintextSha256,
+                "chunk_count": config.chunkCount,
+                "byte_count": config.byteCount,
+                "filename_hint": config.filenameHint ?? "none"
+            ]
+        )
+        
+        return IngestResult(
+            artifact: ArtifactRef(
+                hash: ref.sha256Hex,
+                mediaType: ref.mime,
+                sizeBytes: UInt64(ref.byteLen)
+            ),
+            receiptHash: receipt.receiptID
+        )
     }
-    
-    _ = try await tokenManager.validateToken(config.ctx.capabilityToken, requiredScope: "vault.write")
-    
-    let vKind = StorageCore.VaultArtifactKind(rawValue: config.kind) ?? .original
-    let ref = try await vault.ingest(data: config.data, kind: vKind, mime: config.mime)
-    let receipt = try await receiptEngine.recordActionExecution(
-        actionName: "vault.ingest",
-        authority: "anigmad",
-        decision: .allowed,
-        reasonCode: "INGESTED",
-        inputs: [
-            "hash": ref.sha256Hex,
-            "mime": ref.mime,
-            "kind": ref.kind.rawValue,
-            "bytes": ref.byteLen,
-            "plaintext_sha256": config.plaintextSha256,
-            "chunk_count": config.chunkCount,
-            "byte_count": config.byteCount,
-            "filename_hint": config.filenameHint ?? "none"
-        ]
-    )
-    
-    return IngestResult(
-        artifact: ArtifactRef(
-            hash: ref.sha256Hex,
-            mediaType: ref.mime,
-            sizeBytes: UInt64(ref.byteLen)
-        ),
-        receiptHash: receipt.receiptID
-    )
-}
 
     func handleIngestChunk(
         ctx: DaemonRequestContext,
@@ -1213,6 +1226,11 @@ func handleIngestArtifact(config: HandleIngestArtifactConfiguration) async throw
 
     func handleStreamJobEvents(ctx: DaemonRequestContext, jobId: String) async throws -> AsyncStream<DaemonJobEvent> {
         return AsyncStream { _ in }
+    }
+
+    /// Handle incoming MCP connection
+    public func handleMCPConnection(transport: any Transport) async throws {
+        try await mcpServer.run(transport: transport)
     }
 
     private func isValidReceiptHash(_ hash: String) -> Bool {

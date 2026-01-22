@@ -300,6 +300,67 @@ public actor DevelopumDatabaseService {
 
         return try rows.map { try decodeBridgeEvent(from: $0) }
     }
+    
+    // MARK: - Virtual Documents
+    
+    public func saveVirtualDocument(_ doc: VirtualDocumentRecord) async throws {
+        // Deactivate old versions
+        let deactivateMutation = DatabaseMutation(
+            sql: """
+            UPDATE developum_virtual_documents
+            SET is_active = 0
+            WHERE repo_id = ? AND file_path = ?
+            """,
+            parameters: [.text(doc.repoId.uuidString), .text(doc.filePath)]
+        )
+        try await databaseAuthority.mutate(deactivateMutation, context: ExecutionContext(principal: .system))
+        
+        let mutation = DatabaseMutation(
+            sql: """
+            INSERT INTO developum_virtual_documents (
+                id, repo_id, file_path, chunks_json, mime_type, last_modified, is_active
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            parameters: [
+                .text(doc.id.uuidString),
+                .text(doc.repoId.uuidString),
+                .text(doc.filePath),
+                .text(doc.chunksJson),
+                .text(doc.mimeType),
+                .double(doc.lastModified.timeIntervalSince1970 * 1000),
+                .int(doc.isActive ? 1 : 0)
+            ]
+        )
+        _ = try await databaseAuthority.mutate(mutation, context: ExecutionContext(principal: .system))
+    }
+    
+    public func getVirtualDocument(repoId: UUID, filePath: String) async throws -> VirtualDocumentRecord? {
+        let rows = try await databaseAuthority.query(
+            """
+            SELECT * FROM developum_virtual_documents
+            WHERE repo_id = ? AND file_path = ? AND is_active = 1
+            LIMIT 1
+            """,
+            parameters: [.text(repoId.uuidString), .text(filePath)]
+        )
+        
+        guard let row = rows.first else { return nil }
+        return try decodeVirtualDocument(from: row)
+    }
+    
+    public func getVirtualDocumentHistory(repoId: UUID, filePath: String, limit: Int = 50) async throws -> [VirtualDocumentRecord] {
+        let rows = try await databaseAuthority.query(
+            """
+            SELECT * FROM developum_virtual_documents
+            WHERE repo_id = ? AND file_path = ?
+            ORDER BY last_modified DESC
+            LIMIT ?
+            """,
+            parameters: [.text(repoId.uuidString), .text(filePath), .int(limit)]
+        )
+        
+        return try rows.map { try decodeVirtualDocument(from: $0) }
+    }
 
     private func decodeRepoRecord(from row: DatabaseRow) throws -> RepoRecord {
         guard let idString = row.string(for: "id"),
@@ -389,6 +450,28 @@ public actor DevelopumDatabaseService {
             timestamp: Date(timeIntervalSince1970: (row.double(for: "timestamp") ?? 0) / 1000),
             receiptHash: row.string(for: "receipt_hash"),
             artifactHash: row.string(for: "artifact_hash")
+        )
+    }
+    
+    private func decodeVirtualDocument(from row: DatabaseRow) throws -> VirtualDocumentRecord {
+        guard let idString = row.string(for: "id"),
+              let id = UUID(uuidString: idString),
+              let repoIdString = row.string(for: "repo_id"),
+              let repoId = UUID(uuidString: repoIdString) else {
+            throw DatabaseError.queryError("Invalid UUID in virtual document")
+        }
+        
+        let chunksJson = row.string(for: "chunks_json") ?? "[]"
+        let chunks = (try? JSONDecoder().decode([String].self, from: chunksJson.data(using: .utf8) ?? Data())) ?? []
+        
+        return VirtualDocumentRecord(
+            id: id,
+            repoId: repoId,
+            filePath: row.string(for: "file_path") ?? "",
+            chunks: chunks,
+            mimeType: row.string(for: "mime_type") ?? "text/plain",
+            lastModified: Date(timeIntervalSince1970: (row.double(for: "last_modified") ?? 0) / 1000),
+            isActive: (row.int(for: "is_active") ?? 0) != 0
         )
     }
 }

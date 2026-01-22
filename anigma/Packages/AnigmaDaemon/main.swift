@@ -166,7 +166,10 @@ if CommandLine.arguments.contains("--worker") {
         await registry.register(worker: OfficeWorker())
         await registry.register(worker: HeavyPDFWorker())
         await registry.register(worker: TranslateWorker())
+        await registry.register(worker: TextChunkingWorker())
+        await registry.register(worker: SemanticChunkingWorker())
     }.value
+
 
     // Read JobSpec from stdin
     let inputData = FileHandle.standardInput.readDataToEndOfFile()
@@ -241,6 +244,7 @@ if CommandLine.arguments.contains("--list-jobs") {
         await registry.register(worker: OfficeWorker())
         await registry.register(worker: HeavyPDFWorker())
         await registry.register(worker: TranslateWorker())
+        await registry.register(worker: HarmoniaWorker())
     }.value
 
     let kinds = await registry.registeredKinds()

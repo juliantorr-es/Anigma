@@ -33,9 +33,11 @@ public enum DevelopumMessageType: String, Codable, Sendable {
     case saveRequest = "saveRequest"
     case searchRequest = "searchRequest"
     case findReferencesRequest = "findReferencesRequest"
+    case chunkAction = "chunkAction"
     
     // Swift -> Editor
     case openFile = "openFile"
+    case chunkHistory = "chunkHistory"
     case closeFile = "closeFile"
     case updateContent = "updateContent"
     case showMessage = "showMessage"
@@ -105,7 +107,9 @@ public enum DevelopumPayload: Codable, Sendable {
     case saveRequest(SaveRequestPayload)
     case searchRequest(SearchRequestPayload)
     case findReferencesRequest(FindReferencesRequestPayload)
+    case chunkAction(ChunkActionPayload)
     case openFile(OpenFilePayload)
+    case chunkHistory(ChunkHistoryPayload)
     case closeFile(CloseFilePayload)
     case updateContent(UpdateContentPayload)
     case showMessage(ShowMessagePayload)
@@ -157,9 +161,15 @@ public enum DevelopumPayload: Codable, Sendable {
         case .findReferencesRequest:
             let payload = try container.decode(FindReferencesRequestPayload.self, forKey: .payload)
             self = .findReferencesRequest(payload)
+        case .chunkAction:
+            let payload = try container.decode(ChunkActionPayload.self, forKey: .payload)
+            self = .chunkAction(payload)
         case .openFile:
             let payload = try container.decode(OpenFilePayload.self, forKey: .payload)
             self = .openFile(payload)
+        case .chunkHistory:
+            let payload = try container.decode(ChunkHistoryPayload.self, forKey: .payload)
+            self = .chunkHistory(payload)
         case .closeFile:
             let payload = try container.decode(CloseFilePayload.self, forKey: .payload)
             self = .closeFile(payload)
@@ -224,8 +234,14 @@ public enum DevelopumPayload: Codable, Sendable {
         case .findReferencesRequest(let payload):
             try container.encode(DevelopumMessageType.findReferencesRequest, forKey: .type)
             try container.encode(payload, forKey: .payload)
+        case .chunkAction(let payload):
+            try container.encode(DevelopumMessageType.chunkAction, forKey: .type)
+            try container.encode(payload, forKey: .payload)
         case .openFile(let payload):
             try container.encode(DevelopumMessageType.openFile, forKey: .type)
+            try container.encode(payload, forKey: .payload)
+        case .chunkHistory(let payload):
+            try container.encode(DevelopumMessageType.chunkHistory, forKey: .type)
             try container.encode(payload, forKey: .payload)
         case .closeFile(let payload):
             try container.encode(DevelopumMessageType.closeFile, forKey: .type)
@@ -432,6 +448,43 @@ public struct FindReferencesRequestPayload: Codable, Sendable {
         self.fileUri = fileUri
         self.line = line
         self.column = column
+    }
+}
+
+/// Chunk action payload.
+public struct ChunkActionPayload: Codable, Sendable {
+    public let hash: String
+    public let start: Int
+    public let end: Int
+    
+    public init(hash: String, start: Int, end: Int) {
+        self.hash = hash
+        self.start = start
+        self.end = end
+    }
+}
+
+/// Chunk history item.
+public struct ChunkHistoryItem: Codable, Sendable {
+    public let versionId: String
+    public let timestamp: Date
+    public let chunkHash: String
+    
+    public init(versionId: String, timestamp: Date, chunkHash: String) {
+        self.versionId = versionId
+        self.timestamp = timestamp
+        self.chunkHash = chunkHash
+    }
+}
+
+/// Chunk history payload.
+public struct ChunkHistoryPayload: Codable, Sendable {
+    public let currentChunkHash: String
+    public let history: [ChunkHistoryItem]
+    
+    public init(currentChunkHash: String, history: [ChunkHistoryItem]) {
+        self.currentChunkHash = currentChunkHash
+        self.history = history
     }
 }
 

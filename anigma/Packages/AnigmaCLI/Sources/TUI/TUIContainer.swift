@@ -51,18 +51,47 @@ public actor TUIContainer {
         await render()
     }
 
+    private var isChatExpanded: Bool = false
+    
+    public func toggleChatExpansion() {
+        self.isChatExpanded.toggle()
+        for comp in components {
+            if comp.id == "data_inspector" {
+                comp.isVisible = !isChatExpanded
+            }
+            comp.isDirty = true
+        }
+    }
+
     public func render() async {
         let size = await engine.getTerminalSize()
         let rootRect = TUIRect(row: 1, col: 1, width: size.cols, height: size.rows)
 
-        // Define standard layout: List (flex) -> Input (fixed/flex) -> Status (fixed 1)
-        let layout = TUILayout(direction: .vertical, items: [
-            ("message_list", .flex(1.0)),
+        // 1. Vertical Split: (Main Area + Input Area + Status Bar)
+        let mainVLayout = TUILayout(direction: .vertical, items: [
+            ("main_content", .flex(1.0)),
             ("input_area", .fixed(min(6, components.first { $0.id == "input_area" }.map { ($0 as? InputAreaView)?.lineCount ?? 1 } ?? 1) + 2)),
             ("status_bar", .fixed(1))
         ])
-
-        let rects = layout.calculate(in: rootRect)
+        
+        let vRects = mainVLayout.calculate(in: rootRect)
+        
+        // 2. Horizontal Split in Main Area: (Chat + Inspector)
+        var finalRects = vRects
+        if let contentRect = vRects["main_content"] {
+            if isChatExpanded {
+                finalRects["message_list"] = contentRect
+            } else {
+                let hLayout = TUILayout(direction: .horizontal, items: [
+                    ("message_list", .flex(2.0)),
+                    ("data_inspector", .flex(1.0))
+                ])
+                let hRects = hLayout.calculate(in: contentRect)
+                for (id, rect) in hRects {
+                    finalRects[id] = rect
+                }
+            }
+        }
 
         // Only trigger render if any visible component is dirty
         var anyDirty = false
@@ -76,7 +105,7 @@ public actor TUIContainer {
         await engine.beginFrame()
 
         for comp in components where comp.isVisible {
-            if let rect = rects[comp.id] {
+            if let rect = finalRects[comp.id] {
                 // Pass the specific rect to the component
                 await (comp as? TUIBaseComponent)?.render(engine: engine, rect: rect)
                 comp.isDirty = false
@@ -87,10 +116,23 @@ public actor TUIContainer {
     }
 
     public func dispatchKey(_ key: InputHandler.Key) async -> Bool {
-        // Handle global focus cycling
+        // Handle global focus cycling and view toggles
         if case .tab = key {
-            await cycleFocus()
+            toggleChatExpansion()
             return true
+        }
+        
+        if case .ctrlP = key {
+            if let palette = components.first(where: { $0.id == "command_palette" }) {
+                palette.isVisible.toggle()
+                palette.isDirty = true
+                if palette.isVisible {
+                    await setFocus(palette.id)
+                } else {
+                    await setFocus("input_area")
+                }
+                return true
+            }
         }
 
         // First try the focused component
@@ -100,9 +142,6 @@ public actor TUIContainer {
                 return true
             }
         }
-
-        // Global focus cycling (e.g. Tab)
-        // Note: We need to ensure InputHandler supports Tab
 
         // Then try other components in reverse order (top to bottom)
         for comp in components.reversed() where comp.id != focusedComponentId && comp.isVisible {

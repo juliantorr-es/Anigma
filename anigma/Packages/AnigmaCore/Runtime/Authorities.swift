@@ -332,6 +332,17 @@ public protocol InferenceAuthority: Actor {
         context: ExecutionContext
     ) async throws -> InferenceResponse
 
+    /// Execute a reranking task
+    /// - Parameters:
+    ///   - request: Rerank request details
+    ///   - priority: Execution priority
+    ///   - context: Execution context
+    func rerank(
+        _ request: RerankRequest,
+        priority: InferencePriority,
+        context: ExecutionContext
+    ) async throws -> RerankResponse
+
     /// Get health and status of inference planes
     func getStatus() async -> [InferencePlaneStatus]
 }

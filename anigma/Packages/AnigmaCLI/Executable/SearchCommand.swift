@@ -1,15 +1,7 @@
-//
-//  SearchCommand.swift
-//  AnigmaCLI
-//
-//  Command to search indexed codebase with hybrid retrieval.
-//
-
 import Foundation
 import ArgumentParser
-import AnigmaCLIDatabase
-import AnigmaCLIProviders
-import AnigmaCLIML
+import AnigmaSidecar
+import AnigmaPrimitives
 
 struct SearchCommand: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
@@ -36,74 +28,100 @@ struct SearchCommand: AsyncParsableCommand {
     var fullText: Bool = false
 
     func run() async throws {
-        let repoPath = repoRoot ?? FileManager.default.currentDirectoryPath
-
-        print("🔍 Searching: \"\(query)\"")
-        if let prefix = pathPrefix {
-            print("📁 Path filter: \(prefix)")
-        }
-        print("🎯 Mode: \(lexicalOnly ? "Lexical only" : "Hybrid (lexical + vector)")")
+        print("🔍 Searching: \"\(query)\" (Remote Daemon)")
         print()
 
-        // Initialize database
-        let config = CLIDatabaseConfig.default
-        let db = CLIDatabaseActor(config: config)
-        try await db.open()
-
-        let indexManager = CLIIndexManager(database: db)
-        let retrieval = CLIHybridRetrieval(database: db)
-        let providerRegistry = ProviderRegistry()
-
-        let mlIntegration = CLIMLIntegration(
-            database: db,
-            indexManager: indexManager,
-            retrieval: retrieval,
-            providerRegistry: providerRegistry
-        )
-
-        // Check if repository is indexed
-        guard let status = try await indexManager.getIndexStatus(repoRoot: repoPath) else {
-            print("❌ Repository not indexed. Run 'anigma-cli index' first.")
+        // 1. Ensure Daemon is Running
+        let guardian = DaemonGuardian()
+        do {
+            try await guardian.ensureDaemonRunning()
+        } catch {
+            print("❌ Error: Could not connect to Anigma Daemon.")
             throw ExitCode.failure
         }
 
-        print("📊 Index status: \(status.chunkCount) chunks, \(status.embeddingCount) embeddings")
-        print()
+        // 2. Connect to Sidecar
+        let bridge = try await SidecarBridge.create(clientName: "anigma-cli-search")
 
-        // Perform search
-        let results = try await mlIntegration.searchCodebase(
-            query: query,
-            limit: limit,
-            pathPrefix: pathPrefix,
-            useVector: !lexicalOnly
+        // 3. Construct Job Spec
+        // We use the "harmonia.execute" worker to perform a "Retrieval Only" task
+        // Ideally we would have a dedicated "retrieval.search" job kind, but this works for now.
+        let searchTask = """
+        Perform a retrieval-only search for: "\(query)"
+        Limit: \(limit)
+        Path Prefix: \(pathPrefix ?? "none")
+        Lexical Only: \(lexicalOnly)
+        """
+        
+        let config = HarmoniaJobConfig(
+            taskSummary: searchTask,
+            sessionID: UUID().uuidString,
+            governancePolicy: "fast", // Skip heavy reasoning
+            useFastRAG: true
+        )
+        
+        let configData = try JSONEncoder().encode(config)
+        
+        let jobSpec = AnigmaJobSpec(
+            kind: "harmonia.execute",
+            configCanonical: configData,
+            inputs: []
         )
 
-        if results.isEmpty {
-            print("No results found.")
-            return
+        // 4. Submit Job
+        let submission = try await bridge.submitJob(jobSpec)
+        guard let jobId = submission.jobId else {
+            print("❌ Failed to submit search job.")
+            throw ExitCode.failure
         }
 
-        print("Found \(results.count) result(s):\n")
-
-        for (index, hit) in results.enumerated() {
-            print("[\(index + 1)] \(hit.sourcePath)")
-            if !hit.sectionTitle.isEmpty {
-                print("    Section: \(hit.sectionTitle)")
+        // 5. Stream Results
+        // HarmoniaWorker returns a JSON artifact with the result.
+        // For search, we want to stream events or wait for the final artifact.
+        // Since search is fast, we'll wait for the completion event.
+        
+        print("⏳ Waiting for results...")
+        
+        var foundArtifactHash: String?
+        
+        for try await event in try await bridge.streamJobEvents(jobId: jobId) {
+            if event.type == "job.completed" {
+                foundArtifactHash = event.output?.hash
+                break
+            } else if event.type == "job.failed" {
+                print("❌ Search failed: \(event.message)")
+                throw ExitCode.failure
             }
-            print("    Score: \(String(format: "%.4f", hit.score)) (\(hit.source.rawValue))")
-
-            if fullText {
-                // Fetch full chunk text
-                let sql = "SELECT chunk_text FROM document_chunks WHERE chunk_id = ?"
-                let rows = try await db.query(sql, parameters: [CLIParameter.text(hit.chunkID)])
-                if let text = rows.first?["chunk_text"]?.asString {
-                    print("    ---")
-                    let preview = text.prefix(200)
-                    print("    \(preview)\(text.count > 200 ? "..." : "")")
-                }
-            }
-
-            print()
         }
+        
+        // 6. Fetch and Display Artifact
+        if let hash = foundArtifactHash {
+            let response = try await bridge.getReceipt(receiptHash: hash)
+            // Note: We actually need to fetch the artifact CONTENT, not just the receipt.
+            // SidecarBridge needs a retrieveArtifact method or similar.
+            // Assuming SidecarBridge has listArtifacts or similar we can use to get metadata,
+            // but fetching content might require a new endpoint or using the vault direct access if local.
+            // For a "Thin Client", we must use the bridge.
+            
+            // Temporary Workaround: Print success message. 
+            // Real implementation requires `bridge.retrieveArtifact(hash)`
+            print("✅ Search completed. Results stored in artifact: \(hash)")
+            print("(Artifact retrieval implementation pending in SidecarBridge)")
+        }
+    }
+}
+
+// Temporary shim until AnigmaDaemonCore exports this to a shared library
+public struct HarmoniaJobConfig: Codable, Sendable {
+    public let taskSummary: String
+    public let sessionID: String
+    public let governancePolicy: String
+    public let useFastRAG: Bool
+    
+    public init(taskSummary: String, sessionID: String, governancePolicy: String, useFastRAG: Bool = true) {
+        self.taskSummary = taskSummary
+        self.sessionID = sessionID
+        self.governancePolicy = governancePolicy
+        self.useFastRAG = useFastRAG
     }
 }

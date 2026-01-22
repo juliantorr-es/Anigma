@@ -12,6 +12,7 @@ public enum InferenceTaskKind: String, Codable, Sendable {
     case textGeneration
     case chat
     case embedding
+    case rerank
 }
 
 /// Value type for inference options.
@@ -101,6 +102,58 @@ public struct InferenceRequest: Codable, Sendable, Equatable {
         self.modelID = modelID
         self.options = options
         self.correlationId = correlationId
+    }
+}
+
+/// Rerank request payload.
+public struct RerankRequest: Codable, Sendable, Equatable {
+    public let query: String
+    public let documents: [String]
+    public let modelID: String?
+    public let topK: Int?
+    public let options: [String: InferenceOptionValue]
+    public let correlationId: String
+
+    public init(
+        query: String,
+        documents: [String],
+        modelID: String? = nil,
+        topK: Int? = nil,
+        options: [String: InferenceOptionValue] = [:],
+        correlationId: String = UUID().uuidString
+    ) {
+        self.query = query
+        self.documents = documents
+        self.modelID = modelID
+        self.topK = topK
+        self.options = options
+        self.correlationId = correlationId
+    }
+}
+
+/// Rerank result item.
+public struct RerankResultItem: Codable, Sendable, Equatable {
+    public let index: Int
+    public let score: Double
+    public let document: String?
+
+    public init(index: Int, score: Double, document: String? = nil) {
+        self.index = index
+        self.score = score
+        self.document = document
+    }
+}
+
+/// Rerank response payload.
+public struct RerankResponse: Codable, Sendable, Equatable {
+    public let results: [RerankResultItem]
+    public let usage: InferenceUsage
+    public let metadata: [String: String]
+
+    public init(results: [RerankResultItem], usage: InferenceUsage = .init(), metadata: [String: String] = [:]) {
+        self.results = results
+        self.usage = usage
+        self.metadata = metadata
     }
 }
 

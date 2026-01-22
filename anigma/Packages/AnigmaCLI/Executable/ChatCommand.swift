@@ -106,8 +106,12 @@ struct AnigmaChatCommand: AsyncParsableCommand {
                         let inputArea = InputAreaView()
 
                         let commandPalette = CommandPaletteView()
+                        
+                        let dataInspector = DataInspectorView()
 
                         await container.addComponent(messageList)
+                        
+                        await container.addComponent(dataInspector)
 
                         await container.addComponent(inputArea)
 

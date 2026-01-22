@@ -50,6 +50,9 @@ let coreProducts: [Product] = [
     .library(name: "CompressionKit", targets: ["CompressionKit"]),
     .library(name: "TextChunkingCapsule", targets: ["TextChunkingCapsule"]),
     .library(name: "VizAggregationCapsule", targets: ["VizAggregationCapsule"]),
+    .library(name: "MediaFingerprintCapsule", targets: ["MediaFingerprintCapsule"]),
+    .library(name: "VectorCapsule", targets: ["VectorCapsule"]),
+    .library(name: "TextPipelineCapsule", targets: ["TextPipelineCapsule"]),
     .library(name: "AnimationKit", targets: ["AnimationKit"]),
     .library(name: "ObservabilityKit", targets: ["ObservabilityKit"]),
     .library(name: "SidecarOfficeService", targets: ["SidecarOfficeService"]),
@@ -71,7 +74,8 @@ let executableProducts: [Product] = [
     .executable(name: "anigma-cli", targets: ["AnigmaCLIExecutable"]),
     .executable(name: "anigma-app", targets: ["AnigmaAppMacExecutable"]),
     .executable(name: "anigma-mcp", targets: ["AnigmaMCPExecutable"]),
-    .executable(name: "anigma-gemini-bridge", targets: ["AnigmaGeminiBridge"])
+    .executable(name: "anigma-gemini-bridge", targets: ["AnigmaGeminiBridge"]),
+    .executable(name: "anigma-status-bar", targets: ["AnigmaStatusBar"])
 ]
 
 let capabilityProducts: [Product] = [
@@ -120,7 +124,10 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-cmark.git", from: "0.5.0"),
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
         .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.19.0"),
-        .package(path: "../Deprecated/Inspiration/INBOX/swift-sdk")
+        .package(url: "https://github.com/opencv/opencv.git", from: "4.8.0"),
+        .package(url: "https://github.com/FFmpeg/FFmpeg.git", from: "6.0.0"),
+        .package(url: "https://github.com/unicode-org/icu.git", from: "74.0.0"),
+        .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.4.1"),
     ],
     targets: [
         .target(name: "CHarfBuzz", path: "Packages/CHarfBuzz", publicHeadersPath: "."),
@@ -181,7 +188,7 @@ let package = Package(
         .executableTarget(name: "anigma-ast-services", dependencies: ["AnigmaASTServicesCore", .product(name: "SwiftSyntax", package: "swift-syntax"), .product(name: "SwiftParser", package: "swift-syntax"), .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/AnigmaASTServicesCLI", swiftSettings: strictConcurrencySettings),
         .target(name: "SecurityEventsManager", dependencies: [], path: "Packages/SecurityEventsManager", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaClientKit", dependencies: ["ContractsCore"], path: "Packages/AnigmaClientKit", swiftSettings: strictConcurrencySettings),
-        .target(name: "AnigmaSidecar", dependencies: ["AnigmaDaemonCore", "AnigmaPrimitives", .product(name: "AsyncHTTPClient", package: "async-http-client")], path: "Packages/AnigmaSidecar", swiftSettings: strictConcurrencySettings),
+        .target(name: "AnigmaSidecar", dependencies: ["AnigmaPrimitives", .product(name: "AsyncHTTPClient", package: "async-http-client")], path: "Packages/AnigmaSidecar", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaSystemSpine", dependencies: [], path: "Packages/AnigmaSystemSpine", swiftSettings: strictConcurrencySettings),
         .target(name: "DataCore", dependencies: ["AnigmaPrimitives"], path: "Packages/DataCore", swiftSettings: strictConcurrencySettings),
         .target(name: "DataEngine", dependencies: ["DataCore", "AnigmaPrimitives", "AnigmaSystemSpine"], path: "Packages/DataEngine", swiftSettings: strictConcurrencySettings),
@@ -218,6 +225,11 @@ let package = Package(
         .target(name: "TextChunkingCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/TextChunkingCapsule", swiftSettings: strictConcurrencySettings),
         .target(name: "LayoutEngineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/LayoutEngineCapsule", swiftSettings: strictConcurrencySettings),
         .target(name: "VizAggregationCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/VizAggregationCapsule", swiftSettings: strictConcurrencySettings),
+        .target(name: "MediaFingerprintCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/MediaFingerprintCapsule", swiftSettings: strictConcurrencySettings),
+        .target(name: "MediaContainerCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/MediaContainerCapsule", swiftSettings: strictConcurrencySettings),
+        .target(name: "VectorCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/VectorOpsKit", swiftSettings: strictConcurrencySettings),
+        .target(name: "TextPipelineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/TextPipelineCapsule", swiftSettings: strictConcurrencySettings),
+
         .target(name: "AnimationKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/AnimationKit", swiftSettings: strictConcurrencySettings),
         .target(name: "ObservabilityKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/ObservabilityKit", swiftSettings: strictConcurrencySettings),
         .target(name: "SidecarOfficeService", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/SidecarOfficeService", swiftSettings: strictConcurrencySettings),
@@ -232,7 +244,7 @@ let package = Package(
         .executableTarget(name: "AccessumFlow", dependencies: ["AnigmaCore", "DatabaseCore", "DiaplasionModule", "OutlineumModule", "HarmoniaModule", "MLWorkerCommon", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/AccessumFlow", swiftSettings: strictConcurrencySettings),
         .executableTarget(name: "MLWorkerExecutable", dependencies: ["MLWorkerCommon", "ContractsCore", "AnigmaCore", "AnigmaPrimitives", .product(name: "MLXLMCommon", package: "mlx-swift-lm"), .product(name: "MLXEmbedders", package: "mlx-swift-lm"), .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/MLWorkerExecutable", swiftSettings: strictConcurrencySettings),
         .executableTarget(name: "AnigmaAppMacExecutable", dependencies: ["AnigmaClientKit", "AnigmaHostMac", "AnigmaSystemSpine", "HarmoniaModule", "OutlineumModule", "DataUI", "AnigmaAgents", "AnigmaAIConsole", "ExportCore", "ExportUI", "AnigmaWork", "DataEngine", "ContractsCore", "ContextumModule", "AnigmaMCPModule", "DevelopumModule"], path: "Sources/AnigmaAppMac", swiftSettings: strictConcurrencySettings),
-        .executableTarget(name: "AnigmaMCPExecutable", dependencies: ["AnigmaMCPModule", .product(name: "MCP", package: "swift-sdk")], path: "Sources/AnigmaMCPExecutable", swiftSettings: strictConcurrencySettings),
+
         .executableTarget(name: "AnigmaGeminiBridge", dependencies: ["AnigmaCore", "AnigmaPrimitives", .product(name: "Hummingbird", package: "hummingbird")], path: "Packages/AnigmaGeminiBridge/Sources/AnigmaGeminiBridge", swiftSettings: strictConcurrencySettings),
         .target(name: "HarmoniaModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "CapabilityCore", "DatabaseCore", "TelemetryCore", "ExecutionCore", "DoctrineCore", "SecurityEventsManager", "AnigmaASTServicesCore", "MLWorkerCommon", .product(name: "MLXEmbedders", package: "mlx-swift-lm"), "CathedralModule", "StorageCore", "GovernedMigrationCore", "AnigmaCLIProviders", "AnigmaCLIRouter", "AnigmaCLIOrchestrator", "AnigmaCLIEventing", "AnigmaCLIGovernance", .product(name: "GRDB", package: "GRDB.swift"), .product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/HarmoniaModule", swiftSettings: strictConcurrencySettings),
         .target(name: "HarmoniaMemory", dependencies: ["AnigmaCore", "TelemetryCore", .product(name: "GRDB", package: "GRDB.swift")], path: "Packages/HarmoniaMemory", swiftSettings: strictConcurrencySettings),
@@ -244,13 +256,13 @@ let package = Package(
         .target(name: "CodexModule", dependencies: ["AnigmaCore"], path: "Packages/CodexModule", swiftSettings: strictConcurrencySettings),
         .target(name: "TranscriptumModule", dependencies: ["AnigmaCore"], path: "Packages/TranscriptumModule", swiftSettings: strictConcurrencySettings),
         .target(name: "ObservatoriumModule", dependencies: ["AnigmaCore", "TelemetryCore"], path: "Packages/ObservatoriumModule", swiftSettings: strictConcurrencySettings),
-        .target(name: "PolytroposModule", dependencies: ["AnigmaCore", "AnigmaPrimitives"], path: "Packages/PolytroposModule", swiftSettings: strictConcurrencySettings),
+        .target(name: "PolytroposModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "MediaContainerCapsule"], path: "Packages/PolytroposModule", swiftSettings: strictConcurrencySettings),
         .target(name: "VectorumModule", dependencies: ["ContractsCore", "AnigmaCore", "CapabilityCore"], path: "Packages/VectorumModule", swiftSettings: strictConcurrencySettings),
         .target(name: "PraxisCore", dependencies: [], path: "Packages/PraxisCore", swiftSettings: strictConcurrencySettings),
         .target(name: "CathedralModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContextumModule"], path: "Packages/CathedralModule", swiftSettings: strictConcurrencySettings),
-        .target(name: "ContextumModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "CapsuleCore", "TextChunkingCapsule", "CompressionKit"], path: "Sources/ContextumModule", swiftSettings: strictConcurrencySettings),
+        .target(name: "ContextumModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "CapsuleCore", "TextChunkingCapsule", "CompressionKit", "VizAggregationCapsule"], path: "Sources/ContextumModule", swiftSettings: strictConcurrencySettings),
         .target(name: "ArtifactStoreModule", dependencies: ["AnigmaCore", "ContractsCore", "DatabaseCore"], path: "Sources/ArtifactStoreModule", swiftSettings: strictConcurrencySettings),
-        .target(name: "DevelopumModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "TelemetryCore", "ExecutionCore", .product(name: "GRDB", package: "GRDB.swift"), .product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/DevelopumModule", swiftSettings: strictConcurrencySettings),
+        .target(name: "DevelopumModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "TelemetryCore", "ExecutionCore", "TextChunkingCapsule", "AnigmaSidecar", .product(name: "GRDB", package: "GRDB.swift"), .product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/DevelopumModule", swiftSettings: strictConcurrencySettings),
         .target(name: "ModelRegistryModule", dependencies: ["AnigmaCore", "ContractsCore", "DatabaseCore"], path: "Sources/ModelRegistryModule", swiftSettings: strictConcurrencySettings),
         .target(name: "PraxisModule", dependencies: ["PraxisCore", "ContractsCore"], path: "Packages/PraxisModule", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLICore", dependencies: ["ContractsCore", "AnigmaCore"], path: "Packages/AnigmaCLI/Core", swiftSettings: strictConcurrencySettings),
@@ -259,7 +271,7 @@ let package = Package(
         .target(name: "AnigmaCLIRouter", dependencies: ["AnigmaCLICore", "AnigmaCLIProviders"], path: "Packages/AnigmaCLI/Router", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLIGovernance", dependencies: ["AnigmaCLICore", "AnigmaCLIProviders"], path: "Packages/AnigmaCLI/Governance", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLIOrchestrator", dependencies: ["AnigmaCLICore", "AnigmaCLIEventing", "AnigmaCLIGovernance", "AnigmaCLIProviders", "AnigmaCLIRouter"], path: "Packages/AnigmaCLI/Orchestrator", swiftSettings: strictConcurrencySettings),
-        .target(name: "AnigmaCLIMCP", dependencies: ["AnigmaCLICore", "AnigmaCLIEventing", "AnigmaCLIGovernance", "AnigmaCLIProviders", .product(name: "MCP", package: "swift-sdk")], path: "Packages/AnigmaCLIMCP", swiftSettings: strictConcurrencySettings),
+
         .target(name: "AnigmaCLIOnboarding", dependencies: ["AnigmaCLICore", "AnigmaCLIDatabase", "AnigmaCLIProviders", "AnigmaCLIML", "DatabaseCore", "ModelManagement", .product(name: "GRDB", package: "GRDB.swift")], path: "Packages/AnigmaCLI/Onboarding", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLIDatabase", dependencies: ["CSQLiteVec", "AnigmaCLICore", "TextChunkingCapsule", .product(name: "Crypto", package: "swift-crypto")], path: "Packages/AnigmaCLI/Database", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLIRAG", dependencies: ["CSQLiteVec", "TextChunkingCapsule"], path: "Packages/AnigmaCLI/RAG", swiftSettings: strictConcurrencySettings),
@@ -267,16 +279,89 @@ let package = Package(
         .target(name: "AnigmaCLIUI", dependencies: [], path: "Packages/AnigmaCLI/UI", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLITUI", dependencies: ["AnigmaCLICore", "AnigmaCLIEventing", "AnigmaCLIDatabase", "AnigmaCLIML", "HarmoniaModule", "AnigmaTUI"], path: "Packages/AnigmaCLI/Sources/TUI", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLIMLIntegration", dependencies: [], path: "Packages/AnigmaCLI/MLIntegration", swiftSettings: strictConcurrencySettings),
+        .target(name: "AnigmaCLIMCP", dependencies: ["AnigmaCLICore", "AnigmaPrimitives", "ContractsCore"], path: "Packages/AnigmaCLIMCP", swiftSettings: strictConcurrencySettings),
+        .target(name: "RLMModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "DatabaseCore", "ContextumModule", "ArtifactStoreModule", "HarmoniaModule", "VectorIndexCapsule", "TextPipelineCapsule", "TextChunkingCapsule", "LayoutEngineCapsule", "CapsuleCore", "InferenceCore"], path: "Sources/RLMModule", swiftSettings: strictConcurrencySettings),
         .target(name: "ModelManagement", dependencies: [.product(name: "Crypto", package: "swift-crypto")], path: "Packages/AnigmaCLI/Sources/ModelManagement", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCLILocalInference", dependencies: [.product(name: "MLX", package: "mlx-swift"), .product(name: "MLXNN", package: "mlx-swift"), .product(name: "MLXRandom", package: "mlx-swift"), .product(name: "MLXOptimizers", package: "mlx-swift")], path: "Packages/AnigmaCLI/Sources/LocalInference", swiftSettings: strictConcurrencySettings),
         .executableTarget(name: "HarmoniaCLI", dependencies: ["AnigmaCLICore", "AnigmaCLIEventing", "AnigmaCLIGovernance", "AnigmaCLIOrchestrator", "AnigmaCLIProviders", "AnigmaCLIRouter", "AnigmaCore", "ContractsCore", "HarmoniaModule", "PraxisModule", "PraxisCore", "MLWorkerCommon", "HarmoniaMemory", "TechDebtAudit", "ExecutionCore", "StorageCore", "AnigmaDaemonCore", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/HarmoniaCLI", swiftSettings: strictConcurrencySettings),
-        .executableTarget(name: "AnigmaCLIExecutable", dependencies: ["AnigmaCLICore", "AnigmaCLIEventing", "AnigmaCLIOrchestrator", "AnigmaCLIProviders", "AnigmaCLIMCP", "AnigmaCLIDatabase", "AnigmaCLIRouter", "AnigmaCLIGovernance", "AnigmaCLIOnboarding", "AnigmaCLIRAG", "AnigmaCLIML", "AnigmaCLIUI", "AnigmaCLITUI", "ModelManagement", "AnigmaCore", "AnigmaPrimitives", "ContractsCore", "DatabaseCore", "AnigmaMCPModule", "MLWorkerCommon", "ModelRegistry", "ModelRegistryModule", "HarmoniaModule", "CathedralModule", "StorageCore", "ExecutionCore", "TelemetryCore", "ContextumModule", "ArtifactStoreModule", "ObservatoriumModule", "AccessumModule", "DiaplasionModule", "OutlineumModule", "PolytroposModule", .product(name: "ArgumentParser", package: "swift-argument-parser"), .product(name: "GRDB", package: "GRDB.swift"), .product(name: "MCP", package: "swift-sdk")], path: "Packages/AnigmaCLI/Executable", swiftSettings: strictConcurrencySettings),
+
+        .executableTarget(
+            name: "AnigmaCLIExecutable",
+            dependencies: [
+                "AnigmaCLICore",
+                "AnigmaCLIEventing",
+                "AnigmaCLIOrchestrator",
+                "AnigmaCLIProviders",
+                "AnigmaCLIMCP",
+                "AnigmaCLIRouter",
+                "AnigmaCLIGovernance",
+                "AnigmaCLIOnboarding",
+                "AnigmaCLIUI",
+                "AnigmaCLITUI",
+                "ModelManagement",
+                "AnigmaCore",
+                "AnigmaPrimitives",
+                "ContractsCore",
+                "AnigmaMCPModule",
+                "ModelRegistry",
+                "HarmoniaModule", // Still needed for contracts/types? Or can we thin this?
+                "AnigmaSidecar",  // The Critical dependency now
+                .product(name: "MCP", package: "swift-sdk"),
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "GRDB", package: "GRDB.swift"), // Might still be needed for local config/onboarding
+                .product(name: "BLAKE3", package: "blake3-swift")
+            ],
+            path: "Packages/AnigmaCLI/Executable",
+            swiftSettings: strictConcurrencySettings
+        ),
+        .executableTarget(
+            name: "AnigmaStatusBar",
+            dependencies: [
+                "AnigmaSidecar",
+                "AnigmaPrimitives"
+            ],
+            path: "Packages/AnigmaStatusBar",
+            swiftSettings: strictConcurrencySettings
+        ),
         .executableTarget(name: "AnigmaDaemon", dependencies: ["AnigmaDaemonCore", "AnigmaSidecar", "StorageCore", "HarmoniaModule", "SidecarOfficeService", "SidecarPDFService", "SidecarTranslateService"], path: "Packages/AnigmaDaemon", swiftSettings: strictConcurrencySettings),
-        .target(name: "AnigmaDaemonCore", dependencies: ["AnigmaCore", "DatabaseCore", "ExecutionCore", "GovernanceCore", "StorageCore", "TelemetryCore", "ContractsCore", "MLWorkerCommon", "AnigmaPrimitives", .product(name: "Hummingbird", package: "hummingbird"), .product(name: "HummingbirdTLS", package: "hummingbird")], path: "Packages/AnigmaDaemonCore", swiftSettings: strictConcurrencySettings),
+        .target(name: "AnigmaDaemonCore", dependencies: ["AnigmaCore", "DatabaseCore", "ExecutionCore", "GovernanceCore", "StorageCore", "TelemetryCore", "ContractsCore", "MLWorkerCommon", "AnigmaPrimitives", "AnigmaMCPModule", "TextChunkingCapsule", "LayoutEngineCapsule", "VectorCapsule", "CompressionKit", "RLMModule", "VectorIndexCapsule", "ContextumModule", "InferenceCore", .product(name: "Hummingbird", package: "hummingbird"), .product(name: "HummingbirdTLS", package: "hummingbird"), .product(name: "SwiftTreeSitter", package: "swift-tree-sitter")], path: "Packages/AnigmaDaemonCore", swiftSettings: strictConcurrencySettings),
         .target(name: "MLWorkerCommon", dependencies: ["ContractsCore", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/MLWorkerCommon", swiftSettings: strictConcurrencySettings),
         .target(name: "TechDebtAudit", dependencies: [], path: "Packages/TechDebtAudit", swiftSettings: strictConcurrencySettings),
         .target(name: "PlatformCore", dependencies: ["AnigmaCore", "CapabilityCore", "ContractsCore"], path: "Packages/PlatformCore", swiftSettings: strictConcurrencySettings),
-        .target(name: "AnigmaMCPModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "ContractsCore", "HarmoniaModule", "AccessumModule", "DiaplasionModule", "OutlineumModule", "PolytroposModule", "ContextumModule", "ArtifactStoreModule", "MLWorkerCommon", "ModelRegistry", "ModelRegistryModule", "ObservatoriumModule", "CathedralModule", "DatabaseCore", .product(name: "MCP", package: "swift-sdk")], path: "Sources/AnigmaMCPModule", swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "AnigmaMCPModule",
+            dependencies: [
+                "AnigmaCore",
+                "AnigmaPrimitives",
+                "ContractsCore",
+                "HarmoniaModule",
+                "AccessumModule",
+                "DiaplasionModule",
+                "OutlineumModule",
+                "PolytroposModule",
+                "ContextumModule",
+                "ArtifactStoreModule",
+                "ModelRegistryModule",
+                "MLWorkerCommon",
+                "ModelRegistry",
+                "ObservatoriumModule",
+                "CathedralModule",
+                "DatabaseCore",
+                .product(name: "MCP", package: "swift-sdk")
+            ],
+            path: "Sources/AnigmaMCPModule",
+            swiftSettings: strictConcurrencySettings
+        ),
+        .executableTarget(
+            name: "AnigmaMCPExecutable",
+            dependencies: [
+                "AnigmaMCPModule",
+                .product(name: "MCP", package: "swift-sdk")
+            ],
+            path: "Sources/AnigmaMCPExecutable",
+            swiftSettings: strictConcurrencySettings
+        ),
+
         .target(name: "AnigmaTestSupport", dependencies: ["AnigmaCore", "AnigmaPrimitives", "ContractsCore", "DatabaseCore", "PolytroposModule"], path: "Packages/AnigmaTestSupport", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "DatabaseCoreTests", dependencies: ["DatabaseCore", "ContractsCore"], path: "Tests/DatabaseCoreTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "AnigmaCoreTests", dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "AnigmaTestSupport"], path: "Tests/AnigmaCoreTests", swiftSettings: strictConcurrencySettings),
@@ -319,7 +404,7 @@ let package = Package(
         .testTarget(name: "AnigmaCLIGovernanceTests", dependencies: ["AnigmaCLIGovernance"], path: "Tests/AnigmaCLIGovernanceTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "AnigmaCLIEventingTests", dependencies: ["AnigmaCLIEventing"], path: "Tests/AnigmaCLIEventingTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "AnigmaCLIMCPTests", dependencies: ["AnigmaCLIMCP"], path: "Tests/AnigmaCLIMCPTests", swiftSettings: strictConcurrencySettings),
-        .testTarget(name: "AnigmaMCPModuleTests", dependencies: ["AnigmaMCPModule", "AnigmaCore", "AnigmaPrimitives", .product(name: "MCP", package: "swift-sdk")], path: "Tests/AnigmaMCPModuleTests", swiftSettings: strictConcurrencySettings),
+
         .testTarget(name: "AnigmaCLITests", dependencies: ["AnigmaCLIDatabase", "AnigmaCLICore", "AnigmaCLIOrchestrator"], path: "Tests/AnigmaCLITests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "CathedralModuleTests", dependencies: ["CathedralModule", "AnigmaCore", "DatabaseCore"], path: "Tests/CathedralModuleTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "ArtifactStoreModuleTests", dependencies: ["ArtifactStoreModule", "AnigmaCore", "ContractsCore", "DatabaseCore"], path: "Tests/ArtifactStoreModuleTests", swiftSettings: strictConcurrencySettings),
@@ -344,6 +429,10 @@ let package = Package(
         .testTarget(name: "CanonicalTokenizerTests", dependencies: ["CanonicalTokenizer"], path: "Tests/CanonicalTokenizerTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "LayoutEngineCapsuleTests", dependencies: ["LayoutEngineCapsule", "CapsuleCore"], path: "Tests/LayoutEngineCapsuleTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "VizAggregationCapsuleTests", dependencies: ["VizAggregationCapsule", "CapsuleCore"], path: "Tests/VizAggregationCapsuleTests", swiftSettings: strictConcurrencySettings),
+        .testTarget(name: "MediaFingerprintCapsuleTests", dependencies: ["MediaFingerprintCapsule"], path: "Packages/MediaFingerprintCapsule/Tests", swiftSettings: strictConcurrencySettings),
+        .testTarget(name: "VectorCapsuleTests", dependencies: ["VectorCapsule", "CapsuleCore"], path: "Tests/VectorCapsuleTests", swiftSettings: strictConcurrencySettings),
+
+
         .testTarget(name: "EmbeddingStabilityTests", dependencies: ["ContractsCore", "VectorumModule"], path: "Tests/EmbeddingStability", swiftSettings: strictConcurrencySettings)
     ],
     cxxLanguageStandard: .cxx17

@@ -16,6 +16,7 @@ public struct DevelopumEditorSystem: System {
     public var name: String { "DevelopumEditorSystem" }
     
     private let databaseService: DevelopumDatabaseService
+    private let historyService: DevelopumHistoryService
     private let telemetryClient: TelemetryClient?
     
     /// Current bridge session ID for message correlation.
@@ -26,6 +27,7 @@ public struct DevelopumEditorSystem: System {
         telemetryClient: TelemetryClient? = nil
     ) {
         self.databaseService = databaseService
+        self.historyService = DevelopumHistoryService(databaseService: databaseService)
         self.telemetryClient = telemetryClient
     }
     
@@ -63,6 +65,8 @@ public struct DevelopumEditorSystem: System {
                 await handleSaveRequest(world: world, entity: entity, bridgeMessage: bridgeMessage, repoSession: repoSession)
             case .searchRequest:
                 await handleSearchRequest(world: world, entity: entity, bridgeMessage: bridgeMessage, repoSession: repoSession)
+            case .chunkAction:
+                await handleChunkAction(world: world, entity: entity, bridgeMessage: bridgeMessage, repoSession: repoSession)
             default:
                 logWarning("Unhandled bridge message type: \(bridgeMessage.messageType)", category: "DevelopumEditorSystem")
             }
@@ -315,6 +319,7 @@ public struct DevelopumEditorSystem: System {
         bridgeMessage: BridgeMessageComponent,
         repoSession: RepoSessionComponent
     ) async {
+        // ... (existing implementation)
         guard let payload = try? JSONDecoder().decode(SearchRequestPayload.self, from: bridgeMessage.payloadJson.data(using: .utf8)!) else {
             logError("Failed to decode SearchRequestPayload", category: "DevelopumEditorSystem")
             return
@@ -335,6 +340,69 @@ public struct DevelopumEditorSystem: System {
         await world.addComponent(jobEntity, repoSession)
         
         logInfo("Search request queued: \(payload.query)", category: "DevelopumEditorSystem")
+    }
+    
+    /// Handle chunk action message.
+    private func handleChunkAction(
+        world: World,
+        entity: EntityId,
+        bridgeMessage: BridgeMessageComponent,
+        repoSession: RepoSessionComponent
+    ) async {
+        guard let payload = try? JSONDecoder().decode(ChunkActionPayload.self, from: bridgeMessage.payloadJson.data(using: .utf8)!) else {
+            logError("Failed to decode ChunkActionPayload", category: "DevelopumEditorSystem")
+            return
+        }
+        
+        // We need file path. BridgeMessageComponent doesn't track it, so we rely on the OpenFileComponent
+        // attached to the same entity (usually).
+        guard let openFile = await world.getComponent(entity, OpenFileComponent.self) else {
+            logError("ChunkAction received without OpenFileComponent", category: "DevelopumEditorSystem")
+            return
+        }
+        
+        let filePath = openFile.filePath
+        
+        // 1. Load Virtual Document to find chunk index
+        if let vDoc = try? await databaseService.getVirtualDocument(repoId: repoSession.id, filePath: filePath) {
+             if let chunkIndex = vDoc.chunks.firstIndex(of: payload.hash) {
+                 logInfo("Analyzing history for chunk at index \(chunkIndex) (Hash: \(payload.hash.prefix(8)))", category: "DevelopumEditorSystem")
+                 
+                 // 2. Trace Genealogy
+                 if let history = try? await historyService.traceChunkGenealogy(
+                    repoId: repoSession.id,
+                    filePath: filePath,
+                    chunkIndex: chunkIndex
+                 ) {
+                     let historyCount = history.count
+                     let versions = history.map { $0.versionId.uuidString.prefix(8) }.joined(separator: ", ")
+                     
+                     logInfo("Chunk History Found: \(historyCount) versions (\(versions))", category: "DevelopumEditorSystem")
+                     
+                     // 3. Send feedback to editor
+                     // For now, we use a simple 'showMessage' payload to prove the loop works.
+                     let message = ShowMessagePayload(
+                        severity: .info,
+                        message: "Chunk History: \(historyCount) versions found. Earliest: \(history.last?.timestamp.formatted() ?? "Unknown")"
+                     )
+                     
+                     // Create a response message entity
+                     // Ideally we should reuse the bridge connection from the entity
+                     // But we don't have a direct "send" method here yet without DevelopumBridge reference.
+                     // We typically queue a message for the bridge to pick up, or use a sidecar service.
+                     
+                     // Since we are in the System, we might need to rely on `DevelopumLSPBridge` or similar to send back.
+                     // But wait, DevelopumBridge is the contract.
+                     // The actual sender is likely in the `AnigmaApp` or `Sidecar`.
+                     
+                     // For this prototype, logging is sufficient proof of backend processing.
+                 }
+             } else {
+                 logWarning("Chunk hash \(payload.hash) not found in current virtual document", category: "DevelopumEditorSystem")
+             }
+        } else {
+            logWarning("Virtual document not found for \(filePath)", category: "DevelopumEditorSystem")
+        }
     }
     
     // MARK: - Workspace State Management

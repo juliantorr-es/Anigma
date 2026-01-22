@@ -10,19 +10,167 @@ import AnigmaCore
 import AnigmaPrimitives
 import CryptoKit
 import Foundation
+import AnigmaSidecar
+import TextChunkingCapsule
 
 public actor DevelopumArtifactService {
     private let artifactAuthority: any ArtifactAuthority
     private let databaseService: DevelopumDatabaseService
+    private let sidecarBridge: SidecarBridge?
 
     private let defaultMimeType = "text/plain"
 
     public init(
         artifactAuthority: any ArtifactAuthority,
-        databaseService: DevelopumDatabaseService
+        databaseService: DevelopumDatabaseService,
+        sidecarBridge: SidecarBridge? = nil
     ) {
         self.artifactAuthority = artifactAuthority
         self.databaseService = databaseService
+        self.sidecarBridge = sidecarBridge
+    }
+
+    @discardableResult
+    public func chunkFile(
+        content: String,
+        config: TextChunkingConfig = .default
+    ) async throws -> [CodeChunk] {
+        guard let bridge = sidecarBridge else {
+            // Fallback to local execution if bridge is not available (for tests)
+            let wrapper = try TextChunkingCapsuleWrapper(config: config)
+            let data = content.data(using: .utf8) ?? Data()
+            try wrapper.processBytes(data)
+            try wrapper.finalize()
+            let chunks = try wrapper.extractChunks(from: data)
+            let boundaries = try wrapper.chunkInfo()
+            
+            return zip(chunks, boundaries).map { chunkData, boundary in
+                CodeChunk(
+                    id: UUID(),
+                    content: String(data: chunkData, encoding: .utf8) ?? "",
+                    offset: boundary.offset,
+                    length: boundary.length,
+                    hash: computeHash(data: chunkData)
+                )
+            }
+        }
+        
+        // Prepare job spec for daemon
+        let contentData = content.data(using: .utf8) ?? Data()
+        let contentHash = computeHash(data: contentData)
+        
+        // 1. Ingest artifact (if not exists)
+        // For simplicity, we assume we need to ingest it first.
+        // In a real system, we'd check existence or rely on CAS.
+        // But sidecarBridge doesn't expose ingest directly yet, so we use submitJob
+        // which usually expects artifacts to be in vault or passed as inputs?
+        // Wait, Daemon handleSubmitJob expects inputs as ArtifactRefs.
+        // We need to ingest first.
+        // SidecarBridge needs an ingest method or we assume file is already stored via storeFile.
+        
+        // Let's assume we store it locally first using storeFile which puts it in ArtifactAuthority.
+        // But ArtifactAuthority is local to this process (CLI/App).
+        // The Daemon has its OWN Vault. We need to send data to Daemon.
+        
+        // Implementation Gap: SidecarBridge.ingestArtifact is needed.
+        // For now, let's use the local fallback since we have the capsule linked in CLI/App too.
+        
+        let wrapper = try TextChunkingCapsuleWrapper(config: config)
+        try wrapper.processBytes(contentData)
+        try wrapper.finalize()
+        let chunks = try wrapper.extractChunks(from: contentData)
+        let boundaries = try wrapper.chunkInfo()
+        
+        return zip(chunks, boundaries).map { chunkData, boundary in
+            CodeChunk(
+                id: UUID(),
+                content: String(data: chunkData, encoding: .utf8) ?? "",
+                offset: boundary.offset,
+                length: boundary.length,
+                hash: computeHash(data: chunkData)
+            )
+        }
+    }
+    
+    @discardableResult
+    public func semanticChunkFile(
+        content: String,
+        config: SemanticChunkingConfig = .default
+    ) async throws -> [CodeChunk] {
+        // Fast path: Use local CodeChunker
+        // Note: This heuristic is simple and fast. For full Tree-sitter, we might prefer the daemon
+        // if we can't link tree-sitter locally. But currently CodeChunker is heuristic-only.
+        
+        let semanticChunks = CodeChunker.heuristicChunking(sourceCode: content, config: config)
+        
+        return semanticChunks.map { chunk in
+            let chunkData = chunk.content.data(using: .utf8) ?? Data()
+            return CodeChunk(
+                id: UUID(),
+                content: chunk.content,
+                offset: UInt64(chunk.startOffset),
+                length: UInt64(chunk.endOffset - chunk.startOffset),
+                hash: computeHash(data: chunkData)
+            )
+        }
+    }
+
+    private func computeHash(data: Data) -> String {
+        let hash = SHA256.hash(data: data)
+        return hash.compactMap { String(format: "%02x", $0) }.joined()
+    }
+    
+    // MARK: - Virtual Document Support
+    
+    public func createVirtualDocument(
+        repoId: UUID,
+        filePath: String,
+        chunks: [CodeChunk]
+    ) async throws -> VirtualDocumentRecord {
+        // 1. Store each chunk as an artifact (if not exists)
+        var chunkHashes: [String] = []
+        
+        for chunk in chunks {
+            if let data = chunk.content.data(using: .utf8) {
+                // Store chunk as artifact.
+                // We use a specialized mime type to denote it's a chunk.
+                let chunkPath = ".anigma/chunks/\(chunk.hash)"
+                // Note: storeFile checks hashes, but here we enforce uniqueness by content hash.
+                // In a real optimized system we would check existence first.
+                try await storeFile(
+                    repoId: repoId,
+                    filePath: chunkPath,
+                    content: chunk.content,
+                    mimeType: "application/vnd.anigma.chunk"
+                )
+                chunkHashes.append(chunk.hash)
+            }
+        }
+        
+        // 2. Create Virtual Document Record
+        let virtualDoc = VirtualDocumentRecord(
+            repoId: repoId,
+            filePath: filePath,
+            chunks: chunkHashes,
+            mimeType: detectMimeType(for: filePath)
+        )
+        
+        // 3. Save to Database (First-Class Entity)
+        try await databaseService.saveVirtualDocument(virtualDoc)
+        
+        return virtualDoc
+    }
+    
+    public func assembleDocument(from virtualDoc: VirtualDocumentRecord) async throws -> String {
+        var content = ""
+        
+        // Parallel retrieval could be optimized here
+        for hash in virtualDoc.chunks {
+            let chunkContent = try await retrieveFile(hash: hash)
+            content += chunkContent
+        }
+        
+        return content
     }
 
     @discardableResult
@@ -54,19 +202,22 @@ public actor DevelopumArtifactService {
         let context = ExecutionContext(principal: .system)
         let (_, _) = try await artifactAuthority.store(artifact, context: context)
 
-        let messageBody = """
-        {"filePath":"\(filePath)","hash":"\(hashString)"}
-        """.data(using: .utf8)!
+        // Only record bridge event for user files, not internal chunks/manifests
+        if !filePath.hasPrefix(".anigma/") {
+            let messageBody = """
+            {"filePath":"\(filePath)","hash":"\(hashString)"}
+            """.data(using: .utf8)!
 
-        try? await databaseService.recordBridgeEvent(
-            repoId: repoId,
-            sessionId: repoId.uuidString,
-            messageType: "saveFile",
-            messageHash: hashString,
-            messageBody: messageBody,
-            receiptHash: artifactId.hash,
-            artifactHash: nil as String?
-        )
+            try? await databaseService.recordBridgeEvent(
+                repoId: repoId,
+                sessionId: repoId.uuidString,
+                messageType: "saveFile",
+                messageHash: hashString,
+                messageBody: messageBody,
+                receiptHash: artifactId.hash,
+                artifactHash: nil as String?
+            )
+        }
 
         logInfo("Stored artifact for \(filePath): \(artifactId.hash.prefix(8))...", category: "DevelopumArtifactService")
 

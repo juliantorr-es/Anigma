@@ -124,6 +124,22 @@ public enum DevelopumMigration {
             );
             """
         )
+        
+        // Table: developum_virtual_documents
+        try await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS developum_virtual_documents (
+                id TEXT PRIMARY KEY,
+                repo_id TEXT NOT NULL,
+                file_path TEXT NOT NULL,
+                chunks_json TEXT NOT NULL,
+                mime_type TEXT NOT NULL,
+                last_modified REAL NOT NULL,
+                is_active INTEGER NOT NULL,
+                FOREIGN KEY (repo_id) REFERENCES developum_repos(id) ON DELETE CASCADE
+            );
+            """
+        )
     }
     
     /// Create indexes for query performance.
@@ -209,6 +225,14 @@ public enum DevelopumMigration {
             ON developum_editor_operations(timestamp);
             """
         )
+        
+        // Indexes for developum_virtual_documents
+        try await db.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_developum_vdoc_repo 
+            ON developum_virtual_documents(repo_id, file_path);
+            """
+        )
     }
     
     /// Drop all DevelopumModule tables (for testing/cleanup).
@@ -218,5 +242,6 @@ public enum DevelopumMigration {
         try await db.execute("DROP TABLE IF EXISTS developum_index_artifacts")
         try await db.execute("DROP TABLE IF EXISTS developum_workspace_states")
         try await db.execute("DROP TABLE IF EXISTS developum_repos")
+        try await db.execute("DROP TABLE IF EXISTS developum_virtual_documents")
     }
 }

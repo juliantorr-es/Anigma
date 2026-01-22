@@ -38,18 +38,26 @@ public struct MonacoEditorView: PlatformViewRepresentable {
     /// Bridge message handler.
     public let onBridgeMessage: ((DevelopumBridgeMessage) -> Void)?
     
+    /// Chunk boundaries to visualize.
+    public let chunkBoundaries: [CodeChunk]?
+    
+    /// Callback for bridge messages.
+    public let onBridgeMessage: ((DevelopumBridgeMessage) -> Void)?
+    
     /// Creates a Monaco editor view.
     public init(
         fileUri: String,
         content: String,
         languageId: String = "plaintext",
         readOnly: Bool = false,
+        chunkBoundaries: [CodeChunk]? = nil,
         onBridgeMessage: ((DevelopumBridgeMessage) -> Void)? = nil
     ) {
         self.fileUri = fileUri
         self.content = content
         self.languageId = languageId
         self.readOnly = readOnly
+        self.chunkBoundaries = chunkBoundaries
         self.onBridgeMessage = onBridgeMessage
     }
     
@@ -134,7 +142,7 @@ public struct MonacoEditorView: PlatformViewRepresentable {
     
     private func updateWebView(_ webView: WKWebView, context: Context) {
         // Update editor content if needed
-        let script = """
+        var script = """
         if (window.editor && window.editor.getValue() !== `\(content.escapingQuotes)`) {
             window.editor.setValue(`\(content.escapingQuotes)`);
         }
@@ -143,22 +151,64 @@ public struct MonacoEditorView: PlatformViewRepresentable {
             window.editor.updateOptions({ readOnly: \(readOnly) });
         }
         """
+        
+        if let chunks = chunkBoundaries {
+            let decorationsJson = chunks.map { chunk -> String in
+                // Map offset/length to line/column is complex without Monaco API
+                // For now, we rely on byte offsets which Monaco doesn't natively support well without model access
+                // So we send offsets to JS and let JS handle it using getPositionAt
+                return "{ start: \(chunk.offset), end: \(chunk.offset + chunk.length), hash: '\(chunk.hash)' }"
+            }.joined(separator: ",")
+            
+            script += """
+            if (window.editor) {
+                window.currentChunks = [\(decorationsJson)];
+                const chunks = window.currentChunks;
+                const model = window.editor.getModel();
+                const decorations = chunks.map(chunk => {
+                    const startPos = model.getPositionAt(chunk.start);
+                    const endPos = model.getPositionAt(chunk.end);
+                    return {
+                        range: new monaco.Range(startPos.lineNumber, startPos.column, endPos.lineNumber, endPos.column),
+                        options: {
+                            isWholeLine: false,
+                            className: 'chunkHighlight',
+                            hoverMessage: { value: 'Chunk Hash: ' + chunk.hash }
+                        }
+                    };
+                });
+                window.chunkDecorations = window.editor.deltaDecorations(window.chunkDecorations || [], decorations);
+            }
+            """
+        } else {
+            script += """
+            if (window.editor) {
+                window.currentChunks = [];
+                if (window.chunkDecorations) {
+                    window.chunkDecorations = window.editor.deltaDecorations(window.chunkDecorations, []);
+                }
+            }
+            """
+        }
+        
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
     
     public func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(self, onBridgeMessage: onBridgeMessage)
     }
     
-    /// Coordinator for handling WKWebView delegate and message handling.
     public class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         var parent: MonacoEditorView
+        var onBridgeMessage: ((DevelopumBridgeMessage) -> Void)?
         
-        init(_ parent: MonacoEditorView) {
+        init(_ parent: MonacoEditorView, onBridgeMessage: ((DevelopumBridgeMessage) -> Void)?) {
             self.parent = parent
+            self.onBridgeMessage = onBridgeMessage
         }
         
         // MARK: - WKScriptMessageHandler
+
         
         public func userContentController(
             _ userContentController: WKUserContentController,
@@ -172,6 +222,7 @@ public struct MonacoEditorView: PlatformViewRepresentable {
             
             do {
                 let bridgeMessage = try JSONDecoder().decode(DevelopumBridgeMessage.self, from: messageData)
+                // Forward message to callback via parent
                 parent.onBridgeMessage?(bridgeMessage)
             } catch {
                 print("Failed to decode bridge message: \(error)")
@@ -204,6 +255,38 @@ public struct MonacoEditorView: PlatformViewRepresentable {
                         }
                     }
                 }));
+                
+                // Add Chunk Action
+                editor.addAction({
+                    id: 'anigma.chunkAction',
+                    label: 'Inspect Chunk',
+                    contextMenuGroupId: 'navigation',
+                    run: function(ed) {
+                        if (!window.currentChunks) return;
+                        var pos = ed.getPosition();
+                        var model = ed.getModel();
+                        var offset = model.getOffsetAt(pos);
+                        var chunk = window.currentChunks.find(c => offset >= c.start && offset < c.end);
+                        
+                        if (chunk) {
+                            window.developumBridge.postMessage(JSON.stringify({
+                                version: '1.0',
+                                type: 'chunkAction',
+                                messageId: '\(UUID().uuidString)',
+                                sessionId: 'default',
+                                timestampMs: Date.now(),
+                                payload: {
+                                    type: 'chunkAction',
+                                    payload: {
+                                        hash: chunk.hash,
+                                        start: chunk.start,
+                                        end: chunk.end
+                                    }
+                                }
+                            }));
+                        }
+                    }
+                });
             }
             """
             webView.evaluateJavaScript(initScript, completionHandler: nil)

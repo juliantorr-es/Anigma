@@ -191,6 +191,37 @@ public actor SidecarBridge {
         }
     }
 
+    public func bridgeMCP(inputStream: AsyncStream<String>) async throws -> AsyncThrowingStream<String, Error> {
+        var request = HTTPClientRequest(url: "http://localhost/mcp")
+        request.method = .POST
+        request.body = .stream(length: nil) { writer in
+            for await chunk in inputStream {
+                var buffer = ByteBuffer(string: chunk)
+                try await writer.writeBuffer(buffer)
+            }
+        }
+        
+        let response = try await httpClient.execute(request, timeout: .hours(24), socketPath: socketPath)
+        
+        guard response.status == .ok else {
+            throw SidecarBridgeError.unavailable(nil)
+        }
+        
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    for try await buffer in response.body {
+                        let str = String(buffer: buffer)
+                        continuation.yield(str)
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
     public func healthCheck() async throws -> Bool {
         do {
             let response: AnigmaHealthResponse = try await get("/health")

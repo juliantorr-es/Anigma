@@ -400,6 +400,47 @@ public actor HTTPServerManager {
             )
         }
 
+        // MCP Endpoint (Unified)
+        router.post("/mcp") { request, context in
+            let (stream, continuation) = AsyncStream<String>.makeStream()
+            
+            // Bridge request body to incomingStream
+            Task {
+                do {
+                    for try await byteBuffer in request.body {
+                        if let str = String(buffer: byteBuffer) {
+                            // MCP often sends multiple messages in one chunk or messages ending in newline
+                            let lines = str.split(separator: "\n", omittingEmptySubsequences: true)
+                            for line in lines {
+                                continuation.yield(String(line))
+                            }
+                        }
+                    }
+                } catch {
+                    print("MCP bridge error: \(error)")
+                }
+                continuation.finish()
+            }
+            
+            let transport = DaemonMCPTransport(incomingStream: stream)
+            
+            // Run MCP server session in background
+            Task {
+                try? await daemon.handleMCPConnection(transport: transport)
+            }
+            
+            // Return outgoing messages from transport as streaming response
+            return Response(
+                status: .ok,
+                headers: ["Content-Type": "application/x-ndjson"],
+                body: .stream { writer in
+                    for await message in transport.serverToClientStream {
+                        try await writer.write(.byteBuffer(ByteBuffer(string: message + "\n")))
+                    }
+                }
+            )
+        }
+
         // Stream Job Events (SSE)
         router.post("/job/events/stream") { request, context in
             let body = try await request.decode(as: AnigmaPrimitives.AnigmaStreamJobEventsRequest.self, context: context)
