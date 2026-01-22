@@ -8,12 +8,13 @@
 import ArgumentParser
 import Foundation
 import AnigmaDaemonCore
+import ServiceManagement
 
 struct DaemonCommand: AsyncParsableCommand {
     nonisolated(unsafe) static var configuration = CommandConfiguration(
         commandName: "daemon",
         abstract: "Manage the anigmad sidecar daemon.",
-        subcommands: [Start.self, Stop.self, Status.self]
+        subcommands: [Start.self, Stop.self, Status.self, Install.self, Uninstall.self, Enable.self, Disable.self]
     )
 
     private static var pidFilePath: String {
@@ -108,7 +109,28 @@ struct DaemonCommand: AsyncParsableCommand {
         nonisolated(unsafe) static var configuration = CommandConfiguration(abstract: "Stop the anigmad daemon.")
 
         func run() async throws {
-            print("Stopping anigmad daemon...")
+            // First try launch agent approach
+            let launchAgent = LaunchAgentManager()
+            
+            if await launchAgent.isInstalled() {
+                print("Stopping anigmad daemon via launch agent...")
+                do {
+                    try await launchAgent.stop()
+                    print("✅ Daemon stopped via launch agent.")
+                    
+                    // Also clean up PID file for backward compatibility
+                    if let pid = readPid() {
+                        try? FileManager.default.removeItem(atPath: pidFilePath)
+                    }
+                    return
+                    
+                } catch {
+                    print("⚠️  Launch agent stop failed, trying legacy approach: \(error.localizedDescription)")
+                }
+            }
+            
+            // Fallback to legacy process management
+            print("Stopping anigmad daemon via legacy process management...")
             guard let pid = readPid() else {
                 print("anigmad does not appear to be running (no PID file found).")
                 return
@@ -133,13 +155,57 @@ struct DaemonCommand: AsyncParsableCommand {
         nonisolated(unsafe) static var configuration = CommandConfiguration(abstract: "Check the status of the anigmad daemon.")
 
         func run() async throws {
+            // First check launch agent status
+            let launchAgent = LaunchAgentManager()
+            
+            if await launchAgent.isInstalled() {
+                let status = await launchAgent.getStatus()
+                
+                print("=== anigmad Daemon Status ===")
+                print("Launch Agent: ✅ Installed")
+                print("Running: \(status.running ? "✅ Yes" : "❌ No")")
+                
+                if let pid = status.pid {
+                    print("PID: \(pid)")
+                }
+                
+                if let startTime = status.startTime {
+                    let formatter = DateFormatter()
+                    formatter.dateStyle = .short
+                    formatter.timeStyle = .medium
+                    print("Started: \(formatter.string(from: startTime))")
+                }
+                
+                if let memoryUsage = status.memoryUsage {
+                    print("Memory Usage: \(ByteCountFormatter.string(fromByteCount: Int64(memoryUsage), countStyle: .memory))")
+                }
+                
+                if let plistPath = status.plistPath {
+                    print("Launch Agent Plist: \(plistPath)")
+                }
+                
+                print("===============================")
+                
+                // Also check legacy PID file for backward compatibility
+                if let legacyPid = readPid(), isProcessRunning(pid: legacyPid) {
+                    if status.running && status.pid != legacyPid {
+                        print("⚠️  Legacy process (PID \(legacyPid)) still running - may need manual cleanup")
+                    }
+                }
+                
+                return
+            }
+            
+            // Fallback to legacy status checking
             guard let pid = readPid() else {
                 print("anigmad is stopped (no PID file).")
+                print("Install with 'anigma daemon install' for automatic startup.")
                 return
             }
 
             if isProcessRunning(pid: pid) {
-                print("anigmad is running with PID \(pid).")
+                print("anigmad is running with PID \(pid) (legacy mode).")
+                print("Consider installing the launch agent: 'anigma daemon install'")
             } else {
                 print("anigmad is stopped (stale PID file found).")
             }
@@ -157,5 +223,148 @@ struct DaemonCommand: AsyncParsableCommand {
     private static func isProcessRunning(pid: pid_t) -> Bool {
         // kill with signal 0 is a standard way to check if a process exists.
         return kill(pid, 0) == 0
+    }
+    
+    struct Install: AsyncParsableCommand {
+        nonisolated(unsafe) static var configuration = CommandConfiguration(abstract: "Install the anigmad launch agent for automatic startup.")
+        
+        @Flag(name: .long, help: "Start the daemon immediately after installation.")
+        var start: Bool = false
+        
+        @Option(name: .long, help: "Path to the daemon executable. Auto-detected if not specified.")
+        var executable: String?
+        
+        func run() async throws {
+            let launchAgent = LaunchAgentManager()
+            
+            if await launchAgent.isInstalled() {
+                print("anigmad launch agent is already installed.")
+                
+                if start {
+                    try await launchAgent.start()
+                    print("anigmad daemon started.")
+                }
+                return
+            }
+            
+            print("Installing anigmad launch agent...")
+            
+            do {
+                try await launchAgent.install()
+                print("✅ Launch agent installed successfully.")
+                print("   The daemon will start automatically at system login.")
+                
+                if start {
+                    try await launchAgent.start()
+                    print("✅ anigmad daemon started immediately.")
+                }
+                
+                print("\nTo manage the daemon:")
+                print("  anigma daemon start    - Start the daemon")
+                print("  anigma daemon stop     - Stop the daemon") 
+                print("  anigma daemon status  - Check daemon status")
+                print("  anigma daemon enable  - Enable automatic startup")
+                print("  anigma daemon disable - Disable automatic startup")
+                print("  anigma daemon uninstall - Remove launch agent")
+                
+            } catch LaunchAgentManager.LaunchAgentError.permissionDenied {
+                print("❌ Permission denied. This operation requires appropriate permissions.")
+                print("   Try running without sudo first - the launch agent runs as the current user.")
+            } catch {
+                print("❌ Failed to install launch agent: \(error.localizedDescription)")
+                throw ExitCode.failure
+            }
+        }
+    }
+    
+    struct Uninstall: AsyncParsableCommand {
+        nonisolated(unsafe) static var configuration = CommandConfiguration(abstract: "Remove the anigmad launch agent.")
+        
+        @Flag(name: .long, help: "Stop the daemon before uninstalling.")
+        var stop: Bool = true
+        
+        func run() async throws {
+            let launchAgent = LaunchAgentManager()
+            
+            guard await launchAgent.isInstalled() else {
+                print("anigmad launch agent is not installed.")
+                return
+            }
+            
+            print("Removing anigmad launch agent...")
+            
+            do {
+                // Stop the daemon if requested
+                if stop {
+                    let status = await launchAgent.getStatus()
+                    if status.running {
+                        print("Stopping daemon...")
+                        try await launchAgent.stop()
+                        print("✅ Daemon stopped.")
+                    }
+                }
+                
+                // Remove the launch agent
+                try await launchAgent.remove()
+                print("✅ Launch agent removed successfully.")
+                print("   The daemon will no longer start automatically.")
+                
+            } catch {
+                print("❌ Failed to remove launch agent: \(error.localizedDescription)")
+                throw ExitCode.failure
+            }
+        }
+    }
+    
+    struct Enable: AsyncParsableCommand {
+        nonisolated(unsafe) static var configuration = CommandConfiguration(abstract: "Enable automatic startup of the daemon.")
+        
+        func run() async throws {
+            let launchAgent = LaunchAgentManager()
+            
+            if !await launchAgent.isInstalled() {
+                print("Installing launch agent first...")
+                try await launchAgent.install()
+                print("✅ Launch agent installed.")
+            }
+            
+            print("Enabling automatic startup...")
+            
+            do {
+                try await launchAgent.start()
+                print("✅ Automatic startup enabled.")
+                print("   The daemon will start at system login and when requested.")
+                
+            } catch {
+                print("❌ Failed to enable automatic startup: \(error.localizedDescription)")
+                throw ExitCode.failure
+            }
+        }
+    }
+    
+    struct Disable: AsyncParsableCommand {
+        nonisolated(unsafe) static var configuration = CommandConfiguration(abstract: "Disable automatic startup of the daemon.")
+        
+        func run() async throws {
+            let launchAgent = LaunchAgentManager()
+            
+            guard await launchAgent.isInstalled() else {
+                print("Launch agent is not installed.")
+                return
+            }
+            
+            print("Disabling automatic startup...")
+            
+            do {
+                try await launchAgent.stop()
+                print("✅ Automatic startup disabled.")
+                print("   The daemon will not start automatically at login.")
+                print("   Use 'anigma daemon start' to start it manually.")
+                
+            } catch {
+                print("❌ Failed to disable automatic startup: \(error.localizedDescription)")
+                throw ExitCode.failure
+            }
+        }
     }
 }

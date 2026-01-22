@@ -28,6 +28,9 @@ public actor DaemonServer {
     private let jobEvents: JobEventHub
     private let database: DatabaseActor
     private let rateLimiter: RateLimiter // Pass 8
+    private let signalManager: SignalManager
+    private let healthManager: HealthManager
+    private let resourceMonitor: ResourceMonitor
 
     private var isRunning: Bool = false
     private var startTime: Date?
@@ -129,6 +132,34 @@ public actor DaemonServer {
 
         // Initialize Rate Limiter (Pass 8)
         self.rateLimiter = RateLimiter(capacity: 100, refillRate: 10.0)
+        
+        // Initialize Signal Manager for graceful shutdown
+        self.signalManager = SignalManager()
+        await signalManager.setupDefaultHandlers(
+            shutdownHandler: { [weak self] in
+                await self?.handleGracefulShutdown()
+            },
+            reloadHandler: { [weak self] in
+                await self?.handleConfigurationReload()
+            }
+        )
+        
+        // Initialize Health Manager
+        self.healthManager = HealthManager(daemonStartTime: Date())
+        
+        // Initialize Resource Monitor
+        self.resourceMonitor = ResourceMonitor(
+            thresholds: ResourceThresholds(
+                maxMemoryMB: configuration.resources.maxMemoryMB,
+                maxCPUPercent: 80.0,
+                maxDiskUsagePercent: 90.0
+            )
+        )
+        
+        // Set up resource monitoring event handlers
+        await resourceMonitor.registerEventHandler { [weak self] event in
+            await self?.handleResourceEvent(event)
+        }
     }
 
     func registerWorker(_ worker: JobWorker) async {
@@ -144,6 +175,9 @@ public actor DaemonServer {
         isRunning = true
         startTime = Date()
 
+        // Start resource monitoring
+        await resourceMonitor.startMonitoring()
+        
         // Start HTTP server
         try await httpServer.start(
             configuration: configuration.daemon,
@@ -180,30 +214,172 @@ public actor DaemonServer {
 
     /// Stop the daemon
     public func stop() async {
+        await performShutdown()
+    }
+    
+    /// Handle graceful shutdown from signal
+    private func handleGracefulShutdown() async {
+        print("Initiating graceful shutdown...")
+        await performShutdown()
+        
+        // Give the process a moment to clean up
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        
+        // Exit cleanly
+        exit(0)
+    }
+    
+    /// Handle configuration reload
+    private func handleConfigurationReload() async {
+        print("Configuration reload requested...")
+        // TODO: Implement configuration reload logic
+        print("Configuration reload not yet implemented")
+    }
+    
+    /// Perform the actual shutdown sequence
+    private func performShutdown() async {
         guard isRunning else { return }
 
         isRunning = false
 
+        // Stop accepting new jobs
+        await jobQueue.pause()
+
+        // Wait for existing jobs to complete or timeout
+        if let jobTask = jobProcessingTask {
+            jobTask.cancel()
+            
+            // Wait up to 30 seconds for jobs to complete
+            let timeout = Task {
+                try? await Task.sleep(nanoseconds: 30_000_000_000)
+            }
+            
+            _ = await withTaskGroup(of: Void.self) { group in
+                group.addTask { await jobTask }
+                group.addTask { await timeout.value }
+            }
+        }
+
         // Stop HTTP server
         await httpServer.stop()
+        
+        // Stop worker pool
+        await workerPool.stop()
+        
+        // Stop resource monitoring
+        await resourceMonitor.stopMonitoring()
+
+        // Clean up signal handlers
+        await signalManager.cleanup()
 
         _ = await telemetry.emit(
             category: .system,
             name: "daemon_stopped",
-            values: [:]
+            values: [
+                "uptime": Date().timeIntervalSince(startTime ?? Date()),
+                "jobs_processed": jobQueue.processedJobCount
+            ]
         )
 
-        logInfo("anigmad stopped", category: "Daemon")
+        logInfo("anigmad stopped gracefully", category: "Daemon")
+    }
+    
+    /// Handle resource monitoring events
+    private func handleResourceEvent(_ event: ResourceEvent) async {
+        switch event {
+        case .memoryWarning(let usage, let threshold):
+            _ = await telemetry.emit(
+                category: .system,
+                name: "memory_warning",
+                values: ["usage": Double(usage), "threshold": Double(threshold)]
+            )
+            print("⚠️  Memory usage warning: \(usage / 1024 / 1024)MB / \(threshold / 1024 / 1024)MB")
+            
+        case .memoryCritical(let usage, let threshold):
+            _ = await telemetry.emit(
+                category: .system,
+                name: "memory_critical",
+                values: ["usage": Double(usage), "threshold": Double(threshold)]
+            )
+            print("🚨 Critical memory usage: \(usage / 1024 / 1024)MB / \(threshold / 1024 / 1024)MB")
+            await resourceMonitor.performCleanup()
+            
+        case .cpuWarning(let usage, let threshold):
+            _ = await telemetry.emit(
+                category: .system,
+                name: "cpu_warning",
+                values: ["usage": usage, "threshold": threshold]
+            )
+            print("⚠️  CPU usage warning: \(String(format: "%.1f", usage))% / \(String(format: "%.1f", threshold))%")
+            
+        case .cpuCritical(let usage, let threshold):
+            _ = await telemetry.emit(
+                category: .system,
+                name: "cpu_critical",
+                values: ["usage": usage, "threshold": threshold]
+            )
+            print("🚨 Critical CPU usage: \(String(format: "%.1f", usage))% / \(String(format: "%.1f", threshold))%")
+            
+        case .diskWarning(let usage, let threshold):
+            _ = await telemetry.emit(
+                category: .system,
+                name: "disk_warning",
+                values: ["usage": usage, "threshold": threshold]
+            )
+            print("⚠️  Disk usage warning: \(String(format: "%.1f", usage))% / \(String(format: "%.1f", threshold))%")
+            
+        case .threadWarning(let count, let threshold):
+            _ = await telemetry.emit(
+                category: .system,
+                name: "thread_warning",
+                values: ["count": count, "threshold": threshold]
+            )
+            print("⚠️  Thread count warning: \(count) / \(threshold)")
+            
+        case .resourceUsageNormal:
+            _ = await telemetry.emit(
+                category: .system,
+                name: "resource_usage_normal",
+                values: [:]
+            )
+            print("✅ Resource usage returned to normal levels")
+        }
     }
 
     // MARK: - gRPC Service Handlers
 
     /// HealthCheck handler
-    func handleHealthCheck() -> HealthCheckResponse {
+    func handleHealthCheck() async -> HealthCheckResponse {
+        let healthManager = HealthManager(daemonStartTime: startTime ?? Date())
+        let health = await healthManager.generateHealthReport(
+            jobQueue: jobQueue,
+            workerPool: workerPool,
+            httpServer: httpServer
+        )
+        
         return HealthCheckResponse(
             ok: isRunning,
-            message: isRunning ? "healthy" : "not running",
-            apiVersion: apiVersion
+            message: health.status.rawValue,
+            apiVersion: apiVersion,
+            uptime: health.uptime,
+            memoryUsage: health.memoryInfo.residentSize,
+            jobCount: health.jobQueueStats.totalJobs
+        )
+    }
+    
+    /// Detailed health check endpoint for monitoring
+    func handleDetailedHealthCheck() async -> DetailedHealthResponse {
+        let healthManager = HealthManager(daemonStartTime: startTime ?? Date())
+        let health = await healthManager.generateHealthReport(
+            jobQueue: jobQueue,
+            workerPool: workerPool,
+            httpServer: httpServer
+        )
+        
+        return DetailedHealthResponse(
+            health: health,
+            daemonVersion: daemonVersion,
+            buildHash: buildHash
         )
     }
 

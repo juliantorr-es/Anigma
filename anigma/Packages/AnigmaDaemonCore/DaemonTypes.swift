@@ -125,11 +125,36 @@ public struct HealthCheckResponse: Sendable, Codable {
     public let ok: Bool
     public let message: String
     public let apiVersion: String
+    public let uptime: TimeInterval?
+    public let memoryUsage: UInt64?
+    public let jobCount: Int?
 
-    public init(ok: Bool, message: String, apiVersion: String) {
+    public init(
+        ok: Bool, 
+        message: String, 
+        apiVersion: String, 
+        uptime: TimeInterval? = nil, 
+        memoryUsage: UInt64? = nil, 
+        jobCount: Int? = nil
+    ) {
         self.ok = ok
         self.message = message
         self.apiVersion = apiVersion
+        self.uptime = uptime
+        self.memoryUsage = memoryUsage
+        self.jobCount = jobCount
+    }
+}
+
+public struct DetailedHealthResponse: Sendable, Codable {
+    public let health: DaemonHealth
+    public let daemonVersion: String
+    public let buildHash: String
+    
+    public init(health: DaemonHealth, daemonVersion: String, buildHash: String) {
+        self.health = health
+        self.daemonVersion = daemonVersion
+        self.buildHash = buildHash
     }
 }
 
