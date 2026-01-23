@@ -55,57 +55,61 @@ public class MessageListView: TUIBaseComponent {
         scrollOffset = 999999
     }
 
+    private let richRenderer = RichTextRenderer()
+
     public override func render(engine: TUIEngine, rect: TUIRect) async {
         let borderColor = isFocused ? theme.borderActive.color : theme.border.color
         await engine.drawBox(row: rect.row, col: rect.col, width: rect.width, height: rect.height, title: "Anigma CLI Chat", color: borderColor)
 
         let width = rect.width - 4
-        var allLines: [String] = []
-        var inCodeBlock = false
+        var allLines: [String] = [] // Legacy string lines for scrolling calculation
+        var richLines: [[RichTextRenderer.RenderedLine]] = [] 
 
+        // We render everything to a buffer first
         for msg in messages {
             let roleStyle = msg.role == "user" ? theme.userRole : (msg.role == "system" ? theme.systemRole : theme.assistantRole)
-            allLines.append(engine.styled("[\(msg.role)]", style: roleStyle))
+            
+            // Header
+            richLines.append([RichTextRenderer.RenderedLine(segments: [
+                RichTextRenderer.StyledSegment(text: "[\(msg.role)]", style: roleStyle.bold ? .bold : .reset, color: roleStyle.color)
+            ])])
+            allLines.append("[\(msg.role)]")
 
-            let contentLines = msg.content.components(separatedBy: "\n")
-            for rawLine in contentLines {
-                if rawLine.trimmingCharacters(in: .whitespaces).hasPrefix("```") {
-                    inCodeBlock.toggle()
-                    allLines.append(engine.styled("  " + String(repeating: "─", count: width - 2), style: theme.systemRole))
-                    continue
-                }
-
-                let wrapped = wordWrap(rawLine, width: width - 2)
-                for w in wrapped {
-                    let styledLine = inCodeBlock ? engine.styled("  " + w, color: .cyan) : "  " + w
-                    allLines.append(styledLine)
-                }
+            // Content
+            let renderedContent = richRenderer.render(text: msg.content, width: width)
+            richLines.append(renderedContent)
+            
+            // Update line count for scrolling
+            for _ in renderedContent {
+                allLines.append("") 
             }
+            
+            // Spacer
+            richLines.append([RichTextRenderer.RenderedLine(segments: [])])
             allLines.append("")
         }
+        
+        // Flatten richLines for easy indexing
+        let flatRichLines = richLines.flatMap { $0 }
 
         let visibleHeight = rect.height - 2
-        let visibleStart = max(0, min(scrollOffset, allLines.count - visibleHeight))
-        let visibleEnd = min(allLines.count, visibleStart + visibleHeight)
+        let visibleStart = max(0, min(scrollOffset, flatRichLines.count - visibleHeight))
+        let visibleEnd = min(flatRichLines.count, visibleStart + visibleHeight)
 
         for (i, lineIdx) in (visibleStart..<visibleEnd).enumerated() {
-            await engine.addToFrame(row: rect.row + 1 + i, col: rect.col + 2, text: allLines[lineIdx])
-        }
-    }
-
-    private func wordWrap(_ text: String, width: Int) -> [String] {
-        if text.isEmpty { return [""] }
-        var lines: [String] = []
-        var currentLine = ""
-        for word in text.split(separator: " ", omittingEmptySubsequences: false) {
-            if currentLine.count + word.count + 1 > width {
-                if !currentLine.isEmpty { lines.append(currentLine); currentLine = "" }
+            let line = flatRichLines[lineIdx]
+            var currentCol = rect.col + 2
+            
+            for segment in line.segments {
+                let text = segment.text
+                await engine.addToFrame(
+                    row: rect.row + 1 + i, 
+                    col: currentCol, 
+                    text: engine.styled(text, color: segment.color, bg: segment.background, style: segment.style)
+                )
+                currentCol += text.count 
             }
-            if !currentLine.isEmpty { currentLine += " " }
-            currentLine += word
         }
-        if !currentLine.isEmpty { lines.append(currentLine) }
-        return lines.isEmpty ? [""] : lines
     }
 
     public override func handleKey(_ key: InputHandler.Key) async -> Bool {

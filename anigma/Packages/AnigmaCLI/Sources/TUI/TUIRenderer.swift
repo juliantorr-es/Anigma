@@ -207,7 +207,10 @@ public actor TUIRenderer {
                     Text("Toggle View", foreground: .gray)
                     
                     Text("[CTRL+P]", foreground: .brightCyan)
-                    Text("Command Palette", foreground: .gray)
+                    Text("Commands", foreground: .gray)
+                    
+                    Text("[↑/↓]", foreground: .white)
+                    Text("History", foreground: .gray)
                     
                     Text("[CTRL+R]", foreground: .brightGreen)
                     Text("Restart Daemon", foreground: .gray)

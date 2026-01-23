@@ -32,10 +32,12 @@ public struct ChunkedCodeEditorDemoView: View {
     @State private var isProcessing = false
     @State private var errorMessage: String?
     @State private var selectedChunkHistory: ChunkHistoryPayload?
+    @State private var showGraph: Bool = false
     
     @State private var chunkingMode: ChunkingMode = .semantic
     
     private let artifactService: DevelopumArtifactService
+    private let qualityService = QualityEnforcementService()
     
     public enum ChunkingMode: String, CaseIterable, Identifiable {
         case content = "Content (Rabin)"
@@ -63,6 +65,21 @@ public struct ChunkedCodeEditorDemoView: View {
                 .frame(width: 250)
                 
                 Spacer()
+                
+                Button(action: enforceQuality) {
+                    Label("Best Practices", systemImage: "checkmark.shield")
+                }
+                .disabled(isProcessing)
+                
+                Button(action: { showGraph.toggle() }) {
+                    Label("Graph", systemImage: "arrow.triangle.branch")
+                }
+                .disabled(chunks.isEmpty)
+                .popover(isPresented: $showGraph) {
+                    ChunkGraphView(chunks: chunks)
+                        .frame(width: 400, height: 500)
+                }
+                
                 Button(action: chunkCode) {
                     if isProcessing {
                         ProgressView().controlSize(.small)
@@ -172,6 +189,32 @@ public struct ChunkedCodeEditorDemoView: View {
                         currentChunkHash: payload.hash,
                         history: mockHistory
                     )
+                }
+            }
+        }
+    }
+    
+    private func enforceQuality() {
+        isProcessing = true
+        errorMessage = nil
+        
+        Task {
+            do {
+                let (newCode, changes) = try await qualityService.enforceBestPractices(code: content, language: "swift")
+                
+                await MainActor.run {
+                    if !changes.isEmpty {
+                        self.content = newCode
+                        self.errorMessage = "Applied \(changes.count) quality improvements."
+                    } else {
+                        self.errorMessage = "Code already meets best practices."
+                    }
+                    self.isProcessing = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = "Quality enforcement failed: \(error.localizedDescription)"
+                    self.isProcessing = false
                 }
             }
         }

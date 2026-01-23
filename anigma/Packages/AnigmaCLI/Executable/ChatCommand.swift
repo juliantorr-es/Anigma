@@ -143,13 +143,18 @@ struct AnigmaChatCommand: AsyncParsableCommand {
 
                         ])
 
-                        // Initialize Presenter
-
-                                let presenter = ChatPresenter(mlCoordinator: mlCoordinator, toolRouter: toolRouter)
-
-                                await presenter.start()
-
-                                // Handle Resize Signal (SIGWINCH)
+                        // 5. Initialize Presenter (Remote)
+                        // Connect to Sidecar
+                        do {
+                            let bridge = try await SidecarBridge.create(clientName: "anigma-cli-chat")
+                            let presenter = ChatPresenter(sidecar: bridge, sessionID: sessionID)
+                            await presenter.start()
+                        } catch {
+                            print("❌ Failed to connect to daemon: \(error)")
+                            return
+                        }
+                        
+                        // Handle Resize Signal (SIGWINCH)
 
                                 let signalSource = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
 
@@ -208,80 +213,10 @@ struct AnigmaChatCommand: AsyncParsableCommand {
                     }
 
                     _ = await container.dispatchKey(key)
-
                 }    }
-
-    private struct ExtractedToolCall {
-        let name: String
-        let parameters: String
-    }
-
-    private func extractToolCalls(from text: String) -> [ExtractedToolCall] {
-        var calls: [ExtractedToolCall] = []
-
-        // Simple manual extraction for robustness
-        let parts = text.components(separatedBy: "<tool_call>")
-        for part in parts.dropFirst() {
-            guard let callEnd = part.range(of: "</tool_call>") else { continue }
-            let callContent = String(part[..<callEnd.lowerBound])
-
-            guard let nameStart = callContent.range(of: "<name>"),
-                  let nameEnd = callContent.range(of: "</name>") else { continue }
-            let name = String(callContent[nameStart.upperBound..<nameEnd.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
-
-            guard let paramsStart = callContent.range(of: "<parameters>"),
-                  let paramsEnd = callContent.range(of: "</parameters>") else { continue }
-            let parameters = String(callContent[paramsStart.upperBound..<paramsEnd.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
-
-            calls.append(ExtractedToolCall(name: name, parameters: parameters))
-        }
-
-        return calls
-    }
-
-    private func loadMLConfig() async throws -> MLBackendCoordinator.BackendConfig {
-        let homeDir = FileManager.default.homeDirectoryForCurrentUser
-        let configPath = homeDir.appendingPathComponent(".anigma/config.json")
-
-        // Load API keys if available
-        var cloudAPIKeys: [String: String] = [:]
-        if FileManager.default.fileExists(atPath: configPath.path) {
-            let data = try Data(contentsOf: configPath)
-            if let config = try? JSONDecoder().decode([String: String].self, from: data) {
-                cloudAPIKeys = config
-            }
-        }
-
-        // Set up model directories
-        let mlxModelsDir = homeDir.appendingPathComponent(".anigma/models/mlx")
-        let llamaModelsDir = homeDir.appendingPathComponent(".anigma/models/llama")
-
-        // Parse backend preference
-        var preferredChat: MLBackendCoordinator.ChatBackend?
-        if let backend = backend {
-            switch backend.lowercased() {
-            case "mlx": preferredChat = .mlx
-            case "llama", "llamacpp": preferredChat = .llamaCpp
-            case "deepseek": preferredChat = .deepseek
-            case "openai": preferredChat = .openai
-            case "anthropic": preferredChat = .anthropic
-            case "google": preferredChat = .google
-            case "ollama": preferredChat = .ollama
-            default: break
-            }
-        }
-
-        return MLBackendCoordinator.BackendConfig(
-            mlxModelsDir: mlxModelsDir,
-            llamaCppModelsDir: llamaModelsDir,
-            preferredChatBackend: preferredChat,
-            preferredEmbeddingBackend: nil,
-            enableFallback: true,
-            cloudAPIKeys: cloudAPIKeys
-        )
-    }
 }
 
 enum ChatError: Error {
     case gitCommandFailed
 }
+
