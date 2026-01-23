@@ -3,9 +3,19 @@
 import PackageDescription
 import Foundation
 
+let isCI = ProcessInfo.processInfo.environment["CI"] != nil
+
 let strictConcurrencySettings: [SwiftSetting] = [
     .unsafeFlags(["-strict-concurrency=targeted"])
 ]
+
+let debugPerformanceSettings: [SwiftSetting] = [
+    .unsafeFlags(["-Xfrontend", "-stats-output-dir", "-Xfrontend", ".build/stats"]),
+    .unsafeFlags(["-Xfrontend", "-warn-long-function-bodies=100"]),
+    .unsafeFlags(["-Xfrontend", "-warn-long-expression-type-checking=100"])
+]
+
+let skipTestsOnCI: [Target] = isCI ? [] : [] // Logic placeholder
 
 let coreProducts: [Product] = [
     .library(name: "AnigmaFoundation", targets: ["AnigmaFoundation"]),
@@ -208,7 +218,7 @@ let package = Package(
                 .unsafeFlags(["-O3", "-ffast-math"]) // Performance optimizations
             ]
         ),
-        .target(name: "AnigmaFoundation", path: "Packages/AnigmaFoundation", swiftSettings: strictConcurrencySettings),
+        .target(name: "AnigmaFoundation", path: "Packages/AnigmaFoundation", swiftSettings: strictConcurrencySettings + debugPerformanceSettings),
         .target(name: "AnigmaCore",
              dependencies: ["AnigmaFoundation", "AnigmaPrimitives", "ContractsCore", "DatabaseCore", "StorageCore", "InferenceCore", "GovernanceCore", "SecurityEventsManager", "TextChunkingCapsule", "LayoutEngineCapsule", .product(name: "Toml", package: "swift-toml"), .product(name: "Crypto", package: "swift-crypto"), .product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/AnigmaCore", swiftSettings: strictConcurrencySettings),
 
@@ -487,17 +497,20 @@ let package = Package(
         .target(
             name: "RuntimeOrchestrator",
             dependencies: ["AnigmaNativeShims", "NativeKernel"],
-            path: "Sources/RuntimeOrchestrator"
+            path: "Sources/RuntimeOrchestrator",
+            swiftSettings: strictConcurrencySettings + debugPerformanceSettings
         ),
         .target(
             name: "PlatformAdapters",
             dependencies: ["RuntimeOrchestrator", "AnigmaNativeShims"],
-            path: "Sources/PlatformAdapters"
+            path: "Sources/PlatformAdapters",
+            swiftSettings: strictConcurrencySettings + debugPerformanceSettings
         ),
         .target(
             name: "AnigmaUI",
             dependencies: ["PlatformAdapters", "RuntimeOrchestrator"],
-            path: "Sources/AnigmaUI"
+            path: "Sources/AnigmaUI",
+            swiftSettings: strictConcurrencySettings + debugPerformanceSettings
         ),
         .target(name: "AnigmaTestSupport", dependencies: ["AnigmaCore", "AnigmaPrimitives", "ContractsCore", "DatabaseCore", "PolytroposModule"], path: "Packages/AnigmaTestSupport", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "DatabaseCoreTests", dependencies: ["DatabaseCore", "ContractsCore"], path: "Tests/DatabaseCoreTests", swiftSettings: strictConcurrencySettings),
