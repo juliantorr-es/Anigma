@@ -9,23 +9,33 @@ BUILD_DIR=".build"
 SCHEME="Anigma"
 CONFIG="debug" # Default to debug for faster incremental builds
 
-# Function to build a specific target
-build_target() {
+# Function to build with core-aware parallelism
+build_parallel() {
     local target=$1
-    echo "🚀 Building target: $target..."
-    swift build --target "$target" -c "$CONFIG" --build-path "$BUILD_DIR"
+    local cores
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        cores=$(sysctl -n hw.ncpu)
+    else
+        cores=$(nproc)
+    fi
+    echo "⚡️ Building $target with $cores cores..."
+    swift build --target "$target" -c "$CONFIG" -j "$cores" --build-path "$BUILD_DIR"
 }
 
-# Function to build the core engine "Hot Path"
-build_engine() {
-    echo "⚡️ Building Anigma Engine Hot Path..."
-    build_target "NativeKernel"
-    build_target "RuntimeOrchestrator"
-    build_target "PlatformAdapters"
+# Function to pre-compile stable dependencies
+warmup() {
+    echo "🔥 Warming up build cache for stable modules..."
+    local targets=("AnigmaFoundation" "AnigmaPrimitives" "CapsuleCore" "CompressionNative" "VectorNative")
+    for t in "${targets[@]}"; do
+        build_target "$t"
+    done
 }
 
 # Main routing
 case "$1" in
+    "warmup")
+        warmup
+        ;;
     "engine")
         build_engine
         ;;

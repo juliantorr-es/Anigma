@@ -8,6 +8,7 @@ let strictConcurrencySettings: [SwiftSetting] = [
 ]
 
 let coreProducts: [Product] = [
+    .library(name: "AnigmaFoundation", targets: ["AnigmaFoundation"]),
     .library(name: "AnigmaCore", targets: ["AnigmaCore"]),
     .library(name: "AnigmaPrimitives", targets: ["AnigmaPrimitives"]),
     .library(name: "CapsuleCore", targets: ["CapsuleCore"]),
@@ -207,8 +208,10 @@ let package = Package(
                 .unsafeFlags(["-O3", "-ffast-math"]) // Performance optimizations
             ]
         ),
+        .target(name: "AnigmaFoundation", path: "Packages/AnigmaFoundation", swiftSettings: strictConcurrencySettings),
         .target(name: "AnigmaCore",
-            dependencies: ["AnigmaPrimitives", "ContractsCore", "DatabaseCore", "StorageCore", "InferenceCore", "GovernanceCore", "SecurityEventsManager", "TextChunkingCapsule", "LayoutEngineCapsule", .product(name: "Toml", package: "swift-toml"), .product(name: "Crypto", package: "swift-crypto"), .product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/AnigmaCore", swiftSettings: strictConcurrencySettings),
+             dependencies: ["AnigmaFoundation", "AnigmaPrimitives", "ContractsCore", "DatabaseCore", "StorageCore", "InferenceCore", "GovernanceCore", "SecurityEventsManager", "TextChunkingCapsule", "LayoutEngineCapsule", .product(name: "Toml", package: "swift-toml"), .product(name: "Crypto", package: "swift-crypto"), .product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/AnigmaCore", swiftSettings: strictConcurrencySettings),
+
         .target(name: "AnigmaPrimitives", dependencies: [.product(name: "BLAKE3", package: "blake3-swift")], path: "Packages/AnigmaPrimitives", swiftSettings: strictConcurrencySettings),
         .target(name: "DatabaseCore", dependencies: ["ContractsCore", .product(name: "GRDB", package: "GRDB.swift")], path: "Packages/DatabaseCore", swiftSettings: strictConcurrencySettings),
         .target(name: "ContractsCore", dependencies: ["AnigmaPrimitives", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/ContractsCore", swiftSettings: strictConcurrencySettings),
@@ -297,35 +300,35 @@ let package = Package(
             publicHeadersPath: "include",
             cxxSettings: [.headerSearchPath("include")]
         ),
-        .target(name: "VectorCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "VectorNative"], path: "Packages/VectorCapsule", exclude: ["Sources/VectorNative"], swiftSettings: strictConcurrencySettings),
+        .target(name: "VectorCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "VectorNative"], path: "Packages/VectorCapsule", exclude: ["Sources/VectorNative"], swiftSettings: strictConcurrencySettings + [.unsafeFlags(["-whole-module-optimization"])]),
         .target(
             name: "TextPipelineNative",
             path: "Packages/TextPipelineCapsule/Sources/TextPipelineNative",
             publicHeadersPath: "include",
             cxxSettings: [.headerSearchPath("include")]
         ),
-        .target(name: "TextPipelineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "TextPipelineNative"], path: "Packages/TextPipelineCapsule", exclude: ["Sources/TextPipelineNative"], swiftSettings: strictConcurrencySettings),
+        .target(name: "TextPipelineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "TextPipelineNative"], path: "Packages/TextPipelineCapsule", exclude: ["Sources/TextPipelineNative"], swiftSettings: strictConcurrencySettings + [.unsafeFlags(["-whole-module-optimization"])]),
         .target(
             name: "VectorIndexNative",
             path: "Packages/VectorIndexCapsule/Sources/VectorIndexNative",
             publicHeadersPath: "include",
             cxxSettings: [.headerSearchPath("include")]
         ),
-        .target(name: "VectorIndexCapsule", dependencies: ["AnigmaPrimitives", "CapsuleCore", "VectorIndexNative"], path: "Packages/VectorIndexCapsule", exclude: ["Sources/VectorIndexNative"], swiftSettings: strictConcurrencySettings),
+        .target(name: "VectorIndexCapsule", dependencies: ["AnigmaPrimitives", "CapsuleCore", "VectorIndexNative"], path: "Packages/VectorIndexCapsule", exclude: ["Sources/VectorIndexNative"], swiftSettings: strictConcurrencySettings + [.unsafeFlags(["-whole-module-optimization"])]),
         .target(
             name: "CosineNative",
             path: "Packages/CosineSimilarityCapsule/Sources/CosineNative",
             publicHeadersPath: "include",
             cxxSettings: [.headerSearchPath("include")]
         ),
-        .target(name: "CosineSimilarityCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "CosineNative"], path: "Packages/CosineSimilarityCapsule", exclude: ["Sources/CosineNative"], swiftSettings: strictConcurrencySettings),
+        .target(name: "CosineSimilarityCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "CosineNative"], path: "Packages/CosineSimilarityCapsule", exclude: ["Sources/CosineNative"], swiftSettings: strictConcurrencySettings + [.unsafeFlags(["-whole-module-optimization"])]),
         .target(
             name: "RankFusionNative",
             path: "Packages/RankFusionCapsule/Sources/RankFusionNative",
             publicHeadersPath: "include",
             cxxSettings: [.headerSearchPath("include")]
         ),
-        .target(name: "RankFusionCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "RankFusionNative"], path: "Packages/RankFusionCapsule", exclude: ["Sources/RankFusionNative"], swiftSettings: strictConcurrencySettings),
+        .target(name: "RankFusionCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "RankFusionNative"], path: "Packages/RankFusionCapsule", exclude: ["Sources/RankFusionNative"], swiftSettings: strictConcurrencySettings + [.unsafeFlags(["-whole-module-optimization"])]),
         .target(
             name: "SceneGraphNative",
             path: "Packages/SceneGraphCapsule/Sources/SceneGraphNative",
