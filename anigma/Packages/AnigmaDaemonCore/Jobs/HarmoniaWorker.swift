@@ -61,8 +61,10 @@ public final class HarmoniaWorker: BaseWorker, JobWorker {
         // TODO: Initialize RankFusionCapsuleWrapper if available
         // let rankFusion = try RankFusionCapsuleWrapper() 
         
-        // Create Mock Inference Authority for code generation
-        let mockInference = MockInferenceAuthority()
+        // Create Inference Authority for code generation
+        // Use DaemonInferenceAuthority for real ml-worker execution
+        // Falls back to mock behavior if ml-worker not available
+        let inferenceAuthority = DaemonInferenceAuthority()
         
         // Initialize Artifact Authority wrapper for RLM
         // We might need a bridge here if ArtifactAuthority is protocol based
@@ -76,7 +78,7 @@ public final class HarmoniaWorker: BaseWorker, JobWorker {
             artifactAuthority: nil, // TODO: Wire up artifact authority from daemon context
             evidenceAuthority: nil,  // TODO: Wire up evidence authority
             embeddingComputing: nil,
-            inferenceAuthority: mockInference,
+             inferenceAuthority: inferenceAuthority,
             capsules: ["vectorIndex": vectorIndex]
         )
         

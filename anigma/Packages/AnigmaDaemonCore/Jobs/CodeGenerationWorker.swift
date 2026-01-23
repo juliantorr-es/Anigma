@@ -47,11 +47,12 @@ public struct CodeGenerationWorker: JobWorker {
         // Initialize Contextum Database (The Engram Store)
         let contextumDB = try await ContextumDatabase(database: dbActor)
         
-        // 3. Create Mock Inference Authority (temporary)
-        let mockInference = MockInferenceAuthority()
+        // 3. Create Inference Authority
+        // Use DaemonInferenceAuthority for real ml-worker execution
+        let inferenceAuthority = DaemonInferenceAuthority()
         
         // 4. Create GenerateCodeTool
-        let tool = GenerateCodeTool(contextumDB: contextumDB, inference: mockInference)
+        let tool = GenerateCodeTool(contextumDB: contextumDB, inference: inferenceAuthority)
         
         // 5. Execute tool with decoded parameters
         let toolContext = SimpleToolContext(sessionId: UUID().uuidString, agentName: "code_generation_worker")

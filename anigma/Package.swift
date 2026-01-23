@@ -21,7 +21,7 @@ let coreProducts: [Product] = [
     .library(name: "ExecutionCore", targets: ["ExecutionCore"]),
     .library(name: "InferenceCore", targets: ["InferenceCore"]),
     .library(name: "CanonicalTokenizer", targets: ["CanonicalTokenizer"]),
-    .library(name: "AnigmaASTServicesCore", targets: ["AnigmaASTServicesCore"]),
+    .library(name: "AnigmaASTServicesCore", type: .dynamic, targets: ["AnigmaASTServicesCore"]),
     .library(name: "PlatformCore", targets: ["PlatformCore"]),
     .library(name: "AnigmaClientKit", targets: ["AnigmaClientKit"]),
     .library(name: "AnigmaHostKit", targets: ["AnigmaHostKit"]),

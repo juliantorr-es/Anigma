@@ -23,20 +23,40 @@ actor DaemonInferenceAuthority: InferenceAuthority {
     private let mlWorkerPath: String
     private let timeoutSeconds: Int
     private let defaultEngine: MLWorkerEngine
+    private let mlWorkerAvailable: Bool
+    private let fallbackAuthority: MockInferenceAuthority?
     
     init(mlWorkerPath: String? = nil, timeoutSeconds: Int = 120, defaultEngine: MLWorkerEngine = .llama) {
         // Resolve ml-worker path
+        let resolvedPath: String
         if let path = mlWorkerPath {
-            self.mlWorkerPath = path
+            resolvedPath = path
         } else if let envPath = ProcessInfo.processInfo.environment["ML_WORKER_PATH"] {
-            self.mlWorkerPath = envPath
+            resolvedPath = envPath
         } else {
             // Default to build directory
             let currentDir = FileManager.default.currentDirectoryPath
-            self.mlWorkerPath = "\(currentDir)/.build/debug/ml-worker"
+            resolvedPath = "\(currentDir)/.build/debug/ml-worker"
         }
+        self.mlWorkerPath = resolvedPath
+        
+        // Check if ml-worker executable exists and is executable
+        var isExecutable = false
+        if FileManager.default.fileExists(atPath: resolvedPath) {
+            isExecutable = FileManager.default.isExecutableFile(atPath: resolvedPath)
+        }
+        self.mlWorkerAvailable = isExecutable
         self.timeoutSeconds = timeoutSeconds
         self.defaultEngine = defaultEngine
+        
+        // Create fallback mock authority if ml-worker not available
+        self.fallbackAuthority = mlWorkerAvailable ? nil : MockInferenceAuthority()
+        
+        if !mlWorkerAvailable {
+            print("[DaemonInferenceAuthority] ml-worker not available at \(resolvedPath), using mock fallback")
+        } else {
+            print("[DaemonInferenceAuthority] ml-worker available at \(resolvedPath)")
+        }
     }
     
     func chatCompletion(
@@ -45,20 +65,41 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         speculativeConfig: SpeculativeConfiguration?,
         context: ExecutionContext
     ) async throws -> InferenceResponse {
+        // Use fallback mock authority if ml-worker not available
+        guard mlWorkerAvailable else {
+            guard let fallback = fallbackAuthority else {
+                throw DaemonInferenceError("ML worker not available and no fallback")
+            }
+            return try await fallback.chatCompletion(request, priority: priority, speculativeConfig: speculativeConfig, context: context)
+        }
+        
         // Convert InferenceRequest to MLWorkerRequest for chat task
-        let mlRequest = try convertToMLWorkerRequest(request, task: .chat)
+        let (mlRequest, requestDir, _) = try convertToMLWorkerRequest(request, task: .chat)
+        
+        defer {
+            // Clean up temporary directory
+            try? FileManager.default.removeItem(at: requestDir)
+        }
         
         // Execute ml-worker
         let response = try await executeMLWorker(request: mlRequest)
         
         // Convert MLWorkerResponse to InferenceResponse
-        return try convertToInferenceResponse(response, originalRequest: request)
+        return try convertToInferenceResponse(response, requestDir: requestDir, originalRequest: request)
     }
     
     func backgroundTask(
         _ task: InferenceRequest,
         context: ExecutionContext
     ) async throws -> InferenceResponse {
+        // Use fallback if needed, otherwise proceed with normal chatCompletion
+        guard mlWorkerAvailable else {
+            guard let fallback = fallbackAuthority else {
+                throw DaemonInferenceError("ML worker not available and no fallback")
+            }
+            return try await fallback.backgroundTask(task, context: context)
+        }
+        
         // For background tasks, use worker plane (lower priority)
         return try await chatCompletion(task, priority: .background, speculativeConfig: nil, context: context)
     }
@@ -73,19 +114,21 @@ actor DaemonInferenceAuthority: InferenceAuthority {
     }
     
     func getStatus() async -> [InferencePlaneStatus] {
-        // Check if ml-worker executable exists and is executable
-        let isAvailable = FileManager.default.isExecutableFile(atPath: mlWorkerPath)
         return [
-            InferencePlaneStatus(planeId: "daemon", isAvailable: isAvailable, currentLoad: 0.0)
+            InferencePlaneStatus(planeId: "daemon", isAvailable: mlWorkerAvailable, currentLoad: 0.0)
         ]
     }
     
     // MARK: - Private Methods
     
-    private func convertToMLWorkerRequest(_ request: InferenceRequest, task: MLWorkerTask) throws -> MLWorkerRequest {
-        // Create temporary input file with the request input
+    private func convertToMLWorkerRequest(_ request: InferenceRequest, task: MLWorkerTask) throws -> (MLWorkerRequest, URL, URL) {
+        // Create temporary directory for this request
         let tempDir = FileManager.default.temporaryDirectory
-        let inputFile = tempDir.appendingPathComponent(UUID().uuidString + ".txt")
+        let requestDir = tempDir.appendingPathComponent("ml-worker-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: requestDir, withIntermediateDirectories: true)
+        
+        // Create input file
+        let inputFile = requestDir.appendingPathComponent("input.txt")
         try request.input.write(to: inputFile, atomically: true, encoding: .utf8)
         
         // Determine engine from request options or use default
@@ -102,10 +145,10 @@ actor DaemonInferenceAuthority: InferenceAuthority {
             maxTokens: maxTokens,
             temperature: temperature,
             topP: topP,
-            outputDirectory: nil
+            outputDirectory: requestDir.path
         )
         
-        return MLWorkerRequest(
+        let mlRequest = MLWorkerRequest(
             requestId: request.correlationId,
             runId: "daemon-\(UUID().uuidString)",
             stepId: UUID().uuidString,
@@ -114,6 +157,8 @@ actor DaemonInferenceAuthority: InferenceAuthority {
             inputs: [MLArtifactRef(path: inputFile.path, hash: "input")],
             options: options
         )
+        
+        return (mlRequest, requestDir, inputFile)
     }
     
     private func executeMLWorker(request: MLWorkerRequest) async throws -> MLWorkerResponse {
@@ -139,37 +184,45 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         } catch {
             // If parsing fails, check if ml-worker returned error
             if !result.stderr.isEmpty {
-                throw RuntimeError("ML worker error: \(result.stderr)")
+                throw DaemonInferenceError("ML worker error: \(result.stderr)")
             } else {
-                throw RuntimeError("Failed to parse ML worker response: \(error)")
+                throw DaemonInferenceError("Failed to parse ML worker response: \(error)")
             }
         }
     }
     
-    private func convertToInferenceResponse(_ response: MLWorkerResponse, originalRequest: InferenceRequest) throws -> InferenceResponse {
+    private func convertToInferenceResponse(_ response: MLWorkerResponse, requestDir: URL, originalRequest: InferenceRequest) throws -> InferenceResponse {
         guard response.status == .completed else {
-            throw RuntimeError("ML worker response status: \(response.status)")
+            throw DaemonInferenceError("ML worker response status: \(response.status)")
         }
         
         // Extract output from first artifact
         // For chat tasks, ml-worker should output text file with response
         guard let firstArtifact = response.outputs.first else {
-            throw RuntimeError("ML worker response has no outputs")
+            throw DaemonInferenceError("ML worker response has no outputs")
         }
         
-        // Read output file
+        // Read output file - path might be relative to requestDir
         let outputPath = firstArtifact.path
-        guard FileManager.default.fileExists(atPath: outputPath) else {
-            // If no file, use raw output string from response
-            let output = response.outputs.first?.metadata?["text"] ?? "No output generated"
+        let outputURL: URL
+        if FileManager.default.fileExists(atPath: outputPath) {
+            outputURL = URL(fileURLWithPath: outputPath)
+        } else {
+            // Try relative to requestDir
+            outputURL = requestDir.appendingPathComponent(outputPath)
+        }
+        
+        guard FileManager.default.fileExists(atPath: outputURL.path) else {
+            // If no file, check for embedded output in response
+            // For now, return placeholder
             return InferenceResponse(
-                output: output,
+                output: "[ML worker completed but no output file found]",
                 usage: InferenceUsage(inputTokens: nil, outputTokens: nil),
-                metadata: ["source": "daemon-ml-worker"]
+                metadata: ["source": "daemon-ml-worker", "requestId": response.requestId]
             )
         }
         
-        let outputData = try Data(contentsOf: URL(fileURLWithPath: outputPath))
+        let outputData = try Data(contentsOf: outputURL)
         let output = String(data: outputData, encoding: .utf8) ?? ""
         
         // Estimate token usage from metrics if available
@@ -229,7 +282,7 @@ actor DaemonInferenceAuthority: InferenceAuthority {
                 }
                 
                 if timedOut {
-                    continuation.resume(throwing: RuntimeError("Command timed out after \(self.timeoutSeconds) seconds"))
+                    continuation.resume(throwing: DaemonInferenceError("Command timed out after \(self.timeoutSeconds) seconds"))
                     return
                 }
                 
