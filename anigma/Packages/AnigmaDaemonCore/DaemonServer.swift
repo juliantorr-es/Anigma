@@ -105,6 +105,7 @@ public actor DaemonServer {
         await self.jobRegistry.register(worker: LaTeXWorker())
         await self.jobRegistry.register(worker: TextChunkingWorker())
         await self.jobRegistry.register(worker: SemanticChunkingWorker())
+        await self.jobRegistry.register(worker: CodeGenerationWorker())
         await self.jobRegistry.register(worker: NoOpWorker())
 
         // Initialize Worker Pool with Resource Limits (Pass 6)

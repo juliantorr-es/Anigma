@@ -2,17 +2,22 @@
 //  CanvasController.swift
 //  AnigmaAppMac
 //
-//  Orchestrates the "Live Preview" (Canvas) for code and web content.
-//  Inspired by Sidekick.
+//  Orchestrates the high-performance Engine-driven Canvas.
+//  Bridges the Swift AppStore state to the Native Kernel.
 //
 
 import Foundation
 import AnigmaCore
+import RuntimeOrchestrator
+import PlatformAdapters
+import Metal
+import MetalKit
 
 public enum CanvasContentType: String, Codable, Sendable {
     case code
     case web
     case document
+    case graph // Added for Atlas integration
 }
 
 public struct CanvasSnapshot: Codable, Sendable, Identifiable {
@@ -35,42 +40,43 @@ public struct CanvasSnapshot: Codable, Sendable, Identifiable {
 public class CanvasController: ObservableObject {
     @Published public var currentSnapshot: CanvasSnapshot?
     @Published public var isExtracting: Bool = false
-    @Published public var previewURL: URL?
-
-    private let runtime: RuntimeServices
+    
+    // Engine components
+    public let orchestrator: RuntimeOrchestrator
+    public let renderer: MetalRenderAdapter
+    
     private let cacheDirectory: URL
 
-    public init(runtime: RuntimeServices) {
-        self.runtime = runtime
+    public init() throws {
+        self.orchestrator = try RuntimeOrchestrator()
+        self.renderer = try MetalRenderAdapter()
         self.cacheDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("AnigmaCanvas")
         try? FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
     }
 
-    /// Write the current snapshot to a temporary directory for WebView rendering.
-    public func materializeForPreview() async throws {
-        guard let snapshot = currentSnapshot else { return }
-
-        let sessionDir = cacheDirectory.appendingPathComponent(snapshot.id.uuidString)
-        try FileManager.default.createDirectory(at: sessionDir, withIntermediateDirectories: true)
-
-        let indexURL = sessionDir.appendingPathComponent("index.html")
-        try snapshot.content.write(to: indexURL, atomically: true, encoding: .utf8)
-
-        self.previewURL = indexURL
-
-        // 4. Persist to ArtifactAuthority for long-term storage
-        let artifact = Artifact(
-            mimeType: snapshot.type == .web ? "text/html" : "text/plain",
-            data: snapshot.content.data(using: .utf8)!,
-            metadata: ["canvas_id": snapshot.id.uuidString, "language": snapshot.language ?? ""]
-        )
-
-        // _ = try await runtime.artifacts.store(artifact, context: .system)
-    }
-
-    /// Cleanup old preview files.
-    public func cleanup() {
-        try? FileManager.default.removeItem(at: cacheDirectory)
+    /// Synchronize the application state into the Native Kernel Scene Graph.
+    public func syncScene(artifacts: [ArtifactSummary], contexts: [AnigmaContext]) async throws {
+        // Map contexts to SceneNodes
+        for (index, context) in contexts.enumerated() {
+            let node = SceneNode(
+                id: UInt64(context.id.hashValue), // Simple mapping for prototype
+                localTransform: Transform(a: 1, b: 0, c: 0, d: 1, tx: Float(index * 200), ty: 0),
+                layerIndex: 0
+            )
+            try orchestrator.attach(node: node)
+        }
+        
+        // Map artifacts to SceneNodes (below contexts)
+        for (index, artifact) in artifacts.enumerated() {
+            let node = SceneNode(
+                id: UInt64(artifact.id.hashValue),
+                localTransform: Transform(a: 1, b: 0, c: 0, d: 1, tx: Float(index * 150), ty: 250),
+                layerIndex: 1
+            )
+            try orchestrator.attach(node: node)
+        }
+        
+        try orchestrator.evaluateTransforms()
     }
 
     /// Extract code blocks from a message and update the canvas.
@@ -78,7 +84,7 @@ public class CanvasController: ObservableObject {
         isExtracting = true
         defer { isExtracting = false }
 
-        // 1. Regex to find markdown code blocks
+        // Regex to find markdown code blocks
         let pattern = "```(\\w+)?\\n([\\s\\S]*?)```"
         guard let regex = try? NSRegularExpression(pattern: pattern) else { return }
 
@@ -97,7 +103,6 @@ public class CanvasController: ObservableObject {
             extractedCode[language] = code
         }
 
-        // 2. Determine type
         if extractedCode["html"] != nil {
             currentSnapshot = CanvasSnapshot(
                 type: .web,
@@ -113,7 +118,6 @@ public class CanvasController: ObservableObject {
     }
 
     private func buildWebBundle(from extracted: [String: String]) -> String {
-        // Simple bundling logic for HTML/CSS/JS
         let html = extracted["html"] ?? "<html><body></body></html>"
         let css = extracted["css"] ?? ""
         let js = extracted["javascript"] ?? extracted["js"] ?? ""
@@ -125,9 +129,8 @@ public class CanvasController: ObservableObject {
         """
     }
 
-    /// Export the current canvas content to a file.
-    public func export(to url: URL) throws {
-        guard let snapshot = currentSnapshot else { return }
-        try snapshot.content.write(to: url, atomically: true, encoding: .utf8)
+    /// Cleanup old preview files.
+    public func cleanup() {
+        try? FileManager.default.removeItem(at: cacheDirectory)
     }
 }

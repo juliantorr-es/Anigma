@@ -19,11 +19,22 @@ import Combine
 import SwiftUI
 import Observation
 import UniformTypeIdentifiers
+import DevelopumModule
+import DatabaseCore
 
 @MainActor
 @Observable
 final class AppStore {
   // MARK: - Bauhaus Architecture State
+  
+  /// Artifact service for chunking and virtualization
+  let developArtifactService: DevelopumArtifactService
+  
+  private let dbService: DevelopumDatabaseService
+  
+  private func setupServices() {
+      // Logic from init moved here if needed or kept in init
+  }
 
   /// Current role determines which surfaces are available
   var role: AnigmaRole = .user
@@ -851,13 +862,20 @@ let daemonStore: DaemonStore
 
   private var irSubscriptionTask: Task<Void, Never>?
 
-  // MARK: - Initialization
+    // MARK: - Initialization
 
-  /// Initialize with a nil capability for default behavior, or pass one explicitly
-  init() {
-    self.daemonCapability = DaemonHostCapability()
-    self.systemSpine = SystemSpine.shared
-    self.dataEngine = DataEngine()
+    /// Initialize with a nil capability for default behavior, or pass one explicitly
+    init() {
+        self.daemonCapability = DaemonHostCapability()
+        self.systemSpine = SystemSpine.shared
+        self.dataEngine = DataEngine()
+
+        // Initialize Developum Services
+        self.dbService = DevelopumDatabaseService(databaseAuthority: StubDatabaseAuthority())
+        self.developArtifactService = DevelopumArtifactService(
+            artifactAuthority: StubArtifactAuthority(),
+            databaseService: dbService
+        )
 
 
 

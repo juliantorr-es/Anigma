@@ -61,6 +61,9 @@ public final class HarmoniaWorker: BaseWorker, JobWorker {
         // TODO: Initialize RankFusionCapsuleWrapper if available
         // let rankFusion = try RankFusionCapsuleWrapper() 
         
+        // Create Mock Inference Authority for code generation
+        let mockInference = MockInferenceAuthority()
+        
         // Initialize Artifact Authority wrapper for RLM
         // We might need a bridge here if ArtifactAuthority is protocol based
         // let artifactAuthority = ... 
@@ -72,6 +75,8 @@ public final class HarmoniaWorker: BaseWorker, JobWorker {
             contextumDatabase: contextumDB,
             artifactAuthority: nil, // TODO: Wire up artifact authority from daemon context
             evidenceAuthority: nil,  // TODO: Wire up evidence authority
+            embeddingComputing: nil,
+            inferenceAuthority: mockInference,
             capsules: ["vectorIndex": vectorIndex]
         )
         

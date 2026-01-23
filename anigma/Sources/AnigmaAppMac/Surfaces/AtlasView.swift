@@ -12,6 +12,15 @@ import AnigmaClientKit
 struct AtlasView: View {
     @Environment(AppStore.self) private var store
     @State private var selectedLens: AtlasLens = .contexts
+    @StateObject private var canvasController: CanvasController
+
+    init() {
+        do {
+            self._canvasController = StateObject(wrappedValue: try CanvasController())
+        } catch {
+            fatalError("Failed to initialize CanvasController: \(error)")
+        }
+    }
 
     var body: some View {
         HSplitView {
@@ -35,7 +44,8 @@ struct AtlasView: View {
                 .listStyle(.sidebar)
             }
             .frame(minWidth: 160, maxWidth: 220)
-            // Map Canvas
+            
+            // Map Canvas (Blazing Fast Engine)
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     Image(systemName: selectedLens.icon).foregroundStyle(Bauhaus.Color.accent)
@@ -47,30 +57,27 @@ struct AtlasView: View {
                 .bauhausSection()
 
                 ZStack {
-                    CanvasGrid()
-                        .accessibilityHidden(true)
-
-                    switch selectedLens {
-                    case .contexts:
-                        ContextLensView()
-                    case .projects:
-                        ProjectLensView()
-                    case .timeline:
-                        TimelineLensView()
-                    default:
-                        VStack(spacing: 8) {
-                            Text("\(selectedLens.rawValue) lens not calibrated.")
-                                .font(Bauhaus.Font.subHeader)
-                                .foregroundStyle(Bauhaus.Color.textSecondary)
-                            Text("Import more entity data to enable this view.")
-                                .font(Bauhaus.Font.body)
-                                .foregroundStyle(Bauhaus.Color.textTertiary)
+                    // Replace legacy ZStack switches with the high-performance Native Engine
+                    RuntimeCanvasContainerView(controller: canvasController)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .onAppear {
+                            syncAtlasToEngine()
                         }
-                    }
+                        .onChange(of: selectedLens) { _, _ in
+                            syncAtlasToEngine()
+                        }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .frame(minWidth: 400)
+        }
+    }
+
+    private func syncAtlasToEngine() {
+        Task {
+            try? await canvasController.syncScene(
+                artifacts: store.artifacts,
+                contexts: store.contexts
+            )
         }
     }
 }

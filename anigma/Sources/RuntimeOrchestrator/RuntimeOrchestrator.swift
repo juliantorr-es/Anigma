@@ -1,7 +1,10 @@
 import Foundation
+import SceneGraphCapsule
+import AnigmaNativeShims
 
 public actor RuntimeOrchestrator {
     private let kernelBridge: KernelBridge
+    private let sceneGraph: SceneGraph
     private var viewportSize: CGSize = .zero
     private var displayScale: Float = 2.0
     
@@ -9,6 +12,15 @@ public actor RuntimeOrchestrator {
         // Initialize with default config
         let config = Data([0]) // Dummy config
         self.kernelBridge = try KernelBridge(config: config)
+        self.sceneGraph = try SceneGraph()
+    }
+    
+    public func attach(node: SceneNode) throws {
+        try sceneGraph.attach(node: node)
+    }
+    
+    public func evaluateTransforms() throws {
+        try sceneGraph.evaluateTransforms()
     }
     
     public func updateViewport(size: CGSize, scale: Float) {

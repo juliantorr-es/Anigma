@@ -1,0 +1,185 @@
+//
+//  DaemonMLWorkerInterface.swift
+//  AnigmaDaemonCore
+//
+//  ML Worker interface that actually executes ml-worker command in daemon context.
+//
+
+import Foundation
+import AnigmaCore
+import ContractsCore
+
+public struct DaemonMLWorkerInterface: MLWorkerInterface, Sendable {
+    private let mlWorkerPath: String
+    private let timeoutSeconds: Int
+    
+    public init(mlWorkerPath: String? = nil, timeoutSeconds: Int = 120) {
+        // Resolve ml-worker path:
+        // 1. Use provided path
+        // 2. Check ML_WORKER_PATH environment variable
+        // 3. Default to .build/debug/ml-worker relative to current directory
+        if let path = mlWorkerPath {
+            self.mlWorkerPath = path
+        } else if let envPath = ProcessInfo.processInfo.environment["ML_WORKER_PATH"] {
+            self.mlWorkerPath = envPath
+        } else {
+            // Default to build directory
+            let currentDir = FileManager.default.currentDirectoryPath
+            self.mlWorkerPath = "\(currentDir)/.build/debug/ml-worker"
+        }
+        self.timeoutSeconds = timeoutSeconds
+    }
+    
+    public func performMLTask(
+        task: MLWorkerTaskKind,
+        input: String,
+        modelID: String?,
+        options: [String: AnyHashable]
+    ) async throws -> String {
+        // Create temporary input file
+        let tempDir = FileManager.default.temporaryDirectory
+        let inputFile = tempDir.appendingPathComponent(UUID().uuidString + ".txt")
+        try input.write(to: inputFile, atomically: true, encoding: .utf8)
+        
+        // Create temporary output file
+        let outputFile = tempDir.appendingPathComponent(UUID().uuidString + ".out.txt")
+        
+        defer {
+            // Clean up temp files
+            try? FileManager.default.removeItem(at: inputFile)
+            try? FileManager.default.removeItem(at: outputFile)
+        }
+        
+        // Build command arguments similar to MLWorkerProcessInterface but for ml-worker executable
+        var commandArgs: [String] = []
+        
+        // Determine engine (default to llama for now)
+        let engine = "llama"
+        
+        // Build ndjson request
+        let request = MLWorkerRequest(
+            requestId: UUID().uuidString,
+            runId: "daemon-\(UUID().uuidString)",
+            stepId: UUID().uuidString,
+            engine: MLWorkerEngine(rawValue: engine) ?? .llama,
+            task: task.toMLTaskKind(),
+            inputs: [MLArtifactRef(path: inputFile.path, hash: "input")],
+            options: MLTaskOptions.fromDictionary(options)
+        )
+        
+        let encoder = JSONEncoder()
+        let requestData = try encoder.encode(request)
+        let requestString = String(data: requestData, encoding: .utf8) ?? ""
+        
+        // Execute ml-worker with request as stdin
+        let result = try await executeCommand(
+            command: mlWorkerPath,
+            arguments: ["--engine", engine],
+            stdin: requestString
+        )
+        
+        guard result.exitCode == 0 else {
+            throw RuntimeError("ML worker failed with exit code \(result.exitCode): \(result.stderr)")
+        }
+        
+        // Parse response
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(MLWorkerResponse.self, from: Data(result.stdout.utf8))
+        
+        guard response.status == .completed, let firstOutput = response.outputs.first else {
+            throw RuntimeError("ML worker response not successful: \(response.status)")
+        }
+        
+        // For now, return raw output string
+        // TODO: Parse actual output from artifact
+        return "ML worker response received"
+    }
+    
+    private func executeCommand(
+        command: String,
+        arguments: [String],
+        stdin: String? = nil
+    ) async throws -> (stdout: String, stderr: String, exitCode: Int32) {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: command)
+        process.arguments = arguments
+        
+        // Setup pipes
+        let stdoutPipe = Pipe()
+        let stderrPipe = Pipe()
+        process.standardOutput = stdoutPipe
+        process.standardError = stderrPipe
+        
+        if let stdin = stdin {
+            let stdinPipe = Pipe()
+            process.standardInput = stdinPipe
+            
+            // Write stdin data
+            let stdinData = Data(stdin.utf8)
+            try stdinPipe.fileHandleForWriting.write(contentsOf: stdinData)
+            try stdinPipe.fileHandleForWriting.close()
+        }
+        
+        // Set environment
+        process.environment = ProcessInfo.processInfo.environment
+        
+        try process.run()
+        
+        // Wait for completion with timeout
+        var timedOut = false
+        let startTime = Date()
+        while process.isRunning {
+            if Date().timeIntervalSince(startTime) > Double(timeoutSeconds) {
+                process.terminate()
+                timedOut = true
+                break
+            }
+            try await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+        }
+        
+        if timedOut {
+            throw RuntimeError("Command timed out after \(timeoutSeconds) seconds")
+        }
+        
+        // Read outputs
+        let stdoutData = try stdoutPipe.fileHandleForReading.readToEnd() ?? Data()
+        let stderrData = try stderrPipe.fileHandleForReading.readToEnd() ?? Data()
+        
+        let stdout = String(data: stdoutData, encoding: .utf8) ?? ""
+        let stderr = String(data: stderrData, encoding: .utf8) ?? ""
+        
+        return (stdout, stderr, process.terminationStatus)
+    }
+}
+
+// Extensions for type conversions
+
+extension MLWorkerTaskKind {
+    func toMLTaskKind() -> MLTaskKind {
+        switch self {
+        case .embedding:
+            return .embed
+        case .chat:
+            return .chat
+        }
+    }
+}
+
+extension MLTaskOptions {
+    static func fromDictionary(_ dict: [String: AnyHashable]) -> MLTaskOptions {
+        var options = MLTaskOptions()
+        for (key, value) in dict {
+            // Convert value to appropriate type
+            if let stringVal = value as? String {
+                options.setValue(stringVal, forKey: key)
+            } else if let intVal = value as? Int {
+                options.setValue(intVal, forKey: key)
+            } else if let doubleVal = value as? Double {
+                options.setValue(doubleVal, forKey: key)
+            } else if let boolVal = value as? Bool {
+                options.setValue(boolVal, forKey: key)
+            }
+        }
+        return options
+    }
+}

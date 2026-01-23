@@ -4,6 +4,7 @@ import AnigmaPrimitives
 import CapsuleCore
 import ContextumModule
 import ArtifactStoreModule
+import InferenceCore
 import CryptoKit
 
 // Import capsule wrappers if available
@@ -53,6 +54,7 @@ public actor ContextEnvironment {
     private let artifactAuthority: (any ArtifactAuthority)?
     private let evidenceAuthority: (any EvidenceAuthority)?
     private let embeddingComputing: (any EmbeddingComputing)?
+    private let inferenceAuthority: (any InferenceAuthority)?
     
     // Capsule wrappers for accelerated operations
     private let textChunkingCapsule: Any?
@@ -107,12 +109,14 @@ public actor ContextEnvironment {
         artifactAuthority: (any ArtifactAuthority)? = nil,
         evidenceAuthority: (any EvidenceAuthority)? = nil,
         embeddingComputing: (any EmbeddingComputing)? = nil,
+        inferenceAuthority: (any InferenceAuthority)? = nil,
         capsules: [String: Any] = [:]
     ) {
         self.contextumDatabase = contextumDatabase
         self.artifactAuthority = artifactAuthority
         self.evidenceAuthority = evidenceAuthority
         self.embeddingComputing = embeddingComputing
+        self.inferenceAuthority = inferenceAuthority
         
         // Initialize capsule wrappers from provided capsules
         self.textChunkingCapsule = capsules["textChunking"] as? EnhancedTextChunkingCapsuleWrapper
@@ -741,6 +745,113 @@ public actor ContextEnvironment {
         // For now, return placeholder artifact
         _ = startTime
         return "# Synthesized Artifact\n\nBased on \(spanRefs.count) spans."
+    }
+    
+    /// Generate code based on instruction and retrieved context chunks.
+    /// - Parameter inputs: Dictionary containing:
+    ///   - "instruction": String describing what code to generate (required)
+    ///   - "chunkIds": Array of chunk IDs to use as context (required)
+    ///   - "language": Optional programming language hint
+    /// - Returns: Tool result with generated code and metadata, plus span references for the chunks used.
+    public func generateCode(inputs: [String: AnyCodable]) async throws -> (ToolResult, [SpanRef]) {
+        let startTime = Date()
+        
+        // Parse inputs
+        guard let instruction = inputs["instruction"]?.value as? String else {
+            throw RLMError.toolExecutionFailed("Missing required parameter 'instruction'", underlyingError: nil)
+        }
+        guard let chunkIdsArray = inputs["chunkIds"]?.value as? [Any] else {
+            throw RLMError.toolExecutionFailed("Missing required parameter 'chunkIds'", underlyingError: nil)
+        }
+        let chunkIds = chunkIdsArray.compactMap { $0 as? String }
+        guard !chunkIds.isEmpty else {
+            throw RLMError.toolExecutionFailed("'chunkIds' array is empty", underlyingError: nil)
+        }
+        let language = inputs["language"]?.value as? String
+        
+        // Check inference authority
+        guard let inferenceAuthority = inferenceAuthority else {
+            throw RLMError.toolExecutionFailed("No inference authority available for code generation", underlyingError: nil)
+        }
+        
+        // Retrieve chunks from database
+        let chunks = try await contextumDatabase.getChunkContent(chunkIds: chunkIds)
+        
+        // Construct context string
+        var contextString = ""
+        for (index, chunk) in chunks.enumerated() {
+            contextString += """
+            [CHUNK \(index + 1)]
+            Source: \(chunk.sourceId)
+            Content:
+            \(chunk.content)
+            
+            """
+        }
+        
+        let systemPrompt = """
+        You are an expert coding assistant. Your task is to generate code based strictly on the provided context chunks and the user's instruction.
+        
+        Guidelines:
+        - Use the provided context to understand existing patterns, variable names, and architectural style.
+        - Do not invent new libraries or patterns unless explicitly asked.
+        - Output ONLY the requested code, or a brief explanation if code cannot be generated.
+        - If the language is specified as '\(language ?? "unknown")', ensure the code matches that language.
+        """
+        
+        let userPrompt = """
+        Context:
+        \(contextString)
+        
+        Instruction:
+        \(instruction)
+        """
+        
+        let fullPrompt = "\(systemPrompt)\n\n\(userPrompt)"
+        
+        let request = InferenceRequest(
+            task: .chat,
+            input: fullPrompt,
+            options: [
+                "temperature": .number(0.2),
+                "max_tokens": .integer(2048)
+            ]
+        )
+        
+        let response = try await inferenceAuthority.chatCompletion(
+            request,
+            priority: .ui,
+            speculativeConfig: nil,
+            context: ExecutionContext(principal: .system)
+        )
+        
+        // Convert to span references for the chunks used
+        let spanRefs = chunks.map { chunk in
+            SpanRef(
+                sourceHash: getHashForSourceId(chunk.sourceId),
+                offset: 0,
+                length: 0,
+                stableId: chunk.chunkId
+            )
+        }
+        
+        let duration = Date().timeIntervalSince(startTime)
+        
+        let result = ToolResult(
+            success: true,
+            output: [
+                "generated_code": AnyCodable(response.output),
+                "instruction": AnyCodable(instruction),
+                "chunk_ids": AnyCodable(chunkIds),
+                "language": AnyCodable(language as Any)
+            ],
+            errorMessage: nil,
+            evidenceHash: "", // Will be filled by recordEvidence
+            duration: duration,
+            resourcesConsumed: ToolResources(toolCalls: 1)
+        )
+        
+        return (result, spanRefs)
     }
     
     /// Generate provenance chain for spans or artifacts.

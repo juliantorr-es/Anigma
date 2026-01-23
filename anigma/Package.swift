@@ -1,3 +1,4 @@
+// swift-tools-version: 5.10
 // Package.swift
 import PackageDescription
 import Foundation
@@ -134,9 +135,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-cmark.git", from: "0.5.0"),
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
         .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.19.0"),
-        .package(url: "https://github.com/opencv/opencv.git", from: "4.8.0"),
-        .package(url: "https://github.com/FFmpeg/FFmpeg.git", from: "6.0.0"),
-        .package(url: "https://github.com/unicode-org/icu.git", from: "74.0.0"),
         .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.4.1"),
     ],
     targets: [
@@ -180,8 +178,14 @@ let package = Package(
             ]
         ),
         .target(
+            name: "KernelNative",
+            path: "Native/Shims/src/kernel",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("../../include")]
+        ),
+        .target(
             name: "AnigmaNativeShims",
-            dependencies: ["CClipper2", "CPDFium"],
+            dependencies: ["CClipper2", "CPDFium", "KernelNative"],
             path: "Native/Shims",
             exclude: ["Package.swift"],
             sources: ["src/kernel_abi.c"],
@@ -200,6 +204,7 @@ let package = Package(
             cxxSettings: [
                 .headerSearchPath("include"),
                 .headerSearchPath("../Shims/include"),
+                .unsafeFlags(["-O3", "-ffast-math"]) // Performance optimizations
             ]
         ),
         .target(name: "AnigmaCore",
@@ -244,21 +249,111 @@ let package = Package(
         .target(name: "ColorKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/ColorKit", swiftSettings: strictConcurrencySettings),
         .target(name: "VectorOpsKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/VectorOpsKit", swiftSettings: strictConcurrencySettings),
         .target(name: "CapsuleCore", dependencies: ["AnigmaPrimitives", "AnigmaNativeShims"], path: "Packages/CapsuleCore/Sources/CapsuleCore", swiftSettings: strictConcurrencySettings),
-        .target(name: "CompressionKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/CompressionKit", swiftSettings: strictConcurrencySettings),
-        .target(name: "TextChunkingCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/TextChunkingCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "LayoutEngineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/LayoutEngineCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "VizAggregationCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/VizAggregationCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "MediaFingerprintCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/MediaFingerprintCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "MediaContainerCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/MediaContainerCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "VectorCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/VectorCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "TextPipelineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/TextPipelineCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "VectorIndexCapsule", dependencies: ["AnigmaPrimitives", "CapsuleCore"], path: "Packages/VectorIndexCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "CosineSimilarityCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/CosineSimilarityCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "RankFusionCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/RankFusionCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "SceneGraphCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore"], path: "Packages/SceneGraphCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "RenderPlanCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "SceneGraphCapsule"], path: "Packages/RenderPlanCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "HitTestCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "SceneGraphCapsule"], path: "Packages/HitTestCapsule", swiftSettings: strictConcurrencySettings),
-        .target(name: "AnimationKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/AnimationKit", swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "CompressionNative",
+            path: "Packages/CompressionKit/Sources/CompressionNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "CompressionKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "CompressionNative"], path: "Packages/CompressionKit", exclude: ["Sources/CompressionNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "TextChunkingNative",
+            path: "Packages/TextChunkingCapsule/Sources/TextChunkingNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "TextChunkingCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "TextChunkingNative"], path: "Packages/TextChunkingCapsule", exclude: ["Sources/TextChunkingNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "LayoutEngineNative",
+            path: "Packages/LayoutEngineCapsule/Sources/LayoutEngineNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "LayoutEngineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "LayoutEngineNative"], path: "Packages/LayoutEngineCapsule", exclude: ["Sources/LayoutEngineNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "VizAggregationNative",
+            path: "Packages/VizAggregationCapsule/Sources/VizAggregationNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "VizAggregationCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "VizAggregationNative"], path: "Packages/VizAggregationCapsule", exclude: ["Sources/VizAggregationNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "MediaFingerprintNative",
+            path: "Packages/MediaFingerprintCapsule/Sources/MediaFingerprintNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "MediaFingerprintCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "MediaFingerprintNative"], path: "Packages/MediaFingerprintCapsule", exclude: ["Sources/MediaFingerprintNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "MediaContainerNative",
+            path: "Packages/MediaContainerCapsule/Sources/MediaContainerNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "MediaContainerCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "MediaContainerNative"], path: "Packages/MediaContainerCapsule", exclude: ["Sources/MediaContainerNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "VectorNative",
+            path: "Packages/VectorCapsule/Sources/VectorNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "VectorCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "VectorNative"], path: "Packages/VectorCapsule", exclude: ["Sources/VectorNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "TextPipelineNative",
+            path: "Packages/TextPipelineCapsule/Sources/TextPipelineNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "TextPipelineCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "TextPipelineNative"], path: "Packages/TextPipelineCapsule", exclude: ["Sources/TextPipelineNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "VectorIndexNative",
+            path: "Packages/VectorIndexCapsule/Sources/VectorIndexNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "VectorIndexCapsule", dependencies: ["AnigmaPrimitives", "CapsuleCore", "VectorIndexNative"], path: "Packages/VectorIndexCapsule", exclude: ["Sources/VectorIndexNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "CosineNative",
+            path: "Packages/CosineSimilarityCapsule/Sources/CosineNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "CosineSimilarityCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "CosineNative"], path: "Packages/CosineSimilarityCapsule", exclude: ["Sources/CosineNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "RankFusionNative",
+            path: "Packages/RankFusionCapsule/Sources/RankFusionNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "RankFusionCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "RankFusionNative"], path: "Packages/RankFusionCapsule", exclude: ["Sources/RankFusionNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "SceneGraphNative",
+            path: "Packages/SceneGraphCapsule/Sources/SceneGraphNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "SceneGraphCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "SceneGraphNative"], path: "Packages/SceneGraphCapsule", exclude: ["Sources/SceneGraphNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "RenderPlanNative",
+            path: "Packages/RenderPlanCapsule/Sources/RenderPlanNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "RenderPlanCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "SceneGraphCapsule", "RenderPlanNative"], path: "Packages/RenderPlanCapsule", exclude: ["Sources/RenderPlanNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "HitTestNative",
+            path: "Packages/HitTestCapsule/Sources/HitTestNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "HitTestCapsule", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "SceneGraphCapsule", "HitTestNative"], path: "Packages/HitTestCapsule", exclude: ["Sources/HitTestNative"], swiftSettings: strictConcurrencySettings),
+        .target(
+            name: "AnimationNative",
+            path: "Packages/AnimationKit/Sources/AnimationNative",
+            publicHeadersPath: "include",
+            cxxSettings: [.headerSearchPath("include")]
+        ),
+        .target(name: "AnimationKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives", "AnimationNative"], path: "Packages/AnimationKit", exclude: ["Sources/AnimationNative"], swiftSettings: strictConcurrencySettings),
         .target(name: "ObservabilityKit", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/ObservabilityKit", swiftSettings: strictConcurrencySettings),
         .target(name: "SidecarOfficeService", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/SidecarOfficeService", swiftSettings: strictConcurrencySettings),
         .target(name: "SidecarPDFService", dependencies: ["AnigmaNativeShims", "AnigmaPrimitives"], path: "Packages/SidecarPDFService", swiftSettings: strictConcurrencySettings),
@@ -467,7 +562,7 @@ let package = Package(
         .testTarget(name: "CanonicalTokenizerTests", dependencies: ["CanonicalTokenizer"], path: "Tests/CanonicalTokenizerTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "LayoutEngineCapsuleTests", dependencies: ["LayoutEngineCapsule", "CapsuleCore"], path: "Tests/LayoutEngineCapsuleTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "VizAggregationCapsuleTests", dependencies: ["VizAggregationCapsule", "CapsuleCore"], path: "Tests/VizAggregationCapsuleTests", swiftSettings: strictConcurrencySettings),
-        .testTarget(name: "MediaFingerprintCapsuleTests", dependencies: ["MediaFingerprintCapsule"], path: "Packages/MediaFingerprintCapsule/Tests", swiftSettings: strictConcurrencySettings),
+        .testTarget(name: "MFCTests", dependencies: ["MediaFingerprintCapsule"], path: "Tests/MFCTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "VectorCapsuleTests", dependencies: ["VectorCapsule", "CapsuleCore"], path: "Tests/VectorCapsuleTests", swiftSettings: strictConcurrencySettings),
         .testTarget(name: "EmbeddingStabilityTests", dependencies: ["ContractsCore", "VectorumModule"], path: "Tests/EmbeddingStability", swiftSettings: strictConcurrencySettings)
     ],

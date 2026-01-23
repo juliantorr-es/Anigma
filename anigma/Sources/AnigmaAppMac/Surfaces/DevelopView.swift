@@ -436,7 +436,7 @@ struct RepoWorkbench: View {
             ZStack {
                 switch store.developWorkbenchTab {
                 case .editor:
-                    FileViewer(url: store.selectedFileURL)
+                    ChunkedCodeEditorDemoView(artifactService: store.developArtifactService)
                 case .review:
                     PatchReviewLayout(workspace: workspace)
                 case .logs:

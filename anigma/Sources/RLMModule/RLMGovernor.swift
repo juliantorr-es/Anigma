@@ -383,6 +383,8 @@ public actor RLMGovernor {
             return try await synthesizeArtifact(inputs: inputs)
         case .generateProvenance:
             return try await generateProvenance(inputs: inputs)
+        case .generateCode:
+            return try await environment.generateCode(inputs: inputs)
         }
     }
     

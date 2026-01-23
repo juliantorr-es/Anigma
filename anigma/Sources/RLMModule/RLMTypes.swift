@@ -256,6 +256,7 @@ public enum ToolOperation: String, CaseIterable, Sendable, Codable {
     // Synthesis operations
     case synthesizeArtifact = "synthesize_artifact"
     case generateProvenance = "generate_provenance"
+    case generateCode = "generate_code"
 }
 
 /// Result of a tool operation.
