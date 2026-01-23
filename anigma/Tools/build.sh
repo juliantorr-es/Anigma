@@ -9,6 +9,21 @@ BUILD_DIR=".build"
 SCHEME="Anigma"
 CONFIG="debug" # Default to debug for faster incremental builds
 
+# Function to build a specific target
+build_target() {
+    local target=$1
+    echo "🚀 Building target: $target..."
+    swift build --target "$target" -c "$CONFIG" --build-path "$BUILD_DIR"
+}
+
+# Function to build the core engine "Hot Path"
+build_engine() {
+    echo "⚡️ Building Anigma Engine Hot Path..."
+    build_target "NativeKernel"
+    build_target "RuntimeOrchestrator"
+    build_target "PlatformAdapters"
+}
+
 # Function to build with core-aware parallelism
 build_parallel() {
     local target=$1
