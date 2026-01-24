@@ -22,8 +22,7 @@ public struct CapsuleBuffer: ~Copyable {
         self.descriptor = anigma_capsule_buffer_t(
             ptr: UnsafeMutablePointer<UInt8>(mutating: bytes.assumingMemoryBound(to: UInt8.self)),
             len: count,
-            cap: count,
-            flags: 0
+            cap: count
         )
         self.owner = .borrowedInput
     }
@@ -36,8 +35,7 @@ public struct CapsuleBuffer: ~Copyable {
         self.descriptor = anigma_capsule_buffer_t(
             ptr: ptr,
             len: 0,  // Nothing written yet
-            cap: capacity,
-            flags: 0
+            cap: capacity
         )
         self.owner = .callerAllocatedOutput
     }
@@ -51,8 +49,7 @@ public struct CapsuleBuffer: ~Copyable {
         self.descriptor = anigma_capsule_buffer_t(
             ptr: ptr,
             len: count,
-            cap: count,
-            flags: 0
+            cap: count
         )
         self.owner = .capsuleAllocatedOutput
     }

@@ -6,14 +6,14 @@
 //
 
 import Foundation
-import Security
+import AnigmaPrimitives
 
 public enum HFAuthError: Error, LocalizedError {
-    case keychainError(OSStatus)
+    case keychainError(Int32)
     case tokenNotFound
     case tokenInvalid
     case encodingFailed
-    case deletionFailed(OSStatus)
+    case deletionFailed(Int32)
 
     public var errorDescription: String? {
         switch self {
@@ -32,142 +32,47 @@ public enum HFAuthError: Error, LocalizedError {
 }
 
 public actor HuggingFaceKeychain {
-    private let service: String
-    private let accessGroup: String?
-    private let accessControl: SecAccessControl?
-
+    private let authority: KeychainSecretAuthority
     private static let tokenAccount = "huggingface_token"
-    private static let tokenService = "ai.anigma.huggingface"
+    public static let tokenService = "ai.anigma.huggingface"
 
-    public init(
-        service: String = tokenService,
-        accessGroup: String? = nil,
-        accessControl: SecAccessControl? = nil
-    ) {
-        self.service = service
-        self.accessGroup = accessGroup
+    public init(service: String = tokenService) {
+        self.authority = KeychainSecretAuthority(service: service)
+    }
 
-        if let accessControl = accessControl {
-            self.accessControl = accessControl
-        } else {
-            var access: SecAccessControl?
-            let accessControlFlags: SecAccessControlCreateFlags = .privateKeyUsage
-
-            if #available(macOS 12.3, *) {
-                access = SecAccessControlCreateWithFlags(
-                    kCFAllocatorDefault,
-                    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                    accessControlFlags,
-                    nil
-                )
-            } else {
-                access = SecAccessControlCreateWithFlags(
-                    kCFAllocatorDefault,
-                    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                    accessControlFlags,
-                    nil
-                )
+    public func storeToken(_ token: String) async throws {
+        do {
+            try await authority.store(password: token, for: Self.tokenAccount)
+        } catch let error as SecretAuthorityError {
+            if case .unhandledError(let status) = error {
+                throw HFAuthError.keychainError(status)
             }
-            self.accessControl = access
+            throw error
         }
     }
 
-    public func storeToken(_ token: String) throws {
-        guard let tokenData = token.data(using: .utf8) else {
-            throw HFAuthError.encodingFailed
-        }
-
-        var query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: Self.tokenAccount,
-            kSecValueData as String: tokenData
-        ]
-
-        if #available(macOS 12.3, *), let accessControl = accessControl {
-            query[kSecAttrAccessControl as String] = accessControl
-        } else {
-            query[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        }
-
-        if let group = accessGroup {
-            query[kSecAttrAccessGroup as String] = group
-        }
-
-        let deleteQuery: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: Self.tokenAccount
-        ]
-        SecItemDelete(deleteQuery as CFDictionary)
-
-        let status = SecItemAdd(query as CFDictionary, nil)
-
-        guard status == errSecSuccess else {
-            throw HFAuthError.keychainError(status)
-        }
+    public func getToken() async -> String? {
+        return try? await authority.retrievePassword(for: Self.tokenAccount)
     }
 
-    public func getToken() -> String? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: Self.tokenAccount,
-            kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
-        ]
-
-        var result: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-
-        guard status == errSecSuccess,
-              let data = result as? Data,
-              let token = String(data: data, encoding: .utf8) else {
-            return nil
-        }
-
-        return token.isEmpty ? nil : token
-    }
-
-    public func deleteToken() throws {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: Self.tokenAccount
-        ]
-
-        let status = SecItemDelete(query as CFDictionary)
-
-        guard status == errSecSuccess || status == errSecItemNotFound else {
-            throw HFAuthError.deletionFailed(status)
+    public func deleteToken() async throws {
+        do {
+            try await authority.delete(for: Self.tokenAccount)
+        } catch let error as SecretAuthorityError {
+            if case .unhandledError(let status) = error {
+                throw HFAuthError.deletionFailed(status)
+            }
+            throw error
         }
     }
 
     public var hasToken: Bool {
-        getToken() != nil
+        get async {
+            await getToken() != nil
+        }
     }
 
-    public func updateToken(_ token: String) throws {
-        guard let tokenData = token.data(using: .utf8) else {
-            throw HFAuthError.encodingFailed
-        }
-
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: Self.tokenAccount
-        ]
-
-        let attributes: [String: Any] = [
-            kSecValueData as String: tokenData
-        ]
-
-        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-
-        if status == errSecItemNotFound {
-            try storeToken(token)
-        } else if status != errSecSuccess {
-            throw HFAuthError.keychainError(status)
-        }
+    public func updateToken(_ token: String) async throws {
+        try await storeToken(token)
     }
 }

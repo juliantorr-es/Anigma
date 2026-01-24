@@ -7,6 +7,7 @@
 
 import CryptoKit
 import Foundation
+import AnigmaPrimitives
 
 #if canImport(Security)
 import Security
@@ -40,7 +41,7 @@ public struct VaultSignature: Codable, Sendable {
 
 /// Signs vault exports for offline verification.
 public protocol VaultSigner: Sendable {
-    func sign(payload: Data) throws -> VaultSignature
+    func sign(payload: Data) async throws -> VaultSignature
 }
 
 /// In-memory signer for tests or mock mode.
@@ -53,7 +54,7 @@ public final class InMemoryVaultSigner: VaultSigner {
         self.keyId = keyId
     }
 
-    public func sign(payload: Data) throws -> VaultSignature {
+    public func sign(payload: Data) async throws -> VaultSignature {
         let payloadHash = SHA256.hash(data: payload).map { String(format: "%02x", $0) }.joined()
         let signature = try key.signature(for: payload)
         let publicKey = key.publicKey.rawRepresentation.base64EncodedString()
@@ -68,25 +69,32 @@ public final class InMemoryVaultSigner: VaultSigner {
     }
 }
 
-#if canImport(Security)
 /// Keychain-backed signer for production use.
 public final class KeychainVaultSigner: VaultSigner {
     private let service: String
     private let account: String
     private let keyId: String
+    private let authority: any SecretAuthority
 
     public init(
         service: String = "AnigmaVaultSigning",
         account: String = "default",
-        keyId: String = "vault-signing-key"
+        keyId: String = "vault-signing-key",
+        authority: (any SecretAuthority)? = nil
     ) {
         self.service = service
         self.account = account
         self.keyId = keyId
+        
+        #if os(macOS) || os(iOS)
+        self.authority = authority ?? KeychainSecretAuthority(service: service)
+        #else
+        self.authority = authority ?? CompositeSecretAuthority(service: service)
+        #endif
     }
 
-    public func sign(payload: Data) throws -> VaultSignature {
-        let privateKey = try loadOrCreateKey()
+    public func sign(payload: Data) async throws -> VaultSignature {
+        let privateKey = try await loadOrCreateKey()
         let payloadHash = SHA256.hash(data: payload).map { String(format: "%02x", $0) }.joined()
         let signature = try privateKey.signature(for: payload)
         let publicKey = privateKey.publicKey.rawRepresentation.base64EncodedString()
@@ -100,74 +108,19 @@ public final class KeychainVaultSigner: VaultSigner {
         )
     }
 
-    private func loadOrCreateKey() throws -> P256.Signing.PrivateKey {
-        if let stored = try loadKey() {
-            return stored
-        }
-        let key = P256.Signing.PrivateKey()
-        try storeKey(key.rawRepresentation)
-        if let stored = try loadKey() {
-            return stored
-        }
-        throw VaultError.cryptoFailure("Failed to persist signing key")
-    }
-
-    private func loadKey() throws -> P256.Signing.PrivateKey? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
-            kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
-        ]
-        var item: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &item)
-        if status == errSecSuccess, let data = item as? Data {
+    private func loadOrCreateKey() async throws -> P256.Signing.PrivateKey {
+        if let data = try await authority.retrieve(for: account) {
             return try P256.Signing.PrivateKey(rawRepresentation: data)
         }
-        if status == errSecItemNotFound {
-            return nil
-        }
-        throw VaultError.cryptoFailure("Keychain read failed: \(status)")
-    }
-
-    private func storeKey(_ data: Data) throws {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
-            kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
-        ]
-        SecItemDelete(query as CFDictionary)
-        let status = SecItemAdd(query as CFDictionary, nil)
-        guard status == errSecSuccess else {
-            throw VaultError.cryptoFailure("Keychain write failed: \(status)")
-        }
+        let key = P256.Signing.PrivateKey()
+        try await authority.store(secret: key.rawRepresentation, for: account)
+        return key
     }
 }
-#else
-
-public final class KeychainVaultSigner: VaultSigner {
-    public init(
-        service: String = "AnigmaVaultSigning",
-        account: String = "default",
-        keyId: String = "vault-signing-key"
-    ) {}
-
-    public func sign(payload: Data) throws -> VaultSignature {
-        throw VaultError.cryptoFailure("Keychain not available")
-    }
-}
-#endif
 
 /// Default signer selector that falls back to in-memory when keychain is unavailable.
 public struct DefaultVaultSigner {
     public static func make() -> VaultSigner {
-        #if canImport(Security)
         return KeychainVaultSigner()
-        #else
-        return InMemoryVaultSigner()
-        #endif
     }
 }

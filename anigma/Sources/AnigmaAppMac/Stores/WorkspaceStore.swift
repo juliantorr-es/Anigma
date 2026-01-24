@@ -156,6 +156,40 @@ final class WorkspaceStore {
         await loadWorkspaceData(id: id)
     }
 
+    /// Create a new remote workspace
+    func createWorkspace(name: String = "New Workspace") async {
+        guard let client = client else { return }
+        do {
+            let workspaceId = try await client.command.createWorkspace(name: name)
+            await loadWorkspaces()
+            await selectWorkspace(workspaceId)
+        } catch {
+            print("Error creating workspace: \(error)")
+        }
+    }
+
+    /// Update a remote workspace name
+    func updateWorkspace(id: WorkspaceID, name: String) async {
+        guard let client = client else { return }
+        do {
+            try await client.command.updateWorkspace(id: id, name: name)
+            await loadWorkspaces()
+        } catch {
+            print("Error updating workspace: \(error)")
+        }
+    }
+
+    /// Delete a remote workspace
+    func deleteWorkspace(id: WorkspaceID) async {
+        guard let client = client else { return }
+        do {
+            try await client.command.deleteWorkspace(id: id)
+            await loadWorkspaces()
+        } catch {
+            print("Error deleting workspace: \(error)")
+        }
+    }
+
     /// Load more remote workspaces (pagination)
     func loadMoreWorkspaces() async {
         guard let client = client, let cursor = workspacesCursor else { return }

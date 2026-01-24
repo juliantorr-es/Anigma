@@ -17,7 +17,7 @@ public actor ImageFingerprint {
         _ imageData: [Data],
         algorithm: FingerprintAlgorithm
     ) async throws -> [FingerprintResult] {
-        return try await withTaskGroup(of: FingerprintResult.self) { group in
+        return try await withThrowingTaskGroup(of: FingerprintResult.self) { group in
             var results: [FingerprintResult?] = Array(repeating: nil, count: imageData.count)
             
             for (index, data) in imageData.enumerated() {

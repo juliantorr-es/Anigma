@@ -146,11 +146,21 @@ public struct ProviderRegistry: Sendable {
     private let locator: ExecutableLocator
 
     public init(
-        environment: [String: String] = CLIEnvironment.mergedEnvironment(),
+        environment: [String: String],
         locator: ExecutableLocator? = nil
     ) {
         self.configuration = ProviderConfiguration.fromEnvironment(environment)
         self.locator = locator ?? ExecutableLocator(environment: environment)
+    }
+    
+    public init() {
+        let env = ProcessInfo.processInfo.environment
+        self.init(environment: env)
+    }
+    
+    public static func createDefault() async -> ProviderRegistry {
+        let env = await CLIEnvironment.mergedEnvironment()
+        return ProviderRegistry(environment: env)
     }
 
     public func statuses() -> [ProviderStatus] {

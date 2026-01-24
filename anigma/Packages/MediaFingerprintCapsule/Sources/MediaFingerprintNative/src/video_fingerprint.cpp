@@ -1,5 +1,5 @@
-#include "MediaFingerprintCapsule/media_fingerprint_capsule.h"
-#include "../../include/anigma_capsule_core.h"
+#include "anigma_media_fingerprint_capsule.h"
+#include "anigma_capsule_core.h"
 #include <cstring>
 #include <cmath>
 #include <algorithm>

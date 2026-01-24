@@ -96,6 +96,7 @@ public enum DownloadState: Sendable {
     case paused(resumeData: Data)
     case completed(path: String)
     case failed(String)
+    case cancelled
 }
 
 public actor ResumableModelDownloader {
@@ -207,6 +208,7 @@ public actor ResumableModelDownloader {
 
     public func resume(
         url: String,
+        destinationPath: String,
         resumeData: Data,
         progressHandler: @escaping @Sendable (DownloadProgress) -> Void,
         stateHandler: @escaping @Sendable (DownloadState) -> Void
@@ -221,13 +223,12 @@ public actor ResumableModelDownloader {
 
         let path = try await download(
             url: url,
-            destinationPath: resumeDataStore[url]?.path ?? "",
+            destinationPath: destinationPath,
             resumeFrom: resumeData,
             progressHandler: progressHandler,
             stateHandler: stateHandler
         )
 
-        resumeDataStore.removeValue(forKey: url)
         return path
     }
 
@@ -317,7 +318,7 @@ public actor ResumableModelDownloader {
 
     private func resumeDownload(url: URL, taskId: String, resumeData: Data) async throws -> URL {
         try await withCheckedThrowingContinuation { continuation in
-            let downloadTask = session.downloadTask(with: resumeData) { location, response, error in
+            let downloadTask = session.downloadTask(withResumeData: resumeData) { location, response, error in
                 if let error = error as? URLError {
                     if error.code == .cancelled {
                         continuation.resume(throwing: DownloadError.cancelled)
@@ -412,14 +413,14 @@ public actor ResumableModelDownloader {
         defer { try? handle.close() }
 
         var hasher = SHA256()
-        while autoreleasepool(invoking: {
+        try handle.seek(toOffset: 0)
+        while true {
             let data = try handle.read(upToCount: 1024 * 1024) ?? Data()
             if data.isEmpty {
-                return false
+                break
             }
             hasher.update(data: data)
-            return true
-        }) { }
+        }
 
         let digest = hasher.finalize()
         return digest.compactMap { String(format: "%02x", $0) }.joined()

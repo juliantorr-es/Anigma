@@ -91,7 +91,7 @@ public actor DatabaseActor {
         guard let db = connection else { return }
         
         do {
-            try VectorStore.registerExtension(with: db)
+            try VectorStore.registerExtension(with: UnsafeMutableRawPointer(db))
             vectorAvailable = true
             vectorVersion = VectorStore.version
             logInfo("sqlite-vec loaded successfully (version: \(vectorVersion ?? "unknown"))")
@@ -450,6 +450,11 @@ public actor DatabaseActor {
     /// Log a message (internal use).
     private func logInfo(_ message: String) {
         fputs("[DatabaseActor] \(message)\n", stderr)
+    }
+
+    /// Log a warning message (internal use).
+    private func logWarning(_ message: String) {
+        fputs("[DatabaseActor] [WARNING] \(message)\n", stderr)
     }
 
     /// Reset all metrics counters.

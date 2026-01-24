@@ -133,7 +133,7 @@ public struct EPUBStyler: Sendable {
                 let headingLevel = extractHeadingLevel(from: chunk.text)
                 
                 // Complete previous section
-                if let section = currentSection {
+                if var section = currentSection {
                     section.endIndex = index - 1
                     landmarks.append(section)
                 }
@@ -151,7 +151,7 @@ public struct EPUBStyler: Sendable {
             case .paragraph:
                 break // Continue current section
                 
-            case .list:
+            case .listItem:
                 if currentSection == nil {
                     // Create implicit section for list
                     currentSection = EPUBLandmark(
@@ -181,7 +181,7 @@ public struct EPUBStyler: Sendable {
         }
         
         // Complete final section
-        if let section = currentSection {
+        if var section = currentSection {
             section.endIndex = chunks.count - 1
             landmarks.append(section)
         }
@@ -201,11 +201,11 @@ public struct EPUBStyler: Sendable {
         case .paragraph:
             markedUpText = "<p>\(chunk.text)</p>"
             
-        case .list:
+        case .listItem:
             markedUpText = "<ul><li>\(chunk.text.replacingOccurrences(of: "\n", with: "</li><li>"))</li></ul>"
             
         case .quote:
-            markedUpText = "<blockquote>\(chunk.text}</blockquote>"
+            markedUpText = "<blockquote>\(chunk.text)</blockquote>"
             
         case .caption:
             markedUpText = "<figcaption>\(chunk.text)</figcaption>"
@@ -216,7 +216,7 @@ public struct EPUBStyler: Sendable {
         
         // Add accessibility attributes if enabled
         if optimizeForScreenReaders {
-            markedUpUpText = addAccessibilityAttributes(to: markedUpText, chunk: chunk)
+            markedUpText = addAccessibilityAttributes(to: markedUpText, chunk: chunk)
         }
         
         return markedUpText
@@ -298,7 +298,7 @@ public struct EPUBStyler: Sendable {
         let cleaned = text
             .replacingOccurrences(of: #"^\d+\.\s*"#, with: "", options: .regularExpression)
             .replacingOccurrences(of: #"^\d+\.\d+\s*"#, with: "", options: .regularExpression)
-            .replacingOccurrences(of: #"^(CHAPTER|Part|Section)\s+"#i, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"^(CHAPTER|Part|Section)\s+"#, with: "", options: [.regularExpression, .caseInsensitive])
             .trimmingCharacters(in: .whitespacesAndNewlines)
         
         return cleaned.isEmpty ? text : cleaned
@@ -317,7 +317,7 @@ public struct EPUBStyler: Sendable {
         }
         
         // Add language information
-        if let language = DiaplasionConfiguration.defaultLanguage.split(separator: "-").first {
+        if let language = DiaplasionConfiguration.defaultLanguage.components(separatedBy: "-").first {
             accessibleMarkup = accessibleMarkup.replacingOccurrences(
                 of: "<",
                 with: "<lang=\"\(language)\" "
@@ -601,7 +601,7 @@ public struct EPUBStylingSystem: System {
         
         for (entity, chunked, document, transform) in entities {
             // Skip if not processing EPUB
-            if !transform.outputFormats.contains(.epub) {
+            if !transform.targetFormats.contains(.epub) {
                 continue
             }
             

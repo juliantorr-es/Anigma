@@ -28,7 +28,9 @@ let package = Package(
                 "src/render",
                 "src/color",
                 "src/compression",
-                // "src/media_container_capsule",
+                "src/kernel",
+                "src/layout_engine_capsule",
+                "src/viz_aggregation_capsule",
                 "src/MediaFingerprintCapsule",
                 "src/common"
             ],

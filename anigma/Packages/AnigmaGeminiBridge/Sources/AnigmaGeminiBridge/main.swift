@@ -2,8 +2,6 @@ import Hummingbird
 import Foundation
 import NIOCore
 
-/// Anigma Gemini Bridge - HTTP server for Gemini Function Calling ↔ MCP translation
-
 @main
 struct AnigmaGeminiBridge {
     static func main() async throws {

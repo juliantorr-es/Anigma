@@ -1,4 +1,5 @@
 import Foundation
+import AnigmaSidecar
 
 // MARK: - Cloud Provider Protocol
 
@@ -6,6 +7,8 @@ public protocol CloudProvider: Sendable {
     var name: String { get }
     var supportsChat: Bool { get }
     var supportsEmbeddings: Bool { get }
+    
+    var bridge: SidecarBridge? { get set }
 
     func configure(apiKey: String) async throws
     func validateConnection() async throws -> Bool

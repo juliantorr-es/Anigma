@@ -9,7 +9,7 @@
 import Foundation
 import Observation
 import AnigmaHostMac
-import CathedralModule
+import AnigmaSidecar
 
 @MainActor
 @Observable
@@ -56,18 +56,10 @@ final class ServiceIntegrationStore {
     
     init(
         daemonCapability: DaemonHostCapability,
-        modelRegistry: ModelRegistry,
-        hfAdapter: HuggingFaceAdapter,
-        cathedralCoordinator: CathedralCoordinator
+        daemonStore: DaemonStore
     ) {
-        // Initialize MLStore with dependencies
-        let mlWorkerClient = MLWorkerClient()
-        self.mlStore = MLStore(
-            modelRegistry: modelRegistry,
-            hfAdapter: hfAdapter,
-            mlWorkerClient: mlWorkerClient,
-            cathedralCoordinator: cathedralCoordinator
-        )
+        // Initialize MLStore with daemonStore
+        self.mlStore = MLStore(daemonStore: daemonStore)
         
         // Initialize PipelineStore with dependencies
         let pipelineClient = PipelineClient()

@@ -10,6 +10,7 @@ import Hummingbird
 import NIOCore
 import NIOPosix
 import AnigmaPrimitives // Use Codable contracts from Primitives
+import CathedralModule
 
 #if canImport(HummingbirdTLS)
 import HummingbirdTLS
@@ -90,6 +91,52 @@ extension AnigmaStreamTelemetryResponse: ResponseGenerator {
     }
 }
 
+extension AnigmaListModelsResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaInstallModelResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaEmbedResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaSearchResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaSessionEvidenceResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaPlanSubmitResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaAgentRunResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension AnigmaExportStartResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+extension TokenResponse: ResponseGenerator {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
+    }
+}
+
 /// Simple CORS middleware
 private struct CORSMiddleware: HBMiddleware {
     let allowedOrigins: [String]
@@ -146,6 +193,10 @@ public actor HTTPServerManager {
             let corsMiddleware = CORSMiddleware(allowedOrigins: configuration.corsAllowedOrigins)
             router.middlewares.add(corsMiddleware)
         }
+
+        // Add Evidence Enforcement Middleware
+        let evidenceSubstrate = await daemon.getEvidenceSubstrate()
+        router.middlewares.add(EvidenceEnforcementMiddleware(evidenceSubstrate: evidenceSubstrate))
 
         // Health Check
         router.get("/health") { _, _ in
@@ -401,19 +452,43 @@ public actor HTTPServerManager {
         }
 
         // Gemini Bridge: List Tools
-        router.get("/v1/tools") { _, _ in
-            return try await daemon.handleGeminiListTools()
-        }
+        router.group("/v1/tools")
+            .add(middleware: CapabilityTokenMiddleware(tokenManager: daemon.tokenManager, requiredScope: "models.list"))
+            .get("/") { _, _ in
+                return try await daemon.handleGeminiListTools()
+            }
+        
+        // Generic List Tools
+        router.group("/tools/list")
+            .add(middleware: CapabilityTokenMiddleware(tokenManager: daemon.tokenManager, requiredScope: "system.read"))
+            .post("/") { request, context in
+                let body = try await request.decode(as: AnigmaPrimitives.AnigmaListToolsRequest.self, context: context)
+                let ctx = DaemonRequestContext(clientId: body.ctx.clientId, capabilityToken: body.ctx.capabilityToken, nonce: body.ctx.nonce)
+                return try await daemon.handleListTools(ctx: ctx)
+            }
+        
+        // Onboarding Status
+        router.group("/onboarding/status")
+            .add(middleware: CapabilityTokenMiddleware(tokenManager: daemon.tokenManager, requiredScope: "system.read"))
+            .post("/") { request, context in
+                let body = try await request.decode(as: AnigmaPrimitives.AnigmaOnboardingStatusRequest.self, context: context)
+                let ctx = DaemonRequestContext(clientId: body.ctx.clientId, capabilityToken: body.ctx.capabilityToken, nonce: body.ctx.nonce)
+                return try await daemon.handleOnboardingStatus(ctx: ctx)
+            }
 
         // Gemini Bridge: Call Tool
-        router.post("/v1/tools/call") { request, context in
-            let body = try await request.decode(as: GeminiToolCallRequest.self, context: context)
-            return try await daemon.handleGeminiCallTool(name: body.name, arguments: body.arguments)
-        }
+        router.group("/v1/tools/call")
+            .add(middleware: CapabilityTokenMiddleware(tokenManager: daemon.tokenManager, requiredScope: "job.submit"))
+            .post("/") { request, context in
+                let body = try await request.decode(as: GeminiToolCallRequest.self, context: context)
+                return try await daemon.handleGeminiCallTool(name: body.name, arguments: body.arguments)
+            }
 
         // MCP Endpoint (Unified)
-        router.post("/mcp") { request, context in
-            let (stream, continuation) = AsyncStream<String>.makeStream()
+        router.group("/mcp")
+            .add(middleware: CapabilityTokenMiddleware(tokenManager: daemon.tokenManager, requiredScope: "job.submit"))
+            .post("/") { request, context in
+                let (stream, continuation) = AsyncStream<String>.makeStream()
             
             // Bridge request body to incomingStream
             Task {
@@ -508,6 +583,124 @@ public actor HTTPServerManager {
                         try await writer.write(.byteBuffer(ByteBuffer(bytes: [0x0A])))
                     }
                 }
+            )
+            return response
+        }
+
+        // OAuth endpoints
+        router.post("/oauth/token") { request, context in
+            let body = try await request.decode(as: OAuthTokenRequest.self, context: context)
+            return try await daemon.handleOAuthToken(request: body)
+        }
+
+        // Models endpoints
+        router.post("/models/list") { request, context in
+            let body = try await request.decode(as: AnigmaListModelsRequest.self, context: context)
+            let response = try await daemon.handleListModels(ctx: DaemonRequestContext(
+                clientId: body.ctx.clientId,
+                capabilityToken: body.ctx.capabilityToken,
+                nonce: body.ctx.nonce
+            ))
+            return response
+        }
+
+        router.post("/models/install") { request, context in
+            let body = try await request.decode(as: AnigmaInstallModelRequest.self, context: context)
+            let response = try await daemon.handleInstallModel(
+                ctx: DaemonRequestContext(
+                    clientId: body.ctx.clientId,
+                    capabilityToken: body.ctx.capabilityToken,
+                    nonce: body.ctx.nonce
+                ),
+                modelId: body.modelId,
+                repo: body.repo,
+                revision: body.revision
+            )
+            return response
+        }
+
+        // ML endpoints
+        router.post("/ml/embed") { request, context in
+            let body = try await request.decode(as: AnigmaEmbedRequest.self, context: context)
+            let response = try await daemon.handleMLEmbed(
+                ctx: DaemonRequestContext(
+                    clientId: body.ctx.clientId,
+                    capabilityToken: body.ctx.capabilityToken,
+                    nonce: body.ctx.nonce
+                ),
+                request: body
+            )
+            return response
+        }
+
+        router.post("/ml/search") { request, context in
+            let body = try await request.decode(as: AnigmaSearchRequest.self, context: context)
+            let response = try await daemon.handleMLSearch(
+                ctx: DaemonRequestContext(
+                    clientId: body.ctx.clientId,
+                    capabilityToken: body.ctx.capabilityToken,
+                    nonce: body.ctx.nonce
+                ),
+                request: body
+            )
+            return response
+        }
+
+        // Evidence endpoints
+        router.post("/evidence/session/:sessionId") { request, context in
+            guard let sessionId = context.parameters.get("sessionId") else {
+                throw HTTPError(.badRequest)
+            }
+            let ctxBody = try await request.decode(as: AnigmaSessionEvidenceRequest.self, context: context)
+            let response = try await daemon.handleGetSessionEvidence(
+                ctx: DaemonRequestContext(
+                    clientId: ctxBody.ctx.clientId,
+                    capabilityToken: ctxBody.ctx.capabilityToken,
+                    nonce: ctxBody.ctx.nonce
+                ),
+                sessionId: sessionId
+            )
+            return response
+        }
+
+        // Plan endpoints
+        router.post("/plan/submit") { request, context in
+            let body = try await request.decode(as: AnigmaPlanSubmitRequest.self, context: context)
+            let response = try await daemon.handleSubmitPlan(
+                ctx: DaemonRequestContext(
+                    clientId: body.ctx.clientId,
+                    capabilityToken: body.ctx.capabilityToken,
+                    nonce: body.ctx.nonce
+                ),
+                request: body
+            )
+            return response
+        }
+
+        // Agent endpoints
+        router.post("/agents/run") { request, context in
+            let body = try await request.decode(as: AnigmaAgentRunRequest.self, context: context)
+            let response = try await daemon.handleAgentRun(
+                ctx: DaemonRequestContext(
+                    clientId: body.ctx.clientId,
+                    capabilityToken: body.ctx.capabilityToken,
+                    nonce: body.ctx.nonce
+                ),
+                request: body
+            )
+            return response
+        }
+
+        // Export endpoints
+        router.post("/export/start") { request, context in
+            let body = try await request.decode(as: AnigmaExportStartRequest.self, context: context)
+            let response = try await daemon.handleExportStart(
+                ctx: DaemonRequestContext(
+                    clientId: body.ctx.clientId,
+                    capabilityToken: body.ctx.capabilityToken,
+                    nonce: body.ctx.nonce
+                ),
+                request: body
             )
             return response
         }

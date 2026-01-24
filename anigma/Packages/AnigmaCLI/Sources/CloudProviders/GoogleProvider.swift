@@ -1,9 +1,12 @@
 import Foundation
+import AnigmaSidecar
 
 public final class GoogleProvider: CloudProvider, @unchecked Sendable {
     public let name = "Google"
     public let supportsChat = true
     public let supportsEmbeddings = true
+    
+    public var bridge: SidecarBridge?
 
     private var apiKey: String?
     private let baseURL = "https://generativelanguage.googleapis.com/v1beta"
@@ -15,6 +18,9 @@ public final class GoogleProvider: CloudProvider, @unchecked Sendable {
     }
 
     public func validateConnection() async throws -> Bool {
+        if let bridge = bridge {
+            return try await bridge.healthCheck()
+        }
         guard apiKey != nil else {
             throw CloudProviderError.notConfigured
         }
@@ -22,6 +28,15 @@ public final class GoogleProvider: CloudProvider, @unchecked Sendable {
     }
 
     public func chat(messages: [ChatMessage], model: String?, temperature: Double) async throws -> String {
+        if let bridge = bridge {
+            return try await bridge.chat(
+                messages: messages.map { AnigmaPrimitives.ChatMessage(role: $0.role, content: $0.content) },
+                model: model,
+                temperature: temperature,
+                provider: "google"
+            )
+        }
+        
         guard let apiKey = apiKey else {
             throw CloudProviderError.notConfigured
         }
@@ -70,6 +85,15 @@ public final class GoogleProvider: CloudProvider, @unchecked Sendable {
     }
 
     public func embeddings(texts: [String], model: String?) async throws -> [[Float]] {
+        if let bridge = bridge {
+            var allEmbeddings: [[Float]] = []
+            for text in texts {
+                let response = try await bridge.embed(text: text, model: model ?? "text-embedding-004")
+                allEmbeddings.append(response.vector)
+            }
+            return allEmbeddings
+        }
+        
         guard let apiKey = apiKey else {
             throw CloudProviderError.notConfigured
         }

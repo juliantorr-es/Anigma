@@ -1,9 +1,12 @@
 import Foundation
+import AnigmaSidecar
 
 public final class DeepSeekProvider: CloudProvider, @unchecked Sendable {
     public let name = "DeepSeek"
     public let supportsChat = true
     public let supportsEmbeddings = false
+    
+    public var bridge: SidecarBridge?
 
     private var apiKey: String?
     private let baseURL = "https://api.deepseek.com/v1"
@@ -15,6 +18,9 @@ public final class DeepSeekProvider: CloudProvider, @unchecked Sendable {
     }
 
     public func validateConnection() async throws -> Bool {
+        if let bridge = bridge {
+            return try await bridge.healthCheck()
+        }
         guard let apiKey = apiKey else {
             throw CloudProviderError.notConfigured
         }
@@ -30,6 +36,15 @@ public final class DeepSeekProvider: CloudProvider, @unchecked Sendable {
     }
 
     public func chat(messages: [ChatMessage], model: String?, temperature: Double) async throws -> String {
+        if let bridge = bridge {
+            return try await bridge.chat(
+                messages: messages.map { AnigmaPrimitives.ChatMessage(role: $0.role, content: $0.content) },
+                model: model,
+                temperature: temperature,
+                provider: "deepseek"
+            )
+        }
+        
         guard let apiKey = apiKey else {
             throw CloudProviderError.notConfigured
         }
@@ -73,6 +88,15 @@ public final class DeepSeekProvider: CloudProvider, @unchecked Sendable {
     }
 
     public func embeddings(texts: [String], model: String?) async throws -> [[Float]] {
+        if let bridge = bridge {
+            var results: [[Float]] = []
+            for text in texts {
+                let response = try await bridge.embed(text: text, model: model ?? "deepseek-embedder")
+                results.append(response.vector)
+            }
+            return results
+        }
+        
         guard let apiKey = apiKey else {
             throw CloudProviderError.notConfigured
         }

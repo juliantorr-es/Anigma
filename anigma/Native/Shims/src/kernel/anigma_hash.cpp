@@ -1,4 +1,4 @@
-#include "../../include/anigma_hash.h"
+#include "anigma_hash.h"
 
 #define ANIGMA_HASH_CHUNK_SIZE 64
 #define ANIGMA_HASH_DIGEST_SIZE 32

@@ -11,7 +11,7 @@ import Observation
 import AnigmaClientKit
 import AnigmaSidecar
 import AnigmaHostMac
-import AnigmaDaemonCore
+import AnigmaPrimitives
 
 @MainActor
 @Observable

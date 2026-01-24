@@ -145,8 +145,7 @@ public actor HuggingFaceHubClient {
         }
 
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("HEAD", forHTTPMethodField: "HEAD")
+        request.httpMethod = "HEAD"
         await addAuthHeaders(to: &request)
 
         let (_, response) = try await performRequest(request)

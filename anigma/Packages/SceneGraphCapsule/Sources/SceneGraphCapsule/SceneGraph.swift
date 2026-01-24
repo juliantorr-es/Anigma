@@ -1,202 +1,179 @@
 import Foundation
+import SceneGraphNative
 import AnigmaNativeShims
-import AnigmaPrimitives
-import CapsuleCore
 
-/// A high-performance, native scene graph for managing spatial hierarchy and transforms.
-public final class SceneGraph {
-    private var handle: CapsuleHandle<AnyObject>?
-    private let arena: CapsuleHandle<AnyObject>? // Should we manage arena separately?
-    // For now, let's assume the scene manages its own memory or we pass a default arena.
-    // The C API takes an arena for creation.
-    
-    // We need an Arena wrapper first?
-    // CapsuleCore usually provides memory management.
-    // Let's check if we have an Arena wrapper or if we should just use a default one created internally.
-    // Ideally, we'd use a shared arena, but for simplicity, let's make the SceneGraph own its arena or create one.
-    
-    public init(initialCapacity: UInt32 = 1024) throws {
-        // We need an arena.
-        // Assuming we can create a simple arena or pass null if the implementation supports default allocators?
-        // anigma_scene_create(graph, capacity, arena)
-        
-        // Let's implement a simple Arena wrapper in CapsuleCore or just malloc for now if C allows it?
-        // Checking headers... anigma_kernel_types.h usually defines arena.
-        // If we don't have an Arena wrapper, we might need to rely on the shim creating one.
-        
-        // Let's try to create the scene graph.
-        // We need to allocate the struct `anigma_scene_graph_t`.
-        // It's a struct, not an opaque pointer in the header... wait.
-        // `struct anigma_scene_graph_t { ... }` is defined in the header.
-        // So we need to allocate memory for this struct on the Swift side or heap allocate it.
-        
-        let graphPtr = UnsafeMutablePointer<anigma_scene_graph_t>.allocate(capacity: 1)
-        
-        // We'll pass NULL for arena for now, assuming the implementation handles it or uses malloc if null.
-        // If not, we'll need to fix the C side or add Arena support.
-        let status = anigma_scene_create(graphPtr, initialCapacity, nil)
-        
-        guard status == ANIGMA_OK else {
-            graphPtr.deallocate()
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
-        }
-        
-        self.handle = CapsuleHandle(
-            rawHandle: graphPtr,
-            destroyFunction: { ptr in
-                let graph = ptr.assumingMemoryBound(to: anigma_scene_graph_t.self)
-                anigma_scene_destroy(graph)
-                graph.deallocate()
-            }
-        )
-        self.arena = nil
-    }
-    
-    deinit {
-        handle?.invalidate()
-    }
-    
-    public func attach(node: SceneNode) throws {
-        // Node struct needs to be converted to C
-        var cNode = node.toCStruct()
-        
-        try handle?.withHandle { rawHandle in
-            let graph = rawHandle.assumingMemoryBound(to: anigma_scene_graph_t.self)
-            let status = anigma_scene_attach(graph, &cNode)
-            guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: anigma_capsule_error_t())
-            }
-        }
-    }
-    
-    public func detach(nodeId: UInt64) throws {
-        try handle?.withHandle { rawHandle in
-            let graph = rawHandle.assumingMemoryBound(to: anigma_scene_graph_t.self)
-            let status = anigma_scene_detach(graph, nodeId)
-            guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: anigma_capsule_error_t())
-            }
-        }
-    }
-    
-    public func updateTransform(nodeId: UInt64, transform: Transform) throws {
-        var cTransform = transform.toCStruct()
-        try handle?.withHandle { rawHandle in
-            let graph = rawHandle.assumingMemoryBound(to: anigma_scene_graph_t.self)
-            let status = anigma_scene_update_transform(graph, nodeId, &cTransform)
-            guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: anigma_capsule_error_t())
-            }
-        }
-    }
-    
-    public func evaluateTransforms() throws {
-        try handle?.withHandle { rawHandle in
-            let graph = rawHandle.assumingMemoryBound(to: anigma_scene_graph_t.self)
-            let status = anigma_scene_evaluate_transforms(graph)
-            guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: anigma_capsule_error_t())
-            }
-        }
-    }
-    
-    internal func withUnsafeGraph<T>(_ body: (UnsafePointer<anigma_scene_graph_t>) throws -> T) throws -> T {
-        guard let handle = handle else { throw CapsuleError(status: ANIGMA_ERR_INVALID_HANDLE, error: anigma_capsule_error_t()) }
-        return try handle.withHandle { rawHandle in
-            return try body(rawHandle.assumingMemoryBound(to: anigma_scene_graph_t.self))
-        }
-    }
-}
-
-public struct SceneNode {
-    public var id: UInt64
-    public var parentId: UInt64
-    public var children: [UInt64]
-    public var localTransform: Transform
-    public var layerIndex: UInt32
-    public var renderOrder: UInt32
-    public var hitTestGroup: UInt32
-    public var flags: UInt64
+/// Represents a node in the scene graph with transform and hierarchy info.
+public struct SceneNode: Sendable {
+    public let entityId: UInt64
+    public let parentId: UInt64
+    public var localTransform: Transform2D
+    public var worldTransform: Transform2D
+    public var flags: UInt32
+    public var layerMask: UInt32
     
     public init(
-        id: UInt64,
+        entityId: UInt64,
         parentId: UInt64 = 0,
-        children: [UInt64] = [],
-        localTransform: Transform = .identity,
-        layerIndex: UInt32 = 0,
-        renderOrder: UInt32 = 0,
-        hitTestGroup: UInt32 = 0,
-        flags: UInt64 = 0
+        localTransform: Transform2D = .identity,
+        flags: UInt32 = 0,
+        layerMask: UInt32 = 0xFFFFFFFF
     ) {
-        self.id = id
+        self.entityId = entityId
         self.parentId = parentId
-        self.children = children
         self.localTransform = localTransform
-        self.layerIndex = layerIndex
-        self.renderOrder = renderOrder
-        self.hitTestGroup = hitTestGroup
+        self.worldTransform = .identity
         self.flags = flags
+        self.layerMask = layerMask
+    }
+    
+    internal init(from cNode: anigma_scene_node_t) {
+        self.entityId = cNode.entity_id
+        self.parentId = cNode.parent_id
+        self.localTransform = Transform2D(from: cNode.local_transform)
+        self.worldTransform = Transform2D(from: cNode.world_transform)
+        self.flags = cNode.flags
+        self.layerMask = cNode.layer_mask
     }
     
     internal func toCStruct() -> anigma_scene_node_t {
-        // Warning: children pointer lifetime is tricky here if we just pass array address.
-        // anigma_scene_attach takes 'const anigma_scene_node_t* node'.
-        // It likely copies the data.
-        // We'll need to allocate children buffer or assume attach copies it immediately.
-        // The implementation of `anigma_scene_attach` likely copies the node data into its internal array.
-        // However, `children` is a pointer. Does it copy the children array?
-        // Checking header... `anigma_entity_id_t* children;`
-        // Usually ECS style scene graphs store hierarchy flat or via indices.
-        // If `attach` copies the structure, it might shallow copy the pointer.
-        // If so, we need to manage that memory.
-        // BUT, typically `attach` would be "add this node definition".
-        // Let's assume for now we provide the definition and the graph manages the hierarchy structure internally.
-        // Actually, looking at `anigma_scene_node_t`, it has `children` array.
-        // If we attach a node, we are saying "this node has these children".
-        // Ideally, we add nodes and then link them via parent_id, and the graph builds the children lists?
-        // Or we manage it manually?
-        // `anigma_scene_attach` takes a node.
-        
-        // Let's assume for this "Capsule" high performance usage, we primarily set parent_id,
-        // and the graph maintains children lists or we provide them.
-        // Given `child_capacity` field, it looks like dynamic array.
-        // So we probably don't pass children in `attach` typically, or if we do, it copies.
-        
-        // For safety, let's keep children empty in the struct passed to C, relying on parent links?
-        // No, that depends on implementation.
-        // Let's assume we pass empty children and let the graph build it, or we handle it if needed.
-        // For now, mapping straightforwardly.
-        
-        // Note: Using a temporary buffer here is risky if C keeps the pointer.
-        // But `anigma_scene_attach` implies copying into the graph.
-        
         return anigma_scene_node_t(
-            id: id,
+            entity_id: entityId,
             parent_id: parentId,
-            child_count: UInt32(children.count),
-            child_capacity: UInt32(children.count),
-            children: nil, // TODO: Handle children array if needed
             local_transform: localTransform.toCStruct(),
-            world_transform: anigma_transform_t(), // computed
-            layer_index: layerIndex,
-            render_order: renderOrder,
-            hit_test_group: hitTestGroup,
+            world_transform: worldTransform.toCStruct(),
             flags: flags,
-            world_transform_valid: false
+            layer_mask: layerMask
         )
     }
 }
 
-public struct Transform {
-    public var a, b, c, d, tx, ty: Float
+/// 2D affine transform - stored as 3x3 matrix
+/// Matrix layout: [[m00, m01, m02], [m10, m11, m12], [m20, m21, m22]]
+/// Where m02 = tx, m12 = ty for translation
+public struct Transform2D: Sendable {
+    public var m: ((Int32, Int32, Int32), (Int32, Int32, Int32), (Int32, Int32, Int32))
     
-    public static let identity = Transform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
+    public static let identity = Transform2D(
+        m: ((256, 0, 0), (0, 256, 0), (0, 0, 256))  // ANIGMA_COORDINATE_SCALE = 256
+    )
     
-    public init(a: Float, b: Float, c: Float, d: Float, tx: Float, ty: Float) {
-        self.a = a; self.b = b; self.c = c; self.d = d; self.tx = tx; self.ty = ty
+    public init(m: ((Int32, Int32, Int32), (Int32, Int32, Int32), (Int32, Int32, Int32))) {
+        self.m = m
+    }
+    
+    internal init(from cTransform: anigma_transform_t) {
+        self.m = (
+            (cTransform.m.0.0, cTransform.m.0.1, cTransform.m.0.2),
+            (cTransform.m.1.0, cTransform.m.1.1, cTransform.m.1.2),
+            (cTransform.m.2.0, cTransform.m.2.1, cTransform.m.2.2)
+        )
     }
     
     internal func toCStruct() -> anigma_transform_t {
-        return anigma_transform_t(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
+        // Swift imports C arrays in structs as tuples
+        var t = anigma_transform_t()
+        t.m.0 = (m.0.0, m.0.1, m.0.2)
+        t.m.1 = (m.1.0, m.1.1, m.1.2)
+        t.m.2 = (m.2.0, m.2.1, m.2.2)
+        return t
+    }
+    
+    /// Create a translation transform
+    public static func translation(x: Float, y: Float) -> Transform2D {
+        let scale: Float = 256.0  // ANIGMA_COORDINATE_SCALE
+        return Transform2D(m: (
+            (256, 0, Int32(x * scale)),
+            (0, 256, Int32(y * scale)),
+            (0, 0, 256)
+        ))
+    }
+}
+
+/// Simple error type for SceneGraph operations
+public struct SceneGraphError: Error {
+    public let message: String
+    
+    public init(_ message: String) {
+        self.message = message
+    }
+}
+
+/// A high-performance scene graph for managing spatial hierarchy and transforms.
+/// Wrapper around native C++ implementation.
+public final class SceneGraph: @unchecked Sendable {
+    private var handle: anigma_scene_graph_t?
+    
+    public init() throws {
+        var newHandle: anigma_scene_graph_t?
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_create(&newHandle, &error)
+        guard status == ANIGMA_OK, let h = newHandle else {
+            throw SceneGraphError("Failed to create scene graph: \(status)")
+        }
+        self.handle = h
+    }
+    
+    deinit {
+        if let h = handle {
+            anigma_scene_graph_destroy(h, nil)
+        }
+    }
+    
+    /// Attach a node to the scene graph.
+    public func attach(node: SceneNode) throws {
+        guard let h = handle else { throw SceneGraphError("Invalid handle") }
+        var cNode = node.toCStruct()
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_attach(h, &cNode, &error)
+        if status != ANIGMA_OK { throw SceneGraphError("Attach failed: \(status)") }
+    }
+    
+    /// Detach a node from the scene graph.
+    public func detach(entityId: UInt64) throws {
+        guard let h = handle else { throw SceneGraphError("Invalid handle") }
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_detach(h, entityId, &error)
+        if status != ANIGMA_OK { throw SceneGraphError("Detach failed: \(status)") }
+    }
+    
+    /// Update the local transform of a node.
+    public func updateTransform(entityId: UInt64, transform: Transform2D) throws {
+        guard let h = handle else { throw SceneGraphError("Invalid handle") }
+        var cTransform = transform.toCStruct()
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_update_transform(h, entityId, &cTransform, &error)
+        if status != ANIGMA_OK { throw SceneGraphError("Update transform failed: \(status)") }
+    }
+    
+    /// Get a node by entity ID.
+    public func getNode(entityId: UInt64) throws -> SceneNode {
+        guard let h = handle else { throw SceneGraphError("Invalid handle") }
+        var cNode = anigma_scene_node_t()
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_get_node(h, entityId, &cNode, &error)
+        if status != ANIGMA_OK { throw SceneGraphError("Node not found") }
+        return SceneNode(from: cNode)
+    }
+    
+    /// Get the number of nodes in the scene graph.
+    public func nodeCount() -> Int {
+        guard let h = handle else { return 0 }
+        var count: Int = 0
+        anigma_scene_graph_get_node_count(h, &count, nil)
+        return count
+    }
+    
+    /// Evaluate all world transforms based on parent-child hierarchy.
+    public func evaluateTransforms() throws {
+        guard let h = handle else { throw SceneGraphError("Invalid handle") }
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_evaluate_transforms(h, &error)
+        if status != ANIGMA_OK { throw SceneGraphError("Evaluate transforms failed: \(status)") }
+    }
+    
+    /// Provide unsafe access to the underlying graph handle for interoperability.
+    public func withUnsafeGraph<T>(_ body: (anigma_scene_graph_t) throws -> T) rethrows -> T {
+        guard let h = handle else { fatalError("SceneGraph handle is nil") }
+        return try body(h)
     }
 }

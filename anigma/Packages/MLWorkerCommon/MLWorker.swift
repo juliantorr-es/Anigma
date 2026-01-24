@@ -142,12 +142,14 @@ public class MLWorker {
         
         // Compute binary hash for provenance (hash of this executable's code)
         let binaryHash = try computeBinaryHash()
+        let modelPath = resolveModelPath(for: engine)
+        let modelHash = (try? computeFileHash(at: URL(fileURLWithPath: modelPath))) ?? "sha256:unknown"
         
         let engineMeta = MLWorkerEngineMetadata(
             binaryHash: binaryHash,
             version: "1.0",
             modelId: "\(engine.rawValue)-model",
-            modelHash: "mock-hash", // TODO: Compute actual model hash
+            modelHash: modelHash,
             binaryVersion: binaryHash
         )
         
@@ -246,10 +248,12 @@ public class MLWorker {
             requestId: request.requestId
         )
         
+        let modelHash = (try? computeFileHash(at: URL(fileURLWithPath: modelPath))) ?? "sha256:unknown"
+        
         let engineMetadata = EmbeddingEngineMetadata(
             engine: engine.rawValue,
             binaryHash: try computeBinaryHash(),
-            modelHash: "mock-model-hash", // TODO: Compute actual model hash
+            modelHash: modelHash,
             argv: argv,
             env: collectBackendEnvVars(backendRunner.getEnvironmentAllowlist())
         )
@@ -260,7 +264,7 @@ public class MLWorker {
             shape: [1, floatCount],
             ordering: "row-major",
             tokenizer: "\(engine.rawValue)-tokenizer-v1",
-            modelHash: "mock-model-hash",
+            modelHash: modelHash,
             inputHash: input.hash,
             requestId: request.requestId,
             timestamp: ISO8601DateFormatter().string(from: Date()),
@@ -423,6 +427,28 @@ public class MLWorker {
     
     private func estimateMemoryUsage(request: MLWorkerRequest) -> Int {
         return request.inputs.count * 512 * 4
+    }
+
+    private func computeFileHash(at url: URL) throws -> String {
+        guard FileManager.default.fileExists(atPath: url.path) else { return "sha256:missing" }
+        
+        var isDirectory: ObjCBool = false
+        if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory), isDirectory.boolValue {
+            let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles])
+            var hashes: [String] = []
+            while let fileURL = enumerator?.nextObject() as? URL {
+                if let values = try? fileURL.resourceValues(forKeys: [.isRegularFileKey]), values.isRegularFile == true {
+                    if let data = try? Data(contentsOf: fileURL, options: .mappedIfSafe) {
+                        hashes.append(SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined())
+                    }
+                }
+            }
+            let combined = hashes.sorted().joined().data(using: .utf8)!
+            return SHA256.hash(data: combined).map { String(format: "%02x", $0) }.joined()
+        } else {
+            let data = try Data(contentsOf: url, options: .mappedIfSafe)
+            return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        }
     }
 }
 

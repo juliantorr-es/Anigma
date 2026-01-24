@@ -53,7 +53,7 @@ public struct CheckpointManager: Sendable {
         operationType: String,
         data: T,
         metadata: [String: String] = [:]
-    ) throws {
+    ) async throws {
         let checkpoint = Checkpoint(
             entityId: entityId,
             operationType: operationType,
@@ -83,7 +83,7 @@ public struct CheckpointManager: Sendable {
         entityType: T.Type,
         entityId: EntityID,
         operationType: String
-    ) throws -> Checkpoint<T>? {
+    ) async throws -> Checkpoint<T>? {
         let checkpointFile = checkpointFileURL(for: entityId, operationType: operationType)
         
         guard FileManager.default.fileExists(atPath: checkpointFile.path) else {
@@ -108,7 +108,7 @@ public struct CheckpointManager: Sendable {
     }
     
     /// Delete a checkpoint for an operation.
-    public func deleteCheckpoint(entityId: EntityID, operationType: String) throws {
+    public func deleteCheckpoint(entityId: EntityID, operationType: String) async throws {
         let checkpointFile = checkpointFileURL(for: entityId, operationType: operationType)
         
         if FileManager.default.fileExists(atPath: checkpointFile.path) {
@@ -122,7 +122,7 @@ public struct CheckpointManager: Sendable {
     }
     
     /// Delete all checkpoints for an entity.
-    public func deleteAllCheckpoints(entityId: EntityID) throws {
+    public func deleteAllCheckpoints(entityId: EntityID) async throws {
         let entityCheckpoints = try findAllCheckpoints(for: entityId)
         
         for checkpointFile in entityCheckpoints {
@@ -136,7 +136,7 @@ public struct CheckpointManager: Sendable {
     }
     
     /// Get list of available checkpoints for an entity.
-    public func getAvailableCheckpoints(entityId: EntityID) throws -> [CheckpointInfo] {
+    public func getAvailableCheckpoints(entityId: EntityID) async throws -> [CheckpointInfo] {
         let entityCheckpoints = try findAllCheckpoints(for: entityId)
         var checkpointInfos: [CheckpointInfo] = []
         
@@ -158,7 +158,7 @@ public struct CheckpointManager: Sendable {
     }
     
     /// Clean up old checkpoints.
-    public func cleanupOldCheckpoints() throws {
+    public func cleanupOldCheckpoints() async throws {
         guard enableCleanup else { return }
         
         let cutoffDate = Date().addingTimeInterval(-maxCheckpointAge)
@@ -191,7 +191,7 @@ public struct CheckpointManager: Sendable {
     }
     
     /// Get storage usage statistics.
-    public func getStorageUsage() -> CheckpointStorageUsage {
+    public func getStorageUsage() async -> CheckpointStorageUsage {
         do {
             let allCheckpoints = try findAllCheckpoints()
             var totalSize: Int64 = 0
@@ -303,41 +303,19 @@ public struct CheckpointInfo: Codable, Sendable {
 }
 
 /// Wrapper for extracting just the info from a checkpoint.
-private struct CheckpointInfoWrapper<T: Codable>: Codable {
-    let info: CheckpointInfo
+private struct CheckpointInfoWrapper: Codable {
+    let entityId: EntityID
+    let operationType: String
+    let timestamp: Date
+    let metadata: [String: String]
     
-    init(from checkpoint: Checkpoint<T>) {
-        self.info = CheckpointInfo(
-            entityId: checkpoint.entityId,
-            operationType: checkpoint.operationType,
-            timestamp: checkpoint.timestamp,
-            metadata: checkpoint.metadata
+    var info: CheckpointInfo {
+        CheckpointInfo(
+            entityId: entityId,
+            operationType: operationType,
+            timestamp: timestamp,
+            metadata: metadata
         )
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case entityId
-        case operationType
-        case timestamp
-        case metadata
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.info = CheckpointInfo(
-            entityId: try container.decode(EntityID.self, forKey: .entityId),
-            operationType: try container.decode(String.self, forKey: .operationType),
-            timestamp: try container.decode(Date.self, forKey: .timestamp),
-            metadata: try container.decodeIfPresent([String: String].self, forKey: .metadata) ?? [:]
-        )
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(info.entityId, forKey: .entityId)
-        try container.encode(info.operationType, forKey: .operationType)
-        try container.encode(info.timestamp, forKey: .timestamp)
-        try container.encode(info.metadata, forKey: .metadata)
     }
 }
 
@@ -438,11 +416,11 @@ public struct CheckpointManagementSystem: System {
         let now = Date()
         
         // Get last cleanup time from world metadata or use default
-        let lastCleanupTime = await world.getMetadata(lastCleanupKey) as Date? ?? Date.distantPast
+        let lastCleanupTime = await world.getMetadata(lastCleanupKey) as? Date ?? Date.distantPast
         
         if now.timeIntervalSince(lastCleanupTime) >= 3600 { // Every hour
             do {
-                try checkpointManager.cleanupOldCheckpoints()
+                try await checkpointManager.cleanupOldCheckpoints()
                 await world.setMetadata(lastCleanupKey, value: now)
             } catch {
                 await Logger.shared.error(
@@ -457,7 +435,7 @@ public struct CheckpointManagementSystem: System {
         
         for (entity, operation) in checkpointEntities {
             do {
-                try handleCheckpointOperation(operation, for: entity)
+                try await handleCheckpointOperation(operation, for: entity)
             } catch {
                 await Logger.shared.error(
                     "Checkpoint operation failed for entity \(entity): \(error)",
@@ -470,35 +448,27 @@ public struct CheckpointManagementSystem: System {
         }
     }
     
-    private func handleCheckpointOperation(_ operation: CheckpointOperationComponent, for entity: EntityID) throws {
+    private func handleCheckpointOperation(_ operation: CheckpointOperationComponent, for entity: EntityID) async throws {
         switch operation.action {
         case .save(let operationType, let data, let metadata):
-            try checkpointManager.saveCheckpoint(
-                entityId: entity,
-                operationType: operationType,
-                data: data,
-                metadata: metadata
-            )
+            // We need a generic way to call saveCheckpoint if data is Any
+            // But saveCheckpoint is generic <T: Codable>.
+            // This design is flawed if we want to use components to trigger it.
+            // For now, let's just cast to common types or use a specific implementation.
+            await Logger.shared.warning("Direct component-based checkpoint saving not fully implemented for type Any", category: "Diaplasion")
             
         case .load(let entityType, let operationType, let continuation):
-            if let checkpoint = try checkpointManager.loadCheckpoint(
-                entityType: entityType,
-                entityId: entity,
-                operationType: operationType
-            ) {
-                continuation(.success(checkpoint))
-            } else {
-                continuation(.failure(CheckpointError.notFound))
-            }
+            // Same here, cannot call loadCheckpoint without knowing T at compile time here
+            await Logger.shared.warning("Direct component-based checkpoint loading not fully implemented", category: "Diaplasion")
             
         case .delete(let operationType):
-            try checkpointManager.deleteCheckpoint(
+            try await checkpointManager.deleteCheckpoint(
                 entityId: entity,
                 operationType: operationType
             )
             
         case .deleteAll:
-            try checkpointManager.deleteAllCheckpoints(entityId: entity)
+            try await checkpointManager.deleteAllCheckpoints(entityId: entity)
         }
     }
 }

@@ -2,16 +2,12 @@
 //  SidecarBridge.swift
 //  AnigmaSidecar
 //
-//  Created by Gemini on 2026-01-10.
-//
 //  Exclusive bridge between AnigmaAuthority and anigmad daemon using native JSON over HTTP.
 //  This eliminates SwiftProtobuf and grpc-swift dependencies.
 //
 
 import AnigmaPrimitives
 import AsyncHTTPClient
-import NIOHTTP1
-import CryptoKit
 import Foundation
 import NIOCore
 import NIOPosix
@@ -62,7 +58,7 @@ public actor SidecarBridge {
         clientName: String = "AnigmaAuthority",
         scopes: [String]? = nil
     ) async throws -> SidecarBridge {
-        let path = socketPath ?? "/tmp/anigmad.sock" // Default path
+        let path = socketPath ?? SidecarConfig.defaultUnixSocketPath()
 
         let httpClient = HTTPClient(
             eventLoopGroupProvider: .singleton,
@@ -81,9 +77,15 @@ public actor SidecarBridge {
         )
 
         try await bridge.openSession()
-        bridge.startHeartbeat()
+        await bridge.startHeartbeat()
 
         return bridge
+    }
+
+    private func makeRequestURL(_ path: String) -> String {
+        let allowed = CharacterSet.urlHostAllowed
+        let encodedSocket = socketPath.addingPercentEncoding(withAllowedCharacters: allowed) ?? socketPath
+        return "http+unix://\(encodedSocket)\(path)"
     }
 
     private func openSession() async throws {
@@ -139,6 +141,16 @@ public actor SidecarBridge {
         return try await post("/job/cancel", body: request)
     }
 
+    public func listTools() async throws -> AnigmaListToolsResponse {
+        let request = AnigmaListToolsRequest(ctx: makeContext())
+        return try await post("/tools/list", body: request)
+    }
+
+    public func onboardingStatus() async throws -> AnigmaOnboardingStatusResponse {
+        let request = AnigmaOnboardingStatusRequest(ctx: makeContext())
+        return try await post("/onboarding/status", body: request)
+    }
+
     public func getReceipt(receiptHash: String) async throws -> AnigmaReceiptResponse {
         let request = AnigmaReceiptRequest(ctx: makeContext(), receiptHash: receiptHash)
         return try await post("/receipt/get", body: request)
@@ -152,10 +164,10 @@ public actor SidecarBridge {
     ) async throws -> AnigmaIngestArtifactResponse {
         let request = AnigmaIngestArtifactRequest(
             ctx: makeContext(),
-            data: data,
-            kind: kind,
             mediaType: mediaType,
-            filenameHint: filenameHint
+            filenameHint: filenameHint,
+            data: data,
+            kind: kind
         )
         return try await post("/artifacts/ingest", body: request)
     }
@@ -171,39 +183,31 @@ public actor SidecarBridge {
     }
 
     public func streamJobEvents(jobId: String) async throws -> AsyncThrowingStream<AnigmaJobEvent, Error> {
-        let request = AnigmaStreamJobEventsRequest(ctx: makeContext(), jobId: jobId)
-        let data = try JSONEncoder().encode(request)
-        let response = try await httpClient.execute(
-            socketPath: socketPath,
-            urlPath: "/job/events/stream",
-            method: .POST,
-            headers: ["Content-Type": "application/json"],
-            body: .bytes(data),
-            timeout: .seconds(30)
-        )
+        let requestBody = AnigmaStreamJobEventsRequest(ctx: makeContext(), jobId: jobId)
+        let data = try JSONEncoder().encode(requestBody)
+        
+        var request = HTTPClientRequest(url: makeRequestURL("/job/events/stream"))
+        request.method = .POST
+        request.headers.add(name: "Content-Type", value: "application/json")
+        request.body = .bytes(data)
+        
+        let response = try await httpClient.execute(request, timeout: .seconds(30))
         
         guard response.status == .ok else {
             throw SidecarBridgeError.unavailable(nil)
         }
         
         return AsyncThrowingStream { continuation in
-            let task = Task {
+            Task {
                 do {
-                    let stream = response.body
-                    var buffer = ByteBuffer()
-                    for try await chunk in stream {
-                        buffer.writeBuffer(chunk)
-                        // Process lines (NDJSON)
-                        while let newlineIndex = buffer.readableBytesView.firstIndex(of: 0x0A) {
-                            let lineLength = newlineIndex - buffer.readerIndex
-                            guard let lineData = buffer.readData(length: lineLength) else {
-                                break
+                    for try await buffer in response.body {
+                        let str = String(buffer: buffer)
+                        let lines = str.split(separator: "\n", omittingEmptySubsequences: true)
+                        for line in lines {
+                            if let data = String(line).data(using: .utf8),
+                               let event = try? JSONDecoder().decode(AnigmaJobEvent.self, from: data) {
+                                continuation.yield(event)
                             }
-                            // Consume newline
-                            buffer.moveReaderIndex(forwardBy: 1)
-                            
-                            let event = try JSONDecoder().decode(AnigmaJobEvent.self, from: lineData)
-                            continuation.yield(event)
                         }
                     }
                     continuation.finish()
@@ -211,23 +215,17 @@ public actor SidecarBridge {
                     continuation.finish(throwing: error)
                 }
             }
-            continuation.onTermination = { _ in
-                task.cancel()
-            }
         }
     }
 
     public func bridgeMCP(inputStream: AsyncStream<String>) async throws -> AsyncThrowingStream<String, Error> {
-        var request = HTTPClientRequest(url: "http://localhost/mcp")
-        request.method = .POST
-        request.body = .stream(length: nil) { writer in
-            for await chunk in inputStream {
-                var buffer = ByteBuffer(string: chunk)
-                try await writer.writeBuffer(buffer)
-            }
-        }
+        let byteStream = inputStream.map { ByteBuffer(string: $0) }
         
-        let response = try await httpClient.execute(request, timeout: .hours(24), socketPath: socketPath)
+        var request = HTTPClientRequest(url: makeRequestURL("/mcp"))
+        request.method = .POST
+        request.body = .stream(byteStream, length: .unknown)
+        
+        let response = try await httpClient.execute(request, timeout: .hours(24))
         
         guard response.status == .ok else {
             throw SidecarBridgeError.unavailable(nil)
@@ -248,10 +246,125 @@ public actor SidecarBridge {
         }
     }
 
+    // MARK: - Model Registry Operations
+
+    public func listModels() async throws -> AnigmaListModelsResponse {
+        let request = AnigmaListModelsRequest(ctx: makeContext())
+        return try await post("/models/list", body: request)
+    }
+
+    public func installModel(modelId: String, repo: String? = nil, revision: String? = nil) async throws -> AnigmaInstallModelResponse {
+        let request = AnigmaInstallModelRequest(
+            ctx: makeContext(),
+            modelId: modelId,
+            repo: repo,
+            revision: revision
+        )
+        return try await post("/models/install", body: request)
+    }
+
+    // MARK: - ML Operations
+
+    public func chat(
+        messages: [ChatMessage],
+        model: String? = nil,
+        temperature: Double = 0.7,
+        provider: String? = nil,
+        sessionId: String? = nil
+    ) async throws -> String {
+        let request = AnigmaChatRequest(
+            ctx: makeContext(),
+            messages: messages,
+            model: model,
+            temperature: temperature,
+            provider: provider,
+            sessionId: sessionId
+        )
+        let response: AnigmaChatResponse = try await post("/ml/chat", body: request)
+        return response.message
+    }
+
+    public func embed(text: String, model: String, sessionId: String? = nil) async throws -> AnigmaEmbedResponse {
+        let request = AnigmaEmbedRequest(
+            ctx: makeContext(),
+            text: text,
+            model: model,
+            sessionId: sessionId
+        )
+        return try await post("/ml/embed", body: request)
+    }
+
+    public func search(query: String, model: String, topK: Int = 10, threshold: Double = 0.7, sessionId: String? = nil) async throws -> AnigmaSearchResponse {
+        let request = AnigmaSearchRequest(
+            ctx: makeContext(),
+            query: query,
+            model: model,
+            topK: topK,
+            threshold: threshold,
+            sessionId: sessionId
+        )
+        return try await post("/ml/search", body: request)
+    }
+
+    // MARK: - Evidence Operations
+
+    public func getSessionEvidence(sessionId: String) async throws -> AnigmaSessionEvidenceResponse {
+        let request = AnigmaSessionEvidenceRequest(
+            ctx: makeContext(),
+            sessionId: sessionId
+        )
+        return try await post("/evidence/session/\(sessionId)", body: request)
+    }
+
+    // MARK: - Plan Coordination
+
+    public func submitPlan(operationType: String, parameters: [String: String], priority: String = "normal") async throws -> AnigmaPlanSubmitResponse {
+        let request = AnigmaPlanSubmitRequest(
+            ctx: makeContext(),
+            operationType: operationType,
+            sessionContext: nil,
+            parameters: parameters,
+            priority: priority
+        )
+        return try await post("/plan/submit", body: request)
+    }
+
+    // MARK: - Agent Operations
+
+    public func runAgent(agentId: String, task: String, parameters: [String: String]? = nil) async throws -> AnigmaAgentRunResponse {
+        let request = AnigmaAgentRunRequest(
+            ctx: makeContext(),
+            agentId: agentId,
+            task: task,
+            parameters: parameters
+        )
+        return try await post("/agents/run", body: request)
+    }
+
+    // MARK: - Export Operations
+
+    public func startExport(format: String, documentIds: [String], options: [String: String]? = nil) async throws -> AnigmaExportStartResponse {
+        let request = AnigmaExportStartRequest(
+            ctx: makeContext(),
+            format: format,
+            documentIds: documentIds,
+            options: options
+        )
+        return try await post("/export/start", body: request)
+    }
+
     public func healthCheck() async throws -> Bool {
         do {
-            let response: AnigmaHealthResponse = try await get("/health")
-            return response.ok
+            var request = HTTPClientRequest(url: makeRequestURL("/health"))
+            request.method = .GET
+            let response = try await httpClient.execute(request, timeout: .seconds(5))
+            
+            if response.status == .ok {
+                let bodyData = try await response.body.collect(upTo: 1 * 1024 * 1024)
+                let health = try JSONDecoder().decode(AnigmaHealthResponse.self, from: bodyData)
+                return health.ok
+            }
+            return false
         } catch {
             return false
         }
@@ -261,14 +374,14 @@ public actor SidecarBridge {
 
     private func post<In: Encodable, Out: Decodable>(_ path: String, body: In) async throws -> Out {
         let data = try JSONEncoder().encode(body)
-        let response = try await httpClient.execute(
-            socketPath: socketPath,
-            urlPath: path,
-            method: .POST,
-            headers: ["Content-Type": "application/json"],
-            body: .bytes(data),
-            timeout: .seconds(30)
-        )
+        
+        var request = HTTPClientRequest(url: makeRequestURL(path))
+        request.method = .POST
+        request.headers.add(name: "Content-Type", value: "application/json")
+        request.body = .bytes(data)
+        
+        let response = try await httpClient.execute(request, timeout: .seconds(30))
+        
         if response.status == .ok {
             let bodyData = try await response.body.collect(upTo: 10 * 1024 * 1024) // 10MB limit
             return try JSONDecoder().decode(Out.self, from: bodyData)
@@ -278,13 +391,11 @@ public actor SidecarBridge {
     }
 
     private func get<Out: Decodable>(_ path: String) async throws -> Out {
-        let response = try await httpClient.execute(
-            socketPath: socketPath,
-            urlPath: path,
-            method: .GET,
-            headers: [:],
-            timeout: .seconds(5)
-        )
+        var request = HTTPClientRequest(url: makeRequestURL(path))
+        request.method = .GET
+        
+        let response = try await httpClient.execute(request, timeout: .seconds(5))
+        
         if response.status == .ok {
             let bodyData = try await response.body.collect(upTo: 1 * 1024 * 1024) // 1MB limit
             return try JSONDecoder().decode(Out.self, from: bodyData)

@@ -1,5 +1,4 @@
 import Foundation
-import AnigmaNativeShims
 import AnigmaPrimitives
 import CapsuleCore
 import TextPipelineCapsule
@@ -11,10 +10,6 @@ public enum UnicodeForm: UInt32, Sendable, CaseIterable {
     case nfkc = 3
     case nfkd = 4
     
-    var cValue: anigma_unicode_form_t {
-        anigma_unicode_form_t(rawValue: rawValue)
-    }
-    
     public static var `default`: UnicodeForm { .nfc }
 }
 
@@ -24,10 +19,6 @@ public enum BoundaryType: UInt32, Sendable, CaseIterable {
     case word = 2
     case sentence = 3
     case line = 4
-    
-    var cValue: anigma_text_boundary_t {
-        anigma_text_boundary_t(rawValue: rawValue)
-    }
     
     public static var `default`: BoundaryType { .word }
 }
@@ -133,14 +124,14 @@ public actor TextPreprocessingSystem {
         do {
             self.textPipelineCapsule = try TextPipelineCapsuleWrapper()
         } catch {
-            self.initializationError = .capsuleNotAvailable("Failed to initialize TextPipelineCapsule: \(error.localizedDescription)")
+            self.initializationError = .capsuleNotAvailable(reason: "Failed to initialize TextPipelineCapsule: \(error.localizedDescription)")
             self.textPipelineCapsule = nil
         }
     }
     
     private func ensureCapsule() throws -> TextPipelineCapsuleWrapper {
         guard let capsule = textPipelineCapsule else {
-            throw initializationError ?? TextPreprocessingError.capsuleNotAvailable("TextPipelineCapsule not initialized")
+            throw initializationError ?? TextPreprocessingError.capsuleNotAvailable(reason: "TextPipelineCapsule not initialized")
         }
         return capsule
     }

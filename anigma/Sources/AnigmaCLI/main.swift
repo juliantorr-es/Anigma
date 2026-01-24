@@ -1,5 +1,7 @@
 import Foundation
 import ArgumentParser
+import AnigmaSidecar
+import AnigmaPrimitives
 
 @main
 struct AnigmaCLI: AsyncParsableCommand {
@@ -25,25 +27,27 @@ extension AnigmaCLI {
 
         func run() async throws {
             let config = try await CLIConfiguration.shared()
-            let database = try await CLIDatabase.shared()
+            // let database = try await CLIDatabase.shared() // REMOVED
+            let bridge = try await SidecarBridge.create(clientName: "anigma-cli")
+            
             let ui = TUIManager()
 
             // Check if onboarding is needed
-            let isOnboarded = try await config.isOnboarded()
-
-            if !isOnboarded && !skipOnboarding {
-                let coordinator = OnboardingCoordinator(
-                    config: config,
-                    database: database,
-                    ui: ui
-                )
-                try await coordinator.runOnboarding()
+            if !skipOnboarding {
+                do {
+                    let status = try await bridge.onboardingStatus()
+                    if !status.isOnboarded {
+                        await ui.showInfo("Anigma is not yet configured. Please run 'anigma init' or follow the onboarding instructions.")
+                    }
+                } catch {
+                    print("Warning: Could not check onboarding status: \(error.localizedDescription)")
+                }
             }
 
             // Start chat session
             let chat = try await ChatInterface(
                 config: config,
-                database: database,
+                bridge: bridge,
                 ui: ui
             )
 
@@ -64,10 +68,12 @@ extension AnigmaCLI {
         var force = false
 
         func run() async throws {
+            let ui = TUIManager()
+            await ui.showInfo("Onboarding is temporarily unavailable during daemon consolidation.")
+            /*
             let config = try await CLIConfiguration.shared()
             let database = try await CLIDatabase.shared()
-            let ui = TUIManager()
-
+            
             if !force {
                 let isOnboarded = try await config.isOnboarded()
                 if isOnboarded {
@@ -89,6 +95,7 @@ extension AnigmaCLI {
             )
 
             try await coordinator.runOnboarding()
+            */
         }
     }
 }
@@ -108,26 +115,30 @@ extension AnigmaCLI {
             )
 
             func run() async throws {
-                let config = try await CLIConfiguration.shared()
-                let database = try await CLIDatabase.shared()
-                let installer = ModelInstaller(config: config, database: database)
+                let bridge = try await SidecarBridge.create(clientName: "anigma-cli")
 
-                let models = try await installer.listInstalled()
+                do {
+                    let response = try await bridge.listModels()
+                    
+                    if response.models.isEmpty {
+                        print("No models installed")
+                        return
+                    }
 
-                if models.isEmpty {
-                    print("No models installed")
-                    return
-                }
-
-                print("\nInstalled Models:")
-                print("─────────────────────────────────────────────────────")
-                for model in models {
-                    print("• \(model.name)")
-                    print("  Type: \(model.type.rawValue)")
-                    print("  Size: \(String(format: "%.1f", model.sizeGB)) GB")
-                    print("  Quantization: \(model.quantization)")
-                    print("  Installed: \(model.installedAt.formatted())")
-                    print()
+                    print("\nInstalled Models:")
+                    print("─────────────────────────────────────────────────────")
+                    for model in response.models {
+                        print("• \(model.name)")
+                        print("  Type: \(model.type)")
+                        print("  Size: \(String(format: "%.1f", model.sizeGB)) GB")
+                        print("  Quantization: \(model.quantization)")
+                        if let date = model.installedAt {
+                            print("  Installed: \(date.formatted())")
+                        }
+                        print()
+                    }
+                } catch {
+                    print("Failed to list models: \(error.localizedDescription)")
                 }
             }
         }
@@ -141,34 +152,23 @@ extension AnigmaCLI {
             var modelID: String
 
             func run() async throws {
-                let config = try await CLIConfiguration.shared()
-                let database = try await CLIDatabase.shared()
+                let bridge = try await SidecarBridge.create(clientName: "anigma-cli")
                 let ui = TUIManager()
+                
+                await ui.showProgress("Installing \(modelID)...", current: 0, total: 100)
 
-                // Run benchmark to get recommendations
-                await ui.showSpinner("Running system benchmark...")
-                let benchmark = try await SystemBenchmark().run()
-                await ui.hideSpinner()
-
-                let recommendations = ModelRecommender.recommend(for: benchmark)
-
-                guard let model = recommendations.first(where: { $0.id == modelID }) else {
-                    await ui.showError("Model not found: \(modelID)")
-                    await ui.showInfo("\nAvailable models:")
-                    for rec in recommendations {
-                        await ui.showInfo("  \(rec.id) - \(rec.name)")
+                do {
+                    let response = try await bridge.installModel(modelId: modelID)
+                    
+                    if let error = response.error {
+                        await ui.showError("Installation failed: \(error.message)")
+                    } else {
+                        await ui.updateProgress(current: 100, total: 100)
+                        await ui.showSuccess("Installed \(modelID)")
                     }
-                    return
+                } catch {
+                    await ui.showError("Installation failed: \(error.localizedDescription)")
                 }
-
-                let installer = ModelInstaller(config: config, database: database)
-                await ui.showProgress("Installing \(model.name)...", current: 0, total: 100)
-
-                try await installer.install(model) { progress in
-                    await ui.updateProgress(current: Int(progress * 100), total: 100)
-                }
-
-                await ui.showSuccess("Installed \(model.name)")
             }
         }
 
@@ -181,14 +181,7 @@ extension AnigmaCLI {
             var modelID: String
 
             func run() async throws {
-                let config = try await CLIConfiguration.shared()
-                let database = try await CLIDatabase.shared()
-                let ui = TUIManager()
-
-                let installer = ModelInstaller(config: config, database: database)
-                try await installer.uninstall(modelID: modelID)
-
-                await ui.showSuccess("Uninstalled model: \(modelID)")
+                print("Uninstall not yet supported via daemon.")
             }
         }
 
@@ -198,25 +191,7 @@ extension AnigmaCLI {
             )
 
             func run() async throws {
-                let ui = TUIManager()
-
-                await ui.showSpinner("Running system benchmark...")
-                let benchmark = try await SystemBenchmark().run()
-                await ui.hideSpinner()
-
-                await ui.showBenchmarkResults(benchmark)
-
-                let recommendations = ModelRecommender.recommend(for: benchmark)
-
-                print("\nRecommended Models:")
-                print("─────────────────────────────────────────────────────")
-                for model in recommendations {
-                    print("• \(model.name) (\(model.id))")
-                    print("  Type: \(model.type.rawValue)")
-                    print("  Size: \(String(format: "%.1f", model.sizeGB)) GB")
-                    print("  \(model.description)")
-                    print()
-                }
+                print("Recommendations not yet supported via daemon.")
             }
         }
     }

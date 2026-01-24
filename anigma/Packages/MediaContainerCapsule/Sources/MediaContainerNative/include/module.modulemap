@@ -1,0 +1,9 @@
+module MediaContainerNative {
+    header "anigma_media_container_capsule.h"
+    header "anigma_capsule_core.h"
+    header "anigma_native_common.h"
+    header "anigma_kernel_types.h"
+    header "anigma_blob.h"
+    header "anigma_status.h"
+    export *
+}

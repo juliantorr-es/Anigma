@@ -108,12 +108,14 @@ private func makeContext() -> TaskContext {
 
 private func makeOrchestrator(
     eventStream: CLIEventStream,
-    enableMcp: Bool
+    enableMcp: Bool,
+    registry: ProviderRegistry
 ) -> AnigmaCLIOrchestrator {
     let fallback = LocalContractBuilder()
 
     guard enableMcp else {
         return AnigmaCLIOrchestrator(
+            registry: registry,
             contractBuilder: fallback,
             eventStream: eventStream
         )
@@ -133,6 +135,7 @@ private func makeOrchestrator(
     )
 
     return AnigmaCLIOrchestrator(
+        registry: registry,
         contractBuilder: mcpBuilder,
         eventStream: eventStream
     )
@@ -235,9 +238,11 @@ private func runTUISession(
     let context = makeContext()
     let eventStream = CLIEventStream()
     let renderer = TUIRenderer(mode: options.mode, dryRun: options.dryRun)
+    let registry = await ProviderRegistry.createDefault()
     let orchestrator = makeOrchestrator(
         eventStream: eventStream,
-        enableMcp: options.enableMcp
+        enableMcp: options.enableMcp,
+        registry: registry
     )
 
     let eventTask = Task {
@@ -416,7 +421,7 @@ private struct ProviderListPayload: Encodable {
     let providers: [ProviderStatus]
 }
 
-struct AnigmaProvidersCommand: ParsableCommand {
+struct AnigmaProvidersCommand: AsyncParsableCommand {
     static var configuration: CommandConfiguration {
         CommandConfiguration(
             commandName: "providers",
@@ -426,8 +431,8 @@ struct AnigmaProvidersCommand: ParsableCommand {
 
     @OptionGroup var output: OutputOptions
 
-    func run() throws {
-        let registry = ProviderRegistry()
+    func run() async throws {
+        let registry = await ProviderRegistry.createDefault()
         let statuses = registry.statuses()
 
         switch output.format {
@@ -487,9 +492,11 @@ struct AnigmaPlanCommand: AsyncParsableCommand {
         let shouldStream = stream || output.format == .text
 
         let streamTask = startEventStreamPrinter(enabled: shouldStream, stream: eventStream)
+        let registry = await ProviderRegistry.createDefault()
         let orchestrator = makeOrchestrator(
             eventStream: eventStream,
-            enableMcp: !noMcp
+            enableMcp: !noMcp,
+            registry: registry
         )
 
         let outcome = try await orchestrator.plan(task: task, context: context)
@@ -561,9 +568,11 @@ struct AnigmaRunCommand: AsyncParsableCommand {
         let shouldStream = stream || output.format == .text
 
         let streamTask = startEventStreamPrinter(enabled: shouldStream, stream: eventStream)
+        let registry = await ProviderRegistry.createDefault()
         let orchestrator = makeOrchestrator(
             eventStream: eventStream,
-            enableMcp: !noMcp
+            enableMcp: !noMcp,
+            registry: registry
         )
 
         let outcome = try await orchestrator.run(

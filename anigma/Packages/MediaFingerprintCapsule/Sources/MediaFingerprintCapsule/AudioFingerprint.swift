@@ -17,7 +17,7 @@ public actor AudioFingerprint {
         _ audioData: [Data],
         algorithm: FingerprintAlgorithm
     ) async throws -> [FingerprintResult] {
-        return try await withTaskGroup(of: FingerprintResult.self) { group in
+        return try await withThrowingTaskGroup(of: FingerprintResult.self) { group in
             var results: [FingerprintResult?] = []
             results.reserveCapacity(audioData.count)
             
@@ -153,7 +153,7 @@ public actor AudioFingerprint {
         algorithm: FingerprintAlgorithm
     ) async throws -> [(TimeInterval, FingerprintResult)] {
         // Extract metadata to get total duration
-        let metadata = try extractMetadata(data)
+        let metadata = try await extractMetadata(data)
         let totalDuration = Double(metadata.durationMs) / 1000.0
         
         guard totalDuration > 0 else { return [] }

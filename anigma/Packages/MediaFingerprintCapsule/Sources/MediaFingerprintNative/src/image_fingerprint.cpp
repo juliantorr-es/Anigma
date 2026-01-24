@@ -1,4 +1,4 @@
-#include "MediaFingerprintCapsule/media_fingerprint_capsule.h"
+#include "anigma_media_fingerprint_capsule.h"
 #include <cstring>
 #include <cmath>
 #include <algorithm>
@@ -131,7 +131,7 @@ extern "C" {
         identity.capsule_id = "media_fingerprint_capsule";
         identity.build_hash = "v1.0.0";
         identity.algo_version = "1.0.0";
-        identity.determinism_tier = ANIGMA_DETERMINISM_TIER_1_RECEIPT_GRADE;
+        identity.determinism_tier = 1; // Tier 1 - bitwise deterministic
         return identity;
     }
 
@@ -153,12 +153,10 @@ extern "C" {
     }
 
     anigma_status_t anigma_media_fingerprint_capsule_destroy(
-        anigma_media_fingerprint_capsule_t capsule,
+        anigma_media_fingerprint_capsule_t* capsule,
         anigma_capsule_error_t* error
     ) {
-        // Stub implementation
-        (void)capsule;
-        (void)error;
+        if (capsule) *capsule = nullptr;
         return ANIGMA_OK;
     }
 

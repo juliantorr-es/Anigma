@@ -38,9 +38,14 @@ public struct ASTTransformWorker: JobWorker {
         let transformConfig = try JSONDecoder().decode(ASTTransformConfig.self, from: config)
         
         // 2. Prepare Pipeline
-        // In a real implementation, we'd look up rules by name from a registry
+        let allRules: [String: any RewriteRule] = [
+            "add-sendable": AddSendableToValueTypesRule()
+        ]
+        
+        let selectedRules = transformConfig.ruleNames.compactMap { allRules[$0] }
+        
         let pipeline = RewritePipeline(
-            rules: [], // TODO: Populate based on ruleNames
+            rules: selectedRules,
             config: PipelineConfig(dryRun: transformConfig.dryRun)
         )
         

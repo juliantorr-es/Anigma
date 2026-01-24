@@ -232,7 +232,7 @@ public actor OnboardingFlow {
 
         for (name, envKey, prefix) in providers {
             // Check if already configured via environment or keychain
-            if existingAPIKey(envKey, configDir: configDir) != nil {
+            if await existingAPIKey(envKey, configDir: configDir) != nil {
                 print("  ✓ \(name): Already configured")
                 configured.append(name)
                 continue
@@ -259,16 +259,16 @@ public actor OnboardingFlow {
     }
 
     private func storeAPIKey(key: String, envKey: String, configDir: URL) async throws {
-        try KeychainStore.store(value: key, for: envKey, fallbackDirectory: configDir)
+        try await KeychainStore.store(value: key, for: envKey, fallbackDirectory: configDir)
         print("  ℹ️  Stored \(envKey) securely")
     }
 
-    private func existingAPIKey(_ envKey: String, configDir: URL) -> String? {
+    private func existingAPIKey(_ envKey: String, configDir: URL) async -> String? {
         if let envValue = ProcessInfo.processInfo.environment[envKey], !envValue.isEmpty {
             return envValue
         }
 
-        return try? KeychainStore.retrieve(key: envKey, fallbackDirectory: configDir)
+        return try? await KeychainStore.retrieve(key: envKey, fallbackDirectory: configDir)
     }
 
     // MARK: - Model Recommendations
@@ -497,7 +497,7 @@ public actor OnboardingFlow {
         // Build cloud API keys from stored configuration
         var cloudAPIKeys: [String: String] = [:]
         for provider in providersConfigured {
-            if let key = try? KeychainStore.retrieve(key: "\(provider.uppercased())_API_KEY", fallbackDirectory: anigmaDir) {
+            if let key = try? await KeychainStore.retrieve(key: "\(provider.uppercased())_API_KEY", fallbackDirectory: anigmaDir) {
                 cloudAPIKeys[provider.lowercased()] = key
             }
         }

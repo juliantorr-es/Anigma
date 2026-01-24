@@ -2,10 +2,14 @@ import Foundation
 import AnigmaNativeShims
 import CapsuleCore
 
-internal final class TextPipelineCapsuleWrapper {
+public final class TextPipelineCapsuleWrapper {
     private let handle: CapsuleHandle<AnyObject>
     
-    init(config: TextPipelineConfig) throws {
+    public convenience init() throws {
+        try self.init(config: TextPipelineConfig())
+    }
+    
+    public init(config: TextPipelineConfig) throws {
         var rawHandle: anigma_text_pipeline_capsule_t? = nil
         var error = anigma_capsule_error_t()
         var cConfig = anigma_text_pipeline_config_t()

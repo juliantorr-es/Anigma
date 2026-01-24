@@ -19,6 +19,10 @@ import ImageIO
 import PDFKit
 #endif
 
+#if canImport(Vision)
+import Vision
+#endif
+
 /// Extracts and optimizes images from documents for EPUB inclusion.
 public struct ImageExtractor: Sendable {
     
@@ -124,11 +128,21 @@ public struct ImageExtractor: Sendable {
         let pageRect = page.bounds(for: .mediaBox)
         
         // Render page as image to extract content
-        if let cgImage = page.thumbnail(of: CGSize(width: pageRect.width, height: pageRect.height)) {
+        #if canImport(AppKit)
+        let thumbnail = page.thumbnail(of: CGSize(width: pageRect.width, height: pageRect.height), for: .mediaBox)
+        var imageRect = CGRect(x: 0, y: 0, width: thumbnail.size.width, height: thumbnail.size.height)
+        if let cgImage = thumbnail.cgImage(forProposedRect: &imageRect, context: nil, hints: nil) {
             // Try to detect individual images in the rendered page
             let detectedImages = try await detectImagesInCGImage(cgImage, pageIndex: pageIndex)
             images.append(contentsOf: detectedImages)
         }
+        #elseif canImport(UIKit)
+        let thumbnail = page.thumbnail(of: CGSize(width: pageRect.width, height: pageRect.height), for: .mediaBox)
+        if let cgImage = thumbnail.cgImage {
+            let detectedImages = try await detectImagesInCGImage(cgImage, pageIndex: pageIndex)
+            images.append(contentsOf: detectedImages)
+        }
+        #endif
         
         return images
     }
@@ -304,10 +318,10 @@ public struct ImageExtractor: Sendable {
             return CGImage(pngDataProviderSource: dataProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
         case .jpeg:
             return CGImage(jpegDataProviderSource: dataProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
-        case .tiff:
-            return CGImage(tiffDataProviderSource: dataProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
-        case .gif:
-            return CGImage(gifDataProviderSource: dataProvider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+        case .tiff, .gif:
+            // For TIFF and GIF, use CGImageSource
+            guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+            return CGImageSourceCreateImageAtIndex(source, 0, nil)
         }
         #else
         return nil
@@ -523,7 +537,7 @@ public struct ImageExtractionSystem: System {
         
         for (entity, document, transform) in entities {
             // Skip if not processing EPUB
-            if !transform.outputFormats.contains(.epub) {
+            if !transform.targetFormats.contains(.epub) {
                 continue
             }
             

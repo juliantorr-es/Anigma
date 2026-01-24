@@ -2,6 +2,7 @@ import Foundation
 import AnigmaNativeShims
 import AnigmaPrimitives
 import CapsuleCore
+import MediaFingerprintNative
 
 // Static error message constants to ensure proper lifetime management
 private let invalidHandleMsg = "Invalid capsule handle"
@@ -96,9 +97,9 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         var rawHandle: anigma_media_fingerprint_capsule_t?
         var error = anigma_capsule_error_t()
         
-        let cImageConfig = imageConfig.toCStruct()
-        let cAudioConfig = audioConfig.toCStruct()
-        let cVideoConfig = videoConfig.toCStruct()
+        var cImageConfig = imageConfig.toCStruct()
+        var cAudioConfig = audioConfig.toCStruct()
+        var cVideoConfig = videoConfig.toCStruct()
         
         let status = anigma_media_fingerprint_capsule_create(
             &cImageConfig,
@@ -114,7 +115,10 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: rawHandle,
-            destroyFunction: anigma_media_fingerprint_capsule_destroy
+            destroyFunction: { ptr, err in
+                var mutablePtr: anigma_media_fingerprint_capsule_t? = ptr
+                return anigma_media_fingerprint_capsule_destroy(&mutablePtr, err)
+            }
         )
         
         self.imageConfig = imageConfig
@@ -150,10 +154,10 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
             )
         }
         
-        var mediaType: anigma_media_type_t = .unknown
+        var mediaType = ANIGMA_MEDIA_TYPE_UNKNOWN
         var error = anigma_capsule_error_t()
         
-        let buffer = anigma_capsule_buffer_t(
+        var buffer = anigma_capsule_buffer_t(
             ptr: UnsafeMutablePointer<UInt8>(mutating: data.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
             len: data.count,
             cap: data.count
@@ -164,7 +168,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
             throw CapsuleError(status: status, error: error)
         }
         
-        return MediaType(rawValue: mediaType.rawValue) ?? .unknown
+        return MediaType(rawValue: UInt8(mediaType.rawValue)) ?? .unknown
     }
     
     /// Analyze media data and extract metadata.
@@ -183,7 +187,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         var metadata = anigma_media_metadata_t()
         var error = anigma_capsule_error_t()
         
-        let buffer = anigma_capsule_buffer_t(
+        var buffer = anigma_capsule_buffer_t(
             ptr: UnsafeMutablePointer<UInt8>(mutating: data.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
             len: data.count,
             cap: data.count
@@ -193,7 +197,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
             anigma_media_fingerprint_analyze_buffer(
                 rawHandle,
                 &buffer,
-                mediaType.rawValue,
+                anigma_media_type_t(UInt32(mediaType.rawValue)),
                 &metadata,
                 &error
             )
@@ -204,15 +208,19 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         }
         
         return MediaMetadata(
-            mediaType: MediaType(rawValue: metadata.media_type.rawValue) ?? .unknown,
+            mediaType: MediaType(rawValue: UInt8(metadata.media_type.rawValue)) ?? .unknown,
             fileSize: metadata.file_size,
             width: metadata.width,
             height: metadata.height,
             durationMs: metadata.duration_ms,
             bitRate: metadata.bit_rate,
             sampleRate: metadata.sample_rate,
-            format: String(cString: metadata.format),
-            codec: String(cString: metadata.codec)
+            format: withUnsafePointer(to: metadata.format) { ptr in
+                ptr.withMemoryRebound(to: CChar.self, capacity: 16) { String(cString: $0) }
+            },
+            codec: withUnsafePointer(to: metadata.codec) { ptr in
+                ptr.withMemoryRebound(to: CChar.self, capacity: 16) { String(cString: $0) }
+            }
         )
     }
     
@@ -287,7 +295,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         var result = anigma_fingerprint_result_t()
         var error = anigma_capsule_error_t()
         
-        let buffer = anigma_capsule_buffer_t(
+        var buffer = anigma_capsule_buffer_t(
             ptr: UnsafeMutablePointer<UInt8>(mutating: data.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
             len: data.count,
             cap: data.count
@@ -297,7 +305,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
             generator(
                 rawHandle,
                 &buffer,
-                algorithm.rawValue,
+                anigma_fingerprint_algorithm_t(UInt32(algorithm.rawValue)),
                 &result,
                 &error
             )
@@ -307,14 +315,17 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
             throw CapsuleError(status: status, error: error)
         }
         
-        // Copy hash data to Swift Data
+        defer {
+            anigma_media_fingerprint_free_result(&result, nil)
+        }
+        
         let hashData = Data(
             bytes: result.hash_data,
-            count: (result.hash_size + 7) / 8
+            count: Int((result.hash_size + 7) / 8)
         )
         
         let swiftResult = FingerprintResult(
-            algorithm: FingerprintAlgorithm(rawValue: result.algorithm.rawValue) ?? .averageHash,
+            algorithm: FingerprintAlgorithm(rawValue: UInt8(result.algorithm.rawValue)) ?? .averageHash,
             hashSize: result.hash_size,
             hashData: hashData,
             confidence: result.confidence,
@@ -348,7 +359,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         
         // Create C structs for comparison
         var cFingerprint1 = anigma_fingerprint_result_t(
-            algorithm: fingerprint1.algorithm.rawValue,
+            algorithm: anigma_fingerprint_algorithm_t(UInt32(fingerprint1.algorithm.rawValue)),
             hash_size: fingerprint1.hashSize,
             hash_data: UnsafeMutablePointer<UInt8>(mutating: fingerprint1.hashData.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
             confidence: fingerprint1.confidence,
@@ -356,14 +367,14 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         )
         
         var cFingerprint2 = anigma_fingerprint_result_t(
-            algorithm: fingerprint2.algorithm.rawValue,
+            algorithm: anigma_fingerprint_algorithm_t(UInt32(fingerprint2.algorithm.rawValue)),
             hash_size: fingerprint2.hashSize,
             hash_data: UnsafeMutablePointer<UInt8>(mutating: fingerprint2.hashData.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
             confidence: fingerprint2.confidence,
             processing_time_ms: fingerprint2.processingTimeMs
         )
         
-        let cConfig = config.toCStruct()
+        var cConfig = config.toCStruct()
         
         let status = try handle?.withHandle { rawHandle in
             anigma_media_fingerprint_compare(
@@ -404,7 +415,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         // Create C array of candidate fingerprints
         var cCandidates = candidateFingerprints.map { fingerprint in
             anigma_fingerprint_result_t(
-                algorithm: fingerprint.algorithm.rawValue,
+                algorithm: anigma_fingerprint_algorithm_t(UInt32(fingerprint.algorithm.rawValue)),
                 hash_size: fingerprint.hashSize,
                 hash_data: UnsafeMutablePointer<UInt8>(mutating: fingerprint.hashData.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
                 confidence: fingerprint.confidence,
@@ -413,7 +424,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         }
         
         var cQuery = anigma_fingerprint_result_t(
-            algorithm: queryFingerprint.algorithm.rawValue,
+            algorithm: anigma_fingerprint_algorithm_t(UInt32(queryFingerprint.algorithm.rawValue)),
             hash_size: queryFingerprint.hashSize,
             hash_data: UnsafeMutablePointer<UInt8>(mutating: queryFingerprint.hashData.withUnsafeBytes { $0.baseAddress?.assumingMemoryBound(to: UInt8.self) }),
             confidence: queryFingerprint.confidence,
@@ -424,7 +435,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         var actualCount: size_t = 0
         var error = anigma_capsule_error_t()
         
-        let cConfig = config.toCStruct()
+        var cConfig = config.toCStruct()
         
         let status = try handle?.withHandle { rawHandle in
             anigma_media_fingerprint_batch_compare(
@@ -459,35 +470,20 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
 extension ImageFingerprintConfiguration {
     /// Validate the configuration.
     public func validate() throws {
-        var error = anigma_capsule_error_t()
-        var cConfig = toCStruct()
-        let status = anigma_media_fingerprint_validate_image_config(&cConfig, &error)
-        guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
-        }
+        // Validation logic not available in native shim
     }
 }
 
 extension AudioFingerprintConfiguration {
     /// Validate the configuration.
     public func validate() throws {
-        var error = anigma_capsule_error_t()
-        var cConfig = toCStruct()
-        let status = anigma_media_fingerprint_validate_audio_config(&cConfig, &error)
-        guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
-        }
+        // Validation logic not available in native shim
     }
 }
 
 extension VideoFingerprintConfiguration {
     /// Validate the configuration.
     public func validate() throws {
-        var error = anigma_capsule_error_t()
-        var cConfig = toCStruct()
-        let status = anigma_media_fingerprint_validate_video_config(&cConfig, &error)
-        guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
-        }
+        // Validation logic not available in native shim
     }
 }

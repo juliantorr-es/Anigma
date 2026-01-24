@@ -5,7 +5,7 @@ import AnigmaNativeShims
 
 /// RAG (Retrieval-Augmented Generation) Pipeline  
 public actor RAGPipeline {
-    private let vectorStore: VectorStore
+    private let vectorStore: CLIVectorStore
     private let embeddingProvider: any EmbeddingProvider
     private let chunkSize: Int
     private let chunkOverlap: Int
@@ -17,7 +17,7 @@ public actor RAGPipeline {
     }
 
     public init(
-        vectorStore: VectorStore,
+        vectorStore: CLIVectorStore,
         embeddingProvider: any EmbeddingProvider,
         chunkSize: Int = 512,
         chunkOverlap: Int = 128

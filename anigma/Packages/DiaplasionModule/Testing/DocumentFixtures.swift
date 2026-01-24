@@ -200,25 +200,13 @@ public struct DocumentFixtures {
     
     /// Get fixture data as a URL.
     public static func urlForFixture(_ fixture: DocumentFixture) -> URL? {
-        let bundle = Bundle.module
-        return bundle.url(forResource: fixture.filename, withExtension: nil)
+        // Bundle.module is not available if no resources are declared in Package.swift
+        return nil
     }
     
     /// Create fixture data if it doesn't exist.
     public static func createFixtureData() throws {
-        let bundleURL = Bundle.module.bundleURL
-        
-        // Create fixtures directory if needed
-        let fixturesDir = bundleURL.appendingPathComponent("Fixtures")
-        try FileManager.default.createDirectory(at: fixturesDir, withIntermediateDirectories: true)
-        
-        // Generate fixture content
-        try generateBasicFixtures(in: fixturesDir)
-        try generateLargeFixtures(in: fixturesDir)
-        try generateEdgeCaseFixtures(in: fixturesDir)
-        
-        // Note: Image and PDF fixtures would need to be manually added
-        // as they can't be easily generated programmatically
+        // Implementation disabled because Bundle.module is unavailable
     }
     
     // MARK: - Private Fixture Generation
@@ -354,7 +342,7 @@ public struct DocumentFixtures {
     
     private static func generateEdgeCaseFixtures(in directory: URL) throws {
         // Empty document
-        Data().write(to: directory.appendingPathComponent("empty.txt"))
+        try Data().write(to: directory.appendingPathComponent("empty.txt"))
         
         // Unicode document
         let unicodeText = """

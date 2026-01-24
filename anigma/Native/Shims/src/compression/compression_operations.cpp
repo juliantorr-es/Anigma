@@ -3,7 +3,7 @@
 // ============================================================================
 
 #include "anigma_compression_capsule_impl.h"
-#include "../../include/anigma_capsule_core.h"
+#include "anigma_capsule_core.h"
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>

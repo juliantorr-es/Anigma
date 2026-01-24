@@ -1,4 +1,4 @@
-#include "../../include/anigma_capsule_core.h"
+#include "anigma_capsule_core.h"
 #include <stdlib.h>
 #include <string.h>
 

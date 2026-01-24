@@ -21,6 +21,7 @@ public struct TelemetryEventComponent: Codable, Hashable, Sendable {
         case search
         case toolCall
         case agentExecution
+        case capsule
     }
 
     public enum Outcome: String, Codable, Sendable {

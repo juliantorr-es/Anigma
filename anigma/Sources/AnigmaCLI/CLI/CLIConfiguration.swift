@@ -1,6 +1,5 @@
 import Foundation
 import HarmoniaModule
-import DatabaseCore
 
 /// CLI configuration management with provider keys and model settings
 actor CLIConfiguration {

@@ -1,40 +1,20 @@
 import Foundation
+import AnigmaSidecar
+import AnigmaPrimitives
 
 /// Interactive chat interface for the CLI
 actor ChatInterface {
     private let config: CLIConfiguration
-    private let database: CLIDatabase
-    private let agentOrchestrator: AgentOrchestrator
+    private let bridge: SidecarBridge
     private let ui: TUIManager
     private var sessionID: String
     private var conversationHistory: [Message] = []
 
-    init(config: CLIConfiguration, database: CLIDatabase, ui: TUIManager) async throws {
+    init(config: CLIConfiguration, bridge: SidecarBridge, ui: TUIManager) async throws {
         self.config = config
-        self.database = database
+        self.bridge = bridge
         self.ui = ui
-        self.agentOrchestrator = try await AgentOrchestrator(config: config, database: database)
         self.sessionID = UUID().uuidString
-
-        try await initializeSession()
-    }
-
-    private func initializeSession() async throws {
-        // Create new session in database
-        let statement = """
-            INSERT INTO sessions (id, started_at, workspace_path)
-            VALUES (?, ?, ?)
-            """
-
-        let workspacePath = try await config.getWorkspacePath()
-        try await database.execute(
-            statement,
-            params: [
-                .text(sessionID),
-                .integer(Int64(Date().timeIntervalSince1970)),
-                .text(workspacePath)
-            ]
-        )
     }
 
     func start() async throws {
@@ -66,8 +46,6 @@ actor ChatInterface {
             // Process user message
             try await processMessage(input)
         }
-
-        try await endSession()
     }
 
     private func handleCommand(_ command: String) async throws -> Bool {
@@ -127,67 +105,46 @@ actor ChatInterface {
         )
 
         conversationHistory.append(message)
-        try await saveMessage(message)
 
         await ui.showInfo("")
         await ui.showSpinner("Thinking...")
 
         do {
-            let response = try await agentOrchestrator.processRequest(
-                userMessage,
-                history: conversationHistory,
-                sessionID: sessionID
+            // Run agent via daemon
+            let response = try await bridge.runAgent(
+                agentId: "default", // or specific agent
+                task: userMessage,
+                parameters: ["session_id": sessionID]
             )
-
+            
+            // Wait for completion or poll status?
+            // runAgent currently returns AnigmaAgentRunResponse with runId and status.
+            // If it's async, we might need to poll or stream events.
+            // For now, assume it returns completion status or we just show "Started".
+            
+            // Wait, runAgent stub returns "not_implemented".
+            // Assuming daemon handles it.
+            
+            // To be robust, we should stream job events.
+            // bridge.streamJobEvents(jobId: response.runId)
+            
+            // For Phase 1 stub, just print status.
+            
             await ui.hideSpinner()
 
             let assistantMessage = Message(
                 role: .assistant,
-                content: response,
+                content: "Agent run started: \(response.runId) (Status: \(response.status))",
                 timestamp: Date()
             )
 
             conversationHistory.append(assistantMessage)
-            try await saveMessage(assistantMessage)
-
-            print("\n\(response)\n")
+            print("\n\(assistantMessage.content)\n")
 
         } catch {
             await ui.hideSpinner()
             await ui.showError("Error: \(error.localizedDescription)")
         }
-    }
-
-    private func saveMessage(_ message: Message) async throws {
-        let statement = """
-            INSERT INTO messages (id, session_id, role, content, timestamp)
-            VALUES (?, ?, ?, ?, ?)
-            """
-
-        try await database.execute(
-            statement,
-            params: [
-                .text(UUID().uuidString),
-                .text(sessionID),
-                .text(message.role.rawValue),
-                .text(message.content),
-                .integer(Int64(message.timestamp.timeIntervalSince1970))
-            ]
-        )
-    }
-
-    private func endSession() async throws {
-        let statement = """
-            UPDATE sessions SET ended_at = ? WHERE id = ?
-            """
-
-        try await database.execute(
-            statement,
-            params: [
-                .integer(Int64(Date().timeIntervalSince1970)),
-                .text(sessionID)
-            ]
-        )
     }
 
     // Command implementations
@@ -222,10 +179,16 @@ actor ChatInterface {
 
     private func listTools() async {
         await ui.showSection("Available Tools")
-
-        let tools = await agentOrchestrator.availableTools()
-        for tool in tools {
-            await ui.showInfo("• \(tool)")
+        do {
+            let response = try await bridge.listTools()
+            for tool in response.tools {
+                await ui.showInfo("• \(tool.name): \(tool.description ?? "No description")")
+            }
+            if response.tools.isEmpty {
+                await ui.showInfo("No tools available")
+            }
+        } catch {
+            await ui.showError("Failed to list tools: \(error.localizedDescription)")
         }
     }
 
@@ -233,14 +196,13 @@ actor ChatInterface {
         await ui.showSection("Installed Models")
 
         do {
-            let installer = ModelInstaller(config: config, database: database)
-            let models = try await installer.listInstalled()
-
-            for model in models {
-                await ui.showInfo("• \(model.name) (\(model.type.rawValue), \(model.sizeGB)GB)")
+            let response = try await bridge.listModels()
+            
+            for model in response.models {
+                await ui.showInfo("• \(model.name) (\(model.type), \(model.sizeGB)GB)")
             }
 
-            if models.isEmpty {
+            if response.models.isEmpty {
                 await ui.showInfo("No models installed")
             }
         } catch {

@@ -4,6 +4,21 @@ import CapsuleCore
 import AnigmaCore
 import ContractsCore
 import VectorCapsule
+import TelemetryCore
+
+// Local Point struct for SVG path parsing
+private struct Point {
+    let x: Double
+    let y: Double
+}
+
+// Local BoundingBox for SVG operations
+private struct BoundingBox {
+    let minX: Double
+    let minY: Double
+    let maxX: Double
+    let maxY: Double
+}
 
 public actor LayoutIndexingSystem {
     private let database: ContextumDatabase
@@ -319,7 +334,9 @@ public actor LayoutIndexingSystem {
     }
     
     private func svgPathToPoints(_ path: String) -> [Point] {
-        let components = path.components(separatedBy: CharacterSet(charactersIn: "MLZ ").subtracting([""]))
+        // Split by SVG path commands and spaces
+        let separators = CharacterSet(charactersIn: "MLZ ")
+        let components = path.components(separatedBy: separators).filter { !$0.isEmpty }
         var points: [Point] = []
         var index = 0
         var x: Double = 0
@@ -342,23 +359,29 @@ public actor LayoutIndexingSystem {
         operation: String,
         success: Bool,
         error: String? = nil
-    ) throws {
+    ) {
+        // Fire-and-forget telemetry - don't block the calling function
+        var diagnostics: [String: String] = [
+            "capsule_type": "VectorCapsule",
+            "operation": operation,
+            "capsule_used": "true"
+        ]
+        
+        if !success, let errorMessage = error {
+            diagnostics["error"] = errorMessage
+        }
+        
         let event = TelemetryEventComponent(
             eventId: UUID().uuidString,
             eventType: .capsule,
             outcome: success ? .success : .failure,
-            metadata: [
-                "capsule_type": "VectorCapsule",
-                "operation": operation,
-                "capsule_used": "true"
-            ]
+            diagnosticPayload: diagnostics
         )
         
-        if !success, let errorMessage = error {
-            event.metadata["error"] = errorMessage
+        let db = self.database
+        Task.detached {
+            try? await db.insertEvent(event)
         }
-        
-        try await database.insertEvent(event)
     }
     
     // MARK: - Text Segment Processing

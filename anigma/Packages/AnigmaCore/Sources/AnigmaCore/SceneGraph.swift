@@ -8,7 +8,7 @@ public final class SceneGraph {
     private var pendingDiffs: [Data] = []
     
     public init() throws {
-        var ctx = anigma_ctx_t(operation_id: 0, budget_cpu_ms: 0, budget_mem_bytes: 0, user_data: nil)
+        let ctx = anigma_ctx_t(operation_id: 0, budget_cpu_ms: 0, budget_mem_bytes: 0, user_data: nil)
         var instance: anigma_kernel_instance_t?
         let status = anigma_kernel_initialize(ctx, anigma_blob_t(ptr: nil, size: 0), &instance)
         guard status == ANIGMA_OK, let k = instance else {
@@ -25,12 +25,12 @@ public final class SceneGraph {
     
     public func addNode(id: anigma_entity_id_t) {
         var header = anigma_diff_header_t(
-            op: ANIGMA_DIFF_ATTACH.rawValue, 
+            op: UInt8(ANIGMA_DIFF_ATTACH.rawValue), 
             target_count: 1, 
             flags: 0, 
             payload_size: UInt32(MemoryLayout<anigma_diff_attach_t>.size)
         )
-        var attach = anigma_diff_attach_t(entity_id: id, component_type: 0, component_size: 0)
+        var attach = anigma_diff_attach_t(entity_id: id, component_type: 0, component_size: 0, component_data: ())
         
         var data = Data()
         withUnsafeBytes(of: header) { data.append(contentsOf: $0) }
@@ -40,7 +40,7 @@ public final class SceneGraph {
     
     public func updateTransform(id: anigma_entity_id_t, transform: anigma_transform_t) {
         var header = anigma_diff_header_t(
-            op: ANIGMA_DIFF_TRANSFORM.rawValue, 
+            op: UInt8(ANIGMA_DIFF_TRANSFORM.rawValue), 
             target_count: 1, 
             flags: 0, 
             payload_size: UInt32(MemoryLayout<anigma_diff_transform_t>.size)
@@ -55,7 +55,7 @@ public final class SceneGraph {
     
     public func removeNode(id: anigma_entity_id_t) {
         var header = anigma_diff_header_t(
-            op: ANIGMA_DIFF_DETACH.rawValue, 
+            op: UInt8(ANIGMA_DIFF_DETACH.rawValue), 
             target_count: 1, 
             flags: 0, 
             payload_size: UInt32(MemoryLayout<anigma_entity_id_t>.size)
@@ -73,7 +73,8 @@ public final class SceneGraph {
         var batchHeader = anigma_diff_batch_t(
             diff_count: UInt32(pendingDiffs.count), 
             schema_version: 1, 
-            sequence_id: UInt64.random(in: 0...UInt64.max)
+            sequence_id: UInt64.random(in: 0...UInt64.max),
+            diffs: ()
         )
         
         var batchData = Data()

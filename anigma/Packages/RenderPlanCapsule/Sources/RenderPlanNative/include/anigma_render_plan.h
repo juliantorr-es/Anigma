@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 typedef anigma_capsule_handle_t anigma_render_plan_t;
+typedef anigma_capsule_handle_t anigma_render_plan_builder_t;
 
 #define ANIGMA_PLAN_MAGIC 0x504C414E // "PLAN"
 #define ANIGMA_PLAN_VERSION 1
@@ -48,6 +49,15 @@ typedef struct {
 
 anigma_status_t anigma_render_plan_create(anigma_render_plan_t* out_handle, anigma_capsule_error_t* err);
 anigma_status_t anigma_render_plan_destroy(anigma_render_plan_t handle, anigma_capsule_error_t* err);
+anigma_status_t anigma_render_plan_compute_hash(anigma_render_plan_t handle);
+
+anigma_status_t anigma_render_plan_builder_create(anigma_render_plan_builder_t* out_builder, uint32_t op_capacity, uint32_t resource_capacity, void* arena);
+anigma_status_t anigma_render_plan_builder_destroy(anigma_render_plan_builder_t builder);
+anigma_status_t anigma_render_plan_builder_add_clear(anigma_render_plan_builder_t builder, uint32_t layer_id, anigma_resource_ref_t color);
+anigma_status_t anigma_render_plan_builder_add_rect(anigma_render_plan_builder_t builder, uint32_t layer_id, const anigma_rect_t* rect, const void* transform, const anigma_resource_ref_t* material);
+anigma_status_t anigma_render_plan_build(anigma_render_plan_builder_t builder, anigma_render_plan_t* out_plan);
+
+anigma_status_t anigma_generate_render_plan(anigma_capsule_handle_t scene, const void* request, anigma_render_plan_t* out_plan, void* arena);
 
 #ifdef __cplusplus
 }

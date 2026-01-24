@@ -4,8 +4,25 @@
 //
 //  System performance benchmarking for model recommendations.
 //
+//
 
 import Foundation
+
+public enum SystemMLBackend: String, Codable, Sendable, CaseIterable {
+    case mlx
+    case coreml
+    case gguf
+    case safetensors
+
+    public var displayName: String {
+        switch self {
+        case .mlx: return "MLX"
+        case .coreml: return "CoreML"
+        case .gguf: return "GGUF"
+        case .safetensors: return "Safetensors"
+        }
+    }
+}
 
 public actor SystemBenchmark {
     public struct Result: Codable, Sendable {
@@ -16,7 +33,7 @@ public actor SystemBenchmark {
         public let overallScore: Double
         public let tier: Tier
         public let recommendedMemoryGB: Int
-        public let recommendedBackends: [MLBackend]
+        public let recommendedBackends: [SystemMLBackend]
         public let recommendedModelSize: String
         public let benchmarkDate: Date
 
@@ -38,7 +55,7 @@ public actor SystemBenchmark {
         }
     }
 
-    public enum Tier: String, Sendable, CaseIterable {
+    public enum Tier: String, Codable, Sendable, CaseIterable {
         case minimum
         case standard
         case powerful
@@ -196,10 +213,8 @@ public actor SystemBenchmark {
         let testFile = tempDir.appendingPathComponent("benchmark_\(UUID().uuidString)")
 
         let testSize = 100 * 1024 * 1024
-        guard let testData = Data(count: testSize) else {
-            return 50
-        }
-
+        let testData = Data(count: testSize)
+        
         let writeStart = Date()
         do {
             try testData.write(to: testFile)
@@ -274,8 +289,8 @@ public actor SystemBenchmark {
         return .extreme
     }
 
-    private func determineBackends(gpuScore: Double?, tier: Tier) -> [MLBackend] {
-        var backends: [MLBackend] = []
+    private func determineBackends(gpuScore: Double?, tier: Tier) -> [SystemMLBackend] {
+        var backends: [SystemMLBackend] = []
 
         if gpuScore != nil && gpuScore! > 30 {
             backends.append(.mlx)

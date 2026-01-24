@@ -3,6 +3,7 @@ import AnigmaNativeShims
 import AnigmaPrimitives
 import CapsuleCore
 import SceneGraphCapsule
+import HitTestNative
 
 public final class HitTestCapsule {
     private let scene: SceneGraph
@@ -19,15 +20,17 @@ public final class HitTestCapsule {
         var error = anigma_capsule_error_t()
         
         // Create buffer
-        let bufferStatus = anigma_hit_test_create_buffer(&results, options.maxResults, nil)
+        let bufferStatus = anigma_hit_test_create_buffer(&results, Int(options.maxResults), nil)
         guard bufferStatus == ANIGMA_OK else {
             throw CapsuleError(status: bufferStatus, error: error) // error not set by create_buffer usually but we can try
         }
         defer { anigma_hit_test_destroy_buffer(&results) }
         
-        let cPoint = point.toCStruct()
+        // Convert Point (Float) to anigma_point_t (Int32 scaled)
+        let scale: Float = 256.0
+        let cPoint = anigma_point_t(x: Int32(point.x * scale), y: Int32(point.y * scale))
         
-        let status = try scene.withUnsafeGraph { graphPtr in
+        let status = scene.withUnsafeGraph { graphPtr in
             anigma_hit_test_point(
                 graphPtr,
                 cPoint,
@@ -40,13 +43,10 @@ public final class HitTestCapsule {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error) // hit_test_point likely sets error if needed? signature doesn't have error ptr in header I read?
-            // Checking header:
-            // anigma_status_t anigma_hit_test_point(..., anigma_arena_t* arena);
-            // It does NOT take anigma_capsule_error_t*!
-            // So we rely on status code.
+            throw CapsuleError(status: status, error: error)
         }
         
+        // Convert results
         var hitResults: [HitResult] = []
         if let hits = results.results {
             for i in 0..<results.count {
@@ -61,7 +61,7 @@ public final class HitTestCapsule {
     public func hitTest(rect: Rect, options: HitTestOptions = .default) throws -> [HitResult] {
         var results = anigma_hit_result_buffer_t()
         
-        let bufferStatus = anigma_hit_test_create_buffer(&results, options.maxResults, nil)
+        let bufferStatus = anigma_hit_test_create_buffer(&results, Int(options.maxResults), nil)
         guard bufferStatus == ANIGMA_OK else {
             throw CapsuleError(status: bufferStatus, error: anigma_capsule_error_t())
         }
@@ -69,7 +69,7 @@ public final class HitTestCapsule {
         
         let cRect = rect.toCStruct()
         
-        let status = try scene.withUnsafeGraph { graphPtr in
+        let status = scene.withUnsafeGraph { graphPtr in
             anigma_hit_test_rect(
                 graphPtr,
                 cRect,
@@ -97,7 +97,7 @@ public final class HitTestCapsule {
     public func getBounds(nodeId: UInt64) throws -> GeometryBounds {
         var bounds = anigma_geometry_bounds_t()
         
-        let status = try scene.withUnsafeGraph { graphPtr in
+        let status = scene.withUnsafeGraph { graphPtr in
             anigma_get_node_bounds(graphPtr, nodeId, &bounds)
         }
         
@@ -112,7 +112,11 @@ public final class HitTestCapsule {
 public struct Point {
     public var x, y: Float
     public init(x: Float, y: Float) { self.x = x; self.y = y }
-    internal func toCStruct() -> anigma_point_t { return anigma_point_t(x: x, y: y) }
+    internal func toCStruct() -> anigma_point_t {
+        // anigma_point_t uses Int32 scaled coordinates
+        let scale: Float = 256.0
+        return anigma_point_t(x: Int32(x * scale), y: Int32(y * scale))
+    }
 }
 
 public struct Rect {
@@ -121,7 +125,13 @@ public struct Rect {
         self.x = x; self.y = y; self.w = w; self.h = h
     }
     internal func toCStruct() -> anigma_rect_t {
-        return anigma_rect_t(min_x: x, min_y: y, max_x: x + w, max_y: y + h)
+        let scale: Float = 256.0
+        return anigma_rect_t(
+            x: Int32(x * scale),
+            y: Int32(y * scale),
+            width: Int32(w * scale),
+            height: Int32(h * scale)
+        )
     }
 }
 
@@ -141,22 +151,13 @@ public struct HitResult {
     public var nodeId: UInt64
     public var distance: Float
     public var point: Point
-    public var reason: UInt8
+    public var reason: UInt32
     
-    internal init(from cHit: anigma_hit_result_t) {
-        // anigma_hit_result_t definition needed.
-        // Assuming standard layout: node_id, distance, point, reason...
-        // Let's assume AnigmaNativeShims provides it.
-        // If not visible, I might need to check header.
-        // I don't see anigma_hit_result_t struct def in the header snippet I read earlier?
-        // Wait, I missed it?
-        // `anigma_hit_test.h` uses `anigma_hit_result_t` but doesn't define it?
-        // It includes `anigma_kernel_types.h`. It must be there.
-        // I will assume it has: entity_id, distance, local_point, reason.
-        
+    internal init(from cHit: anigma_hit_test_result_t) {
         self.nodeId = cHit.node_id
         self.distance = cHit.distance
-        self.point = Point(x: cHit.local_point.x, y: cHit.local_point.y)
+        let scale: Float = 1.0 / 256.0
+        self.point = Point(x: Float(cHit.local_point.x) * scale, y: Float(cHit.local_point.y) * scale)
         self.reason = cHit.reason
     }
 }

@@ -1,13 +1,19 @@
 import Foundation
+import AnigmaSidecar
 
 public final class CloudProviderRegistry: @unchecked Sendable {
     public static let shared = CloudProviderRegistry()
 
     private var providers: [String: CloudProvider] = [:]
     private var activeProvider: CloudProvider?
+    private var bridge: SidecarBridge?
 
     private init() {
         registerDefaultProviders()
+        Task {
+            self.bridge = try? await SidecarBridge.create(clientName: "anigma-cli-providers")
+            await injectBridge()
+        }
     }
 
     private func registerDefaultProviders() {
@@ -15,6 +21,12 @@ public final class CloudProviderRegistry: @unchecked Sendable {
         providers["openai"] = OpenAIProvider()
         providers["anthropic"] = AnthropicProvider()
         providers["google"] = GoogleProvider()
+    }
+    
+    private func injectBridge() async {
+        for name in providers.keys {
+            providers[name]?.bridge = self.bridge
+        }
     }
 
     public func getProvider(name: String) -> CloudProvider? {

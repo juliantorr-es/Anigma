@@ -1,9 +1,12 @@
 import Foundation
+import Crypto
 import CapsuleCore
 import DatabaseCore
 import AnigmaNativeShims
 import MediaFingerprintCapsule
+import TelemetryCore
 
+// Using types from MediaFingerprintCapsule via wrapper to avoid direct native import issues in downstream modules
 public struct MediaDeduplicationSystem {
     public struct MediaFingerprint: Codable, Sendable {
         public let fingerprintId: String
@@ -181,6 +184,10 @@ public struct MediaDeduplicationSystem {
         fingerprintId: String,
         startTime: UInt64
     ) async throws -> MediaFingerprint {
+        guard let capsule = self.capsule else {
+            throw DeduplicationError.invalidMediaData
+        }
+        
         let algorithm: FingerprintAlgorithm
         let fingerprintResult: FingerprintResult
 
@@ -229,17 +236,17 @@ public struct MediaDeduplicationSystem {
 
         switch fallbackHashAlgorithm {
         case "SHA256":
-            let hash = Insecure.SHA256.hash(data: data)
+            let hash = SHA256.hash(data: data)
             hashData = Data(hash)
-            hashSize = UInt32(hash.count * 8)
+            hashSize = UInt32(SHA256.Digest.byteCount * 8)
         case "SHA512":
             let hash = SHA512.hash(data: data)
             hashData = Data(hash)
-            hashSize = UInt32(hash.count * 8)
+            hashSize = UInt32(SHA512.Digest.byteCount * 8)
         default:
-            let hash = Insecure.SHA256.hash(data: data)
+            let hash = SHA256.hash(data: data)
             hashData = Data(hash)
-            hashSize = UInt32(hash.count * 8)
+            hashSize = UInt32(SHA256.Digest.byteCount * 8)
         }
 
         return MediaFingerprint(

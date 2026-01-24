@@ -2,10 +2,10 @@ import Foundation
 import AnigmaNativeShims
 import CapsuleCore
 
-internal final class VizAggregationCapsuleWrapper {
+public final class VizAggregationCapsuleWrapper {
     private let handle: CapsuleHandle<AnyObject>?
     
-    init() throws {
+    public init() throws {
         var rawHandle: anigma_viz_aggregation_capsule_t?
         var error = anigma_capsule_error_t()
         

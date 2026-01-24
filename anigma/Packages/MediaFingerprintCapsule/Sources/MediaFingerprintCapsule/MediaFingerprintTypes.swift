@@ -1,8 +1,9 @@
 import Foundation
+import MediaFingerprintNative
 
 // MARK: - Media Types
 
-public enum MediaType: UInt8, Sendable {
+public enum MediaType: UInt8, Sendable, Codable {
     case unknown = 0
     case image = 1
     case audio = 2
@@ -11,7 +12,7 @@ public enum MediaType: UInt8, Sendable {
 
 // MARK: - Fingerprint Algorithms
 
-public enum FingerprintAlgorithm: UInt8, Sendable {
+public enum FingerprintAlgorithm: UInt8, Sendable, Codable {
     case averageHash = 0
     case differenceHash = 1
     case waveletHash = 2
@@ -200,6 +201,7 @@ public struct AudioFingerprintConfiguration: Sendable {
         anigma_audio_fingerprint_config_t(
             sample_rate: sampleRate,
             window_size: windowSize,
+            prototype_id: 0,
             hop_size: hopSize,
             num_coefficients: numCoefficients,
             fingerprint_size: fingerprintSize,

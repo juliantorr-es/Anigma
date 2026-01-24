@@ -63,7 +63,7 @@ public struct CapabilityAuditAdapter: CapabilityRegistry.CapabilityAuditLog {
         success: Bool,
         metadata: [String: String]
     ) async {
-        let eventType: AuditEventType = success ? .custom : .accessDenied
+        let eventType: ContractsCore.AuditEventType = success ? .custom : .accessDenied
 
         var enrichedMetadata = metadata
         enrichedMetadata["capability_id"] = capabilityId

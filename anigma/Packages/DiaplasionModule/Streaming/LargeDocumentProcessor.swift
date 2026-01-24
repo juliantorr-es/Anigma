@@ -56,8 +56,9 @@ public struct LargeDocumentProcessor: Sendable {
         // Check if document requires batched processing
         guard shouldUseBatchedProcessing(document) else {
             // Use regular processing for smaller documents
+            let totalPages = document.pageCount ?? 1
             let batch = DocumentBatch(
-                pages: Array(1...document.pageCount),
+                pages: Array(1...totalPages),
                 document: document,
                 isFinalBatch: true
             )
@@ -66,7 +67,7 @@ public struct LargeDocumentProcessor: Sendable {
             return LargeDocumentResult(
                 results: [result],
                 metadata: ProcessingMetadata(
-                    totalPages: document.pageCount,
+                    totalPages: totalPages,
                     batchesProcessed: 1,
                     processingTime: 0,
                     memoryPeak: estimateMemoryUsage(for: document)
@@ -89,7 +90,7 @@ public struct LargeDocumentProcessor: Sendable {
         var currentMemoryUsage: Double = 0
         
         // Split pages into batches
-        let totalPages = document.pageCount
+        let totalPages = document.pageCount ?? 1
         let pageBatches = splitIntoBatches(1...totalPages, batchSize: batchSize)
         
         onProgress?(ProcessingProgress(
@@ -171,7 +172,7 @@ public struct LargeDocumentProcessor: Sendable {
     /// Determine if document should use batched processing.
     private func shouldUseBatchedProcessing(_ document: DocumentSourceComponent) -> Bool {
         // Use configuration threshold
-        return DiaplasionConfiguration.isLargeDocument(fileSizeBytes: document.fileSize)
+        return DiaplasionConfiguration.isLargeDocument(fileSizeBytes: document.fileSize ?? 0)
     }
     
     /// Split range of pages into batches.
@@ -231,14 +232,14 @@ public struct LargeDocumentProcessor: Sendable {
     
     /// Estimate memory usage for document processing.
     private func estimateMemoryUsage(for document: DocumentSourceComponent, processedBatches: Int = 0) -> Double {
-        let baseMemory = Double(document.fileSize) / (1024 * 1024) * 2 // Rough estimate
+        let baseMemory = Double(document.fileSize ?? 0) / (1024 * 1024) * 2 // Rough estimate
         let batchMemory = Double(processedBatches * batchSize) * 0.5 // ~0.5MB per page
         return baseMemory + batchMemory
     }
     
     /// Estimate current memory usage.
     private func estimateCurrentMemoryUsage() -> Double {
-        let taskInfo = mach_task_basic_info()
+        var taskInfo = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
         
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
@@ -386,7 +387,7 @@ public struct LargeDocumentProcessingSystem: System {
             }
             
             // Check if document requires large document processing
-            guard DiaplasionConfiguration.isLargeDocument(fileSizeBytes: document.fileSize) else {
+            guard DiaplasionConfiguration.isLargeDocument(fileSizeBytes: document.fileSize ?? 0) else {
                 continue
             }
             
@@ -394,7 +395,7 @@ public struct LargeDocumentProcessingSystem: System {
                 let processingComponent = LargeDocumentProcessingComponent(
                     documentId: entity,
                     startedAt: Date(),
-                    status: .pending
+                    status: .starting
                 )
                 
                 await world.addComponent(entity, processingComponent)

@@ -10,7 +10,7 @@ import Foundation
 import AnigmaPrimitives
 
 /// Tracks progress of document processing jobs with real-time updates.
-public struct ProgressTracker: Sendable {
+public actor ProgressTracker: Sendable {
     
     // MARK: - Configuration
     
@@ -21,7 +21,7 @@ public struct ProgressTracker: Sendable {
     public let enableDetailedLogging: Bool
     
     /// Progress change callback
-    public let onProgressUpdate: ((ProgressUpdate) -> Void)?
+    public let onProgressUpdate: (@Sendable (ProgressUpdate) -> Void)?
     
     // MARK: - State
     
@@ -33,7 +33,7 @@ public struct ProgressTracker: Sendable {
     public init(
         updateInterval: TimeInterval = 1.0,
         enableDetailedLogging: Bool = true,
-        onProgressUpdate: ((ProgressUpdate) -> Void)? = nil
+        onProgressUpdate: (@Sendable (ProgressUpdate) -> Void)? = nil
     ) {
         self.updateInterval = updateInterval
         self.enableDetailedLogging = enableDetailedLogging
@@ -55,7 +55,7 @@ public struct ProgressTracker: Sendable {
             startedAt: Date(),
             totalSteps: totalSteps,
             currentStep: 0,
-            stage: .started,
+            stage: .starting,
             metadata: metadata
         )
         
@@ -65,7 +65,7 @@ public struct ProgressTracker: Sendable {
         let update = ProgressUpdate(
             entityId: entityId,
             jobType: jobType,
-            stage: .started,
+            stage: .starting,
             percentage: 0.0,
             message: "Job started",
             estimatedTimeRemaining: nil,
@@ -312,7 +312,7 @@ public struct JobProgress: Sendable {
         startedAt: Date,
         totalSteps: Int,
         currentStep: Int = 0,
-        stage: ProcessingStage = .started,
+        stage: ProcessingStage = .starting,
         lastUpdatedAt: Date = Date(),
         completedAt: Date? = nil,
         success: Bool? = nil,
@@ -430,7 +430,7 @@ public struct ProgressTrackingSystem: System {
     
     public func update(world: World) async {
         // Clean up old completed jobs periodically
-        tracker.cleanupCompletedJobs(olderThan: 3600) // 1 hour
+        await tracker.cleanupCompletedJobs(olderThan: 3600) // 1 hour
         
         // Handle progress updates from components
         let progressEntities = await world.query(ProgressUpdateComponent.self)
@@ -438,7 +438,7 @@ public struct ProgressTrackingSystem: System {
         for (entity, updateComponent) in progressEntities {
             switch updateComponent.action {
             case .start(let jobType, let totalSteps, let metadata):
-                tracker.startJob(
+                await tracker.startJob(
                     entityId: entity,
                     jobType: jobType,
                     totalSteps: totalSteps,
@@ -446,7 +446,7 @@ public struct ProgressTrackingSystem: System {
                 )
                 
             case .update(let currentStep, let stage, let message, let metadata):
-                tracker.updateProgress(
+                await tracker.updateProgress(
                     entityId: entity,
                     currentStep: currentStep,
                     stage: stage,
@@ -455,7 +455,7 @@ public struct ProgressTrackingSystem: System {
                 )
                 
             case .complete(let success, let message, let metadata):
-                tracker.completeJob(
+                await tracker.completeJob(
                     entityId: entity,
                     success: success,
                     finalMessage: message,

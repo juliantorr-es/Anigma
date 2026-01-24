@@ -61,52 +61,48 @@ final class SourceConnectionStore {
     // MARK: - Initialization
     
     init() {
-        // Setup is called later after callbacks are injected
+        loadOAuthConfig()
+        loadGoogleRefreshTimestamp()
     }
     
     func setup() {
-        loadOAuthConfig()
-        loadOAuthToken()
-        loadGoogleRefreshTimestamp()
-        startGoogleTokenRefreshLoop()
+        Task {
+            await loadOAuthToken()
+            startGoogleTokenRefreshLoop()
+        }
     }
     
     deinit {
         googleRefreshTask?.cancel()
     }
     
-    // MARK: - OAuth Configuration Persistence
-    
-    private static let googleOAuthClientIdKey = "google_oauth_client_id"
-    private static let googleOAuthTokenAccount = "google_oauth_token"
-    private static let googleOAuthRedirectURI = "com.anigma.app:/callback"
-    private static let googleOAuthLastRefreshKey = "google_oauth_last_refresh_at"
-    
-    private func saveOAuthConfig() {
-        let trimmed = googleOAuthClientId.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty {
-            UserDefaults.standard.removeObject(forKey: Self.googleOAuthClientIdKey)
-        } else {
-            UserDefaults.standard.set(trimmed, forKey: Self.googleOAuthClientIdKey)
-        }
-    }
-    
-    private func loadOAuthConfig() {
-        googleOAuthClientId = UserDefaults.standard.string(forKey: Self.googleOAuthClientIdKey) ?? ""
-    }
-    
-    private func loadOAuthToken() {
+    private func loadOAuthToken() async {
         do {
-            guard let stored = try KeychainManager.shared.retrievePassword(for: Self.googleOAuthTokenAccount),
+            guard let stored = try await KeychainManager.shared.retrievePassword(for: Self.googleOAuthTokenAccount),
                   let data = stored.data(using: .utf8)
             else { return }
             let token = try JSONDecoder().decode(GoogleOAuthToken.self, from: data)
             googleOAuthToken = token
             onSourceConnectionChanged(.googleDrive, true)
-            Task { await refreshGoogleOAuthTokenIfNeeded() }
+            await refreshGoogleOAuthTokenIfNeeded()
         } catch {
             print("Failed to load Google OAuth token: \(error)")
         }
+    }
+    
+    // MARK: - Persistence
+    
+    private static let googleOAuthClientIdKey = "google_oauth_client_id"
+    private static let googleOAuthTokenAccount = "google_oauth_token"
+    private static let googleOAuthLastRefreshKey = "google_oauth_last_refresh"
+    private static let googleOAuthRedirectURI = "http://localhost:8080/auth/google/callback"
+    
+    private func saveOAuthConfig() {
+        UserDefaults.standard.set(googleOAuthClientId, forKey: Self.googleOAuthClientIdKey)
+    }
+    
+    private func loadOAuthConfig() {
+        googleOAuthClientId = UserDefaults.standard.string(forKey: Self.googleOAuthClientIdKey) ?? ""
     }
     
     private func loadGoogleRefreshTimestamp() {
@@ -139,19 +135,21 @@ final class SourceConnectionStore {
     
     /// Store Google OAuth token from authorization flow
     func storeGoogleOAuthToken(_ token: GoogleOAuthToken) {
-        do {
-            let data = try JSONEncoder().encode(token)
-            guard let encoded = String(data: data, encoding: .utf8) else {
-                showToast(title: "Auth Error", subtitle: "Failed to encode token.", icon: "exclamationmark.triangle")
-                return
+        Task {
+            do {
+                let data = try JSONEncoder().encode(token)
+                guard let encoded = String(data: data, encoding: .utf8) else {
+                    showToast("Auth Error", "Failed to encode token.", "exclamationmark.triangle")
+                    return
+                }
+                try await KeychainManager.shared.save(password: encoded, for: Self.googleOAuthTokenAccount)
+                googleOAuthToken = token
+                googleOAuthLastRefreshAt = Date()
+                onSourceConnectionChanged(.googleDrive, true)
+                startGoogleTokenRefreshLoop()
+            } catch {
+                showToast("Auth Error", error.localizedDescription, "exclamationmark.triangle")
             }
-            try KeychainManager.shared.save(password: encoded, for: Self.googleOAuthTokenAccount)
-            googleOAuthToken = token
-            googleOAuthLastRefreshAt = Date()
-            onSourceConnectionChanged(.googleDrive, true)
-            startGoogleTokenRefreshLoop()
-        } catch {
-            showToast(title: "Auth Error", subtitle: error.localizedDescription, icon: "exclamationmark.triangle")
         }
     }
     
@@ -161,14 +159,14 @@ final class SourceConnectionStore {
         let needsRefresh = force || shouldRefreshToken(token)
         guard needsRefresh else {
             if displayToast {
-                showToast(title: "Google Token", subtitle: "Token is up to date.", icon: "checkmark.circle")
+                showToast("Google Token", "Token is up to date.", "checkmark.circle")
             }
             return
         }
         
         guard let refreshToken = token.refreshToken else {
             if displayToast {
-                showToast(title: "Google Token", subtitle: "Refresh token not available.", icon: "exclamationmark.triangle")
+                showToast("Google Token", "Refresh token not available.", "exclamationmark.triangle")
             } else if token.expiresAt != nil {
                 disconnectGoogle()
             }
@@ -178,7 +176,7 @@ final class SourceConnectionStore {
         let clientId = googleOAuthClientId.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clientId.isEmpty else { return }
         
-        logNetworkActivity(domain: "oauth2.googleapis.com", isAllowed: true, reason: "OAuth token refresh")
+        logNetworkActivity("oauth2.googleapis.com", "true", "OAuth token refresh", "auth")
         
         do {
             let refreshed = try await GoogleOAuthService.refreshAccessToken(
@@ -188,27 +186,29 @@ final class SourceConnectionStore {
             let merged = mergeGoogleTokens(current: token, refreshed: refreshed)
             storeGoogleOAuthToken(merged)
             if displayToast {
-                showToast(title: "Google Token", subtitle: "Token refreshed.", icon: "checkmark.circle.fill")
+                showToast("Google Token", "Token refreshed.", "checkmark.circle.fill")
             }
         } catch {
             if displayToast {
-                showToast(title: "Google Refresh Failed", subtitle: error.localizedDescription, icon: "exclamationmark.triangle")
+                showToast("Google Refresh Failed", error.localizedDescription, "exclamationmark.triangle")
             }
         }
     }
     
     /// Disconnect Google account
     func disconnectGoogle() {
-        do {
-            try KeychainManager.shared.delete(account: Self.googleOAuthTokenAccount)
-        } catch {
-            showToast(title: "Disconnect Failed", subtitle: error.localizedDescription, icon: "exclamationmark.triangle")
+        Task {
+            do {
+                try await KeychainManager.shared.delete(account: Self.googleOAuthTokenAccount)
+                googleOAuthToken = nil
+                googleOAuthLastRefreshAt = nil
+                onSourceConnectionChanged(.googleDrive, false)
+                googleRefreshTask?.cancel()
+                googleRefreshTask = nil
+            } catch {
+                showToast("Disconnect Failed", error.localizedDescription, "exclamationmark.triangle")
+            }
         }
-        googleOAuthToken = nil
-        googleOAuthLastRefreshAt = nil
-        onSourceConnectionChanged(.googleDrive, false)
-        googleRefreshTask?.cancel()
-        googleRefreshTask = nil
     }
     
     /// Get Google OAuth redirect URI

@@ -345,7 +345,7 @@ public struct NemethTranslationSystem: System {
         
         for (entity, chunked, transform) in entities {
             // Skip if not processing Braille
-            if !transform.outputFormats.contains(.braille) {
+            if !transform.targetFormats.contains(.brailleReady) {
                 continue
             }
             
@@ -384,7 +384,7 @@ public struct NemethTranslationSystem: System {
                 originalText: chunk.text,
                 translatedText: translatedText,
                 chunkType: chunk.chunkType,
-                pageNumber: chunk.pageNumber,
+                pageNumber: chunk.pageNumber ?? 0,
                 containsMathematicalContent: hasMath,
                 wasModified: translatedText != chunk.text
             )

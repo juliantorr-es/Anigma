@@ -39,7 +39,7 @@ public struct CLIEnvironment {
     public static func mergedEnvironment(
         with overrides: [String: String] = [:],
         baseDirectory: URL = defaultBaseDirectory()
-    ) -> [String: String] {
+    ) async -> [String: String] {
         var environment = ProcessInfo.processInfo.environment
         overrides.forEach { environment[$0] = $1 }
 
@@ -49,7 +49,7 @@ public struct CLIEnvironment {
                 continue
             }
 
-            if let storedValue = try? KeychainStore.retrieve(key: key, fallbackDirectory: baseDirectory),
+            if let storedValue = try? await KeychainStore.retrieve(key: key, fallbackDirectory: baseDirectory),
                !storedValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 environment[key] = storedValue.trimmingCharacters(in: .whitespacesAndNewlines)
             }

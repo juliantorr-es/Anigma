@@ -8,8 +8,10 @@
 import Foundation
 import ArgumentParser
 import AnigmaCore
+import DatabaseCore
 
 public struct ModelCommands: ParsableCommand {
+    public init() {}
     public static let configuration = CommandConfiguration(
         commandName: "model",
         abstract: "Model management commands for HuggingFace",
@@ -26,6 +28,7 @@ public struct ModelCommands: ParsableCommand {
 }
 
 public struct ModelSearch: ParsableCommand {
+    public init() {}
     @Argument(help: "Search query") var query: String
 
     @Option(name: .shortAndLong, help: "Filter by task type")
@@ -52,15 +55,15 @@ public struct ModelSearch: ParsableCommand {
         print()
 
         let cache = try await ModelSearchCache(
-            database: try await DatabaseActor(storagePath: ".")
+            database: try await DatabaseActor(dbPath: ".")
         )
         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
 
         let filter = HFSearchFilter(
             query: query,
             task: task.flatMap { ModelTaskType(rawValue: $0) },
-            limit: limit,
-            sort: sort
+            sort: sort,
+            limit: limit
         )
 
         let results = try await client.searchModels(query: query, filter: filter)
@@ -81,6 +84,7 @@ public struct ModelSearch: ParsableCommand {
 }
 
 public struct ModelDownload: ParsableCommand {
+    public init() {}
     @Argument(help: "Repository ID (e.g., 'TheBloke/Mistral-7B-GGUF')") var repo: String
 
     @Option(name: .shortAndLong, help: "File to download (default: all files)")
@@ -95,7 +99,7 @@ public struct ModelDownload: ParsableCommand {
     public func run() async throws {
         let keychain = HuggingFaceKeychain()
         let cache = try await ModelSearchCache(
-            database: try await DatabaseActor(storagePath: ".")
+            database: try await DatabaseActor(dbPath: ".")
         )
         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
 
@@ -126,7 +130,7 @@ public struct ModelDownload: ParsableCommand {
             let jobId = try await queue.enqueue(
                 repo: repo,
                 file: file,
-                priority: JobPriority(rawValue: priority) ?? .normal
+                priority: JobPriority(rawValue: Int(priority) ?? 1) ?? .normal
             )
             print("Queued: \(file) (Job: \(jobId.raw.prefix(8)))")
         }
@@ -137,6 +141,7 @@ public struct ModelDownload: ParsableCommand {
 }
 
 public struct ModelList: ParsableCommand {
+    public init() {}
     @Flag(name: .shortAndLong, help: "Show detailed information")
     var verbose: Bool = false
 
@@ -145,7 +150,7 @@ public struct ModelList: ParsableCommand {
         print("=" .padding(toLength: 60, withPad: "=", startingAt: 0))
         print()
 
-        let database = try await DatabaseActor(storagePath: ".")
+        let database = try await DatabaseActor(dbPath: ".")
         let statement = "SELECT * FROM installed_models ORDER BY installed_at DESC"
         let rows = try await database.query(statement)
 
@@ -179,6 +184,7 @@ public struct ModelList: ParsableCommand {
 }
 
 public struct ModelStatus: ParsableCommand {
+    public init() {}
     @Option(name: .shortAndLong, help: "Show detailed status")
     var verbose: Bool = false
 
@@ -225,6 +231,7 @@ public struct ModelStatus: ParsableCommand {
 }
 
 public struct ModelCancel: ParsableCommand {
+    public init() {}
     @Argument(help: "Job ID to cancel (or 'all' to cancel all)")
     var jobId: String
 
@@ -248,6 +255,7 @@ public struct ModelCancel: ParsableCommand {
 }
 
 public struct ModelBenchmark: ParsableCommand {
+    public init() {}
     @Flag(name: .shortAndLong, help: "Quick assessment only")
     var quick: Bool = false
 
@@ -287,6 +295,7 @@ public struct ModelBenchmark: ParsableCommand {
 }
 
 public struct ModelStorage: ParsableCommand {
+    public init() {}
     @Flag(name: .shortAndLong, help: "Show detailed breakdown")
     var verbose: Bool = false
 

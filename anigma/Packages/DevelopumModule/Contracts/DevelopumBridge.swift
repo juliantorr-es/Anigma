@@ -717,17 +717,15 @@ extension DevelopumBridgeMessage {
     /// Computes the canonical JCS representation of this message.
     /// Used for deterministic evidence hashing.
     public func toCanonicalJSON() throws -> Data {
-        // TODO: Implement proper JCS canonicalization
-        // For now, use sorted keys and no whitespace
+        // Implement JCS-like canonicalization using sorted keys and no escaping
         let encoder = JSONEncoder()
-        encoder.outputFormatting = [.sortedKeys]
+        encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         return try encoder.encode(self)
     }
     
-    /// Computes the BLAKE3 hash of the canonical JCS representation.
+    /// Computes the content hash of the canonical JCS representation.
     public func canonicalHash() throws -> String {
         let canonicalData = try toCanonicalJSON()
-        // TODO: Use BLAKE3 hashing
-        return canonicalData.base64EncodedString()
+        return BLAKE3Digest.hex(of: canonicalData)
     }
 }

@@ -564,23 +564,33 @@ public struct StructureMetadata: Sendable, Codable {
 
 /// Stage of processing
 public enum ProcessingStage: String, Sendable, Codable, CaseIterable {
+    case started = "started"
     case ingestion = "ingestion"
     case ocr = "ocr"
     case analysis = "analysis"
     case transformation = "transformation"
+    case processing = "processing"
     case accessibility = "accessibility"
     case validation = "validation"
+    case finalizing = "finalizing"
     case export = "export"
+    case completed = "completed"
+    case error = "error"
 
     public var description: String {
         switch self {
+        case .started: return "Processing started"
         case .ingestion: return "Document ingestion"
         case .ocr: return "OCR text extraction"
         case .analysis: return "Content analysis"
         case .transformation: return "Format transformation"
+        case .processing: return "Processing content"
         case .accessibility: return "Accessibility processing"
         case .validation: return "Content validation"
+        case .finalizing: return "Finalizing output"
         case .export: return "Export generation"
+        case .completed: return "Processing completed"
+        case .error: return "Processing error"
         }
     }
 }

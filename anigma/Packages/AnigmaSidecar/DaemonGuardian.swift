@@ -1,5 +1,4 @@
 import Foundation
-import AnigmaDaemonCore
 
 /// Automatically manages the anigmad daemon for the CLI.
 /// Ensures the daemon is running, healthy, and persists in the background.
@@ -8,7 +7,7 @@ public actor DaemonGuardian {
     private let binaryPath: String?
     
     public init(socketPath: String? = nil, binaryPath: String? = nil) {
-        self.socketPath = socketPath ?? DaemonConfig.defaultUnixSocketPath()
+        self.socketPath = socketPath ?? SidecarConfig.defaultUnixSocketPath()
         self.binaryPath = binaryPath
     }
     

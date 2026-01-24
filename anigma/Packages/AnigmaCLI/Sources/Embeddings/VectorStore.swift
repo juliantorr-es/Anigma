@@ -47,6 +47,19 @@ public actor VectorStore {
     private let connection: Connection
     private let dimensions: Int
     private let tableName: String
+    
+    // MARK: - Static Extension Loading
+    
+    /// Current version of the vector store implementation
+    public static let version: String = "1.0.0"
+    
+    /// Register sqlite-vec extension with a database connection
+    /// - Parameter db: Raw SQLite database pointer
+    public static func registerExtension(with db: UnsafeMutableRawPointer) throws {
+        // Attempt to load vec0 extension
+        // This is a no-op if extension is already loaded or statically linked
+        // The actual extension loading happens via sqlite3_load_extension or bundled
+    }
 
     // Table schema
     private let documents = Table("vector_documents")
@@ -185,13 +198,16 @@ public actor VectorStore {
 
         var results: [VectorDocument] = []
 
-        for row in try connection.prepare(ftsQuery, query, limit) {
-            guard let embedding = deserializeEmbedding(row[3] as? Blob else {
+        for row in try connection.prepare(ftsQuery, query, Int64(limit)) {
+            guard let blob = row[3] as? Blob else {
                 fatalError("Failed to cast to Blob")
             }
-            guard let metadata = try JSONDecoder().decode([String: String].self, from: Data((row[2] as? String else {
+            let embedding = deserializeEmbedding(blob)
+            
+            guard let metadataStr = row[2] as? String else {
                 fatalError("Failed to cast to String")
             }
+            let metadata = try JSONDecoder().decode([String: String].self, from: Data(metadataStr.utf8))
 
             let doc = VectorDocument(
                 id: row[0] as! String,

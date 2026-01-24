@@ -245,34 +245,7 @@ struct AnigmaArtifact: Identifiable, Codable, Hashable, Sendable {
 
 // MARK: - 5. Evidence (The Ledger)
 
-/// The immutable audit trail entry
-struct AnigmaEvidence: Identifiable, Codable, Hashable, Sendable {
-    let id: UUID
-    var jobId: UUID?
-    var contextId: UUID?
-    var timestamp: Date
-    var type: EvidenceType
-    var summary: String
-    var hash: String? // Cryptographic proof
-
-    enum EvidenceType: String, Codable {
-        case importEvent
-        case jobCompletion
-        case policyCheck
-        case export
-        case userAction
-
-        var icon: String {
-            switch self {
-            case .importEvent: return "square.and.arrow.down"
-            case .jobCompletion: return "checkmark.seal"
-            case .policyCheck: return "shield.check"
-            case .export: return "square.and.arrow.up"
-            case .userAction: return "person.fill"
-            }
-        }
-    }
-}
+// AnigmaEvidence is now defined in AnigmaPrimitives
 
 // MARK: - 6. Project & Tools
 

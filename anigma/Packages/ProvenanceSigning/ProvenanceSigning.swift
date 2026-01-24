@@ -55,71 +55,52 @@ public struct ProvenanceSignature: Sendable, Codable {
 
 /// Manages local signing keys for provenance.
 public actor SigningKeyManager {
-    private let keychainService: String
+    private let authority: any SecretAuthority
     private var privateKey: P256.Signing.PrivateKey?
 
     public init(keychainService: String = "com.anigma.provenance") {
-        self.keychainService = keychainService
+        #if os(macOS) || os(iOS)
+        self.authority = KeychainSecretAuthority(service: keychainService)
+        #else
+        self.authority = CompositeSecretAuthority(service: keychainService)
+        #endif
     }
 
     /// Get or generate signing key.
-    public func getSigningKey() throws -> P256.Signing.PrivateKey {
+    public func getSigningKey() async throws -> P256.Signing.PrivateKey {
         if let privateKey = privateKey {
             return privateKey
         }
 
-        // Try to load from keychain
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: keychainService,
-            kSecAttrAccount as String: "signing_key",
-            kSecReturnData as String: true
-        ]
-
-        var item: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &item)
-
-        if status == errSecSuccess,
-           let keyData = item as? Data {
-            privateKey = try P256.Signing.PrivateKey(rawRepresentation: keyData)
-            return privateKey!
+        // Try to load from authority
+        if let keyData = try await authority.retrieve(for: "signing_key") {
+            let key = try P256.Signing.PrivateKey(rawRepresentation: keyData)
+            privateKey = key
+            return key
         }
 
         // Generate new key
         let newKey = P256.Signing.PrivateKey()
         let keyData = newKey.rawRepresentation
 
-        // Store in keychain
-        let storeQuery: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: keychainService,
-            kSecAttrAccount as String: "signing_key",
-            kSecValueData as String: keyData,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        ]
-
-        SecItemDelete(storeQuery as CFDictionary)
-        let storeStatus = SecItemAdd(storeQuery as CFDictionary, nil)
-
-        guard storeStatus == errSecSuccess else {
-            throw ProvenanceError.keychainError("Failed to store signing key")
-        }
+        // Store in authority
+        try await authority.store(secret: keyData, for: "signing_key")
 
         privateKey = newKey
         return newKey
     }
 
     /// Get public key as string.
-    public func getPublicKeyString() throws -> String {
-        let privateKey = try getSigningKey()
+    public func getPublicKeyString() async throws -> String {
+        let privateKey = try await getSigningKey()
         let publicKey = privateKey.publicKey
         let publicKeyData = publicKey.rawRepresentation
         return publicKeyData.base64EncodedString()
     }
 
     /// Sign data.
-    public func sign(data: Data) throws -> String {
-        let privateKey = try getSigningKey()
+    public func sign(data: Data) async throws -> String {
+        let privateKey = try await getSigningKey()
         let signature = try privateKey.signature(for: data)
         return signature.rawRepresentation.base64EncodedString()
     }
@@ -130,9 +111,9 @@ public actor SigningKeyManager {
         engineId: String,
         result: MigrationResult,
         metadata: [String: String] = [:]
-    ) throws -> ProvenanceSignature {
-        let privateKey = try getSigningKey()
-        let publicKeyString = try getPublicKeyString()
+    ) async throws -> ProvenanceSignature {
+        let privateKey = try await getSigningKey()
+        let publicKeyString = try await getPublicKeyString()
 
         // Create data to sign
         let timestamp = Date()

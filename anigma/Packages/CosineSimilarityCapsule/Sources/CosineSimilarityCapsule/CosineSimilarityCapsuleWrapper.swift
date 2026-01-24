@@ -45,7 +45,7 @@ public final class CosineSimilarityCapsuleWrapper {
             throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
         }
         
-        let layout = anigma_cosine_vector_layout_t(
+        var layout = anigma_cosine_vector_layout_t(
             dimension: query.count,
             stride: 1,
             alignment: 0,
@@ -57,7 +57,7 @@ public final class CosineSimilarityCapsuleWrapper {
         
         let status = query.withUnsafeBufferPointer { queryPtr in
             candidate.withUnsafeBufferPointer { candPtr in
-                handle?.withHandle { rawHandle in
+                (try? handle?.withHandle { rawHandle in
                     anigma_cosine_similarity_compute_single(
                         rawHandle,
                         queryPtr.baseAddress,
@@ -67,7 +67,7 @@ public final class CosineSimilarityCapsuleWrapper {
                         simd,
                         &error
                     )
-                } ?? ANIGMA_ERR_INTERNAL
+                }) ?? ANIGMA_ERR_INTERNAL
             }
         }
         
@@ -103,7 +103,7 @@ public final class CosineSimilarityCapsuleWrapper {
         var results = [Float](repeating: 0.0, count: count)
         var error = anigma_capsule_error_t()
         
-        let layout = anigma_cosine_vector_layout_t(
+        var layout = anigma_cosine_vector_layout_t(
             dimension: dimension,
             stride: dimension, // Stride in elements (1 vector)
             alignment: 0,
@@ -112,14 +112,14 @@ public final class CosineSimilarityCapsuleWrapper {
         
         let status = query.withUnsafeBufferPointer { queryPtr in
             flattenedCandidates.withUnsafeBufferPointer { candPtr in
-                let descriptor = anigma_cosine_batch_descriptor_t(
+                var descriptor = anigma_cosine_batch_descriptor_t(
                     count: count,
                     vectors: candPtr.baseAddress,
                     layout: layout
                 )
                 
                 return results.withUnsafeMutableBufferPointer { resPtr in
-                    handle?.withHandle { rawHandle in
+                    (try? handle?.withHandle { rawHandle in
                         anigma_cosine_similarity_compute_batch(
                             rawHandle,
                             queryPtr.baseAddress,
@@ -128,7 +128,7 @@ public final class CosineSimilarityCapsuleWrapper {
                             simd,
                             &error
                         )
-                    } ?? ANIGMA_ERR_INTERNAL
+                    }) ?? ANIGMA_ERR_INTERNAL
                 }
             }
         }
@@ -166,7 +166,7 @@ public final class CosineSimilarityCapsuleWrapper {
         var results = [Float](repeating: 0.0, count: queries.count * candidates.count)
         var error = anigma_capsule_error_t()
         
-        let layout = anigma_cosine_vector_layout_t(
+        var layout = anigma_cosine_vector_layout_t(
             dimension: dimension,
             stride: dimension,
             alignment: 0,
@@ -175,11 +175,11 @@ public final class CosineSimilarityCapsuleWrapper {
         
         let status = flattenedQueries.withUnsafeBufferPointer { qPtr in
             flattenedCandidates.withUnsafeBufferPointer { cPtr in
-                let qDesc = anigma_cosine_batch_descriptor_t(count: queries.count, vectors: qPtr.baseAddress, layout: layout)
-                let cDesc = anigma_cosine_batch_descriptor_t(count: candidates.count, vectors: cPtr.baseAddress, layout: layout)
+                var qDesc = anigma_cosine_batch_descriptor_t(count: queries.count, vectors: qPtr.baseAddress, layout: layout)
+                var cDesc = anigma_cosine_batch_descriptor_t(count: candidates.count, vectors: cPtr.baseAddress, layout: layout)
                 
                 return results.withUnsafeMutableBufferPointer { resPtr in
-                    handle?.withHandle { rawHandle in
+                    (try? handle?.withHandle { rawHandle in
                         anigma_cosine_similarity_compute_matrix(
                             rawHandle,
                             &qDesc,
@@ -188,7 +188,7 @@ public final class CosineSimilarityCapsuleWrapper {
                             simd,
                             &error
                         )
-                    } ?? ANIGMA_ERR_INTERNAL
+                    }) ?? ANIGMA_ERR_INTERNAL
                 }
             }
         }

@@ -150,7 +150,7 @@ public actor UnifiedInferenceEngine {
             if let path = config.modelPath {
                 mlxBackend = MLXBackend(modelPath: path)
                 try await mlxBackend?.loadModel()
-                mlxEngine = MLXInferenceEngine(modelPath: URL(fileURLWithPath: path))
+                mlxEngine = MLXInferenceEngine(modelId: path)
                 try await mlxEngine?.loadModel()
             }
 

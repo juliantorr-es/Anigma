@@ -9,14 +9,6 @@ public enum FusionStrategy: UInt32, CaseIterable, Sendable {
     case reciprocalRank = 1     // Reciprocal Rank Fusion (RRF)
     case weightedSum = 2       // Weighted sum with normalization
     case hybrid = 3            // Hybrid: dense similarity + sparse BM25 + heuristics
-    
-    var cValue: anigma_fusion_strategy_t {
-        switch self {
-        case .reciprocalRank: return ANIGMA_FUSION_STRATEGY_RRF
-        case .weightedSum: return ANIGMA_FUSION_STRATEGY_WEIGHTED_SUM
-        case .hybrid: return ANIGMA_FUSION_STRATEGY_HYBRID
-        }
-    }
 }
 
 /// Normalization methods for scores
@@ -25,15 +17,6 @@ public enum NormalizationMethod: UInt32, CaseIterable, Sendable {
     case minMax = 2          // Min-max normalization to [0,1]
     case zScore = 3           // Z-score normalization (mean=0, std=1)
     case rankBased = 4        // Rank-based normalization
-    
-    var cValue: anigma_normalization_method_t {
-        switch self {
-        case .none: return ANIGMA_NORMALIZATION_NONE
-        case .minMax: return ANIGMA_NORMALIZATION_MIN_MAX
-        case .zScore: return ANIGMA_NORMALIZATION_Z_SCORE
-        case .rankBased: return ANIGMA_NORMALIZATION_RANK_BASED
-        }
-    }
 }
 
 /// Rank list with metadata for hybrid fusion
@@ -252,9 +235,10 @@ public actor RankFusionCapsuleWrapper {
         )
         
         // Convert sparse BM25 ranks to dummy scores for processing
-        let sparseScores = Dictionary(uniqueKeysWithValues: 
-            sparseResults.mapValues { rank in 1.0 / Double(rank + 1) }
-        )
+        var sparseScores: [String: Double] = [:]
+        for (key, rank) in sparseResults {
+            sparseScores[key] = 1.0 / Double(rank + 1)
+        }
         
         let sparseList = RankList(
             ranks: sparseResults,
@@ -334,11 +318,10 @@ public actor RankFusionCapsuleWrapper {
     ) throws {
         var error = anigma_capsule_error_t()
         try handle?.withHandle { rawHandle in
-            let status = anigma_rank_fusion_capsule_fuse_advanced(
+            // Use the standard fuse function with RRF k parameter
+            let status = anigma_rank_fusion_capsule_fuse(
                 rawHandle,
-                strategy.cValue,
-                normalization.cValue,
-                rrfK,
+                UInt32(rrfK),
                 &scores,
                 &ids,
                 ids.count,
@@ -451,9 +434,14 @@ public actor RankFusionCapsuleWrapper {
         // Compute SHA256 hash and take first 8 bytes as UInt64 (little-endian)
         let data = Data(string.utf8)
         let hash = SHA256.hash(data: data)
-        let prefix = hash.prefix(8)
         
-        return prefix.withUnsafeBytes { $0.load(as: UInt64.self) }
+        var result: UInt64 = 0
+        var index = 0
+        for byte in hash.prefix(8) {
+            result |= UInt64(byte) << (index * 8)
+            index += 1
+        }
+        return result
     }
 }
 

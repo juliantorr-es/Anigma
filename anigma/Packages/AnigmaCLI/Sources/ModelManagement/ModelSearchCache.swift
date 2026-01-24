@@ -124,7 +124,7 @@ public actor ModelSearchCache {
         }
     }
 
-    public func isStale(query: String, filters: String) -> Bool {
+    public func isStale(query: String, filters: String) async -> Bool {
         let id = cacheId(query: query, filters: filters)
 
         do {

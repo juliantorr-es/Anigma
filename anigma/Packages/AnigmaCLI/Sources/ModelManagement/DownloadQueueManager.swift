@@ -78,7 +78,7 @@ public actor DownloadQueueManager {
     }
 
     public func pause(jobId: JobId) async throws {
-        guard let download = active[jobId] else {
+        guard var download = active[jobId] else {
             throw DownloadQueueError.jobNotFound
         }
 
@@ -126,9 +126,9 @@ public actor DownloadQueueManager {
             active.removeValue(forKey: jobId)
         } else if let queued = queue[jobId] {
             queue.removeValue(forKey: jobId)
-        } else if let completed = completed[jobId] {
+        } else if completed[jobId] != nil {
             completed.removeValue(forKey: jobId)
-        } else if let failed = failed[jobId] {
+        } else if failed[jobId] != nil {
             self.failed.removeValue(forKey: jobId)
         }
 

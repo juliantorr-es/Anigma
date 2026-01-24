@@ -401,7 +401,7 @@ public actor VaultAuthority {
             generatedAt: clock(),
             entries: entries,
             bundleReceipt: bundleReceipt,
-            signature: try signer.sign(payload: payload)
+            signature: try await signer.sign(payload: payload)
         )
         let manifestURL = bundleURL.appendingPathComponent("manifest.json", isDirectory: false)
         let manifestEncoder = JSONEncoder()

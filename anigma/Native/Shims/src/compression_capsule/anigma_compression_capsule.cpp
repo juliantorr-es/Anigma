@@ -1,5 +1,5 @@
-#include "../../include/anigma_compression_capsule.h"
-#include "../../include/anigma_capsule_core.h"
+#include "anigma_compression_capsule.h"
+#include "anigma_capsule_core.h"
 
 #include <cstdint>
 #include <cstring>

@@ -36,7 +36,17 @@ public struct HarmoniaJobConfig: Codable, Sendable {
 public final class HarmoniaWorker: BaseWorker, JobWorker {
     public static let kind = "harmonia.execute"
     
-    public override init() {}
+    private let artifactAuthority: (any ArtifactAuthority)?
+    private let evidenceAuthority: (any EvidenceAuthority)?
+    
+    public init(
+        artifactAuthority: (any ArtifactAuthority)? = nil,
+        evidenceAuthority: (any EvidenceAuthority)? = nil
+    ) {
+        self.artifactAuthority = artifactAuthority
+        self.evidenceAuthority = evidenceAuthority
+        super.init()
+    }
     
     public func execute(
         inputs: [ArtifactRef],
@@ -55,31 +65,23 @@ public final class HarmoniaWorker: BaseWorker, JobWorker {
         let contextumDB = try await ContextumDatabase(database: dbActor)
         
         // Initialize RAG Engine Capsules
-        // Note: In a production environment, we might share these instances across jobs
-        // or rely on the daemon's global state, but for now we instantiate per job.
         let vectorIndex = try VectorIndexCapsuleWrapper(config: VectorIndexConfig(dimension: 384))
-        // TODO: Initialize RankFusionCapsuleWrapper if available
-        // let rankFusion = try RankFusionCapsuleWrapper() 
+        let rankFusion = try RankFusionCapsuleWrapper() 
         
         // Create Inference Authority for code generation
-        // Use DaemonInferenceAuthority for real ml-worker execution
-        // Falls back to mock behavior if ml-worker not available
         let inferenceAuthority = DaemonInferenceAuthority()
         
-        // Initialize Artifact Authority wrapper for RLM
-        // We might need a bridge here if ArtifactAuthority is protocol based
-        // let artifactAuthority = ... 
-        
         // 3. Create RLM Environment
-        // This is the "Context Environment" that holds Engrams
-        // We currently pass nil for some optional capsules until we wire them fully
         let environment = try await ContextEnvironment(
             contextumDatabase: contextumDB,
-            artifactAuthority: nil, // TODO: Wire up artifact authority from daemon context
-            evidenceAuthority: nil,  // TODO: Wire up evidence authority
+            artifactAuthority: artifactAuthority,
+            evidenceAuthority: evidenceAuthority,
             embeddingComputing: nil,
-             inferenceAuthority: inferenceAuthority,
-            capsules: ["vectorIndex": vectorIndex]
+            inferenceAuthority: inferenceAuthority,
+            capsules: [
+                "vectorIndex": vectorIndex,
+                "rankFusion": rankFusion
+            ]
         )
         
         // 4. Create Governor

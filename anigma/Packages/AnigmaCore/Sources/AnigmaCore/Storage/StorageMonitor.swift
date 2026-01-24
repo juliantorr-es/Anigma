@@ -8,10 +8,10 @@
 import Foundation
 
 public actor StorageMonitor {
-    public enum WarningLevel: Double, Sendable {
-        case normal = 0.80
-        case warning = 0.90
-        case critical = 0.95
+    public enum WarningLevel: String, Codable, Sendable {
+        case normal
+        case warning
+        case critical
     }
 
     public struct Status: Sendable {
@@ -23,18 +23,6 @@ public actor StorageMonitor {
         public let modelStorageBytes: UInt64
         public let cacheStorageBytes: UInt64
 
-        public var shouldWarn: Bool {
-            percentageUsed > WarningLevel.normal.rawValue
-        }
-
-        public var shouldAlert: Bool {
-            percentageUsed > WarningLevel.warning.rawValue
-        }
-
-        public var formattedAvailable: String {
-            formatBytes(availableBytes)
-        }
-
         public var formattedTotal: String {
             formatBytes(totalBytes)
         }
@@ -43,8 +31,20 @@ public actor StorageMonitor {
             formatBytes(usedBytes)
         }
 
+        public var formattedAvailable: String {
+            formatBytes(availableBytes)
+        }
+
         public var formattedModelStorage: String {
             formatBytes(modelStorageBytes)
+        }
+
+        public var shouldWarn: Bool {
+            percentageUsed > 0.80
+        }
+
+        public var shouldAlert: Bool {
+            percentageUsed > 0.90
         }
 
         private func formatBytes(_ bytes: UInt64) -> String {
@@ -109,9 +109,9 @@ public actor StorageMonitor {
                 .volumeAvailableCapacityKey
             ])
 
-            let totalBytes = values.volumeTotalCapacity ?? 0
+            let totalBytes = Int64(values.volumeTotalCapacity ?? 0)
             let availableBytes = values.volumeAvailableCapacityForImportantUsage
-                ?? values.volumeAvailableCapacity ?? 0
+                ?? (values.volumeAvailableCapacity.map { Int64($0) }) ?? 0
             let usedBytes = totalBytes > availableBytes ? totalBytes - availableBytes : 0
             let percentageUsed = totalBytes > 0 ? Double(usedBytes) / Double(totalBytes) : 0
 
@@ -136,14 +136,14 @@ public actor StorageMonitor {
         let status = await getStatus()
         var warnings: [StorageWarning] = []
 
-        if status.percentageUsed > WarningLevel.critical.rawValue {
+        if status.percentageUsed > 0.95 {
             warnings.append(StorageWarning(
                 id: "critical",
                 level: .critical,
                 message: "Critical: Only \(status.formattedAvailable) remaining",
                 recommendedAction: "Delete unused models or clear cache immediately"
             ))
-        } else if status.percentageUsed > WarningLevel.warning.rawValue {
+        } else if status.percentageUsed > 0.90 {
             warnings.append(StorageWarning(
                 id: "warning",
                 level: .warning,
@@ -182,9 +182,9 @@ public actor StorageMonitor {
                 .volumeAvailableCapacityKey
             ])
 
-            let totalBytes = values.volumeTotalCapacity ?? 0
+            let totalBytes = Int64(values.volumeTotalCapacity ?? 0)
             let availableBytes = values.volumeAvailableCapacityForImportantUsage
-                ?? values.volumeAvailableCapacity ?? 0
+                ?? (values.volumeAvailableCapacity.map { Int64($0) }) ?? 0
             let usedBytes = totalBytes > availableBytes ? totalBytes - availableBytes : 0
             let percentageUsed = totalBytes > 0 ? Double(usedBytes) / Double(totalBytes) : 0
 
@@ -264,9 +264,9 @@ public actor StorageMonitor {
     }
 
     private func determineWarningLevel(percentageUsed: Double) -> WarningLevel {
-        if percentageUsed > WarningLevel.critical.rawValue {
+        if percentageUsed > 0.95 {
             return .critical
-        } else if percentageUsed > WarningLevel.warning.rawValue {
+        } else if percentageUsed > 0.90 {
             return .warning
         }
         return .normal

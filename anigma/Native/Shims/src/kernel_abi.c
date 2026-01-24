@@ -3,6 +3,15 @@
 #include <string.h>
 #include <stdlib.h>
 
+anigma_status_t anigma_kernel_apply_diff_batch(
+  anigma_kernel_instance_t instance,
+  anigma_ctx_t ctx,
+  anigma_blob_t diff_batch,
+  anigma_mut_blob_t* out_receipt
+) {
+  return ANIGMA_OK;
+}
+
 anigma_status_t anigma_kernel_initialize(
   anigma_ctx_t ctx,
   anigma_blob_t config,

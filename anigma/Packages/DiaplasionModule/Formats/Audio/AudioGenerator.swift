@@ -66,23 +66,25 @@ public struct AudioGenerator: Sendable {
         #if canImport(AVFoundation)
         let synthesizer = AVSpeechSynthesizer()
         
-        // Configure synthesizer
-        if let voice = selectedVoice {
-            synthesizer.voice = voice
-        }
-        
-        synthesizer.rate = speechRate
-        synthesizer.pitchMultiplier = pitchMultiplier
-        synthesizer.volume = 1.0
-        
         // Process pronunciation dictionary if enabled
         let processedSSML = includePronunciation ? applyPronunciationDictionary(ssml) : ssml
         
         // Generate utterance from SSML
         let utterance = AVSpeechUtterance(string: processedSSML)
         
-        // Set audio session for high quality recording
+        // Configure utterance
+        if let voice = selectedVoice {
+            utterance.voice = voice
+        }
+        
+        utterance.rate = speechRate
+        utterance.pitchMultiplier = pitchMultiplier
+        utterance.volume = 1.0
+        
+        // Set audio session for high quality recording (iOS only)
+        #if os(iOS)
         try await configureAudioSession()
+        #endif
         
         // Generate audio
         let startTime = Date()
@@ -144,6 +146,7 @@ public struct AudioGenerator: Sendable {
                 outputPath: outputPath,
                 metadata: AudioMetadata(
                     title: "Chunk \(index + 1)",
+                    format: audioFormat,
                     chapter: index + 1,
                     totalChapters: totalChunks,
                     chunkType: chunk.chunkType.rawValue
@@ -164,7 +167,7 @@ public struct AudioGenerator: Sendable {
     /// Get available voices for audio generation.
     public func getAvailableVoices() -> [AudioVoice] {
         #if canImport(AVFoundation)
-        return AVSpeechSynthesisVoice.allSpeechVoices().compactMap { voice in
+        return AVSpeechSynthesisVoice.speechVoices().compactMap { voice in
             AudioVoice(
                 identifier: voice.identifier,
                 name: voice.name,
@@ -184,15 +187,17 @@ public struct AudioGenerator: Sendable {
     private var selectedVoice: AVSpeechSynthesisVoice? {
         guard let defaultVoice = defaultVoice else { return nil }
         
-        return AVSpeechSynthesisVoice.allSpeechVoices().first { voice in
+        return AVSpeechSynthesisVoice.speechVoices().first { voice in
             voice.identifier.contains(defaultVoice) || voice.name.lowercased().contains(defaultVoice.lowercased())
         }
     }
     
     private func configureAudioSession() async throws {
+        #if os(iOS)
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.playAndRecord, mode: .default)
         try audioSession.setActive(true)
+        #endif
     }
     
     private func generateAudioData(
@@ -200,22 +205,24 @@ public struct AudioGenerator: Sendable {
         utterance: AVSpeechUtterance
     ) async throws -> Data {
         return try await withCheckedThrowingContinuation { continuation in
-            var audioData: Data?
+            var audioData = Data()
             
-            synthesizer.writeUtterance(utterance) { buffer in
-                guard let buffer = buffer else {
-                    if let data = audioData {
-                        continuation.resume(returning: data)
+            synthesizer.write(utterance) { buffer in
+                guard let pcmBuffer = buffer as? AVAudioPCMBuffer else {
+                    if !audioData.isEmpty {
+                        continuation.resume(returning: audioData)
                     } else {
                         continuation.resume(throwing: AudioGenerationError.noAudioData)
                     }
                     return
                 }
                 
-                if audioData == nil {
-                    audioData = buffer.audioBuffer.data
-                } else {
-                    audioData?.append(buffer.audioBuffer.data)
+                let frameLength = Int(pcmBuffer.frameLength)
+                if frameLength > 0 {
+                    let audioBuffer = pcmBuffer.audioBufferList.pointee.mBuffers
+                    if let mData = audioBuffer.mData {
+                        audioData.append(Data(bytes: mData, count: Int(audioBuffer.mDataByteSize)))
+                    }
                 }
             }
         }
@@ -541,7 +548,7 @@ public struct AudioGenerationSystem: System {
         
         for (entity, chunked, transform) in entities {
             // Skip if not processing audio
-            if !transform.outputFormats.contains(.audio) {
+            if !transform.targetFormats.contains(.audioReady) {
                 continue
             }
             
@@ -561,7 +568,7 @@ public struct AudioGenerationSystem: System {
                     Task {
                         await world.addComponent(entity, ProgressUpdateComponent(
                             action: .update(
-                                currentChunk: progress.currentChunk,
+                                currentStep: progress.currentChunk,
                                 stage: .processing,
                                 message: "Generated audio for chunk \(progress.currentChunk) of \(progress.totalChunks)",
                                 metadata: ["percentage": "\(String(format: "%.1f", progress.percentage))"]
@@ -651,12 +658,5 @@ extension URL {
         } catch {
             return 0
         }
-    }
-}
-
-extension AVAudioBuffer {
-    /// Convert audio buffer to Data.
-    var data: Data {
-        return Data(bytesNoCopy: audioBufferListPointers.0, count: Int(audioBufferListPointers.1.mBuffersByteCount))
     }
 }

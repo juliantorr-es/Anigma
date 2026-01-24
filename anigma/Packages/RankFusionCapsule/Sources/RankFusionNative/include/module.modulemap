@@ -1,0 +1,7 @@
+module RankFusionNative {
+    header "anigma_rank_fusion_capsule.h"
+    header "anigma_capsule_core.h"
+    header "anigma_native_common.h"
+    header "anigma_status.h"
+    export *
+}

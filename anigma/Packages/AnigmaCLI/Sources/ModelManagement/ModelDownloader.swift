@@ -7,6 +7,7 @@
 
 import Foundation
 import CryptoKit
+import AnigmaSidecar
 
 public enum ModelDownloadError: Error, CustomStringConvertible {
     case invalidURL(String)
@@ -316,8 +317,13 @@ public actor ModelDownloader {
 public actor HuggingFaceModelDownloader {
     private let downloader = ModelDownloader()
     private let baseURL = "https://huggingface.co"
+    private var bridge: SidecarBridge?
 
-    public init() {}
+    public init() {
+        Task {
+            self.bridge = try? await SidecarBridge.create(clientName: "anigma-cli-downloader")
+        }
+    }
 
     public func download(
         repo: String,
@@ -326,6 +332,16 @@ public actor HuggingFaceModelDownloader {
         destinationDirectory: String,
         progressHandler: @escaping @Sendable (String, ModelDownloadProgress) -> Void
     ) async throws -> [String: String] {
+        if let bridge = bridge {
+            let response = try await bridge.installModel(modelId: repo, repo: repo, revision: revision)
+            if let error = response.error {
+                throw ModelDownloadError.downloadFailed(error.message)
+            }
+            // Return mapping of files to their new home if available
+            // This is simplified since Daemon might have a different structure
+            return [:] 
+        }
+        
         var downloadedFiles: [String: String] = [:]
 
         for file in files {

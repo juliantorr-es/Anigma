@@ -3,18 +3,18 @@ import AnigmaNativeShims
 import CapsuleCore
 
 /// Low-level wrapper for the native text chunking capsule.
-internal final class TextChunkingCapsuleWrapper {
+public final class TextChunkingCapsuleWrapper {
     private let handle: CapsuleHandle<AnyObject>
     
-    init(config: TextChunkingConfig) throws {
+    public init(config: TextChunkingConfig) throws {
         var rawHandle: anigma_text_chunking_capsule_t?
         var error = anigma_capsule_error_t()
         
         var cConfig = anigma_text_chunking_config_t()
-        cConfig.target_chunk_size = UInt32(config.targetChunkSize)
-        cConfig.min_chunk_size = UInt32(config.minChunkSize)
-        cConfig.max_chunk_size = UInt32(config.maxChunkSize)
-        cConfig.window_size = UInt32(config.windowSize)
+        cConfig.target_chunk_size = Int(config.targetChunkSize)
+        cConfig.min_chunk_size = Int(config.minChunkSize)
+        cConfig.max_chunk_size = Int(config.maxChunkSize)
+        cConfig.window_size = Int(config.windowSize)
         cConfig.polynomial = config.polynomial
         cConfig.determinism_tier = config.determinismTier
         
@@ -31,7 +31,7 @@ internal final class TextChunkingCapsuleWrapper {
         )
     }
     
-    func processBytes(_ data: Data) throws {
+    public func processBytes(_ data: Data) throws {
         var error = anigma_capsule_error_t()
         try handle.withHandle { rawHandle in
             let status = data.withUnsafeBytes { bytes in
@@ -48,7 +48,7 @@ internal final class TextChunkingCapsuleWrapper {
         }
     }
     
-    func finalize() throws {
+    public func finalize() throws {
         var error = anigma_capsule_error_t()
         try handle.withHandle { rawHandle in
             let status = anigma_text_chunking_capsule_finalize(rawHandle, &error)
@@ -58,7 +58,7 @@ internal final class TextChunkingCapsuleWrapper {
         }
     }
     
-    func reset() throws {
+    public func reset() throws {
         var error = anigma_capsule_error_t()
         try handle.withHandle { rawHandle in
             let status = anigma_text_chunking_capsule_reset(rawHandle, &error)
@@ -68,7 +68,7 @@ internal final class TextChunkingCapsuleWrapper {
         }
     }
     
-    func getBoundaries() throws -> [anigma_chunk_boundary_t] {
+    public func getBoundaries() throws -> [anigma_chunk_boundary_t] {
         var error = anigma_capsule_error_t()
         return try handle.withHandle { rawHandle in
             var count: Int = 0
@@ -86,5 +86,26 @@ internal final class TextChunkingCapsuleWrapper {
             
             return Array(boundaries.prefix(actual))
         }
+    }
+    
+    public func extractChunks(from data: Data) async throws -> [Data] {
+        // Simple extraction based on boundaries
+        let boundaries = try getBoundaries()
+        var chunks: [Data] = []
+        var lastOffset = 0
+        
+        for boundary in boundaries {
+            let offset = Int(boundary.offset)
+            if offset > lastOffset && offset <= data.count {
+                chunks.append(data.subdata(in: lastOffset..<offset))
+                lastOffset = offset
+            }
+        }
+        
+        if lastOffset < data.count {
+            chunks.append(data.subdata(in: lastOffset..<data.count))
+        }
+        
+        return chunks
     }
 }
