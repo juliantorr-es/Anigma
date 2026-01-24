@@ -10,6 +10,18 @@ import AnigmaPrimitives
 import DoctrineCore
 import Foundation
 
+// MARK: - Execution Mode
+
+/// AST execution mode for three-tier architecture
+public enum ASTExecutionMode: String, Sendable {
+    /// Use daemon via Unix socket (fastest, lowest latency)
+    case daemon
+    /// Use in-process SwiftSyntax library (fast, no process spawn)
+    case inProcess
+    /// Use legacy subprocess execution (compatibility fallback)
+    case subprocess
+}
+
 // MARK: - AST Client
 
 /// Client for interacting with AnigmaASTServices binary
@@ -18,44 +30,68 @@ public actor ASTClient {
     /// Path to the AST services binary
     private let binaryPath: String
 
-    /// Whether to use binary or fallback to in-process
+    /// Execution mode for three-tier architecture
+    private let executionMode: ASTExecutionMode
+
+    /// Daemon socket path (for daemon mode)
+    private let daemonSocket: String?
+
+    /// Whether to use binary or fallback to in-process (legacy compatibility)
     private let useBinary: Bool
 
+    public init(
+        binaryPath: String? = nil,
+        executionMode: ASTExecutionMode = .inProcess,
+        daemonSocket: String? = nil
+    ) {
+        self.binaryPath = binaryPath ?? Self.findBinaryPath() ?? "anigma-ast-services"
+        self.executionMode = executionMode
+        self.daemonSocket = daemonSocket
+        self.useBinary = (executionMode == .subprocess) // Legacy compatibility
+    }
+
+    /// Legacy initializer for backward compatibility
     public init(binaryPath: String? = nil, useBinary: Bool = true) {
         self.binaryPath = binaryPath ?? Self.findBinaryPath() ?? "anigma-ast-services"
         self.useBinary = useBinary
+        // Map legacy useBinary to execution mode
+        self.executionMode = useBinary ? .subprocess : .inProcess
+        self.daemonSocket = nil
     }
 
     /// Parse a Swift file using AST services
     public func parseFile(_ path: String) async throws -> ParseResult {
-        if useBinary {
-            return try await callBinary(operation: "parse", file: path, visitors: nil)
-        } else {
-            // Fallback to simple string parsing
+        // Legacy fallback when useBinary is false
+        if !useBinary {
             return try parseFileFallback(path)
         }
+        
+        // Otherwise use three-tier execution via binary
+        return try await callBinary(operation: "parse", file: path, visitors: nil)
     }
 
     /// Analyze a Swift file with specific visitors
     public func analyzeFile(_ path: String, visitors: [String] = ["security", "quality"])
         async throws -> AnalyzeResult {
-        if useBinary {
-            return try await callBinaryAnalyze(operation: "analyze", file: path, visitors: visitors)
-        } else {
-            // Fallback to simple analysis
+        // Legacy fallback when useBinary is false
+        if !useBinary {
             return try analyzeFileFallback(path, visitors: visitors)
         }
+        
+        // Otherwise use three-tier execution via binary
+        return try await callBinaryAnalyze(operation: "analyze", file: path, visitors: visitors)
     }
 
     /// Analyze a directory of Swift files
     public func analyzeDirectory(_ path: String, visitors: [String] = ["security", "quality"])
         async throws -> [AnalyzeResult] {
-        if useBinary {
-            return try await callBinaryDirectory(path: path, visitors: visitors)
-        } else {
-            // Fallback to directory analysis
+        // Legacy fallback when useBinary is false
+        if !useBinary {
             return try analyzeDirectoryFallback(path, visitors: visitors)
         }
+        
+        // Otherwise use three-tier execution via binary
+        return try await callBinaryDirectory(path: path, visitors: visitors)
     }
 }
 
@@ -80,62 +116,104 @@ extension ASTClient {
     /// Runs the binary and returns its JSON output.
     private func runBinary(operation: String, file: String, visitors: [String]?) async throws
         -> String {
+        // Build arguments with execution mode flags
+        let args = buildArguments(operation: operation, file: file, visitors: visitors)
+        
+        do {
+            return try await runProcess(arguments: args)
+        } catch ASTError.binaryFailed(let code) {
+            // Check if failure might be due to unknown flag (older binary)
+            // We'll retry with stripped arguments (remove execution mode flags)
+            let strippedArgs = stripExecutionModeFlags(args)
+            if strippedArgs != args {
+                return try await runProcess(arguments: strippedArgs)
+            }
+            throw ASTError.binaryFailed(code)
+        }
+    }
+    
+    /// Run process with given arguments and return stdout
+    private func runProcess(arguments: [String]) async throws -> String {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: binaryPath)
-        process.arguments = buildArguments(operation: operation, file: file, visitors: visitors)
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = Pipe()
-
+        process.arguments = arguments
+        
+        let stdoutPipe = Pipe()
+        let stderrPipe = Pipe()
+        process.standardOutput = stdoutPipe
+        process.standardError = stderrPipe
+        
         try process.run()
-        guard let data = try pipe.fileHandleForReading.readToEnd() else {
+        guard let stdoutData = try stdoutPipe.fileHandleForReading.readToEnd() else {
             throw ASTError.invalidOutput
         }
         process.waitUntilExit()
-
+        
         guard process.terminationStatus == 0 else {
+            // Capture stderr for error analysis
+            let stderrData = try stderrPipe.fileHandleForReading.readToEnd()
+            let stderrString = stderrData.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+            
+            // Check for unknown flag error
+            if stderrString.contains("unknown flag") || stderrString.contains("unrecognized flag") {
+                throw ASTError.binaryFailed(process.terminationStatus)
+            }
+            
             throw ASTError.binaryFailed(process.terminationStatus)
         }
-
-        guard let jsonString = String(data: data, encoding: .utf8) else {
+        
+        guard let jsonString = String(data: stdoutData, encoding: .utf8) else {
             throw ASTError.invalidOutput
         }
-
+        
         return jsonString
+    }
+    
+    /// Strip execution mode flags for compatibility with older binaries
+    private func stripExecutionModeFlags(_ args: [String]) -> [String] {
+        var stripped: [String] = []
+        var i = 0
+        while i < args.count {
+            if args[i] == "--execution-mode" {
+                i += 2 // Skip flag and value
+            } else if args[i] == "--daemon-socket" {
+                i += 2 // Skip flag and value
+            } else {
+                stripped.append(args[i])
+                i += 1
+            }
+        }
+        return stripped
     }
 
     /// Call the AST services binary for directory analysis
     private func callBinaryDirectory(path: String, visitors: [String]) async throws
         -> [AnalyzeResult] {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: binaryPath)
-        process.arguments = [
+        var args = [
             "analyze",
             "--directory", path,
             "--visitors", visitors.joined(separator: ","),
-            "--output-format", "ndjson"
+            "--output-format", "ndjson",
+            "--execution-mode", executionMode.rawValue
         ]
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = Pipe()
-
-        try process.run()
-        guard let data = try pipe.fileHandleForReading.readToEnd() else {
-            throw ASTError.invalidOutput
+        
+        if executionMode == .daemon, let socket = daemonSocket {
+            args.append(contentsOf: ["--daemon-socket", socket])
         }
-        process.waitUntilExit()
-
-        guard process.terminationStatus == 0 else {
-            throw ASTError.binaryFailed(process.terminationStatus)
+        
+        do {
+            let jsonString = try await runProcess(arguments: args)
+            return try decodeBinaryNDJSONResponse(jsonString)
+        } catch ASTError.binaryFailed(let code) {
+            // Check if failure might be due to unknown flag (older binary)
+            // Retry with stripped arguments
+            let strippedArgs = stripExecutionModeFlags(args)
+            if strippedArgs != args {
+                let jsonString = try await runProcess(arguments: strippedArgs)
+                return try decodeBinaryNDJSONResponse(jsonString)
+            }
+            throw ASTError.binaryFailed(code)
         }
-
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            throw ASTError.invalidOutput
-        }
-
-        return try decodeBinaryNDJSONResponse(jsonString)
     }
 
     /// Build command line arguments for binary
@@ -151,6 +229,14 @@ extension ASTClient {
         }
 
         args.append(contentsOf: ["--output-format", "json"])
+
+        // Add execution mode flag (if not default .inProcess? include always for clarity)
+        args.append(contentsOf: ["--execution-mode", executionMode.rawValue])
+
+        // Add daemon socket if provided and mode is daemon
+        if executionMode == .daemon, let socket = daemonSocket {
+            args.append(contentsOf: ["--daemon-socket", socket])
+        }
 
         return args
     }

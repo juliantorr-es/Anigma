@@ -7,6 +7,7 @@
 
 import AnigmaCore
 import AnigmaMCPModule
+import AnigmaASTServices
 import DatabaseCore
 import ExecutionCore
 import Foundation
@@ -34,6 +35,7 @@ public actor DaemonServer {
     private let healthManager: HealthManager
     private let resourceMonitor: ResourceMonitor
     private let mcpServer: AnigmaMCPServer
+    private let vfsWatcher: VFSWatcherService
 
     private var isRunning: Bool = false
     private var startTime: Date?
@@ -106,6 +108,25 @@ public actor DaemonServer {
         await self.jobRegistry.register(worker: TextChunkingWorker())
         await self.jobRegistry.register(worker: SemanticChunkingWorker())
         await self.jobRegistry.register(worker: CodeGenerationWorker())
+        await self.jobRegistry.register(worker: ASTAnalysisWorker())
+        await self.jobRegistry.register(worker: ASTTransformWorker())
+        await self.jobRegistry.register(worker: CodeSearchWorker())
+        await self.jobRegistry.register(worker: IndexingWorker(database: self.database))
+        await self.jobRegistry.register(worker: TechDebtWorker())
+        await self.jobRegistry.register(worker: AccessumWorker())
+        await self.jobRegistry.register(worker: DiaplasionWorker())
+        await self.jobRegistry.register(worker: WorktreeWorker())
+        await self.jobRegistry.register(worker: GovernanceWorker())
+        await self.jobRegistry.register(worker: MLInferWorker())
+        await self.jobRegistry.register(worker: FFmpegWorker())
+        await self.jobRegistry.register(worker: PandocWorker())
+        await self.jobRegistry.register(worker: GnuPGWorker())
+        await self.jobRegistry.register(worker: ImageMagickWorker())
+        await self.jobRegistry.register(worker: TesseractWorker())
+        await self.jobRegistry.register(worker: LibassWorker())
+        await self.jobRegistry.register(worker: BiberWorker())
+        await self.jobRegistry.register(worker: InkscapeWorker())
+        await self.jobRegistry.register(worker: CtagsWorker())
         await self.jobRegistry.register(worker: NoOpWorker())
 
         // Initialize Worker Pool with Resource Limits (Pass 6)
@@ -156,6 +177,9 @@ public actor DaemonServer {
         // Initialize MCP Server
         self.mcpServer = AnigmaMCPServer()
         
+        // Initialize VFS Watcher
+        self.vfsWatcher = VFSWatcherService()
+        
         // Initialize Resource Monitor
         self.resourceMonitor = ResourceMonitor(
             thresholds: ResourceThresholds(
@@ -186,6 +210,13 @@ public actor DaemonServer {
 
         // Start resource monitoring
         await resourceMonitor.startMonitoring()
+        
+        // Start VFS watching (example root, should be configurable)
+        await vfsWatcher.onFileChange { [weak self] path in
+            Task {
+                await self?.handleFileChange(path: path)
+            }
+        }
         
         // Start HTTP server
         try await httpServer.start(
@@ -1232,6 +1263,24 @@ public actor DaemonServer {
     /// Handle incoming MCP connection
     public func handleMCPConnection(transport: any Transport) async throws {
         try await mcpServer.run(transport: transport)
+    }
+
+    // MARK: - Gemini Bridge Handlers
+
+    public func handleGeminiListTools() async throws -> [String: AnyCodable] {
+        return try await mcpServer.listToolsForGemini()
+    }
+
+    public func handleGeminiCallTool(name: String, arguments: [String: AnyCodable]) async throws -> [String: AnyCodable] {
+        return try await mcpServer.callToolForGemini(name: name, arguments: arguments)
+    }
+
+    private func handleFileChange(path: String) async {
+        logInfo("File changed: \(path)", category: "VFS")
+        // Invalidate AST cache if it's a swift file
+        if path.hasSuffix(".swift") {
+            // TODO: Notify ASTWorker to invalidate cache for this file
+        }
     }
 
     private func isValidReceiptHash(_ hash: String) -> Bool {

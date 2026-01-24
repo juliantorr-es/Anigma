@@ -1,7 +1,10 @@
 import Foundation
+import CapsuleCore
 
-/// Placeholder for LayoutEngineCapsule package.
-/// TODO: Implement Swift wrapper for LayoutEngineCapsule.
-public enum LayoutEngineCapsule {
-    // TODO: Implement
+public final class LayoutEngineCapsule: IdentifiableCapsule {
+    private let wrapper: LayoutEngineCapsuleWrapper
+    
+    public init(config: LayoutEngineConfig) throws {
+        self.wrapper = try LayoutEngineCapsuleWrapper(config: config)
+    }
 }

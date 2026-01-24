@@ -8,6 +8,7 @@
 
 import Foundation
 import CryptoKit
+import MLWorkerCommon
 
 // MARK: - Receipt Export Manager
 
@@ -365,7 +366,7 @@ public class CSVGenerator {
         try csvContent.write(to: URL(fileURLWithPath: outputPath), atomically: true, encoding: .utf8)
     }
     
-    public func generateStatisticsCSV(_ stats: AIStatistics, outputPath: String) throws {
+    public func generateStatisticsCSV(_ stats: SessionStats, outputPath: String) throws {
         var csvContent = "Metric,Value,Percentage\n"
         
         csvContent += "Total Operations,\(stats.totalOperations),100.0%\n"
@@ -386,7 +387,7 @@ public class CSVGenerator {
         csvContent += "\nTask Type Breakdown\n"
         for (taskType, count) in stats.taskTypeStats {
             let percentage = Double(count) / Double(stats.totalOperations) * 100
-            csvContent += "\(taskType.rawValue),\(count),\(String(format: "%.1f%%", percentage))\n"
+            csvContent += "\(taskType),\(count),\(String(format: "%.1f%%", percentage))\n"
         }
         
         try csvContent.write(to: URL(fileURLWithPath: outputPath), atomically: true, encoding: .utf8)

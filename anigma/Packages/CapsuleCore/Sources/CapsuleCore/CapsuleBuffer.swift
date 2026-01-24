@@ -22,7 +22,8 @@ public struct CapsuleBuffer: ~Copyable {
         self.descriptor = anigma_capsule_buffer_t(
             ptr: UnsafeMutablePointer<UInt8>(mutating: bytes.assumingMemoryBound(to: UInt8.self)),
             len: count,
-            cap: count
+            cap: count,
+            flags: 0
         )
         self.owner = .borrowedInput
     }
@@ -35,7 +36,8 @@ public struct CapsuleBuffer: ~Copyable {
         self.descriptor = anigma_capsule_buffer_t(
             ptr: ptr,
             len: 0,  // Nothing written yet
-            cap: capacity
+            cap: capacity,
+            flags: 0
         )
         self.owner = .callerAllocatedOutput
     }
@@ -49,7 +51,8 @@ public struct CapsuleBuffer: ~Copyable {
         self.descriptor = anigma_capsule_buffer_t(
             ptr: ptr,
             len: count,
-            cap: count
+            cap: count,
+            flags: 0
         )
         self.owner = .capsuleAllocatedOutput
     }
@@ -123,7 +126,7 @@ public struct CapsuleBuffer: ~Copyable {
     /// - Returns: The filled buffer if successful.
     /// - Throws: `CapsuleError` if the operation fails.
     public static func fill(
-        _ operation: (UnsafeMutablePointer<anigma_capsule_buffer_t>?) throws -> anigma_status_t
+        _ operation: (UnsafeMutablePointer<anigma_capsule_buffer_t>?) throws -> AnigmaNativeShims.anigma_status_t
     ) throws -> CapsuleBuffer {
         // Phase 1: Query required size
         var err = anigma_capsule_error_t()
@@ -151,10 +154,10 @@ public struct CapsuleBuffer: ~Copyable {
 
 /// Error type for capsule operations.
 public struct CapsuleError: Error {
-    public let status: anigma_status_t
+    public let status: AnigmaNativeShims.anigma_status_t
     public let error: anigma_capsule_error_t
     
-    public init(status: anigma_status_t, error: anigma_capsule_error_t) {
+    public init(status: AnigmaNativeShims.anigma_status_t, error: anigma_capsule_error_t) {
         self.status = status
         self.error = error
     }

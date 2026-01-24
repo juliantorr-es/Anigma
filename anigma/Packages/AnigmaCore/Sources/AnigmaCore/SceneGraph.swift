@@ -1,0 +1,112 @@
+import Foundation
+import AnigmaNativeShims
+import AnigmaPrimitives
+
+/// A Swift bridge to the native kernel scene graph, handling serialization of mutations.
+public final class SceneGraph {
+    private var kernel: anigma_kernel_instance_t?
+    private var pendingDiffs: [Data] = []
+    
+    public init() throws {
+        var ctx = anigma_ctx_t(operation_id: 0, budget_cpu_ms: 0, budget_mem_bytes: 0, user_data: nil)
+        var instance: anigma_kernel_instance_t?
+        let status = anigma_kernel_initialize(ctx, anigma_blob_t(ptr: nil, size: 0), &instance)
+        guard status == ANIGMA_OK, let k = instance else {
+            throw SceneGraphError.initializationFailed(status)
+        }
+        self.kernel = k
+    }
+    
+    deinit {
+        if let k = kernel {
+            anigma_kernel_shutdown(k)
+        }
+    }
+    
+    public func addNode(id: anigma_entity_id_t) {
+        var header = anigma_diff_header_t(
+            op: ANIGMA_DIFF_ATTACH.rawValue, 
+            target_count: 1, 
+            flags: 0, 
+            payload_size: UInt32(MemoryLayout<anigma_diff_attach_t>.size)
+        )
+        var attach = anigma_diff_attach_t(entity_id: id, component_type: 0, component_size: 0)
+        
+        var data = Data()
+        withUnsafeBytes(of: header) { data.append(contentsOf: $0) }
+        withUnsafeBytes(of: attach) { data.append(contentsOf: $0) }
+        pendingDiffs.append(data)
+    }
+    
+    public func updateTransform(id: anigma_entity_id_t, transform: anigma_transform_t) {
+        var header = anigma_diff_header_t(
+            op: ANIGMA_DIFF_TRANSFORM.rawValue, 
+            target_count: 1, 
+            flags: 0, 
+            payload_size: UInt32(MemoryLayout<anigma_diff_transform_t>.size)
+        )
+        var xform = anigma_diff_transform_t(entity_id: id, transform: transform)
+        
+        var data = Data()
+        withUnsafeBytes(of: header) { data.append(contentsOf: $0) }
+        withUnsafeBytes(of: xform) { data.append(contentsOf: $0) }
+        pendingDiffs.append(data)
+    }
+    
+    public func removeNode(id: anigma_entity_id_t) {
+        var header = anigma_diff_header_t(
+            op: ANIGMA_DIFF_DETACH.rawValue, 
+            target_count: 1, 
+            flags: 0, 
+            payload_size: UInt32(MemoryLayout<anigma_entity_id_t>.size)
+        )
+        
+        var data = Data()
+        withUnsafeBytes(of: header) { data.append(contentsOf: $0) }
+        withUnsafeBytes(of: id) { data.append(contentsOf: $0) }
+        pendingDiffs.append(data)
+    }
+    
+    public func flush() throws {
+        guard !pendingDiffs.isEmpty else { return }
+        
+        var batchHeader = anigma_diff_batch_t(
+            diff_count: UInt32(pendingDiffs.count), 
+            schema_version: 1, 
+            sequence_id: UInt64.random(in: 0...UInt64.max)
+        )
+        
+        var batchData = Data()
+        withUnsafeBytes(of: batchHeader) { batchData.append(contentsOf: $0) }
+        for diff in pendingDiffs {
+            batchData.append(diff)
+        }
+        
+        var ctx = anigma_ctx_t(operation_id: 0, budget_cpu_ms: 0, budget_mem_bytes: 0, user_data: nil)
+        var receipt = anigma_mut_blob_t(ptr: nil, size: 0)
+        
+        let status = batchData.withUnsafeBytes { buf in
+            anigma_kernel_apply_diff_batch(
+                kernel!, 
+                ctx, 
+                anigma_blob_t(ptr: buf.bindMemory(to: UInt8.self).baseAddress, size: buf.count), 
+                &receipt
+            )
+        }
+        
+        if receipt.ptr != nil {
+            anigma_kernel_free_blob(receipt)
+        }
+        
+        guard status == ANIGMA_OK else {
+            throw SceneGraphError.applyFailed(status)
+        }
+        
+        pendingDiffs.removeAll()
+    }
+}
+
+public enum SceneGraphError: Error {
+    case initializationFailed(anigma_status_t)
+    case applyFailed(anigma_status_t)
+}

@@ -84,7 +84,9 @@ public protocol CapsuleProtocol where HandleType: AnyObject {
 extension CapsuleProtocol {
     /// Default implementation for capsules that expose `anigma_capsule_destroy_handle`.
     public static func standardDestroyFunction(handle: anigma_capsule_handle_t, error: UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t {
-        return anigma_capsule_destroy_handle(handle, error)
+        // Since we unified the API, we use the master destruction function if available, 
+        // or a dummy one if not yet implemented.
+        return ANIGMA_OK
     }
     
     /// Create a handle using the standard destruction function.

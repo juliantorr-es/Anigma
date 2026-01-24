@@ -84,6 +84,27 @@ let candidates = try await searchService.search(
 - **Buffered Rewriting**: Transformations are applied to an in-memory representation, ensuring that file I/O only occurs once the entire pipeline is complete.
 - **Strict Concurrency**: Fully enabled across the module to ensure safe multi-threaded code analysis.
 
+## Three-Tier Execution Model
+
+To optimize performance and flexibility, AnigmaASTServices supports three execution modes:
+
+1.  **Daemon Mode (Recommended)**: Connects to the running `anigmad` daemon via Unix socket.
+    *   **Pros**: Fastest (uses pre-warmed worker pool), zero process spawn overhead, shared caching.
+    *   **Cons**: Requires daemon to be running.
+    *   **CLI Flag**: `--execution-mode daemon`
+
+2.  **In-Process Mode**: Runs analysis directly within the calling process using `AnigmaASTServicesCore`.
+    *   **Pros**: Fast, no external dependencies, good for scripts/tools.
+    *   **Cons**: Increases memory usage of host process, incurs JIT/setup cost per run.
+    *   **CLI Flag**: `--execution-mode in-process`
+
+3.  **Subprocess Mode (Legacy)**: Spawns `anigma-ast-services` as a separate binary.
+    *   **Pros**: Complete isolation, robustness against crashes.
+    *   **Cons**: Slowest (process spawn overhead ~100-200ms), no shared cache.
+    *   **CLI Flag**: `--execution-mode subprocess`
+
+The `anigma-ast-services` CLI automatically selects the best available mode (Daemon > In-Process > Subprocess) unless explicitly overridden.
+
 ## Dependencies
 
 - **SwiftSyntax**: The underlying Apple-provided AST parser.

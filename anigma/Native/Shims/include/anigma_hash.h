@@ -1,10 +1,10 @@
 #ifndef ANIGMA_HASH_H
 #define ANIGMA_HASH_H
 
-#include <cstdint>
-#include <cstddef>
+#include <stdint.h>
+#include <stddef.h>
 
-#if defined(__cplusplus)
+#ifdef __cplusplus
 extern "C" {
 #endif
 

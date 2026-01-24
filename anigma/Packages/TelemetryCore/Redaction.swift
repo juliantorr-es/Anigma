@@ -50,7 +50,20 @@ public struct Redaction {
         case .hashedToken:
             // Hashed tokens are already safe
             return value
+
+        case .string(let str):
+            // Redact string values based on key
+            if isSensitiveKey(key) {
+                return .string("[REDACTED]")
+            }
+            return .string(str)
         }
+    }
+
+    /// Checks if a telemetry key is considered sensitive.
+    private static func isSensitiveKey(_ key: String) -> Bool {
+        let sensitivePrefixes = ["user.", "auth.", "token.", "secret.", "password.", "email."]
+        return sensitivePrefixes.contains(where: key.lowercased().hasPrefix)
     }
 
     /// Determines the redaction level based on privacy classification.

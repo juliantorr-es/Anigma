@@ -8,7 +8,7 @@
 import AnigmaPrimitives
 import AnigmaCore
 import Foundation
-import SwiftTreeSitter
+import SyntaxCapsule
 
 public struct SemanticChunkingWorker: JobWorker {
     public static let kind = "code.semantic_chunking"

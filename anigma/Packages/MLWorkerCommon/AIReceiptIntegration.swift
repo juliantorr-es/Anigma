@@ -61,7 +61,7 @@ public actor AIReceiptIntegration {
             inputs: inputs,
             provider: provider,
             startTime: startTime,
-            sessionID: currentSessionID
+            sessionID: currentSessionID ?? "default-session"
         )
         
         // Emit start telemetry
@@ -170,7 +170,7 @@ public struct AIOperationContext: Sendable {
     public let operationID: String
     public let modelID: String
     public let taskType: String
-    public let inputs: [String: Any]
+    public let inputs: [String: String] // Changed from Any to String for Sendable compliance
     public let provider: String
     public let startTime: Date
     public let sessionID: String
@@ -187,7 +187,8 @@ public struct AIOperationContext: Sendable {
         self.operationID = operationID
         self.modelID = modelID
         self.taskType = taskType
-        self.inputs = inputs
+        // Convert inputs to strings for Sendable compliance
+        self.inputs = inputs.mapValues { "\($0)" }
         self.provider = provider
         self.startTime = startTime
         self.sessionID = sessionID

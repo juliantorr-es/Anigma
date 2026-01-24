@@ -124,6 +124,11 @@ public actor SidecarBridge {
         return try await post("/status", body: request)
     }
 
+    public func getJobStatus(jobId: String) async throws -> AnigmaGetJobStatusResponse {
+        let request = AnigmaGetJobStatusRequest(ctx: makeContext(), jobId: jobId)
+        return try await post("/job/status", body: request)
+    }
+
     public func listArtifacts(pageToken: String = "", pageSize: UInt32 = 0) async throws -> AnigmaListResponse {
         let request = AnigmaListRequest(ctx: makeContext(), pageToken: pageToken, pageSize: pageSize)
         return try await post("/artifacts/list", body: request)
@@ -137,6 +142,27 @@ public actor SidecarBridge {
     public func getReceipt(receiptHash: String) async throws -> AnigmaReceiptResponse {
         let request = AnigmaReceiptRequest(ctx: makeContext(), receiptHash: receiptHash)
         return try await post("/receipt/get", body: request)
+    }
+
+    public func ingestArtifact(
+        data: Data,
+        kind: String = "blob",
+        mediaType: String = "application/octet-stream",
+        filenameHint: String? = nil
+    ) async throws -> AnigmaIngestArtifactResponse {
+        let request = AnigmaIngestArtifactRequest(
+            ctx: makeContext(),
+            data: data,
+            kind: kind,
+            mediaType: mediaType,
+            filenameHint: filenameHint
+        )
+        return try await post("/artifacts/ingest", body: request)
+    }
+
+    public func retrieveArtifact(hash: String) async throws -> AnigmaRetrieveArtifactResponse {
+        let request = AnigmaRetrieveArtifactRequest(ctx: makeContext(), hash: hash)
+        return try await post("/artifacts/retrieve", body: request)
     }
 
     public func verifyChain(headReceiptHash: String) async throws -> AnigmaVerifyChainResponse {

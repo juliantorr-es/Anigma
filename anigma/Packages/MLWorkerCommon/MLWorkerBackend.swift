@@ -584,6 +584,206 @@ internal func generateMockEmbedding(inputHash: String, modelHash: String, dimens
     return vector
 }
 
+// MARK: - Model Cache (LRU)
+
+/// Thread-safe LRU cache for loaded ML models with memory limit monitoring
+public final class ModelCache<Key: Hashable, Value> {
+    private struct CacheEntry {
+        let key: Key
+        let value: Value
+        let size: Int
+        var lastAccess: Date
+    }
+    
+    private var entries: [Key: CacheEntry]
+    private var accessOrder: [Key]
+    private let lock: NSLock
+    private let maxCount: Int
+    private let maxMemoryBytes: Int
+    private var currentMemoryBytes: Int
+    private let evictionPolicy: EvictionPolicy
+    
+    public enum EvictionPolicy {
+        case countBased
+        case memoryBased
+        case hybrid
+    }
+    
+    public var count: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return entries.count
+    }
+    
+    public var totalMemoryBytes: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return currentMemoryBytes
+    }
+    
+    public var hitCount: Int = 0
+    public var missCount: Int = 0
+    
+    public init(maxCount: Int = 10, maxMemoryBytes: Int = 1024 * 1024 * 1024, // 1GB default
+                evictionPolicy: EvictionPolicy = .hybrid) {
+        self.entries = [:]
+        self.accessOrder = []
+        self.lock = NSLock()
+        self.maxCount = maxCount
+        self.maxMemoryBytes = maxMemoryBytes
+        self.currentMemoryBytes = 0
+        self.evictionPolicy = evictionPolicy
+    }
+    
+    public func get(_ key: Key) -> Value? {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        guard let entry = entries[key] else {
+            missCount += 1
+            return nil
+        }
+        
+        // Update access order
+        if let index = accessOrder.firstIndex(of: key) {
+            accessOrder.remove(at: index)
+            accessOrder.append(key)
+        }
+        
+        // Update last access time
+        entries[key] = CacheEntry(
+            key: entry.key,
+            value: entry.value,
+            size: entry.size,
+            lastAccess: Date()
+        )
+        
+        hitCount += 1
+        return entry.value
+    }
+    
+    public func set(_ key: Key, value: Value, size: Int) {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        // Remove existing entry if present
+        if let existing = entries[key] {
+            currentMemoryBytes -= existing.size
+            if let index = accessOrder.firstIndex(of: key) {
+                accessOrder.remove(at: index)
+            }
+        }
+        
+        // Add new entry
+        let entry = CacheEntry(
+            key: key,
+            value: value,
+            size: size,
+            lastAccess: Date()
+        )
+        entries[key] = entry
+        accessOrder.append(key)
+        currentMemoryBytes += size
+        
+        // Evict if necessary
+        evictIfNeeded()
+    }
+    
+    public func remove(_ key: Key) -> Value? {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        guard let entry = entries.removeValue(forKey: key) else {
+            return nil
+        }
+        
+        if let index = accessOrder.firstIndex(of: key) {
+            accessOrder.remove(at: index)
+        }
+        
+        currentMemoryBytes -= entry.size
+        return entry.value
+    }
+    
+    public func clear() {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        entries.removeAll()
+        accessOrder.removeAll()
+        currentMemoryBytes = 0
+        hitCount = 0
+        missCount = 0
+    }
+    
+    public func getStatistics() -> (hits: Int, misses: Int, hitRate: Double, count: Int, memoryBytes: Int) {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        let total = hitCount + missCount
+        let hitRate = total > 0 ? Double(hitCount) / Double(total) : 0.0
+        return (hitCount, missCount, hitRate, entries.count, currentMemoryBytes)
+    }
+    
+    private func evictIfNeeded() {
+        while shouldEvict() {
+            evictOldest()
+        }
+    }
+    
+    private func shouldEvict() -> Bool {
+        switch evictionPolicy {
+        case .countBased:
+            return entries.count > maxCount
+        case .memoryBased:
+            return currentMemoryBytes > maxMemoryBytes
+        case .hybrid:
+            return entries.count > maxCount || currentMemoryBytes > maxMemoryBytes
+        }
+    }
+    
+    private func evictOldest() {
+        guard !accessOrder.isEmpty else { return }
+        
+        let oldestKey = accessOrder.removeFirst()
+        if let entry = entries.removeValue(forKey: oldestKey) {
+            currentMemoryBytes -= entry.size
+        }
+    }
+}
+
+// MARK: - Model File Hash Helper
+
+internal func computeModelFileHash(_ filePath: String) -> String {
+    let fileURL = URL(fileURLWithPath: filePath)
+    guard FileManager.default.fileExists(atPath: filePath) else {
+        return "no-file"
+    }
+    
+    do {
+        let data = try Data(contentsOf: fileURL)
+        let digest = SHA256.hash(data: data)
+        return digest.compactMap { String(format: "%02x", $0) }.joined()
+    } catch {
+        // Fallback to file modification date
+        let attributes = try? FileManager.default.attributesOfItem(atPath: filePath)
+        let modificationDate = attributes?[.modificationDate] as? Date ?? Date.distantPast
+        let timestamp = Int(modificationDate.timeIntervalSince1970)
+        return "timestamp-\(timestamp)"
+    }
+}
+
+internal func getCacheKeyForModel(_ modelPath: String, engine: MLWorkerEngine) -> String {
+    switch engine {
+    case .coreml, .llama:
+        let hash = computeModelFileHash(modelPath)
+        return "\(modelPath):\(hash)"
+    case .mlx, .deepseek:
+        // For MLX and DeepSeek, modelPath is actually a model ID or URL
+        return modelPath
+    }
+}
+
 // MARK: - DeepSeek Cloud Backend (OpenAI-compatible)
 
 public class DeepSeekBackendRunner: BackendRunner {
@@ -840,9 +1040,29 @@ public class MLXBackendRunner: BackendRunner {
     #if canImport(MLXLMCommon)
         private let chatModelId: String
         private let embedModelId: String
-        private var chatSession: ChatSession?
-        private var chatContainer: MLXLMCommon.ModelContainer?
-        private var embedContainer: MLXEmbedders.ModelContainer?
+        
+        
+        // Static shared caches for model containers (count-based LRU)
+        private static let chatContainerCache = ModelCache<String, MLXLMCommon.ModelContainer>(
+            maxCount: ProcessInfo.processInfo.environment["ML_WORKER_CACHE_MAX_COUNT"].flatMap(Int.init) ?? 2,
+            maxMemoryBytes: 0,
+            evictionPolicy: .countBased
+        )
+        private static let embedContainerCache = ModelCache<String, MLXEmbedders.ModelContainer>(
+            maxCount: ProcessInfo.processInfo.environment["ML_WORKER_CACHE_MAX_COUNT"].flatMap(Int.init) ?? 2,
+            maxMemoryBytes: 0,
+            evictionPolicy: .countBased
+        )
+        
+        /// Get cache statistics for monitoring
+        public static func getCacheStatistics() -> [(cache: String, hits: Int, misses: Int, hitRate: Double, count: Int)] {
+            var stats: [(cache: String, hits: Int, misses: Int, hitRate: Double, count: Int)] = []
+            let chatStats = chatContainerCache.getStatistics()
+            stats.append(("MLXChatContainer", chatStats.hits, chatStats.misses, chatStats.hitRate, chatStats.count))
+            let embedStats = embedContainerCache.getStatistics()
+            stats.append(("MLXEmbedContainer", embedStats.hits, embedStats.misses, embedStats.hitRate, embedStats.count))
+            return stats
+        }
 
         public init(chatModelId: String? = nil, embedModelId: String? = nil) {
             let env = ProcessInfo.processInfo.environment
@@ -923,9 +1143,17 @@ public class MLXBackendRunner: BackendRunner {
             let text = String(data: inputData, encoding: .utf8) ?? ""
             let modelId = self.embedModelId
             let (vector, _): ([Float], Int) = try runBlocking {
-                let container = try await MLXEmbedders.loadModelContainer(configuration: MLXEmbedders.ModelConfiguration(id: modelId))
-                let c = container // Capture for closure
-                return try await c.perform { model, tokenizer, pooling in
+                // Get container from cache or load it
+                let container: MLXEmbedders.ModelContainer
+                if let cached = MLXBackendRunner.embedContainerCache.get(modelId) {
+                    container = cached
+                } else {
+                    container = try await MLXEmbedders.loadModelContainer(configuration: MLXEmbedders.ModelConfiguration(id: modelId))
+                    // Estimate size (placeholder: 1 for count-based eviction)
+                    MLXBackendRunner.embedContainerCache.set(modelId, value: container, size: 1)
+                }
+                
+                return try await container.perform { model, tokenizer, pooling in
                     let tokens = tokenizer.encode(text: text, addSpecialTokens: true)
                     let eos = tokenizer.eosTokenId ?? 0
                     let maxLength = max(tokens.count, 1)
@@ -955,32 +1183,27 @@ public class MLXBackendRunner: BackendRunner {
         private func loadChatSession(
             maxTokens: Int?, temperature: Double?, topP: Double?, seed: Int
         ) throws -> ChatSession {
-            if let session = chatSession {
-                return session
-            }
             let generateParameters = GenerateParameters(
                 maxTokens: maxTokens ?? 512,
                 temperature: Float(temperature ?? 0.7),
                 topP: Float(topP ?? 0.9)
             )
+            
+            // Get container from cache or load it
             let container: MLXLMCommon.ModelContainer = try runBlocking {
-                try await MLXLMCommon.loadModelContainer(id: self.chatModelId)
-            }
-            let session = ChatSession(container, generateParameters: generateParameters)
-            self.chatContainer = container
-            self.chatSession = session
-            return session
-        }
-
-        private func loadEmbedContainer() async throws -> MLXEmbedders.ModelContainer {
-            if let container = embedContainer {
+                if let cached = MLXBackendRunner.chatContainerCache.get(self.chatModelId) {
+                    return cached
+                }
+                let container = try await MLXLMCommon.loadModelContainer(id: self.chatModelId)
+                // Estimate size (placeholder: 1 for count-based eviction)
+                MLXBackendRunner.chatContainerCache.set(self.chatModelId, value: container, size: 1)
                 return container
             }
-            let configuration = MLXEmbedders.ModelConfiguration(id: embedModelId)
-            let container = try await MLXEmbedders.loadModelContainer(configuration: configuration)
-            self.embedContainer = container
-            return container
+            
+            return ChatSession(container, generateParameters: generateParameters)
         }
+
+
     #else
         public init(chatModelId: String? = nil, embedModelId: String? = nil) {
             super.init(engine: .mlx)
@@ -1013,8 +1236,18 @@ public class MLXBackendRunner: BackendRunner {
 // MARK: - CoreML Backend
 
 public class CoreMLBackendRunner: BackendRunner {
-    private var loadedModelPath: String?
-    private var model: MLModel?
+    // Static shared cache for CoreML models (count-based LRU)
+    private static let modelCache = ModelCache<String, MLModel>(
+        maxCount: ProcessInfo.processInfo.environment["ML_WORKER_CACHE_MAX_COUNT"].flatMap(Int.init) ?? 2,
+        maxMemoryBytes: 0,
+        evictionPolicy: .countBased
+    )
+    
+    /// Get cache statistics for monitoring
+    public static func getCacheStatistics() -> [(cache: String, hits: Int, misses: Int, hitRate: Double, count: Int)] {
+        let stats = modelCache.getStatistics()
+        return [("CoreMLModel", stats.hits, stats.misses, stats.hitRate, stats.count)]
+    }
     
     public init() {
         super.init(engine: .coreml)
@@ -1063,17 +1296,24 @@ public class CoreMLBackendRunner: BackendRunner {
     
     #if canImport(CoreML)
     private func loadModelIfNeeded(modelPath: String) throws -> MLModel {
-        if let model = model, loadedModelPath == modelPath {
-            return model
+        // Compute cache key with file hash for invalidation
+        let cacheKey = getCacheKeyForModel(modelPath, engine: self.engine)
+        
+        // Check cache first
+        if let cached = CoreMLBackendRunner.modelCache.get(cacheKey) {
+            return cached
         }
+        
         let modelURL = URL(fileURLWithPath: modelPath)
         let compiledModelURL = try MLModel.compileModel(at: modelURL)
         let configuration = MLModelConfiguration()
         configuration.computeUnits = .all
         let loadedModel = try MLModel(contentsOf: compiledModelURL, configuration: configuration)
-        self.model = loadedModel
-        self.loadedModelPath = modelPath
-        print("Loaded CoreML model from \(modelPath)")
+        
+        // Store in cache with estimated size (placeholder: 1 for count-based)
+        CoreMLBackendRunner.modelCache.set(cacheKey, value: loadedModel, size: 1)
+        print("Loaded CoreML model from \(modelPath) (cached)")
+        
         return loadedModel
     }
     

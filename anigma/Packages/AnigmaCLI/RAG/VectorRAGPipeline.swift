@@ -1,6 +1,6 @@
 import Foundation
 import SQLite3
-import CSQLiteVec
+import VectorStoreCapsule
 
 /// Extended RAG pipeline with vector embedding support
 @available(macOS 13.0, *)
@@ -43,13 +43,11 @@ public actor VectorRAGPipeline {
         }
 
         // Initialize sqlite-vec
-        var errMsg: UnsafeMutablePointer<CChar>?
-        let result = sqlite3_vec_init(dbPtr, &errMsg, nil)
-        if result != SQLITE_OK {
-            let message = errMsg.map { String(cString: $0) } ?? "Unknown error initializing sqlite-vec"
-            sqlite3_free(errMsg)
+        do {
+            try VectorStore.registerExtension(with: UnsafeMutableRawPointer(dbPtr))
+        } catch {
             sqlite3_close(dbPtr)
-            throw VectorRAGError.databaseError(message)
+            throw VectorRAGError.databaseError("Failed to initialize sqlite-vec: \(error)")
         }
 
         self.dbHandle = DBHandle(pointer: dbPtr)
@@ -96,7 +94,7 @@ public actor VectorRAGPipeline {
     }
 
     private func loadVecExtension() throws {
-        // sqlite-vec is compiled into the CSQLiteVec module
+        // sqlite-vec is compiled into the VectorStoreCapsule module
         // The extension is automatically available
     }
 

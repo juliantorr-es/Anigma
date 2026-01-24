@@ -12,7 +12,7 @@ import Foundation
 import ContractsCore
 import GovernanceCore
 import InferenceCore
-import BLAKE3
+// import BLAKE3 - Removed for build stability
 import DatabaseCore
 import AnigmaPrimitives
 

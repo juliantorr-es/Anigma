@@ -6,6 +6,7 @@
 //
 
 import AnigmaDaemonCore
+import AnigmaASTServices
 import AnigmaSidecar
 import DatabaseCore
 import Foundation
@@ -161,6 +162,7 @@ if CommandLine.arguments.contains("--worker") {
         await registry.register(worker: InkscapeWorker())
         await registry.register(worker: BiberWorker())
         await registry.register(worker: MLInferWorker())
+        await registry.register(worker: ASTAnalysisWorker())
         await registry.register(worker: NoOpWorker())
         // Native Sidecar Workers
         await registry.register(worker: OfficeWorker())

@@ -9,6 +9,7 @@
 
 import Foundation
 import SQLite3
+import VectorStoreCapsule
 
 /// Database health metrics for monitoring SQLite performance.
 public struct DatabaseMetrics: Sendable, Codable {
@@ -46,6 +47,9 @@ public actor DatabaseActor {
     private var transactionRetryCount: Int = 0
     private var totalQueryTime: TimeInterval = 0
     private var queryExecutionCount: Int = 0
+    
+    private var vectorAvailable: Bool = false
+    private var vectorVersion: String?
 
     public init(dbPath: String = DatabaseConfiguration.defaultDatabasePath()) {
         self.dbPath = dbPath
@@ -78,6 +82,31 @@ public actor DatabaseActor {
             _ = sqlite3_step(pragmaStmt)
             sqlite3_finalize(pragmaStmt)
         }
+        
+        // Load vector extension
+        loadVectorExtension()
+    }
+    
+    private func loadVectorExtension() {
+        guard let db = connection else { return }
+        
+        do {
+            try VectorStore.registerExtension(with: db)
+            vectorAvailable = true
+            vectorVersion = VectorStore.version
+            logInfo("sqlite-vec loaded successfully (version: \(vectorVersion ?? "unknown"))")
+        } catch {
+            logWarning("Failed to load sqlite-vec: \(error)")
+            vectorAvailable = false
+        }
+    }
+    
+    public func isVectorAvailable() -> Bool {
+        return vectorAvailable
+    }
+    
+    public func getVectorVersion() -> String? {
+        return vectorVersion
     }
 
     private func ensureOpen() throws {

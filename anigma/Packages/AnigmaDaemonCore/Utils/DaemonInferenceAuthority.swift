@@ -9,6 +9,15 @@ import Foundation
 import AnigmaCore
 import InferenceCore
 import ContractsCore
+import MLWorkerCommon
+
+/// ML execution mode for the daemon
+public enum MLExecutionMode: String, Sendable {
+    /// Use in-process ML worker library (fastest, warm context)
+    case inProcess
+    /// Use legacy ml-worker binary subprocess (isolated)
+    case subprocess
+}
 
 private struct DaemonInferenceError: Error, LocalizedError {
     let message: String
@@ -24,10 +33,17 @@ actor DaemonInferenceAuthority: InferenceAuthority {
     private let timeoutSeconds: Int
     private let defaultEngine: MLWorkerEngine
     private let mlWorkerAvailable: Bool
+    private let executionMode: MLExecutionMode
+    private let inProcessWorker: MLWorker
     private let fallbackAuthority: MockInferenceAuthority?
     
-    init(mlWorkerPath: String? = nil, timeoutSeconds: Int = 120, defaultEngine: MLWorkerEngine = .llama) {
-        // Resolve ml-worker path
+    init(
+        mlWorkerPath: String? = nil,
+        timeoutSeconds: Int = 120,
+        defaultEngine: MLWorkerEngine = .llama,
+        executionMode: MLExecutionMode = .inProcess
+    ) {
+        // Resolve ml-worker path for subprocess mode
         let resolvedPath: String
         if let path = mlWorkerPath {
             resolvedPath = path
@@ -39,8 +55,12 @@ actor DaemonInferenceAuthority: InferenceAuthority {
             resolvedPath = "\(currentDir)/.build/debug/ml-worker"
         }
         self.mlWorkerPath = resolvedPath
+        self.executionMode = executionMode
         
-        // Check if ml-worker executable exists and is executable
+        // Initialize in-process worker
+        self.inProcessWorker = MLWorker(engine: defaultEngine)
+        
+        // Check if ml-worker executable exists for subprocess mode
         var isExecutable = false
         if FileManager.default.fileExists(atPath: resolvedPath) {
             isExecutable = FileManager.default.isExecutableFile(atPath: resolvedPath)
@@ -49,13 +69,17 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         self.timeoutSeconds = timeoutSeconds
         self.defaultEngine = defaultEngine
         
-        // Create fallback mock authority if ml-worker not available
-        self.fallbackAuthority = mlWorkerAvailable ? nil : MockInferenceAuthority()
+        // Create fallback mock authority if needed
+        // If inProcess mode, we consider it "available" if MLWorker can initialize (usually it can)
+        self.fallbackAuthority = (executionMode == .inProcess || mlWorkerAvailable) ? nil : MockInferenceAuthority()
         
-        if !mlWorkerAvailable {
-            print("[DaemonInferenceAuthority] ml-worker not available at \(resolvedPath), using mock fallback")
-        } else {
-            print("[DaemonInferenceAuthority] ml-worker available at \(resolvedPath)")
+        print("[DaemonInferenceAuthority] Initialized in \(executionMode.rawValue) mode")
+        if executionMode == .subprocess {
+            if !mlWorkerAvailable {
+                print("[DaemonInferenceAuthority] Warning: ml-worker not available at \(resolvedPath)")
+            } else {
+                print("[DaemonInferenceAuthority] ml-worker available at \(resolvedPath)")
+            }
         }
     }
     
@@ -65,8 +89,8 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         speculativeConfig: SpeculativeConfiguration?,
         context: ExecutionContext
     ) async throws -> InferenceResponse {
-        // Use fallback mock authority if ml-worker not available
-        guard mlWorkerAvailable else {
+        // Use fallback if nothing is available
+        guard executionMode == .inProcess || mlWorkerAvailable else {
             guard let fallback = fallbackAuthority else {
                 throw DaemonInferenceError("ML worker not available and no fallback")
             }
@@ -81,8 +105,14 @@ actor DaemonInferenceAuthority: InferenceAuthority {
             try? FileManager.default.removeItem(at: requestDir)
         }
         
-        // Execute ml-worker
-        let response = try await executeMLWorker(request: mlRequest)
+        // Execute based on mode
+        let response: MLWorkerResponse
+        switch executionMode {
+        case .inProcess:
+            response = try await inProcessWorker.performTaskAsync(mlRequest)
+        case .subprocess:
+            response = try await executeMLWorkerSubprocess(request: mlRequest)
+        }
         
         // Convert MLWorkerResponse to InferenceResponse
         return try convertToInferenceResponse(response, requestDir: requestDir, originalRequest: request)
@@ -92,8 +122,8 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         _ task: InferenceRequest,
         context: ExecutionContext
     ) async throws -> InferenceResponse {
-        // Use fallback if needed, otherwise proceed with normal chatCompletion
-        guard mlWorkerAvailable else {
+        // Use fallback if needed
+        guard executionMode == .inProcess || mlWorkerAvailable else {
             guard let fallback = fallbackAuthority else {
                 throw DaemonInferenceError("ML worker not available and no fallback")
             }
@@ -114,8 +144,9 @@ actor DaemonInferenceAuthority: InferenceAuthority {
     }
     
     func getStatus() async -> [InferencePlaneStatus] {
+        let isAvailable = executionMode == .inProcess || mlWorkerAvailable
         return [
-            InferencePlaneStatus(planeId: "daemon", isAvailable: mlWorkerAvailable, currentLoad: 0.0)
+            InferencePlaneStatus(planeId: "daemon", isAvailable: isAvailable, currentLoad: 0.0)
         ]
     }
     
@@ -161,7 +192,7 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         return (mlRequest, requestDir, inputFile)
     }
     
-    private func executeMLWorker(request: MLWorkerRequest) async throws -> MLWorkerResponse {
+    private func executeMLWorkerSubprocess(request: MLWorkerRequest) async throws -> MLWorkerResponse {
         let encoder = JSONEncoder()
         let requestData = try encoder.encode(request)
         let requestString = String(data: requestData, encoding: .utf8) ?? ""

@@ -9,11 +9,17 @@
 //  Designed to be called as subprocess from Harmonia to keep SwiftSyntax
 //  out of main build chain.
 //
+//  Enhanced with daemon delegation and in-process execution options.
+//
 
 import Foundation
 import SwiftSyntax
 import SwiftParser
 import ArgumentParser
+import AnigmaASTServicesCore
+import AnigmaSidecar
+import AnigmaPrimitives
+import CryptoKit
 
 // MARK: - CLI Interface
 
@@ -45,6 +51,12 @@ struct AnigmaASTServices: ParsableCommand {
 
     @Option(name: .long, help: "Keep process alive for stdin/stdio mode")
     var stdio: Bool = false
+    
+    @Option(name: .long, help: "Execution mode: daemon, in-process, subprocess")
+    var executionMode: ExecutionMode = .inProcess
+
+    @Option(name: .long, help: "Daemon socket path (for daemon mode)")
+    var daemonSocket: String?
 }
 
 enum Operation: String, ExpressibleByArgument {
@@ -59,52 +71,58 @@ enum OutputFormat: String, ExpressibleByArgument {
     case ndjson
 }
 
+enum ExecutionMode: String, ExpressibleByArgument {
+    case daemon
+    case inProcess = "in-process"
+    case subprocess
+}
+
 // MARK: - Main Execution
 
 extension AnigmaASTServices {
-    mutating func run() throws {
+    mutating func run() async throws {
         switch operation {
         case .parse:
-            try runParse()
+            try await runParse()
         case .analyze:
-            try runAnalyze()
+            try await runAnalyze()
         case .batch:
-            try runBatch()
+            try await runBatch()
         case .stdio:
-            try runStdio()
+            try await runStdio()
         }
     }
 
-    private func runParse() throws {
+    private func runParse() async throws {
         guard let file = file else {
             throw ValidationError.missingFile
         }
 
-        let result = try parseFile(file)
+        let result = try await executeParse(file: file, visitors: parseVisitors())
         outputResult(result)
     }
 
-    private func runAnalyze() throws {
+    private func runAnalyze() async throws {
         guard let file = file else {
             throw ValidationError.missingFile
         }
 
-        let result = try analyzeFile(file, visitors: visitors.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) })
+        let result = try await executeAnalyze(file: file, visitors: parseVisitors())
         outputResult(result)
     }
 
-    private func runBatch() throws {
+    private func runBatch() async throws {
         guard let directory = directory else {
             throw ValidationError.missingDirectory
         }
 
-        let results = try analyzeDirectory(directory, visitors: visitors.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) })
+        let results = try await executeBatch(directory: directory, visitors: parseVisitors())
         for result in results {
             outputResult(result)
         }
     }
 
-    private func runStdio() throws {
+    private func runStdio() async throws {
         // Keep process alive for stdin/stdio mode
         let stdin = FileHandle.standardInput
         let stdout = FileHandle.standardOutput
@@ -118,8 +136,8 @@ extension AnigmaASTServices {
             guard let line = line else { continue }
 
             do {
-                let request = try JSONDecoder().decode(BatchRequest.self, from: line.data(using: .utf8)!)
-                let result = try processBatchRequest(request)
+                let request = try JSONDecoder().decode(ASTBatchRequest.self, from: line.data(using: .utf8)!)
+                let result = try await processBatchRequest(request)
                 let output = try JSONEncoder().encode(result)
                 stdout.write(output)
                 stdout.write("\n".data(using: .utf8)!)
@@ -128,7 +146,7 @@ extension AnigmaASTServices {
                     schemaVersion: "1.0.0",
                     requestId: UUID().uuidString,
                     ok: false,
-                    error: ErrorInfo(
+                    error: ASTErrorInfo(
                         code: "PROCESSING_ERROR",
                         message: error.localizedDescription
                     )
@@ -139,250 +157,288 @@ extension AnigmaASTServices {
             }
         }
     }
-}
 
-// MARK: - Data Models
+    // MARK: - Execution Mode Routing
 
-struct BatchRequest: Codable {
-    let operation: String
-    let file: String?
-    let visitors: [String]?
-}
-
-struct Finding: Codable {
-    let type: String
-    let ruleId: String
-    let severity: String
-    let message: String
-    let filePath: String
-    let lineNumber: Int
-    let columnNumber: Int?
-    let context: String
-}
-
-struct ErrorInfo: Codable {
-    let code: String
-    let message: String
-}
-
-enum ResultType: String, Codable {
-    case parse
-    case analyze
-    case error
-}
-
-struct ASTResult: Codable {
-    let type: ResultType
-    let schemaVersion: String
-    let requestId: String
-    let ok: Bool
-    let filePath: String?
-    let sourceSize: Int?
-    let nodeCount: Int?
-    let parseTime: Date?
-    let visitors: [String]?
-    let findings: [Finding]?
-    let analysisTime: Date?
-    let error: ErrorInfo?
-    
-    private init(
-        type: ResultType,
-        schemaVersion: String,
-        requestId: String,
-        ok: Bool,
-        filePath: String? = nil,
-        sourceSize: Int? = nil,
-        nodeCount: Int? = nil,
-        parseTime: Date? = nil,
-        visitors: [String]? = nil,
-        findings: [Finding]? = nil,
-        analysisTime: Date? = nil,
-        error: ErrorInfo? = nil
-    ) {
-        self.type = type
-        self.schemaVersion = schemaVersion
-        self.requestId = requestId
-        self.ok = ok
-        self.filePath = filePath
-        self.sourceSize = sourceSize
-        self.nodeCount = nodeCount
-        self.parseTime = parseTime
-        self.visitors = visitors
-        self.findings = findings
-        self.analysisTime = analysisTime
-        self.error = error
-    }
-    
-    static func parse(
-        schemaVersion: String,
-        requestId: String,
-        ok: Bool,
-        filePath: String,
-        sourceSize: Int,
-        nodeCount: Int?,
-        parseTime: Date?
-    ) -> ASTResult {
-        return ASTResult(
-            type: .parse,
-            schemaVersion: schemaVersion,
-            requestId: requestId,
-            ok: ok,
-            filePath: filePath,
-            sourceSize: sourceSize,
-            nodeCount: nodeCount,
-            parseTime: parseTime
-        )
-    }
-    
-    static func analyze(
-        schemaVersion: String,
-        requestId: String,
-        ok: Bool,
-        filePath: String,
-        sourceSize: Int,
-        visitors: [String],
-        findings: [Finding],
-        analysisTime: Date?
-    ) -> ASTResult {
-        return ASTResult(
-            type: .analyze,
-            schemaVersion: schemaVersion,
-            requestId: requestId,
-            ok: ok,
-            filePath: filePath,
-            sourceSize: sourceSize,
-            visitors: visitors,
-            findings: findings,
-            analysisTime: analysisTime
-        )
-    }
-    
-    static func error(
-        schemaVersion: String,
-        requestId: String,
-        ok: Bool,
-        error: ErrorInfo
-    ) -> ASTResult {
-        return ASTResult(
-            type: .error,
-            schemaVersion: schemaVersion,
-            requestId: requestId,
-            ok: ok,
-            error: error
-        )
-    }
-}
-
-enum ValidationError: LocalizedError {
-    case missingFile
-    case missingDirectory
-    case unknownOperation(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .missingFile:
-            return "File path required"
-        case .missingDirectory:
-            return "Directory path required"
-        case .unknownOperation(let op):
-            return "Unknown operation: \(op)"
+    private func executeParse(file: String, visitors: [String]) async throws -> ASTResult {
+        switch executionMode {
+        case .daemon:
+            return try await executeViaDaemon(task: .parse, file: file, visitors: visitors)
+        case .inProcess:
+            return try await executeInProcess(task: .parse, file: file, visitors: visitors)
+        case .subprocess:
+            return try executeLegacyParse(file: file)
         }
     }
-}
 
-// MARK: - Core Processing
-
-private func parseFile(_ path: String) throws -> ASTResult {
-    let source = try String(contentsOfFile: path, encoding: .utf8)
-    let syntax = try Parser.parse(source: source)
-
-    return ASTResult.parse(
-        schemaVersion: "1.0.0",
-        requestId: UUID().uuidString,
-        ok: true,
-        filePath: path,
-        sourceSize: source.count,
-        nodeCount: countNodes(syntax),
-        parseTime: Date()
-    )
-}
-
-private func analyzeFile(_ path: String, visitors: [String]) throws -> ASTResult {
-    let source = try String(contentsOfFile: path, encoding: .utf8)
-    let syntax = try Parser.parse(source: source)
-
-    var findings: [Finding] = []
-
-    // Run requested visitors
-    if visitors.contains("security") {
-        findings.append(contentsOf: runSecurityVisitor(syntax: syntax, filePath: path, source: source))
+    private func executeAnalyze(file: String, visitors: [String]) async throws -> ASTResult {
+        switch executionMode {
+        case .daemon:
+            return try await executeViaDaemon(task: .analyze, file: file, visitors: visitors)
+        case .inProcess:
+            return try await executeInProcess(task: .analyze, file: file, visitors: visitors)
+        case .subprocess:
+            return try executeLegacyAnalyze(file: file, visitors: visitors)
+        }
     }
 
-    if visitors.contains("quality") {
-        findings.append(contentsOf: runQualityVisitor(syntax: syntax, filePath: path, source: source))
+    private func executeBatch(directory: String, visitors: [String]) async throws -> [ASTResult] {
+        // For batch, we can still delegate to daemon or in-process worker
+        // For simplicity, we'll process each file individually
+        let fileManager = FileManager.default
+        let swiftFiles = try fileManager.contentsOfDirectory(atPath: directory)
+            .filter { $0.hasSuffix(".swift") }
+            .map { "\(directory)/\($0)" }
+
+        var results: [ASTResult] = []
+        for file in swiftFiles {
+            do {
+                let result = try await executeAnalyze(file: file, visitors: visitors)
+                results.append(result)
+            } catch {
+                let errorResult = ASTResult.error(
+                    schemaVersion: "1.0.0",
+                    requestId: UUID().uuidString,
+                    ok: false,
+                    error: ASTErrorInfo(
+                        code: "FILE_ERROR",
+                        message: "Failed to analyze \(file): \(error.localizedDescription)"
+                    )
+                )
+                results.append(errorResult)
+            }
+        }
+        return results
     }
 
-    return ASTResult.analyze(
-        schemaVersion: "1.0.0",
-        requestId: UUID().uuidString,
-        ok: true,
-        filePath: path,
-        sourceSize: source.count,
-        visitors: visitors,
-        findings: findings,
-        analysisTime: Date()
-    )
-}
+    // MARK: - Daemon Execution
 
-private func analyzeDirectory(_ path: String, visitors: [String]) throws -> [ASTResult] {
-    let fileManager = FileManager.default
-    let swiftFiles = try fileManager.contentsOfDirectory(atPath: path)
-        .filter { $0.hasSuffix(".swift") }
-        .map { "\(path)/\($0)" }
+    private func executeViaDaemon(task: ASTTaskKind, file: String, visitors: [String]) async throws -> ASTResult {
+        let socketPath = try resolveDaemonSocketPath()
+        let bridge = try await SidecarBridge.create(
+            socketPath: socketPath,
+            clientName: "anigma-ast-services",
+            scopes: ["job.submit", "job.read", "vault.read", "vault.write"]
+        )
 
-    var results: [ASTResult] = []
-    for file in swiftFiles {
+        // 1. Ingest input file
+        let fileData = try Data(contentsOf: URL(fileURLWithPath: file))
+        let ingestResponse = try await bridge.ingestArtifact(
+            data: fileData,
+            kind: "source.swift",
+            mediaType: "text/x-swift",
+            filenameHint: URL(fileURLWithPath: file).lastPathComponent
+        )
+        let inputHash = ingestResponse.artifact.hash
+
+        // 2. Prepare Config
+        let operation: ASTOperation
+        switch task {
+        case .parse: operation = .parse
+        case .analyze: operation = .analyze
+        case .batch: operation = .batch
+        default: throw ValidationError.unknownOperation(task.rawValue)
+        }
+
+        let config = ASTAnalysisConfig(
+            operation: operation,
+            visitors: visitors,
+            maxFileSize: 100 * 1024 * 1024,
+            cacheEnabled: true,
+            cacheSizeLimit: nil,
+            timeoutSeconds: 60
+        )
+        let configData = try JSONEncoder().encode(config)
+
+        // 3. Submit Job
+        let jobSpec = AnigmaJobSpec(
+            kind: "ast.analyze",
+            configCanonical: configData,
+            inputs: [
+                AnigmaArtifactRef(hash: inputHash, mediaType: "text/x-swift", sizeBytes: UInt64(fileData.count))
+            ]
+        )
+        
+        let submitResponse = try await bridge.submitJob(jobSpec)
+        guard let jobId = submitResponse.jobId else {
+            throw ValidationError.executionFailed("Daemon accepted job but returned no Job ID: \(submitResponse.error?.message ?? "unknown error")")
+        }
+
+        // 4. Wait for completion
+        for try await event in try await bridge.streamJobEvents(jobId: jobId) {
+            if event.type == "completed" {
+                // Get job status to find outputs
+                let jobStatus = try await bridge.getJobStatus(jobId: jobId)
+                
+                for output in jobStatus.outputs {
+                    if output.mediaType == "application/json" {
+                         let retrieveResponse = try await bridge.retrieveArtifact(hash: output.hash)
+                         let data = retrieveResponse.data
+                         
+                         // Try to decode as ASTResult
+                         if let result = try? JSONDecoder().decode(ASTResult.self, from: data) {
+                             return result
+                         }
+                    }
+                }
+                
+                throw ValidationError.executionFailed("Job completed but no valid ASTResult found in outputs")
+            } else if event.type == "failed" {
+                throw ValidationError.executionFailed("Job failed: \(event.message)")
+            }
+        }
+        
+        throw ValidationError.executionFailed("Job stream ended without completion")
+    }
+
+    private func resolveDaemonSocketPath() throws -> String {
+        // 1. Command-line argument
+        if let socket = daemonSocket {
+            return socket
+        }
+
+        // 2. Environment variable
+        if let envSocket = ProcessInfo.processInfo.environment["ANIGMA_DAEMON_SOCKET"] {
+            return envSocket
+        }
+
+        // 3. Default socket path
+        let defaultSocket = "/tmp/anigmad.sock"
+        if FileManager.default.fileExists(atPath: defaultSocket) {
+            return defaultSocket
+        }
+
+        throw ValidationError.daemonUnavailable("Daemon socket not found. Please specify --daemon-socket or ensure daemon is running.")
+    }
+
+    // MARK: - In-Process Execution
+
+    private func executeInProcess(task: ASTTaskKind, file: String, visitors: [String]) async throws -> ASTResult {
+        let worker = ASTWorker()
+        let fileData = try Data(contentsOf: URL(fileURLWithPath: file))
+        let fileHash = SHA256.hash(data: fileData).compactMap { String(format: "%02x", $0) }.joined()
+
+        let request = ASTWorkerRequest(
+            requestId: UUID().uuidString,
+            runId: "cli-in-process",
+            stepId: "ast-\(task.rawValue)",
+            task: task,
+            inputs: [ASTArtifactRef(path: file, hash: fileHash)],
+            options: ASTTaskOptions(visitors: visitors)
+        )
+
+        let response = try await worker.performTask(request)
+        guard response.status == .completed else {
+            throw ValidationError.executionFailed("AST worker failed: \(response.errorMessage ?? "unknown error")")
+        }
+
+        // Read result from output artifact
+        guard let output = response.outputs.first else {
+            throw ValidationError.executionFailed("No output produced")
+        }
+
+        let resultData = try Data(contentsOf: URL(fileURLWithPath: output.path))
+        return try JSONDecoder().decode(ASTResult.self, from: resultData)
+    }
+
+    // MARK: - Legacy Subprocess Execution (Original Implementation)
+
+    private func executeLegacyParse(file: String) throws -> ASTResult {
+        let source = try String(contentsOfFile: file, encoding: .utf8)
+        let syntax = try Parser.parse(source: source)
+
+        return ASTResult.parse(
+            schemaVersion: "1.0.0",
+            requestId: UUID().uuidString,
+            ok: true,
+            filePath: file,
+            sourceSize: source.count,
+            nodeCount: countNodes(syntax),
+            parseTime: Date()
+        )
+    }
+
+    private func executeLegacyAnalyze(file: String, visitors: [String]) throws -> ASTResult {
+        let source = try String(contentsOfFile: file, encoding: .utf8)
+        let syntax = try Parser.parse(source: source)
+
+        var findings: [ASTFinding] = []
+
+        // Run requested visitors
+        if visitors.contains("security") {
+            findings.append(contentsOf: runSecurityVisitor(syntax: syntax, filePath: file, source: source))
+        }
+
+        if visitors.contains("quality") {
+            findings.append(contentsOf: runQualityVisitor(syntax: syntax, filePath: file, source: source))
+        }
+
+        return ASTResult.analyze(
+            schemaVersion: "1.0.0",
+            requestId: UUID().uuidString,
+            ok: true,
+            filePath: file,
+            sourceSize: source.count,
+            visitors: visitors,
+            findings: findings,
+            analysisTime: Date()
+        )
+    }
+
+    // MARK: - Utility Methods
+
+    private func parseVisitors() -> [String] {
+        return visitors.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+    }
+
+    private func processBatchRequest(_ request: ASTBatchRequest) async throws -> ASTResult {
+        switch request.operation {
+        case "parse":
+            guard let filePath = request.file else {
+                throw ValidationError.missingFile
+            }
+            return try await executeParse(file: filePath, visitors: request.visitors ?? ["security", "quality"])
+        case "analyze":
+            guard let filePath = request.file else {
+                throw ValidationError.missingFile
+            }
+            return try await executeAnalyze(file: filePath, visitors: request.visitors ?? ["security", "quality"])
+        default:
+            throw ValidationError.unknownOperation(request.operation)
+        }
+    }
+
+    private func outputResult(_ result: ASTResult) {
         do {
-            let result = try analyzeFile(file, visitors: visitors)
-            results.append(result)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            encoder.dateEncodingStrategy = .iso8601
+            
+            let json = try encoder.encode(result)
+            print(String(data: json, encoding: .utf8)!)
         } catch {
             let errorResult = ASTResult.error(
                 schemaVersion: "1.0.0",
                 requestId: UUID().uuidString,
                 ok: false,
-                error: ErrorInfo(
-                    code: "FILE_ERROR",
-                    message: "Failed to analyze \(file): \(error.localizedDescription)"
+                error: ASTErrorInfo(
+                    code: "JSON_ERROR",
+                    message: "Failed to encode result: \(error.localizedDescription)"
                 )
             )
-            results.append(errorResult)
+            
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let json = try! encoder.encode(errorResult)
+            print(String(data: json, encoding: .utf8)!)
         }
-    }
-
-    return results
-}
-
-private func processBatchRequest(_ request: BatchRequest) throws -> ASTResult {
-    switch request.operation {
-    case "parse":
-        guard let filePath = request.file else {
-            throw ValidationError.missingFile
-        }
-        return try parseFile(filePath)
-    case "analyze":
-        guard let filePath = request.file else {
-            throw ValidationError.missingFile
-        }
-        return try analyzeFile(filePath, visitors: request.visitors ?? ["security", "quality"])
-    default:
-        throw ValidationError.unknownOperation(request.operation)
     }
 }
 
 // MARK: - Visitor Implementations
 
-private func runSecurityVisitor(syntax: SourceFileSyntax, filePath: String, source: String) -> [Finding] {
-    var findings: [Finding] = []
+private func runSecurityVisitor(syntax: SourceFileSyntax, filePath: String, source: String) -> [ASTFinding] {
+    var findings: [ASTFinding] = []
 
     // Simple string-based security analysis
     let lines = source.components(separatedBy: .newlines)
@@ -394,7 +450,7 @@ private func runSecurityVisitor(syntax: SourceFileSyntax, filePath: String, sour
 
         for keyword in secretKeywords {
             if lowerLine.contains(keyword) {
-                findings.append(Finding(
+                findings.append(ASTFinding(
                     type: "security",
                     ruleId: "sec-secret-001",
                     severity: "error",
@@ -411,8 +467,8 @@ private func runSecurityVisitor(syntax: SourceFileSyntax, filePath: String, sour
     return findings
 }
 
-private func runQualityVisitor(syntax: SourceFileSyntax, filePath: String, source: String) -> [Finding] {
-    var findings: [Finding] = []
+private func runQualityVisitor(syntax: SourceFileSyntax, filePath: String, source: String) -> [ASTFinding] {
+    var findings: [ASTFinding] = []
 
     let lines = source.components(separatedBy: .newlines)
 
@@ -427,7 +483,7 @@ private func runQualityVisitor(syntax: SourceFileSyntax, filePath: String, sourc
 
         // Check for force unwrapping
         if line.contains("!") {
-            findings.append(Finding(
+            findings.append(ASTFinding(
                 type: "quality",
                 ruleId: "quality-002",
                 severity: "warning",
@@ -441,7 +497,7 @@ private func runQualityVisitor(syntax: SourceFileSyntax, filePath: String, sourc
 
         // Check for long lines
         if line.count > 120 {
-            findings.append(Finding(
+            findings.append(ASTFinding(
                 type: "quality",
                 ruleId: "quality-003",
                 severity: "info",
@@ -464,27 +520,44 @@ private func countNodes(_ syntax: SyntaxProtocol) -> Int {
     return syntax.description.count / 10 // Rough estimate of nodes
 }
 
-private func outputResult(_ result: ASTResult) {
-    do {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+// MARK: - Errors
 
-        let json = try encoder.encode(result)
-        print(String(data: json, encoding: .utf8)!)
-    } catch {
-        let errorResult = ASTResult.error(
-            schemaVersion: "1.0.0",
-            requestId: UUID().uuidString,
-            ok: false,
-            error: ErrorInfo(
-                code: "JSON_ERROR",
-                message: "Failed to encode result: \(error.localizedDescription)"
-            )
-        )
+enum ValidationError: LocalizedError {
+    case missingFile
+    case missingDirectory
+    case unknownOperation(String)
+    case daemonUnavailable(String)
+    case executionFailed(String)
 
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let json = try! encoder.encode(errorResult)
-        print(String(data: json, encoding: .utf8)!)
+    var errorDescription: String? {
+        switch self {
+        case .missingFile:
+            return "File path required"
+        case .missingDirectory:
+            return "Directory path required"
+        case .unknownOperation(let op):
+            return "Unknown operation: \(op)"
+        case .daemonUnavailable(let reason):
+            return "Daemon unavailable: \(reason)"
+        case .executionFailed(let reason):
+            return "Execution failed: \(reason)"
+        }
     }
+}
+
+// MARK: - Daemon Configuration Models
+
+private enum ASTOperation: String, Codable {
+    case parse = "parse"
+    case analyze = "analyze"
+    case batch = "batch"
+}
+
+private struct ASTAnalysisConfig: Codable {
+    let operation: ASTOperation
+    let visitors: [String]
+    let maxFileSize: Int
+    let cacheEnabled: Bool
+    let cacheSizeLimit: Int?
+    let timeoutSeconds: Int
 }

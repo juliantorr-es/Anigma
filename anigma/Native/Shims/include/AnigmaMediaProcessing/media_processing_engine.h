@@ -2,12 +2,16 @@
 #define ANIGMA_MEDIA_PROCESSING_ENGINE_H
 
 #include "anigma_capsule_core.h"
+
+#ifdef __cplusplus
 #include <memory>
 #include <vector>
 #include <unordered_map>
 #include <mutex>
 #include <chrono>
 #include <cstdint>
+#include <list>
+#include <shared_mutex>
 
 #ifdef ENABLE_OPENCV
 #include <opencv2/opencv.hpp>
@@ -310,5 +314,7 @@ public:
 };
 
 } // namespace AnigmaMediaProcessing
+
+#endif // __cplusplus
 
 #endif // ANIGMA_MEDIA_PROCESSING_ENGINE_H

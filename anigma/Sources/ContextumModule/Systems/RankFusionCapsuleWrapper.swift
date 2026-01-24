@@ -2,7 +2,7 @@ import Foundation
 import AnigmaNativeShims
 import AnigmaPrimitives
 import CapsuleCore
-import BLAKE3
+import Crypto // Replaces BLAKE3
 
 /// Fusion strategy types for rank fusion
 public enum FusionStrategy: UInt32, CaseIterable, Sendable {
@@ -448,14 +448,11 @@ public actor RankFusionCapsuleWrapper {
     }
     
     private func hashStringToUInt64(_ string: String) -> UInt64 {
-        // Compute BLAKE3 hash and take first 8 bytes as UInt64 (little-endian)
+        // Compute SHA256 hash and take first 8 bytes as UInt64 (little-endian)
         let data = Data(string.utf8)
-        let hash = BLAKE3.hash(contentsOf: data)
+        let hash = SHA256.hash(data: data)
         let prefix = hash.prefix(8)
-        guard prefix.count == 8 else {
-            // This should never happen with BLAKE3
-            fatalError("BLAKE3 hash produced less than 8 bytes")
-        }
+        
         return prefix.withUnsafeBytes { $0.load(as: UInt64.self) }
     }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 import SQLite3
-import CSQLiteVec
+import VectorStoreCapsule
 
 /// Configuration for CLI database with FTS5 and optional sqlite-vec support.
 public struct CLIDatabaseConfig: Sendable {
@@ -102,17 +102,13 @@ public actor CLIDatabaseActor {
         guard let db = connection else { return }
 
         // Load sqlite-vec extension
-        var errMsg: UnsafeMutablePointer<Int8>?
-        let result = sqlite3_vec_init(db, &errMsg, nil)
-
-        if result == SQLITE_OK {
+        do {
+            try VectorStore.registerExtension(with: UnsafeMutableRawPointer(db))
             vectorAvailable = true
-            vectorVersion = await detectVectorVersion()
+            vectorVersion = VectorStore.version
             logInfo("sqlite-vec loaded successfully (version: \(vectorVersion ?? "unknown"))")
-        } else {
-            let msg = errMsg.map { String(cString: $0) } ?? "Unknown error"
-            sqlite3_free(errMsg)
-            logWarning("Failed to load sqlite-vec: \(msg)")
+        } catch {
+            logWarning("Failed to load sqlite-vec: \(error)")
             vectorAvailable = false
         }
     }
@@ -132,15 +128,8 @@ public actor CLIDatabaseActor {
 
     private func detectVectorVersion() async -> String? {
         // Query sqlite-vec version
-        do {
-            let rows = try await query("SELECT vec_version() as version")
-            if let row = rows.first, let version = row["version"]?.asString {
-                return version
-            }
-        } catch {
-            // Fallback version detection
-        }
-        return "0.1.x"
+        // Using static version from VectorStoreCapsule
+        return VectorStore.version
     }
 
     private func initializeSchema() async throws {

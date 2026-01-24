@@ -17,12 +17,13 @@ public enum TelemetryValue: Sendable, Hashable {
     case boolean(Bool)
     case limitedTag(TelemetryTag)
     case hashedToken(TelemetryHash)
+    case string(String) // Added for internal use/audit trails where strictly necessary
 }
 
 // MARK: - Codable Wire Support
 extension TelemetryValue: Codable {
-    private enum Kind: String, Codable { case int, int64, double, bool, tag, hash }
-    private enum CodingKeys: String, CodingKey { case kind, int, int64, double, bool, tag, hash }
+    private enum Kind: String, Codable { case int, int64, double, bool, tag, hash, string }
+    private enum CodingKeys: String, CodingKey { case kind, int, int64, double, bool, tag, hash, string }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -45,6 +46,9 @@ extension TelemetryValue: Codable {
         case .hashedToken(let value):
             try container.encode(Kind.hash, forKey: .kind)
             try container.encode(value, forKey: .hash)
+        case .string(let value):
+            try container.encode(Kind.string, forKey: .kind)
+            try container.encode(value, forKey: .string)
         }
     }
 
@@ -63,6 +67,8 @@ extension TelemetryValue: Codable {
             self = .limitedTag(try container.decode(TelemetryTag.self, forKey: .tag))
         case .hash:
             self = .hashedToken(try container.decode(TelemetryHash.self, forKey: .hash))
+        case .string:
+            self = .string(try container.decode(String.self, forKey: .string))
         }
     }
 }
@@ -121,6 +127,10 @@ public struct TelemetryHash: Sendable, Hashable {
         let hash = SHA256.hash(data: data)
         self.hex = hash.compactMap { String(format: "%02x", $0) }.joined()
         self.algorithm = .sha256
+    }
+
+    public var value: String {
+        return hex
     }
 
     public init(algorithm: Algorithm, hex: String) throws {

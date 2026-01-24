@@ -400,6 +400,17 @@ public actor HTTPServerManager {
             )
         }
 
+        // Gemini Bridge: List Tools
+        router.get("/v1/tools") { _, _ in
+            return try await daemon.handleGeminiListTools()
+        }
+
+        // Gemini Bridge: Call Tool
+        router.post("/v1/tools/call") { request, context in
+            let body = try await request.decode(as: GeminiToolCallRequest.self, context: context)
+            return try await daemon.handleGeminiCallTool(name: body.name, arguments: body.arguments)
+        }
+
         // MCP Endpoint (Unified)
         router.post("/mcp") { request, context in
             let (stream, continuation) = AsyncStream<String>.makeStream()
@@ -569,12 +580,15 @@ public actor HTTPServerManager {
         try? await group.shutdownGracefully()
     }
 
-    private func createSocketDirectory(_ socketPath: String) throws {
-        let dir = (socketPath as NSString).deletingLastPathComponent
-        try FileManager.default.createDirectory(
-            atPath: dir,
-            withIntermediateDirectories: true,
-            attributes: nil
-        )
+// MARK: - Gemini Bridge Types
+
+struct GeminiToolCallRequest: Codable {
+    let name: String
+    let arguments: [String: AnyCodable]
+}
+
+extension Dictionary: ResponseGenerator where Key == String, Value == AnyCodable {
+    public func response(from request: Request, context: some RequestContext) throws -> Response {
+        return try context.responseEncoder.encode(self, from: request, context: context)
     }
 }

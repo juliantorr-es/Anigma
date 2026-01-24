@@ -223,6 +223,64 @@ public actor AnigmaMCPServer {
         self.cathedral = coordinator
     }
 
+    // MARK: - Gemini Bridge Support
+
+    /// List all tools in Gemini-compatible format.
+    public func listToolsForGemini() async throws -> [String: AnyCodable] {
+        let tools = getTools()
+        var functionDeclarations: [[String: AnyCodable]] = []
+
+        for tool in tools {
+            // MCP Tool inputSchema is already close to Gemini's parameters
+            // We might need to transform it if Gemini expects specific format
+            functionDeclarations.append([
+                "name": AnyCodable(tool.name),
+                "description": AnyCodable(tool.description ?? ""),
+                "parameters": AnyCodable(tool.inputSchema)
+            ])
+        }
+
+        return ["function_declarations": AnyCodable(functionDeclarations)]
+    }
+
+    /// Call a tool using Gemini-compatible parameters.
+    public func callToolForGemini(name: String, arguments: [String: AnyCodable]) async throws -> [String: AnyCodable] {
+        // Convert [String: AnyCodable] to [String: Value] for MCP
+        var mcpArgs: [String: Value] = [:]
+        for (key, val) in arguments {
+            if let mcpVal = convertToValue(val.value) {
+                mcpArgs[key] = mcpVal
+            }
+        }
+
+        let result = await callTool(name: name, arguments: mcpArgs)
+        
+        // Convert MCP result to Gemini format
+        var content = ""
+        for item in result.content {
+            if case .text(let text) = item {
+                content += text
+            }
+        }
+
+        return [
+            "name": AnyCodable(name),
+            "response": AnyCodable([
+                "content": content,
+                "success": !(result.isError ?? false)
+            ])
+        ]
+    }
+
+    private func convertToValue(_ any: Any) -> Value? {
+        if let s = any as? String { return .string(s) }
+        if let i = any as? Int { return .number(Double(i)) }
+        if let d = any as? Double { return .number(d) }
+        if let b = any as? Bool { return .bool(b) }
+        // Handle nested arrays/dicts if needed
+        return nil
+    }
+
     private nonisolated func registerDefaultTools() {
         // 1. read_file
         toolRegistry.register(contract: ToolContract(
