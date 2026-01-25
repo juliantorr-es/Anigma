@@ -1,0 +1,219 @@
+Building for debugging...
+warning: 'anigma': dependency 'swift-tree-sitter' is not used by any target
+[0/2] Write sources
+[1/2] Write swift-version--58304C5D6DBC2206.txt
+[3/10] Compiling ContextumModule FtsIndexSystem.swift
+[4/10] Compiling ContextumModule HybridSearchSystem.swift
+[5/10] Compiling ContextumModule TelemetryEventComponent.swift
+[6/10] Compiling ContextumModule IngestNormalizeSystem.swift
+[7/10] Compiling ContextumModule CapsuleMetricsSystem.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CapsuleMetricsSystem.swift:175:9: warning: actor-isolated instance method 'initializeDefaultMetrics()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+173 |     public init(telemetryEmitter: ((TelemetryEventComponent) -> Void)? = nil) {
+174 |         self.telemetryEmitter = telemetryEmitter
+175 |         initializeDefaultMetrics()
+    |         `- warning: actor-isolated instance method 'initializeDefaultMetrics()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+176 |     }
+177 | 
+178 |     private func initializeDefaultMetrics() {
+    |                  `- note: calls to instance method 'initializeDefaultMetrics()' from outside of its actor context are implicitly asynchronous
+179 |         for capsule in CapsuleType.allCases {
+180 |             metrics[capsule.rawValue] = CapsuleMetrics(capsuleName: capsule.rawValue)
+[8/10] Compiling ContextumModule AgentStatsAggregateSystem.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:227:14: warning: immutable value 'index' was never used; consider replacing with '_' or removing it [#no-usage]
+ 225 | 
+ 226 |         var predicateBuilder = PredicateBuilder()
+ 227 |         for (index, filter) in filters.enumerated() {
+     |              `- warning: immutable value 'index' was never used; consider replacing with '_' or removing it [#no-usage]
+ 228 |             if let columnIndex = columnIndex(for: filter.dimension, in: columns) {
+ 229 |                 switch filter.op {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:439:13: warning: immutable value 'intervalSeconds' was never used; consider removing it [#no-usage]
+ 437 |         aggregationBuilder.addMean(columnIndex: 3, outputName: "avg_duration")
+ 438 | 
+ 439 |         let intervalSeconds: Int
+     |             `- warning: immutable value 'intervalSeconds' was never used; consider removing it [#no-usage]
+ 440 |         switch timeGranularity {
+ 441 |         case .hour: intervalSeconds = 3600
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:447:13: warning: variable 'groupBy' was never mutated; consider changing to 'let' constant
+ 445 |         }
+ 446 | 
+ 447 |         var groupBy: [ColumnReference] = [
+     |             `- warning: variable 'groupBy' was never mutated; consider changing to 'let' constant
+ 448 |             ColumnReference(name: "agent_id", type: .stringUtf8),
+ 449 |             ColumnReference(name: "time_bucket", type: .int64)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:566:13: warning: variable 'metricColumnIndex' was never mutated; consider changing to 'let' constant
+ 564 |         aggregationBuilder.addCount(columnIndex: 0, outputName: "count")
+ 565 | 
+ 566 |         var metricColumnIndex: UInt32 = 3
+     |             `- warning: variable 'metricColumnIndex' was never mutated; consider changing to 'let' constant
+ 567 |         var metricOutputName = "metric_value"
+ 568 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:567:13: warning: initialization of variable 'metricOutputName' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 565 | 
+ 566 |         var metricColumnIndex: UInt32 = 3
+ 567 |         var metricOutputName = "metric_value"
+     |             `- warning: initialization of variable 'metricOutputName' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 568 | 
+ 569 |         switch metric {
+[9/14] Compiling ContextumModule ChunkingSystem.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/ChunkingSystem.swift:69:17: warning: no 'async' operations occur within 'await' expression
+ 67 |             // Use one-shot chunking for simplicity
+ 68 |             let wrapper = try TextChunkingCapsuleWrapper(config: config)
+ 69 |             try await wrapper.processBytes(data)
+    |                 `- warning: no 'async' operations occur within 'await' expression
+ 70 |             try await wrapper.finalize()
+ 71 |             
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/ChunkingSystem.swift:70:17: warning: no 'async' operations occur within 'await' expression
+ 68 |             let wrapper = try TextChunkingCapsuleWrapper(config: config)
+ 69 |             try await wrapper.processBytes(data)
+ 70 |             try await wrapper.finalize()
+    |                 `- warning: no 'async' operations occur within 'await' expression
+ 71 |             
+ 72 |             // Extract chunks as Data slices
+[10/14] Compiling ContextumModule ForensicsWorkflows.swift
+[11/14] Compiling ContextumModule ContextumModule.swift
+[12/14] Emitting module ContextumModule
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CapsuleMetricsSystem.swift:175:9: warning: actor-isolated instance method 'initializeDefaultMetrics()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+173 |     public init(telemetryEmitter: ((TelemetryEventComponent) -> Void)? = nil) {
+174 |         self.telemetryEmitter = telemetryEmitter
+175 |         initializeDefaultMetrics()
+    |         `- warning: actor-isolated instance method 'initializeDefaultMetrics()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+176 |     }
+177 | 
+178 |     private func initializeDefaultMetrics() {
+    |                  `- note: calls to instance method 'initializeDefaultMetrics()' from outside of its actor context are implicitly asynchronous
+179 |         for capsule in CapsuleType.allCases {
+180 |             metrics[capsule.rawValue] = CapsuleMetrics(capsuleName: capsule.rawValue)
+[13/14] Compiling ContextumModule ContextumDatabase.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Database/ContextumDatabase.swift:115:17: warning: immutable value 'receipt' was never used; consider replacing with '_' or removing it [#no-usage]
+ 113 |         )
+ 114 |         let systemContext = ExecutionContext(principal: .system)
+ 115 |         let (_, receipt) = try await authority.store(artifact, context: systemContext)
+     |                 `- warning: immutable value 'receipt' was never used; consider replacing with '_' or removing it [#no-usage]
+ 116 |         // We can log receipt if needed
+ 117 |         return hash
+[14/14] Compiling ContextumModule LayoutIndexingSystem.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:110:16: warning: value 'capsule' was defined but never used; consider replacing with boolean test [#no-usage]
+108 |         let height = boundingBox.height
+109 |         
+110 |         if let capsule = vectorCapsule {
+    |                `- warning: value 'capsule' was defined but never used; consider replacing with boolean test [#no-usage]
+111 |             do {
+112 |                 let bounds = BoundingBox(minX: x, minY: y, maxX: x + width, maxY: y + height)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:113:17: warning: no calls to throwing functions occur within 'try' expression
+111 |             do {
+112 |                 let bounds = BoundingBox(minX: x, minY: y, maxX: x + width, maxY: y + height)
+113 |                 try recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: true)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+114 |                 return svgPathFromBounds(bounds)
+115 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:115:15: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+113 |                 try recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: true)
+114 |                 return svgPathFromBounds(bounds)
+115 |             } catch {
+    |               `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+116 |                 try? recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: false, error: error.localizedDescription)
+117 |             }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:116:17: warning: no calls to throwing functions occur within 'try' expression
+114 |                 return svgPathFromBounds(bounds)
+115 |             } catch {
+116 |                 try? recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: false, error: error.localizedDescription)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+117 |             }
+118 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:136:17: warning: no calls to throwing functions occur within 'try' expression
+134 |                 }
+135 |                 let bounds = try capsule.getBounds(path: resultPath)
+136 |                 try recordVectorCapsuleTelemetry(operation: "unionRegions", success: true)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+137 |                 return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
+138 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:139:17: warning: no calls to throwing functions occur within 'try' expression
+137 |                 return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
+138 |             } catch {
+139 |                 try? recordVectorCapsuleTelemetry(operation: "unionRegions", success: false, error: error.localizedDescription)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+140 |             }
+141 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:159:17: warning: no calls to throwing functions occur within 'try' expression
+157 |                 }
+158 |                 let bounds = try capsule.getBounds(path: resultPath)
+159 |                 try recordVectorCapsuleTelemetry(operation: "intersectRegions", success: true)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+160 |                 return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
+161 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:162:17: warning: no calls to throwing functions occur within 'try' expression
+160 |                 return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
+161 |             } catch {
+162 |                 try? recordVectorCapsuleTelemetry(operation: "intersectRegions", success: false, error: error.localizedDescription)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+163 |             }
+164 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:180:21: warning: initialization of immutable value 'bounds' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+178 |                 let svgPath = pointsToSVGPath(boundary)
+179 |                 let simplifiedPath = try capsule.douglasPeuckerSimplify(path: svgPath, tolerance: Double(tolerance))
+180 |                 let bounds = try capsule.getBounds(path: simplifiedPath)
+    |                     `- warning: initialization of immutable value 'bounds' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+181 |                 try recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: true)
+182 |                 return svgPathToPoints(simplifiedPath)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:181:17: warning: no calls to throwing functions occur within 'try' expression
+179 |                 let simplifiedPath = try capsule.douglasPeuckerSimplify(path: svgPath, tolerance: Double(tolerance))
+180 |                 let bounds = try capsule.getBounds(path: simplifiedPath)
+181 |                 try recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: true)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+182 |                 return svgPathToPoints(simplifiedPath)
+183 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:184:17: warning: no calls to throwing functions occur within 'try' expression
+182 |                 return svgPathToPoints(simplifiedPath)
+183 |             } catch {
+184 |                 try? recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: false, error: error.localizedDescription)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+185 |             }
+186 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:201:17: warning: no calls to throwing functions occur within 'try' expression
+199 |                 let capsulePoint = Point(x: point.x, y: point.y)
+200 |                 let result = try capsule.pointInPolygon(point: capsulePoint, path: svgPath)
+201 |                 try recordVectorCapsuleTelemetry(operation: "pointInRegion", success: true)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+202 |                 return result
+203 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:204:17: warning: no calls to throwing functions occur within 'try' expression
+202 |                 return result
+203 |             } catch {
+204 |                 try? recordVectorCapsuleTelemetry(operation: "pointInRegion", success: false, error: error.localizedDescription)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+205 |             }
+206 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:222:17: warning: no calls to throwing functions occur within 'try' expression
+220 |                 let svgPath = pointsToSVGPath(points.map { Point(x: $0.x, y: $0.y) })
+221 |                 let bounds = try capsule.getBounds(path: svgPath)
+222 |                 try recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: true)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+223 |                 return BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)
+224 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/LayoutIndexingSystem.swift:225:17: warning: no calls to throwing functions occur within 'try' expression
+223 |                 return BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)
+224 |             } catch {
+225 |                 try? recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: false, error: error.localizedDescription)
+    |                 `- warning: no calls to throwing functions occur within 'try' expression
+226 |             }
+227 |         }
+Build of target: 'ContextumModule' complete! (3.09s)
