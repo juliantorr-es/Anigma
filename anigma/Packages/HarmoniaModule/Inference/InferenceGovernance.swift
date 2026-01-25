@@ -8,7 +8,7 @@
 
 import AnigmaCore
 import ContractsCore
-import Foundation
+@preconcurrency import Foundation
 import TelemetryCore
 
 // MARK: - Inference Governance

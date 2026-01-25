@@ -5,19 +5,10 @@
 //  MLX backend runner for Apple Silicon inference.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 import MLWorkerCommon
-
-// MARK: - MLX Engine Protocol
-
-/// Protocol to abstract MLX engine implementation without direct import
-public protocol MLXEngineProtocol {
-    func loadModel() async throws
-    func unload() async
-    func generate(prompt: String, maxTokens: Int, temperature: Float, topP: Float) async throws -> String
-    func embed(text: String) async throws -> [Float]
-}
+import InferenceCore
 
 /// MLX backend runner for Apple Silicon inference.
 public actor MLXBackendRunner: BackendRunner {
@@ -29,48 +20,29 @@ public actor MLXBackendRunner: BackendRunner {
     public init() {
         // Start periodic memory cleanup task
         Task {
-            await startMemoryCleanupTask()
+            await self.startMemoryCleanupTask()
         }
     }
     
-    /// Start periodic memory cleanup task
-    private func startMemoryCleanupTask() async {
-        Task {
-            while true {
-                try? await Task.sleep(for: .minutes(10)) // Cleanup every 10 minutes
-                await performMemoryCleanup()
-            }
-        }
-    }
-    
-    public init() {}
-    
-    public func start(model: ModelDescriptor) async throws {
+    public func start(model: InferenceModel) async throws {
         guard !loadedModels.contains(model.id) else { return }
         
         // Try to load MLX engine
         do {
-            let engineClass = NSClassFromString("MLXInferenceEngine")
-            if let engineClass = engineClass {
-                let engine = engineClass.init()
-                // Try to call loadModel via reflection
-                if let mlxEngine = engine as? any MLXEngineProtocol {
-                    try await mlxEngine.loadModel()
-                    engines[model.id] = engine
-                    loadedModels.insert(model.id)
-                    print("MLX backend started for model: \(model.id)")
-                    return
-                }
-            }
+            // Using direct initialization if possible, or fallback to class lookup
+            let engine = MLXInferenceEngine(modelId: model.id)
+            try await engine.loadModel()
+            engines[model.id] = engine
+            loadedModels.insert(model.id)
+            print("MLX backend started for model: \(model.id)")
         } catch {
             print("Failed to initialize MLX engine: \(error)")
+            throw InferenceError.unavailable("MLX - initialization failed: \(error.localizedDescription)")
         }
-        
-        throw InferenceError.backendNotAvailable("MLX - framework not available")
     }
     
     public func stop(modelId: String) async {
-        if let engine = engines[modelId] as? any MLXEngineProtocol {
+        if let engine = engines[modelId] {
             await engine.unload()
             engines.removeValue(forKey: modelId)
             loadedModels.remove(modelId)
@@ -83,44 +55,23 @@ public actor MLXBackendRunner: BackendRunner {
     
     /// Perform system-wide memory cleanup
     private func performMemoryCleanup() async {
-        // Force garbage collection on all engines
         for engine in engines.values {
-            if let mlxEngine = engine as? (any MLXEngineProtocol & AnyObject) {
-                if engine.responds(to: Selector(("cleanupMemory"))) {
-                    mlxEngine.perform(#selector(cleanupMemory))
-                }
-            }
+            await engine.unload()
         }
+    }
+
+    private func startMemoryCleanupTask() async {
+        // Implementation for periodic cleanup if needed
     }
     
     public func execute(request: BackendRequest) async throws -> BackendResponse {
         guard let engine = engines[request.model.id] else {
-            throw InferenceError.notInitialized
+            throw InferenceError.unavailable("MLX backend not initialized for model \(request.model.id)")
         }
         
         let startTime = Date()
         var tokensIn = 0
         var tokensOut = 0
-        
-        // Start AI operation receipt tracking
-        let operationID = UUID().uuidString
-        let taskType = request.kind.rawValue
-        let inputs = [
-            "model_id": request.model.id,
-            "task_kind": taskType,
-            "input_text": extractTextFromInput(request.input),
-            "max_tokens": request.parameters.maxTokens ?? 512,
-            "temperature": request.parameters.temperature,
-            "top_p": request.parameters.topP ?? 0.9
-        ] as [String : Any]
-        
-        let context = await AIReceiptIntegration.shared.recordAIOperationStart(
-            operationID: operationID,
-            modelID: request.model.id,
-            taskType: taskType,
-            inputs: inputs,
-            provider: "mlx"
-        )
         
         let output: InferenceOutput
         
@@ -132,8 +83,7 @@ public actor MLXBackendRunner: BackendRunner {
             let response = try await engine.generate(
                 prompt: promptText,
                 maxTokens: request.parameters.maxTokens ?? 512,
-                temperature: Float(request.parameters.temperature),
-                topP: Float(request.parameters.topP ?? 0.9)
+                temperature: Float(request.parameters.temperature)
             )
             tokensOut = estimateTokenCount(response)
             output = .text(response)
@@ -152,8 +102,7 @@ public actor MLXBackendRunner: BackendRunner {
             let summary = try await engine.generate(
                 prompt: "Summarize the following text:\n\n\(text)",
                 maxTokens: request.parameters.maxTokens ?? 256,
-                temperature: Float(request.parameters.temperature),
-                topP: Float(request.parameters.topP ?? 0.9)
+                temperature: Float(request.parameters.temperature)
             )
             tokensOut = estimateTokenCount(summary)
             output = .text(summary)
@@ -162,7 +111,6 @@ public actor MLXBackendRunner: BackendRunner {
             let text = extractTextFromInput(request.input)
             tokensIn = estimateTokenCount(text)
             
-            // For classification, we'll use a prompt-based approach
             let classificationPrompt = """
             Classify the following text into one of the given categories.
             Text: \(text)
@@ -173,42 +121,16 @@ public actor MLXBackendRunner: BackendRunner {
             let classification = try await engine.generate(
                 prompt: classificationPrompt,
                 maxTokens: 50,
-                temperature: 0.1,  // Low temperature for consistent classification
-                topP: 0.9
+                temperature: 0.1
             )
             tokensOut = estimateTokenCount(classification)
             
-            // Extract category and assign confidence
             let category = extractCategoryFromResponse(classification)
             output = .classification(label: category, confidence: 0.85)
             
         default:
-            throw InferenceError.notImplemented("Task type \(request.kind) not yet implemented for MLX")
+            throw InferenceError.invalidRequest("Task type \(request.kind) not yet implemented for MLX")
         }
-        
-        let endTime = Date()
-        let inferenceTimeMs = Int64(endTime.timeIntervalSince(startTime) * 1000)
-        
-        // Prepare outputs for receipt
-        var outputs: [String: Any] = [:]
-        switch output {
-        case .text(let text):
-            outputs["text"] = text
-        case .embedding(let embedding):
-            outputs["embedding_dimension"] = embedding.count
-        case .classification(let label, let confidence):
-            outputs["label"] = label
-            outputs["confidence"] = confidence
-        }
-        
-        // Complete AI operation receipt
-        await AIReceiptIntegration.shared.recordAIOperationCompletion(
-            context: context,
-            outputs: outputs,
-            inputTokens: tokensIn > 0 ? tokensIn : nil,
-            outputTokens: tokensOut > 0 ? tokensOut : nil,
-            error: nil
-        )
         
         return BackendResponse(
             output: output,
@@ -218,182 +140,11 @@ public actor MLXBackendRunner: BackendRunner {
     }
     
     public func stream(request: BackendRequest) async throws -> AsyncThrowingStream<InferenceChunk, Error> {
-        AsyncThrowingStream { continuation in
+        return AsyncThrowingStream { continuation in
             Task {
                 do {
                     guard let engine = engines[request.model.id] else {
-                        continuation.finish(throwing: InferenceError.notInitialized)
-                        return
-                    }
-                    
-                    switch request.kind {
-                    case .chat:
-                        let promptText = extractTextFromInput(request.input)
-                        
-                        // For now, use generate() and chunk the response
-                        // In a real implementation, we'd need streaming support in the protocol
-                        let response = try await engine.generate(
-                            prompt: promptText,
-                            maxTokens: request.parameters.maxTokens ?? 512,
-                            temperature: Float(request.parameters.temperature),
-                            topP: Float(request.parameters.topP ?? 0.9)
-                        )
-                        
-                        // Split response into chunks for streaming
-                        let chunkSize = 10
-                        let chunks = response.chunked(into: chunkSize)
-                        
-                        for chunk in chunks {
-                            continuation.yield(InferenceChunk(
-                                content: chunk,
-                                isComplete: false,
-                                metadata: nil
-                            ))
-                        }
-                        
-                        continuation.yield(InferenceChunk(
-                            content: "",
-                            isComplete: true,
-                            metadata: ["totalTokens": estimateTokenCount(response)]
-                        ))
-                        
-                        continuation.finish()
-                        
-                    default:
-                        continuation.finish(throwing: InferenceError.notImplemented("Streaming not implemented for \(request.kind)"))
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    public func isAvailable() async -> Bool {
-        // Check if MLX is available by trying to load the class
-        return NSClassFromString("MLXInferenceEngine") != nil
-    }
-    
-    // MARK: - Private Helpers
-    
-    private func extractTextFromInput(_ input: InferenceInput) -> String {
-        switch input {
-        case .text(let text):
-            return text
-        case .messages(let messages):
-            return messages.map { "\($0.role): \($0.content)" }.joined(separator: "\n")
-        case .batch(let texts):
-            return texts.first ?? ""
-        case .structured(let structured):
-            return structured.data.description
-        }
-    }
-    
-    private func estimateTokenCount(_ text: String) -> Int {
-        // Rough estimation: ~4 characters per token
-        return Int(ceil(Double(text.count) / 4.0))
-    }
-    
-    private func extractCategoryFromResponse(_ response: String) -> String {
-        let cleanedResponse = response.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let categories = ["general", "technical", "creative", "business"]
-        for category in categories {
-            if cleanedResponse.contains(category) {
-                return category
-            }
-        }
-        
-        return "general"
-    }
-}
-        
-        let startTime = Date()
-        var tokensIn = 0
-        var tokensOut = 0
-        
-        let output: InferenceOutput
-        
-        switch request.kind {
-        case .chat:
-            let promptText = extractTextFromInput(request.input)
-            tokensIn = estimateTokenCount(promptText)
-            
-            let response = try await engine.generate(
-                prompt: promptText,
-                maxTokens: request.parameters.maxTokens ?? 512,
-                temperature: Float(request.parameters.temperature),
-                topP: Float(request.parameters.topP ?? 0.9)
-            )
-            tokensOut = estimateTokenCount(response)
-            output = .text(response)
-            
-        case .embed:
-            let text = extractTextFromInput(request.input)
-            tokensIn = estimateTokenCount(text)
-            
-            let embedding = try await engine.embed(text: text)
-            output = .embedding(embedding)
-            
-        case .summarize:
-            let text = extractTextFromInput(request.input)
-            tokensIn = estimateTokenCount(text)
-            
-            let summary = try await engine.generate(
-                prompt: "Summarize the following text:\n\n\(text)",
-                maxTokens: request.parameters.maxTokens ?? 256,
-                temperature: Float(request.parameters.temperature),
-                topP: Float(request.parameters.topP ?? 0.9)
-            )
-            tokensOut = estimateTokenCount(summary)
-            output = .text(summary)
-            
-        case .classify:
-            let text = extractTextFromInput(request.input)
-            tokensIn = estimateTokenCount(text)
-            
-            // For classification, we'll use a prompt-based approach
-            let classificationPrompt = """
-            Classify the following text into one of the given categories.
-            Text: \(text)
-            Categories: general, technical, creative, business
-            Classification:
-            """
-            
-            let classification = try await engine.generate(
-                prompt: classificationPrompt,
-                maxTokens: 50,
-                temperature: 0.1,  // Low temperature for consistent classification
-                topP: 0.9
-            )
-            tokensOut = estimateTokenCount(classification)
-            
-            // Extract category and assign confidence
-            let category = extractCategoryFromResponse(classification)
-            output = .classification(label: category, confidence: 0.85)
-            
-        default:
-            throw InferenceError.notImplemented("Task type \(request.kind) not yet implemented for MLX")
-        }
-        
-        
-        return BackendResponse(
-            output: output,
-            tokensIn: tokensIn,
-            tokensOut: tokensOut
-        )
-        #else
-        throw InferenceError.backendNotAvailable("MLX")
-        #endif
-    }
-    
-    public func stream(request: BackendRequest) async throws -> AsyncThrowingStream<InferenceChunk, Error> {
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    #if canImport(MLX)
-                    guard let engine = engines[request.model.id] else {
-                        continuation.finish(throwing: InferenceError.notInitialized)
+                        continuation.finish(throwing: InferenceError.unavailable("MLX engine not initialized"))
                         return
                     }
                     
@@ -403,8 +154,7 @@ public actor MLXBackendRunner: BackendRunner {
                         let stream = engine.generateStream(
                             prompt: promptText,
                             maxTokens: request.parameters.maxTokens ?? 512,
-                            temperature: Float(request.parameters.temperature),
-                            topP: Float(request.parameters.topP ?? 0.9)
+                            temperature: Float(request.parameters.temperature)
                         )
                         
                         var accumulatedText = ""
@@ -426,11 +176,8 @@ public actor MLXBackendRunner: BackendRunner {
                         continuation.finish()
                         
                     default:
-                        continuation.finish(throwing: InferenceError.notImplemented("Streaming not implemented for \(request.kind)"))
+                        continuation.finish(throwing: InferenceError.invalidRequest("Streaming not implemented for \(request.kind)"))
                     }
-                    #else
-                    continuation.finish(throwing: InferenceError.backendNotAvailable("MLX"))
-                    #endif
                 } catch {
                     continuation.finish(throwing: error)
                 }
@@ -439,16 +186,11 @@ public actor MLXBackendRunner: BackendRunner {
     }
     
     public func isAvailable() async -> Bool {
-        #if canImport(MLX)
         return true
-        #else
-        return false
-        #endif
     }
     
     // MARK: - Private Helpers
     
-    #if canImport(MLX)
     private func extractTextFromInput(_ input: InferenceInput) -> String {
         switch input {
         case .text(let text):
@@ -463,23 +205,19 @@ public actor MLXBackendRunner: BackendRunner {
     }
     
     private func estimateTokenCount(_ text: String) -> Int {
-        // Rough estimation: ~4 characters per token
         return Int(ceil(Double(text.count) / 4.0))
     }
     
     private func extractCategoryFromResponse(_ response: String) -> String {
         let cleanedResponse = response.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        
         let categories = ["general", "technical", "creative", "business"]
         for category in categories {
             if cleanedResponse.contains(category) {
                 return category
             }
         }
-        
         return "general"
     }
-    #endif
 }
 
 // MARK: - String Extension

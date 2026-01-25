@@ -7,7 +7,7 @@
 //  Prevents duplication of core architectural components.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import SwiftParser
 import SwiftSyntax
 

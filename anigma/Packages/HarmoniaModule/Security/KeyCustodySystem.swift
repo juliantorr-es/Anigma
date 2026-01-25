@@ -7,20 +7,20 @@
 
 import AnigmaCore
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import Security
-import CryptoKit
+@preconcurrency import CryptoKit
 import os
 
 /// Production-grade HSM/Secure Enclave key custody system
 /// Addresses "one malware incident away from compromised signing keys"
 public actor KeyCustodySystem {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private let keyStorage: SecureKeyStorage
     private let hardwareAttestation: HardwareAttestationService
     private var currentKeyFingerprint: String?
 
-    public init(dbActor: any DatabaseExecutor) throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) throws {
         self.dbActor = dbActor
         self.keyStorage = SecureKeyStorage()
         self.hardwareAttestation = HardwareAttestationService()

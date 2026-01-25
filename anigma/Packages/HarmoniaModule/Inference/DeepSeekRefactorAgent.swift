@@ -5,7 +5,7 @@
 //  Created by Anigma Agent on 2026-01-12.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// AI agent powered by DeepSeek for intelligent refactoring.
 public actor DeepSeekRefactorAgent {

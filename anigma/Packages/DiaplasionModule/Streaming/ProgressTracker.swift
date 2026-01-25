@@ -249,7 +249,7 @@ public actor ProgressTracker: Sendable {
     /// Check if a progress update represents a significant milestone.
     private func isSignificantMilestone(progress: JobProgress) -> Bool {
         let percentage = progress.percentage
-        return [25.0, 50.0, 75.0, 100.0].contains { abs(percentage - $0) < 2.5 }
+        return [25.0, 50.0, 75.0, 100.0].contains { Swift.abs(percentage - $0) < 2.5 }
     }
     
     /// Create a progress update from job progress.

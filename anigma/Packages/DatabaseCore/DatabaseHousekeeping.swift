@@ -65,7 +65,7 @@ public actor WALManager {
             modeString = "TRUNCATE"
         }
 
-        try await db.execute("PRAGMA wal_checkpoint(\(modeString))")
+        try await db.executeAsync("PRAGMA wal_checkpoint(\(modeString))")
 
         let walSizeAfter = try await getWALSize()
         let duration = Date().timeIntervalSince(startTime)
@@ -81,17 +81,17 @@ public actor WALManager {
     /// Configure WAL parameters for optimal performance.
     public func configureWAL() async throws {
         // Set WAL mode
-        try await db.execute("PRAGMA journal_mode = WAL")
+        try await db.executeAsync("PRAGMA journal_mode = WAL")
 
         // Set WAL autocheckpoint threshold
         let autocheckpoint = config.autoCheckpointFrames
-        try await db.execute("PRAGMA wal_autocheckpoint = \(autocheckpoint)")
+        try await db.executeAsync("PRAGMA wal_autocheckpoint = \(autocheckpoint)")
 
         // Synchronous mode for durability
-        try await db.execute("PRAGMA synchronous = NORMAL")
+        try await db.executeAsync("PRAGMA synchronous = NORMAL")
 
         // Memory-mapped I/O for performance
-        try await db.execute("PRAGMA mmap_size = \(config.mmapSize)")
+        try await db.executeAsync("PRAGMA mmap_size = \(config.mmapSize)")
     }
 }
 
@@ -142,10 +142,10 @@ public actor DatabaseMaintenance {
 
         switch mode {
         case .full:
-            try await db.execute("VACUUM")
+            try await db.executeAsync("VACUUM")
         case .incremental:
             let incrPages = config.incrementalVacuumPages
-            try await db.execute("PRAGMA incremental_vacuum(\(incrPages))")
+            try await db.executeAsync("PRAGMA incremental_vacuum(\(incrPages))")
         }
 
         let sizeAfter = try await getDatabaseSize()
@@ -165,7 +165,7 @@ public actor DatabaseMaintenance {
     /// Run ANALYZE to update query statistics.
     public func analyzeDatabase() async throws -> AnalyzeResult {
         let startTime = Date()
-        try await db.execute("ANALYZE")
+        try await db.executeAsync("ANALYZE")
         let duration = Date().timeIntervalSince(startTime)
 
         return AnalyzeResult(

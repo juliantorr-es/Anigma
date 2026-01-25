@@ -10,18 +10,18 @@
 
 import AnigmaCore
 import ContractsCore
-import CryptoKit
+@preconcurrency import CryptoKit
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Plan Compiler that transforms planning into evidence-producing transformations
 /// Instead of generating plans based on heuristics, it creates plans that are
 /// provably justified by evidence and can be validated through cryptographic verification
 public actor PlanCompiler {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private let evidenceSubstrate: EvidenceSubstrate
 
-    public init(dbActor: any DatabaseExecutor, evidenceSubstrate: EvidenceSubstrate) {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor, evidenceSubstrate: EvidenceSubstrate) {
         self.dbActor = dbActor
         self.evidenceSubstrate = evidenceSubstrate
     }
@@ -166,24 +166,22 @@ public actor PlanCompiler {
         if !countValid {
             violations.append(
                 ContractsCore.EvidenceViolation(
-                    id: UUID().uuidString.lowercased(),
-                    evidenceId: "evidence_count_check",
-                    violationType: .insufficientEvidence,
+                    type: .insufficientEvidence,
                     severity: .high,
                     description:
-                        "Insufficient evidence count: required \(requirements.minimumCount), found \(recentEvidence.count)"
+                        "Insufficient evidence count: required \(requirements.minimumCount), found \(recentEvidence.count)",
+                    evidenceId: "evidence_count_check"
                 ))
         }
 
         if !typeValid {
             violations.append(
                 ContractsCore.EvidenceViolation(
-                    id: UUID().uuidString.lowercased(),
-                    evidenceId: "evidence_type_check",
-                    violationType: .requirementMismatch,
+                    type: .requirementMismatch,
                     severity: .medium,
                     description:
-                        "Invalid evidence types for operation: allowed \(requirements.allowedEvidenceTypes.map(\.rawValue).joined(separator: ", ")), found \(recentEvidence.types.map(\.rawValue).joined(separator: ", "))"
+                        "Invalid evidence types for operation: allowed \(requirements.allowedEvidenceTypes.map(\.rawValue).joined(separator: ", ")), found \(recentEvidence.types.map(\.rawValue).joined(separator: ", "))",
+                    evidenceId: "evidence_type_check"
                 ))
         }
 
@@ -191,12 +189,11 @@ public actor PlanCompiler {
             let oldestAge = recentEvidence.max?.ageSeconds ?? 0
             violations.append(
                 ContractsCore.EvidenceViolation(
-                    id: UUID().uuidString.lowercased(),
-                    evidenceId: "evidence_recency_check",
-                    violationType: .expiredEvidence,
+                    type: .expiredEvidence,
                     severity: .medium,
                     description:
-                        "Evidence too old: maximum age \(requirements.recentTimeframeSeconds)s, oldest evidence is \(oldestAge)s"
+                        "Evidence too old: maximum age \(requirements.recentTimeframeSeconds)s, oldest evidence is \(oldestAge)s",
+                    evidenceId: "evidence_recency_check"
                 ))
         }
 

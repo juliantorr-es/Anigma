@@ -39,9 +39,9 @@ public struct PersistedArtifact: Sendable {
 
 /// SQLite-backed artifact store with idempotent writes.
 public actor DatabaseArtifactStore {
-    private let db: DatabaseActor
+    private let db: any DatabaseExecutor
 
-    public init(database: DatabaseActor) async throws {
+    public init(database: any DatabaseExecutor) async throws {
         self.db = database
         try await MigrationRegistry.applyMigrations(using: db)
     }
@@ -50,7 +50,7 @@ public actor DatabaseArtifactStore {
     /// Returns the canonical stored row (either the newly inserted artifact or the existing one).
     @discardableResult
     public func putArtifactIdempotent(_ artifact: PersistedArtifact) async throws -> PersistedArtifact {
-        let inserted = try await db.execute(
+        let inserted = try await db.executeAsync(
             """
             INSERT OR IGNORE INTO artifacts
             (artifact_id, session_id, contract_id, schema_version, artifact_key, payload_json, evidence_json, metrics_json, envelope_json, receipt_json, created_at)

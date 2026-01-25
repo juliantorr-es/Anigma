@@ -8,8 +8,8 @@
 import AnigmaCore
 import AnigmaPrimitives
 import ContractsCore
-import CryptoKit
-import Foundation
+@preconcurrency import CryptoKit
+@preconcurrency import Foundation
 
 /// Actor-backed registry for executor profiles.
 public actor ExecutorProfileRegistry: ExecutorProfileProviding {

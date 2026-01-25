@@ -5,7 +5,7 @@
 //  Lightweight wrapper around BLAKE3Digest to provide a consistent hashing interface.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 public struct BLAKE3Hasher: Sendable {

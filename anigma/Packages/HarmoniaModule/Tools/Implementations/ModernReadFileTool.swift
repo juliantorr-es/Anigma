@@ -4,7 +4,8 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+import ContractsCore
+@preconcurrency import Foundation
 
 /// Modern, type-safe implementation of the read_file tool.
 public struct ModernReadFileTool: Tool {

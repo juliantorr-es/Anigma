@@ -6,7 +6,7 @@
 //  Migrated from: Harmonia/OrchestrumCore/Models/ModelConcurrencyController.swift
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Model Kind

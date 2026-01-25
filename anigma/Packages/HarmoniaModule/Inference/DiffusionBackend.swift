@@ -12,7 +12,7 @@
 //  - Multimodal document processing
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Diffusion Backend Types

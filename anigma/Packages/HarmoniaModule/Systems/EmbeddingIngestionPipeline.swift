@@ -7,8 +7,8 @@
 
 import ContractsCore
 import DatabaseCore
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 
 /// Pipeline for ingesting embeddings with complete provenance tracking
 /// Connects ML worker output to database storage with document unit creation
@@ -81,7 +81,7 @@ public actor EmbeddingIngestionPipeline {
 
         try FileManager.default.createDirectory(atPath: outputDir, withIntermediateDirectories: true)
 
-        guard let filename = filePath != nil ? (filePath else {
+        guard let filename = filePath else {
             fatalError("Failed to unwrap filename")
         }
         let artifactPath = "\(outputDir)/\(filename)"

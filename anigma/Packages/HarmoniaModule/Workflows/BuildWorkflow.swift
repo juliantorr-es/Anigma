@@ -7,7 +7,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Swift build workflow with governance integration
 public struct BuildWorkflow: Sendable {

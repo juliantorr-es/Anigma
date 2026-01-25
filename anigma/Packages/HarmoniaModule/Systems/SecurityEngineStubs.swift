@@ -6,7 +6,7 @@
 //
 
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 import AnigmaPrimitives
 

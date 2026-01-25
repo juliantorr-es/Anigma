@@ -5,15 +5,15 @@ import AnigmaCore
 /// Database layer for artifact metadata
 /// Backed by DatabaseActor for governed, court-safe persistence
 public actor ArtifactStoreDatabase {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
 
-    public init(dbActor: any DatabaseExecutor) async throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) async throws {
         self.dbActor = dbActor
         try await executeMigrations()
     }
 
     private func executeMigrations() async throws {
-        _ = try await dbActor.execute("""
+        _ = try await dbActor.executeAsync("""
             CREATE TABLE IF NOT EXISTS artifacts (
                 artifact_id TEXT PRIMARY KEY,
                 content_hash TEXT NOT NULL,
@@ -29,11 +29,11 @@ public actor ArtifactStoreDatabase {
                 trust_tier TEXT NOT NULL,
                 created_at REAL NOT NULL DEFAULT (julianday('now'))
             );
-            """)
+            """, parameters: [])
 
-        _ = try await dbActor.execute("CREATE INDEX IF NOT EXISTS idx_artifacts_content_hash ON artifacts(content_hash);")
-        _ = try await dbActor.execute("CREATE INDEX IF NOT EXISTS idx_artifacts_media_type ON artifacts(media_type);")
-        _ = try await dbActor.execute("CREATE INDEX IF NOT EXISTS idx_artifacts_trust_tier ON artifacts(trust_tier);")
+        _ = try await dbActor.executeAsync("CREATE INDEX IF NOT EXISTS idx_artifacts_content_hash ON artifacts(content_hash);", parameters: [])
+        _ = try await dbActor.executeAsync("CREATE INDEX IF NOT EXISTS idx_artifacts_media_type ON artifacts(media_type);", parameters: [])
+        _ = try await dbActor.executeAsync("CREATE INDEX IF NOT EXISTS idx_artifacts_trust_tier ON artifacts(trust_tier);", parameters: [])
     }
 
     // MARK: - Insert
@@ -42,7 +42,7 @@ public actor ArtifactStoreDatabase {
         let metadataJSON = try JSONEncoder().encode(artifact.metadata)
         let metadataString = String(data: metadataJSON, encoding: .utf8) ?? "{}"
 
-        _ = try await dbActor.execute(
+        _ = try await dbActor.executeAsync(
             """
             INSERT INTO artifacts (
                 artifact_id, content_hash, source_hash, media_type, size_bytes,
@@ -51,18 +51,18 @@ public actor ArtifactStoreDatabase {
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             parameters: [
-                .text(artifact.artifactID),
-                .text(artifact.contentHash),
-                .text(artifact.sourceHash),
-                .text(artifact.mediaType),
-                .int(Int(artifact.sizeBytes)),
-                .text(artifact.source.type),
-                .text(artifact.source.identifier),
-                .text(metadataString),
-                .text(artifact.receiptID),
-                artifact.evidenceHeadHash.map { .text($0) } ?? .null,
-                .double(artifact.committedAt.timeIntervalSince1970),
-                .text(artifact.trustTier.rawValue)
+                DatabaseCore.DatabaseParameter.text(artifact.artifactID),
+                DatabaseCore.DatabaseParameter.text(artifact.contentHash),
+                DatabaseCore.DatabaseParameter.text(artifact.sourceHash),
+                DatabaseCore.DatabaseParameter.text(artifact.mediaType),
+                DatabaseCore.DatabaseParameter.int(Int(artifact.sizeBytes)),
+                DatabaseCore.DatabaseParameter.text(artifact.source.type),
+                DatabaseCore.DatabaseParameter.text(artifact.source.identifier),
+                DatabaseCore.DatabaseParameter.text(metadataString),
+                DatabaseCore.DatabaseParameter.text(artifact.receiptID),
+                artifact.evidenceHeadHash.map { DatabaseCore.DatabaseParameter.text($0) } ?? DatabaseCore.DatabaseParameter.null,
+                DatabaseCore.DatabaseParameter.double(artifact.committedAt.timeIntervalSince1970),
+                DatabaseCore.DatabaseParameter.text(artifact.trustTier.rawValue)
             ]
         )
     }
@@ -79,7 +79,7 @@ public actor ArtifactStoreDatabase {
             WHERE artifact_id = ?
             LIMIT 1
             """,
-            parameters: [.text(artifactID)]
+            parameters: [DatabaseCore.DatabaseParameter.text(artifactID)]
         )
 
         guard let row = rows.first else { return nil }
@@ -96,7 +96,7 @@ public actor ArtifactStoreDatabase {
             WHERE content_hash = ?
             LIMIT 1
             """,
-            parameters: [.text(contentHash)]
+            parameters: [DatabaseCore.DatabaseParameter.text(contentHash)]
         )
 
         guard let row = rows.first else { return nil }
@@ -116,20 +116,20 @@ public actor ArtifactStoreDatabase {
             WHERE 1=1
             """
 
-        var parameters: [DatabaseParameter] = []
+        var parameters: [DatabaseCore.DatabaseParameter] = []
 
         if let mt = mediaType {
             sql += " AND media_type = ?"
-            parameters.append(.text(mt))
+            parameters.append(DatabaseCore.DatabaseParameter.text(mt))
         }
 
         if let tt = trustTier {
             sql += " AND trust_tier = ?"
-            parameters.append(.text(tt.rawValue))
+            parameters.append(DatabaseCore.DatabaseParameter.text(tt.rawValue))
         }
 
         sql += " ORDER BY committed_at DESC LIMIT ?"
-        parameters.append(.int(limit))
+        parameters.append(DatabaseCore.DatabaseParameter.int(limit))
 
         let rows = try await dbActor.query(sql, parameters: parameters)
         return try rows.map { try parseArtifact(row: $0) }

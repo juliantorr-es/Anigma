@@ -6,19 +6,19 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 import DatabaseCore
-import CryptoKit
+@preconcurrency import CryptoKit
 
 public final class RetrievalService: Sendable {
-    private let db: any DatabaseExecutor
+    private let db: any DatabaseCore.DatabaseExecutor
     private let policyGate: PolicyGate
     private let evidence: GovernedEvidenceRecorder
     private let loopBreaker: ToolCallLoopBreaker
     private let embedder: EmbeddingQueryProvider?
 
     public init(
-        db: any DatabaseExecutor,
+        db: any DatabaseCore.DatabaseExecutor,
         policyGate: PolicyGate,
         evidence: GovernedEvidenceRecorder,
         loopBreaker: ToolCallLoopBreaker,

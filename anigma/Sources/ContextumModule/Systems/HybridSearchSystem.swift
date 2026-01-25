@@ -404,7 +404,12 @@ public actor HybridSearchSystem {
         k: Int = 60
     ) async throws -> [String: Double] {
         let capsule = try await getOrCreateCapsule()
-        let rankLists = [ftsRanks, semanticRanks]
-        return try await capsule.fuse(rankLists: rankLists, k: k)
+        
+        let rankLists = [
+            RankList(ranks: ftsRanks),
+            RankList(ranks: semanticRanks)
+        ]
+        
+        return try await capsule.fuse(rankLists: rankLists)
     }
 }

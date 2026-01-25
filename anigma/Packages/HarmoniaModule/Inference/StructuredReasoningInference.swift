@@ -6,7 +6,7 @@
 //  Enables TRM-style models to be used alongside LLMs for constraint solving.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Structured Reasoning Task Types

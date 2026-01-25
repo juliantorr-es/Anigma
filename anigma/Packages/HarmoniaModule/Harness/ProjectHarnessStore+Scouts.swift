@@ -5,8 +5,8 @@
 //  Store extensions for scout findings and migration tasks.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Scout Findings Store Methods
 

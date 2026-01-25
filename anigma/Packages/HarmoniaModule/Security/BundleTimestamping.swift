@@ -5,7 +5,7 @@
 //  Protocol surface for bundle timestamping implementations.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Abstraction for emitting timestamp claims for exported bundles.
 public protocol BundleTimestamping: Sendable {

@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 // Simple error type for version management
 public enum VersionManagerError: Error, Sendable {

@@ -5,7 +5,7 @@
 //  Explicit state model for Swift 6 migration domain.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Outcome of a session for a Swift 6 migration task.
 public struct Swift6SessionOutcome: Sendable, Codable {

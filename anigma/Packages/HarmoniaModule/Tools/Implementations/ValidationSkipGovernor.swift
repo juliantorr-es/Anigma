@@ -6,7 +6,7 @@
 //  Ensures agents can only skip validation with valid justification.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import DatabaseCore
 

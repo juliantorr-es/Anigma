@@ -592,10 +592,10 @@ public actor CLIDatabaseActor {
         var combined: [String: HybridSearchResult] = [:]
 
         // Normalize lexical scores (FTS rank is negative)
-        let maxLexicalScore = lexical.map { abs($0.score) }.max() ?? 1.0
+        let maxLexicalScore = lexical.map { Swift.abs($0.score) }.max() ?? 1.0
 
         for result in lexical {
-            let normalizedScore = abs(result.score) / maxLexicalScore
+            let normalizedScore = Swift.abs(result.score) / maxLexicalScore
             combined[result.chunkId] = HybridSearchResult(
                 chunkId: result.chunkId,
                 documentPath: result.documentPath,

@@ -411,7 +411,7 @@ public actor UnifiedContentBridge {
             return children.map { nodeToMarkdown($0) }.joined(separator: " ") + "\n\n"
         case .heading(let level, let text):
             return String(repeating: "#", count: level) + " \(text)\n"
-        case .list(let items, let type):
+        case .list(let items, _):
             return items.map { "- \(nodeToMarkdown($0))" }.joined(separator: "\n") + "\n"
         case .code(let code, let lang):
             return "```\(lang ?? "")\n\(code)\n```\n"
@@ -424,7 +424,7 @@ public actor UnifiedContentBridge {
         // Simple markdown parser
         let lines = markdown.split(separator: "\n", omittingEmptySubsequences: false)
         var title = "Untitled"
-        var sections: [ContentSection] = []
+        let sections: [ContentSection] = []
 
         if let firstLine = lines.first, firstLine.starts(with: "#") {
             title = String(firstLine.dropFirst(2)).trimmingCharacters(in: .whitespaces)

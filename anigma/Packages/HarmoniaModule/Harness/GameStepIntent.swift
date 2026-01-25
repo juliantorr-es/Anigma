@@ -5,7 +5,7 @@
 //  Step intent for game project domain.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Intent for a game project step.
 public enum GameStepIntent: Sendable, Codable {

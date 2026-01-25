@@ -32,13 +32,13 @@ public actor TCPClient {
         hints.ai_protocol = Darwin.IPPROTO_TCP
 
         var result: UnsafeMutablePointer<addrinfo>?
-        guard getaddrinfo(host, String(port), &hints, &result) == 0 else {
+        guard getaddrinfo(host, String(port), &hints, &result) == 0, let addrList = result else {
             throw TCPClientError.dnsResolutionFailed
         }
-        defer { freeaddrinfo(result) }
+        defer { freeaddrinfo(addrList) }
 
-        let sockaddr = result.pointee
-        guard Darwin.connect(socket, sockaddr.pointee.ai_addr, sockaddr.pointee.ai_addrlen) == 0 else {
+        let sockaddr = addrList.pointee
+        guard Darwin.connect(socket, sockaddr.ai_addr, sockaddr.ai_addrlen) == 0 else {
             throw TCPClientError.connectionFailed
         }
 
@@ -68,7 +68,9 @@ public actor TCPClient {
         let buffer = [UInt8](data)
 
         while bytesSent < totalBytes {
-            let result = Darwin.send(socket, buffer + bytesSent, totalBytes - bytesSent, 0)
+            let result = buffer.withUnsafeBytes { ptr in
+                Darwin.send(socket, ptr.baseAddress!.advanced(by: bytesSent), totalBytes - bytesSent, 0)
+            }
             guard result > 0 else {
                 throw TCPClientError.sendFailed
             }

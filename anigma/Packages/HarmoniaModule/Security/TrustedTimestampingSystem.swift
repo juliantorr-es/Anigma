@@ -7,17 +7,17 @@
 
 import AnigmaCore
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import os
 
 /// Trusted timestamping for evidence temporal authenticity
 /// Turns "when captured" into "provably when captured" with external time anchors
 public actor TrustedTimestampingSystem {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private let timestampingServices: [TimestampingService]
     private var monotonicClock: MonotonicClock
 
-    public init(dbActor: any DatabaseExecutor) {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) {
         self.dbActor = dbActor
         self.timestampingServices = [
             RFC3161TimestampingService(),
@@ -552,7 +552,7 @@ public actor TrustedTimestampingSystem {
 
 // MARK: - Supporting Classes
 
-class MonotonicClock: Sendable {
+final class MonotonicClock: Sendable {
     private let state = OSAllocatedUnfairLock(initialState: UInt64(0))
 
     func getNext() -> UInt64 {

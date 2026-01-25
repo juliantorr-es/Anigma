@@ -6,7 +6,7 @@
 //  Turns "college-level wisdom" into concrete findings.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import DoctrineCore
 
 // MARK: - Code Quality Scout

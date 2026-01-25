@@ -6,7 +6,7 @@
 //  Tools: code_question, code_search, symbol_lookup
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Simple Code Analysis Tool
 

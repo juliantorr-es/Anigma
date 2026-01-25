@@ -14,7 +14,7 @@
 //  - Node/cluster orchestration
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Harmonia Reasoning Domain Extensions

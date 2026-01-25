@@ -6,7 +6,7 @@
 //  Turn the black box into a visible, auditable graph.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - DataFlow Graph
@@ -519,20 +519,20 @@ public struct DataFlowRenderer {
 
 /// Central service for generating and managing transparency artifacts.
 public struct CompleteTrackingConfiguration: Sendable {
-    public let task: Task
-    public let result: Result
-    public let stages: [Stage]
-    public let engines: [Engine]
-    public let policy: Policy
+    public let task: InferenceTask
+    public let result: InferenceResult
+    public let stages: [PipelineStage]
+    public let engines: [EngineUsage]
+    public let policy: AppliedPolicyReport
     public let blockedActions: [BlockedAction]
     public let reasoningExplanation: ReasoningExplanation?
 
     public init(
-        task: Task,
-        result: Result,
-        stages: [Stage],
-        engines: [Engine],
-        policy: Policy,
+        task: InferenceTask,
+        result: InferenceResult,
+        stages: [PipelineStage],
+        engines: [EngineUsage],
+        policy: AppliedPolicyReport,
         blockedActions: [BlockedAction] = [],
         reasoningExplanation: ReasoningExplanation? = nil
     ) {
@@ -565,23 +565,31 @@ public actor TransparencyService {
     }
 
     /// Complete tracking and emit transparency bundle.
-    public func completeTracking(config: CompleteTrackingConfiguration) async -> TransparencyBundle {
+    public func completeTracking(
+        for task: InferenceTask,
+        result: InferenceResult,
+        stages: [PipelineStage],
+        engines: [EngineUsage],
+        policy: AppliedPolicyReport,
+        blockedActions: [BlockedAction],
+        reasoningExplanation: ReasoningExplanation?
+    ) async -> TransparencyBundle {
         let receipt = await receiptGenerator.generateReceipt(
-            for: config.task,
-            result: config.result,
-            stages: config.stages,
-            engines: config.engines,
-            policy: config.policy,
-            blockedActions: config.blockedActions,
-            reasoningExplanation: config.reasoningExplanation
+            for: task,
+            result: result,
+            stages: stages,
+            engines: engines,
+            policy: policy,
+            blockedActions: blockedActions,
+            reasoningExplanation: reasoningExplanation
         )
 
         let flowGraph: DataFlowGraph
-        if let builder = flowBuilders[config.task.id] {
+        if let builder = flowBuilders[task.id] {
             flowGraph = await builder.build()
-            flowBuilders.removeValue(forKey: config.task.id)
+            flowBuilders.removeValue(forKey: task.id)
         } else {
-            flowGraph = DataFlowGraph(taskId: config.task.id, nodes: [], edges: [])
+            flowGraph = DataFlowGraph(taskId: task.id, nodes: [], edges: [])
         }
 
         return TransparencyBundle(

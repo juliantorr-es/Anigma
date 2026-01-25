@@ -81,9 +81,9 @@ public actor Scheduler {
             switch (record1.job.deadline, record2.job.deadline) {
             case (let deadline1?, let deadline2?):
                 return deadline1 < deadline2
-            case (nil, let deadline2?):
+            case (nil, _?):
                 return true // Jobs with deadlines come first
-            case (let deadline1?, nil):
+            case (_?, nil):
                 return false
             case (nil, nil):
                 break
@@ -130,7 +130,7 @@ public actor Scheduler {
                     expiredRecord.status = .expired
                     expiredRecord.completedAt = Date()
                     jobRecords[record.id] = expiredRecord
-                    Task { try? await persistRecord(expiredRecord) }
+                    Task { await persistRecord(expiredRecord) }
                 }
                 continue
             }
@@ -251,7 +251,7 @@ public actor Scheduler {
             // Schedule retry
             Task {
                 try? await Task.sleep(for: .seconds(retryDelay.timeIntervalSinceNow))
-                await enqueue(retryRecord)
+                self.enqueue(retryRecord)
             }
             
             print("Scheduler: Job \(jobId) failed, retry scheduled at \(retryDelay)")

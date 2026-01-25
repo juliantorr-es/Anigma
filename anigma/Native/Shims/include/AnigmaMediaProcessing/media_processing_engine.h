@@ -7,8 +7,11 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <string>
 #include <mutex>
 #include <chrono>
+#include <ratio>
+#include <limits>
 #include <cstdint>
 #include <list>
 #include <shared_mutex>

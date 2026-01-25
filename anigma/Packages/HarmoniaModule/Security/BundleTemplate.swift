@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // Public because it's used by public APIs. Keeping it top-level avoids ordering
 // weirdness and forward-reference surprises.

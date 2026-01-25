@@ -6,8 +6,8 @@
 //  Separate database file for code indexing (isolated from general memory).
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Code Index Configuration
 

@@ -7,17 +7,17 @@
 
 import AnigmaCore
 import DatabaseCore
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 import ContractsCore
 
 /// Tamper-evident evidence chain and bundle generation system
 /// Makes entire custody chain tamper-detectable and exportable as admissible evidence
 public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private let signingKey: SymmetricKey
 
-    public init(dbActor: any DatabaseExecutor) async throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) async throws {
         self.dbActor = dbActor
         self.signingKey = SymmetricKey(size: .bits256)
 
@@ -74,17 +74,17 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
                 actor, actor_ip, session_id, previous_hash, event_hash
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, parameters: [
-                dbp(eventId),
-                dbp(eventType),
-                dbp(timestamp),
-                dbp(timezone),
-                dbp(payloadHash),
-                dbp(payloadString),
-                dbp(actor),
-                dbp(actorIP),
-                dbp(sessionId),
-                dbp(previousHash),
-                dbp(eventHash)
+                DatabaseCore.dbp(eventId),
+                DatabaseCore.dbp(eventType),
+                DatabaseCore.dbp(timestamp),
+                DatabaseCore.dbp(timezone),
+                DatabaseCore.dbp(payloadHash),
+                DatabaseCore.dbp(payloadString),
+                DatabaseCore.dbp(actor),
+                DatabaseCore.dbp(actorIP),
+                DatabaseCore.dbp(sessionId),
+                DatabaseCore.dbp(previousHash),
+                DatabaseCore.dbp(eventHash)
             ])
 
         return eventId
@@ -139,15 +139,15 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
                 time_range_hours, event_count, manifest_hash, manifest_json
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, parameters: [
-                dbp(bundleId),
-                dbp(bundleType),
-                dbp(description),
-                dbp(purpose),
-                dbp(createdAt),
-                dbp(timeRangeHours),
-                dbp(events.count),
-                dbp(manifestHash),
-                dbp(String(data: manifestJSON, encoding: .utf8) ?? "{}")
+                DatabaseCore.dbp(bundleId),
+                DatabaseCore.dbp(bundleType),
+                DatabaseCore.dbp(description),
+                DatabaseCore.dbp(purpose),
+                DatabaseCore.dbp(createdAt),
+                DatabaseCore.dbp(timeRangeHours),
+                DatabaseCore.dbp(events.count),
+                DatabaseCore.dbp(manifestHash),
+                DatabaseCore.dbp(String(data: manifestJSON, encoding: .utf8) ?? "{}")
             ])
 
         // Link events to bundle
@@ -157,7 +157,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
             }
             try await dbActor.execute("""
                 INSERT INTO bundle_events (bundle_id, event_id) VALUES (?, ?)
-                """, parameters: [dbp(bundleId), dbp(eventId)])
+                """, parameters: [DatabaseCore.dbp(bundleId), DatabaseCore.dbp(eventId)])
         }
 
         return bundleId
@@ -183,7 +183,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
 
         // Write manifest
         let manifestPath = "\(exportDir)/manifest.json"
-        guard let manifestData = (bundle["manifest_json"] as? String else {
+        guard let manifestData = (bundle["manifest_json"] as? String) else {
             fatalError("Failed to cast to String")
         }
         try manifestData.write(to: URL(fileURLWithPath: manifestPath))
@@ -391,7 +391,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
             SELECT * FROM tamper_events
             WHERE timestamp >= ? AND timestamp <= ?
             ORDER BY timestamp, event_id
-            """, parameters: [dbp(startTime), dbp(endTime)])
+            """, parameters: [DatabaseCore.dbp(startTime), DatabaseCore.dbp(endTime)])
 
         return convertDatabaseRows(result)
     }
@@ -408,7 +408,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
     private func getBundle(_ bundleId: String) async throws -> [String: Sendable]? {
         let result = try await dbActor.query("""
             SELECT * FROM evidence_bundles WHERE bundle_id = ?
-            """, parameters: [dbp(bundleId)])
+            """, parameters: [DatabaseCore.dbp(bundleId)])
 
         guard let row = result.first else { return nil }
 
@@ -422,7 +422,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
             JOIN bundle_events be ON e.event_id = be.event_id
             WHERE be.bundle_id = ?
             ORDER BY e.timestamp, e.event_id
-            """, parameters: [dbp(bundleId)])
+            """, parameters: [DatabaseCore.dbp(bundleId)])
 
         return convertDatabaseRows(result)
     }

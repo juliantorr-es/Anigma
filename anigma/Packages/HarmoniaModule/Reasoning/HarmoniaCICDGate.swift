@@ -12,7 +12,7 @@
 //  - Integrates with Pragma for issue tracking
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 import ContractsCore
 

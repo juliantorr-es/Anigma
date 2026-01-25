@@ -9,6 +9,7 @@ import AnigmaCore
 import Foundation
 import AnigmaPrimitives
 import AnigmaNativeShims
+import UniformTypeIdentifiers
 
 #if canImport(CoreGraphics)
 import CoreGraphics
@@ -463,10 +464,10 @@ public enum ImageFormat: String, CaseIterable, Sendable {
     /// Uniform Type Identifier for the format.
     public var utType: CFString {
         switch self {
-        case .png: return kUTTypePNG
-        case .jpeg: return kUTTypeJPEG
-        case .tiff: return kUTTypeTIFF
-        case .gif: return kUTTypeGIF
+        case .png: return UTType.png.identifier as CFString
+        case .jpeg: return UTType.jpeg.identifier as CFString
+        case .tiff: return UTType.tiff.identifier as CFString
+        case .gif: return UTType.gif.identifier as CFString
         }
     }
     

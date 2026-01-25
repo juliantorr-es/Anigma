@@ -6,7 +6,7 @@
 //  and resource allocation across backends.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Scheduling Strategy

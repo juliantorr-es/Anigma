@@ -7,15 +7,16 @@
 
 import AnigmaCore
 import DatabaseCore
-import Foundation
-import CryptoKit
+import ContractsCore
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 
 /// Forensic document metadata tracking system
 /// Captures complete chain-of-custody information for legal admissibility
 public actor ForensicMetadataTracker {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
 
-    public init(dbActor: any DatabaseExecutor) async throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) async throws {
         self.dbActor = dbActor
         try await createForensicSchema()
     }
@@ -85,6 +86,10 @@ public actor ForensicMetadataTracker {
             fileData: fileData,
             fileHash: fileHash
         )
+        
+        return acquisitionId
+    }
+    
 struct RecordTransformationConfiguration: Sendable {
     let sourceAcquisitionId: String
     let transformationType: String
@@ -125,57 +130,62 @@ struct RecordTransformationConfiguration: Sendable {
 // Function signature would change to:
 // func recordTransformation(config: RecordTransformationConfiguration) async throws -> String
         // Store transformed artifact
-        try await storeTransformedArtifact(
-            transformationId: transformationId,
-            outputPath: outputPath,
-            outputData: outputData,
-            outputHash: outputHash
-        )
-
-        // Record transformation event
-        try await dbActor.execute("""
-            INSERT INTO forensic_transformations (
-                transformation_id, source_acquisition_id, transformation_type,
-                transforming_actor, transformation_tool, tool_version,
-                input_hash, output_hash, output_path,
-                transformation_timestamp, transformation_parameters, purpose
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, parameters: [
-                dbp(transformationId),
-                dbp(sourceAcquisitionId),
-                dbp(transformationType.rawValue),
-                dbp(transformingActor),
-                dbp(transformationTool),
-                dbp(toolVersion),
-                dbp(inputHash),
-                dbp(outputHash),
-                dbp(outputPath),
-                dbp(timestamp),
-                dbp(try JSONSerialization.data(withJSONObject: transformationParameters ?? [:], options: [])),
-                dbp(purpose)
-            ])
-
-        protocolVersion: String? = nil,
-        transmissionMetadata: [String: Sendable]? = nil
-    ) async throws -> String {
-        let transmissionId = UUID().uuidString.lowercased()
-        let timestamp = Int(Date().timeIntervalSince1970)
-
-        try await dbActor.execute("""
-            INSERT INTO forensic_transmissions (
-                transmission_id, source_acquisition_id, transmission_type,
-struct RecordTransmissionConfiguration: Sendable {
-    let sourceAcquisitionId: UUID
-    let transmissionType: TransmissionType
-    let transmittingActor: String
-    let recipient: String
-    let transmissionMethod: String
-    let protocolVersion: String
-    let transmissionMetadata: [String: Any]
-    
-    // Note: If [String: Any] is not Sendable, consider using a Codable type or @unchecked Sendable
-    // Alternatively, make transmissionMetadata a specific type that conforms to Sendable
-}
+        // try await storeTransformedArtifact(
+        //     transformationId: transformationId,
+        //     outputPath: outputPath,
+        //     outputData: outputData,
+        //     outputHash: outputHash
+        // )
+        // 
+        // // Record transformation event
+        // try await dbActor.execute("""
+        //     INSERT INTO forensic_transformations (
+        //         transformation_id, source_acquisition_id, transformation_type,
+        //         transforming_actor, transformation_tool, tool_version,
+        //         input_hash, output_hash, output_path,
+        //         transformation_timestamp, transformation_parameters, purpose
+        //     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        //     """, parameters: [
+        //         dbp(transformationId),
+        //         dbp(sourceAcquisitionId),
+        //         dbp(transformationType.rawValue),
+        //         dbp(transformingActor),
+        //         dbp(transformationTool),
+        //         dbp(toolVersion),
+        //         dbp(inputHash),
+        //         dbp(outputHash),
+        //         dbp(outputPath),
+        //         dbp(timestamp),
+        //         dbp(try JSONSerialization.data(withJSONObject: transformationParameters ?? [:], options: [])),
+        //         dbp(purpose)
+        //     ])
+        // 
+        // protocolVersion: String? = nil,
+        // transmissionMetadata: [String: Sendable]? = nil
+        // ) async throws -> String {
+        //     let transmissionId = UUID().uuidString.lowercased()
+        //     let timestamp = Int(Date().timeIntervalSince1970)
+        // 
+        //     try await dbActor.execute("""
+        //         INSERT INTO forensic_transmissions (
+        //             transmission_id, source_acquisition_id, transmission_type,
+        //             transmitting_actor, recipient, transmission_method,
+        //             protocol_version, transmission_timestamp, transmission_metadata
+        //         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        //         """, parameters: [
+        //             dbp(transmissionId),
+        //             dbp(sourceAcquisitionId),
+        //             dbp(transmissionType.rawValue),
+        //             dbp(transmittingActor),
+        //             dbp(recipient),
+        //             dbp(transmissionMethod),
+        //             dbp(protocolVersion),
+        //             dbp(timestamp),
+        //             dbp(try JSONSerialization.data(withJSONObject: transmissionMetadata ?? [:], options: []))
+        //         ])
+        // 
+        //     return transmissionId
+        // }
 
 // In the function call:
 // recordTransmission(config: RecordTransmissionConfiguration(
@@ -199,12 +209,12 @@ struct RecordTransmissionConfiguration: Sendable {
 //     dbp(config.protocolVersion),
 //     ...
 // ]
-                dbp(timestamp),
-                dbp(try JSONSerialization.data(withJSONObject: transmissionMetadata ?? [:], options: []))
-            ])
-
-        return transmissionId
-    }
+        //         dbp(timestamp),
+        //         dbp(try JSONSerialization.data(withJSONObject: transmissionMetadata ?? [:], options: []))
+        //     ])
+        // 
+        //     return transmissionId
+        // }
 
     // MARK: - Forensic Chain Queries
 
@@ -281,7 +291,8 @@ struct RecordTransmissionConfiguration: Sendable {
                 purpose TEXT,
                 FOREIGN KEY (source_acquisition_id) REFERENCES forensic_acquisitions(acquisition_id)
             )
-            """)
+            """
+        )
 
         // Forensic transmissions table
         try await dbActor.execute("""
@@ -297,7 +308,8 @@ struct RecordTransmissionConfiguration: Sendable {
                 transmission_metadata TEXT,
                 FOREIGN KEY (source_acquisition_id) REFERENCES forensic_acquisitions(acquisition_id)
             )
-            """)
+            """
+        )
 
         // Immutable artifacts table
         try await dbActor.execute("""
@@ -310,23 +322,27 @@ struct RecordTransmissionConfiguration: Sendable {
                 storage_timestamp INTEGER NOT NULL,
                 FOREIGN KEY (acquisition_id) REFERENCES forensic_acquisitions(acquisition_id)
             )
-            """)
+            """
+        )
 
         // Create indexes
         try await dbActor.execute("""
             CREATE INDEX IF NOT EXISTS idx_forensic_acquisitions_hash
             ON forensic_acquisitions(file_hash)
-            """)
+            """
+        )
 
         try await dbActor.execute("""
             CREATE INDEX IF NOT EXISTS idx_forensic_transformations_source
             ON forensic_transformations(source_acquisition_id)
-            """)
+            """
+        )
 
         try await dbActor.execute("""
             CREATE INDEX IF NOT EXISTS idx_forensic_transmissions_source
             ON forensic_transmissions(source_acquisition_id)
-            """)
+            """
+        )
     }
 
     private func createImmutableArtifact(
@@ -460,10 +476,10 @@ struct RecordTransmissionConfiguration: Sendable {
     }
 
     private func hasUnalteredOriginal(acquisitionId: String) async throws -> Bool {
-        let result = try await dbActor.query("""
+        let result = try await dbActor.query(#"""
             SELECT COUNT(*) as count FROM immutable_artifacts
             WHERE acquisition_id = ? AND artifact_type = 'original'
-            """, parameters: [dbp(acquisitionId)])
+            """#, parameters: [dbp(acquisitionId)])
 
         return (result.first?.int(for: "count") ?? 0) > 0
     }

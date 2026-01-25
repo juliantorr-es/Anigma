@@ -6,7 +6,7 @@
 //  Mirrors Swift6MigrationState pattern for different domain.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Outcome of a game playtest session.
 public struct GamePlaytestOutcome: Sendable, Codable {

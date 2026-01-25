@@ -7,7 +7,7 @@
 //  and maintains Core Governance Layer requirements.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import AnigmaCore
 

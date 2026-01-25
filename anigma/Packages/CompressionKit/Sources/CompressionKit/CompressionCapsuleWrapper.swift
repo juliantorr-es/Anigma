@@ -11,7 +11,7 @@ extension CapsuleBuffer {
         _ body: (borrowing CapsuleBuffer) throws -> T
     ) rethrows -> T {
         try data.withUnsafeBytes { bytes in
-            var buffer = CapsuleBuffer(
+            let buffer = CapsuleBuffer(
                 borrowedInput: bytes.baseAddress!,
                 count: bytes.count
             )
@@ -250,8 +250,7 @@ public final class CompressionCapsuleWrapper {
     /// - Throws: `CapsuleError` if the release fails.
     public func releaseBuffer(_ buffer: consuming CapsuleBuffer) throws {
         // Temporary placeholder to allow compilation
-        var mutableBuffer = buffer
-        mutableBuffer.markReleased()
+        buffer.markReleased()
     }
 
     /// Estimate the compressed size for a given input size.
@@ -285,7 +284,7 @@ public final class CompressionCapsuleWrapper {
     /// - Throws: `CapsuleError` if compression fails.
     public func compress(_ input: Data) throws -> Data {
         try input.withUnsafeBytes { bytes in
-            var buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
+            let buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
             let outputBuffer = try CapsuleBuffer.fill { descriptorPtr in
                 var error = anigma_capsule_error_t()
                 return try lock.withLock {
@@ -314,7 +313,7 @@ public final class CompressionCapsuleWrapper {
     /// - Throws: `CapsuleError` if decompression fails.
     public func decompress(_ input: Data) throws -> Data {
         try input.withUnsafeBytes { bytes in
-            var buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
+            let buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
             let outputBuffer = try CapsuleBuffer.fill { descriptorPtr in
                 var error = anigma_capsule_error_t()
                 return try lock.withLock {
@@ -351,7 +350,7 @@ public final class CompressionCapsuleWrapper {
                     &rawStreamHandle,
                     &error
                 )
-                guard status == ANIGMA_OK, let rawStreamHandle = rawStreamHandle else {
+                guard status == ANIGMA_OK, let _ = rawStreamHandle else {
                     throw CapsuleError(status: status, error: error)
                 }
             }
@@ -360,12 +359,14 @@ public final class CompressionCapsuleWrapper {
         guard let rawStreamHandle = rawStreamHandle else {
             throw CapsuleError(
                 status: ANIGMA_ERR_NOT_INITIALIZED,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_NOT_INITIALIZED,
-                    message: "Stream handle not created",
-                    detail: nil,
-                    aux: 0
-                )
+                        error: "Stream handle not created".withCString { msgPtr in
+                            anigma_capsule_error_t(
+                                code: ANIGMA_ERR_NOT_INITIALIZED,
+                                message: msgPtr,
+                                detail: nil,
+                                aux: 0
+                            )
+                        }
             )
         }
 
@@ -389,7 +390,7 @@ public final class CompressionCapsuleWrapper {
                     &rawStreamHandle,
                     &error
                 )
-                guard status == ANIGMA_OK, let rawStreamHandle = rawStreamHandle else {
+                guard status == ANIGMA_OK, let _ = rawStreamHandle else {
                     throw CapsuleError(status: status, error: error)
                 }
             }
@@ -398,12 +399,14 @@ public final class CompressionCapsuleWrapper {
         guard let rawStreamHandle = rawStreamHandle else {
             throw CapsuleError(
                 status: ANIGMA_ERR_NOT_INITIALIZED,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_NOT_INITIALIZED,
-                    message: "Stream handle not created",
-                    detail: nil,
-                    aux: 0
-                )
+                        error: "Stream handle not created".withCString { msgPtr in
+                            anigma_capsule_error_t(
+                                code: ANIGMA_ERR_NOT_INITIALIZED,
+                                message: msgPtr,
+                                detail: nil,
+                                aux: 0
+                            )
+                        }
             )
         }
 
@@ -466,7 +469,7 @@ public final class CompressionCapsuleWrapper {
     /// - Throws: `CapsuleError` if loading fails.
     public func loadDictionary(_ dictionary: Data) throws {
         try dictionary.withUnsafeBytes { bytes in
-            var buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
+            let buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
             var error = anigma_capsule_error_t()
 
             try lock.withLock {
@@ -523,19 +526,21 @@ public final class CompressionStreamHandle {
                 guard let rawHandle = rawHandle else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_NOT_INITIALIZED,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_NOT_INITIALIZED,
-                            message: "Stream handle already destroyed",
-                            detail: nil,
-                            aux: 0
-                        )
+                        error: "Stream handle already destroyed".withCString { msgPtr in
+                            anigma_capsule_error_t(
+                                code: ANIGMA_ERR_NOT_INITIALIZED,
+                                message: msgPtr,
+                                detail: nil,
+                                aux: 0
+                            )
+                        }
                     )
                 }
 
                 let status: anigma_status_t
                 if let input = input {
                     status = input.withUnsafeBytes { bytes -> anigma_status_t in
-                        var buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
+                        let buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
                         var inputDesc = buffer.withUnsafeDescriptor { (ptr: UnsafePointer<anigma_capsule_buffer_t>) in ptr.pointee }
                         return anigma_compression_capsule_compress_stream(
                             rawHandle,
@@ -574,19 +579,21 @@ public final class CompressionStreamHandle {
                 guard let rawHandle = rawHandle else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_NOT_INITIALIZED,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_NOT_INITIALIZED,
-                            message: "Stream handle already destroyed",
-                            detail: nil,
-                            aux: 0
-                        )
+                        error: "Stream handle already destroyed".withCString { msgPtr in
+                            anigma_capsule_error_t(
+                                code: ANIGMA_ERR_NOT_INITIALIZED,
+                                message: msgPtr,
+                                detail: nil,
+                                aux: 0
+                            )
+                        }
                     )
                 }
 
                 let status: anigma_status_t
                 if let input = input {
                     status = input.withUnsafeBytes { bytes -> anigma_status_t in
-                        var buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
+                        let buffer = CapsuleBuffer(borrowedInput: bytes.baseAddress!, count: bytes.count)
                         var inputDesc = buffer.withUnsafeDescriptor { (ptr: UnsafePointer<anigma_capsule_buffer_t>) in ptr.pointee }
                         return anigma_compression_capsule_decompress_stream(
                             rawHandle,
@@ -620,12 +627,14 @@ public final class CompressionStreamHandle {
             guard let rawHandle = rawHandle else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_NOT_INITIALIZED,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_NOT_INITIALIZED,
-                            message: "Stream handle already destroyed",
-                            detail: nil,
-                            aux: 0
-                        )
+                        error: "Stream handle already destroyed".withCString { msgPtr in
+                            anigma_capsule_error_t(
+                                code: ANIGMA_ERR_NOT_INITIALIZED,
+                                message: msgPtr,
+                                detail: nil,
+                                aux: 0
+                            )
+                        }
                     )
             }
 

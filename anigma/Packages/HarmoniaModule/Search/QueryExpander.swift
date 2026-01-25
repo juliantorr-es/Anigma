@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Expanded query result
 public struct ExpandedQuery: Sendable, Codable {

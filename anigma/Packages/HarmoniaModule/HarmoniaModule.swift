@@ -47,12 +47,12 @@ public enum HarmoniaModule: CapabilityModule {
         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
         
         // Create TamperEvidenceSystem adapter
-        let tamperEvidenceSystem = try await TamperEvidenceSystem(dbActor: databaseAdapter)
+        let tamperEvidenceSystem = try await TamperEvidenceSystem(dbActor: databaseAdapter as! DatabaseCore.DatabaseExecutor)
         let tamperEvidenceAdapter = TamperEvidenceSystemAdapter(tamperEvidenceSystem: tamperEvidenceSystem)
         try await runtime.registerEvidenceSink(tamperEvidenceAdapter)
         
         // Create EvidenceRecorder adapter
-        let evidenceRecorder = GovernedEvidenceRecorder(masterDb: databaseAdapter)
+        let evidenceRecorder = GovernedEvidenceRecorder(masterDb: databaseAdapter as! DatabaseCore.DatabaseExecutor)
         let evidenceRecorderAdapter = EvidenceRecorderAdapter(evidenceRecorder: evidenceRecorder)
         try await runtime.registerEvidenceSink(evidenceRecorderAdapter)
         

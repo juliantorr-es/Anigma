@@ -12,7 +12,7 @@
 //  - Provide inline hints in the IDE
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 import ContractsCore
 

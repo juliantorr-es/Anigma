@@ -6,7 +6,7 @@
 //  Enables versioned policy updates with rollback and A/B testing.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Versioned scoring policy for Phase 9.3.
 /// Tracks policy versions with explicit rollback and evolution control.

@@ -266,9 +266,9 @@ public actor DevelopumLSPBridge {
             let inputs: [String: TelemetryValue] = [
                 "repoId": .string(repoId.uuidString),
                 "filePath": .string(filePath),
-                "line": .int(line),
-                "column": .int(column),
-                "resultCount": .int(result.locations.count)
+                "line": .integer(line),
+                "column": .integer(column),
+                "resultCount": .integer(result.locations.count)
             ]
             let inputsHash = TelemetryHash.compute(from: inputs)
             let _ = ReceiptWire.create(
@@ -315,10 +315,10 @@ public actor DevelopumLSPBridge {
             let inputs: [String: TelemetryValue] = [
                 "repoId": .string(repoId.uuidString),
                 "filePath": .string(filePath),
-                "line": .int(line),
-                "column": .int(column),
-                "includeDeclaration": .bool(includeDeclaration),
-                "resultCount": .int(locations.count)
+                "line": .integer(line),
+                "column": .integer(column),
+                "includeDeclaration": .boolean(includeDeclaration),
+                "resultCount": .integer(locations.count)
             ]
             let inputsHash = TelemetryHash.compute(from: inputs)
             let _ = ReceiptWire.create(
@@ -363,9 +363,9 @@ public actor DevelopumLSPBridge {
             let inputs: [String: TelemetryValue] = [
                 "repoId": .string(repoId.uuidString),
                 "filePath": .string(filePath),
-                "line": .int(line),
-                "column": .int(column),
-                "hasContent": .bool(result != nil)
+                "line": .integer(line),
+                "column": .integer(column),
+                "hasContent": .boolean(result != nil)
             ]
             let inputsHash = TelemetryHash.compute(from: inputs)
             let _ = ReceiptWire.create(
@@ -416,9 +416,9 @@ public actor DevelopumLSPBridge {
             let inputs: [String: TelemetryValue] = [
                 "repoId": .string(repoId.uuidString),
                 "filePath": .string(filePath),
-                "line": .int(line),
-                "column": .int(column),
-                "itemCount": .int(result.items.count)
+                "line": .integer(line),
+                "column": .integer(column),
+                "itemCount": .integer(result.items.count)
             ]
             let inputsHash = TelemetryHash.compute(from: inputs)
             let _ = ReceiptWire.create(
@@ -457,7 +457,7 @@ public actor DevelopumLSPBridge {
             let inputs: [String: TelemetryValue] = [
                 "repoId": .string(repoId.uuidString),
                 "filePath": .string(filePath),
-                "symbolCount": .int(symbols.count)
+                "symbolCount": .integer(symbols.count)
             ]
             let inputsHash = TelemetryHash.compute(from: inputs)
             let _ = ReceiptWire.create(

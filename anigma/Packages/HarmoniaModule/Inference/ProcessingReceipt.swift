@@ -6,7 +6,7 @@
 //  that explains exactly what happened to the user's data.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Processing Receipt Types
@@ -575,20 +575,20 @@ public struct ReasoningExplanation: Sendable, Codable {
 
 /// Generates processing receipts for inference runs.
 public struct GenerateReceiptConfiguration: Sendable {
-    public let task: ProcessingTask
-    public let result: ProcessingResult
-    public let stages: [ProcessingStage]
-    public let engines: [ProcessingEngine]
-    public let policy: ProcessingPolicy
+    public let task: InferenceTask
+    public let result: InferenceResult
+    public let stages: [PipelineStage]
+    public let engines: [EngineUsage]
+    public let policy: AppliedPolicyReport
     public let blockedActions: [BlockedAction]
     public let reasoningExplanation: ReasoningExplanation?
 
     public init(
-        task: ProcessingTask,
-        result: ProcessingResult,
-        stages: [ProcessingStage],
-        engines: [ProcessingEngine],
-        policy: ProcessingPolicy,
+        task: InferenceTask,
+        result: InferenceResult,
+        stages: [PipelineStage],
+        engines: [EngineUsage],
+        policy: AppliedPolicyReport,
         blockedActions: [BlockedAction] = [],
         reasoningExplanation: ReasoningExplanation? = nil
     ) {

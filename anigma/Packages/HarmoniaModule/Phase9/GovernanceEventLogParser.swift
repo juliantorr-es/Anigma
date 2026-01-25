@@ -6,7 +6,7 @@
 //  Provides deterministic parsing for verification processing.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Parser for governance event logs used in replay verification.
 /// Handles deserialization and validation of event log data.

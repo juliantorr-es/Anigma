@@ -49,7 +49,7 @@ public final class RankFusionCapsuleWrapper {
         
         let status = ids.withUnsafeBufferPointer { idsPtr in
             ranks.withUnsafeBufferPointer { ranksPtr in
-                (try? handle?.withHandle { rawHandle in
+                (try? handle?.withHandle { rawHandle -> anigma_status_t in
                     anigma_rank_fusion_capsule_add_rank_list(
                         rawHandle,
                         idsPtr.baseAddress,
@@ -70,7 +70,7 @@ public final class RankFusionCapsuleWrapper {
     public func clear() throws {
         var error = anigma_capsule_error_t()
         
-        let status = (try? handle?.withHandle { rawHandle in
+        let status = (try? handle?.withHandle { rawHandle -> anigma_status_t in
             anigma_rank_fusion_capsule_clear(rawHandle, &error)
         }) ?? ANIGMA_ERR_INTERNAL
         
@@ -84,7 +84,7 @@ public final class RankFusionCapsuleWrapper {
         var error = anigma_capsule_error_t()
         var count: size_t = 0
         
-        let status = (try? handle?.withHandle { rawHandle in
+        let status = (try? handle?.withHandle { rawHandle -> anigma_status_t in
             anigma_rank_fusion_capsule_get_unique_count(rawHandle, &count, &error)
         }) ?? ANIGMA_ERR_INTERNAL
         
@@ -110,7 +110,7 @@ public final class RankFusionCapsuleWrapper {
         
         let status = scores.withUnsafeMutableBufferPointer { scoresPtr in
             ids.withUnsafeMutableBufferPointer { idsPtr in
-                (try? handle?.withHandle { rawHandle in
+                (try? handle?.withHandle { rawHandle -> anigma_status_t in
                     anigma_rank_fusion_capsule_fuse(
                         rawHandle,
                         k,
@@ -158,7 +158,7 @@ public final class RankFusionCapsuleWrapper {
         
         let status = scores.withUnsafeMutableBufferPointer { scoresPtr in
             ids.withUnsafeMutableBufferPointer { idsPtr in
-                (try? handle?.withHandle { rawHandle in
+                (try? handle?.withHandle { rawHandle -> anigma_status_t in
                     anigma_rank_fusion_capsule_fuse_top_k(
                         rawHandle,
                         k,

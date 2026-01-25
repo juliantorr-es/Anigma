@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Lightweight research task validator used when the full research module is unavailable.
 public actor ResearchTaskValidator {

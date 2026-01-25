@@ -8,7 +8,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 // Import Build components
 // Note: These are internal to HarmoniaModule, so we use relative paths
@@ -155,9 +155,10 @@ public actor SwiftBuildTool {
         let packagePath = parameters["package_path"] as? String
         let configuration = (parameters["configuration"] as? String) ?? "debug"
         let buildConfig = BuildConfiguration(rawValue: configuration) ?? .debug
-        guard let targetName = (target?.isEmpty == false) ? target else {
+        guard let target = target, !target.isEmpty else {
             fatalError("Failed to unwrap targetName")
         }
+        let targetName = target
         let requestWorkingDirectory = packagePath
             .map { URL(fileURLWithPath: $0).standardizedFileURL } ?? workingDirectory
 

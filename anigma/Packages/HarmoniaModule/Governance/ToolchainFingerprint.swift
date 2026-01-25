@@ -7,7 +7,8 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+import ContractsCore
+@preconcurrency import Foundation
 
 /// Toolchain fingerprint for deterministic reproduction.
 /// Captures compiler version, SDK, and other environment state.

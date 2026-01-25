@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import AnigmaCLILocalInference
 
 public actor MLXChatProvider {
     private var mlxEngine: MLXInferenceEngine?
@@ -55,8 +56,7 @@ public actor MLXChatProvider {
         return try await engine.generate(
             prompt: prompt,
             maxTokens: maxTokens,
-            temperature: temperature,
-            topP: 0.9
+            temperature: temperature
         )
         #else
         throw MLXChatError.mlxNotAvailable
@@ -79,8 +79,7 @@ public actor MLXChatProvider {
         return try await engine.generate(
             prompt: fullPrompt,
             maxTokens: maxTokens,
-            temperature: Float(temperature),
-            topP: 0.9
+            temperature: Float(temperature)
         )
         #else
         throw MLXChatError.mlxNotAvailable
@@ -103,8 +102,7 @@ public actor MLXChatProvider {
         let stream = engine.generateStream(
             prompt: fullPrompt,
             maxTokens: maxTokens,
-            temperature: Float(temperature),
-            topP: 0.9
+            temperature: Float(temperature)
         )
         
         for try await token in stream {

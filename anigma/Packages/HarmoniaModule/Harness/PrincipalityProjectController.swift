@@ -7,8 +7,8 @@
 //  Phase B: Governance protocols with angelic hierarchy (comments only).
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 import AnigmaPrimitives
 
 /// Single coordination point for everything that happens to one project.

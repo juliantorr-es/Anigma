@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Model Source
 

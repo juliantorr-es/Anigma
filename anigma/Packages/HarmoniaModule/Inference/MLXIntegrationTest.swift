@@ -5,7 +5,7 @@
 //  Integration test for MLX inference functionality.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 /// Simple integration test for MLX functionality

@@ -7,19 +7,19 @@
 
 import AnigmaCore
 import ContractsCore
-import CryptoKit
+@preconcurrency import CryptoKit
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Cryptographic signing and key management for evidence authenticity
 /// Turns "unchanged since captured" into "captured correctly by authorized actor"
 public actor EvidenceSigningSystem {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private var keyProvider: SigningKeyProvider
     private var keyRotationSchedule: KeyRotationSchedule
     private var keyMetadata: SigningKeyMetadata
 
-    public init(dbActor: any DatabaseExecutor) throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) throws {
         self.dbActor = dbActor
         self.keyProvider = try Self.loadOrCreateSigningKeyProvider()
         self.keyRotationSchedule = KeyRotationSchedule.default

@@ -7,7 +7,7 @@
 //  All side effects must be recorded as events before execution.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Governed executor for Phase 9.0 deterministic loop.

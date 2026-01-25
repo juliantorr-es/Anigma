@@ -314,11 +314,11 @@ public struct PerformanceDegradationDetector: PatternDetector {
 
     private func calculatePerformanceConfidence(_ traces: [NormalizedTrace], trend: PerformanceTrend) -> Double {
         // Higher confidence for stronger degradation
-        let degradationStrength = abs(trend.slope)
+        let degradationStrength = Swift.abs(trend.slope)
         let strengthScore = min(degradationStrength / 1.0, 1.0)
 
         // Higher confidence for more consistent trend
-        let consistencyScore = abs(trend.correlation)
+        let consistencyScore = Swift.abs(trend.correlation)
 
         // Higher confidence for more data points
         let dataScore = min(Double(traces.count) / 10.0, 1.0)

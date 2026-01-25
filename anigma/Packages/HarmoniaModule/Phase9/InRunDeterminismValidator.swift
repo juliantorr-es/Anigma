@@ -7,7 +7,7 @@
 //  Stops execution immediately if any stage violates the determinism contract.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Live determinism validator for Phase 9.1 loop execution.
 /// Validates that target enumeration, scoring, and selection produce deterministic results.

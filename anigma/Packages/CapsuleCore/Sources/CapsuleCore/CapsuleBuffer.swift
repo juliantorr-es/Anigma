@@ -1,5 +1,5 @@
 import Foundation
-import AnigmaNativeShims
+@preconcurrency import AnigmaNativeShims
 
 /// A buffer descriptor for zero-copy marshalling between Swift and C capsules.
 /// Enforces the two-phase pattern: size query then fill.
@@ -150,7 +150,7 @@ public struct CapsuleBuffer: ~Copyable {
 }
 
 /// Error type for capsule operations.
-public struct CapsuleError: Error {
+public struct CapsuleError: Error, Sendable {
     public let status: AnigmaNativeShims.anigma_status_t
     public let error: anigma_capsule_error_t
     

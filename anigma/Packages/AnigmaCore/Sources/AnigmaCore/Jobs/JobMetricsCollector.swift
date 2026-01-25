@@ -210,8 +210,8 @@ public actor JobMetricsCollector: JobMetricsCollectorProtocol {
     
     /// Get error classification statistics.
     public func getErrorStats() async -> ErrorStats {
-        var errorCounts: [String: Int] = [:]
-        var errorTrends: [Date: [String]] = [:]
+        let errorCounts: [String: Int] = [:]
+        let errorTrends: [Date: [String]] = [:]
         
         // This would need to be integrated with the error classification system
         // For now, return basic error metrics

@@ -442,7 +442,7 @@ public struct PerformanceOptimizationPlanner: CampaignPlanner {
         // Calculate degradation strength
         let degradationStrength = calculateDegradationStrength(
             slope: slope,
-            correlation: abs(correlation),
+            correlation: Swift.abs(correlation),
             avgDuration: avgDuration,
             recentDuration: recentDuration
         )
@@ -559,7 +559,7 @@ public struct PerformanceOptimizationPlanner: CampaignPlanner {
         recentDuration: Double
     ) -> Double {
         // Combine multiple factors for degradation strength
-        let slopeScore = min(abs(slope) / 0.5, 1.0)  // Normalize slope
+        let slopeScore = min(Swift.abs(slope) / 0.5, 1.0)  // Normalize slope
         let correlationScore = correlation  // Higher correlation = more consistent trend
         let durationRatio = recentDuration / max(avgDuration, 1.0)  // Recent vs average
 

@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Circuit breaker for migration verification failures and rollbacks.
 /// Implements the circuit breaker pattern to stop pathological loops:

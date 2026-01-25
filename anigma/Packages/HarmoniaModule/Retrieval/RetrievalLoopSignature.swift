@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 public struct RetrievalLoopSignature: Sendable, Hashable, Codable {
     public let queryHash: String

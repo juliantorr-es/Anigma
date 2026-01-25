@@ -7,9 +7,9 @@
 //
 
 import AnigmaPrimitives
-import CryptoKit
+@preconcurrency import CryptoKit
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Tool router orchestrator that coordinates tool execution with strict guarantees.
 /// Ensures:

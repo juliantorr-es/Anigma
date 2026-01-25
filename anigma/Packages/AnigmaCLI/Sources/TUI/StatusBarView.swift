@@ -18,7 +18,9 @@ public class StatusBarView: TUIBaseComponent {
                     }
                 }
             }
-            self.subscriptionId = id
+            Task { @MainActor [weak self] in
+                self?.subscriptionId = id
+            }
         }
     }
 

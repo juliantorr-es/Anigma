@@ -7,12 +7,14 @@
 //
 
 import AnigmaCore
+import AnigmaPrimitives
 import Foundation
 import CryptoKit
+import TelemetryCore
 
 /// System that manages file indexing operations.
-public struct DevelopumIndexSystem: System {
-    public var name: String { "DevelopumIndexSystem" }
+public actor DevelopumIndexSystem: System {
+    public nonisolated var name: String { "DevelopumIndexSystem" }
     
     private let databaseService: DevelopumDatabaseService
     private let telemetryClient: TelemetryClient?
@@ -228,7 +230,7 @@ public struct DevelopumIndexSystem: System {
         let matches = regex.matches(in: line, options: [], range: NSRange(line.startIndex..., in: line))
         
         for match in matches {
-            if let range = Range(match.range, in: line) {
+            if let range = Range<String.Index>(match.range, in: line) {
                 let identifier = String(line[range])
                 
                 // Filter out keywords

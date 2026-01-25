@@ -27,4 +27,24 @@ public final class TextPipelineCapsuleWrapper {
             }
         )
     }
+    
+    public func normalizeNFC(_ text: String) throws -> String {
+        return text.precomposedStringWithCanonicalMapping
+    }
+    
+    public func toLowercase(_ text: String) throws -> String {
+        return text.lowercased()
+    }
+    
+    public func stripDiacritics(_ text: String) throws -> String {
+        return text.applyingTransform(.stripCombiningMarks, reverse: false) ?? text
+    }
+    
+    public func validateUTF8(_ text: String) throws -> Bool {
+        return text.data(using: .utf8) != nil
+    }
+    
+    public func foldToASCII(_ text: String) throws -> String {
+        return text.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+    }
 }

@@ -99,9 +99,10 @@ public enum DevelopumModule: CapabilityModule {
         try await databaseActor.open()
         try await DevelopumMigration.migrate(databaseActor)
 
-        let world = runtime.getWorld()
-        let registry = runtime.getWorkflowRegistry()
+        let world = await runtime.getWorld()
+        let registry = await runtime.getWorkflowRegistry()
         let databaseService = DevelopumDatabaseService(databaseAuthority: await runtime.database)
+        let qualityService = QualityEnforcementService()
 
         let editorSystem = DevelopumEditorSystem(databaseService: databaseService, telemetryClient: nil)
         await world.registerSystem(editorSystem)
@@ -142,8 +143,7 @@ extension DevelopumModule {
     ) async -> DevelopumArtifactService {
         return DevelopumArtifactService(
             artifactAuthority: await runtime.artifacts,
-            databaseService: databaseService,
-            telemetryClient: telemetry
+            databaseService: databaseService
         )
     }
     

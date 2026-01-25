@@ -6,7 +6,7 @@
 //  Captures comprehensive evidence at every stage transition for audit and verification.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Runtime evidence collector for Phase 9.1 loop execution.

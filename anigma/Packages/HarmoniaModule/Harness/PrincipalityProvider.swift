@@ -7,7 +7,7 @@
 //  Phase B: Default choir construction with governance protocols.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Simple factory + cache for per-project principalities.
 /// Lives at the same level as your root module singleton.

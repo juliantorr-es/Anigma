@@ -8,7 +8,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Circuit breaker for tool call loops.
 /// Detects repeated tool calls within sliding time windows and blocks infinite loops.

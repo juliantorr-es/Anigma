@@ -46,7 +46,7 @@ public extension DatabaseActor {
         let resultData = try JSONEncoder().encode(invariantResult)
         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
 
-        try execute("""
+        try performExecute("""
             INSERT INTO invariant_checks (
                 check_id, timestamp, passed, details_json,
                 violations_json

@@ -13,7 +13,7 @@ public extension DatabaseActor {
     /// Initialize the maintenance history tables.
     func initializeMaintenanceSchema() async throws {
         // Create maintenance history table
-        try execute("""
+        try performExecute("""
             CREATE TABLE IF NOT EXISTS maintenance_history (
                 operation_id TEXT PRIMARY KEY,
                 operation_type TEXT NOT NULL,
@@ -25,7 +25,7 @@ public extension DatabaseActor {
         """)
 
         // Create invariant checks table for governance compliance
-        try execute("""
+        try performExecute("""
             CREATE TABLE IF NOT EXISTS invariant_checks (
                 check_id TEXT PRIMARY KEY,
                 timestamp REAL NOT NULL,
@@ -36,8 +36,8 @@ public extension DatabaseActor {
         """)
 
         // Create indexes
-        try execute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
-        try execute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_maintenance_operation_type ON maintenance_history(operation_type)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_maintenance_started_at ON maintenance_history(started_at)")
     }
 
     /// Perform WAL checkpoint operation and record in history.
@@ -157,7 +157,7 @@ public extension DatabaseActor {
         let resultData = try JSONEncoder().encode(result)
         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
 
-        try execute("""
+        try performExecute("""
             INSERT INTO invariant_checks (
                 check_id, timestamp, passed, details_json,
                 violations_json

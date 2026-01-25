@@ -15,7 +15,7 @@ import DatabaseCore
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// System that synchronizes ECS state with the ModelConcurrencyController.
 /// This system bridges the existing concurrency controller with ECS representation.

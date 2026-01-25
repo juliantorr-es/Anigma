@@ -55,12 +55,12 @@ actor DatabaseAuthorityImpl: DatabaseAuthority {
 
     /// Execute SQL directly (internal use only - for schema setup)
     func executeDirectly(_ sql: String) async throws {
-        try await databaseActor.execute(sql)
+        _ = try await databaseActor.executeAsync(sql)
     }
 
     /// Execute SQL internally with parameters (for evidence recording)
     func executeInternal(_ sql: String, parameters: [DatabaseParameter]) async throws {
-        _ = try await databaseActor.execute(sql, parameters: parameters)
+        _ = try await databaseActor.executeAsync(sql, parameters: parameters)
     }
 
     // MARK: - DatabaseAuthority Protocol
@@ -88,12 +88,12 @@ actor DatabaseAuthorityImpl: DatabaseAuthority {
             }
 
             // Execute migration
-            try await databaseActor.execute(migrationSQL)
+            _ = try await databaseActor.executeAsync(migrationSQL)
 
             // Record in registry
             if currentVersion == 0 {
                 // Insert
-                try await databaseActor.execute(
+                _ = try await databaseActor.executeAsync(
                     "INSERT INTO schema_registry (name, module, version, migrated_at) VALUES (?, ?, ?, ?)",
                     parameters: [
                         .text(schema.name),
@@ -104,7 +104,7 @@ actor DatabaseAuthorityImpl: DatabaseAuthority {
                 )
             } else {
                 // Update
-                try await databaseActor.execute(
+                _ = try await databaseActor.executeAsync(
                     "UPDATE schema_registry SET version = ?, migrated_at = ? WHERE name = ?",
                     parameters: [
                         .int(version),
@@ -158,7 +158,7 @@ actor DatabaseAuthorityImpl: DatabaseAuthority {
 
         // Execute mutation
         let startTime = Date()
-        let rowsAffected = try await databaseActor.execute(mutation.sql, parameters: mutation.parameters)
+        let rowsAffected = try await databaseActor.executeAsync(mutation.sql, parameters: mutation.parameters)
         let duration = Date().timeIntervalSince(startTime)
 
         // Record evidence (if authority is set)

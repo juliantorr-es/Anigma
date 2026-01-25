@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Health status of a subsystem.
 public struct HealthComponent: Component, Codable {

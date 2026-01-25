@@ -7,9 +7,9 @@
 //  Not vibes - actual checklists and invariants.
 //
 
-import CryptoKit
+@preconcurrency import CryptoKit
 import DoctrineCore
-import Foundation
+@preconcurrency import Foundation
 
 /// PII classification levels.
 public enum PIILevel: String, Sendable, Codable {

@@ -7,7 +7,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Mock evidence recorder that stores events in memory.
 /// Suitable for development and testing but not for production use.

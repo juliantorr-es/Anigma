@@ -293,8 +293,14 @@ extension Job {
             focus: focus
         )
         return Job(
-            type: OpenFileJobType.identifier,
-            parameters: try? JSONEncoder().encode(params),
+            typeId: OpenFileJobType.identifier,
+            metadata: [
+                "repoId": repoId,
+                "filePath": filePath,
+                "line": line.map { String($0) } ?? "",
+                "column": column.map { String($0) } ?? "",
+                "focus": String(focus)
+            ],
             priority: priority
         )
     }
@@ -308,16 +314,15 @@ extension Job {
         mirrorToWorkingTree: Bool = true,
         priority: JobPriority = .normal
     ) -> Job {
-        let params = SaveFileParams(
-            repoId: repoId,
-            filePath: filePath,
-            content: content,
-            createArtifact: createArtifact,
-            mirrorToWorkingTree: mirrorToWorkingTree
-        )
         return Job(
-            type: SaveFileJobType.identifier,
-            parameters: try? JSONEncoder().encode(params),
+            typeId: SaveFileJobType.identifier,
+            metadata: [
+                "repoId": repoId,
+                "filePath": filePath,
+                "content": content,
+                "createArtifact": String(createArtifact),
+                "mirrorToWorkingTree": String(mirrorToWorkingTree)
+            ],
             priority: priority
         )
     }
@@ -333,18 +338,17 @@ extension Job {
         maxResults: Int = 100,
         priority: JobPriority = .normal
     ) -> Job {
-        let params = SearchFilesParams(
-            repoId: repoId,
-            query: query,
-            isRegex: isRegex,
-            matchCase: matchCase,
-            matchWholeWord: matchWholeWord,
-            filePattern: filePattern,
-            maxResults: maxResults
-        )
         return Job(
-            type: SearchFilesJobType.identifier,
-            parameters: try? JSONEncoder().encode(params),
+            typeId: SearchFilesJobType.identifier,
+            metadata: [
+                "repoId": repoId,
+                "query": query,
+                "isRegex": String(isRegex),
+                "matchCase": String(matchCase),
+                "matchWholeWord": String(matchWholeWord),
+                "filePattern": filePattern ?? "",
+                "maxResults": String(maxResults)
+            ],
             priority: priority
         )
     }

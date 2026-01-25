@@ -6,7 +6,7 @@
 //  Integrates with session flow to provide supervised "wiggle room."
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Bandit Config Selector
 

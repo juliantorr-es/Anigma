@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Model recommendation for a use case
 public struct ModelRecommendation: Sendable, Codable {

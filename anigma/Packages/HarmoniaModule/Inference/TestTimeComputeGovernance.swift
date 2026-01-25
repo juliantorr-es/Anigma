@@ -6,7 +6,7 @@
 //  All "thinking" is structured, logged, and governable - not hidden latent soup.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Reasoning Budget

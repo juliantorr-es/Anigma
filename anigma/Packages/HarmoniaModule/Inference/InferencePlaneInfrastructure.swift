@@ -13,7 +13,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Infrastructure Configuration
 

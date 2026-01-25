@@ -6,7 +6,7 @@
 //  Handles starting, stopping, and pooling of inference backends.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Backend Instance

@@ -6,7 +6,7 @@
 //  Bounded storage with auditable deletion trail.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 import ContractsCore
 import DatabaseCore
@@ -15,13 +15,13 @@ public typealias GCRetentionPolicy = ContractsCore.RetentionPolicy
 
 /// Garbage collector for evidence and artifact cleanup.
 public actor GarbageCollector {
-    private let masterDb: any DatabaseExecutor
+    private let masterDb: any DatabaseCore.DatabaseExecutor
     private let artifactStore: ArtifactStore
     private let sessionManager: SessionManager
     private let artifactAuthority: (any ArtifactAuthority)?
 
     public init(
-        masterDb: any DatabaseExecutor,
+        masterDb: any DatabaseCore.DatabaseExecutor,
         artifactStore: ArtifactStore,
         sessionManager: SessionManager
     ) {
@@ -33,7 +33,7 @@ public actor GarbageCollector {
     
     public init(
         artifactAuthority: any ArtifactAuthority,
-        masterDb: (any DatabaseExecutor)? = nil,
+        masterDb: (any DatabaseCore.DatabaseExecutor)? = nil,
         sessionManager: SessionManager
     ) {
         self.artifactAuthority = artifactAuthority
@@ -231,12 +231,12 @@ public actor GarbageCollector {
         // Run VACUUM if enough space can be reclaimed
         if reclaimableBytes >= Int64(policy.gc.vacuumThresholdMb * 1024 * 1024) {
             print("🗑️  Running VACUUM on artifact store...")
-            try await masterDb.execute("VACUUM artifacts")
+            _ = try await masterDb.executeAsync("VACUUM artifacts", parameters: [])
 
             // Incremental VACUUM on master if needed
             if stats.totalBytes >= Int64(policy.gc.vacuumThresholdMb * 2 * 1024 * 1024) {
                 print("🗑️  Running incremental VACUUM on master ledger...")
-                try await masterDb.execute("VACUUM evidence_chain")
+                _ = try await masterDb.executeAsync("VACUUM evidence_chain", parameters: [])
             }
         }
 
@@ -244,7 +244,7 @@ public actor GarbageCollector {
         let walSize = try await getWalSize()
         if walSize >= Int64(policy.gc.checkpointWalMb * 1024 * 1024) {
             print("📝 Running WAL checkpoint...")
-            try await masterDb.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+            _ = try await masterDb.executeAsync("PRAGMA wal_checkpoint(TRUNCATE)", parameters: [])
         }
     }
 
@@ -287,7 +287,7 @@ public actor GarbageCollector {
         let deletedHashesData = try JSONSerialization.data(withJSONObject: deletedHashes, options: .sortedKeys)
         let deletedHashesJson = String(data: deletedHashesData, encoding: .utf8) ?? "[]"
 
-        try await masterDb.execute("""
+        try await masterDb.executeAsync("""
             INSERT INTO retention_events (
                 event_id, policy_hash, policy_version, event_type,
                 started_at, completed_at, artifacts_deleted, artifacts_freed_bytes,
@@ -312,7 +312,7 @@ public actor GarbageCollector {
 
     /// Get current WAL file size.
     private func getWalSize() async throws -> Int64 {
-        _ = try await masterDb.query("PRAGMA wal_checkpoint(TRUNCATE)")
+        _ = try await masterDb.query("PRAGMA wal_checkpoint(TRUNCATE)", parameters: [])
         // This is a simplified approach - in production would check actual WAL file size
         return 0
     }
@@ -320,7 +320,7 @@ public actor GarbageCollector {
 
 // Report types are defined in GCReport.swift
 
-private actor DummyDatabaseExecutor: DatabaseExecutor {
+private actor DummyDatabaseExecutor: DatabaseCore.DatabaseExecutor {
     @discardableResult
     func execute(_ sql: String, parameters: [DatabaseParameter]) async throws -> Int { 0 }
 

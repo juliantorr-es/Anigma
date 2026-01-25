@@ -15,7 +15,7 @@ import DatabaseCore
 //  Not vibes - actual attacker models and defense mappings.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import DoctrineCore
 import AnigmaCore // Import AnigmaCore for TrustTier, TrustZone, etc.

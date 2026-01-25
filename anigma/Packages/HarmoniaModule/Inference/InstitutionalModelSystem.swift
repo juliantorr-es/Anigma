@@ -13,7 +13,7 @@
 //  small regulated organisms with immune systems, union contracts, and paper trails.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Institutional Model Charter

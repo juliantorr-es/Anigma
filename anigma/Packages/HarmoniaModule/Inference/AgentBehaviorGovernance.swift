@@ -11,7 +11,7 @@
 //  3. Premature Disengagement - giving up instead of checking signals
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Agent Behavior Patterns

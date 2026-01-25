@@ -8,7 +8,7 @@
 //  Uses task-based delegation: spawns one delegate per embedding request.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import ContractsCore
 import CapabilityCore
 

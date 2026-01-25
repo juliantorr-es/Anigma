@@ -13,7 +13,7 @@ import DatabaseCore
 //  Creates migration tasks from scout findings.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import SQLite3
 import AnigmaCore
 

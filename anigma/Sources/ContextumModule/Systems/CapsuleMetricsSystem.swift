@@ -172,7 +172,9 @@ public actor CapsuleMetricsSystem {
 
     public init(telemetryEmitter: ((TelemetryEventComponent) -> Void)? = nil) {
         self.telemetryEmitter = telemetryEmitter
-        initializeDefaultMetrics()
+        Task {
+            await initializeDefaultMetrics()
+        }
     }
 
     private func initializeDefaultMetrics() {

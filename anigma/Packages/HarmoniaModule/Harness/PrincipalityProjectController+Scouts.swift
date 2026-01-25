@@ -5,7 +5,7 @@
 //  Scout and migration task extensions for PrincipalityProjectController.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 // MARK: - Scout and Task Management

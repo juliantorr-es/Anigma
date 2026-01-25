@@ -14,9 +14,9 @@ import AnigmaCore
 
 /// Handles persistence of Cathedral evidence to database
 public actor CathedralDatabasePersistence {
-    private let database: any DatabaseExecutor
+    private let database: any DatabaseCore.DatabaseExecutor
 
-    public init(database: any DatabaseExecutor) {
+    public init(database: any DatabaseCore.DatabaseExecutor) {
         self.database = database
     }
 
@@ -24,7 +24,7 @@ public actor CathedralDatabasePersistence {
 
     /// Persist evidence to database evidence_chain table
     public func persistEvidence(_ evidence: Evidence) async throws {
-        try await database.execute(
+        try await database.executeAsync(
             """
             INSERT INTO evidence_chain (
                 event_id, event_type, timestamp, timezone,
@@ -83,7 +83,8 @@ public actor CathedralDatabasePersistence {
     /// Get evidence chain length
     public func getChainLength() async throws -> Int {
         let rows = try await database.query(
-            "SELECT COUNT(*) as count FROM evidence_chain"
+            "SELECT COUNT(*) as count FROM evidence_chain",
+            parameters: []
         )
 
         guard let row = rows.first,
@@ -101,7 +102,8 @@ public actor CathedralDatabasePersistence {
             SELECT head_hash FROM evidence_chain
             ORDER BY sequence_number DESC
             LIMIT 1
-            """
+            """,
+            parameters: []
         )
 
         return rows.first?.string(for: "head_hash")
@@ -116,7 +118,7 @@ public actor CathedralDatabasePersistence {
             context["evidenceId"] = evidenceId
         }
 
-        try await database.execute(
+        try await database.executeAsync(
             """
             INSERT INTO policy_violations (
                 violation_type, severity, actor, session_id,
@@ -156,7 +158,7 @@ public actor CathedralDatabasePersistence {
     /// Persist document metadata
     public func persistDocumentMetadata(_ metadata: DocumentMetadata) async throws {
         // First, ensure document_metadata table exists (it's in Schema_DocumentUnits.sql)
-        try await database.execute(
+        try await database.executeAsync(
             """
             INSERT OR REPLACE INTO document_metadata (
                 document_id, file_path, acquisition_time,
@@ -178,7 +180,7 @@ public actor CathedralDatabasePersistence {
         documentId: String,
         transformation: DocumentTransformation
     ) async throws {
-        try await database.execute(
+        try await database.executeAsync(
             """
             INSERT INTO document_transformations (
                 id, document_id, type, tool_name, tool_version,
@@ -259,7 +261,7 @@ public actor CathedralDatabasePersistence {
             .int(createdAt)
         ]
 
-        try await database.execute(
+        try await database.executeAsync(
             """
             INSERT INTO retrieval_evidence (
                 query_id, query_text, query_timestamp,
@@ -333,7 +335,7 @@ public actor CathedralDatabasePersistence {
               let payloadString = row.string(for: "payload"),
               let agentId = row.string(for: "actor"),
               let sessionId = row.string(for: "session_id") else {
-            throw DatabaseError.decodingError("Failed to decode evidence")
+            throw CathedralDatabaseError.decodingError("Failed to decode evidence")
         }
 
         let timestamp = Date(timeIntervalSince1970: TimeInterval(timestampInt))
@@ -366,7 +368,7 @@ public actor CathedralDatabasePersistence {
               let severity = EvidenceViolationSeverity(rawValue: severityString),
               let description = row.string(for: "description"),
               let timestampInt = row.int64(for: "timestamp") else {
-            throw DatabaseError.decodingError("Failed to decode violation")
+            throw CathedralDatabaseError.decodingError("Failed to decode violation")
         }
 
         let timestamp = Date(timeIntervalSince1970: TimeInterval(timestampInt))
@@ -398,7 +400,7 @@ public actor CathedralDatabasePersistence {
               let sourceMetadataString = row.string(for: "source_metadata"),
               let stateString = row.string(for: "current_state"),
               let state = DocumentState(rawValue: stateString) else {
-            throw DatabaseError.decodingError("Failed to decode document metadata")
+            throw CathedralDatabaseError.decodingError("Failed to decode document metadata")
         }
 
         let acquisitionTime = Date(timeIntervalSince1970: TimeInterval(acquisitionTimeInt))
@@ -426,7 +428,7 @@ public actor CathedralDatabasePersistence {
               let timestampInt = row.int64(for: "timestamp"),
               let inputHash = row.string(for: "input_hash"),
               let outputHash = row.string(for: "output_hash") else {
-            throw DatabaseError.decodingError("Failed to decode transformation")
+            throw CathedralDatabaseError.decodingError("Failed to decode transformation")
         }
 
         let timestamp = Date(timeIntervalSince1970: TimeInterval(timestampInt))
@@ -456,7 +458,7 @@ public actor CathedralDatabasePersistence {
               let threshold = row.double(for: "similarity_threshold"),
               let topK = row.int(for: "max_results"),
               let resultsBlob = row.data(for: "results_json") else {
-            throw DatabaseError.decodingError("Failed to decode query record")
+            throw CathedralDatabaseError.decodingError("Failed to decode query record")
         }
 
         let timestamp = Date(timeIntervalSince1970: TimeInterval(timestampInt))
@@ -482,7 +484,7 @@ public actor CathedralDatabasePersistence {
 
 // MARK: - Database Error Extension
 
-public enum DatabaseError: Error {
+public enum CathedralDatabaseError: Error {
     case connectionError(String)
     case executionError(String)
     case decodingError(String)

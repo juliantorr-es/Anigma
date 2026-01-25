@@ -196,6 +196,35 @@ extension DaemonServer {
         )
     }
 
+    func handleStreamTelemetry(ctx: DaemonRequestContext) async throws -> AsyncThrowingStream<AnigmaTelemetryEvent, Error> {
+        _ = try await tokenManager.validateToken(ctx.capabilityToken, requiredScope: "system.read")
+        
+        return AsyncThrowingStream { continuation in
+            // Send initial connected event
+            let connectedEvent = AnigmaTelemetryEvent(
+                type: "system.telemetry.connected",
+                payloadJson: "{}",
+                atUnixMs: UInt64(Date().timeIntervalSince1970 * 1000)
+            )
+            continuation.yield(connectedEvent)
+            
+            // Keep stream open (simulate heartbeat)
+            // In a real implementation, this would subscribe to a notification center or telemetry bus
+            Task {
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 30 * 1_000_000_000) // 30s heartbeat
+                    let heartbeat = AnigmaTelemetryEvent(
+                        type: "system.heartbeat",
+                        payloadJson: "{\"status\":\"ok\"}",
+                        atUnixMs: UInt64(Date().timeIntervalSince1970 * 1000)
+                    )
+                    continuation.yield(heartbeat)
+                }
+                continuation.finish()
+            }
+        }
+    }
+
     /// Handle incoming MCP connection
     public func handleMCPConnection(transport: any Transport) async throws {
         try await mcpServer.run(transport: transport)

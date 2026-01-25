@@ -24,7 +24,7 @@ public struct LargeDocumentProcessor: Sendable {
     public let maxConcurrentJobs: Int
     
     /// Progress callback during processing
-    public let onProgress: ((ProcessingProgress) -> Void)?
+    public let onProgress: (@Sendable (ProcessingProgress) -> Void)?
     
     // MARK: - Initialization
     
@@ -32,7 +32,7 @@ public struct LargeDocumentProcessor: Sendable {
         batchSize: Int? = nil,
         memoryThreshold: Int? = nil,
         maxConcurrentJobs: Int? = nil,
-        onProgress: ((ProcessingProgress) -> Void)? = nil
+        onProgress: (@Sendable (ProcessingProgress) -> Void)? = nil
     ) {
         self.batchSize = batchSize ?? DiaplasionConfiguration.largeDocumentBatchSize
         self.memoryThreshold = memoryThreshold ?? DiaplasionConfiguration.performanceMaxMemoryMB
@@ -331,7 +331,7 @@ public enum ProcessingStage: String, CaseIterable, Sendable {
 }
 
 /// Result of large document processing.
-public struct LargeDocumentResult<T>: Sendable {
+public struct LargeDocumentResult<T>: Sendable where T: Sendable {
     public let results: [T]
     public let metadata: ProcessingMetadata
     

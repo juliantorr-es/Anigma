@@ -5,9 +5,9 @@ import SQLite3
 
 /// SQLite-backed model registry storage with migrations
 public actor ModelRegistryDatabase {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
 
-    public init(dbActor: any DatabaseExecutor) async throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) async throws {
         self.dbActor = dbActor
         try await createTables()
     }
@@ -35,20 +35,20 @@ public actor ModelRegistryDatabase {
                 registered_at REAL NOT NULL,
                 PRIMARY KEY (model_id, model_hash)
             );
-            """)
+            """, parameters: [])
 
         _ = try await dbActor.executeAsync("""
             CREATE INDEX IF NOT EXISTS idx_models_task ON registered_models(task_contract);
-            """)
+            """, parameters: [])
         _ = try await dbActor.executeAsync("""
             CREATE INDEX IF NOT EXISTS idx_models_backend ON registered_models(backend_kind);
-            """)
+            """, parameters: [])
         _ = try await dbActor.executeAsync("""
             CREATE INDEX IF NOT EXISTS idx_models_tier ON registered_models(trust_tier);
-            """)
+            """, parameters: [])
         _ = try await dbActor.executeAsync("""
             CREATE INDEX IF NOT EXISTS idx_models_id ON registered_models(model_id);
-            """)
+            """, parameters: [])
     }
 
     public func insertModel(_ model: RegisteredModelRecord) async throws {
@@ -81,22 +81,22 @@ public actor ModelRegistryDatabase {
         """
 
         _ = try await dbActor.executeAsync(sql, parameters: [
-            dbp(model.modelID),
-            dbp(model.modelHash),
-            dbp(model.taskContract.rawValue),
-            dbp(model.backendKind.rawValue),
-            dbp(model.source.type),
-            dbp(model.source.identifier),
-            dbp(model.source.revision),
-            dbp(model.license),
-            dbp(model.licenseDecision),
-            dbp(artifactHashesStr),
-            dbp(model.tokenizerHash),
-            dbp(conversionReceiptsStr),
-            dbp(metadataStr),
-            dbp(model.trustTier.rawValue),
-            dbp(model.dimensions),
-            dbp(model.registeredAt.timeIntervalSince1970)
+            DatabaseCore.dbp(model.modelID),
+            DatabaseCore.dbp(model.modelHash),
+            DatabaseCore.dbp(model.taskContract.rawValue),
+            DatabaseCore.dbp(model.backendKind.rawValue),
+            DatabaseCore.dbp(model.source.type),
+            DatabaseCore.dbp(model.source.identifier),
+            DatabaseCore.dbp(model.source.revision),
+            DatabaseCore.dbp(model.license),
+            DatabaseCore.dbp(model.licenseDecision),
+            DatabaseCore.dbp(artifactHashesStr),
+            DatabaseCore.dbp(model.tokenizerHash),
+            DatabaseCore.dbp(conversionReceiptsStr),
+            DatabaseCore.dbp(metadataStr),
+            DatabaseCore.dbp(model.trustTier.rawValue),
+            DatabaseCore.dbp(model.dimensions),
+            DatabaseCore.dbp(model.registeredAt.timeIntervalSince1970)
         ])
     }
 
@@ -111,7 +111,7 @@ public actor ModelRegistryDatabase {
         WHERE model_id = ? AND model_hash = ?
         """
 
-        let rows = try await dbActor.query(sql, parameters: [dbp(modelID), dbp(modelHash)])
+        let rows = try await dbActor.query(sql, parameters: [DatabaseCore.dbp(modelID), DatabaseCore.dbp(modelHash)])
         return rows.first.flatMap { try? decodeModelRecord($0) }
     }
 
@@ -128,7 +128,7 @@ public actor ModelRegistryDatabase {
         LIMIT 1
         """
 
-        let rows = try await dbActor.query(sql, parameters: [dbp(modelID)])
+        let rows = try await dbActor.query(sql, parameters: [DatabaseCore.dbp(modelID)])
         return rows.first.flatMap { try? decodeModelRecord($0) }
     }
 
@@ -147,21 +147,21 @@ public actor ModelRegistryDatabase {
         WHERE 1=1
         """
 
-        var params: [DatabaseParameter] = []
+        var params: [DatabaseCore.DatabaseParameter] = []
 
         if let taskContract = taskContract {
             sql += " AND task_contract = ?"
-            params.append(dbp(taskContract.rawValue))
+            params.append(DatabaseCore.dbp(taskContract.rawValue))
         }
 
         if let backendKind = backendKind {
             sql += " AND backend_kind = ?"
-            params.append(dbp(backendKind.rawValue))
+            params.append(DatabaseCore.dbp(backendKind.rawValue))
         }
 
         if let trustTier = trustTier {
             sql += " AND trust_tier = ?"
-            params.append(dbp(trustTier.rawValue))
+            params.append(DatabaseCore.dbp(trustTier.rawValue))
         }
 
         sql += " ORDER BY registered_at DESC"
@@ -171,40 +171,40 @@ public actor ModelRegistryDatabase {
     }
 
     private func decodeModelRecord(_ row: DatabaseRow) throws -> RegisteredModelRecord {
-        guard case .text(let modelID) = row.values["model_id"],
-              case .text(let modelHash) = row.values["model_hash"],
-              case .text(let taskContractRaw) = row.values["task_contract"],
-              case .text(let backendKindRaw) = row.values["backend_kind"],
-              case .text(let sourceType) = row.values["source_type"],
-              case .text(let sourceIdentifier) = row.values["source_identifier"],
-              case .text(let license) = row.values["license"],
-              case .text(let licenseDecision) = row.values["license_decision"],
-              case .text(let artifactHashesStr) = row.values["artifact_hashes_json"],
-              case .text(let metadataStr) = row.values["metadata_json"],
-              case .text(let trustTierRaw) = row.values["trust_tier"],
-              case .double(let registeredAtTimestamp) = row.values["registered_at"],
+        guard let modelID = row.string(for: "model_id"),
+              let modelHash = row.string(for: "model_hash"),
+              let taskContractRaw = row.string(for: "task_contract"),
+              let backendKindRaw = row.string(for: "backend_kind"),
+              let sourceType = row.string(for: "source_type"),
+              let sourceIdentifier = row.string(for: "source_identifier"),
+              let license = row.string(for: "license"),
+              let licenseDecision = row.string(for: "license_decision"),
+              let artifactHashesStr = row.string(for: "artifact_hashes_json"),
+              let metadataStr = row.string(for: "metadata_json"),
+              let trustTierRaw = row.string(for: "trust_tier"),
+              let registeredAtTimestamp = row.double(for: "registered_at"),
               let taskContract = TaskContract(rawValue: taskContractRaw),
               let backendKind = BackendKind(rawValue: backendKindRaw),
               let trustTier = TrustTier(rawValue: trustTierRaw) else {
-            throw DatabaseError.invalidRow
+            throw ModelRegistryDatabaseError.invalidRow
         }
 
         let sourceRevision: String?
-        if case .text(let rev) = row.values["source_revision"] {
+        if let rev = row.string(for: "source_revision") {
             sourceRevision = rev
         } else {
             sourceRevision = nil
         }
 
         let tokenizerHash: String?
-        if case .text(let hash) = row.values["tokenizer_hash"] {
+        if let hash = row.string(for: "tokenizer_hash") {
             tokenizerHash = hash
         } else {
             tokenizerHash = nil
         }
 
         let conversionReceipts: [String]?
-        if case .text(let jsonStr) = row.values["conversion_receipts_json"],
+        if let jsonStr = row.string(for: "conversion_receipts_json"),
            let data = jsonStr.data(using: .utf8) {
             conversionReceipts = try? JSONDecoder().decode([String].self, from: data)
         } else {
@@ -212,7 +212,7 @@ public actor ModelRegistryDatabase {
         }
 
         let dimensions: Int?
-        if case .int(let dim) = row.values["dimensions"] {
+        if let dim = row.int(for: "dimensions") {
             dimensions = dim
         } else {
             dimensions = nil
@@ -253,6 +253,6 @@ public actor ModelRegistryDatabase {
     }
 }
 
-enum DatabaseError: Error {
+enum ModelRegistryDatabaseError: Error {
     case invalidRow
 }

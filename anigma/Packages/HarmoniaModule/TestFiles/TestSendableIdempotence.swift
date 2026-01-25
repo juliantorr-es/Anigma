@@ -6,7 +6,7 @@
 //  This file should be in Sources/ directory to pass invariants check.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // Test case 1: Struct without inheritance - should add : Sendable
 struct UserWithoutSendable {

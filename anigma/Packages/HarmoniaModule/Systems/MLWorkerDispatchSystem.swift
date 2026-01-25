@@ -15,7 +15,7 @@ import DatabaseCore
 
 import AnigmaCore
 import ContractsCore
-import Foundation
+@preconcurrency import Foundation
 import MLWorkerCommon
 
 public struct MLWorkerDispatchSystem: System {

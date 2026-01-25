@@ -6,11 +6,12 @@
 //  Ensures exactly one artifact per stage with deterministic sequence numbers.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import DatabaseCore
 import StorageCore
 import AnigmaCore
+@preconcurrency import Crypto
 
 /// Protocol for emitting stage boundary artifacts.
 /// Ensures consistent artifact recording across different components.
@@ -90,8 +91,9 @@ public final class StandardStageBoundaryEmitter: StageBoundaryEmitter {
     public func recordArtifact(_ type: String, data: Data) async throws {
         if let artifactAuthority = artifactAuthority {
             // Use ArtifactAuthority (three-tier architecture)
+            let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
             let artifact = Artifact(
-                id: ArtifactID(data),
+                id: ArtifactID(hash: hash),
                 mimeType: "application/octet-stream",
                 size: Int64(data.count),
                 createdAt: Date(),

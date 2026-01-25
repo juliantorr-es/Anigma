@@ -160,14 +160,14 @@ public struct ModelList: ParsableCommand {
         }
 
         for (index, row) in rows.enumerated() {
-            guard let id = row["id"] as? String,
-                  let name = row["name"] as? String else {
+            guard let id = row.string(for: "id"),
+                  let name = row.string(for: "name") else {
                 continue
             }
 
-            let sizeGB = row["size_gb"] as? Double ?? 0
-            let path = row["path"] as? String ?? "unknown"
-            let quantization = row["quantization"] as? String ?? "unknown"
+            let sizeGB = row.double(for: "size_gb") ?? 0
+            let path = row.string(for: "path") ?? "unknown"
+            let quantization = row.string(for: "quantization") ?? "unknown"
 
             print("\(index + 1). \(name)")
             if verbose {

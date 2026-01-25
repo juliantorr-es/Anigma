@@ -2,6 +2,7 @@ import Foundation
 import AnigmaCore
 import AnigmaPrimitives
 import ContractsCore
+import DatabaseCore
 
 /// Governed artifact storage with content-addressable semantics and full provenance
 /// Implements court-safe artifact lifecycle: commit, retrieve, verify, retention
@@ -220,7 +221,7 @@ extension ArtifactStoreModule: CapabilityModule {
     public static func register(runtime: PlatformRuntime) async throws {
         let databaseAuthority = await runtime.database
         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
-        _ = try await ArtifactStoreDatabase(dbActor: databaseAdapter)
+        _ = try await ArtifactStoreDatabase(dbActor: databaseAdapter as! DatabaseCore.DatabaseExecutor)
     }
 }
 

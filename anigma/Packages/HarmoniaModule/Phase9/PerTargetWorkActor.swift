@@ -6,7 +6,7 @@
 //  Provides isolated work context to prevent cross-target state pollution.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Context for per-target work execution.
 public struct TargetWorkContext: Sendable {

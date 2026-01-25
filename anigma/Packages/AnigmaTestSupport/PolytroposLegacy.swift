@@ -8,6 +8,7 @@
 import Foundation
 import PolytroposModule
 import AnigmaCore
+import AnigmaPrimitives
 
 /// Legacy conveniences for PolytroposModule tests.
 public typealias Resolution = ExportResolution

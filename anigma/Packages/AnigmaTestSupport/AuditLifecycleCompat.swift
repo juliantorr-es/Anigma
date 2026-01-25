@@ -8,13 +8,14 @@
 import Foundation
 import ContractsCore
 import AnigmaCore
+import AnigmaPrimitives
 
 // MARK: - Audit Test Helpers
 
 public extension AuditLogging {
     /// Convenience helper for tests that record audit events without needing a principal/module/metadata.
     func record(
-        eventType: AuditEventType,
+        eventType: ContractsCore.AuditEventType,
         description: String,
         metadata: [String: String] = [:]
     ) async throws {
@@ -29,19 +30,20 @@ public extension AuditLogging {
     }
 }
 
-public extension AuditLogManager {
-    func generateComplianceReport(
-        from startDate: Date,
-        to endDate: Date
-    ) async throws -> ComplianceReport {
-        // Return deterministic stubbed compliance report for tests.
-        return ComplianceReport(
-            isCompliant: true,
-            checkedAt: Date(),
-            violations: []
-        )
-    }
-}
+// Temporarily commented out due to compilation errors
+// public extension AuditLogManager {
+//     func generateComplianceReport(
+//         from startDate: Date,
+//         to endDate: Date
+//     ) async throws -> ComplianceReport {
+//         // Return deterministic stubbed compliance report for tests.
+//         return ComplianceReport(
+//             isCompliant: true,
+//             checkedAt: Date(),
+//             violations: []
+//         )
+//     }
+// }
 
 // MARK: - Lifecycle Test Helpers
 
@@ -131,27 +133,25 @@ public extension LifecycleManager {
 
     private func makePolicy(id: String) -> RetentionPolicy {
         RetentionPolicy(
-            metadata: PolicyMetadata(version: "1.0", description: id),
-            gc: GCPolicy(
-                requirePolicyHashMatch: true,
-                maxDeletePerRun: 1,
-                vacuumThresholdMb: 64,
-                checkpointWalMb: 16,
-                minAgeHours: 24
-            ),
-            sessionDb: SessionDbPolicy(ttlDays: 7, cleanupBatchSize: 10),
-            artifacts: ArtifactPolicy(
-                defaultTtlDays: 90,
-                compressionEnabled: true,
-                largePayloadThresholdMb: 10,
-                largePayloadTtlDays: 365,
-                diffPatternTtlDays: 365,
-                maxTotalStorageGb: 10
-            )
+            version: "1.0",
+            classes: [
+                "session_db": RetentionPolicyClass(name: "Session Databases", ttlHours: 7 * 24),
+                "artifacts": RetentionPolicyClass(
+                    name: "Artifacts",
+                    ttlHours: 90 * 24,
+                    maxTotalMB: 10 * 1024,
+                    retentionRules: [
+                        "large_payload": RetentionRuleConfig(ttlDays: 365),
+                        "diff_pattern": RetentionRuleConfig(ttlDays: 365)
+                    ]
+                )
+            ],
+            segments: SegmentationPolicy(maxSegmentSizeMB: 64, rotationIntervalDays: 30),
+            hotRuns: HotRunPolicy(maxKept: 100, cooldownDays: 1)
         )
     }
 }
 
 public extension RetentionPolicy {
-    var id: String { metadata.description ?? metadata.version }
+    var id: String { version }
 }

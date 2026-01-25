@@ -12,7 +12,7 @@
 //  - Synthetic puzzle generation integration
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Reasoning Trace

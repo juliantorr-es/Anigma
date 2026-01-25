@@ -7,8 +7,8 @@
 //
 
 import AnigmaCore
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Project Status
 

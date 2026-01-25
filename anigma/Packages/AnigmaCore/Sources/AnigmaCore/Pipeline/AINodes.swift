@@ -643,8 +643,8 @@ struct DocumentChunkerExecutor: NodeExecutor {
         do {
             // Use one-shot chunking
             let wrapper = try TextChunkingCapsuleWrapper(config: config)
-            try await wrapper.processBytes(data)
-            try await wrapper.finalize()
+            try wrapper.processBytes(data)
+            try wrapper.finalize()
             
             // Extract chunks as Data slices
             let chunkData = try await wrapper.extractChunks(from: data)

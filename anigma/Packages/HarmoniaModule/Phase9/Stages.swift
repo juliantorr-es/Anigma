@@ -5,7 +5,7 @@
 //  Stage definitions and structures for Phase 9.1. 8-stage loop.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Stage identifiers for the Phase 9.1 deterministic loop

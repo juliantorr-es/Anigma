@@ -7,7 +7,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Concurrent target enumerator for Phase 9.2.
 /// Processes targets in parallel while maintaining deterministic ordering.

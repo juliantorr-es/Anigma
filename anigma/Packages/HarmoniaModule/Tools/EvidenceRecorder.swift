@@ -7,26 +7,26 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 import DatabaseCore
 import ContractsCore
 import AnigmaPrimitives
 
 /// Evidence recorder that tracks all tool calls with full provenance.
 public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
-    private let masterDb: any DatabaseExecutor
+    private let masterDb: any DatabaseCore.DatabaseExecutor
     private let artifactStore: ArtifactStore
     private let artifactAuthority: (any ArtifactAuthority)?
 
-    public init(masterDb: any DatabaseExecutor) {
+    public init(masterDb: any DatabaseCore.DatabaseExecutor) {
         self.masterDb = masterDb
         self.artifactAuthority = nil
         self.artifactStore = ArtifactStore(db: masterDb)
     }
     
-    public init(artifactAuthority: any ArtifactAuthority, masterDb: any DatabaseExecutor? = nil) {
+    public init(artifactAuthority: any ArtifactAuthority, masterDb: (any DatabaseCore.DatabaseExecutor)? = nil) {
         self.artifactAuthority = artifactAuthority
-        self.masterDb = masterDb ?? (artifactAuthority as? DatabaseExecutor) ?? DummyDatabaseExecutor()
+        self.masterDb = masterDb ?? (artifactAuthority as? any DatabaseCore.DatabaseExecutor) ?? DummyDatabaseExecutor()
         self.artifactStore = ArtifactStore(artifactAuthority: artifactAuthority, db: self.masterDb)
     }
 
@@ -36,7 +36,7 @@ public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
         let timestamp = Int(Date().timeIntervalSince1970)
 
         do {
-            try await masterDb.execute(
+            _ = try await masterDb.executeAsync(
                 """
                 INSERT INTO evidence_chain (
                     evidence_id, session_id, agent_id, tool_name, request_id,
@@ -59,7 +59,7 @@ public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
             print("[GovernedEvidenceRecorder] failed to insert evidence row: \(error)")
         }
 
-        return evidenceId
+        return insertionId
     }
 
     /// Record successful tool call completion.
@@ -68,7 +68,7 @@ public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
         let payload = encodeResult(result)
 
         do {
-            try await masterDb.execute(
+            _ = try await masterDb.executeAsync(
                 """
                 UPDATE evidence_chain
                 SET status = ?,
@@ -95,7 +95,7 @@ public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
         let details = String(describing: error)
 
         do {
-            try await masterDb.execute(
+            _ = try await masterDb.executeAsync(
                 """
                 UPDATE evidence_chain
                 SET status = ?,
@@ -119,7 +119,7 @@ public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
 
     /// Record edit-specific result details.
     private func recordEditResult(_ evidenceId: String, _ result: EditToolResponse) async throws {
-        try await masterDb.execute("""
+        _ = try await masterDb.executeAsync("""
             INSERT INTO edit_results (
                 evidence_id, success, changes_count, new_file_hash, applied_diff
             ) VALUES (?, ?, ?, ?, ?)
@@ -148,13 +148,13 @@ public actor GovernedEvidenceRecorder: EvidenceRecorderProtocol {
                 .text(change.oldContent ?? ""),
                 .text(change.newContent ?? "")
             ]
-            try await masterDb.execute(sql, parameters: parameters)
+            _ = try await masterDb.executeAsync(sql, parameters: parameters)
         }
     }
 
     /// Record read-specific result details.
     private func recordReadResult(_ evidenceId: String, _ result: ReadToolResponse) async throws {
-        try await masterDb.execute("""
+        _ = try await masterDb.executeAsync("""
             INSERT INTO read_results (
                 evidence_id, file_size, file_hash, last_modified, permissions_readable,
                 permissions_writable, permissions_executable
@@ -314,8 +314,14 @@ public struct EvidenceStats: Sendable, Codable {
     }
 }
 
-private actor DummyDatabaseExecutor: DatabaseExecutor {
-    func execute(_ sql: String, parameters: [DatabaseParameter]) async throws {}
+private actor DummyDatabaseExecutor: DatabaseCore.DatabaseExecutor {
+    @discardableResult
+    func execute(_ sql: String, parameters: [DatabaseParameter]) async throws -> Int { 0 }
     func query(_ sql: String, parameters: [DatabaseParameter]) async throws -> [DatabaseRow] { [] }
-    func close() async throws {}
+    @discardableResult
+    func executeAsync(_ sql: String, parameters: [DatabaseParameter]) async throws -> Int { 0 }
+    func transaction(_ block: @Sendable () async throws -> Void) async throws { try await block() }
+    func open() throws {}
+    func close() {}
+    var path: String { "" }
 }

@@ -5,7 +5,7 @@
 //  Integration layer for doctrine guards in migration engines and AST rules.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import DoctrineCore
 import SQLite3
 import AnigmaCore

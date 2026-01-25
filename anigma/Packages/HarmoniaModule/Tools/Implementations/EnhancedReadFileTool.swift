@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Enhanced file read result
 public struct EnhancedReadFileResult: Sendable, Codable {

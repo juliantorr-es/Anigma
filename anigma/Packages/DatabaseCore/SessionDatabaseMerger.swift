@@ -38,14 +38,14 @@ public actor SessionDatabaseMerger {
         }
 
         // Attach session database for merge
-        try await db.execute(
+        try await db.executeAsync(
             "ATTACH DATABASE ? AS sessiondb;",
             parameters: [.text(sessionDatabasePath)]
         )
 
         do {
             // Begin merge transaction
-            try await db.execute("BEGIN TRANSACTION;")
+            try await db.executeAsync("BEGIN TRANSACTION;")
 
             // Get list of tables in session database
             let sessionTables = try await getSessionTables(sessionDatabasePath: sessionDatabasePath)
@@ -83,7 +83,7 @@ public actor SessionDatabaseMerger {
 
             // Record merge event in master database
             let mergeID = UUID().uuidString
-            try await db.execute(
+            try await db.executeAsync(
                 """
                 INSERT INTO session_merge_events
                 (merge_id, session_id, merged_at, rows_merged, tables_processed, status)
@@ -100,8 +100,8 @@ public actor SessionDatabaseMerger {
             )
 
             // Commit transaction
-            try await db.execute("COMMIT;")
-            try await db.execute("DETACH DATABASE sessiondb;")
+            try await db.executeAsync("COMMIT;")
+            try await db.executeAsync("DETACH DATABASE sessiondb;")
 
             // Mark session as merged in the store
             try await sessionStore.archiveSession(sessionID: sessionID)
@@ -118,8 +118,8 @@ public actor SessionDatabaseMerger {
             )
         } catch {
             // Rollback transaction on error
-            _ = try? await db.execute("ROLLBACK;")
-            _ = try? await db.execute("DETACH DATABASE sessiondb;")
+            _ = try? await db.executeAsync("ROLLBACK;")
+            _ = try? await db.executeAsync("DETACH DATABASE sessiondb;")
             throw error
         }
     }
@@ -164,7 +164,7 @@ public actor SessionDatabaseMerger {
         let safeFrom = try requireSafeIdentifier(sessionDB)
         let safeTo = try requireSafeIdentifier(masterDB)
         let sql = "INSERT OR IGNORE INTO \(safeTo).\(safeTable) SELECT * FROM \(safeFrom).\(safeTable);"
-        return try await db.execute(sql)
+        return try await db.executeAsync(sql)
     }
 
     private func copyTable(table: String, from sessionDB: String, to masterDB: String) async throws {
@@ -180,9 +180,9 @@ public actor SessionDatabaseMerger {
             throw SessionDatabaseError.mergeConflict(table)
         }
 
-        try await db.execute(schema)
+        try await db.executeAsync(schema)
         let insertSQL = "INSERT OR IGNORE INTO \(safeTo).\(safeTable) SELECT * FROM \(safeFrom).\(safeTable);"
-        _ = try await db.execute(insertSQL)
+        _ = try await db.executeAsync(insertSQL)
     }
 
     private func countTableRows(_ table: String, in database: String) async throws -> Int {

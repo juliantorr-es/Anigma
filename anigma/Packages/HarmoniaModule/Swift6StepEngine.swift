@@ -5,7 +5,7 @@
 //  Step engine for Swift 6 migration domain.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Intent for a Swift 6 migration step.
 public enum Swift6StepIntent: Sendable, Codable {

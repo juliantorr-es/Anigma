@@ -1,11 +1,13 @@
-#pragma once
+#ifndef ANIGMA_DETERMINISM_PROFILE_H
+#define ANIGMA_DETERMINISM_PROFILE_H
+
 #include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct anigma_det_profile_t {
+typedef struct {
   uint32_t schema_version;
 
   // Geometry snapping
@@ -27,3 +29,5 @@ typedef struct anigma_det_profile_t {
 #ifdef __cplusplus
 }
 #endif
+
+#endif // ANIGMA_DETERMINISM_PROFILE_H

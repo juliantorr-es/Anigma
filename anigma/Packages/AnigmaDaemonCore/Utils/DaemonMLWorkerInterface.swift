@@ -90,9 +90,13 @@ public struct DaemonMLWorkerInterface: MLWorkerInterface, Sendable {
             throw RuntimeError("ML worker response not successful: \(response.status)")
         }
         
-        // For now, return raw output string
-        // TODO: Parse actual output from artifact
-        return "ML worker response received"
+        // Read actual output from artifact
+        if FileManager.default.fileExists(atPath: firstOutput.path) {
+            let outputData = try Data(contentsOf: URL(fileURLWithPath: firstOutput.path))
+            return String(data: outputData, encoding: .utf8) ?? "ML worker response received (decoding failed)"
+        }
+        
+        return "ML worker response received (artifact not found)"
     }
     
     private func executeCommand(

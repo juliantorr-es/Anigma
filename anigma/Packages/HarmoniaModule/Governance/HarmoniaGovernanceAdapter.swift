@@ -6,7 +6,7 @@
 //  Demonstrates migration from DatabaseActor to DatabaseAuthority.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import AnigmaCore
 import DatabaseCore

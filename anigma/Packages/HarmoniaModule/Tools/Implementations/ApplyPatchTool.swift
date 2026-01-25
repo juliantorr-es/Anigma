@@ -8,7 +8,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 public struct ApplyPatchTool: Sendable {
     private let repoRoot: String

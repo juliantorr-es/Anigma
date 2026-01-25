@@ -14,7 +14,7 @@ import DatabaseCore
 //  All bindings use SQLITE_TRANSIENT by default to prevent lifetime issues.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import SQLite3
 import AnigmaCore
 import AnigmaPrimitives

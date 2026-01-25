@@ -6,8 +6,8 @@
 //  Turns monitoring into steering.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Session Epilogue Context
 

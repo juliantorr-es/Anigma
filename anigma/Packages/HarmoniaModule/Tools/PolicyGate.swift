@@ -6,8 +6,9 @@
 //  Ensures agents only use tools they have permission for.
 //
 
-import Foundation
 import AnigmaPrimitives
+import ContractsCore
+@preconcurrency import Foundation
 
 /// Policy gate that enforces permissions and constraints.
 public actor PolicyGate {

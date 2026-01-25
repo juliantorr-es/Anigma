@@ -5,8 +5,8 @@
 //  Inspector that checks for behavioral invariants - not vibes, assertions.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Behavioral Invariants
 

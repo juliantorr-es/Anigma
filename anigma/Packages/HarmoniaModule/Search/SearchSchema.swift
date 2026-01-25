@@ -6,7 +6,7 @@
 //
 
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 public enum SearchSchema {
     public static func apply(using db: DatabaseActor) async throws {

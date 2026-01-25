@@ -13,7 +13,7 @@ import DatabaseCore
 //  Creates all required tables with proper versioning.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import SQLite3
 import AnigmaCore
 

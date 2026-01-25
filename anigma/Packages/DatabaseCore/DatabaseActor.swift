@@ -206,7 +206,7 @@ public actor DatabaseActor {
     }
 
     /// Execute an update/insert/delete.
-    @discardableResult public func execute(
+    @discardableResult public func performExecute(
         _ sql: String,
         parameters: [DatabaseParameter] = []
     ) throws -> Int {
@@ -284,11 +284,11 @@ public actor DatabaseActor {
     }
 
     /// Async wrapper for execute method to support actor-to-actor calls
-    public func executeAsync(
+    @discardableResult public func executeAsync(
         _ sql: String,
         parameters: [DatabaseParameter] = []
     ) async throws -> Int {
-        return try execute(sql, parameters: parameters)
+        return try performExecute(sql, parameters: parameters)
     }
 
     /// Execute multiple statements in a transaction.

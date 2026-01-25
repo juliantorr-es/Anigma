@@ -5,7 +5,7 @@
 //  Self-host convenience extensions for PrincipalityProvider.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 extension PrincipalityProvider {
     /// Gets the principality controller for the self-host project.

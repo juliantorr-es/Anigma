@@ -5,8 +5,8 @@
 //  Metrics for evaluating harness behavior - not vibes, data.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Git Diff Summary
 

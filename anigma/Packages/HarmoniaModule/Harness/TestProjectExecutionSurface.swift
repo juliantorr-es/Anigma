@@ -5,7 +5,7 @@
 //  Test implementations of ProjectExecutionSurface for unit testing.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Fake implementation of ProjectExecutionSurface for unit tests.

@@ -443,7 +443,7 @@ public struct DevelopumEditorSystem: System {
             // Remove files inactive for more than 5 minutes
             if Date().timeIntervalSince(openFile.lastActivityAt) > 300 {
                 logInfo("Removing inactive file: \(openFile.filePath)", category: "DevelopumEditorSystem")
-                await world.removeEntity(entity)
+                await world.destroyEntity(entity)
             }
         }
     }

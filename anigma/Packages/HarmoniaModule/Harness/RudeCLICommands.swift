@@ -7,8 +7,8 @@
 //  Phase A: Updated to use PrincipalityProjectController instead of direct GRDB/bandit access.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Rude CLI Commands
 

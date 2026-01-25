@@ -6,7 +6,7 @@
 //  Ensures environment and toolchain compatibility before verification.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Precheck validator for pinned inputs required for deterministic replay.
 /// Verifies that the replay environment matches the original execution environment.

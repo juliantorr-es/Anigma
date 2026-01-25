@@ -6,7 +6,8 @@
 //
 
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
+import ContractsCore
 
 /// Database schemas for Cathedral coordination and enforcement systems
 /// Creates tables for evidence chains, violations, audit reports, and plan artifacts
@@ -108,12 +109,7 @@ public enum EvidenceViolationSeverity: String, CaseIterable {
     case critical = "critical"
 }
 
-public enum EvidenceViolationType: String, CaseIterable {
-    case evidenceSubstrateBypass = "evidence_substrate_bypass"
-    case evidenceChainCompromise = "evidence_chain_compromise"
-    case unauthorizedModification = "unauthorized_modification"
-    case missingEvidence = "missing_evidence"
-}
+
 
 public enum EnforcementActionType: String, CaseIterable {
     case validation = "validation"

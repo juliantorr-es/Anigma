@@ -542,7 +542,7 @@ public struct EmailNotificationHandler: NotificationDeliveryHandler {
         // Group by email address to avoid duplicates
         let emailGroups = Dictionary(grouping: subscriptions) { $0.emailAddress }
         
-        for (emailAddress, emailSubscriptions) in emailGroups {
+        for (emailAddress, _) in emailGroups {
             // Send email (implementation depends on email service)
             print("Sending email to \(emailAddress): \(notification.title)")
         }
@@ -558,7 +558,7 @@ public struct WebhookNotificationHandler: NotificationDeliveryHandler {
         let webhookGroups = Dictionary(grouping: subscriptions) { $0.webhookUrl }
         
         for (webhookUrl, webhookSubscriptions) in webhookGroups {
-            guard let url = URL(string: webhookUrl) else { continue }
+            guard let _ = URL(string: webhookUrl) else { continue }
             
             // Prepare webhook payload
             let payload: [String: Any] = [
@@ -581,7 +581,7 @@ public struct PushNotificationHandler: NotificationDeliveryHandler {
         // Group by push token
         let tokenGroups = Dictionary(grouping: subscriptions) { $0.pushToken }
         
-        for (pushToken, tokenSubscriptions) in tokenGroups {
+        for (pushToken, _) in tokenGroups {
             // Send push notification (implementation depends on push service)
             print("Sending push to token \(pushToken): \(notification.title)")
         }

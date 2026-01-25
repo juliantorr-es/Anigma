@@ -6,7 +6,7 @@
 //  Uses only recorded inputs to reproduce each stage boundary artifact.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Plan for recomputing artifacts during replay verification.
 /// Executes each stage deterministically to produce canonical outputs for comparison.

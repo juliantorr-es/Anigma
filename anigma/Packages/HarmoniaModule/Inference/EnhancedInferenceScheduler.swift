@@ -12,7 +12,7 @@
 //  - Measures learning impact for training data curation
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Enhanced Scheduling Decision

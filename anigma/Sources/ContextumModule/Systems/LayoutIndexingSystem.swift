@@ -6,26 +6,12 @@ import ContractsCore
 import VectorCapsule
 import TelemetryCore
 
-// Local Point struct for SVG path parsing
-private struct Point {
-    let x: Double
-    let y: Double
-}
-
-// Local BoundingBox for SVG operations
-private struct BoundingBox {
-    let minX: Double
-    let minY: Double
-    let maxX: Double
-    let maxY: Double
-}
-
 public actor LayoutIndexingSystem {
     private let database: ContextumDatabase
     private let maxChunkSize: Int
-    private let vectorCapsule: VectorCapsuleWrapper?
+    private let vectorCapsule: VectorCapsule?
     
-    public init(database: ContextumDatabase, maxChunkSize: Int = 512, vectorCapsule: VectorCapsuleWrapper? = nil) {
+    public init(database: ContextumDatabase, maxChunkSize: Int = 512, vectorCapsule: VectorCapsule? = nil) {
         self.database = database
         self.maxChunkSize = maxChunkSize
         self.vectorCapsule = vectorCapsule
@@ -121,14 +107,10 @@ public actor LayoutIndexingSystem {
         let width = boundingBox.width
         let height = boundingBox.height
         
-        if let capsule = vectorCapsule {
-            do {
-                let bounds = BoundingBox(minX: x, minY: y, maxX: x + width, maxY: y + height)
-                try recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: true)
-                return svgPathFromBounds(bounds)
-            } catch {
-                try? recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: false, error: error.localizedDescription)
-            }
+        if vectorCapsule != nil {
+            let bounds = BoundingBox(minX: x, minY: y, maxX: x + width, maxY: y + height)
+            recordVectorCapsuleTelemetry(operation: "layoutRegionToSVG", success: true)
+            return svgPathFromBounds(bounds)
         }
         return manualLayoutRegionToSVG(x: x, y: y, width: width, height: height)
     }
@@ -147,10 +129,10 @@ public actor LayoutIndexingSystem {
                     resultPath = try capsule.union(pathA: resultPath, pathB: svgPaths[i])
                 }
                 let bounds = try capsule.getBounds(path: resultPath)
-                try recordVectorCapsuleTelemetry(operation: "unionRegions", success: true)
+                recordVectorCapsuleTelemetry(operation: "unionRegions", success: true)
                 return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
             } catch {
-                try? recordVectorCapsuleTelemetry(operation: "unionRegions", success: false, error: error.localizedDescription)
+                recordVectorCapsuleTelemetry(operation: "unionRegions", success: false, error: error.localizedDescription)
             }
         }
         return manualUnionRegions(regions)
@@ -170,10 +152,10 @@ public actor LayoutIndexingSystem {
                     resultPath = try capsule.intersection(pathA: resultPath, pathB: svgPaths[i])
                 }
                 let bounds = try capsule.getBounds(path: resultPath)
-                try recordVectorCapsuleTelemetry(operation: "intersectRegions", success: true)
+                recordVectorCapsuleTelemetry(operation: "intersectRegions", success: true)
                 return [BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)]
             } catch {
-                try? recordVectorCapsuleTelemetry(operation: "intersectRegions", success: false, error: error.localizedDescription)
+                recordVectorCapsuleTelemetry(operation: "intersectRegions", success: false, error: error.localizedDescription)
             }
         }
         return manualIntersectRegions(regions)
@@ -191,11 +173,11 @@ public actor LayoutIndexingSystem {
             do {
                 let svgPath = pointsToSVGPath(boundary)
                 let simplifiedPath = try capsule.douglasPeuckerSimplify(path: svgPath, tolerance: Double(tolerance))
-                let bounds = try capsule.getBounds(path: simplifiedPath)
-                try recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: true)
+                _ = try capsule.getBounds(path: simplifiedPath)
+                recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: true)
                 return svgPathToPoints(simplifiedPath)
             } catch {
-                try? recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: false, error: error.localizedDescription)
+                recordVectorCapsuleTelemetry(operation: "simplifyRegionBoundary", success: false, error: error.localizedDescription)
             }
         }
         return manualSimplifyRegionBoundary(boundary, tolerance: tolerance)
@@ -212,10 +194,10 @@ public actor LayoutIndexingSystem {
                 let svgPath = layoutRegionToSVG(boundingBox: region)
                 let capsulePoint = Point(x: point.x, y: point.y)
                 let result = try capsule.pointInPolygon(point: capsulePoint, path: svgPath)
-                try recordVectorCapsuleTelemetry(operation: "pointInRegion", success: true)
+                recordVectorCapsuleTelemetry(operation: "pointInRegion", success: true)
                 return result
             } catch {
-                try? recordVectorCapsuleTelemetry(operation: "pointInRegion", success: false, error: error.localizedDescription)
+                recordVectorCapsuleTelemetry(operation: "pointInRegion", success: false, error: error.localizedDescription)
             }
         }
         return manualPointInRegion(point: point, region: region)
@@ -233,10 +215,10 @@ public actor LayoutIndexingSystem {
             do {
                 let svgPath = pointsToSVGPath(points.map { Point(x: $0.x, y: $0.y) })
                 let bounds = try capsule.getBounds(path: svgPath)
-                try recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: true)
+                recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: true)
                 return BoundingBoxRef(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)
             } catch {
-                try? recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: false, error: error.localizedDescription)
+                recordVectorCapsuleTelemetry(operation: "calculateRegionBounds", success: false, error: error.localizedDescription)
             }
         }
         return manualCalculateRegionBounds(points)

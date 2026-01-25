@@ -8,7 +8,7 @@
 import ContractsCore
 import AnigmaCore
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Stubbed MAKER integration point for Harmonia.
 public struct MakerHarmoniaIntegration {

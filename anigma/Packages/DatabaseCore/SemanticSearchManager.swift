@@ -20,7 +20,7 @@ public actor SemanticSearchManager {
     /// Initialize semantic search schema and indexes.
     public func initialize() async throws {
         // Create search index table
-        try await db.execute("""
+        try await db.executeAsync("""
             CREATE TABLE IF NOT EXISTS search_index (
                 index_id TEXT PRIMARY KEY,
                 segment_id TEXT NOT NULL,
@@ -35,7 +35,7 @@ public actor SemanticSearchManager {
         """)
 
         // Create search queries audit table
-        try await db.execute("""
+        try await db.executeAsync("""
             CREATE TABLE IF NOT EXISTS search_queries (
                 query_id TEXT PRIMARY KEY,
                 query_text TEXT NOT NULL,
@@ -51,7 +51,7 @@ public actor SemanticSearchManager {
         """)
 
         // Create search results audit table
-        try await db.execute("""
+        try await db.executeAsync("""
             CREATE TABLE IF NOT EXISTS search_results (
                 result_id TEXT PRIMARY KEY,
                 query_id TEXT NOT NULL,
@@ -65,10 +65,10 @@ public actor SemanticSearchManager {
         """)
 
         // Create indexes for performance
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_search_content_hash ON search_index(content_hash)")
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_search_segment ON search_index(segment_id)")
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_search_queries_timestamp ON search_queries(timestamp)")
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_search_results_query ON search_results(query_id)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_search_content_hash ON search_index(content_hash)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_search_segment ON search_index(segment_id)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_search_queries_timestamp ON search_queries(timestamp)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_search_results_query ON search_results(query_id)")
     }
 
     /// Index content from a ledger event for semantic search.
@@ -84,7 +84,7 @@ public actor SemanticSearchManager {
         // Generate embedding using simple hash-based approach (fallback for demo)
         let embedding = try generateEmbedding(for: textContent)
 
-        try await db.execute("""
+        try await db.executeAsync("""
             INSERT OR REPLACE INTO search_index (
                 index_id, segment_id, event_id, content_hash, text_content,
                 embedding, embedding_model, indexed_at
@@ -120,7 +120,7 @@ public actor SemanticSearchManager {
         // Record the search query
         let filtersJson = filters.flatMap { try? JSONEncoder().encode($0).base64EncodedString() }
 
-        try await db.execute("""
+        try await db.executeAsync("""
             INSERT INTO search_queries (
                 query_id, query_text, query_hash, query_vector,
                 timestamp, user_id, session_id, filters_applied
@@ -178,7 +178,7 @@ public actor SemanticSearchManager {
         // Record results
         for (rank, result) in results.enumerated() {
             let resultId = UUID().uuidString
-            try await db.execute("""
+            try await db.executeAsync("""
                 INSERT INTO search_results (
                     result_id, query_id, segment_id, event_id,
                     relevance_score, rank, recorded_at
@@ -196,7 +196,7 @@ public actor SemanticSearchManager {
 
         // Update query with result count and execution time
         let executionTime = Int(Date().timeIntervalSince(startTime) * 1000)
-        try await db.execute("""
+        try await db.executeAsync("""
             UPDATE search_queries
             SET result_count = ?, execution_time_ms = ?
             WHERE query_id = ?
@@ -285,7 +285,7 @@ public actor SemanticSearchManager {
         let cutoffDate = Date().addingTimeInterval(-TimeInterval(olderThanDays * 86400))
 
         // Delete old search results
-        try await db.execute("""
+        try await db.executeAsync("""
             DELETE FROM search_results
             WHERE query_id IN (
                 SELECT query_id FROM search_queries
@@ -294,7 +294,7 @@ public actor SemanticSearchManager {
         """, parameters: [.double(cutoffDate.timeIntervalSince1970)])
 
         // Delete old search queries
-        let result = try await db.execute("""
+        let result = try await db.executeAsync("""
             DELETE FROM search_queries
             WHERE timestamp < ?
         """, parameters: [.double(cutoffDate.timeIntervalSince1970)])

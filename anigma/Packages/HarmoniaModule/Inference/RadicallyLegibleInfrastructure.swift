@@ -7,7 +7,7 @@
 //  into a single, coherent system for institutional AI deployment.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Radically Legible AI Service

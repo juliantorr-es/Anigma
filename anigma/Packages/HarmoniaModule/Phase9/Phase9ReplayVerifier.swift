@@ -6,7 +6,7 @@
 //  Wires together all components to provide end-to-end verification.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Final Phase 9.0 replay verifier implementation.
 /// Provides surgical failure reporting with byte-level divergence detection.

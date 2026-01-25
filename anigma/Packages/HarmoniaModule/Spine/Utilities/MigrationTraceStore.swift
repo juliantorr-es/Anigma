@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 import DatabaseCore
 import AnigmaPrimitives
 
@@ -21,7 +21,7 @@ public init(dbPath: String = DatabaseConfiguration.defaultDatabasePath()) {
         self.actor = actor
         self.ready = Task {
             try await actor.open()
-          try await actor.execute("""
+            _ = try await actor.executeAsync("""
                 CREATE TABLE IF NOT EXISTS migration_trace_steps (
                     task_id TEXT NOT NULL,
                     recorded_at TEXT NOT NULL,
@@ -36,40 +36,40 @@ public init(dbPath: String = DatabaseConfiguration.defaultDatabasePath()) {
                     circuit_state TEXT,
                     PRIMARY KEY(task_id, recorded_at)
                 )
-                """)
+                """, parameters: [])
 
-            try await actor.execute("""
+            _ = try await actor.executeAsync("""
                 CREATE INDEX IF NOT EXISTS idx_migration_trace_task
                 ON migration_trace_steps (task_id)
-                """)
+                """, parameters: [])
 
-            try await actor.execute("""
+            _ = try await actor.executeAsync("""
                 CREATE INDEX IF NOT EXISTS idx_migration_trace_recorded_at
                 ON migration_trace_steps (recorded_at)
-                """)
+                """, parameters: [])
 
             // Add circuit_state column if it doesn't exist (for backwards compatibility)
             // Check if column already exists first
-            let tableInfo = try await actor.query("PRAGMA table_info(migration_trace_steps)")
+            let tableInfo = try await actor.query("PRAGMA table_info(migration_trace_steps)", parameters: [])
             let hasCircuitStateColumn = tableInfo.contains { row in
                 row.string(for: "name") == "circuit_state"
             }
 
             if !hasCircuitStateColumn {
-                try await actor.execute("""
+                _ = try await actor.executeAsync("""
                     ALTER TABLE migration_trace_steps
                     ADD COLUMN circuit_state TEXT
-                    """)
+                    """, parameters: [])
             }
 
-            try await actor.execute("""
+            _ = try await actor.executeAsync("""
                 CREATE INDEX IF NOT EXISTS idx_migration_trace_task
                 ON migration_trace_steps (task_id)
-                """)
-            try await actor.execute("""
+                """, parameters: [])
+            _ = try await actor.executeAsync("""
                 CREATE INDEX IF NOT EXISTS idx_migration_trace_recorded_at
                 ON migration_trace_steps (recorded_at)
-                """)
+                """, parameters: [])
         }
     }
 
@@ -82,7 +82,7 @@ public init(dbPath: String = DatabaseConfiguration.defaultDatabasePath()) {
             do {
                 try await ready.value
                 let recordedAt = SQLiteMigrationTraceSink.isoTimestamp(Date())
-                try await actor.execute("""
+                _ = try await actor.executeAsync("""
                     INSERT INTO migration_trace_steps (
                         task_id, recorded_at, rewrite_path, rule_id,
                         verify_status, rollback_status, rollback_reason,

@@ -489,7 +489,7 @@ private func colorBalanceTriplet(from wheel: ColorWheelValue) -> (r: Double, g: 
 private func rgbFromHue(_ hue: Double) -> (r: Double, g: Double, b: Double) {
     let normalized = (hue.truncatingRemainder(dividingBy: 360) + 360).truncatingRemainder(dividingBy: 360)
     let c = 1.0
-    let x = c * (1 - abs((normalized / 60).truncatingRemainder(dividingBy: 2) - 1))
+    let x = c * (1 - Swift.abs((normalized / 60).truncatingRemainder(dividingBy: 2) - 1))
     switch normalized {
     case 0..<60:
         return (c, x, 0)

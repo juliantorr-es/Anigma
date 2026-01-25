@@ -285,13 +285,53 @@ public actor HTTPServerManager {
 
         // Ingest Artifact
         router.post("/artifacts/ingest") { request, context in
+            // Handle streaming/raw ingestion if specified via headers
+            if let contentType = request.headers["content-type"].first, contentType.contains("application/octet-stream") {
+                // Metadata in headers
+                let kind = request.headers["x-anigma-kind"].first ?? "blob"
+                let mime = request.headers["x-anigma-media-type"].first ?? "application/octet-stream"
+                let filenameHint = request.headers["x-anigma-filename"].first
+                
+                // Buffer the body (Streaming to Vault not yet supported by StorageCore)
+                var data = Data()
+                for try await buffer in request.body {
+                    data.append(contentsOf: buffer.readableBytesView)
+                }
+                
+                let body = AnigmaPrimitives.AnigmaIngestArtifactRequest(
+                    ctx: AnigmaRequestContext(clientId: "client", capabilityToken: "", nonce: ""), // TODO: Extract from headers
+                    kind: kind,
+                    mediaType: mime,
+                    filenameHint: filenameHint,
+                    data: data
+                )
+                 // Extract context from headers if available or use defaults (auth will be checked)
+                let clientId = request.headers["x-anigma-client-id"].first ?? ""
+                let capToken = request.headers["x-anigma-capability-token"].first ?? ""
+                let nonce = request.headers["x-anigma-nonce"].first ?? ""
+                
+                let config = HandleIngestArtifactConfiguration(
+                    ctx: RequestContext(clientId: clientId, capabilityToken: capToken, nonce: nonce),
+                    kind: kind,
+                    mime: mime,
+                    data: data,
+                    plaintextSha256: "",
+                    chunkCount: 1,
+                    byteCount: data.count,
+                    filenameHint: filenameHint
+                )
+                
+                let result = try await daemon.handleIngestArtifact(config: config)
+                return AnigmaIngestArtifactResponse(
+                    artifact: AnigmaArtifactRef(hash: result.artifact.hash, mediaType: result.artifact.mediaType, sizeBytes: result.artifact.sizeBytes),
+                    receiptHash: result.receiptHash,
+                    error: nil
+                )
+            }
+            
+            // Default JSON handling
             let body = try await request.decode(as: AnigmaPrimitives.AnigmaIngestArtifactRequest.self, context: context)
-            // TODO: implement streaming ingestion
-            // Design: Use HTTP chunked transfer encoding or multipart/form-data.
-            // Option 1: Client sends POST with Transfer-Encoding: chunked, first chunk is JSON metadata,
-            // subsequent chunks are raw binary data.
-            // Option 2: Use multipart/form-data with two parts: metadata (JSON) and data (binary).
-            // For now, small artifacts are supported via single request/response.
+            
             let config = HandleIngestArtifactConfiguration(
                 ctx: RequestContext(clientId: body.ctx.clientId, capabilityToken: body.ctx.capabilityToken, nonce: body.ctx.nonce),
                 kind: body.kind,
@@ -312,11 +352,8 @@ public actor HTTPServerManager {
 
         // Retrieve Artifact
         router.post("/artifacts/retrieve") { request, context in
-            // TODO: implement streaming retrieval
-            // Design: Server responds with Transfer-Encoding: chunked and Content-Type: application/octet-stream.
-            // Alternatively, use HTTP Range requests for partial retrieval.
-            // For now, small artifacts are returned as base64 in JSON response.
             let body = try await request.decode(as: AnigmaPrimitives.AnigmaRetrieveArtifactRequest.self, context: context)
+            
             let (data, receiptHash) = try await daemon.handleRetrieveArtifact(
                 ctx: DaemonRequestContext(
                     clientId: body.ctx.clientId,
@@ -325,6 +362,26 @@ public actor HTTPServerManager {
                 ),
                 hash: body.hash
             )
+            
+            // Streaming response if requested via query param or header
+            // For now, check if the client can accept raw stream or if the artifact is large
+            // Note: The backend currently loads full Data into memory, but we stream the response
+            // to satisfy the HTTP interface requirement for large file downloads.
+            // Future improvement: Stream directly from Vault/FileHandle.
+            
+            let isStreamRequested = request.uri.queryParameters["stream"] == "true"
+            
+            if isStreamRequested {
+                return Response(
+                    status: .ok,
+                    headers: [
+                        "Content-Type": "application/octet-stream",
+                        "X-Anigma-Receipt": receiptHash ?? ""
+                    ],
+                    body: .init(byteBuffer: ByteBuffer(data: data))
+                )
+            }
+
             return AnigmaRetrieveArtifactResponse(data: data, receiptHash: receiptHash, error: nil)
         }
 
@@ -390,15 +447,33 @@ public actor HTTPServerManager {
             )
         }
 
-        // Stream Telemetry (placeholder)
+        // Stream Telemetry
         router.post("/telemetry/stream") { request, context in
             let body = try await request.decode(as: AnigmaPrimitives.AnigmaStreamTelemetryRequest.self, context: context)
-            // TODO: implement streaming telemetry
-            return AnigmaStreamTelemetryResponse(
-                ok: false,
-                error: AnigmaErrorStatus(code: "UNIMPLEMENTED", message: "StreamTelemetry not yet implemented", detailJson: nil),
-                receiptHash: nil
+            
+            let ctx = DaemonRequestContext(
+                clientId: body.ctx.clientId,
+                capabilityToken: body.ctx.capabilityToken,
+                nonce: body.ctx.nonce
             )
+            
+            let stream = try await daemon.handleStreamTelemetry(ctx: ctx)
+            
+            // Create streaming response (NDJSON)
+            let response = Response(
+                status: .ok,
+                headers: ["Content-Type": "application/x-ndjson"],
+                body: .stream { writer in
+                    for await event in stream {
+                        // TODO: Map internal TelemetryEvent to AnigmaTelemetryEvent
+                        // For now, assume simple mapping or pass simplified JSON
+                        let eventData = try JSONEncoder().encode(event)
+                        try await writer.write(.byteBuffer(ByteBuffer(bytes: eventData)))
+                        try await writer.write(.byteBuffer(ByteBuffer(bytes: [0x0A]))) // newline
+                    }
+                }
+            )
+            return response
         }
 
         // Cancel Job

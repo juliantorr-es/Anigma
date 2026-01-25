@@ -11,21 +11,21 @@ import Foundation
 /// Migration for retention policy storage and compliance events.
 public enum RetentionMigration {
     public static func migrate(_ db: DatabaseActor) async throws {
-        try await db.execute("BEGIN TRANSACTION")
+        try await db.executeAsync("BEGIN TRANSACTION")
 
         do {
             try await createPolicyStorage(db)
             try await createComplianceEvents(db)
             try await createIndexes(db)
-            try await db.execute("COMMIT TRANSACTION")
+            try await db.executeAsync("COMMIT TRANSACTION")
         } catch {
-            _ = try? await db.execute("ROLLBACK TRANSACTION")
+            _ = try? await db.executeAsync("ROLLBACK TRANSACTION")
             throw error
         }
     }
 
     private static func createPolicyStorage(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS retention_policy_store (
                 policy_id TEXT PRIMARY KEY,
@@ -40,7 +40,7 @@ public enum RetentionMigration {
     }
 
     private static func createComplianceEvents(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS policy_compliance_events (
                 event_id TEXT PRIMARY KEY,
@@ -56,21 +56,21 @@ public enum RetentionMigration {
     }
 
     private static func createIndexes(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_retention_policy_active
             ON retention_policy_store(is_active);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_policy_compliance_hash
             ON policy_compliance_events(policy_version_hash);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_policy_compliance_timestamp
             ON policy_compliance_events(created_at);

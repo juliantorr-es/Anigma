@@ -6,7 +6,7 @@
 //  Defines deterministic inputs, verification results, and failure reporting.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Canonical stage identifiers for Phase 9 boundary artifacts.
@@ -209,65 +209,27 @@ public struct StageArtifact: Codable, Sendable, Equatable {
         self.stageName = stageName
         self.canonicalPayload = canonicalPayload
         self.digest = digest
-struct FromConfiguration: Sendable {
-    let payload: PayloadType
-    let stage: StageType
-    let stageNumber: Int
-    let evidenceId: EvidenceId
-    let workspaceSnapshotHash: String
-    let encoder: CanonicalJSONEncoder
-    let hasher: BLAKE3Hasher
+        self.evidenceId = evidenceId
+        self.stageDisplayName = stageDisplayName
+    }
     
-    init(
-        payload: PayloadType,
-        stage: StageType,
+    /// Create a StageArtifact from configuration
+    public static func from<T: Encodable>(
+        _ payload: T,
+        stage: StageBoundary,
         stageNumber: Int,
-        evidenceId: EvidenceId,
+        evidenceId: String,
         workspaceSnapshotHash: String,
         encoder: CanonicalJSONEncoder,
         hasher: BLAKE3Hasher
-    ) {
-        self.payload = payload
-        self.stage = stage
-        self.stageNumber = stageNumber
-        self.evidenceId = evidenceId
-        self.workspaceSnapshotHash = workspaceSnapshotHash
-        self.encoder = encoder
-        self.hasher = hasher
-    }
-}
-
-// Update the 'from' function to accept the configuration object:
-// func from(config: FromConfiguration) { ... }
-        stage: StageType,
-        stageNumber: Int,
-        evidenceId: EvidenceId,
-        workspaceSnapshotHash: String,
-        encoder: CanonicalJSONEncoder,
-        hasher: BLAKE3Hasher
-    ) {
-        self.payload = payload
-        self.stage = stage
-        self.stageNumber = stageNumber
-        self.evidenceId = evidenceId
-        self.workspaceSnapshotHash = workspaceSnapshotHash
-        self.encoder = encoder
-        self.hasher = hasher
-    }
-}
-
-// Then update the 'from' function to accept the configuration:
-func from(config: FromConfiguration) throws -> StageArtifact {
-    let canonicalPayload = try config.encoder.encode(config.payload)
-    let digest = try config.hasher.hash(canonicalPayload)
-    
-    return StageArtifact(
-        stageNumber: config.stageNumber,
-        stageName: config.stage.rawValue,
-        canonicalPayload: canonicalPayload,
-        // ... continue with remaining parameters
-    )
-}
+    ) throws -> StageArtifact {
+        let canonicalPayload = try encoder.encode(payload)
+        let digest = try hasher.hash(canonicalPayload)
+        
+        return StageArtifact(
+            stageNumber: stageNumber,
+            stageName: stage.rawValue,
+            canonicalPayload: canonicalPayload,
             digest: digest,
             evidenceId: evidenceId,
             stageDisplayName: workspaceSnapshotHash

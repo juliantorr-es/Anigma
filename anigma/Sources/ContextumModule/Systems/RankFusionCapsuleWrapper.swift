@@ -262,7 +262,7 @@ public actor RankFusionCapsuleWrapper {
     /// Clear all rank lists from the capsule and reset mappings.
     public func clear() throws {
         var error = anigma_capsule_error_t()
-        try handle?.withHandle { rawHandle in
+        try handle?.withHandle { (rawHandle: anigma_capsule_handle_t) throws -> Void in
             let status = anigma_rank_fusion_capsule_clear(rawHandle, &error)
             guard status == ANIGMA_OK else {
                 throw CapsuleError(status: status, error: error)
@@ -281,7 +281,7 @@ public actor RankFusionCapsuleWrapper {
         let (ids, ranks) = try convertRankList(rankList)
         
         var error = anigma_capsule_error_t()
-        try handle?.withHandle { rawHandle in
+        try handle?.withHandle { (rawHandle: anigma_capsule_handle_t) throws -> Void in
             let status = anigma_rank_fusion_capsule_add_rank_list(
                 rawHandle,
                 ids,
@@ -299,7 +299,7 @@ public actor RankFusionCapsuleWrapper {
         var count: size_t = 0
         var error = anigma_capsule_error_t()
         
-        try handle?.withHandle { rawHandle in
+        try handle?.withHandle { (rawHandle: anigma_capsule_handle_t) throws -> Void in
             let status = anigma_rank_fusion_capsule_get_unique_count(rawHandle, &count, &error)
             guard status == ANIGMA_OK else {
                 throw CapsuleError(status: status, error: error)
@@ -317,7 +317,7 @@ public actor RankFusionCapsuleWrapper {
         scores: inout [Double]
     ) throws {
         var error = anigma_capsule_error_t()
-        try handle?.withHandle { rawHandle in
+        try handle?.withHandle { (rawHandle: anigma_capsule_handle_t) throws -> Void in
             // Use the standard fuse function with RRF k parameter
             let status = anigma_rank_fusion_capsule_fuse(
                 rawHandle,
@@ -340,7 +340,7 @@ public actor RankFusionCapsuleWrapper {
         ranks.reserveCapacity(rankList.ranks.count)
         
         for (chunkId, rank) in rankList.ranks {
-            let intId = try hashStringToUInt64(chunkId)
+            let intId = hashStringToUInt64(chunkId)
             ids.append(intId)
             ranks.append(UInt32(rank))
             
@@ -365,15 +365,13 @@ public actor RankFusionCapsuleWrapper {
         
         // Get top-K results by score (deterministic tie-breaking)
         let indexedScores = filteredIndices.map { ($0, scores[$0]) }
-        let sortedScores = indexedScores.sorted { lhs, rhs in
-            if abs(lhs.1 - rhs.1) < 1e-10 {
-                // Scores are effectively equal, use deterministic tie-breaking
-                let id1 = ids[lhs.0]
-                let id2 = ids[rhs.0]
+        let sortedScores = indexedScores.sorted { a, b in
+            if abs(a.1 - b.1) < 1e-10 {
+                let id1 = ids[a.0]
+                let id2 = ids[b.0]
                 return id1 < id2
-            } else {
-                return lhs.1 > rhs.1
             }
+            return a.1 > b.1
         }
         
         let topKIndices = Array(sortedScores.prefix(topK).map { $0.0 })
@@ -393,22 +391,19 @@ public actor RankFusionCapsuleWrapper {
         
         if enableTieBreaking {
             // Stable sorting by score then by document ID then by original position
-            let indexedResults = ids.enumerated().sorted { lhs, rhs in
-                let score1 = scores[lhs.offset]
-                let score2 = scores[rhs.offset]
-                let id1 = ids[lhs.offset]
-                let id2 = ids[rhs.offset]
+            let indexedResults = ids.enumerated().sorted { a, b in
+                let score1 = scores[a.offset]
+                let score2 = scores[b.offset]
+                let id1 = a.element
+                let id2 = b.element
                 
                 if abs(score1 - score2) < 1e-10 {
-                    // Scores are effectively equal, use deterministic tie-breaking
                     if id1 != id2 {
                         return id1 < id2
-                    } else {
-                        return lhs.offset < rhs.offset
                     }
-                } else {
-                    return score1 > score2
+                    return a.offset < b.offset
                 }
+                return score1 > score2
             }
             
             for (index, intId) in indexedResults {

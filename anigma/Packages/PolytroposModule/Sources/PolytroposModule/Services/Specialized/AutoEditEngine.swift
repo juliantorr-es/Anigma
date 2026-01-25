@@ -239,13 +239,13 @@ public actor AutoEditEngine {
         var bestDistance: TimeInterval = .infinity
 
         for beat in audio.beatOnsets {
-            let distance = abs(beat - idealTime)
+            let distance = Swift.abs(beat - idealTime)
             if distance < tolerance && distance < bestDistance {
                 // Check if this is a phrase boundary or downbeat
                 if profile.musicAlignment.preferPhraseBoundaries {
                     // Simplified: check if near a structural boundary
                     for segment in audio.structuralSegments {
-                        if abs(segment.range.start - beat) < 0.1 || abs(segment.range.end - beat) < 0.1 {
+                        if Swift.abs(segment.range.start - beat) < 0.1 || Swift.abs(segment.range.end - beat) < 0.1 {
                             bestDistance = distance * 0.5 // Prefer phrase boundaries
                             bestBeat = beat
                         }
@@ -353,7 +353,7 @@ public actor AutoEditEngine {
         // Compute average metrics
         let avgSharpness = frames.map { Double($0.sharpness) }.reduce(0, +) / Double(frames.count)
         let avgStability = frames.map { 1.0 - Double($0.motionMagnitude) }.reduce(0, +) / Double(frames.count)
-        let avgExposure = frames.map { 1.0 - abs(Double($0.exposure) - 0.5) * 2 }.reduce(0, +) / Double(frames.count)
+        let avgExposure = frames.map { 1.0 - Swift.abs(Double($0.exposure) - 0.5) * 2 }.reduce(0, +) / Double(frames.count)
         let avgSubjectPresence = frames.map { Double($0.subjectCount) / 3.0 }.reduce(0, +) / Double(frames.count)
 
         var score = (
@@ -435,14 +435,14 @@ public actor AutoEditEngine {
 
         // Check if on beat
         for beat in audio.beatOnsets {
-            if abs(beat - time) < 0.1 {
+            if Swift.abs(beat - time) < 0.1 {
                 return .beat
             }
         }
 
         // Check if at segment boundary
         for segment in audio.structuralSegments {
-            if abs(segment.range.start - time) < 0.2 || abs(segment.range.end - time) < 0.2 {
+            if Swift.abs(segment.range.start - time) < 0.2 || Swift.abs(segment.range.end - time) < 0.2 {
                 return .segmentBoundary
             }
         }

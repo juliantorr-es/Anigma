@@ -8,7 +8,7 @@
 
 import AnigmaCore
 import DoctrineCore
-import Foundation
+@preconcurrency import Foundation
 import SecurityEventsManager
 
 private func securityEventSeverity(for doctrineSeverity: DoctrineSeverity) -> SecurityEventSeverity {

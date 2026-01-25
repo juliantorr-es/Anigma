@@ -7,7 +7,7 @@
 //  Defines the "choir" interfaces without touching the bones.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 // MARK: - Shared core types

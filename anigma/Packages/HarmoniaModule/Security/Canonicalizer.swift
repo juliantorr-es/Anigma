@@ -7,7 +7,7 @@
 
 import ContractsCore
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 public struct Canonicalizer {
 

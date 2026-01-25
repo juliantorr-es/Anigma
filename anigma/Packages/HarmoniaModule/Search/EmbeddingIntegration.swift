@@ -8,7 +8,7 @@
 import AnigmaPrimitives
 import AnigmaCore
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Embedding model interface
 public protocol SearchEmbeddingModel: Sendable {
@@ -103,12 +103,12 @@ public struct ContentEmbedding: Sendable, Codable {
 
 /// Hybrid keyword + semantic search
 public actor EmbeddingIntegration {
-    private let dbActor: (any DatabaseExecutor)?
+    private let dbActor: (any DatabaseCore.DatabaseExecutor)?
     private let embeddingModel: SearchEmbeddingModel?
     private var schemaInitialized = false
 
     public init(
-        dbActor: (any DatabaseExecutor)? = nil,
+        dbActor: (any DatabaseCore.DatabaseExecutor)? = nil,
         embeddingModel: SearchEmbeddingModel? = nil
     ) {
         self.dbActor = dbActor
@@ -137,12 +137,12 @@ public actor EmbeddingIntegration {
             VALUES (?, ?, ?, ?, ?, ?)
             """,
             parameters: [
-                .text(UUID().uuidString),
-                .text(contentId),
-                .text(embeddingJson),
-                .int(timestamp),
-                .text(modelName),
-                .text(contentHash)
+                DatabaseCore.DatabaseParameter.text(UUID().uuidString),
+                DatabaseCore.DatabaseParameter.text(contentId),
+                DatabaseCore.DatabaseParameter.text(embeddingJson),
+                DatabaseCore.DatabaseParameter.int(timestamp),
+                DatabaseCore.DatabaseParameter.text(modelName),
+                DatabaseCore.DatabaseParameter.text(contentHash)
             ]
         )
     }
@@ -161,7 +161,7 @@ public actor EmbeddingIntegration {
             """
             SELECT id, content_id, embedding FROM content_embeddings LIMIT ?
             """,
-            parameters: [.int(limit * 5)]  // Get more to filter
+            parameters: [DatabaseCore.DatabaseParameter.int(limit * 5)]  // Get more to filter
         )
 
         var results: [(id: String, similarity: Double)] = []
@@ -225,7 +225,7 @@ public actor EmbeddingIntegration {
                 """
                 SELECT embedding FROM content_embeddings WHERE content_id = ? LIMIT 1
                 """,
-                parameters: [.text(contentId)]
+                parameters: [DatabaseCore.DatabaseParameter.text(contentId)]
             )
 
             if let row = rows.first,
@@ -277,7 +277,7 @@ public actor EmbeddingIntegration {
             """
             DELETE FROM content_embeddings WHERE content_id = ?
             """,
-            parameters: [.text(contentId)]
+            parameters: [DatabaseCore.DatabaseParameter.text(contentId)]
         )
 
         // Store new embedding
@@ -318,18 +318,14 @@ public actor EmbeddingIntegration {
 
                 if let oldestInt = row.int(for: "oldest") {
                     let date = Date(timeIntervalSince1970: TimeInterval(oldestInt))
-                    guard let oldest = = nil || date < oldest else {
-                        fatalError("Failed to unwrap oldest")
-                    }
+                    if oldest == nil || date < oldest! {
                         oldest = date
                     }
                 }
 
                 if let newestInt = row.int(for: "newest") {
                     let date = Date(timeIntervalSince1970: TimeInterval(newestInt))
-                    guard let newest = = nil || date > newest else {
-                        fatalError("Failed to unwrap newest")
-                    }
+                    if newest == nil || date > newest! {
                         newest = date
                     }
                 }

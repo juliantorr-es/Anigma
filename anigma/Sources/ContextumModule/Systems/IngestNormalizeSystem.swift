@@ -1,5 +1,8 @@
 import Foundation
 import CryptoKit
+import TextChunkingCapsule
+import ContractsCore
+import TelemetryCore
 
 public actor IngestNormalizeSystem {
     private let database: ContextumDatabase
@@ -16,8 +19,6 @@ public actor IngestNormalizeSystem {
 
     public func process(source: ContextSourceComponent) async throws {
         let startTime = Date()
-        var outcome: TelemetryEventComponent.Outcome = .success
-        var errorCode: String?
         var diagnosticPayload: [String: String] = [:]
 
         do {
@@ -44,12 +45,9 @@ public actor IngestNormalizeSystem {
             diagnosticPayload["isCapsuleAvailable"] = String(await textPreprocessor.isCapsuleAvailable)
 
             let normalizedContent = preprocessed.normalizedText
-            let data = Data(normalizedContent.utf8)
-            let hash = SHA256.hash(data: data)
-            let hashString = hash.compactMap { String(format: "%02x", $0) }.joined()
-
+            
             var chunkComponents: [ChunkComponent] = []
-            let chunks = chunkText(normalizedContent)
+            let chunks = await chunkText(normalizedContent)
 
             for (index, chunkContent) in chunks.enumerated() {
                 let chunkData = Data(chunkContent.utf8)
@@ -76,55 +74,50 @@ public actor IngestNormalizeSystem {
                 eventId: UUID().uuidString,
                 eventType: .ingest,
                 receiptId: source.receiptId,
-                outcome: .success,
                 durationMs: Int(Date().timeIntervalSince(startTime) * 1000),
+                outcome: .success,
                 diagnosticPayload: diagnosticPayload
             )
 
             try await database.insertEvent(event)
 
         } catch {
-            outcome = .failure
-            errorCode = error.localizedDescription
             diagnosticPayload["error"] = error.localizedDescription
             throw error
         }
     }
 
-    private func chunkText(_ text: String) -> [String] {
+    private func chunkText(_ text: String) async -> [String] {
         guard !text.isEmpty else { return [] }
 
-        let chunkingConfig = TextChunkingConfig(
+        let data = Data(text.utf8)
+        let config = TextChunkingConfig(
             targetChunkSize: maxChunkSize,
-            minChunkSize: max(64, maxChunkSize / 4),
+            minChunkSize: maxChunkSize / 2,
             maxChunkSize: min(maxChunkSize * 2, 8192),
             windowSize: 48,
-            determinismTier: UInt32(ANIGMA_DETERMINISM_TIER_1_RECEIPT_GRADE)
+            determinismTier: 1
         )
 
         do {
-            let wrapper = try TextChunkingCapsuleWrapper(config: chunkingConfig)
-            let data = Data(text.utf8)
+            let wrapper = try TextChunkingCapsuleWrapper(config: config)
             try wrapper.processBytes(data)
             try wrapper.finalize()
 
-            let chunkData = try wrapper.extractChunks(from: data)
+            let chunkData = try await wrapper.extractChunks(from: data)
 
             var stringChunks: [String] = []
             for chunk in chunkData {
-                if let chunkString = String(data: chunk, encoding: .utf8) {
-                    stringChunks.append(chunkString)
-                } else {
-                    return fallbackChunkText(text)
+                if let s = String(data: chunk, encoding: .utf8) {
+                    stringChunks.append(s)
                 }
             }
-
+            
             if overlapSize > 0 && stringChunks.count > 1 {
                 return applyOverlap(to: stringChunks)
             }
 
             return stringChunks.isEmpty ? [text] : stringChunks
-
         } catch {
             return fallbackChunkText(text)
         }

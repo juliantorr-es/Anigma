@@ -9,7 +9,7 @@
 import AnigmaPrimitives
 import AnigmaCLICore
 import AnigmaCLIOrchestrator
-import Foundation
+@preconcurrency import Foundation
 
 public struct ModernTaskTool: Tool {
     public static let id = "task"

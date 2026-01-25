@@ -8,7 +8,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Orchestrator for executing Phase 9.1 closed loop with deterministic replay verification.
 /// Connects pure kernel (no side effects) with governed executor (side effects with evidence).

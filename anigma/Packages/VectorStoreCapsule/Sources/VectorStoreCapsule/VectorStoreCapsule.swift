@@ -9,7 +9,7 @@ public final class VectorStore {
     /// Register the sqlite-vec extension with a SQLite connection.
     /// - Parameter dbHandle: A raw pointer to the `sqlite3` connection handle.
     public static func registerExtension(with dbHandle: UnsafeMutableRawPointer) throws {
-        var err = anigma_capsule_error_t()
+        var err = AnigmaNativeShims.anigma_capsule_error_t()
         
         let status = anigma_vector_store_register(dbHandle, &err)
         
@@ -21,7 +21,7 @@ public final class VectorStore {
     /// Get the version of the underlying sqlite-vec extension.
     public static var version: String {
         var versionPtr: UnsafeMutablePointer<CChar>?
-        var err = anigma_capsule_error_t()
+        var err = AnigmaNativeShims.anigma_capsule_error_t()
         
         let status = anigma_vector_store_version(&versionPtr, &err)
         

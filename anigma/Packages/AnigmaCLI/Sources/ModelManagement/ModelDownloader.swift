@@ -319,10 +319,10 @@ public actor HuggingFaceModelDownloader {
     private let baseURL = "https://huggingface.co"
     private var bridge: SidecarBridge?
 
-    public init() {
-        Task {
-            self.bridge = try? await SidecarBridge.create(clientName: "anigma-cli-downloader")
-        }
+    public init() {}
+
+    internal func initialize() async {
+        self.bridge = try? await SidecarBridge.create(clientName: "anigma-cli-downloader")
     }
 
     public func download(

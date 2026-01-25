@@ -246,7 +246,7 @@ public extension CathedralModule {
         mlService: CathedralMLService? = nil
     ) async -> CathedralFacade {
         // Create database persistence layer if database provided
-        let persistence = database.map { CathedralDatabasePersistence(database: $0) }
+        let persistence = database.map { CathedralDatabasePersistence(database: $0 as! DatabaseCore.DatabaseExecutor) }
 
         // Create tamper system
         let tamperSystem = TamperEvidenceSystem(database: database)

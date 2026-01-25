@@ -10,11 +10,11 @@ import Foundation
 
 /// Persistence for contract receipts with idempotent inserts and lookup by session/contract/input key.
 public actor ReceiptStore {
-    private let db: DatabaseActor
+    private let db: any DatabaseExecutor
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
 
-    public init(database: DatabaseActor) async throws {
+    public init(database: any DatabaseExecutor) async throws {
         self.db = database
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -33,7 +33,7 @@ public actor ReceiptStore {
     @discardableResult
     public func putReceiptIdempotent(_ receipt: ContractReceipt, inputKey: String) async throws -> ContractReceipt {
         let data = try encoder.encode(receipt)
-        let inserted = try await db.execute(
+        let inserted = try await db.executeAsync(
             """
             INSERT OR IGNORE INTO contract_receipts
             (run_id, session_id, contract_id, status, started_at, ended_at, provenance_hash, receipt_json, input_key)

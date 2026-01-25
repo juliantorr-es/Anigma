@@ -177,7 +177,7 @@ public actor GarbageCollectorEngine {
 
         for proof in verifiedDeletions {
             // Delete artifact from content-addressed store
-            _ = try await db.execute(
+            _ = try await db.executeAsync(
                 """
                 DELETE FROM content_addressed_artifacts
                 WHERE content_hash = ?
@@ -189,7 +189,7 @@ public actor GarbageCollectorEngine {
             bytesFreed += Int64(proof.artifact.payloadSize)
 
             // Tombstone in artifact references (mark as deleted but keep hash)
-            _ = try await db.execute(
+            _ = try await db.executeAsync(
                 """
                 UPDATE artifact_references
                 SET deleted_at = ?
@@ -220,7 +220,7 @@ public actor GarbageCollectorEngine {
         let deletedHashesData = try JSONSerialization.data(withJSONObject: result.deletedHashes, options: .sortedKeys)
         let deletedHashesJson = String(data: deletedHashesData, encoding: .utf8) ?? "[]"
 
-        try await db.execute("""
+        try await db.executeAsync("""
             INSERT INTO retention_events (
                 event_id, policy_hash, policy_version, event_type,
                 started_at, completed_at, artifacts_deleted, artifacts_freed_bytes,

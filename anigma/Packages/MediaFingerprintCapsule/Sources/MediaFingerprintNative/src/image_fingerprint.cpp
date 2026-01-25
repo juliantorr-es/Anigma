@@ -126,15 +126,6 @@ extern "C" {
         return config;
     }
 
-    anigma_capsule_identity_t anigma_media_fingerprint_capsule_get_identity(void) {
-        anigma_capsule_identity_t identity;
-        identity.capsule_id = "media_fingerprint_capsule";
-        identity.build_hash = "v1.0.0";
-        identity.algo_version = "1.0.0";
-        identity.determinism_tier = 1; // Tier 1 - bitwise deterministic
-        return identity;
-    }
-
     anigma_status_t anigma_media_fingerprint_capsule_create(
         const anigma_image_fingerprint_config_t* image_config,
         const anigma_audio_fingerprint_config_t* audio_config,

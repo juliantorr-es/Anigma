@@ -10,16 +10,16 @@ import Foundation
 
 /// Database index for vault metadata and access logs.
 public actor VaultIndexStore {
-    private let db: DatabaseActor
+    private let db: any DatabaseExecutor
 
-    public init(database: DatabaseActor) async throws {
+    public init(database: any DatabaseExecutor) async throws {
         self.db = database
         try await MigrationRegistry.applyVaultMigrations(using: db)
     }
 
     /// Insert or update an artifact record.
     public func upsertArtifact(_ artifact: VaultArtifactRef) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT INTO vault_artifacts
             (sha256_hex, byte_len, mime, kind, created_at, key_id, object_relpath, previous_receipt_hash)
@@ -89,7 +89,7 @@ public actor VaultIndexStore {
         runId: String?,
         stepId: String?
     ) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT OR IGNORE INTO vault_edges
             (parent_sha256_hex, child_sha256_hex, relation, run_id, step_id)
@@ -114,7 +114,7 @@ public actor VaultIndexStore {
         decision: VaultDecision,
         reason: String?
     ) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT INTO vault_access_log
             (at_utc, actor_id, action, sha256_hex, decision, reason)
@@ -203,7 +203,7 @@ public actor VaultIndexStore {
 
     /// Remove an artifact record.
     public func deleteArtifact(hash: String) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             "DELETE FROM vault_artifacts WHERE sha256_hex = ?",
             parameters: [.text(hash)]
         )
@@ -232,7 +232,7 @@ public actor VaultIndexStore {
         ]
         let metadataData = try JSONSerialization.data(withJSONObject: metadata, options: [])
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT INTO retention_events (
                 retention_id, policy_version_hash, started_at, completed_at,

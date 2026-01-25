@@ -6,7 +6,7 @@
 //  and generating project scaffolding.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Project Initializer System

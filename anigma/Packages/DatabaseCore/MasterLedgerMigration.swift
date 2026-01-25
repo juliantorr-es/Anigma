@@ -11,18 +11,18 @@ import Foundation
 public enum MasterLedgerMigration {
     public static func migrate(_ db: DatabaseActor) async throws {
         do {
-            try await db.execute("BEGIN TRANSACTION")
+            try await db.executeAsync("BEGIN TRANSACTION")
             try await createMasterLedgerTables(db)
             try await createIndexes(db)
-            try await db.execute("COMMIT TRANSACTION")
+            try await db.executeAsync("COMMIT TRANSACTION")
         } catch {
-            _ = try? await db.execute("ROLLBACK TRANSACTION")
+            _ = try? await db.executeAsync("ROLLBACK TRANSACTION")
             throw error
         }
     }
 
     private static func createMasterLedgerTables(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS master_ledger_events (
                 event_id TEXT PRIMARY KEY,
@@ -41,7 +41,7 @@ public enum MasterLedgerMigration {
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS retention_events (
                 retention_id TEXT PRIMARY KEY,
@@ -58,42 +58,42 @@ public enum MasterLedgerMigration {
     }
 
     private static func createIndexes(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_master_events_session
             ON master_ledger_events(session_id, timestamp);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_master_events_type
             ON master_ledger_events(event_type, status);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_master_events_tool
             ON master_ledger_events(tool_name);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_master_events_timestamp
             ON master_ledger_events(timestamp);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_retention_events_timestamp
             ON retention_events(started_at);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_master_events_content_hash
             ON master_ledger_events(result_content_hash);

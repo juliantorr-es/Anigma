@@ -25,7 +25,7 @@ public actor RetentionPolicyManager {
 
     /// Initialize storage for retention policies.
     private func setupPolicyStorage() async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS retention_policy_store (
                 policy_id TEXT PRIMARY KEY,
@@ -38,7 +38,7 @@ public actor RetentionPolicyManager {
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_retention_policy_active
             ON retention_policy_store(is_active);
@@ -93,7 +93,7 @@ public actor RetentionPolicyManager {
         let encoder = JSONEncoder()
         let policyData = try encoder.encode(policy)
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT OR REPLACE INTO retention_policy_store
             (policy_id, policy_version, policy_content, policy_hash, created_at, is_active)
@@ -110,7 +110,7 @@ public actor RetentionPolicyManager {
         )
 
         if makeActive {
-            try await db.execute(
+            try await db.executeAsync(
                 """
                 UPDATE retention_policy_store
                 SET is_active = 0
@@ -171,7 +171,7 @@ public actor RetentionPolicyManager {
     ) async throws -> String {
         let now = Date()
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT OR REPLACE INTO policy_compliance_events
             (event_id, policy_version_hash, action, effected_artifacts, bytes_freed, created_at)

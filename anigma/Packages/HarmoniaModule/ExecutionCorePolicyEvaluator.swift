@@ -7,7 +7,7 @@
 //
 
 import ExecutionCore
-import Foundation
+@preconcurrency import Foundation
 import TelemetryCore
 
 /// Adapter that makes HarmoniaModule's governance mechanisms compatible with ExecutionCore's PolicyEvaluator protocol.

@@ -7,8 +7,8 @@
 
 import AnigmaCore
 import DatabaseCore
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 import ContractsCore
 
 // MARK: - Legacy Type Aliases for Migration
@@ -26,12 +26,12 @@ public typealias ViolationSeverity = ContractsCore.EvidenceViolationSeverity
 /// Makes TamperEvidenceSystem, ForensicMetadataTracker, and RetrievalExplainabilitySystem
 /// serve as default evidence primitives for all ML and coordination operations
 public actor EvidenceSubstrate {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private let tamperEvidence: TamperEvidenceSystem
     private let forensicTracker: ForensicMetadataTracker
     private let retrievalExplainability: RetrievalExplainabilitySystem
 
-    public init(dbActor: any DatabaseExecutor) async throws {
+    public init(dbActor: any DatabaseCore.DatabaseExecutor) async throws {
         self.dbActor = dbActor
 
         // Initialize the three evidence systems
@@ -223,9 +223,9 @@ public actor EvidenceSubstrate {
             ORDER BY timestamp DESC
             LIMIT 100
             """, parameters: [
-                dbp("%\(operation)%"),
-                dbp("%operation\":\"\(operation)%"),
-                dbp(Date().addingTimeInterval(-300).timeIntervalSince1970) // Last 5 minutes
+                DatabaseCore.dbp("%\(operation)%"),
+                DatabaseCore.dbp("%operation\":\"\(operation)%"),
+                DatabaseCore.dbp(Date().addingTimeInterval(-300).timeIntervalSince1970) // Last 5 minutes
             ])
 
         let evidenceCount = recentEvidence.first?.int(for: "count") ?? 0

@@ -12,7 +12,7 @@
 //  optimizations for latency, memory, and quantization stability.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Attention Architecture Types

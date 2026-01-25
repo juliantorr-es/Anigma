@@ -660,7 +660,7 @@ public struct AnigmaEvidence: Identifiable, Codable, Hashable, Sendable {
     public var summary: String
     public var hash: String?
 
-    public enum EvidenceType: String, Codable {
+    public enum EvidenceType: String, Codable, Sendable {
         case importEvent
         case jobCompletion
         case policyCheck
@@ -812,6 +812,14 @@ public struct AnigmaTelemetryEvent: Codable, Sendable {
         self.type = type
         self.payloadJson = payloadJson
         self.atUnixMs = atUnixMs
+    }
+}
+
+public struct AnigmaStreamTelemetryRequest: Codable, Sendable {
+    public var ctx: AnigmaRequestContext
+    
+    public init(ctx: AnigmaRequestContext) {
+        self.ctx = ctx
     }
 }
 

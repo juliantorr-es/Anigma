@@ -7,7 +7,7 @@
 //  Not vibes - actual security invariants with blocking enforcement.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import DoctrineCore
 

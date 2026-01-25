@@ -6,9 +6,9 @@
 //
 
 import AnigmaPrimitives
-import CryptoKit
+@preconcurrency import CryptoKit
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import os
 
 public struct GitDiffTool: Sendable {

@@ -10,8 +10,9 @@
 //  This formalizes memory types as constitutional law, not implicit behavior.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
+import DataCore
 
 // MARK: - Memory Types
 

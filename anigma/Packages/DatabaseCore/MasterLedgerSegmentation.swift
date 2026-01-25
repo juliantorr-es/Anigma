@@ -208,7 +208,7 @@ public actor MasterLedgerSegmentationManager {
     /// Create a new ledger segment table.
     private func createSegment(segmentId: String) async throws {
         // Create segment table
-        try await db.execute("""
+        try await db.executeAsync("""
             CREATE TABLE IF NOT EXISTS ledger_segment_\(segmentId) (
                 event_id TEXT PRIMARY KEY,
                 agent_id TEXT NOT NULL,
@@ -222,12 +222,12 @@ public actor MasterLedgerSegmentationManager {
         """)
 
         // Create indexes on segment
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
-        try await db.execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+        try await db.executeAsync("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
 
         // Register segment in metadata table
-        try await db.execute("""
+        try await db.executeAsync("""
             INSERT INTO ledger_segments (segment_id, created_at)
             VALUES (?, ?)
         """, parameters: [
@@ -238,7 +238,7 @@ public actor MasterLedgerSegmentationManager {
 
     /// Close a segment for writing.
     private func closeSegment(segmentId: String) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             "UPDATE ledger_segments SET closed_at = ? WHERE segment_id = ?",
             parameters: [
                 .double(Date().timeIntervalSince1970),
@@ -249,7 +249,7 @@ public actor MasterLedgerSegmentationManager {
 
     /// Mark a segment as archived.
     private func markSegmentArchived(segmentId: String) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             "UPDATE ledger_segments SET archived_at = ? WHERE segment_id = ?",
             parameters: [
                 .double(Date().timeIntervalSince1970),

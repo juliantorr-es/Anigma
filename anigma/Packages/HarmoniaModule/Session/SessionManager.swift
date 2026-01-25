@@ -8,7 +8,8 @@
 
 import DatabaseCore
 import AnigmaCore
-import Foundation
+import ContractsCore
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Session manager for multi-database architecture.

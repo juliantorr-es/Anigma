@@ -7,7 +7,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Simple file-based evidence recorder.
 /// Stores loop events and evidence bundles in files for audit trail.

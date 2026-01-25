@@ -5,8 +5,8 @@
 //  Extensions for ProjectHarnessStore with behavioral history and session reports.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 extension ProjectHarnessStore {
     public func updateFeatureBehavioralHistory(
@@ -125,7 +125,7 @@ extension ProjectHarnessStore {
 
             // Calculate improvement trend
             let healthScores = history.sorted { $0.sessionIndex < $1.sessionIndex }.map { $0.healthScore }
-            guard let improvementTrend = healthScores.count > 1 ? healthScores.last else {
+            guard healthScores.count > 1, let improvementTrend = healthScores.last else {
                 fatalError("Failed to unwrap improvementTrend")
             }
 

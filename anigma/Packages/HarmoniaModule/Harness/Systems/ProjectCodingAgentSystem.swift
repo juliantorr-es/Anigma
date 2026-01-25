@@ -8,7 +8,7 @@
 
 import AnigmaCore
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Project Coding Agent System
 

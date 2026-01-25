@@ -9,7 +9,7 @@ import AnigmaPrimitives
 import AnigmaCLICore
 import AnigmaCLIProviders
 import AnigmaCLIRouter
-import Foundation
+@preconcurrency import Foundation
 
 /// Input for the DelegateTool
 public struct DelegateToolInput: Codable, Sendable {

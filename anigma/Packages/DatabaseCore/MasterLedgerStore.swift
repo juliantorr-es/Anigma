@@ -100,33 +100,33 @@ public actor MasterLedgerStore {
     private func setupSchema() async throws {
         // Initialize ledger segmentation schema
         try await db.initializeLedgerSegmentationSchema()
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE TABLE IF NOT EXISTS master_ledger_events (event_id TEXT PRIMARY KEY, event_type TEXT NOT NULL, tool_name TEXT NOT NULL, session_id TEXT NOT NULL, status TEXT NOT NULL, precondition_hash TEXT, file_hash_before TEXT, result_content_hash TEXT, error_signature TEXT, timestamp REAL NOT NULL, duration_ms INTEGER, metadata BLOB);"
         )
 
         // Indexes for efficient querying
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE INDEX IF NOT EXISTS idx_master_events_session ON master_ledger_events(session_id, timestamp);"
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE INDEX IF NOT EXISTS idx_master_events_type ON master_ledger_events(event_type, status);"
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE INDEX IF NOT EXISTS idx_master_events_tool ON master_ledger_events(tool_name);"
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE INDEX IF NOT EXISTS idx_master_events_timestamp ON master_ledger_events(timestamp);"
         )
 
         // Table for tracking retention events (which artifacts were deleted and why)
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE TABLE IF NOT EXISTS retention_events (retention_id TEXT PRIMARY KEY, policy_version_hash TEXT NOT NULL, started_at REAL NOT NULL, completed_at REAL NOT NULL, artifacts_deleted INTEGER, payload_bytes_freed INTEGER, deletion_reason TEXT, metadata BLOB);"
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             "CREATE INDEX IF NOT EXISTS idx_retention_events_timestamp ON retention_events(started_at);"
         )
     }
@@ -229,7 +229,7 @@ public actor MasterLedgerStore {
         let retentionID = UUID().uuidString
         let now = Date()
 
-        try await db.execute(
+        try await db.executeAsync(
             "INSERT INTO retention_events (retention_id, policy_version_hash, started_at, completed_at, artifacts_deleted, payload_bytes_freed, deletion_reason, metadata) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             parameters: [
                 .text(retentionID),

@@ -6,8 +6,8 @@
 //  Turns data into stories that can't be ignored.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Session Report
 

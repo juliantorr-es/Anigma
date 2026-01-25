@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Search analytics metrics
 public struct SearchAnalyticsMetrics: Sendable, Codable {

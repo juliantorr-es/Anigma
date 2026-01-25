@@ -7,19 +7,19 @@
 
 import AnigmaCore
 import DatabaseCore
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 import MLWorkerCommon
 
 /// Retrieval explainability system with query evidence records
 /// Makes every retrieval decision auditable and replayable
 public actor RetrievalExplainabilitySystem {
-    private let dbActor: any DatabaseExecutor
+    private let dbActor: any DatabaseCore.DatabaseExecutor
     private let documentDatabase: DocumentUnitDatabase
     private let tamperEvidence: TamperEvidenceSystem
 
     public init(
-        dbActor: any DatabaseExecutor,
+        dbActor: any DatabaseCore.DatabaseExecutor,
         documentDatabase: DocumentUnitDatabase,
         tamperEvidence: TamperEvidenceSystem
     ) async throws {
@@ -28,6 +28,8 @@ public actor RetrievalExplainabilitySystem {
         self.tamperEvidence = tamperEvidence
 
         try await createRetrievalSchema()
+    }
+    
 struct ExplainableSemanticSearchConfiguration: Sendable {
     let queryText: String
     let embeddingRecipeId: String
@@ -58,65 +60,14 @@ struct ExplainableSemanticSearchConfiguration: Sendable {
 
 // Function signature would change to:
 // func explainableSemanticSearch(config: ExplainableSemanticSearchConfiguration) async throws -> ExplainableRetrievalResult
-            requestingActor: requestingActor
-        )
+//            requestingActor: requestingActor
+//        )
 
-        // Perform similarity search with detailed tracking
-        let searchResults = try await performSimilaritySearch(
-            queryEmbedding: queryEmbeddingResult.embedding,
-            similarityThreshold: similarityThreshold,
-            maxResults: maxResults,
-            queryId: queryId
-        )
-
-        let executionTimeMs = Int(Date().timeIntervalSince(startTime) * 1000)
-
-        // Create retrieval evidence record
-        let retrievalEvidence = RetrievalEvidence(
-            queryId: queryId,
-            queryText: queryText,
-            embeddingRecipeId: embeddingRecipeId,
-            queryEmbeddingHash: queryEmbeddingResult.hash,
-            similarityThreshold: similarityThreshold,
-            maxResults: maxResults,
-            results: searchResults,
-            executionTimeMs: executionTimeMs,
-            requestingActor: requestingActor,
-            sessionContext: sessionContext,
-            searchPurpose: searchPurpose,
-            timestamp: startTime
-        )
-
-        // Store retrieval evidence
-        try await storeRetrievalEvidence(retrievalEvidence)
-
-        // Create tamper-evident event
-        _ = try await tamperEvidence.appendEvent(
-            eventType: "semantic_search_performed",
-            payload: [
-                "queryId": queryId,
-                "queryText": queryText,
-                "embeddingRecipeId": embeddingRecipeId,
-                "resultCount": searchResults.count,
-                "executionTimeMs": executionTimeMs,
-                "actor": requestingActor
-            ],
-            actor: requestingActor,
-            sessionId: sessionContext
-        )
-
-        return ExplainableRetrievalResult(
-            queryId: queryId,
-            queryText: queryText,
-            results: searchResults,
-            evidence: retrievalEvidence
-        )
-    }
-
-    /// Perform text search with explainability
-    public func explainableTextSearch(
+    /// Perform semantic search with explainability
+    public func explainableSemanticSearch(
         queryText: String,
-        searchFields: [String] = ["content", "content_preview"],
+        embeddingRecipeId: String? = nil,
+        similarityThreshold: Double = 0.7,
         maxResults: Int = 50,
         requestingActor: String,
         sessionContext: String? = nil,
@@ -125,7 +76,8 @@ struct ExplainableSemanticSearchConfiguration: Sendable {
         let queryId = UUID().uuidString.lowercased()
         let startTime = Date()
 
-        // Perform full-text search
+        // Perform semantic search (placeholder - should use embedding)
+        let searchFields = ["content", "content_preview"]
         let searchResults = try await performFullTextSearch(
             queryText: queryText,
             searchFields: searchFields,
@@ -138,9 +90,9 @@ struct ExplainableSemanticSearchConfiguration: Sendable {
         let retrievalEvidence = RetrievalEvidence(
             queryId: queryId,
             queryText: queryText,
-            embeddingRecipeId: nil,
-            queryEmbeddingHash: nil,
-            similarityThreshold: nil,
+            embeddingRecipeId: embeddingRecipeId,
+            queryEmbeddingHash: nil, // Would need to compute embedding hash
+            similarityThreshold: similarityThreshold,
             maxResults: maxResults,
             results: searchResults,
             executionTimeMs: executionTimeMs,

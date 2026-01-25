@@ -8,7 +8,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Captures the current workspace state as a content-addressed hash.
 /// This hash is a pinned input that must match across all stages and verification.

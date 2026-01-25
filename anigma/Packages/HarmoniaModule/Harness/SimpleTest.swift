@@ -5,7 +5,7 @@
 //  Simple test to verify harness components work.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 /// Simple test of harness components.

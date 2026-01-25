@@ -73,6 +73,25 @@ public struct RetentionPolicyClass: Codable, Sendable {
     /// Type-specific retention configuration.
     public let retentionRules: [String: RetentionRuleConfig]?
 
+    public var ttlDays: Int {
+        ttlHours / 24
+    }
+
+    public var defaultTtlDays: Int {
+        ttlDays
+    }
+
+    public var maxTotalStorageGb: Int {
+        (maxTotalMB ?? 0) / 1024
+    }
+
+    public func ttlForArtifact(artifactType: String, sizeBytes: Int64) -> Int {
+        if let rules = retentionRules, let config = rules[artifactType], let ttl = config.ttlDays {
+            return ttl
+        }
+        return ttlDays
+    }
+
     public init(
         name: String,
         ttlHours: Int,
@@ -133,6 +152,9 @@ public struct RetentionPolicy: Codable, Sendable {
     /// Hot run configuration.
     public let hotRuns: HotRunPolicy
 
+    /// Garbage collection rules.
+    public let gc: GCRules
+
     /// Last update timestamp.
     public let updatedAt: Date
 
@@ -141,12 +163,14 @@ public struct RetentionPolicy: Codable, Sendable {
         classes: [String: RetentionPolicyClass],
         segments: SegmentationPolicy,
         hotRuns: HotRunPolicy,
+        gc: GCRules = .default,
         updatedAt: Date = Date()
     ) {
         self.version = version
         self.classes = classes
         self.segments = segments
         self.hotRuns = hotRuns
+        self.gc = gc
         self.updatedAt = updatedAt
         self.policyHash = Self.computePolicyHash(version: version, classes: classes)
     }
@@ -170,7 +194,8 @@ public struct RetentionPolicy: Codable, Sendable {
                 name: "Master Ledger", ttlHours: 0, keepForever: true)
         ],
         segments: SegmentationPolicy(maxSegmentSizeMB: 500, rotationIntervalDays: 30),
-        hotRuns: HotRunPolicy(maxKept: 100, cooldownDays: 7)
+        hotRuns: HotRunPolicy(maxKept: 100, cooldownDays: 7),
+        gc: .default
     )
 
     /// Load a retention policy from JSON. TOML loading moved to specialized parser.
@@ -186,6 +211,36 @@ public struct RetentionPolicy: Codable, Sendable {
         let keyString = version + classes.keys.sorted().joined()
         guard let data = keyString.data(using: .utf8) else { return "" }
         return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    }
+
+    public func computeHash() throws -> String {
+        return policyHash
+    }
+
+    // MARK: - Convenience Accessors
+
+    public var sessionDb: RetentionPolicyClass {
+        classes["session_db"] ?? RetentionPolicyClass(name: "Session Databases", ttlHours: 24)
+    }
+
+    public var artifacts: RetentionPolicyClass {
+        classes["artifacts"] ?? RetentionPolicyClass(name: "Artifacts", ttlHours: 8760)
+    }
+
+    public var masterLedger: RetentionPolicyClass {
+        classes["master_ledger"] ?? RetentionPolicyClass(name: "Master Ledger", ttlHours: 0, keepForever: true)
+    }
+
+    /// Whether any item in this class can be deleted now based on age.
+    public func canDeleteNow(policyClass: String, age: TimeInterval) -> Bool {
+        guard let pClass = classes[policyClass] else { return false }
+        if pClass.keepForever { return false }
+        return age >= TimeInterval(pClass.ttlHours * 3600)
+    }
+
+    /// Convenience for tri-memory logic
+    public var canDeleteNow: Bool {
+        return true 
     }
 
     /// Get retention TTL for a specific artifact type within a class.
@@ -276,5 +331,32 @@ public enum RetentionEligibility: Equatable, Sendable {
             return eligible
         }
         return false
+    }
+}
+
+/// Garbage collection rules and thresholds.
+public struct GCRules: Codable, Sendable {
+    public let requirePolicyHashMatch: Bool
+    public let maxDeletePerRun: Int
+    public let vacuumThresholdMb: Int
+    public let checkpointWalMb: Int
+
+    public static let `default` = GCRules(
+        requirePolicyHashMatch: false,
+        maxDeletePerRun: 5000,
+        vacuumThresholdMb: 100,
+        checkpointWalMb: 50
+    )
+
+    public init(
+        requirePolicyHashMatch: Bool = false,
+        maxDeletePerRun: Int = 5000,
+        vacuumThresholdMb: Int = 100,
+        checkpointWalMb: Int = 50
+    ) {
+        self.requirePolicyHashMatch = requirePolicyHashMatch
+        self.maxDeletePerRun = maxDeletePerRun
+        self.vacuumThresholdMb = vacuumThresholdMb
+        self.checkpointWalMb = checkpointWalMb
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 // MARK: - Example: Migrated System

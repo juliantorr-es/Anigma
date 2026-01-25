@@ -33,7 +33,7 @@ public actor DevelopumArtifactService {
     @discardableResult
     public func chunkFile(
         content: String,
-        config: TextChunkingConfig = .default
+        config: TextChunkingConfig = TextChunkingConfig()
     ) async throws -> [CodeChunk] {
         guard let bridge = sidecarBridge else {
             // Fallback to local execution if bridge is not available (for tests)
@@ -41,32 +41,24 @@ public actor DevelopumArtifactService {
             let data = content.data(using: .utf8) ?? Data()
             try wrapper.processBytes(data)
             try wrapper.finalize()
-            let chunks = try wrapper.extractChunks(from: data)
-            let boundaries = try wrapper.chunkInfo()
+            let chunks = try await wrapper.extractChunks(from: data)
             
-            return zip(chunks, boundaries).map { chunkData, boundary in
-                CodeChunk(
+            var currentOffset: UInt64 = 0
+            return chunks.map { chunkData in
+                let chunk = CodeChunk(
                     id: UUID(),
                     content: String(data: chunkData, encoding: .utf8) ?? "",
-                    offset: boundary.offset,
-                    length: boundary.length,
+                    offset: currentOffset,
+                    length: UInt64(chunkData.count),
                     hash: computeHash(data: chunkData)
                 )
+                currentOffset += UInt64(chunkData.count)
+                return chunk
             }
         }
         
         // Prepare job spec for daemon
         let contentData = content.data(using: .utf8) ?? Data()
-        let contentHash = computeHash(data: contentData)
-        
-        // 1. Ingest artifact (if not exists)
-        // For simplicity, we assume we need to ingest it first.
-        // In a real system, we'd check existence or rely on CAS.
-        // But sidecarBridge doesn't expose ingest directly yet, so we use submitJob
-        // which usually expects artifacts to be in vault or passed as inputs?
-        // Wait, Daemon handleSubmitJob expects inputs as ArtifactRefs.
-        // We need to ingest first.
-        // SidecarBridge needs an ingest method or we assume file is already stored via storeFile.
         
         // Let's assume we store it locally first using storeFile which puts it in ArtifactAuthority.
         // But ArtifactAuthority is local to this process (CLI/App).
@@ -78,17 +70,19 @@ public actor DevelopumArtifactService {
         let wrapper = try TextChunkingCapsuleWrapper(config: config)
         try wrapper.processBytes(contentData)
         try wrapper.finalize()
-        let chunks = try wrapper.extractChunks(from: contentData)
-        let boundaries = try wrapper.chunkInfo()
+        let chunks = try await wrapper.extractChunks(from: contentData)
         
-        return zip(chunks, boundaries).map { chunkData, boundary in
-            CodeChunk(
+        var currentOffset: UInt64 = 0
+        return chunks.map { chunkData in
+            let chunk = CodeChunk(
                 id: UUID(),
                 content: String(data: chunkData, encoding: .utf8) ?? "",
-                offset: boundary.offset,
-                length: boundary.length,
+                offset: currentOffset,
+                length: UInt64(chunkData.count),
                 hash: computeHash(data: chunkData)
             )
+            currentOffset += UInt64(chunkData.count)
+            return chunk
         }
     }
     

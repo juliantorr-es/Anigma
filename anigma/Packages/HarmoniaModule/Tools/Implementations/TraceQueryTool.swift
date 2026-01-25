@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import GovernedMigrationCore
 
 public struct TraceQueryTool: Sendable {

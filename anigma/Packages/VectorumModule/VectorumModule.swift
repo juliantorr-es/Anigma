@@ -201,12 +201,12 @@ public enum MLWorkerEmbeddingError: Error, LocalizedError {
 /// and Double-based EmbeddingComputing protocol.
 public final class BufferEmbeddingAdapter: EmbeddingComputing {
     private let bufferCapability: BufferEmbeddingCapability
-    private let tokenize: (String) throws -> TokenBuffer
+    private let tokenize: @Sendable (String) throws -> TokenBuffer
     
     /// Initialize with custom tokenization closure.
     public init(
         bufferCapability: BufferEmbeddingCapability,
-        tokenize: @escaping (String) throws -> TokenBuffer
+        tokenize: @escaping @Sendable (String) throws -> TokenBuffer
     ) {
         self.bufferCapability = bufferCapability
         self.tokenize = tokenize

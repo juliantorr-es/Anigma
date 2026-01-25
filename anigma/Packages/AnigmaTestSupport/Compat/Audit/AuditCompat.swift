@@ -8,6 +8,7 @@
 import Foundation
 import ContractsCore
 import AnigmaCore
+import AnigmaPrimitives
 
 // MARK: - Legacy Event Types (Test-Only)
 
@@ -20,7 +21,7 @@ public enum LegacyAuditEventType: String, Sendable, CaseIterable {
   case policyViolation
   case automationExecuted
 
-  public func toRuntime() -> AuditEventType {
+  public func toRuntime() -> ContractsCore.AuditEventType {
     switch self {
     case .accessGranted:
       return .accessGranted
@@ -74,8 +75,11 @@ public struct LegacyComplianceReport: Sendable {
   public let accessDenied: Int
   public let sensitiveDataAccess: Int
   public let policyViolations: Int
-struct RecordLegacyConfiguration: Sendable {
-    let eventType: String
+  public let dataModifications: Int
+}
+
+public struct RecordLegacyConfiguration: Sendable {
+    let eventType: LegacyAuditEventType
     let principal: String
     let module: String
     let entityId: EntityId?
@@ -85,7 +89,7 @@ struct RecordLegacyConfiguration: Sendable {
     let metadata: [String: String]
     
     init(
-        eventType: String,
+        eventType: LegacyAuditEventType,
         principal: String,
         module: String,
         entityId: EntityId? = nil,
@@ -102,35 +106,38 @@ struct RecordLegacyConfiguration: Sendable {
         self.sensitivity = sensitivity
         self.description = description
         self.metadata = metadata
-    }
+  }
 }
 
-// Updated function signature:
-func recordLegacy(config: RecordLegacyConfiguration) async throws {
+// MARK: - Legacy Audit Helpers
+
+public extension AuditLogging {
+    // Updated function signature:
+    func recordLegacy(config: RecordLegacyConfiguration) async throws {
     var envelope = config.metadata
     if let entityId = config.entityId {
         envelope["entity_id"] = entityId.raw.uuidString
     }
     if let componentType = config.componentType {
-        // ... rest of the function implementation
+        envelope["component_type"] = componentType
     }
-    // ... rest of the function
-}
-      envelope["component_type"] = componentType
+    if let sensitivity = config.sensitivity {
+        envelope["sensitivity"] = sensitivity.rawValue
     }
-    if let sensitivity {
-      envelope["sensitivity"] = sensitivity.rawValue
-    }
-    envelope["legacy_event_type"] = eventType.label
+    envelope["legacy_event_type"] = config.eventType.label
 
     try await recordEvent(
-      id: UUID(),
-      type: eventType.toRuntime(),
-      principal: principal,
-      module: module,
-      description: description,
-      metadata: envelope
+        id: UUID(),
+        type: config.eventType.toRuntime(),
+        principal: config.principal,
+        module: config.module,
+        description: config.description,
+        metadata: envelope
     )
+  }
+
+  func recent(count: Int) async throws -> [AuditEntry] {
+      return []
   }
 
   func legacyCount() async throws -> Int {

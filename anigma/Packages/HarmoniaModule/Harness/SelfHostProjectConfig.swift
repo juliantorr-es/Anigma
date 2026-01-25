@@ -6,14 +6,17 @@
 //  Provides a canonical project ID and helper for ensuring the project exists.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Configuration for the self-hosted Anigma project.
 public enum SelfHostProjectConfig {
     /// Default hardcoded UUID for the self-host project.
     /// Environment variable ANIGMA_SELF_HOST_PROJECT_ID can override this.
-    guard let defaultId = UUID(uuidString: "00000000-0000-0000-0000-000000000001") else {
-        fatalError("Failed to unwrap defaultId")
+    private static var defaultId: UUID {
+        guard let id = UUID(uuidString: "00000000-0000-0000-0000-000000000001") else {
+            fatalError("Failed to unwrap defaultId")
+        }
+        return id
     }
 
     /// The actual project ID to use (default or environment override).

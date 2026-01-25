@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Current state of concurrency for a model kind.
 public struct ConcurrencyStateComponent: Component, Codable {

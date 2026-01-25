@@ -36,7 +36,7 @@ public actor ModelSearchCache {
     }
 
     private func createSchema() async throws {
-        try await db.execute("""
+        _ = try await db.executeAsync("""
             CREATE TABLE IF NOT EXISTS model_search_cache (
                 id TEXT PRIMARY KEY,
                 query TEXT NOT NULL,
@@ -45,7 +45,7 @@ public actor ModelSearchCache {
                 cached_at REAL NOT NULL,
                 expires_at REAL NOT NULL
             )
-            """)
+            """, parameters: [])
     }
 
     public func get(query: String, filters: String) async -> [HFSearchResult]? {
@@ -85,7 +85,7 @@ public actor ModelSearchCache {
             encoder.dateEncodingStrategy = .iso8601
             let resultsData = try encoder.encode(results)
 
-            try await db.execute("""
+            _ = try await db.executeAsync("""
                 INSERT OR REPLACE INTO model_search_cache
                 (id, query, filters, results, cached_at, expires_at)
                 VALUES (?, ?, ?, ?, ?, ?)
@@ -105,7 +105,7 @@ public actor ModelSearchCache {
 
     public func invalidateAll() async {
         do {
-            try await db.execute("DELETE FROM model_search_cache")
+            _ = try await db.executeAsync("DELETE FROM model_search_cache", parameters: [])
         } catch {
         }
     }
@@ -117,7 +117,7 @@ public actor ModelSearchCache {
     public func cleanupExpired() async {
         let now = Date().timeIntervalSince1970
         do {
-            try await db.execute("""
+            _ = try await db.executeAsync("""
                 DELETE FROM model_search_cache WHERE expires_at < ?
                 """, parameters: [.double(now)])
         } catch {
@@ -145,7 +145,7 @@ public actor ModelSearchCache {
 
     private func delete(id: String) async {
         do {
-            try await db.execute("""
+            _ = try await db.executeAsync("""
                 DELETE FROM model_search_cache WHERE id = ?
                 """, parameters: [.text(id)])
         } catch {
@@ -154,7 +154,7 @@ public actor ModelSearchCache {
 
     private func enforceLimit() async {
         do {
-            try await db.execute("""
+            _ = try await db.executeAsync("""
                 DELETE FROM model_search_cache
                 WHERE id NOT IN (
                     SELECT id FROM model_search_cache

@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Represents a logical session.
 public struct SessionComponent: Component, Codable {

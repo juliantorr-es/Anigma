@@ -6,7 +6,7 @@
 //  Creates disposable per-agent scratch databases and manages merge-to-master operations.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import DatabaseCore
 

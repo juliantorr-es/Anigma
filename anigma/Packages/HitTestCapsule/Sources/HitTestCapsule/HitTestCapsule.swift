@@ -17,7 +17,7 @@ public final class HitTestCapsule {
     
     public func hitTest(point: Point, options: HitTestOptions = .default) throws -> [HitResult] {
         var results = anigma_hit_result_buffer_t()
-        var error = anigma_capsule_error_t()
+        let error = anigma_capsule_error_t()
         
         // Create buffer
         let bufferStatus = anigma_hit_test_create_buffer(&results, Int(options.maxResults), nil)

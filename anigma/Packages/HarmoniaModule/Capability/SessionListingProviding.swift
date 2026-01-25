@@ -7,9 +7,9 @@
 //  Follows two-tier architecture: Core Governance + Capability Modules.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
-import GRDB
+@preconcurrency import GRDB
 
 // MARK: - Session Listing Surface Protocol
 

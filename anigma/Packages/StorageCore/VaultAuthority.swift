@@ -53,7 +53,7 @@ public actor VaultAuthority {
 
     public init(
         rootURL: URL,
-        database: DatabaseActor,
+        database: any DatabaseExecutor,
         keyProvider: VaultKeyProvider,
         signer: VaultSigner = DefaultVaultSigner.make(),
         receiptWriter: VaultReceiptWriter = NullVaultReceiptWriter(),

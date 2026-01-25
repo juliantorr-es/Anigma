@@ -13,7 +13,7 @@ public extension DatabaseActor {
     /// Initialize the master ledger segmentation tables.
     func initializeLedgerSegmentationSchema() async throws {
         // Create segment metadata table
-        try execute("""
+        try performExecute("""
             CREATE TABLE IF NOT EXISTS ledger_segments (
                 segment_id TEXT PRIMARY KEY,
                 created_at REAL NOT NULL,
@@ -26,9 +26,9 @@ public extension DatabaseActor {
         """)
 
         // Create indexes for segment metadata
-        try execute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
-        try execute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
-        try execute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_segments_created ON ledger_segments(created_at)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_segments_status ON ledger_segments(status)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_segments_closed ON ledger_segments(closed_at)")
     }
 
     /// Initialize migration from existing master ledger to segments.
@@ -87,7 +87,7 @@ public extension DatabaseActor {
             }
 
             // Insert event into segment
-            try execute("""
+            try performExecute("""
                 INSERT INTO ledger_segment_\(segmentId) (
                     event_id, agent_id, workflow_id, event_type, timestamp,
                     payload_hash, metadata_json, created_at
@@ -107,10 +107,10 @@ public extension DatabaseActor {
         }
 
         // Close all migrated segments
-        try execute("UPDATE ledger_segments SET closed_at = ?, status = 'closed' WHERE closed_at IS NULL")
+        try performExecute("UPDATE ledger_segments SET closed_at = ?, status = 'closed' WHERE closed_at IS NULL")
 
         // Rename original master ledger table as backup before replacement
-        try execute("ALTER TABLE master_ledger RENAME TO master_ledger_legacy_backup")
+        try performExecute("ALTER TABLE master_ledger RENAME TO master_ledger_legacy_backup")
 
         let duration = Date().timeIntervalSince(startTime)
 
@@ -132,7 +132,7 @@ public extension DatabaseActor {
         _ = try await segmentManager.rotateIfNeeded()
 
         // Insert event into the active segment
-        try execute("""
+        try performExecute("""
             INSERT OR REPLACE INTO ledger_segment_\(activeSegment.segmentId) (
                 event_id, agent_id, workflow_id, event_type, timestamp,
                 payload_hash, metadata_json, created_at
@@ -149,7 +149,7 @@ public extension DatabaseActor {
         ])
 
         // Update segment event count
-        try execute(
+        try performExecute(
             "UPDATE ledger_segments SET event_count = event_count + 1 WHERE segment_id = ?",
             parameters: [.text(activeSegment.segmentId)]
         )
@@ -174,7 +174,7 @@ public extension DatabaseActor {
     /// Create a new segment table.
     private func createLedgerSegment(segmentId: String, createdAt: Date) async throws {
         // Create segment table
-        try execute("""
+        try performExecute("""
             CREATE TABLE IF NOT EXISTS ledger_segment_\(segmentId) (
                 event_id TEXT PRIMARY KEY,
                 agent_id TEXT NOT NULL,
@@ -188,13 +188,13 @@ public extension DatabaseActor {
         """)
 
         // Create indexes on segment
-        try execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
-        try execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
-        try execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
-        try execute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_agent ON ledger_segment_\(segmentId)(agent_id)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_workflow ON ledger_segment_\(segmentId)(workflow_id)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_timestamp ON ledger_segment_\(segmentId)(timestamp)")
+        try performExecute("CREATE INDEX IF NOT EXISTS idx_seg_\(segmentId)_event_type ON ledger_segment_\(segmentId)(event_type)")
 
         // Register segment in metadata table
-        try execute("""
+        try performExecute("""
             INSERT INTO ledger_segments (segment_id, created_at)
             VALUES (?, ?)
         """, parameters: [

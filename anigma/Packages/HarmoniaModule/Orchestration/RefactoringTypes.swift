@@ -5,7 +5,7 @@
 //  Created by Anigma Agent on 2026-01-12.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Status of a refactoring task.
 public enum RefactoringStatus: String, Codable, Sendable {
@@ -26,7 +26,7 @@ public struct RefactoringTask: Identifiable, Codable, Sendable {
     public let line: Int
     public let description: String
     public let originalCode: String
-    public let proposedCode: String
+    public var proposedCode: String
     public let metadata: [String: String]
     
     // Execution tracking

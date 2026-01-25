@@ -8,7 +8,7 @@
 
 import AnigmaCore
 import ContractsCore
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import TelemetryCore
 
@@ -20,7 +20,7 @@ private struct HarmoniaTelemetryContext {
     }
 
     func record(
-        eventType: AuditEventType, metrics: [String: Double], dimensions: [String: String] = [:]
+        eventType: ContractsCore.AuditEventType, metrics: [String: Double], dimensions: [String: String] = [:]
     ) async {
         guard let telemetry else { return }
 

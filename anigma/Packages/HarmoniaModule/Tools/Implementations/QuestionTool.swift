@@ -7,7 +7,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 public struct QuestionTool: Tool {
     public static let id = "question"

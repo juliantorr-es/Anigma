@@ -5,7 +5,7 @@
 //  Simple test to verify the harness works with boring tools.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 /// Simple test of the harness with boring tools.

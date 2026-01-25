@@ -313,7 +313,7 @@ public actor DevelopumDatabaseService {
             """,
             parameters: [.text(doc.repoId.uuidString), .text(doc.filePath)]
         )
-        try await databaseAuthority.mutate(deactivateMutation, context: ExecutionContext(principal: .system))
+        _ = try await databaseAuthority.mutate(deactivateMutation, context: ExecutionContext(principal: .system))
         
         let mutation = DatabaseMutation(
             sql: """

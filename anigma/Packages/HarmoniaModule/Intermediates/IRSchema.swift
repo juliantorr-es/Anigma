@@ -7,7 +7,7 @@
 //  and step evaluation, avoiding representation learning/architecture search.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 // MARK: - Deterministic helpers

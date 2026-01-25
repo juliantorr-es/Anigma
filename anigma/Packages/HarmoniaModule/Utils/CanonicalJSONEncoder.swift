@@ -6,7 +6,7 @@
 //  Ensures stable output without dictionary ordering surprises or Date() randomness.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// JSON encoder with deterministic settings for audit logs and governance events.

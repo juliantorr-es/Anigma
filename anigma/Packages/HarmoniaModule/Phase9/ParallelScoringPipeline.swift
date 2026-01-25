@@ -6,7 +6,7 @@
 //  Maintains deterministic ordering while leveraging parallel processing.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Parallel scoring pipeline for Phase 9.2.
 /// Processes targets in parallel while maintaining deterministic scoring.

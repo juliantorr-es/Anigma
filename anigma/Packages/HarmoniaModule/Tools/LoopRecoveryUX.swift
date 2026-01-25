@@ -6,7 +6,7 @@
 //  Provides deterministic next action templates and recovery guidance when tool calls are blocked.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Loop recovery UX that provides deterministic next actions for blocked tool calls.

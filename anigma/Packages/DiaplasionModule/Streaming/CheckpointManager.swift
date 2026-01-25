@@ -450,14 +450,14 @@ public struct CheckpointManagementSystem: System {
     
     private func handleCheckpointOperation(_ operation: CheckpointOperationComponent, for entity: EntityID) async throws {
         switch operation.action {
-        case .save(let operationType, let data, let metadata):
+        case .save:
             // We need a generic way to call saveCheckpoint if data is Any
             // But saveCheckpoint is generic <T: Codable>.
             // This design is flawed if we want to use components to trigger it.
             // For now, let's just cast to common types or use a specific implementation.
             await Logger.shared.warning("Direct component-based checkpoint saving not fully implemented for type Any", category: "Diaplasion")
             
-        case .load(let entityType, let operationType, let continuation):
+        case .load:
             // Same here, cannot call loadCheckpoint without knowing T at compile time here
             await Logger.shared.warning("Direct component-based checkpoint loading not fully implemented", category: "Diaplasion")
             
@@ -483,7 +483,7 @@ public struct CheckpointOperationComponent: Component {
 }
 
 /// Checkpoint operations.
-public enum CheckpointAction: Sendable {
+public enum CheckpointAction: @unchecked Sendable {
     case save(operationType: String, data: Any, metadata: [String: String])
     case load(entityType: Any.Type, operationType: String, continuation: @Sendable (Result<Any, Error>) -> Void)
     case delete(operationType: String)

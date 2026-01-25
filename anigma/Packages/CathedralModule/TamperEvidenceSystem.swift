@@ -18,7 +18,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
     private var evidenceChain: [Evidence] = []
     private var lastHash: String?
 
-    public init(database: (any DatabaseExecutor)? = nil) {
+    public init(database: (any DatabaseCore.DatabaseExecutor)? = nil) {
         self.persistence = database.map { CathedralDatabasePersistence(database: $0) }
     }
 

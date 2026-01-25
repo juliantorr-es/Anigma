@@ -5,7 +5,7 @@
 //  Service for running code quality tools (formatter, linter).
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Formatter Results
 

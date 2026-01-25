@@ -41,9 +41,6 @@ public struct MonacoEditorView: PlatformViewRepresentable {
     /// Chunk boundaries to visualize.
     public let chunkBoundaries: [CodeChunk]?
     
-    /// Callback for bridge messages.
-    public let onBridgeMessage: ((DevelopumBridgeMessage) -> Void)?
-    
     /// Creates a Monaco editor view.
     public init(
         fileUri: String,

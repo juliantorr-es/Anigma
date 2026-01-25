@@ -256,7 +256,7 @@ public struct RetryPolicy: Codable, Sendable, Equatable {
 ///     metadata: ["language": "en"]
 /// )
 /// ```
-public struct Job: Codable, Sendable, Identifiable {
+public struct Job: Codable, Sendable, Identifiable, Component {
     /// Unique identifier for this job.
     public let id: JobId
 

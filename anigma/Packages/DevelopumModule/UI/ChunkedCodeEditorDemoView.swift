@@ -24,7 +24,7 @@ public struct ChunkedCodeEditorDemoView: View {
     
     extension User {
         func greet() {
-            print("Hi, I'm \(name)")
+            print("Hi, I'm \\(name)")
         }
     }
     """

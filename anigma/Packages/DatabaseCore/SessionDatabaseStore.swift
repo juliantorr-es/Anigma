@@ -56,7 +56,7 @@ public actor SessionDatabaseStore {
     /// Set up session database tracking tables.
     private func setupSchema() async throws {
         // Session database metadata table (in master DB only)
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS session_databases (
                 session_id TEXT PRIMARY KEY,
@@ -70,7 +70,7 @@ public actor SessionDatabaseStore {
         )
 
         // Table for tracking session cleanup events
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS session_cleanup_events (
                 cleanup_id TEXT PRIMARY KEY,
@@ -84,14 +84,14 @@ public actor SessionDatabaseStore {
         )
 
         // Indexes
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_session_dbs_status
             ON session_databases(status, expires_at);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_session_cleanup_session
             ON session_cleanup_events(session_id, cleaned_at);
@@ -109,7 +109,7 @@ public actor SessionDatabaseStore {
         let now = Date()
         let expiresAt = now.addingTimeInterval(TimeInterval(ttlHours * 3600))
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT OR REPLACE INTO session_databases
             (session_id, database_path, created_at, expires_at, status, metadata)
@@ -139,7 +139,7 @@ public actor SessionDatabaseStore {
     public func endSession(sessionID: String) async throws {
         let now = Date()
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             UPDATE session_databases
             SET status = 'ended'
@@ -149,7 +149,7 @@ public actor SessionDatabaseStore {
         )
 
         // Record the end event
-        _ = try await db.execute(
+        _ = try await db.executeAsync(
             """
             INSERT INTO session_cleanup_events
             (cleanup_id, session_id, cleaned_at, reason)
@@ -199,7 +199,7 @@ public actor SessionDatabaseStore {
 
     /// Mark a session database as archived (ready for deletion).
     public func archiveSession(sessionID: String) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             UPDATE session_databases
             SET status = 'archived'
@@ -219,7 +219,7 @@ public actor SessionDatabaseStore {
         let cleanupID = UUID().uuidString
         let now = Date()
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT INTO session_cleanup_events
             (cleanup_id, session_id, cleaned_at, deleted_bytes, tables_affected, reason)

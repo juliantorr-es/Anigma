@@ -5,7 +5,7 @@
 //  Created by Anigma Agent on 2026-01-12.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Orchestrates parallel DeepSeek agent refactoring with batch validation.
 public actor RefactoringOrchestrator {

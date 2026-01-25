@@ -9,6 +9,7 @@ import Foundation
 import AnigmaCore
 import ContractsCore
 import DatabaseCore
+import AnigmaPrimitives
 
 public struct PipelineTestConfig {
   public var budgets: ContractBudgets

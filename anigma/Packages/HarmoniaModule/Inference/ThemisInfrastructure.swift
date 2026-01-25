@@ -22,7 +22,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Type Aliases for Greek Names
 
@@ -304,13 +304,14 @@ public actor ThemisOrchestrator {
         // 11. Generate Receipt
         let policy = buildPolicyReport(session: session, charterResult: charterResult)
         let receiptGenerator = ReceiptGenerator()
-        let receipt = await receiptGenerator.generateReceipt(
-            for: task,
+        let receiptConfig = GenerateReceiptConfiguration(
+            task: task,
             result: inferenceResult,
             stages: stages,
             engines: engines,
             policy: policy
         )
+        let receipt = await receiptGenerator.generateReceipt(config: receiptConfig)
 
         // 12. Update Short-Term Memory
         await updateShortTermMemory(session: session, task: task, result: inferenceResult)

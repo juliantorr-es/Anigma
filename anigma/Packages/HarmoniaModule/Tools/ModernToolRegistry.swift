@@ -6,7 +6,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Registry for modern tools that provides type-erased access for the router.
 public actor ModernToolRegistry {

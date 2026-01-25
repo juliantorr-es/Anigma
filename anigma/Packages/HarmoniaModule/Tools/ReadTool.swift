@@ -6,8 +6,9 @@
 //  Provides reliable file reading with integrity checks.
 //
 
-import Foundation
-import CryptoKit
+import ContractsCore
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 
 /// Read tool request with hash verification.
 public struct ReadToolRequest: Sendable, Codable {

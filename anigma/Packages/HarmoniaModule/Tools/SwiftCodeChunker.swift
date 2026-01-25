@@ -6,7 +6,7 @@
 //  Extracts semantic chunks (functions, classes, structs, enums, protocols, extensions, properties).
 //
 
-import Foundation
+@preconcurrency import Foundation
 import SwiftParser
 import SwiftSyntax
 

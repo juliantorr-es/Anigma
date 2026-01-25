@@ -6,7 +6,7 @@
 //  Workers talk to this, not to GRDB or bandit directly.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import ContractsCore
 import AnigmaPrimitives
 

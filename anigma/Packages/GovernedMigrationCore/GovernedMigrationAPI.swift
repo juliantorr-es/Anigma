@@ -379,7 +379,7 @@ public struct GovernedMigrationAPI {
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """
 
-            _ = try await database.execute(sql, parameters: [
+            _ = try await database.executeAsync(sql, parameters: [
                 .text(id),
                 .text("00000000-0000-0000-0000-000000000000"),
                 .text(category),
@@ -417,7 +417,7 @@ public struct GovernedMigrationAPI {
                 parameters = [.text(newStatus), .null, .text(timestamp), .text(taskId)]
             }
 
-            _ = try await database.execute(sql, parameters: parameters)
+            _ = try await database.executeAsync(sql, parameters: parameters)
         } catch {
             print("Error updating task status: \(error)")
         }
@@ -434,7 +434,7 @@ public struct GovernedMigrationAPI {
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """
 
-            _ = try await database.execute(sql, parameters: [
+            _ = try await database.executeAsync(sql, parameters: [
                 .text(eventType.rawValue),
                 .text(engineId),
                 .text(operation),
@@ -464,7 +464,7 @@ public struct GovernedMigrationAPI {
         WHERE subject_id = ? AND subject_kind = ?
         """
 
-        _ = try await database.execute(updateSql, parameters: [
+        _ = try await database.executeAsync(updateSql, parameters: [
             .int(newScore),
             .text(timestamp),
             .text(reason),

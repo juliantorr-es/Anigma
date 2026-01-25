@@ -5,7 +5,7 @@
 //  Event sinks with verbosity tiers for Phase C.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Event Verbosity Tiers
 

@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 import DatabaseCore
 import AnigmaCore
 import CathedralModule

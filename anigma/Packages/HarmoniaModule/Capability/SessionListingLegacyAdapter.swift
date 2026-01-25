@@ -7,8 +7,8 @@
 //  maintaining the new architectural contract.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 
 // MARK: - Legacy Adapter Implementation
 

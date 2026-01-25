@@ -8,7 +8,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 /// Enumerated improvement target for Phase 9.1 multi-target runs.
 public struct EnumeratedTarget: Codable, Sendable, Equatable {

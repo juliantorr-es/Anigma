@@ -79,6 +79,8 @@ static Clipper2Lib::EndType to_endtype(clipper2_endtype_t et) {
 // Memory management functions
 // -----------------------------------------------------------------------------
 
+extern "C" {
+
 void clipper2_paths64_destroy(clipper2_paths64_t* paths) {
     if (paths) delete reinterpret_cast<clipper2_paths64*>(paths);
 }
@@ -470,3 +472,5 @@ bool clipper2_svg_save_paths_d(const char* filename, const clipper2_paths_d_t* p
         return false;
     }
 }
+
+} // extern "C"

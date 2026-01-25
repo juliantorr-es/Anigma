@@ -194,16 +194,19 @@ public actor ResumableModelDownloader {
             throw DownloadError.notPaused
         }
 
-        return try await withCheckedThrowingContinuation { continuation in
-            task.cancel(byProducingResumeData: { resumeData in
-                if let data = resumeData {
-                    self.resumeDataStore[url] = data
-                    self.stateHandlers[url]?(.paused(resumeData: data))
-                }
-                self.activeTasks.removeValue(forKey: url)
-                continuation.resume(returning: resumeData)
+        let resumeData = await withCheckedContinuation { (continuation: CheckedContinuation<Data?, Never>) in
+            task.cancel(byProducingResumeData: { data in
+                continuation.resume(returning: data)
             })
         }
+
+        if let data = resumeData {
+            self.resumeDataStore[url] = data
+            self.stateHandlers[url]?(.paused(resumeData: data))
+        }
+        self.activeTasks.removeValue(forKey: url)
+
+        return resumeData
     }
 
     public func resume(

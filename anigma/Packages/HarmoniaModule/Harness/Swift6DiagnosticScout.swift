@@ -5,7 +5,7 @@
 //  Real implementation of a Swift 6 diagnostic scout that runs swift build -Xswiftc -warn-swift6.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Real implementation of a Swift 6 diagnostic scout.
 public struct Swift6DiagnosticScout: ProjectScout {

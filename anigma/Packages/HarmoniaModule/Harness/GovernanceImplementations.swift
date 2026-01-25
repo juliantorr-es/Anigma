@@ -6,8 +6,8 @@
 //  Angelic hierarchy mapping in comments only.
 //
 
-import Foundation
-import GRDB
+@preconcurrency import Foundation
+@preconcurrency import GRDB
 import AnigmaPrimitives
 
 // MARK: - Policy Registry Implementation (Seraphim)

@@ -13,7 +13,7 @@ public struct SearchResultItem: Identifiable, Hashable {
     public let id: UUID
     public let result: SearchResult
     public let filePath: String
-    public let matchRange: Range<String.Index>
+    public let matchRange: Swift.Range<String.Index>
     
     public init(result: SearchResult) {
         self.id = UUID()
@@ -24,6 +24,14 @@ public struct SearchResultItem: Identifiable, Hashable {
         } else {
             self.matchRange = result.lineText.startIndex..<result.lineText.startIndex
         }
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: SearchResultItem, rhs: SearchResultItem) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
@@ -422,7 +430,7 @@ struct SearchResultItemView: View {
     private var highlightedLineText: AttributedString {
         var result = AttributedString(item.result.lineText)
         
-        if let matchRange = Range(item.matchRange, in: result) {
+        if let matchRange = Swift.Range(item.matchRange, in: result) {
             result[matchRange].backgroundColor = Color.accentColor.opacity(0.3)
             result[matchRange].foregroundColor = Color.primary
         }
@@ -497,31 +505,33 @@ public struct SearchResultsPanel: View {
 }
 
 #Preview("Search Results View") {
-    SearchResultsView(
-        repoId: UUID(),
-        indexCapsule: IndexCapsule(
-            databaseService: DevelopumDatabaseService(
-                databaseAuthority: MemoryDatabaseAuthority()
-            )
-        ),
-        onNavigate: { uri, line, column in
-            print("Navigate to: \(uri) at line \(line), column \(column)")
-        }
-    )
-    .frame(width: 320, height: 500)
+//    SearchResultsView(
+//        repoId: UUID(),
+//        indexCapsule: IndexCapsule(
+//            databaseService: DevelopumDatabaseService(
+//                databaseAuthority: MemoryDatabaseAuthority()
+//            )
+//        ),
+//        onNavigate: { uri, line, column in
+//            print("Navigate to: \(uri) at line \(line), column \(column)")
+//        }
+//    )
+//    .frame(width: 320, height: 500)
+    Text("Preview Disabled")
 }
 
 #Preview("Search Results Panel") {
-    SearchResultsPanel(
-        isVisible: .constant(true),
-        repoId: UUID(),
-        indexCapsule: IndexCapsule(
-            databaseService: DevelopumDatabaseService(
-                databaseAuthority: MemoryDatabaseAuthority()
-            )
-        ),
-        onNavigate: { uri, line, column in
-            print("Navigate to: \(uri) at line \(line), column \(column)")
-        }
-    )
+//    SearchResultsPanel(
+//        isVisible: .constant(true),
+//        repoId: UUID(),
+//        indexCapsule: IndexCapsule(
+//            databaseService: DevelopumDatabaseService(
+//                databaseAuthority: MemoryDatabaseAuthority()
+//            )
+//        ),
+//        onNavigate: { uri, line, column in
+//            print("Navigate to: \(uri) at line \(line), column \(column)")
+//        }
+//    )
+    Text("Preview Disabled")
 }

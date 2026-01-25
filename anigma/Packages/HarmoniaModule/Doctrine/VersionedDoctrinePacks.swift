@@ -6,7 +6,7 @@
 //  Not vibes - actual rules with versioning and upgrade paths.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import DoctrineCore
 

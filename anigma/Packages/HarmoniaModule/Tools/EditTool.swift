@@ -6,8 +6,8 @@
 //  Replaces string-based editing with proof-of-delta requirements.
 //
 
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 
 /// Edit tool request with strict validation.
 public struct EditToolRequest: Sendable, Codable {

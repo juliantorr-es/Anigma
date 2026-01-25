@@ -5,7 +5,7 @@
 //  Middleware for automatically truncating large tool outputs and saving them as artifacts.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 public enum OutputTruncator {

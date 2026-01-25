@@ -1152,8 +1152,8 @@ public actor MakerEngine {
         }
 
         // Sort by adjusted score (highest first) with deterministic tie-breaking
-        let sortedCandidates = viableCandidates.sorted { lhs, rhs in
-            if abs(lhs.adjustedScore - rhs.adjustedScore) < 0.001 {
+        let sortedCandidates = viableCandidates.sorted { (lhs: EvaluatedCandidate, rhs: EvaluatedCandidate) in
+            if Swift.abs(lhs.adjustedScore - rhs.adjustedScore) < 0.001 {
                 let lhsKey = candidateTieBreakKey(for: lhs.candidate, determinismContext: determinismContext)
                 let rhsKey = candidateTieBreakKey(for: rhs.candidate, determinismContext: determinismContext)
                 if lhsKey == rhsKey {

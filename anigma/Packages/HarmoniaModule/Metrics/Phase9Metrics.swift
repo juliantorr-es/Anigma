@@ -6,7 +6,7 @@
 //  Avoids floating point arithmetic to maintain determinism.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Integer-based metric set for deterministic reporting.

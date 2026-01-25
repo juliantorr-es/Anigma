@@ -6,7 +6,7 @@
 //  Registers basic tools without complex dependencies.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 import AnigmaCLIOrchestrator
 

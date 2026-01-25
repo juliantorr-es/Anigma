@@ -26,7 +26,9 @@ public class MessageListView: TUIBaseComponent {
                 default: break
                 }
             }
-            self.subscriptionId = id
+            Task { @MainActor [weak self] in
+                self?.subscriptionId = id
+            }
         }
     }
 

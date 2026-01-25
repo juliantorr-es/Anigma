@@ -6,9 +6,9 @@
 //
 
 import ContractsCore
-import CryptoKit
+@preconcurrency import CryptoKit
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 public typealias EvidenceBundle = ContractsCore.EvidenceBundle
 public typealias RedactionPlan = ContractsCore.RedactionPlan
@@ -334,78 +334,32 @@ public actor EvidenceRedactionSystem {
             )
 
             redactedComponents.append(redactedComponent)
-struct CreateRedactionAuditTrailConfiguration: Sendable {
-    let originalBundle: EvidenceBundle
-    let redactedComponents: [RedactedComponent]
-    let plan: RedactionPlan
-    let sessionId: UUID
-    let requestedBy: String
-    let authorizedBy: String
-    let legalHoldReference: String?
-    let privilegeLog: PrivilegeLog?
-    
-    init(
-        originalBundle: EvidenceBundle,
-        redactedComponents: [RedactedComponent],
-        plan: RedactionPlan,
-        sessionId: UUID,
-        requestedBy: String,
-        authorizedBy: String,
-        legalHoldReference: String? = nil,
-        privilegeLog: PrivilegeLog? = nil
-    ) {
-        self.originalBundle = originalBundle
-        self.redactedComponents = redactedComponents
-        self.plan = plan
-        self.sessionId = sessionId
-        self.requestedBy = requestedBy
-        self.authorizedBy = authorizedBy
-        self.legalHoldReference = legalHoldReference
-        self.privilegeLog = privilegeLog
+        }
+        
+        return redactedComponents
     }
-}
-        originalBundle: EvidenceBundle,
-        redactedComponents: [RedactedComponent],
-        plan: RedactionPlan,
-        sessionId: UUID,
-        requestedBy: String,
-        authorizedBy: String,
-        legalHoldReference: String? = nil,
-        privilegeLog: PrivilegeLog? = nil
-    ) {
-        self.originalBundle = originalBundle
-        self.redactedComponents = redactedComponents
-        self.plan = plan
-        self.sessionId = sessionId
-        self.requestedBy = requestedBy
-        self.authorizedBy = authorizedBy
-        self.legalHoldReference = legalHoldReference
-        self.privilegeLog = privilegeLog
-    }
-}
 
-// Updated function signature:
-func createRedactionAuditTrail(config: RedactionAuditTrailConfiguration) async throws -> RedactionAuditTrail {
-    let auditTrail = RedactionAuditTrail(
-        sessionId: config.sessionId,
-        originalBundleId: config.originalBundle.id,
-        redactionPlan: config.plan,
-        redactedComponents: config.redactedComponents,
-        requestedBy: config.requestedBy,
-        // ... continue with other parameters
-    )
-    // ... rest of implementation
-}
+    private func createRedactionAuditTrail(
+        originalBundle: EvidenceBundle,
+        redactedComponents: [RedactedComponent],
+        plan: RedactionPlan,
+        sessionId: String,
+        requestedBy: String,
+        authorizedBy: String,
+        legalHoldReference: String?,
+        privilegeLog: PrivilegeLog?
+    ) async throws -> RedactionAuditTrail {
+        return RedactionAuditTrail(
+            sessionId: sessionId,
+            originalBundleId: originalBundle.id,
+            redactedComponents: redactedComponents,
+            plan: plan,
+            requestedBy: requestedBy,
             authorizedBy: authorizedBy,
             legalHoldReference: legalHoldReference,
             privilegeLog: privilegeLog,
             createdAt: Int(Date().timeIntervalSince1970)
         )
-
-        // Store audit trail
-        try await storeRedactionAuditTrail(auditTrail)
-
-        return auditTrail
     }
 
     private func createRedactedBundleManifest(

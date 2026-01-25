@@ -1,5 +1,5 @@
 import Foundation
-import Crypto
+import CryptoKit
 import CapsuleCore
 import DatabaseCore
 import AnigmaNativeShims
@@ -7,12 +7,12 @@ import MediaFingerprintCapsule
 import TelemetryCore
 
 // Using types from MediaFingerprintCapsule via wrapper to avoid direct native import issues in downstream modules
-public struct MediaDeduplicationSystem {
+public struct MediaDeduplicationSystem: Sendable {
     public struct MediaFingerprint: Codable, Sendable {
         public let fingerprintId: String
         public let sourceId: String
-        public let mediaType: MediaType
-        public let algorithm: FingerprintAlgorithm
+        public let mediaType: MediaFingerprintCapsule.MediaType
+        public let algorithm: MediaFingerprintCapsule.FingerprintAlgorithm
         public let hashData: Data
         public let hashSize: UInt32
         public let confidence: Double
@@ -26,8 +26,8 @@ public struct MediaDeduplicationSystem {
         public init(
             fingerprintId: String,
             sourceId: String,
-            mediaType: MediaType,
-            algorithm: FingerprintAlgorithm,
+            mediaType: MediaFingerprintCapsule.MediaType,
+            algorithm: MediaFingerprintCapsule.FingerprintAlgorithm,
             hashData: Data,
             hashSize: UInt32,
             confidence: Double,
@@ -118,14 +118,12 @@ public struct MediaDeduplicationSystem {
         case fingerprintGenerationFailed(String)
         case databaseError(String)
         case capsuleUnavailable
-        case unsupportedMediaType(MediaType)
+        case unsupportedMediaType(MediaFingerprintCapsule.MediaType)
     }
 
     private let database: ContextumDatabase
     private let capsule: MediaFingerprintCapsuleWrapper?
     private let fallbackHashAlgorithm: String
-
-    public static let shared: MediaDeduplicationSystem? = nil
 
     public init(
         database: ContextumDatabase,
@@ -140,7 +138,7 @@ public struct MediaDeduplicationSystem {
     @discardableResult
     public func generateFingerprint(
         for data: Data,
-        mediaType: MediaType,
+        mediaType: MediaFingerprintCapsule.MediaType,
         sourceId: String
     ) async throws -> MediaFingerprint {
         guard !data.isEmpty else {
@@ -158,7 +156,7 @@ public struct MediaDeduplicationSystem {
         let fingerprintId = UUID().uuidString
         let startTime = UInt64(Date().timeIntervalSince1970 * 1000)
 
-        if let capsule = self.capsule {
+        if let _ = self.capsule {
             return try await generateFingerprintWithCapsule(
                 data: data,
                 mediaType: detectedType,
@@ -179,17 +177,17 @@ public struct MediaDeduplicationSystem {
 
     private func generateFingerprintWithCapsule(
         data: Data,
-        mediaType: MediaType,
+        mediaType: MediaFingerprintCapsule.MediaType,
         sourceId: String,
         fingerprintId: String,
         startTime: UInt64
     ) async throws -> MediaFingerprint {
         guard let capsule = self.capsule else {
-            throw DeduplicationError.invalidMediaData
+            throw DeduplicationError.capsuleUnavailable
         }
         
-        let algorithm: FingerprintAlgorithm
-        let fingerprintResult: FingerprintResult
+        let algorithm: MediaFingerprintCapsule.FingerprintAlgorithm
+        let fingerprintResult: MediaFingerprintCapsule.FingerprintResult
 
         switch mediaType {
         case .image:
@@ -215,9 +213,9 @@ public struct MediaDeduplicationSystem {
             hashData: fingerprintResult.hashData,
             hashSize: fingerprintResult.hashSize,
             confidence: fingerprintResult.confidence,
-            durationMs: metadata.map { $0.durationMs },
-            width: metadata.map { $0.width },
-            height: metadata.map { $0.height },
+            durationMs: metadata?.durationMs,
+            width: metadata?.width,
+            height: metadata?.height,
             fileSize: UInt64(data.count),
             format: metadata?.format,
             createdAt: Date()
@@ -226,7 +224,7 @@ public struct MediaDeduplicationSystem {
 
     private func generateFingerprintWithHashFallback(
         data: Data,
-        mediaType: MediaType,
+        mediaType: MediaFingerprintCapsule.MediaType,
         sourceId: String,
         fingerprintId: String,
         startTime: UInt64
@@ -258,6 +256,7 @@ public struct MediaDeduplicationSystem {
             hashSize: hashSize,
             confidence: 0.5,
             fileSize: UInt64(data.count),
+            format: nil,
             createdAt: Date()
         )
     }
@@ -288,7 +287,7 @@ public struct MediaDeduplicationSystem {
 
         var allMatches: [DuplicateMatch] = []
 
-        if let capsule = self.capsule {
+        if let _ = self.capsule {
             allMatches = try await findDuplicatesWithCapsule(
                 fingerprint: fingerprint,
                 existingFingerprints: existingFingerprints,
@@ -329,7 +328,7 @@ public struct MediaDeduplicationSystem {
             )
         }
 
-        let queryFingerprint = FingerprintResult(
+        let queryFingerprint = MediaFingerprintCapsule.FingerprintResult(
             algorithm: fingerprint.algorithm,
             hashSize: fingerprint.hashSize,
             hashData: fingerprint.hashData,
@@ -338,7 +337,7 @@ public struct MediaDeduplicationSystem {
         )
 
         let candidateFingerprints = existingFingerprints.map { existing in
-            FingerprintResult(
+            MediaFingerprintCapsule.FingerprintResult(
                 algorithm: existing.algorithm,
                 hashSize: existing.hashSize,
                 hashData: existing.hashData,
@@ -347,14 +346,14 @@ public struct MediaDeduplicationSystem {
             )
         }
 
-        let similarityConfig = SimilarityConfiguration(
+        let similarityConfig = MediaFingerprintCapsule.SimilarityConfiguration(
             similarityThreshold: Double(threshold),
             useHammingDistance: true,
             enablePartialMatching: true,
             partialMatchThreshold: Double(threshold * 0.75)
         )
 
-        let similarityResults: [SimilarityResult]
+        let similarityResults: [MediaFingerprintCapsule.SimilarityResult]
         do {
             similarityResults = try capsule.batchCompareFingerprints(
                 queryFingerprint: queryFingerprint,
@@ -442,7 +441,7 @@ public struct MediaDeduplicationSystem {
         guard !existingFingerprints.isEmpty else { return false }
 
         if let capsule = self.capsule {
-            let queryFingerprint = FingerprintResult(
+            let queryFingerprint = MediaFingerprintCapsule.FingerprintResult(
                 algorithm: fingerprint.algorithm,
                 hashSize: fingerprint.hashSize,
                 hashData: fingerprint.hashData,
@@ -451,7 +450,7 @@ public struct MediaDeduplicationSystem {
             )
 
             for existing in existingFingerprints {
-                let candidateFingerprint = FingerprintResult(
+                let candidateFingerprint = MediaFingerprintCapsule.FingerprintResult(
                     algorithm: existing.algorithm,
                     hashSize: existing.hashSize,
                     hashData: existing.hashData,
@@ -528,7 +527,7 @@ public struct MediaDeduplicationSystem {
 
     public func checkForDuplicates(
         mediaData: Data,
-        mediaType: MediaType,
+        mediaType: MediaFingerprintCapsule.MediaType,
         sourceId: String,
         threshold: Float = 0.85
     ) async throws -> DuplicateDetectionResult {
@@ -545,52 +544,6 @@ public struct MediaDeduplicationSystem {
 }
 
 extension ContextumDatabase {
-    public struct MediaFingerprintRecord: Sendable {
-        public let fingerprintId: String
-        public let sourceId: String
-        public let mediaType: String
-        public let algorithm: String
-        public let hashData: Data
-        public let hashSize: Int
-        public let confidence: Double
-        public let durationMs: Int?
-        public let width: Int?
-        public let height: Int?
-        public let fileSize: Int64
-        public let format: String?
-        public let createdAt: Int64
-
-        public init(
-            fingerprintId: String,
-            sourceId: String,
-            mediaType: String,
-            algorithm: String,
-            hashData: Data,
-            hashSize: Int,
-            confidence: Double,
-            durationMs: Int?,
-            width: Int?,
-            height: Int?,
-            fileSize: Int64,
-            format: String?,
-            createdAt: Int64
-        ) {
-            self.fingerprintId = fingerprintId
-            self.sourceId = sourceId
-            self.mediaType = mediaType
-            self.algorithm = algorithm
-            self.hashData = hashData
-            self.hashSize = hashSize
-            self.confidence = confidence
-            self.durationMs = durationMs
-            self.width = width
-            self.height = height
-            self.fileSize = fileSize
-            self.format = format
-            self.createdAt = createdAt
-        }
-    }
-
     public func migrateMediaFingerprints() async throws {
         _ = try await dbActor.executeAsync("""
             CREATE TABLE IF NOT EXISTS media_fingerprints (
@@ -635,7 +588,7 @@ extension ContextumDatabase {
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """
 
-        _ = try await dbActor.executeAsync(sql, parameters: [
+        let params: [DatabaseParameter] = [
             .text(fingerprint.fingerprintId),
             .text(fingerprint.sourceId),
             .text(fingerprint.mediaType.rawValue.description),
@@ -646,10 +599,12 @@ extension ContextumDatabase {
             fingerprint.durationMs.map { .int(Int($0)) } ?? .null,
             fingerprint.width.map { .int(Int($0)) } ?? .null,
             fingerprint.height.map { .int(Int($0)) } ?? .null,
-            .int64(Int64(fingerprint.fileSize)),
+            .int(Int(fingerprint.fileSize)), // Using .int since .int64 is missing
             fingerprint.format.map { .text($0) } ?? .null,
-            .int64(Int64(fingerprint.createdAt.timeIntervalSince1970))
-        ])
+            .int(Int(fingerprint.createdAt.timeIntervalSince1970)) // Using .int
+        ]
+
+        _ = try await dbActor.executeAsync(sql, parameters: params)
     }
 
     public func getMediaFingerprints(
@@ -677,12 +632,14 @@ extension ContextumDatabase {
             }
 
             guard let mediaTypeRaw = row.string(for: "media_type"),
-                  let mediaType = MediaFingerprintCapsule.MediaType(rawValue: UInt8(mediaTypeRaw) ?? 0) else {
+                  let mediaTypeUInt8 = UInt8(mediaTypeRaw),
+                  let mediaType = MediaFingerprintCapsule.MediaType(rawValue: mediaTypeUInt8) else {
                 return nil
             }
 
             guard let algorithmRaw = row.string(for: "algorithm"),
-                  let algorithm = MediaFingerprintCapsule.FingerprintAlgorithm(rawValue: UInt8(algorithmRaw) ?? 0) else {
+                  let algorithmUInt8 = UInt8(algorithmRaw),
+                  let algorithm = MediaFingerprintCapsule.FingerprintAlgorithm(rawValue: algorithmUInt8) else {
                 return nil
             }
 
@@ -717,18 +674,20 @@ extension ContextumDatabase {
             }
 
             guard let mediaTypeRaw = row.string(for: "media_type"),
-                  let mediaType = MediaFingerprintCapsule.MediaType(rawValue: UInt8(mediaTypeRaw) ?? 0) else {
+                  let mediaTypeUInt8 = UInt8(mediaTypeRaw),
+                  let mediaType = MediaFingerprintCapsule.MediaType(rawValue: mediaTypeUInt8) else {
                 return nil
             }
 
             guard let algorithmRaw = row.string(for: "algorithm"),
-                  let algorithm = MediaFingerprintCapsule.FingerprintAlgorithm(rawValue: UInt8(algorithmRaw) ?? 0) else {
+                  let algorithmUInt8 = UInt8(algorithmRaw),
+                  let algorithm = MediaFingerprintCapsule.FingerprintAlgorithm(rawValue: algorithmUInt8) else {
                 return nil
             }
 
             return MediaDeduplicationSystem.MediaFingerprint(
                 fingerprintId: fingerprintId,
-                sourceId: sourceId,
+                sourceId: row.string(for: "source_id") ?? "",
                 mediaType: mediaType,
                 algorithm: algorithm,
                 hashData: hashData,

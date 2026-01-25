@@ -117,10 +117,10 @@ public actor DevelopumReceiptService {
         query: String,
         resultCount: Int
     ) async throws -> ReceiptWire {
-        let inputs = [
+        let inputs: [String: TelemetryValue] = [
             "repoId": .string(repoId.uuidString),
             "query": .string(query),
-            "resultCount": .int(resultCount)
+            "resultCount": .integer(resultCount)
         ]
         
         let inputsHash = TelemetryHash.compute(from: inputs)
@@ -153,7 +153,7 @@ public actor DevelopumReceiptService {
         messageHash: String,
         processingResult: String
     ) async throws -> ReceiptWire {
-        let inputs = [
+        let inputs: [String: TelemetryValue] = [
             "sessionId": .string(sessionId),
             "messageType": .string(messageType.rawValue),
             "messageHash": .string(messageHash),
@@ -190,11 +190,11 @@ public actor DevelopumReceiptService {
         artifactHash: String,
         indexSize: Int
     ) async throws -> ReceiptWire {
-        let inputs = [
+        let inputs: [String: TelemetryValue] = [
             "repoId": .string(repoId.uuidString),
             "filePath": .string(filePath),
             "artifactHash": .string(artifactHash),
-            "indexSize": .int(indexSize)
+            "indexSize": .integer(indexSize)
         ]
         
         let inputsHash = TelemetryHash.compute(from: inputs)
@@ -225,7 +225,7 @@ public actor DevelopumReceiptService {
         repoId: UUID,
         repoPath: String
     ) async throws -> ReceiptWire {
-        let inputs = [
+        let inputs: [String: TelemetryValue] = [
             "repoId": .string(repoId.uuidString),
             "repoPath": .string(repoPath),
             "action": .string("createSession")
@@ -258,10 +258,10 @@ public actor DevelopumReceiptService {
         savedFiles: Int,
         unsavedFiles: Int
     ) async throws -> ReceiptWire {
-        let inputs = [
+        let inputs: [String: TelemetryValue] = [
             "repoId": .string(repoId.uuidString),
-            "savedFiles": .int(savedFiles),
-            "unsavedFiles": .int(unsavedFiles),
+            "savedFiles": .integer(savedFiles),
+            "unsavedFiles": .integer(unsavedFiles),
             "action": .string("closeSession")
         ]
         

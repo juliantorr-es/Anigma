@@ -8,7 +8,7 @@
 
 import AnigmaPrimitives
 import DoctrineCore
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Execution Mode
 

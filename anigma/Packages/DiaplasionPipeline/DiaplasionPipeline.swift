@@ -202,34 +202,31 @@ struct DiaplasionPipeline: AsyncParsableCommand {
         } catch {
             return nil
         }
+        
+        let outputData = pipe.fileHandleForReading.readDataToEndOfFile()
         process.waitUntilExit()
 
         guard process.terminationStatus == 0 else {
             return nil
         }
-struct VerifyReplayConfiguration: Sendable {
-    let traceURL: URL
-    let spec: DiaplasionSpec
-    let specURL: URL
-    let specSourceDescription: String
-    let artifactDir: URL
-    let pipelineVersion: String
-    let inputHash: String
-}
-
-// Function signature would change to:
-func verifyReplay(config: VerifyReplayConfiguration) async throws -> SomeReturnType {
-    // Implementation using config.traceURL, config.spec, etc.
-}
-func verifyReplay(config: VerifyReplayConfiguration) throws {
-    guard FileManager.default.fileExists(atPath: config.traceURL.path) else {
-        throw PipelineError.missingTrace
+        return String(data: outputData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    let traceData = try Data(contentsOf: config.traceURL)
-    let trace = try JSONDecoder().decode(DiaplasionTrace.self, from: traceData)
-    // ... rest of function implementation
-}
+    private static func verifyReplay(
+        traceURL: URL,
+        spec: DiaplasionSpec,
+        specURL: URL,
+        specSourceDescription: String,
+        artifactDir: URL,
+        pipelineVersion: String,
+        inputHash: String
+    ) throws {
+        guard FileManager.default.fileExists(atPath: traceURL.path) else {
+            throw PipelineError.missingTrace
+        }
+
+        let traceData = try Data(contentsOf: traceURL)
+        let trace = try JSONDecoder().decode(DiaplasionTrace.self, from: traceData)
         guard trace.pipelineVersion == pipelineVersion else {
             throw PipelineError.traceMismatch("Pipeline version mismatch: expected \(pipelineVersion), got \(trace.pipelineVersion)")
         }

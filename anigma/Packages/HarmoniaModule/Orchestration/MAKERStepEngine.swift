@@ -7,7 +7,8 @@
 //  state transitions as append-only events following the Architect→Builder→Validator→Scribe→Scout pattern.
 //
 
-import Foundation
+import ContractsCore
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 // MARK: - Step Proposal

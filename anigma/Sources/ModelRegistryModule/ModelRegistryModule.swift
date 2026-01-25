@@ -154,7 +154,7 @@ extension ModelRegistryModule: CapabilityModule {
         try await runtime.registerSchema(schema)
         
         // Initialize database with migrated schema
-        let _ = try await ModelRegistryDatabase(dbActor: databaseAdapter)
+        let _ = try await ModelRegistryDatabase(dbActor: databaseAdapter as! DatabaseCore.DatabaseExecutor)
         
         // TODO: Migrate artifact storage from direct filesystem to ArtifactAuthority
         // Currently artifact storage is fragmented (e.g., HuggingFaceAdapter writes to local directory).

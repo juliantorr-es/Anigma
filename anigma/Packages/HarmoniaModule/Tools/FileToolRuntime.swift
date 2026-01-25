@@ -6,7 +6,7 @@
 //  Uses SimpleToolRegistry types.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Simple File Tool Runtime
 

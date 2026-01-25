@@ -11,7 +11,7 @@
 //  This turns architecture selection from heuristics into a learned, governed policy.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Architecture Selection Policy

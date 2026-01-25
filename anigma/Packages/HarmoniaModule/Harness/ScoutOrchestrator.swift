@@ -5,7 +5,7 @@
 //  Orchestrates scout execution and migration task management.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Protocol for project scouts.
 public protocol ProjectScout: Sendable {

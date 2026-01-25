@@ -6,7 +6,7 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+@preconcurrency import Foundation
 
 public struct SwiftTestTool: Sendable {
     public init() {}

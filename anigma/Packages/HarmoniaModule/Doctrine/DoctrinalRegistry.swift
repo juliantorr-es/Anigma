@@ -7,7 +7,7 @@
 //  for file/directory analysis.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import DoctrineCore
 
 public protocol DoctrinalScout: Sendable {

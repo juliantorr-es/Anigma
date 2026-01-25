@@ -9,7 +9,7 @@ import AnigmaCore
 import AnigmaPrimitives
 import DatabaseCore
 import DoctrineCore
-import Foundation
+@preconcurrency import Foundation
 import SQLite3
 
 /// Registry for project scouts.

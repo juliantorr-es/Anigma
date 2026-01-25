@@ -90,12 +90,12 @@ public struct RunContractJobRecord: Codable, Sendable, Identifiable {
 
 /// SQLite-backed queue for contract execution jobs.
 public actor ContractJobQueue {
-    private let database: DatabaseActor
+    private let database: any DatabaseExecutor
     private let idGenerator: () -> String
     private let now: () -> Date
 
     public init(
-        database: DatabaseActor,
+        database: any DatabaseExecutor,
         idGenerator: @escaping () -> String = { UUID().uuidString },
         now: @escaping () -> Date = { Date() }
     ) async throws {
@@ -264,7 +264,7 @@ public actor ContractJobQueue {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
 
-        let changes = try await database.execute(
+        let changes = try await database.executeAsync(
             """
             \(sql)
             """,
@@ -290,7 +290,7 @@ public actor ContractJobQueue {
         let payloadData = try encoder.encode(record.payload)
         let payloadString = String(data: payloadData, encoding: .utf8) ?? "{}"
 
-        _ = try await database.execute(
+        _ = try await database.executeAsync(
             """
             UPDATE contract_jobs
             SET payload = ?, status = ?, attempts = ?, error = ?, updated_at = ?

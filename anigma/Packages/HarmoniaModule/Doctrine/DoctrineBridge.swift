@@ -6,7 +6,7 @@
 //  DoctrineCore API churn while still exposing a stable rule/violation DSL.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import DoctrineCore
 
 public struct DoctrineBridgeRule: Sendable, Codable {

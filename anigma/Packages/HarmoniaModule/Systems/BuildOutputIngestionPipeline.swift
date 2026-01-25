@@ -6,8 +6,9 @@
 //
 
 import DatabaseCore
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
+
 public actor BuildOutputIngestionPipeline {
     private let dbActor: DatabaseActor
 
@@ -48,7 +49,7 @@ public actor BuildOutputIngestionPipeline {
             error: buildResult.error
         )
 
-        let storedDiagnostics = try await storeDiagnostics(
+        let config = StoreDiagnosticsConfiguration(
             sessionId: sessionId,
             gitStateId: gitStateId,
             target: target,
@@ -61,6 +62,7 @@ public actor BuildOutputIngestionPipeline {
             exitCode: buildResult.exitCode,
             outputPath: outputPath
         )
+        let storedDiagnostics = try await storeDiagnostics(config: config)
 
         // Step 5: Store build artifacts (binaries, libraries, etc.)
         let artifacts = try await storeBuildArtifacts(
@@ -398,52 +400,12 @@ public actor BuildOutputIngestionPipeline {
                 return true
             }
         }
-struct StoreDiagnosticsConfiguration: Sendable {
-    let sessionId: String
-    let gitStateId: String
-    let target: String
-    let configuration: String
-    let buildCommand: String
-    let workingDirectory: String
-    let diagnostics: [BuildOutputDiagnostic]
-    let startTime: Int
-    let endTime: Int
-    let exitCode: Int
-    let outputPath: String
-    
-    init(
-        sessionId: String,
-        gitStateId: String,
-        target: String,
-        configuration: String,
-        buildCommand: String,
-        workingDirectory: String,
-        diagnostics: [BuildOutputDiagnostic],
-        startTime: Int,
-        endTime: Int,
-        exitCode: Int,
-        outputPath: String
-    ) {
-        self.sessionId = sessionId
-        self.gitStateId = gitStateId
-        self.target = target
-        self.configuration = configuration
-        self.buildCommand = buildCommand
-        self.workingDirectory = workingDirectory
-        self.diagnostics = diagnostics
-        self.startTime = startTime
-        self.endTime = endTime
-        self.exitCode = exitCode
-        self.outputPath = outputPath
+        return false
     }
-}
 
-// Function signature would change to:
-func storeDiagnostics(config: StoreDiagnosticsConfiguration) async throws -> [String] {
-    let toolchain = detectToolchain(buildCommand: config.buildCommand)
-    let outputData = (try? Data(contentsOf: URL(fileURLWithPath: config.outputPath))) ?? Data()
-    // ... rest of function implementation
-}
+    private func storeDiagnostics(config: StoreDiagnosticsConfiguration) async throws -> [String] {
+        let toolchain = detectToolchain(buildCommand: config.buildCommand)
+        let outputData = (try? Data(contentsOf: URL(fileURLWithPath: config.outputPath))) ?? Data()
 
         // Store build session
         try await dbActor.execute("""
@@ -453,23 +415,23 @@ func storeDiagnostics(config: StoreDiagnosticsConfiguration) async throws -> [St
                 exit_code, artifact_path, artifact_hash
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, parameters: [
-            DatabaseParameter.text(sessionId),
-            DatabaseParameter.text(gitStateId),
-            DatabaseParameter.text(target),
-            DatabaseParameter.text(configuration),
+            DatabaseParameter.text(config.sessionId),
+            DatabaseParameter.text(config.gitStateId),
+            DatabaseParameter.text(config.target),
+            DatabaseParameter.text(config.configuration),
             DatabaseParameter.text(toolchain),
-            DatabaseParameter.text(buildCommand),
-            DatabaseParameter.text(workingDirectory),
-            DatabaseParameter.int(startTime),
-            DatabaseParameter.int(endTime),
-            DatabaseParameter.int(exitCode),
-            DatabaseParameter.text(outputPath),
+            DatabaseParameter.text(config.buildCommand),
+            DatabaseParameter.text(config.workingDirectory),
+            DatabaseParameter.int(config.startTime),
+            DatabaseParameter.int(config.endTime),
+            DatabaseParameter.int(config.exitCode),
+            DatabaseParameter.text(config.outputPath),
             DatabaseParameter.text(sha256Hex(outputData))
         ])
 
         // Store diagnostics
         var storedIds: [String] = []
-        for diagnostic in diagnostics {
+        for diagnostic in config.diagnostics {
             let id = UUID().uuidString
 
             try await dbActor.execute("""
@@ -480,7 +442,7 @@ func storeDiagnostics(config: StoreDiagnosticsConfiguration) async throws -> [St
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, parameters: [
                 DatabaseParameter.text(id),
-                DatabaseParameter.text(sessionId),
+                DatabaseParameter.text(config.sessionId),
                 DatabaseParameter.text(diagnostic.filePath),
                 DatabaseParameter.int(diagnostic.lineNumber),
                 DatabaseParameter.int(diagnostic.columnNumber),
@@ -644,6 +606,20 @@ public struct BuildIngestionResult {
     public let artifactsStored: Int
     public let exitCode: Int
     public let buildDuration: Int
+}
+
+struct StoreDiagnosticsConfiguration: Sendable {
+    let sessionId: String
+    let gitStateId: String
+    let target: String
+    let configuration: String
+    let buildCommand: String
+    let workingDirectory: String
+    let diagnostics: [BuildOutputDiagnostic]
+    let startTime: Int
+    let endTime: Int
+    let exitCode: Int
+    let outputPath: String
 }
 
 private struct GitState {

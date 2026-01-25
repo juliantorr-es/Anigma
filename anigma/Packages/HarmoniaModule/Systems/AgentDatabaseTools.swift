@@ -6,8 +6,8 @@
 //
 
 import DatabaseCore
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 
 /// Agent-facing database tools that enforce DB-first retrieval
 /// These tools replace repo scanning with indexed, provenance-backed queries

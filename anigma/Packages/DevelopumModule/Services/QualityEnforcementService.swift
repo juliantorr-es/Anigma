@@ -13,9 +13,7 @@ public actor QualityEnforcementService {
     private let rewritePipeline: RewritePipeline
     
     public init() {
-        self.rewritePipeline = RewritePipeline()
-        // Register standard rules
-        self.rewritePipeline.register(rule: AddSendableToValueTypesRule())
+        self.rewritePipeline = RewritePipeline(rules: [AddSendableToValueTypesRule()])
         // Add more rules as they become available
     }
     
@@ -30,8 +28,16 @@ public actor QualityEnforcementService {
             return (code, [])
         }
         
-        let result = try await rewritePipeline.process(source: code)
-        return (result.source, result.changes)
+        let tempFile = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString + ".swift").path
+        try code.write(toFile: tempFile, atomically: true, encoding: .utf8)
+        defer { try? FileManager.default.removeItem(atPath: tempFile) }
+
+        let item = RewritePipeline.PipelineItem(filePath: tempFile, astAnchor: nil)
+        let result = await rewritePipeline.execute(on: [item])
+        
+        let processedCode = try String(contentsOfFile: tempFile, encoding: .utf8)
+        let changes = result.changes.map { "\($0.ruleName) at \($0.startLine):\($0.startColumn)" }
+        return (processedCode, changes)
     }
     
     /// Validates a virtual document against quality rules.
@@ -45,7 +51,7 @@ public struct Violation: Sendable {
     public let message: String
     public let severity: Severity
     
-    public enum Severity {
+    public enum Severity: Sendable {
         case warning
         case error
     }

@@ -6,7 +6,7 @@
 //  Handles locale invariant formatting, line endings, paths, and metadata.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Normalizes input/output to eliminate environmental sources of nondeterminism
 public enum InputNormalizer {

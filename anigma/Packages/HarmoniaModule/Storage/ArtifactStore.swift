@@ -7,21 +7,21 @@
 //
 
 import AnigmaCore
-import CryptoKit
+@preconcurrency import CryptoKit
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import StorageCore
 
 /// Artifact storage manager with deduplication.
 public actor ArtifactStore {
-    private let db: any DatabaseExecutor
+    private let db: any DatabaseCore.DatabaseExecutor
     private let rootURL: URL
     private var vault: VaultAuthority?
     private var indexStore: VaultIndexStore?
     private let artifactAuthority: (any ArtifactAuthority)?
     
     /// Legacy initializer using VaultAuthority and VaultIndexStore.
-    public init(db: any DatabaseExecutor, vaultRoot: URL? = nil) {
+    public init(db: any DatabaseCore.DatabaseExecutor, vaultRoot: URL? = nil) {
         self.db = db
         self.rootURL = vaultRoot ?? VaultConfiguration.defaultVaultRoot()
         self.artifactAuthority = nil
@@ -32,9 +32,9 @@ public actor ArtifactStore {
     ///   - artifactAuthority: The ArtifactAuthority to use for storage operations.
     ///   - db: DatabaseExecutor for linking and metadata (optional).
     ///   - vaultRoot: Legacy vault root (optional, used only if artifactAuthority is nil).
-    public init(artifactAuthority: any ArtifactAuthority, db: (any DatabaseExecutor)? = nil, vaultRoot: URL? = nil) {
+    public init(artifactAuthority: any ArtifactAuthority, db: (any DatabaseCore.DatabaseExecutor)? = nil, vaultRoot: URL? = nil) {
         self.artifactAuthority = artifactAuthority
-        self.db = db ?? (artifactAuthority as? DatabaseExecutor) ?? DummyDatabaseExecutor()
+        self.db = db ?? (artifactAuthority as? any DatabaseCore.DatabaseExecutor) ?? DummyDatabaseExecutor()
         self.rootURL = vaultRoot ?? VaultConfiguration.defaultVaultRoot()
     }
     
@@ -266,8 +266,12 @@ public struct StorageStats: Sendable {
 }
 
 // Dummy DatabaseExecutor for when db is not provided and artifactAuthority is not a DatabaseExecutor.
-private actor DummyDatabaseExecutor: DatabaseExecutor {
-    func execute(_ sql: String, parameters: [DatabaseParameter]) async throws {}
+private actor DummyDatabaseExecutor: DatabaseCore.DatabaseExecutor {
+    func execute(_ sql: String, parameters: [DatabaseParameter]) async throws -> Int { 0 }
     func query(_ sql: String, parameters: [DatabaseParameter]) async throws -> [DatabaseRow] { [] }
-    func close() async throws {}
+    func executeAsync(_ sql: String, parameters: [DatabaseParameter]) async throws -> Int { 0 }
+    func transaction(_ block: @Sendable () async throws -> Void) async throws { try await block() }
+    func open() throws {}
+    func close() {}
+    var path: String { "" }
 }

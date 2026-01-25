@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Aggregated metrics for a model kind.
 public struct MetricsComponent: Component, Codable {

@@ -6,7 +6,7 @@
 //  Replaces the regex-based implementation in Swift6MigrationEngine.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaASTServicesCore
 import AnigmaPrimitives
 import SwiftSyntax

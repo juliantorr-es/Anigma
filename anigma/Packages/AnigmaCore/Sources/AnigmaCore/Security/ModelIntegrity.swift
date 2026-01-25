@@ -314,7 +314,7 @@ public struct InputValidator: Sendable {
             guard value >= min && value <= max else { return false }
 
             // Statistical check (within N standard deviations)
-            let deviation = abs(value - mean) / stdDev
+            let deviation = Swift.abs(value - mean) / stdDev
             return deviation <= sigmas
         }
 
@@ -326,7 +326,7 @@ public struct InputValidator: Sendable {
 
             guard stdDev > 0 else { return 0 }
 
-            let deviation = abs(value - mean) / stdDev
+            let deviation = Swift.abs(value - mean) / stdDev
             // Normalize to 0-1 range (3 sigmas = 1.0)
             return Swift.min(1.0, deviation / 3.0)
         }

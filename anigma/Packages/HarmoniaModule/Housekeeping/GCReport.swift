@@ -5,7 +5,7 @@
 //  [Brief description of file purpose]
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Report from garbage collection operation.
 public struct GCReport: Sendable, Codable {

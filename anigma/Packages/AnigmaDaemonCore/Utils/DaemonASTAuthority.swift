@@ -25,6 +25,11 @@ actor DaemonASTAuthority: ASTAuthority {
     private let astWorkerAvailable: Bool
     private let fallbackAuthority: MockASTAuthority?
     
+    // Metrics state
+    private var activeOperations: Int = 0
+    private var totalRequests: Int = 0
+    private var successfulHits: Int = 0
+    
     init(
         cacheEnabled: Bool = true,
         maxFileSize: Int = 10 * 1024 * 1024, // 10MB
@@ -83,6 +88,11 @@ actor DaemonASTAuthority: ASTAuthority {
                 try await self.astWorker.performTask(request)
             }
             
+            self.totalRequests += 1
+            if response.metrics.cacheHits > 0 {
+                self.successfulHits += 1
+            }
+            
             guard response.status == .completed, let firstOutput = response.outputs.first else {
                 throw DaemonASTError("AST worker response not successful: \(response.status)")
             }
@@ -137,6 +147,11 @@ actor DaemonASTAuthority: ASTAuthority {
         do {
             let response = try await executeWithTimeout {
                 try await self.astWorker.performTask(request)
+            }
+            
+            self.totalRequests += 1
+            if response.metrics.cacheHits > 0 {
+                self.successfulHits += 1
             }
             
             guard response.status == .completed, let firstOutput = response.outputs.first else {
@@ -213,6 +228,11 @@ actor DaemonASTAuthority: ASTAuthority {
                     try await self.astWorker.performTask(request)
                 }
                 
+                self.totalRequests += 1
+                if response.metrics.cacheHits > 0 {
+                    self.successfulHits += 1
+                }
+                
                 guard response.status == .completed else {
                     throw DaemonASTError("AST worker batch response not successful: \(response.status)")
                 }
@@ -239,23 +259,30 @@ actor DaemonASTAuthority: ASTAuthority {
     
     func getStatus() async -> ASTServiceStatus {
         let isAvailable = astWorkerAvailable
-        let currentLoad = 0.0 // TODO: Track actual load
+        // Load is ratio of active operations (normalized to 1.0 = 10 ops for example, or just raw count)
+        // For simplicity, we just return active count as "load"
+        let currentLoad = Double(activeOperations)
         
         var cacheStats: ASTCacheStats? = nil
         if astWorkerAvailable {
             // Get cache statistics from worker
             let (entries, sizeBytes) = await astWorker.cacheStats()
+            
+            let hitRate = totalRequests > 0 ? Double(successfulHits) / Double(totalRequests) : 0.0
+            
             cacheStats = ASTCacheStats(
                 entries: entries,
                 sizeBytes: sizeBytes,
-                hitRate: 0.0 // TODO: Get actual hit rate from metrics
+                hitRate: hitRate
             )
         }
         
+        // Try to get actual swift syntax version from worker metadata if possible
+        // For now, we use the known version 600.0.0 matching Swift 6
         let engineInfo = ASTEngineInfo(
             engineId: "swift-ast-worker",
             version: "1.0",
-            swiftSyntaxVersion: "600.0.0" // TODO: Get actual version
+            swiftSyntaxVersion: "600.0.0"
         )
         
         return ASTServiceStatus(
@@ -269,7 +296,10 @@ actor DaemonASTAuthority: ASTAuthority {
     // MARK: - Private Methods
     
     private func executeWithTimeout<T>(_ operation: @escaping @Sendable () async throws -> T) async throws -> T {
-        try await withThrowingTaskGroup(of: T.self) { group in
+        activeOperations += 1
+        defer { activeOperations -= 1 }
+        
+        return try await withThrowingTaskGroup(of: T.self) { group in
             // Add the operation
             group.addTask {
                 try await operation()

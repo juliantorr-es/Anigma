@@ -145,7 +145,7 @@ public struct EnhancedDocumentIngestSystem: System {
         )
         
         // Create progress callback
-        let onProgress: (ProcessingProgress) -> Void = { (progress: ProcessingProgress) in
+        let onProgress: @Sendable (ProcessingProgress) -> Void = { (progress: ProcessingProgress) in
             Task {
                 await world.addComponent(entity, ProgressUpdateComponent(
                     action: .update(

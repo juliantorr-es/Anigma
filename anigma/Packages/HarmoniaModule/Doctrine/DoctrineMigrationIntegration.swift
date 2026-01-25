@@ -9,7 +9,7 @@
 import AnigmaCore
 import AnigmaPrimitives
 @preconcurrency import DoctrineCore
-import Foundation
+@preconcurrency import Foundation
 import SQLite3
 
 /// Migration engine wrapper that checks doctrine compliance.

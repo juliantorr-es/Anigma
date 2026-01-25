@@ -8,7 +8,7 @@
 import AnigmaCore
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 import SQLite3
 
 //

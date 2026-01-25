@@ -12,7 +12,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Bonkers++ Inference Infrastructure
 

@@ -239,3 +239,12 @@ public protocol InferencePlane: Sendable {
     /// Execute the inference request and return a response.
     func perform(_ request: InferenceRequest) async throws -> InferenceResponse
 }
+
+/// Protocol to abstract MLX engine implementation without direct import
+public protocol MLXEngineProtocol: Sendable {
+    func loadModel() async throws
+    func unload() async
+    func generate(prompt: String, maxTokens: Int, temperature: Float) async throws -> String
+    func generateStream(prompt: String, maxTokens: Int, temperature: Float) -> AsyncThrowingStream<String, Error>
+    func embed(text: String) async throws -> [Float]
+}

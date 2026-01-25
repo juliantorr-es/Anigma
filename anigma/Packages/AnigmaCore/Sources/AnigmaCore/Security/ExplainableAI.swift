@@ -493,7 +493,7 @@ public struct LocalExplanationGenerator: Sendable {
             ContributingFactor(
                 name: feature.name,
                 description: feature.description,
-                weight: abs(feature.contribution),
+                weight: Swift.abs(feature.contribution),
                 observedValue: feature.value,
                 baselineValue: feature.baseline,
                 influence: feature.contribution >= 0 ? .positive : .negative,

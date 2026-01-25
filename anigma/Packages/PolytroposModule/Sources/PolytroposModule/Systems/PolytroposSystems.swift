@@ -25,12 +25,12 @@ public struct MediaIngestSystem: System {
     private let supportedVideoExtensions = ["mp4", "mov", "m4v", "mkv", "avi", "mxf", "mts"]
     private let supportedAudioExtensions = ["wav", "mp3", "m4a", "aac", "flac", "aiff"]
     private let containerCapsule: MediaContainerCapsuleWrapperAlias?
-    private let telemetryEmitter: ((String, [String: TelemetryCore.TelemetryValue]) async -> Void)?
+    private let telemetryEmitter: (@Sendable (String, [String: TelemetryCore.TelemetryValue]) async -> Void)?
 
     public init(
         workDirectory: URL,
         containerCapsule: MediaContainerCapsuleWrapperAlias? = nil,
-        telemetryEmitter: ((String, [String: TelemetryCore.TelemetryValue]) async -> Void)? = nil
+        telemetryEmitter: (@Sendable (String, [String: TelemetryCore.TelemetryValue]) async -> Void)? = nil
     ) {
         self.workDirectory = workDirectory
         self.containerCapsule = containerCapsule
@@ -154,10 +154,11 @@ public struct MediaIngestSystem: System {
                         frameRate = Double(videoInfo.frameRate.num) / Double(videoInfo.frameRate.den)
                         sampleRate = videoInfo.sampleRate
 
+                        let codec = MediaContainerCapsule.VideoCodec(rawValue: videoInfo.codec.rawValue) ?? .unknown
                         videoMeta = VideoMetadataComponent(
                             width: Int(videoInfo.width),
                             height: Int(videoInfo.height),
-                            codec: videoCodecName(videoInfo.codec),
+                            codec: videoCodecName(codec),
                             bitrate: Int(videoInfo.bitRate) > 0 ? Int(videoInfo.bitRate) : nil,
                             isHDR: false
                         )
@@ -167,12 +168,13 @@ public struct MediaIngestSystem: System {
 
                 for stream in report.streams where stream.type == .audio {
                     if let audioInfo = try? capsule.getAudioStreamInfo(at: stream.index) {
-                        sampleRate = audioInfo.sampleRate
+                        sampleRate = UInt32(audioInfo.sampleRate)
 
+                        let codec = MediaContainerCapsule.AudioCodec(rawValue: audioInfo.codec.rawValue) ?? .unknown
                         audioMeta = AudioMetadataComponent(
                             channelCount: Int(audioInfo.channels),
-                            sampleRate: Double(audioInfo.sampleRate),
-                            codec: audioCodecName(audioInfo.codec),
+                            sampleRate: audioInfo.sampleRate,
+                            codec: audioCodecName(codec),
                             bitrate: Int(audioInfo.bitRate) > 0 ? Int(audioInfo.bitRate) : nil
                         )
                     }
@@ -240,7 +242,7 @@ public struct MediaIngestSystem: System {
         return (durationEstimate, mediaType == .video ? 30.0 : 0, sampleRateValue, videoMeta, audioMeta)
     }
 
-    private func videoCodecName(_ codec: VideoCodec) -> String {
+    private func videoCodecName(_ codec: MediaContainerCapsuleWrapper.VideoCodec) -> String {
         switch codec {
         case .h264: return "H.264"
         case .h265: return "HEVC"
@@ -250,11 +252,11 @@ public struct MediaIngestSystem: System {
         case .mpeg4: return "MPEG-4"
         case .vc1: return "VC-1"
         case .theora: return "Theora"
-        case .unknown: return "Unknown"
+        default: return "Unknown"
         }
     }
 
-    private func audioCodecName(_ codec: AudioCodec) -> String {
+    private func audioCodecName(_ codec: MediaContainerCapsuleWrapper.AudioCodec) -> String {
         switch codec {
         case .aac: return "AAC"
         case .mp3: return "MP3"
@@ -263,7 +265,7 @@ public struct MediaIngestSystem: System {
         case .flac: return "FLAC"
         case .pcmS16LE: return "PCM 16-bit"
         case .pcmF32LE: return "PCM 32-bit float"
-        case .unknown: return "Unknown"
+        default: return "Unknown"
         }
     }
 

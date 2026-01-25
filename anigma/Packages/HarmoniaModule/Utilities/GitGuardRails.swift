@@ -14,7 +14,7 @@ import DatabaseCore
 //  Prevents running dangerous operations on dirty repos or main branches.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Git safety checks for automated code transformations.
 public struct GitGuardRails {

@@ -162,7 +162,7 @@ public actor MaintenanceHistory {
         let resultData = try JSONEncoder().encode(result)
         let resultJson = String(data: resultData, encoding: .utf8) ?? "{}"
 
-        try await db.execute("""
+        try await db.executeAsync("""
             INSERT INTO maintenance_history (
                 operation_id, operation_type, started_at, completed_at,
                 result_json, config_json
@@ -215,7 +215,7 @@ public actor MaintenanceHistory {
 
     /// Trim old history entries.
     private func trimHistory() async throws {
-        try await db.execute("""
+        try await db.executeAsync("""
             DELETE FROM maintenance_history
             WHERE id NOT IN (
                 SELECT id FROM maintenance_history

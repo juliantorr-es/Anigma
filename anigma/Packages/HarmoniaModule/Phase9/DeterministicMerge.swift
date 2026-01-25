@@ -6,7 +6,7 @@
 //  Ensures output is identical regardless of execution order.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Utility for deterministic merging of concurrent results.
 /// Ensures final result is identical regardless of execution order.

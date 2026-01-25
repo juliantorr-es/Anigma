@@ -10,20 +10,20 @@ import Foundation
 /// Migration for content-addressed artifact storage.
 public enum ContentAddressedMigration {
     public static func migrate(_ db: DatabaseActor) async throws {
-        try await db.execute("BEGIN TRANSACTION")
+        try await db.executeAsync("BEGIN TRANSACTION")
         do {
             try await createContentAddressedArtifacts(db)
             try await createArtifactReferences(db)
             try await createIndexes(db)
-            try await db.execute("COMMIT TRANSACTION")
+            try await db.executeAsync("COMMIT TRANSACTION")
         } catch {
-            _ = try? await db.execute("ROLLBACK TRANSACTION")
+            _ = try? await db.executeAsync("ROLLBACK TRANSACTION")
             throw error
         }
     }
 
     private static func createContentAddressedArtifacts(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS content_addressed_artifacts (
                 content_hash TEXT PRIMARY KEY,
@@ -39,7 +39,7 @@ public enum ContentAddressedMigration {
     }
 
     private static func createArtifactReferences(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS artifact_references (
                 reference_id TEXT PRIMARY KEY,
@@ -56,28 +56,28 @@ public enum ContentAddressedMigration {
     }
 
     private static func createIndexes(_ db: DatabaseActor) async throws {
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_artifact_refs_parent
             ON artifact_references(parent_key, parent_type);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_artifact_refs_hash
             ON artifact_references(content_hash);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_artifact_refs_created
             ON artifact_references(created_at);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_content_artifacts_reference_count
             ON content_addressed_artifacts(reference_count);

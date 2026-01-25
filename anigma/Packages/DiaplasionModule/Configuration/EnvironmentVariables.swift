@@ -8,7 +8,7 @@
 import Foundation
 
 /// Environment variable keys used throughout the Diaplasion pipeline.
-public enum DiaplasionEnvironmentKey: String, CaseIterable {
+public enum DiaplasionEnvironmentKey: String, CaseIterable, Sendable {
     
     // MARK: - OCR Configuration
     

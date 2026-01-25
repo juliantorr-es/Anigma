@@ -7,6 +7,7 @@ public struct ContextSourceComponent: Codable, Hashable, Sendable {
     public let receiptId: String
     public let timestamp: Date
     public let metadata: [String: String]
+    public let content: String?
 
     public enum SourceType: String, Codable, Sendable {
         case document
@@ -22,7 +23,8 @@ public struct ContextSourceComponent: Codable, Hashable, Sendable {
         artifactHash: String,
         receiptId: String,
         timestamp: Date = Date(),
-        metadata: [String: String] = [:]
+        metadata: [String: String] = [:],
+        content: String? = nil
     ) {
         self.sourceId = sourceId
         self.sourceType = sourceType
@@ -30,5 +32,6 @@ public struct ContextSourceComponent: Codable, Hashable, Sendable {
         self.receiptId = receiptId
         self.timestamp = timestamp
         self.metadata = metadata
+        self.content = content
     }
 }

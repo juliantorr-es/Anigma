@@ -108,11 +108,11 @@ public actor DownloadQueueManager {
         let fileURL = "\(baseURL)/\(download.repo)/resolve/main/\(download.file)"
         let resumeData = try await downloader.getResumeData(url: fileURL)
 
-        guard let data = resumeData else {
+        guard resumeData != nil else {
             throw DownloadQueueError.noResumeData
         }
 
-        try await enqueue(
+        _ = try await enqueue(
             repo: download.repo,
             file: download.file,
             priority: .high
@@ -124,7 +124,7 @@ public actor DownloadQueueManager {
             let fileURL = "\(baseURL)/\(download.repo)/resolve/main/\(download.file)"
             await downloader.cancel(url: fileURL)
             active.removeValue(forKey: jobId)
-        } else if let queued = queue[jobId] {
+        } else if queue[jobId] != nil {
             queue.removeValue(forKey: jobId)
         } else if completed[jobId] != nil {
             completed.removeValue(forKey: jobId)

@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Represents an inference request being processed.
 public struct RequestComponent: Component, Codable {

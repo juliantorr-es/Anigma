@@ -3,7 +3,30 @@ import AnigmaNativeShims
 import CapsuleCore
 import MediaContainerNative
 
-public final class MediaContainerCapsuleWrapper {
+public final class MediaContainerCapsuleWrapper: @unchecked Sendable {
+    public enum VideoCodec: UInt32, Sendable {
+        case h264 = 0
+        case h265 = 1
+        case vp9 = 2
+        case av1 = 3
+        case mpeg2 = 4
+        case mpeg4 = 5
+        case vc1 = 6
+        case theora = 7
+        case unknown = 0xFFFFFFFF
+    }
+
+    public enum AudioCodec: UInt32, Sendable {
+        case aac = 0
+        case mp3 = 1
+        case opus = 2
+        case vorbis = 3
+        case flac = 4
+        case pcmS16LE = 5
+        case pcmF32LE = 6
+        case unknown = 0xFFFFFFFF
+    }
+
     private let handle: CapsuleHandle<AnyObject>
     
     public init(config: MediaContainerConfig) throws {

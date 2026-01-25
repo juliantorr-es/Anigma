@@ -98,7 +98,7 @@ public actor ContentAddressedStore {
     /// Set up content-addressed storage tables.
     private func setupSchema() async throws {
         // Content-addressed artifact blobs table.
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS content_addressed_artifacts (
                 content_hash TEXT PRIMARY KEY,
@@ -113,7 +113,7 @@ public actor ContentAddressedStore {
         )
 
         // Artifact references table (pointing to content-addressed artifacts).
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE TABLE IF NOT EXISTS artifact_references (
                 reference_id TEXT PRIMARY KEY,
@@ -130,21 +130,21 @@ public actor ContentAddressedStore {
         )
 
         // Indexes for efficient querying.
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_artifact_refs_parent
             ON artifact_references(parent_key, parent_type);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_artifact_refs_hash
             ON artifact_references(content_hash);
             """
         )
 
-        try await db.execute(
+        try await db.executeAsync(
             """
             CREATE INDEX IF NOT EXISTS idx_artifact_refs_created
             ON artifact_references(created_at);
@@ -156,7 +156,7 @@ public actor ContentAddressedStore {
     public func storeArtifact(
         _ artifact: ContentAddressedArtifact
     ) async throws -> ContentAddressedArtifact {
-        let inserted = try await db.execute(
+        let inserted = try await db.executeAsync(
             """
             INSERT OR IGNORE INTO content_addressed_artifacts
             (content_hash, hash_algorithm, payload, payload_size, is_compressed, first_seen_at, reference_count)
@@ -213,7 +213,7 @@ public actor ContentAddressedStore {
     public func createReference(
         _ reference: ArtifactReference
     ) async throws -> ArtifactReference {
-        try await db.execute(
+        try await db.executeAsync(
             """
             INSERT OR IGNORE INTO artifact_references
             (reference_id, content_hash, parent_key, parent_type, created_at, metadata)
@@ -230,7 +230,7 @@ public actor ContentAddressedStore {
         )
 
         // Increment reference count in the artifact.
-        _ = try await db.execute(
+        _ = try await db.executeAsync(
             """
             UPDATE content_addressed_artifacts
             SET reference_count = reference_count + 1

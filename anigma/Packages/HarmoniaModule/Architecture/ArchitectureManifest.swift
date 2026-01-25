@@ -6,7 +6,7 @@
 //  Defines the core abstractions that must be reused, not reinvented.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 // MARK: - Canonical Abstraction

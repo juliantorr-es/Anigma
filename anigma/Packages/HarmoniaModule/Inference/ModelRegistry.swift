@@ -6,7 +6,7 @@
 //  Maps models to backends, capabilities, and resource requirements.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Capability Profile

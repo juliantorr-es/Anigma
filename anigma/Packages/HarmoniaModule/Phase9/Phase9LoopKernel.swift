@@ -8,7 +8,7 @@
 //  Testable as a pure function.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Pure deterministic pipeline kernel for Phase 9.0 loop.

@@ -9,7 +9,7 @@
 //  automation, refactor, and cluster operation goes through here first.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 import ContractsCore
 

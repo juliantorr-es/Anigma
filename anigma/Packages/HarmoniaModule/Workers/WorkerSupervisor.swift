@@ -6,8 +6,8 @@
 //
 
 import AnigmaCore
-import CryptoKit
-import Foundation
+@preconcurrency import CryptoKit
+@preconcurrency import Foundation
 import MLWorkerCommon
 
 public enum WorkerError: Error, Sendable {

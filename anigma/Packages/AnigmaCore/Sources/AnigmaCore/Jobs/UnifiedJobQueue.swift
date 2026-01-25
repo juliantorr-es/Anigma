@@ -180,9 +180,9 @@ public actor UnifiedJobQueue {
             switch (record1.job.deadline, record2.job.deadline) {
             case (let deadline1?, let deadline2?):
                 return deadline1 < deadline2
-            case (nil, let deadline2?):
+            case (nil, _?):
                 return true
-            case (let deadline1?, nil):
+            case (_?, nil):
                 return false
             case (nil, nil):
                 break
@@ -240,7 +240,7 @@ public actor UnifiedJobQueue {
                     expiredRecord.status = .expired
                     expiredRecord.completedAt = Date()
                     jobRecords[record.id] = expiredRecord
-                    Task { try? await persistAndNotify(expiredRecord) }
+                    Task { await persistAndNotify(expiredRecord) }
                 }
                 continue
             }
@@ -398,7 +398,7 @@ public actor UnifiedJobQueue {
             // Schedule retry
             Task {
                 try? await Task.sleep(for: .seconds(retryTime.timeIntervalSinceNow))
-                await enqueue(retryRecord)
+                self.enqueue(retryRecord)
             }
             
             await recordMetric(.jobRetried, jobId: jobId, jobType: record.job.typeId)

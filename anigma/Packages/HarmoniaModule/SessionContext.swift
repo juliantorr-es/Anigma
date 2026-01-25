@@ -5,7 +5,8 @@
 //  Session context for tool execution.
 //
 
-import Foundation
+import ContractsCore
+@preconcurrency import Foundation
 
 /// Context information about the current session
 public struct SessionContext: Codable, Sendable {

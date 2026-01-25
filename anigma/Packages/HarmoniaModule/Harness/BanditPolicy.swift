@@ -6,7 +6,7 @@
 //  Epsilon-greedy and UCB1 for supervised "wiggle room."
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Bandit Arm Statistics
 

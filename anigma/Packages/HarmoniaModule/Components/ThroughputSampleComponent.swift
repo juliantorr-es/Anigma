@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// A time-series sample for throughput tracking.
 public struct ThroughputSampleComponent: Component, Codable {

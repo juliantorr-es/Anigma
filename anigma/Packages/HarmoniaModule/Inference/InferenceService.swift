@@ -6,7 +6,7 @@
 //  Abstracts away backend differences and provides constraint-based model selection.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaCore
 
 // MARK: - Inference Service

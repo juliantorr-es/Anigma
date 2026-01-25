@@ -8,7 +8,8 @@
 //
 
 import AnigmaPrimitives
-import Foundation
+import ContractsCore
+@preconcurrency import Foundation
 
 // MARK: - Governance Event Protocol
 

@@ -66,17 +66,13 @@ public enum LSPResult: Codable, Sendable {
         case .definition(let result):
             try container.encode(LSPResultValue(result), forKey: .result)
         case .references(let locations):
-            let locationsData = try JSONEncoder().encode(locations)
-            let locationsValue = try JSONSerialization.jsonObject(with: locationsData) as? [Any]
-            try container.encode(LSPResultValue(arrayValue: locationsValue), forKey: .result)
+            try container.encode(LSPResultValue(locations), forKey: .result)
         case .hover(let result):
             try container.encode(LSPResultValue(result), forKey: .result)
         case .completion(let result):
             try container.encode(LSPResultValue(result), forKey: .result)
         case .documentSymbol(let symbols):
-            let symbolsData = try JSONEncoder().encode(symbols)
-            let symbolsValue = try JSONSerialization.jsonObject(with: symbolsData) as? [Any]
-            try container.encode(LSPResultValue(arrayValue: symbolsValue), forKey: .result)
+            try container.encode(LSPResultValue(symbols), forKey: .result)
         case .completionItemResolve(let item):
             try container.encode(LSPResultValue(item), forKey: .result)
         case .none:
@@ -85,23 +81,96 @@ public enum LSPResult: Codable, Sendable {
     }
 }
 
+// AnyEncodable and AnyDecodable removed in favor of AnyCodable from LSPMessageTypes.swift
+
 public struct LSPResultValue: Codable, Sendable {
     public let isNull: Bool
-    public let arrayValue: [Any]?
-    public let dictionaryValue: [String: Any]?
+    public let arrayValue: [AnyCodable]?
+    public let dictionaryValue: [String: AnyCodable]?
 
-    public init(isNull: Bool = false, arrayValue: [Any]? = nil, dictionaryValue: [String: Any]? = nil) {
+    public init(isNull: Bool = false, arrayValue: [AnyCodable]? = nil, dictionaryValue: [String: AnyCodable]? = nil) {
         self.isNull = isNull
         self.arrayValue = arrayValue
         self.dictionaryValue = dictionaryValue
     }
 
     public init<T: Encodable>(_ value: T) {
-        let data = try! JSONEncoder().encode(AnyEncodable(value))
-        let decoded = try! JSONDecoder().decode([String: AnyCodable].self, from: data)
-        self.dictionaryValue = decoded.mapValues { $0.value }
-        self.arrayValue = nil
-        self.isNull = false
+        // Use AnyCodable
+        let anyVal = AnyCodable(value)
+        // To properly structure it as dictionary or array for LSPResultValue, we check the type
+        let data = try! JSONEncoder().encode(anyVal)
+        if let dict = try? JSONDecoder().decode([String: AnyCodable].self, from: data) {
+            self.dictionaryValue = dict
+            self.arrayValue = nil
+            self.isNull = false
+        } else if let arr = try? JSONDecoder().decode([AnyCodable].self, from: data) {
+            self.dictionaryValue = nil
+            self.arrayValue = arr
+            self.isNull = false
+        } else {
+             self.dictionaryValue = nil
+             self.arrayValue = nil
+             self.isNull = false
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        if isNull {
+            try container.encodeNil()
+        } else if let arrayValue = arrayValue {
+            try container.encode(arrayValue)
+        } else if let dictionaryValue = dictionaryValue {
+            try container.encode(dictionaryValue)
+        } else {
+            try container.encodeNil()
+        }
+    }
+}
+
+
+public struct ServerCapabilities: Codable, Sendable {
+    public let textDocumentSync: TextDocumentSyncOptions?
+    public let completionProvider: CompletionOptions?
+    public let hoverProvider: Bool?
+    public let definitionProvider: Bool?
+    public let referencesProvider: Bool?
+    public let documentSymbolProvider: Bool?
+
+    public init(
+        textDocumentSync: TextDocumentSyncOptions? = nil,
+        completionProvider: CompletionOptions? = nil,
+        hoverProvider: Bool? = nil,
+        definitionProvider: Bool? = nil,
+        referencesProvider: Bool? = nil,
+        documentSymbolProvider: Bool? = nil
+    ) {
+        self.textDocumentSync = textDocumentSync
+        self.completionProvider = completionProvider
+        self.hoverProvider = hoverProvider
+        self.definitionProvider = definitionProvider
+        self.referencesProvider = referencesProvider
+        self.documentSymbolProvider = documentSymbolProvider
+    }
+}
+
+public struct CompletionOptions: Codable, Sendable {
+    public let resolveProvider: Bool?
+    public let triggerCharacters: [String]?
+
+    public init(resolveProvider: Bool? = nil, triggerCharacters: [String]? = nil) {
+        self.resolveProvider = resolveProvider
+        self.triggerCharacters = triggerCharacters
+    }
+}
+
+public struct ServerInfo: Codable, Sendable {
+    public let name: String
+    public let version: String?
+
+    public init(name: String, version: String? = nil) {
+        self.name = name
+        self.version = version
     }
 }
 
@@ -363,77 +432,4 @@ public struct TextEdit: Codable, Sendable {
 
 // MARK: - Generic Types
 
-public struct AnyEncodable: Codable {
-    public let value: Any
-
-    public init<T: Encodable>(_ value: T) {
-        self.value = value
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        if let intValue = try? container.decode(Int.self) {
-            value = intValue
-        } else if let stringValue = try? container.decode(String.self) {
-            value = stringValue
-        } else if let doubleValue = try? container.decode(Double.self) {
-            value = doubleValue
-        } else if let boolValue = try? container.decode(Bool.self) {
-            value = boolValue
-        } else if let arrayValue = try? container.decode([AnyDecodable].self) {
-            value = arrayValue.map { $0.value }
-        } else if let dictValue = try? container.decode([String: AnyDecodable].self) {
-            value = dictValue.mapValues { $0.value }
-        } else {
-            value = NSNull()
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-
-        switch value {
-        case let intValue as Int:
-            try container.encode(intValue)
-        case let stringValue as String:
-            try container.encode(stringValue)
-        case let doubleValue as Double:
-            try container.encode(doubleValue)
-        case let boolValue as Bool:
-            try container.encode(boolValue)
-        case let arrayValue as [Any]:
-            let encodableArray = arrayValue.map { AnyEncodable($0) }
-            try container.encode(encodableArray)
-        case let dictValue as [String: Any]:
-            let encodableDict = dictValue.mapValues { AnyEncodable($0) }
-            try container.encode(encodableDict)
-        default:
-            try container.encodeNil()
-        }
-    }
-}
-
-public struct AnyDecodable: Codable {
-    public let value: Any
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        if let intValue = try? container.decode(Int.self) {
-            value = intValue
-        } else if let stringValue = try? container.decode(String.self) {
-            value = stringValue
-        } else if let doubleValue = try? container.decode(Double.self) {
-            value = doubleValue
-        } else if let boolValue = try? container.decode(Bool.self) {
-            value = boolValue
-        } else if let arrayValue = try? container.decode([AnyDecodable].self) {
-            value = arrayValue.map { $0.value }
-        } else if let dictValue = try? container.decode([String: AnyDecodable].self) {
-            value = dictValue.mapValues { $0.value }
-        } else {
-            value = NSNull()
-        }
-    }
-}
+// AnyEncodable/AnyDecodable removed

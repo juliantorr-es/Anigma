@@ -7,7 +7,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Represents a concurrency slot for a specific model kind.
 public struct SlotComponent: Component, Codable {

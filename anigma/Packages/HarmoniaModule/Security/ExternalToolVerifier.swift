@@ -5,8 +5,8 @@
 //  Verifies external tool binaries against a trusted list.
 //
 
-import Foundation
-import CryptoKit
+@preconcurrency import Foundation
+@preconcurrency import CryptoKit
 import AnigmaCore
 
 public struct TrustedTool: Codable, Sendable {

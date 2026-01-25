@@ -7,7 +7,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Performance metrics for a model
 public struct ModelPerformanceMetrics: Sendable, Codable {
@@ -233,8 +233,9 @@ public actor ModelPerformanceTracker {
 
         let latencyPercentiles = computePercentiles(values: latencyMeasurements)
         let throughputPercentiles = computePercentiles(values: throughputMeasurements)
-        let latencyMetrics = latencyPercentiles
+        let latencyMetrics: InferenceLatencyMetrics = latencyPercentiles
         let throughputMetrics = ThroughputMetrics(
+
             p50: throughputPercentiles.p50,
             p95: throughputPercentiles.p95,
             p99: throughputPercentiles.p99,
@@ -284,7 +285,7 @@ public actor ModelPerformanceTracker {
             let baselineMean = baselineValues.reduce(0, +) / Double(baselineValues.count)
             let recentMean = recentValues.reduce(0, +) / Double(recentValues.count)
 
-            let percentChange = abs((recentMean - baselineMean) / baselineMean)
+            let percentChange = Swift.abs((recentMean - baselineMean) / baselineMean)
 
             if percentChange > threshold {
                 let isRegression = (metric == "latency" || metric == "memory") ? recentMean > baselineMean : recentMean < baselineMean
@@ -456,7 +457,7 @@ public actor ModelPerformanceTracker {
 
         let change = (secondMean - firstMean) / firstMean
 
-        if abs(change) < 0.05 {
+        if Swift.abs(change) < 0.05 {
             return "stable"
         } else if change > 0 {
             return "degrading"

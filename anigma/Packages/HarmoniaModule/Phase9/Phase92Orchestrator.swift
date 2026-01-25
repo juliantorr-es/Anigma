@@ -8,7 +8,7 @@
 
 import AnigmaPrimitives
 import DatabaseCore
-import Foundation
+@preconcurrency import Foundation
 
 /// Phase 9.2 orchestrator with concurrent execution support.
 /// Maintains all Phase 9.1 guarantees while enabling parallel processing.

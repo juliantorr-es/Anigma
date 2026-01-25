@@ -6,7 +6,7 @@
 //  Detects first divergence point and provides surgical failure diagnostics.
 //
 
-import Foundation
+@preconcurrency import Foundation
 
 /// Comparator for stage artifacts with byte-level divergence detection.
 /// Produces surgical failure reports showing exact bytes where determinism broke.
@@ -79,9 +79,10 @@ public struct StageArtifactComparator {
             totalVerifiedBytes: totalBytes,
             timestamp: 0
         )
-
-
-
+        
+        return .pass(artifact)
+    }
+    
     /// Find the first byte offset where two payloads differ.
     /// Returns -1 if payloads are identical.
     private func findFirstDiffOffset(expected: Data, actual: Data) -> Int {
@@ -181,10 +182,6 @@ public struct StageArtifactComparator {
         // Default unknown
         return "unknown"
     }
-}
-
-/// Extension for comparing single payloads efficiently.
-extension StageArtifactComparator {
 
     /// Quick comparison of two payloads without full artifact wrapping.
     public func comparePayloads(_ expected: Data, _ actual: Data) -> PayloadComparisonResult {

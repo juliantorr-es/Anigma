@@ -6,7 +6,7 @@
 //
 
 import AnigmaCore
-import Foundation
+@preconcurrency import Foundation
 
 // MARK: - Harmonia Workflow Catalog
 

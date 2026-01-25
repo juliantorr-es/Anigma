@@ -6,7 +6,7 @@
 //  Checks for strict concurrency, Sendable conformance, data races, best practices, and more.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import AnigmaPrimitives
 
 /// Result of Swift code validation
