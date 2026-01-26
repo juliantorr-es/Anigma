@@ -19,10 +19,16 @@ PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
 
 run_gate() {
     local gate_name=$1
-    if [ -z "$GATE_TO_RUN" ] || [ "$GATE_TO_RUN" == "$gate_name" ]; then
-        return 0 # Should run
+    if [ -n "$GATE_TO_RUN" ]; then
+        if [ "$GATE_TO_RUN" == "$gate_name" ]; then
+            return 0 # Should run
+        fi
+        return 1 # Should skip
     fi
-    return 1 # Should skip
+    if [ "$gate_name" == "GATE_STRICT_CONCURRENCY" ] && [ -z "$GATE_STRICT_CONCURRENCY" ]; then
+        return 1 # Strict concurrency gate disabled unless requested
+    fi
+    return 0 # Should run
 }
 
 echo "=========================================================="
@@ -232,6 +238,22 @@ if run_gate "GATE_TEST_COVERAGE"; then
     fi
 
     echo "✅ Test coverage/count requirements met."
+fi
+
+# 6. GATE_STRICT_CONCURRENCY
+if run_gate "GATE_STRICT_CONCURRENCY"; then
+    echo "🔍 [GATE_STRICT_CONCURRENCY] Enforcing strict concurrency..."
+    TIER=$(grep -E "^tier =" "$CAPSULE_PATH/MANIFEST.toml" | cut -d'=' -f2 | tr -d ' ')
+    if [ "$TIER" -ne 5 ] && [ "$TIER" -ne 3 ]; then
+        echo "   Skipping strict concurrency for Tier $TIER capsules."
+    else
+        echo "   Running swift build with strict concurrency for Tier $TIER..."
+        (cd "$CAPSULE_PATH" && swift build -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors) || {
+            echo "❌ Error: Strict concurrency build failed for $CAPSULE_NAME"
+            exit 1
+        }
+        echo "✅ Strict concurrency build passed."
+    fi
 fi
 
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Shims/include/anigma_render_plan.h"
-#include "../../Shims/include/anigma_kernel_abi.h"
+#include "anigma_render_plan.h"
+#include "anigma_kernel_abi.h"
 #include <vector>
 #include <map>
 #include <memory>

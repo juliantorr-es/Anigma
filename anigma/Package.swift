@@ -159,6 +159,9 @@ let nativeTargets: [Target] = [
         name: "PDFNative",
         path: "Packages/PDFCapsule/Sources/PDFNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .headerSearchPath("../../../../Vendor/include")
@@ -226,10 +229,12 @@ let nativeTargets: [Target] = [
         ],
         publicHeadersPath: "include",
         cSettings: [
+            .headerSearchPath("include"),
             .headerSearchPath("../../Vendor/include"),
             .define("ANIGMA_CAPSULE_IMPLEMENTATION")
         ],
         cxxSettings: [
+            .headerSearchPath("include"),
             .define("ANIGMA_CAPSULE_IMPLEMENTATION"),
             .unsafeFlags(["-Wno-everything"])
         ],
@@ -257,6 +262,9 @@ let nativeTargets: [Target] = [
         name: "CompressionNative",
         path: "Packages/CompressionKit/Sources/CompressionNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .unsafeFlags(["-I/opt/homebrew/include"])
@@ -280,12 +288,29 @@ let nativeTargets: [Target] = [
         name: "TextChunkingNative",
         path: "Packages/TextChunkingCapsule/Sources/TextChunkingNative",
         publicHeadersPath: "include",
-        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
+        cSettings: [
+            .headerSearchPath("include")
+        ],
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("avcodec"),
+            .linkedLibrary("avformat"),
+            .linkedLibrary("avutil"),
+            .linkedLibrary("swscale"),
+            .linkedLibrary("swresample")
+        ]
     ),
     .target(
         name: "LayoutEngineNative",
         path: "Packages/LayoutEngineCapsule/Sources/LayoutEngineNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .headerSearchPath("../../../../Vendor/include")
@@ -301,7 +326,21 @@ let nativeTargets: [Target] = [
         name: "MediaFingerprintNative",
         path: "Packages/MediaFingerprintCapsule/Sources/MediaFingerprintNative",
         publicHeadersPath: "include",
-        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
+        cSettings: [
+            .headerSearchPath("include")
+        ],
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("avcodec"),
+            .linkedLibrary("avformat"),
+            .linkedLibrary("avutil"),
+            .linkedLibrary("swscale"),
+            .linkedLibrary("swresample")
+        ]
     ),
     .target(
         name: "MediaContainerNative",
@@ -314,6 +353,9 @@ let nativeTargets: [Target] = [
         dependencies: ["CClipper2"],
         path: "Packages/VectorCapsule/Sources/VectorNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .headerSearchPath("../../../CClipper2")
@@ -323,6 +365,9 @@ let nativeTargets: [Target] = [
         name: "TextPipelineNative",
         path: "Packages/TextPipelineCapsule/Sources/TextPipelineNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .unsafeFlags(["-I/opt/homebrew/opt/icu4c/include"])
@@ -337,30 +382,89 @@ let nativeTargets: [Target] = [
         name: "VectorIndexNative",
         path: "Packages/VectorIndexCapsule/Sources/VectorIndexNative",
         publicHeadersPath: "include",
-        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
+        cSettings: [
+            .headerSearchPath("include")
+        ],
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("avcodec"),
+            .linkedLibrary("avformat"),
+            .linkedLibrary("avutil"),
+            .linkedLibrary("swscale"),
+            .linkedLibrary("swresample")
+        ]
     ),
     .target(
         name: "CosineNative",
         path: "Packages/CosineSimilarityCapsule/Sources/CosineNative",
         publicHeadersPath: "include",
-        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
+        cSettings: [
+            .headerSearchPath("include")
+        ],
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("avcodec"),
+            .linkedLibrary("avformat"),
+            .linkedLibrary("avutil"),
+            .linkedLibrary("swscale"),
+            .linkedLibrary("swresample")
+        ]
     ),
     .target(
         name: "RankFusionNative",
         path: "Packages/RankFusionCapsule/Sources/RankFusionNative",
         publicHeadersPath: "include",
-        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
+        cSettings: [
+            .headerSearchPath("include")
+        ],
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("avcodec"),
+            .linkedLibrary("avformat"),
+            .linkedLibrary("avutil"),
+            .linkedLibrary("swscale"),
+            .linkedLibrary("swresample")
+        ]
     ),
     .target(
         name: "SceneGraphNative",
         path: "Packages/SceneGraphCapsule/Sources/SceneGraphNative",
         publicHeadersPath: "include",
-        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
+        cSettings: [
+            .headerSearchPath("include")
+        ],
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("avcodec"),
+            .linkedLibrary("avformat"),
+            .linkedLibrary("avutil"),
+            .linkedLibrary("swscale"),
+            .linkedLibrary("swresample")
+        ]
     ),
     .target(
         name: "RenderPlanNative",
         path: "Packages/RenderPlanCapsule/Sources/RenderPlanNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .headerSearchPath("../../../SceneGraphCapsule/Sources/SceneGraphNative/include")
@@ -371,6 +475,9 @@ let nativeTargets: [Target] = [
         dependencies: ["SceneGraphNative"],
         path: "Packages/HitTestCapsule/Sources/HitTestNative",
         publicHeadersPath: "include",
+        cSettings: [
+            .headerSearchPath("include")
+        ],
         cxxSettings: [
             .headerSearchPath("include"),
             .headerSearchPath("../../../SceneGraphCapsule/Sources/SceneGraphNative/include")

@@ -3,7 +3,7 @@
 // Part of the Anigma project
 
 import Foundation
-import MediaFingerprintNative
+@preconcurrency import MediaFingerprintNative
 import CapsuleCore
 
 // MARK: - Error Types
@@ -19,21 +19,21 @@ public enum MediaFingerprintError: Error, Sendable, CustomStringConvertible {
     case notImplemented
     case unknownError(Int32)
     
-    init(code: amfp_error_t) {
+    init(code: MediaFingerprintNativeBridge.ErrorCode) {
         switch code {
-        case AMFP_ERROR_NULL_POINTER:
+        case MediaFingerprintNativeBridge.errorNullPointer:
             self = .nullPointer
-        case AMFP_ERROR_INVALID_DIMENSIONS:
+        case MediaFingerprintNativeBridge.errorInvalidDimensions:
             self = .invalidDimensions
-        case AMFP_ERROR_DECODE_FAILED:
+        case MediaFingerprintNativeBridge.errorDecodeFailed:
             self = .decodeFailed
-        case AMFP_ERROR_MEMORY_ALLOCATION:
+        case MediaFingerprintNativeBridge.errorMemoryAllocation:
             self = .memoryAllocation
-        case AMFP_ERROR_INVALID_FORMAT:
+        case MediaFingerprintNativeBridge.errorInvalidFormat:
             self = .invalidFormat
-        case AMFP_ERROR_BUFFER_TOO_SMALL:
+        case MediaFingerprintNativeBridge.errorBufferTooSmall:
             self = .bufferTooSmall
-        case AMFP_ERROR_NOT_IMPLEMENTED:
+        case MediaFingerprintNativeBridge.errorNotImplemented:
             self = .notImplemented
         default:
             self = .unknownError(code.rawValue)
@@ -82,13 +82,13 @@ public struct PerceptualHash64: Sendable, Hashable, Codable, CustomStringConvert
     
     /// Compute Hamming distance to another hash
     public func hammingDistance(to other: PerceptualHash64) -> Int {
-        Int(amfp_hamming_distance_64(value, other.value))
+        Int(MediaFingerprintNativeBridge.hammingDistance64(value, other.value))
     }
     
     /// Compute similarity score (0.0 to 1.0)
     public func similarity(to other: PerceptualHash64) -> Float {
         let distance = hammingDistance(to: other)
-        return amfp_similarity_from_distance(UInt32(distance), 64)
+        return MediaFingerprintNativeBridge.similarityFromDistance(UInt32(distance), bits: 64)
     }
     
     /// Check if similar within threshold
@@ -127,13 +127,13 @@ public struct PerceptualHash256: Sendable, Hashable, Codable, CustomStringConver
     public func hammingDistance(to other: PerceptualHash256) -> Int {
         var h1 = self.cHash
         var h2 = other.cHash
-        return Int(amfp_hamming_distance_256(&h1, &h2))
+        return Int(MediaFingerprintNativeBridge.hammingDistance256(&h1, &h2))
     }
     
     /// Compute similarity score (0.0 to 1.0)
     public func similarity(to other: PerceptualHash256) -> Float {
         let distance = hammingDistance(to: other)
-        return amfp_similarity_from_distance(UInt32(distance), 256)
+        return MediaFingerprintNativeBridge.similarityFromDistance(UInt32(distance), bits: 256)
     }
     
     // Codable conformance for tuple
@@ -194,7 +194,7 @@ public struct AudioFingerprint: Sendable {
         
         var fp1 = toCFingerprint()
         var fp2 = other.toCFingerprint()
-        return amfp_audio_fingerprint_similarity(&fp1, &fp2)
+        return MediaFingerprintNativeBridge.audioFingerprintSimilarity(&fp1, &fp2)
     }
     
     func toCFingerprint() -> amfp_audio_fingerprint_t {
@@ -248,7 +248,7 @@ public actor MediaFingerprintCapsule {
     
     /// Library version
     public nonisolated var version: String {
-        String(cString: amfp_version())
+        String(cString: MediaFingerprintNativeBridge.version())
     }
     
     // MARK: - Initialization
@@ -276,16 +276,16 @@ public actor MediaFingerprintCapsule {
                 
                 switch algorithm {
                 case .pHash:
-                    result = amfp_phash_from_encoded(ptr, buffer.count, &hash)
+                    result = MediaFingerprintNativeBridge.phashFromEncoded(ptr, buffer.count, &hash)
                 case .dHash:
-                    result = amfp_dhash_from_encoded(ptr, buffer.count, &hash)
+                    result = MediaFingerprintNativeBridge.dhashFromEncoded(ptr, buffer.count, &hash)
                 case .pHash256:
                     // For 256-bit, use separate method
                     continuation.resume(throwing: MediaFingerprintError.invalidFormat)
                     return
                 }
                 
-                if result == AMFP_SUCCESS {
+                if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: PerceptualHash64(hash))
                 } else {
                     continuation.resume(throwing: MediaFingerprintError(code: result))
@@ -339,17 +339,27 @@ public actor MediaFingerprintCapsule {
                 
                 switch algorithm {
                 case .pHash:
-                    result = amfp_phash_from_grayscale(ptr, UInt32(width), UInt32(height), 
-                                                       UInt32(pixelStride), &hash)
+                    result = MediaFingerprintNativeBridge.phashFromGrayscale(
+                        ptr,
+                        width: UInt32(width),
+                        height: UInt32(height),
+                        stride: UInt32(pixelStride),
+                        hash: &hash
+                    )
                 case .dHash:
-                    result = amfp_dhash_from_grayscale(ptr, UInt32(width), UInt32(height),
-                                                       UInt32(pixelStride), &hash)
+                    result = MediaFingerprintNativeBridge.dhashFromGrayscale(
+                        ptr,
+                        width: UInt32(width),
+                        height: UInt32(height),
+                        stride: UInt32(pixelStride),
+                        hash: &hash
+                    )
                 case .pHash256:
                     continuation.resume(throwing: MediaFingerprintError.invalidFormat)
                     return
                 }
                 
-                if result == AMFP_SUCCESS {
+                if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: PerceptualHash64(hash))
                 } else {
                     continuation.resume(throwing: MediaFingerprintError(code: result))
@@ -376,10 +386,15 @@ public actor MediaFingerprintCapsule {
                 }
                 
                 var hash = amfp_hash256_t()
-                let result = amfp_phash256_from_grayscale(ptr, UInt32(width), UInt32(height),
-                                                          UInt32(pixelStride), &hash)
+                let result = MediaFingerprintNativeBridge.phash256FromGrayscale(
+                    ptr,
+                    width: UInt32(width),
+                    height: UInt32(height),
+                    stride: UInt32(pixelStride),
+                    hash: &hash
+                )
                 
-                if result == AMFP_SUCCESS {
+                if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: PerceptualHash256(hash))
                 } else {
                     continuation.resume(throwing: MediaFingerprintError(code: result))
@@ -424,10 +439,14 @@ public actor MediaFingerprintCapsule {
                 }
                 
                 var fp = amfp_audio_fingerprint_t()
-                let result = amfp_audio_fingerprint_from_pcm(ptr, buffer.count,
-                                                             UInt32(sampleRate), &fp)
+                let result = MediaFingerprintNativeBridge.audioFingerprintFromPCM(
+                    ptr,
+                    buffer.count,
+                    UInt32(sampleRate),
+                    &fp
+                )
                 
-                if result == AMFP_SUCCESS {
+                if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: AudioFingerprint(fp))
                 } else {
                     continuation.resume(throwing: MediaFingerprintError(code: result))
@@ -460,14 +479,14 @@ public actor MediaFingerprintCapsule {
         let count = candidateValues.withUnsafeBufferPointer { candidateBuffer in
             outIndices.withUnsafeMutableBufferPointer { indicesBuffer in
                 outDistances.withUnsafeMutableBufferPointer { distancesBuffer in
-                    amfp_find_similar_64(
-                        query.value,
-                        candidateBuffer.baseAddress,
-                        candidateBuffer.count,
-                        UInt32(maxDistance),
-                        indicesBuffer.baseAddress,
-                        distancesBuffer.baseAddress,
-                        maxResults
+                    MediaFingerprintNativeBridge.findSimilar64(
+                        query: query.value,
+                        candidates: candidateBuffer.baseAddress,
+                        candidateCount: candidateBuffer.count,
+                        maxDistance: UInt32(maxDistance),
+                        indices: indicesBuffer.baseAddress,
+                        distances: distancesBuffer.baseAddress,
+                        maxResults: maxResults
                     )
                 }
             }

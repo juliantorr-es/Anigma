@@ -1,4 +1,4 @@
-#include "../../include/anigma_text_pipeline_capsule.h"
+#include "anigma_text_pipeline_capsule.h"
 #include <cstring>
 #include <algorithm>
 #include <vector>
