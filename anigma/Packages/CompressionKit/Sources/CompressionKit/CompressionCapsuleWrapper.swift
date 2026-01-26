@@ -166,7 +166,7 @@ public actor CompressionCapsule {
             anigma_compression_capsule_create(configPtr, &rawHandle, &error)
         }
         guard status == ANIGMA_OK, let rawHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
 
         self.handle = CapsuleHandle<AnyObject>(
@@ -190,7 +190,7 @@ public actor CompressionCapsule {
             anigma_compression_capsule_validate_config(configPtr, &error)
         }
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
     }
 
@@ -201,7 +201,7 @@ public actor CompressionCapsule {
         let status = try operation(nil, &error)
         
         guard status == ANIGMA_ERR_BUFFER_TOO_SMALL else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         
         var buffer = CapsuleBuffer(callerAllocatedOutput: Int(error.aux))
@@ -210,7 +210,7 @@ public actor CompressionCapsule {
         }
         
         guard fillStatus == ANIGMA_OK else {
-            throw CapsuleError(status: fillStatus, error: error)
+            throw CapsuleNativeError(status: fillStatus, error: error)
         }
         
         return buffer
@@ -229,7 +229,7 @@ public actor CompressionCapsule {
                 &error
             )
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw CapsuleNativeError(status: status, error: error)
             }
         }
 
@@ -246,7 +246,7 @@ public actor CompressionCapsule {
         try handle.withHandle { rawHandle in
             let status = anigma_compression_capsule_release_buffer(rawHandle, &nativeBuf, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw CapsuleNativeError(status: status, error: error)
             }
         }
         buffer.markReleased()
@@ -265,7 +265,7 @@ public actor CompressionCapsule {
                 &error
             )
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw CapsuleNativeError(status: status, error: error)
             }
         }
 
@@ -316,12 +316,12 @@ public actor CompressionCapsule {
                 &error
             )
             guard status == ANIGMA_OK, let _ = rawStreamHandle else {
-                throw CapsuleError(status: status, error: error)
+                throw CapsuleNativeError(status: status, error: error)
             }
         }
 
         guard let rawStreamHandle = rawStreamHandle else {
-            throw CapsuleError(status: ANIGMA_ERR_INTERNAL, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: ANIGMA_ERR_INTERNAL, error: anigma_capsule_error_t())
         }
 
         return CompressionStreamHandle(rawHandle: rawStreamHandle, capsule: self)
@@ -339,12 +339,12 @@ public actor CompressionCapsule {
                 &error
             )
             guard status == ANIGMA_OK, let _ = rawStreamHandle else {
-                throw CapsuleError(status: status, error: error)
+                throw CapsuleNativeError(status: status, error: error)
             }
         }
 
         guard let rawStreamHandle = rawStreamHandle else {
-            throw CapsuleError(status: ANIGMA_ERR_INTERNAL, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: ANIGMA_ERR_INTERNAL, error: anigma_capsule_error_t())
         }
 
         return CompressionStreamHandle(rawHandle: rawStreamHandle, capsule: self)
@@ -399,7 +399,7 @@ public actor CompressionCapsule {
                      &error
                  )
                 guard status == ANIGMA_OK else {
-                    throw CapsuleError(status: status, error: error)
+                    throw CapsuleNativeError(status: status, error: error)
                 }
             }
         }
@@ -441,7 +441,7 @@ public final class CompressionStreamHandle {
                     return anigma_compression_capsule_compress_stream(rawHandle, nil, outputDesc, flush, &error)
                 }
                 guard status == ANIGMA_OK else {
-                    throw CapsuleError(status: status, error: error)
+                    throw CapsuleNativeError(status: status, error: error)
                 }
                 return buffer.toData()
             }
@@ -452,7 +452,7 @@ public final class CompressionStreamHandle {
             anigma_compression_capsule_compress_stream(rawHandle, nil, outputDesc, flush, &error)
         }
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         return buffer.toData()
     }
@@ -474,7 +474,7 @@ public final class CompressionStreamHandle {
                     return anigma_compression_capsule_decompress_stream(rawHandle, nil, outputDesc, &error)
                 }
                 guard status == ANIGMA_OK else {
-                    throw CapsuleError(status: status, error: error)
+                    throw CapsuleNativeError(status: status, error: error)
                 }
                 return buffer.toData()
             }
@@ -485,7 +485,7 @@ public final class CompressionStreamHandle {
             anigma_compression_capsule_decompress_stream(rawHandle, nil, outputDesc, &error)
         }
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         return buffer.toData()
     }

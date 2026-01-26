@@ -20,7 +20,7 @@ public final class CosineSimilarityCapsuleWrapper {
         
         let status = anigma_cosine_similarity_capsule_create(&rawHandle, &error)
         guard status == ANIGMA_OK, let rawHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
@@ -42,7 +42,7 @@ public final class CosineSimilarityCapsuleWrapper {
         simd: anigma_cosine_simd_t = ANIGMA_COSINE_SIMD_AUTO
     ) throws -> Float {
         guard query.count == candidate.count else {
-            throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
         }
         
         var layout = anigma_cosine_vector_layout_t(
@@ -72,7 +72,7 @@ public final class CosineSimilarityCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         
         return result
@@ -95,7 +95,7 @@ public final class CosineSimilarityCapsuleWrapper {
         flattenedCandidates.reserveCapacity(count * dimension)
         for cand in candidates {
             guard cand.count == dimension else {
-                throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
+                throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
             }
             flattenedCandidates.append(contentsOf: cand)
         }
@@ -134,7 +134,7 @@ public final class CosineSimilarityCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         
         return results
@@ -153,10 +153,10 @@ public final class CosineSimilarityCapsuleWrapper {
         
         // Validate dimensions
         for q in queries {
-            guard q.count == dimension else { throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
+            guard q.count == dimension else { throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
         }
         for c in candidates {
-            guard c.count == dimension else { throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
+            guard c.count == dimension else { throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
         }
         
         // Flatten inputs
@@ -194,7 +194,7 @@ public final class CosineSimilarityCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         
         return results

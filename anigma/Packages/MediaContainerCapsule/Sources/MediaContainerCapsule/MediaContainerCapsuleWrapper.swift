@@ -234,7 +234,7 @@ public enum AudioCodec: UInt32, Sendable {
     case pcmF32LE = 7
 }
 
-private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleNativeError {
     let message = error.message.map { String(cString: $0) } ?? "Capsule error"
-    return CapsuleError(status: status, code: error.code, message: message)
+    return CapsuleNativeError(status: status, code: error.code, message: message)
 }

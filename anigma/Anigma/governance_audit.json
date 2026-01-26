@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-01-26T19:38:18Z",
+  "gates": {
+    "swift6": {"status": "failed", "error": "tool missing"},
+    "type_authority": {"status": "failed", "error": "tool missing"},
+    "dependencies": {"status": "failed", "error": "tool missing"},
+    "build_hygiene": {"status": "passed"}
+  },
+  "governance_status": "audited"
+}

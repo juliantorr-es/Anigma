@@ -22,7 +22,7 @@ public final class HitTestCapsule {
         // Create buffer
         let bufferStatus = anigma_hit_test_create_buffer(&results, Int(options.maxResults), nil)
         guard bufferStatus == ANIGMA_OK else {
-            throw CapsuleError(status: bufferStatus, error: error) // error not set by create_buffer usually but we can try
+            throw CapsuleNativeError(status: bufferStatus, error: error) // error not set by create_buffer usually but we can try
         }
         defer { anigma_hit_test_destroy_buffer(&results) }
         
@@ -43,7 +43,7 @@ public final class HitTestCapsule {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw CapsuleNativeError(status: status, error: error)
         }
         
         // Convert results
@@ -63,7 +63,7 @@ public final class HitTestCapsule {
         
         let bufferStatus = anigma_hit_test_create_buffer(&results, Int(options.maxResults), nil)
         guard bufferStatus == ANIGMA_OK else {
-            throw CapsuleError(status: bufferStatus, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: bufferStatus, error: anigma_capsule_error_t())
         }
         defer { anigma_hit_test_destroy_buffer(&results) }
         
@@ -80,7 +80,7 @@ public final class HitTestCapsule {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
         
         var hitResults: [HitResult] = []
@@ -102,7 +102,7 @@ public final class HitTestCapsule {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
         
         return GeometryBounds(from: bounds)

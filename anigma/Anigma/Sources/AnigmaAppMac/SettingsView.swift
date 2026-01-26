@@ -57,7 +57,7 @@ struct GeneralSettingsView: View {
 }
 
 struct DaemonSettingsView: View {
-    @State private var daemonPath: String = "/usr/local/bin/anigmad"
+    @State private var daemonPath: String = "anigmad"
     @State private var port: String = "9876"
     
     var body: some View {

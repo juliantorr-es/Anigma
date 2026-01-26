@@ -14,7 +14,7 @@ public final class VectorStore {
         let status = anigma_vector_store_register(dbHandle, &err)
         
         if status != ANIGMA_OK {
-            throw CapsuleError(status: status, error: err)
+            throw CapsuleNativeError(status: status, error: err)
         }
     }
     

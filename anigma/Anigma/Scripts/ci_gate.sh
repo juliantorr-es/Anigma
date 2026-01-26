@@ -17,6 +17,14 @@ else
     SWIFT6_RES=$(anigma_swift6_check 2>/dev/null || echo "{\"status\": \"failed\", \"error\": \"tool missing\"}")
     TYPE_AUTH_RES=$(anigma_type_authority_check 2>/dev/null || echo "{\"status\": \"failed\", \"error\": \"tool missing\"}")
     DEPS_RES=$(anigma_deps_check 2>/dev/null || echo "{\"status\": \"failed\", \"error\": \"tool missing\"}")
+    
+    echo "Running Build Hygiene Check..."
+    ./scripts/validate_build_hygiene.sh > build_hygiene_log.txt 2>&1
+    if [ $? -eq 0 ]; then
+        HYGIENE_RES="{\"status\": \"passed\"}"
+    else
+        HYGIENE_RES="{\"status\": \"failed\", \"error\": \"Violations found, see build_hygiene_report.txt\"}"
+    fi
 
     cat <<EOF > "$REPORT"
 {
@@ -24,7 +32,8 @@ else
   "gates": {
     "swift6": $SWIFT6_RES,
     "type_authority": $TYPE_AUTH_RES,
-    "dependencies": $DEPS_RES
+    "dependencies": $DEPS_RES,
+    "build_hygiene": $HYGIENE_RES
   },
   "governance_status": "audited"
 }

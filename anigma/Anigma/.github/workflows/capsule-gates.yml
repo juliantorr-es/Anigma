@@ -1,0 +1,76 @@
+name: Capsule CI Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'Packages/**/*'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Packages/**/*'
+
+jobs:
+  GATE_TIER_VALIDATION:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Tier and MANIFEST.toml
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./scripts/validate_gates.sh "$capsule" GATE_TIER_VALIDATION
+            fi
+          done
+
+  GATE_ERROR_MODEL:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Error Model Conformance
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./scripts/validate_gates.sh "$capsule" GATE_ERROR_MODEL
+            fi
+          done
+
+  GATE_DIAGNOSTICS_CONFORMANCE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate No Forbidden Diagnostics
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./scripts/validate_gates.sh "$capsule" GATE_DIAGNOSTICS_CONFORMANCE
+            fi
+          done
+
+  GATE_BUILD_HYGIENE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Build Hygiene
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./scripts/validate_gates.sh "$capsule" GATE_BUILD_HYGIENE
+            fi
+          done
+
+  GATE_TEST_COVERAGE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Test Coverage and Count
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./scripts/validate_gates.sh "$capsule" GATE_TEST_COVERAGE
+            fi
+          done

@@ -1,0 +1,7 @@
+# DEPS.toml - MediaFingerprintCapsule
+
+[accelerate]
+source = "system"
+version = "native"
+reason = "SIMD-accelerated image convolution for perceptual hashing feature extraction"
+build_env = ["macos_14+", "ios_17+"]

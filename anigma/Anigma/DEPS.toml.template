@@ -1,0 +1,16 @@
+# DEPS.toml - External Dependencies Template
+# Copy this to your package root and rename to DEPS.toml
+
+# [dependency_name]
+# source = "system" | "swiftpm" | "system_or_swiftpm"
+# version = "X.Y.Z+"
+# reason = "Detailed explanation of why this is needed"
+# build_env = ["macos_13+", "linux_x86_64"]
+# install_macos = "brew install ..."
+# install_linux = "sudo apt-get install ..."
+
+[example_lib]
+source = "system_or_swiftpm"
+version = "1.0.0+"
+reason = "Provides core functionality for [CapsuleName]"
+build_env = ["macos_13+", "linux_x86_64"]

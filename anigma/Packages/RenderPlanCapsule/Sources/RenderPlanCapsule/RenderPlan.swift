@@ -15,7 +15,7 @@ public final class RenderPlanBuilder {
         
         guard status == ANIGMA_OK else {
             builderPtr.deallocate()
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
     }
     
@@ -27,15 +27,15 @@ public final class RenderPlanBuilder {
     }
     
     public func addClear(layerId: UInt32, color: ResourceRef) throws {
-        guard let builder = builderPtr.pointee else { throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
+        guard let builder = builderPtr.pointee else { throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
         let status = anigma_render_plan_builder_add_clear(builder, layerId, color.toCStruct())
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
     }
     
     public func addRect(layerId: UInt32, rect: Rect, transform: Transform2D, material: ResourceRef) throws {
-        guard let builder = builderPtr.pointee else { throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
+        guard let builder = builderPtr.pointee else { throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
         var cRect = rect.toCStruct()
         
         var cTransform = anigma_affine_i32_t()
@@ -53,18 +53,18 @@ public final class RenderPlanBuilder {
         
         let status = anigma_render_plan_builder_add_rect(builder, layerId, &cRect, &cTransform, &cMaterial)
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
     }
     
     public func build() throws -> RenderPlan {
-        guard let builder = builderPtr.pointee else { throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
+        guard let builder = builderPtr.pointee else { throw CapsuleNativeError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t()) }
         var planPtr: anigma_render_plan_t? = nil
         
         let status = anigma_render_plan_build(builder, &planPtr)
         
         guard status == ANIGMA_OK, let plan = planPtr else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
         
         return RenderPlan(handle: plan)
@@ -85,7 +85,7 @@ public final class RenderPlan {
     public func computeHash() throws {
         let status = anigma_render_plan_compute_hash(handle)
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
     }
     
@@ -98,7 +98,7 @@ public final class RenderPlan {
         }
         
         guard status == ANIGMA_OK, let plan = planPtr else {
-            throw CapsuleError(status: status, error: anigma_capsule_error_t())
+            throw CapsuleNativeError(status: status, error: anigma_capsule_error_t())
         }
         
         return RenderPlan(handle: plan)

@@ -282,9 +282,9 @@ public struct ReadingOrder: Sendable, Codable {
     public let elementIds: [UInt32]
 }
 
-private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleNativeError {
     let message = error.message.map { String(cString: $0) } ?? "Capsule error"
-    return CapsuleError(status: status, code: error.code, message: message)
+    return CapsuleNativeError(status: status, code: error.code, message: message)
 }
 
 private func capsuleDestroyer(

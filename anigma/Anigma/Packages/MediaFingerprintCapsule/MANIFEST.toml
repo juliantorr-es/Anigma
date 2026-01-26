@@ -1,0 +1,10 @@
+[capsule]
+name = "MediaFingerprintCapsule"
+tier = 5
+description = "High-performance media fingerprinting for content integrity"
+owner = "Core Team"
+
+[requirements]
+minimum_coverage = 80
+minimum_tests = 15
+allowed_errors = ["CapsuleError"]

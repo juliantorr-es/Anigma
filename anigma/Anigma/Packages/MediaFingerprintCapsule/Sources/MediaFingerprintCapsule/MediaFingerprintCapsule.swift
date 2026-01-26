@@ -4,6 +4,7 @@
 
 import Foundation
 import MediaFingerprintNative
+import CapsuleCore
 
 // MARK: - Error Types
 
@@ -136,7 +137,7 @@ public struct PerceptualHash256: Sendable, Hashable, Codable, CustomStringConver
     }
     
     // Codable conformance for tuple
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws /* CapsuleError */ {
         var container = try decoder.unkeyedContainer()
         let p0 = try container.decode(UInt64.self)
         let p1 = try container.decode(UInt64.self)
@@ -145,7 +146,7 @@ public struct PerceptualHash256: Sendable, Hashable, Codable, CustomStringConver
         self.parts = (p0, p1, p2, p3)
     }
     
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws /* CapsuleError */ {
         var container = encoder.unkeyedContainer()
         try container.encode(parts.0)
         try container.encode(parts.1)
@@ -261,7 +262,8 @@ public actor MediaFingerprintCapsule {
     ///   - data: Encoded image data
     ///   - algorithm: Hash algorithm to use (default: pHash)
     /// - Returns: 64-bit perceptual hash
-    public func hash(imageData data: Data, algorithm: HashAlgorithm = .pHash) async throws -> PerceptualHash64 {
+    /// - Throws: CapsuleError
+    public func hash(imageData data: Data, algorithm: HashAlgorithm = .pHash) async throws /* CapsuleError */ -> PerceptualHash64 {
         try await withCheckedThrowingContinuation { continuation in
             data.withUnsafeBytes { buffer in
                 guard let ptr = buffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else {
@@ -295,7 +297,8 @@ public actor MediaFingerprintCapsule {
     /// Compute extended 256-bit hash from encoded image data
     /// - Parameter data: Encoded image data
     /// - Returns: 256-bit perceptual hash
-    public func hash256(imageData data: Data) async throws -> PerceptualHash256 {
+    /// - Throws: CapsuleError
+    public func hash256(imageData data: Data) async throws /* CapsuleError */ -> PerceptualHash256 {
         // Decode and compute from grayscale internally
         // For now, use pHash as base and extend
         let hash64 = try await hash(imageData: data, algorithm: .pHash)
@@ -314,13 +317,14 @@ public actor MediaFingerprintCapsule {
     ///   - stride: Bytes per row (usually == width)
     ///   - algorithm: Hash algorithm
     /// - Returns: 64-bit perceptual hash
+    /// - Throws: CapsuleError
     public func hash(
         grayscalePixels pixels: Data,
         width: Int,
         height: Int,
         stride: Int? = nil,
         algorithm: HashAlgorithm = .pHash
-    ) async throws -> PerceptualHash64 {
+    ) async throws /* CapsuleError */ -> PerceptualHash64 {
         let pixelStride = stride ?? width
         
         return try await withCheckedThrowingContinuation { continuation in
@@ -355,12 +359,13 @@ public actor MediaFingerprintCapsule {
     }
     
     /// Compute extended 256-bit hash from raw grayscale pixels
+    /// - Throws: CapsuleError
     public func hash256(
         grayscalePixels pixels: Data,
         width: Int,
         height: Int,
         stride: Int? = nil
-    ) async throws -> PerceptualHash256 {
+    ) async throws /* CapsuleError */ -> PerceptualHash256 {
         let pixelStride = stride ?? width
         
         return try await withCheckedThrowingContinuation { continuation in
@@ -387,12 +392,13 @@ public actor MediaFingerprintCapsule {
     
     /// Compute perceptual hash for a video frame (from raw grayscale)
     /// This is an alias for image hashing optimized for video use cases
+    /// - Throws: CapsuleError
     public func hashVideoFrame(
         grayscalePixels pixels: Data,
         width: Int,
         height: Int,
         stride: Int? = nil
-    ) async throws -> PerceptualHash64 {
+    ) async throws /* CapsuleError */ -> PerceptualHash64 {
         // Use dHash for video frames (faster, good for detecting duplicates)
         try await hash(grayscalePixels: pixels, width: width, height: height,
                        stride: stride, algorithm: .dHash)
@@ -405,10 +411,11 @@ public actor MediaFingerprintCapsule {
     ///   - samples: Mono float32 PCM samples
     ///   - sampleRate: Sample rate in Hz
     /// - Returns: Audio fingerprint
+    /// - Throws: CapsuleError
     public func fingerprint(
         audioSamples samples: [Float],
         sampleRate: Int
-    ) async throws -> AudioFingerprint {
+    ) async throws /* CapsuleError */ -> AudioFingerprint {
         try await withCheckedThrowingContinuation { continuation in
             samples.withUnsafeBufferPointer { buffer in
                 guard let ptr = buffer.baseAddress else {
@@ -526,9 +533,10 @@ public protocol CapsuleLifecycle: Actor {
 }
 
 extension MediaFingerprintCapsule: CapsuleLifecycle {
-    public func activate() async throws {
+    public func activate() async throws /* CapsuleError */ {
         // No initialization needed for this capsule
     }
+
     
     public func deactivate() async {
         // No cleanup needed

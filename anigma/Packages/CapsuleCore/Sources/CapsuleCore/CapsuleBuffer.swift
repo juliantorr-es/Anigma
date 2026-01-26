@@ -121,7 +121,7 @@ public struct CapsuleBuffer: ~Copyable {
     /// - Parameter operation: Closure that performs the capsule operation.
     ///   It receives a buffer descriptor pointer and returns a status code.
     /// - Returns: The filled buffer if successful.
-    /// - Throws: `CapsuleError` if the operation fails.
+    /// - Throws: `CapsuleNativeError` if the operation fails.
     public static func fill(
         _ operation: (UnsafeMutablePointer<anigma_capsule_buffer_t>?) throws -> AnigmaNativeShims.anigma_status_t
     ) throws -> CapsuleBuffer {
@@ -130,7 +130,7 @@ public struct CapsuleBuffer: ~Copyable {
         let queryStatus = try operation(nil)
         
         guard queryStatus == ANIGMA_ERR_BUFFER_TOO_SMALL else {
-            throw CapsuleError(status: queryStatus, error: err)
+            throw CapsuleNativeError(status: queryStatus, error: err)
         }
         
         let requiredSize = err.aux
@@ -142,15 +142,15 @@ public struct CapsuleBuffer: ~Copyable {
         }
         
         guard fillStatus == ANIGMA_OK else {
-            throw CapsuleError(status: fillStatus, error: err)
+            throw CapsuleNativeError(status: fillStatus, error: err)
         }
         
         return buffer
     }
 }
 
-/// Error type for capsule operations.
-public struct CapsuleError: Error {
+/// Error type for capsule operations (native bridging).
+public struct CapsuleNativeError: Error {
     public let status: anigma_status_t
     public let error: anigma_capsule_error_t
     public let message: String?
@@ -170,6 +170,6 @@ public struct CapsuleError: Error {
     public var localizedDescription: String {
         let msg = message ?? (error.message.map { String(cString: $0) } ?? "Unknown error")
         let det = error.detail.map { String(cString: $0) } ?? ""
-        return "Capsule error \(status): \(msg)\(det.isEmpty ? "" : " (\(det))")"
+        return "Capsule native error \(status): \(msg)\(det.isEmpty ? "" : " (\(det))")"
     }
 }

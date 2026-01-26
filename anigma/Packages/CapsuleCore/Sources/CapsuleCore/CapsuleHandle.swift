@@ -50,12 +50,12 @@ public final class CapsuleHandle<HandleType>: @unchecked Sendable where HandleTy
     /// Execute a closure with the raw handle.
     /// - Parameter body: Closure that receives the raw handle
     /// - Returns: Result of the closure
-    /// - Throws: `CapsuleError` if the handle is invalid
+    /// - Throws: `CapsuleNativeError` if the handle is invalid
     public func withHandle<T>(_ body: (UnsafeMutableRawPointer) throws -> T) throws -> T where T: Sendable {
         lock.lock()
         defer { lock.unlock() }
         guard let handle = rawHandle else {
-            throw CapsuleError(
+            throw CapsuleNativeError(
                 status: ANIGMA_ERR_NOT_INITIALIZED,
                 error: anigma_capsule_error_t(
                     code: ANIGMA_ERR_NOT_INITIALIZED,
@@ -105,9 +105,9 @@ public func capsuleDestroyer(
     }
 }
 
-public func capsuleErrorFrom(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+public func capsuleErrorFrom(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleNativeError {
     let message = error.message.map { String(cString: $0) } ?? "Capsule error"
-    return CapsuleError(status: status, code: error.code, message: message)
+    return CapsuleNativeError(status: status, code: error.code, message: message)
 }
 
 /// Protocol for capsules that manage their own handles.
