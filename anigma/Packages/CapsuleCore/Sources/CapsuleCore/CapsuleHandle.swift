@@ -3,7 +3,7 @@ import AnigmaNativeShims
 
 /// A generic thread-safe wrapper for opaque capsule handles.
 /// Ensures thread safety and automatic destruction.
-public final class CapsuleHandle<HandleType> where HandleType: AnyObject {
+public final class CapsuleHandle<HandleType>: @unchecked Sendable where HandleType: AnyObject {
     public var rawHandle: UnsafeMutableRawPointer?
     public let destroyFunction: (UnsafeMutableRawPointer) -> Void
     private let lock = NSLock()
