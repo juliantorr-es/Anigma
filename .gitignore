@@ -1,4 +1,5 @@
 .DS_Store
+<<<<<<< HEAD
 
 # Shrink the upward tree down to the canonical directories.
 *
@@ -21,3 +22,9 @@
 .worktrees/
 .security-key
 logs/security/
+=======
+.cache/
+
+# Auto Claude data directory
+.auto-claude/
+>>>>>>> origin/auto-claude/001-tui-rendering-completion

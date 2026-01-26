@@ -93,8 +93,7 @@ public actor ModelManagerView {
 
             // Show error message if error
             if case .error(let message) = model.status {
-                let errorText = engine.styled("  Error: \(message)", color: .red, style: .dim)
-                await engine.renderText(row: row, col: 7, text: errorText)
+                await engine.renderError(row: row, col: 7, message: message, maxWidth: size.cols - 14)
                 row += 1
             }
 
