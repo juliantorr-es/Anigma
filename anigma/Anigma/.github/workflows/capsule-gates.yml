@@ -109,3 +109,16 @@ jobs:
         with:
           name: coverage-dashboard
           path: Docs/governance/coverage_dashboard.md
+
+  GATE_STRICT_CONCURRENCY:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Strict Concurrency (Tier 5/3)
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_STRICT_CONCURRENCY
+            fi
+          done
