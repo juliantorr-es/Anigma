@@ -256,7 +256,14 @@ let nativeTargets: [Target] = [
         name: "CompressionNative",
         path: "Packages/CompressionKit/Sources/CompressionNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/lib"]),
+            .linkedLibrary("zstd")
+        ]
     ),
     .target(
         name: "GeometryNative",
@@ -272,7 +279,7 @@ let nativeTargets: [Target] = [
         name: "TextChunkingNative",
         path: "Packages/TextChunkingCapsule/Sources/TextChunkingNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "LayoutEngineNative",
@@ -287,19 +294,19 @@ let nativeTargets: [Target] = [
         name: "VizAggregationNative",
         path: "Packages/VizAggregationCapsule/Sources/VizAggregationNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "MediaFingerprintNative",
         path: "Packages/MediaFingerprintCapsule/Sources/MediaFingerprintNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "MediaContainerNative",
         path: "Packages/MediaContainerCapsule/Sources/MediaContainerNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "VectorNative",
@@ -315,31 +322,39 @@ let nativeTargets: [Target] = [
         name: "TextPipelineNative",
         path: "Packages/TextPipelineCapsule/Sources/TextPipelineNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [
+            .headerSearchPath("include"),
+            .unsafeFlags(["-I/opt/homebrew/opt/icu4c/include"])
+        ],
+        linkerSettings: [
+            .unsafeFlags(["-L/opt/homebrew/opt/icu4c/lib"]),
+            .linkedLibrary("icuuc"),
+            .linkedLibrary("icui18n")
+        ]
     ),
     .target(
         name: "VectorIndexNative",
         path: "Packages/VectorIndexCapsule/Sources/VectorIndexNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "CosineNative",
         path: "Packages/CosineSimilarityCapsule/Sources/CosineNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "RankFusionNative",
         path: "Packages/RankFusionCapsule/Sources/RankFusionNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "SceneGraphNative",
         path: "Packages/SceneGraphCapsule/Sources/SceneGraphNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     ),
     .target(
         name: "RenderPlanNative",
@@ -364,7 +379,7 @@ let nativeTargets: [Target] = [
         name: "AnimationNative",
         path: "Packages/AnimationKit/Sources/AnimationNative",
         publicHeadersPath: "include",
-        cxxSettings: [.headerSearchPath("include")]
+        cxxSettings: [ .headerSearchPath("include"), .unsafeFlags(["-I/opt/homebrew/include"]) ], linkerSettings: [ .unsafeFlags(["-L/opt/homebrew/lib"]), .linkedLibrary("avcodec"), .linkedLibrary("avformat"), .linkedLibrary("avutil"), .linkedLibrary("swscale"), .linkedLibrary("swresample") ]
     )
 ]
 
@@ -486,7 +501,7 @@ let coreTargets: [Target] = [
 ]
 
 let moduleTargets: [Target] = [
-    .target(name: "HarmoniaModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "CapabilityCore", "DatabaseCore", "TelemetryCore", "ExecutionCore", "DoctrineCore", "SecurityEventsManager", "AnigmaASTServicesCore", "MLWorkerCommon", .product(name: "MLXEmbedders", package: "mlx-swift-lm"), "CathedralModule", "StorageCore", "GovernedMigrationCore", "AnigmaCLIProviders", "AnigmaCLIRouter", "AnigmaCLIOrchestrator", "AnigmaCLIEventing", "AnigmaCLIGovernance", .product(name: "GRDB", package: "GRDB.swift"), "DataCore", "InferenceCore"], path: "Packages/HarmoniaModule", exclude: ["README.md", "Config"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
+    .target(name: "HarmoniaModule", dependencies: ["AnigmaCore", "ContractsCore", "AnigmaPrimitives", "CapabilityCore", "DatabaseCore", "TelemetryCore", "ExecutionCore", "DoctrineCore", "SecurityEventsManager", "AnigmaASTServicesCore", "MLWorkerCommon", .product(name: "MLXEmbedders", package: "mlx-swift-lm"), "CathedralModule", "StorageCore", "GovernedMigrationCore", "AnigmaCLIProviders", "AnigmaCLIRouter", "AnigmaCLIOrchestrator", "AnigmaCLIEventing", "AnigmaCLIGovernance", .product(name: "GRDB", package: "GRDB.swift"), "DataCore", "InferenceCore"], path: "Packages/HarmoniaModule", exclude: ["README.md", "Config"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "HarmoniaMemory", dependencies: ["AnigmaCore", "TelemetryCore", .product(name: "GRDB", package: "GRDB.swift")], path: "Packages/HarmoniaMemory", exclude: ["README.md"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "DiaplasionModule", dependencies: ["AnigmaCore", "TextChunkingCapsule"], path: "Packages/DiaplasionModule", exclude: ["README.md", "TestFiles"], 
         swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)],
@@ -500,7 +515,7 @@ let moduleTargets: [Target] = [
     .target(name: "CodexModule", dependencies: ["AnigmaCore"], path: "Packages/CodexModule/Sources/CodexModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "TranscriptumModule", dependencies: ["AnigmaCore"], path: "Packages/TranscriptumModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "ObservatoriumModule", dependencies: ["AnigmaCore", "TelemetryCore"], path: "Packages/ObservatoriumModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
-    .target(name: "PolytroposModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "MediaContainerCapsule"], path: "Packages/PolytroposModule/Sources/PolytroposModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
+    .target(name: "PolytroposModule", dependencies: ["AnigmaCore", "AnigmaPrimitives", "MediaContainerCapsule", "ArtifactStoreModule", "MediaFingerprintCapsule", "DatabaseCore"], path: "Packages/PolytroposModule/Sources/PolytroposModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "VectorumModule", dependencies: ["ContractsCore", "AnigmaCore", "CapabilityCore"], path: "Packages/VectorumModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "CathedralModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContextumModule"], path: "Packages/CathedralModule", exclude: ["CathedralModule.placeholder.swift.backup"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .target(name: "ContextumModule", dependencies: ["AnigmaCore", "DatabaseCore", "ContractsCore", "CapsuleCore", "TextChunkingCapsule", "CompressionKit", "VizAggregationCapsule", "MediaFingerprintCapsule", "VectorCapsule", "TextPipelineCapsule"], path: "Sources/ContextumModule", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
@@ -549,7 +564,7 @@ let executableTargets: [Target] = [
     .executableTarget(name: "DiaplasionPipeline", dependencies: ["AnigmaCore", "DiaplasionModule", "ContractsCore", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/DiaplasionPipeline", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .executableTarget(name: "AccessumFlow", dependencies: ["AnigmaCore", "DatabaseCore", "DiaplasionModule", "OutlineumModule", "HarmoniaModule", "MLWorkerCommon", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/AccessumFlow", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .executableTarget(name: "MLWorkerExecutable", dependencies: ["MLWorkerCommon", "ContractsCore", "AnigmaCore", "AnigmaPrimitives", .product(name: "MLXLMCommon", package: "mlx-swift-lm"), .product(name: "MLXEmbedders", package: "mlx-swift-lm"), .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/MLWorkerExecutable", exclude: ["README.md", "Model/embedding-model.txt"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
-    .executableTarget(name: "AnigmaAppMacExecutable", dependencies: ["AnigmaClientKit", "AnigmaHostMac", "AnigmaSystemSpine", "HarmoniaModule", "OutlineumModule", "DataUI", "AnigmaAgents", "AnigmaAIConsole", "ExportCore", "ExportUI", "AnigmaWork", "DataEngine", "ContractsCore", "DevelopumModule"], path: "Sources/AnigmaAppMac", exclude: ["AppStore.swift.backup", "AppStore.swift.bak2"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
+    .executableTarget(name: "AnigmaAppMacExecutable", dependencies: ["AnigmaClientKit", "AnigmaHostMac", "AnigmaSystemSpine", "HarmoniaModule", "OutlineumModule", "DataUI", "AnigmaAgents", "AnigmaAIConsole", "ExportCore", "ExportUI", "AnigmaWork", "DataEngine", "ContractsCore", "DevelopumModule", "AnigmaCore", "DatabaseCore", "StorageCore"], path: "Sources/AnigmaAppMac", exclude: ["AppStore.swift.backup", "AppStore.swift.bak2"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .executableTarget(name: "AnigmaGeminiBridge", dependencies: ["AnigmaCore", "AnigmaPrimitives", .product(name: "Hummingbird", package: "hummingbird")], path: "Packages/AnigmaGeminiBridge/Sources/AnigmaGeminiBridge", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .executableTarget(name: "HarmoniaCLI", dependencies: ["AnigmaCLICore", "AnigmaCLIEventing", "AnigmaCLIGovernance", "AnigmaCLIOrchestrator", "AnigmaCLIProviders", "AnigmaCLIRouter", "AnigmaCore", "ContractsCore", "HarmoniaModule", "PraxisModule", "PraxisCore", "MLWorkerCommon", "HarmoniaMemory", "TechDebtAudit", "ExecutionCore", "StorageCore", "AnigmaDaemonCore", .product(name: "ArgumentParser", package: "swift-argument-parser")], path: "Packages/HarmoniaCLI", swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
     .executableTarget(

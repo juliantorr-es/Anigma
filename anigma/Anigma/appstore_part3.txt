@@ -1,0 +1,97 @@
+        }
+    }
+    
+    private func subscribeToIR() {
+        guard let client = client else { return }
+        irSubscriptionTask = Task { @MainActor in
+            do {
+                for try await _ in client.events.events() {
+                    if let workspaceId = self.selectedWorkspaceID {
+                        await self.refreshJobs(workspaceId: workspaceId)
+                    }
+                }
+            } catch {
+                print("Event stream error: \(error)")
+            }
+        }
+    }
+    
+    private func refreshJobs(workspaceId: WorkspaceID) async {
+        guard let client = client else { return }
+        if let page = try? await client.query.listJobs(workspaceID: workspaceId, cursor: nil, limit: 50) {
+            jobs = page.items
+        }
+    }
+
+    // MARK: - Caching delegation
+    func saveCache() { cacheManager.saveCache() }
+    func loadCache() { cacheManager.loadCache() }
+    func savePinnedActions() { cacheManager.savePinnedActions() }
+    func saveToUserDefaults(_ data: Data, forKey key: String) throws { try cacheManager.saveToUserDefaults(data, forKey: key) }
+
+    // MARK: - Internal for Managers
+    func updateJob(id: UUID, progress: Double, message: String) {
+        if let index = self.localJobs.firstIndex(where: { $0.id == id }) {
+            self.localJobs[index].progress = progress
+            self.localJobs[index].message = message
+        }
+    }
+}
+
+// MARK: - Computed Properties (Filtered)
+
+extension AppStore {
+    var filteredArtifacts: [AnigmaClientKit.ArtifactSummary] {
+        if artifactSearchQuery.isEmpty { return artifacts }
+        return artifacts.filter { $0.name.localizedCaseInsensitiveContains(artifactSearchQuery) }
+    }
+
+    var filteredJobs: [AnigmaClientKit.JobSummary] {
+        var result = jobs
+        if !jobSearchQuery.isEmpty {
+            result = result.filter { $0.name.localizedCaseInsensitiveContains(jobSearchQuery) }
+        }
+        if jobStatusFilter != .all {
+            result = result.filter { $0.status.uppercased() == jobStatusFilter.rawValue }
+        }
+        if jobTrustFilter != .all {
+            result = result.filter { jobTrustFilter == .verified ? $0.isTrusted : !$0.isTrusted }
+        }
+        return result
+    }
+
+    var inboxCount: Int { artifacts.count }
+    var runningJobsCount: Int { jobs.filter { $0.status.uppercased() == "RUNNING" }.count }
+    var projectsCount: Int { workspaces.count }
+    var insightCount: Int { scopes.count }
+}
+
+// MARK: - Service Delegation (Phase 1 Integration)
+
+extension AppStore {
+    func refreshVaultStatus() async { await serviceIntegrationStore.harmoniaStore.refreshVaultStatus() }
+    func verifyVault() async throws -> HarmoniaClient.VaultVerificationResponse { try await serviceIntegrationStore.harmoniaStore.verifyVault() }
+    func runVaultGC(dryRun: Bool = false) async throws -> HarmoniaClient.VaultGCResponse { try await serviceIntegrationStore.harmoniaStore.runVaultGC(dryRun: dryRun) }
+    func refreshPipelineStatus() async {
+        guard let workspace = activeWorkspace else { return }
+        await serviceIntegrationStore.harmoniaStore.refreshPipelineStatus(workspace: workspace.id.uuidString)
+    }
+    func runTechDebtAudit(path: String) async { await serviceIntegrationStore.harmoniaStore.runTechDebtAudit(path: path) }
+    func searchLedger(query: String, limit: Int = 10) async { await serviceIntegrationStore.harmoniaStore.searchLedger(query: query, limit: limit) }
+    func startDaemon() async throws { try await serviceIntegrationStore.harmoniaStore.startDaemon() }
+    func stopDaemon() async throws { try await serviceIntegrationStore.harmoniaStore.stopDaemon() }
+    
+    func scanDoctrine(path: String, domains: [String]? = nil) async { await serviceIntegrationStore.doctrineStore.scan(path: path, domains: domains) }
+    func loadDoctrineStats() async { await serviceIntegrationStore.doctrineStore.loadStats() }
+    func loadDoctrineRules(domain: String? = nil) async { await serviceIntegrationStore.doctrineStore.loadRules(domain: domain) }
+    func loadDoctrinePacks() async { await serviceIntegrationStore.doctrineStore.loadPacks() }
+    func resolveDoctrineViolation(id: String, note: String? = nil) async throws { try await serviceIntegrationStore.doctrineStore.resolveViolation(id: id, note: note) }
+    func enableDoctrinePack(id: String) async throws { try await serviceIntegrationStore.doctrineStore.enablePack(id: id) }
+    func disableDoctrinePack(id: String) async throws { try await serviceIntegrationStore.doctrineStore.disablePack(id: id) }
+    
+    func loadRegisteredModels() async { await serviceIntegrationStore.mlStore.loadRegisteredModels() }
+    func importHuggingFaceModel(repo: String, revision: String = "main", progressHandler: @escaping (Double) -> Void = { _ in }) async {
+        await serviceIntegrationStore.mlStore.importHuggingFaceModel(repo: repo, revision: revision, progressHandler: progressHandler)
+    }
+    func deleteModel(_ modelId: String) async { await serviceIntegrationStore.mlStore.deleteModel(modelId) }
+}

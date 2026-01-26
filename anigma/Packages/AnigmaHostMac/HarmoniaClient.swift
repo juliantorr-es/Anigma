@@ -54,19 +54,30 @@ public final class HarmoniaClient {
             return installedPath
         }
 
-        // 2. Check .build/release (local build)
-        let releasePath = ".build/release/harmonia"
-        if FileManager.default.fileExists(atPath: releasePath) {
-            return releasePath
+        // 2. Check relative to bundle for development
+        if let bundlePath = Bundle.main.executableURL?.deletingLastPathComponent().path {
+            // Check in the same directory as the executable
+            let sameDir = (bundlePath as NSString).appendingPathComponent("harmonia")
+            if FileManager.default.fileExists(atPath: sameDir) {
+                return sameDir
+            }
+            
+            // Check if we are in a SwiftPM build directory (.build/debug or .build/release)
+            // By going up from the bundle if it's in .build/debug/Anigma.app/Contents/MacOS
+            let projectRoot = (bundlePath as NSString).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            
+            let releasePath = (projectRoot as NSString).appendingPathComponent(".build/release/harmonia")
+            if FileManager.default.fileExists(atPath: releasePath) {
+                return releasePath
+            }
+            
+            let debugPath = (projectRoot as NSString).appendingPathComponent(".build/debug/harmonia")
+            if FileManager.default.fileExists(atPath: debugPath) {
+                return debugPath
+            }
         }
 
-        // 3. Check .build/debug (local debug build)
-        let debugPath = ".build/debug/harmonia"
-        if FileManager.default.fileExists(atPath: debugPath) {
-            return debugPath
-        }
-
-        // 4. Fallback to PATH lookup
+        // 3. Fallback to PATH lookup
         return "harmonia"
     }
 

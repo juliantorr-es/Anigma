@@ -100,7 +100,7 @@ public struct ArchitectureSelectionPolicy: Sendable, Codable, Identifiable {
             for (feature, weight) in featureWeights {
                 let featureValue = extractFeatureValue(feature, from: profile, task: task)
                 baseScore += featureValue * weight
-                if abs(weight) > 0.1 {
+                if Swift.abs(weight) > 0.1 {
                     explanation.append("\(feature.rawValue): \(featureValue) * \(weight)")
                 }
             }

@@ -15,12 +15,13 @@ public final class MarkdownDocument {
         }
         
         guard status == ANIGMA_OK, let h = raw else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
-        
-        self.handle = CapsuleHandle(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_markdown_node_destroy(ptr, e)
-        })
+
+        self.handle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_markdown_node_destroy)
+        )
     }
     
     public func renderHTML(options: Int32 = 0) throws -> String {
@@ -36,7 +37,7 @@ public final class MarkdownDocument {
             free(s)
             return str
         }
-        throw CapsuleError(status: status, error: err)
+        throw capsuleError(status: status, error: err)
     }
     
     public func renderPlaintext(options: Int32 = 0, width: Int32 = 0) throws -> String {
@@ -52,6 +53,20 @@ public final class MarkdownDocument {
             free(s)
             return str
         }
-        throw CapsuleError(status: status, error: err)
+        throw capsuleError(status: status, error: err)
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }

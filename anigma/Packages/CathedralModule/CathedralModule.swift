@@ -46,6 +46,7 @@ public enum CathedralError: Error, LocalizedError {
     case validationFailed([String])
     case databaseError(String)
     case configurationError(String)
+    case operationBlocked(String)
 
     public var errorDescription: String? {
         switch self {
@@ -63,6 +64,8 @@ public enum CathedralError: Error, LocalizedError {
             return "Database error: \(details)"
         case .configurationError(let details):
             return "Configuration error: \(details)"
+        case .operationBlocked(let message):
+            return "Operation blocked: \(message)"
         }
     }
 }
@@ -76,10 +79,11 @@ public enum CathedralModule {
     /// Create a production Cathedral coordinator with full evidence enforcement
     public static func create(
         config: CathedralConfig = defaultConfig,
-        database: LegacyDatabaseExecutor? = nil,
-        mlService: CathedralMLService? = nil
-    ) async -> CathedralCoordinator {
-        let tamperSystem = TamperEvidenceSystem(database: database)
+        database: (any DatabaseCore.DatabaseExecutor)? = nil,
+        mlService: (any CathedralMLService)? = nil
+    ) async throws -> any CathedralCoordinator {
+        let db = database ?? DatabaseActor(dbPath: ":memory:")
+        let tamperSystem = TamperEvidenceSystem(database: db)
 
         // Load from database if provided
         if database != nil {
@@ -101,8 +105,8 @@ public enum CathedralModule {
     /// Create a lightweight coordinator for testing
     public static func createForTesting(
         config: CathedralConfig = defaultConfig
-    ) async -> CathedralCoordinator {
-        return await create(config: config, database: nil)
+    ) async throws -> any CathedralCoordinator {
+        return try await create(config: config, database: nil)
     }
 }
 
@@ -113,13 +117,13 @@ extension CathedralModule: CapabilityModule {
         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
         
         // Initialize TamperEvidenceSystem with database adapter
-        let tamperSystem = TamperEvidenceSystem(database: databaseAdapter)
+        let tamperEvidenceSystem = TamperEvidenceSystem(database: databaseAdapter as! DatabaseCore.DatabaseExecutor)
         
         // Load existing chain from database
-        try? await tamperSystem.loadFromDatabase()
+        try? await tamperEvidenceSystem.loadFromDatabase()
         
         // Create adapter for EvidenceSink compatibility
-        let evidenceAdapter = TamperEvidenceSystemAdapter(tamperEvidenceSystem: tamperSystem)
+        let evidenceAdapter = TamperEvidenceSystemAdapter(tamperEvidenceSystem: tamperEvidenceSystem)
         
         // Register adapter with runtime evidence authority
         try await runtime.registerEvidenceSink(evidenceAdapter)

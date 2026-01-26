@@ -24,12 +24,13 @@ public final class SyntaxParser {
         let status = anigma_syntax_parser_create(language.native, &raw, &err)
         
         guard status == ANIGMA_OK, let h = raw else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
-        self.handle = CapsuleHandle(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_syntax_parser_destroy(ptr, e)
-        })
+        self.handle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_syntax_parser_destroy)
+        )
     }
     
     public func parse(source: String) throws -> SyntaxTree {
@@ -49,12 +50,13 @@ public final class SyntaxParser {
         }
         
         guard status == ANIGMA_OK, let h = rawTree else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
-        let treeHandle = CapsuleHandle<AnyObject>(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_syntax_tree_destroy(ptr, e)
-        })
+        let treeHandle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_syntax_tree_destroy)
+        )
         
         return SyntaxTree(handle: treeHandle)
     }
@@ -77,9 +79,10 @@ public final class SyntaxTree {
         }
         
         if status == ANIGMA_OK, let h = nodeHandleRaw {
-            let capHandle = CapsuleHandle<AnyObject>(rawHandle: h, destroyFunction: { ptr, e in
-                anigma_syntax_node_destroy(ptr, e)
-            })
+            let capHandle = CapsuleHandle<AnyObject>(
+                rawHandle: h,
+                destroyFunction: capsuleDestroyer(anigma_syntax_node_destroy)
+            )
             return SyntaxNode(handle: capHandle, info: info)
         }
         return nil
@@ -153,12 +156,27 @@ public final class SyntaxNode {
             }
             
             if childStatus == ANIGMA_OK, let ch = childHandleRaw {
-                let capHandle = CapsuleHandle<AnyObject>(rawHandle: ch, destroyFunction: { ptr, e in
-                    anigma_syntax_node_destroy(ptr, e)
-                })
+                let capHandle = CapsuleHandle<AnyObject>(
+                    rawHandle: ch,
+                    destroyFunction: capsuleDestroyer(anigma_syntax_node_destroy)
+                )
                 result.append(SyntaxNode(handle: capHandle, info: childInfo))
             }
         }
         return result
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }

@@ -452,7 +452,7 @@ public actor ToolUsageInspector {
             verdict += "✅ **CLEAR WINNER**: \(labelB) shows meaningful improvement over \(labelA). "
         } else if healthRateDiff > 0.05 {
             verdict += "⚠️  **SLIGHT EDGE**: \(labelB) is marginally better than \(labelA). "
-        } else if abs(healthRateDiff) <= 0.05 {
+        } else if Swift.abs(healthRateDiff) <= 0.05 {
             verdict += "⚖️  **STATISTICAL TIE**: Both configurations perform similarly. "
         } else if healthRateDiff < -0.1 {
             verdict +=

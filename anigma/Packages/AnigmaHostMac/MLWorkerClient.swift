@@ -48,8 +48,44 @@ public struct MLWorkerClient: Sendable {
 
     private let mlWorkerPath: String
 
-    public init(mlWorkerPath: String = "/usr/local/bin/ml-worker") {
-        self.mlWorkerPath = mlWorkerPath
+    public init(mlWorkerPath: String? = nil) {
+        self.mlWorkerPath = mlWorkerPath ?? Self.findMLWorkerBinary()
+    }
+
+    // MARK: - Binary Location
+
+    private static func findMLWorkerBinary() -> String {
+        // 1. Check /usr/local/bin (installed location)
+        let installedPath = "/usr/local/bin/ml-worker"
+        if FileManager.default.fileExists(atPath: installedPath) {
+            return installedPath
+        }
+
+        // 2. Check relative to bundle for development
+        if let bundlePath = Bundle.main.executableURL?.deletingLastPathComponent().path {
+            // Check in the same directory as the executable
+            let sameDir = (bundlePath as NSString).appendingPathComponent("ml-worker")
+            if FileManager.default.fileExists(atPath: sameDir) {
+                return sameDir
+            }
+            
+            // Check if we are in a SwiftPM build directory (.build/debug or .build/release)
+            // By going up from the bundle if it's in .build/debug/Anigma.app/Contents/MacOS
+            let projectRoot = (bundlePath as NSString).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            
+            let releasePath = (projectRoot as NSString).appendingPathComponent(".build/release/ml-worker")
+            if FileManager.default.fileExists(atPath: releasePath) {
+                return releasePath
+            }
+            
+            let debugPath = (projectRoot as NSString).appendingPathComponent(".build/debug/ml-worker")
+            if FileManager.default.fileExists(atPath: debugPath) {
+                return debugPath
+            }
+        }
+
+        // 3. Fallback to PATH lookup
+        return "ml-worker"
     }
 
     // MARK: - Worker Management

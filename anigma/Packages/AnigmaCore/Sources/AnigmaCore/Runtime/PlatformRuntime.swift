@@ -90,8 +90,10 @@ public actor PlatformRuntime {
     // MARK: - Initialization
 
     /// Create a new platform runtime
-    /// - Parameter config: Runtime configuration
-    public init(config: RuntimeConfiguration = .production) async throws {
+    /// - Parameters:
+    ///   - config: Runtime configuration
+    ///   - inferencePlane: Optional inference plane for AI model access (defaults to MockInferencePlane)
+    public init(config: RuntimeConfiguration = .production, inferencePlane: (any InferencePlane)? = nil) async throws {
         self.config = config
         self.world = World()
         self.workflowRegistry = WorkflowRegistry()
@@ -131,11 +133,11 @@ public actor PlatformRuntime {
             governance: governance
         )
 
-        // Initialize inference and accessibility placeholders for now
-        let mockPlane = MockInferencePlane()
+        // Initialize inference plane (use provided one or default to mock)
+        let inferencePlaneToUse = inferencePlane ?? MockInferencePlane()
         let inferenceImpl = InferenceAuthorityImpl(
-            uiPlane: mockPlane,
-            workerPlane: mockPlane,
+            uiPlane: inferencePlaneToUse,
+            workerPlane: inferencePlaneToUse,
             governance: governance
         )
         self.inference = inferenceImpl
@@ -540,22 +542,22 @@ public struct RuntimeStatus: Sendable {
 
 extension PlatformRuntime {
     /// Create a local runtime (in-process)
-    public static func local(config: RuntimeConfiguration = .production) async throws -> PlatformRuntime {
-        let runtime = try await PlatformRuntime(config: config)
+    public static func local(config: RuntimeConfiguration = .production, inferencePlane: (any InferencePlane)? = nil) async throws -> PlatformRuntime {
+        let runtime = try await PlatformRuntime(config: config, inferencePlane: inferencePlane)
         try await runtime.initialize()
         return runtime
     }
 
     /// Create a testing runtime (no governance, no evidence)
-    public static func testing() async throws -> PlatformRuntime {
-        let runtime = try await PlatformRuntime(config: .testing)
+    public static func testing(inferencePlane: (any InferencePlane)? = nil) async throws -> PlatformRuntime {
+        let runtime = try await PlatformRuntime(config: .testing, inferencePlane: inferencePlane)
         try await runtime.initialize()
         return runtime
     }
 
     /// Create a daemon runtime (high concurrency, full enforcement)
-    public static func daemon() async throws -> PlatformRuntime {
-        let runtime = try await PlatformRuntime(config: .daemon)
+    public static func daemon(inferencePlane: (any InferencePlane)? = nil) async throws -> PlatformRuntime {
+        let runtime = try await PlatformRuntime(config: .daemon, inferencePlane: inferencePlane)
         try await runtime.initialize()
         return runtime
     }

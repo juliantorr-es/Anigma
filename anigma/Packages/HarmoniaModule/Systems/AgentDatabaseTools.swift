@@ -37,9 +37,8 @@ public actor AgentDatabaseTools {
 
         // Search embeddings database
         let searchResults = try await documentUnitDB.searchEmbeddings(
-            queryVector: queryVector,
-            limit: limit,
-            threshold: threshold
+            queryVector: queryVector.toFloatArray(),
+            limit: limit
         )
 
         return SemanticSearchResult(
@@ -72,7 +71,6 @@ public actor AgentDatabaseTools {
 
         let searchResults = try await documentUnitDB.searchContent(
             query: query,
-            contentType: contentType,
             limit: limit
         )
 
@@ -114,7 +112,7 @@ public actor AgentDatabaseTools {
     /// Get artifact by hash with verification
     public func getArtifact(artifactHash: String) async throws -> ArtifactWithVerification {
         // Look up artifact in document units
-        let results = try await documentUnitDB.query("""
+        let results = try await documentUnitDB.query(predicate: """
             SELECT source_artifact_path, source_artifact_hash, file_path, acquisition_timestamp
             FROM document_units
             WHERE source_artifact_hash = ?
@@ -122,8 +120,8 @@ public actor AgentDatabaseTools {
         """, parameters: [dbp(artifactHash)])
 
         guard let row = results.first,
-              let artifactPath = row["source_artifact_path"]?.asString,
-              let storedHash = row["source_artifact_hash"]?.asString,
+              let artifactPath = row.sourceArtifactPath as String?,
+              let storedHash = row.sourceArtifactHash as String?,
               storedHash == artifactHash else {
             throw AgentError.artifactNotFound(artifactHash)
         }
@@ -136,8 +134,8 @@ public actor AgentDatabaseTools {
             throw AgentError.artifactCorrupted(artifactHash)
         }
 
-        let filePathValue = row["file_path"]?.asString
-        let acquisitionTimestampValue = row["acquisition_timestamp"]?.asInt ?? 0
+        let filePathValue = row.filePath
+        let acquisitionTimestampValue = row.acquisitionTimestamp
 
         return ArtifactWithVerification(
             path: artifactPath,
@@ -193,18 +191,18 @@ public actor AgentDatabaseTools {
         sql += " LIMIT ?"
         parameters.append(dbp(limit))
 
-        let rows = try await documentUnitDB.query(sql, parameters: parameters)
+        let rows = try await documentUnitDB.dbActor.query(sql, parameters: parameters)
         let results: [DiagnosticResult] = rows.compactMap { row in
-            guard let id = row["id"]?.asString,
-                  let filePath = row["file_path"]?.asString,
-                  let message = row["message"]?.asString,
-                  let severity = row["severity"]?.asString,
-                  let toolchain = row["toolchain"]?.asString else {
+            guard let id = row.string(for: "id"),
+                  let filePath = row.string(for: "file_path"),
+                  let message = row.string(for: "message"),
+                  let severity = row.string(for: "severity"),
+                  let toolchain = row.string(for: "toolchain") else {
                 return nil
             }
 
-            let line = row["line_number"]?.asInt ?? 0
-            let column = row["column_number"]?.asInt ?? 0
+            let line = row.int(for: "line_number") ?? 0
+            let column = row.int(for: "column_number") ?? 0
 
             return DiagnosticResult(
                 id: id,
@@ -225,10 +223,10 @@ public actor AgentDatabaseTools {
 
     /// Get coverage report showing what's indexed vs what's missing
     public func getCoverageReport() async throws -> CoverageReport {
-        let totalRow = try await documentUnitDB.query("SELECT COUNT(*) AS total_documents FROM document_units").first
-        let embeddedRow = try await documentUnitDB.query("SELECT COUNT(DISTINCT document_unit_id) AS documents_with_embeddings FROM embeddings").first
-        let totalDocuments = totalRow?["total_documents"]?.asInt ?? 0
-        let embeddedDocuments = embeddedRow?["documents_with_embeddings"]?.asInt ?? 0
+        let totalRow = try await documentUnitDB.dbActor.query("SELECT COUNT(*) AS total_documents FROM document_units").first
+        let embeddedRow = try await documentUnitDB.dbActor.query("SELECT COUNT(DISTINCT document_unit_id) AS documents_with_embeddings FROM embeddings").first
+        let totalDocuments = totalRow?.int(for: "total_documents") ?? 0
+        let embeddedDocuments = embeddedRow?.int(for: "documents_with_embeddings") ?? 0
 
         return CoverageReport(
             totalDocumentsIndexed: totalDocuments,
@@ -359,6 +357,14 @@ public actor AgentDatabaseTools {
     }
 }
 
+extension Data {
+    func toFloatArray() -> [Float] {
+        return self.withUnsafeBytes {
+            Array($0.bindMemory(to: Float.self))
+        }
+    }
+}
+
 // MARK: - Policy Enforcement
 
 /// Enforces DB-first policies and logs violations
@@ -410,7 +416,7 @@ public actor PolicyEnforcer {
         )
 
         // Store violation in database for audit trail
-        try await dbActor.execute("""
+        _ = try await dbActor.execute("""
             INSERT INTO policy_violations (action, reason, details, timestamp)
             VALUES (?, ?, ?, ?)
         """, parameters: [

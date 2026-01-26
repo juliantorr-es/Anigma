@@ -36,9 +36,9 @@ public actor AnigmaMCPServer {
     internal var contextum: Contextum?
     internal var artifactStore: ArtifactStoreModule?
     internal var modelRegistry: (any ContractsCore.ModelRegistryProtocol)?
-    internal var modelDownloader: HuggingFaceAdapter?
+    internal var modelDownloader: AnigmaCore.HuggingFaceAdapter?
     internal var observatorium: ObservatoriumService?
-    internal var cathedral: CathedralCoordinator?
+    internal var cathedral: any CathedralCoordinator?
 
     // Scaling and Lifecycle infrastructure
     internal let moduleInitializer = MCPModuleInitializer()
@@ -154,7 +154,7 @@ public actor AnigmaMCPServer {
 
         let databaseAuthority = await runtime.database
         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
-        let artifactDb = try await ArtifactStoreDatabase(dbActor: databaseAdapter)
+        let artifactDb = try await ArtifactStoreDatabase(dbActor: databaseAdapter as! any DatabaseCore.DatabaseExecutor)
         let artifactAuthority = await runtime.artifacts
         let artifactStore = ArtifactStoreModule(artifactAuthority: artifactAuthority, storageRoot: artifactsDir, database: artifactDb)
         self.artifactStore = artifactStore
@@ -195,7 +195,7 @@ public actor AnigmaMCPServer {
     }
 
     internal func initializeCathedral() async throws {
-        let coordinator = CathedralModule.create(
+        let coordinator = try await CathedralModule.create(
             config: CathedralConfig()
         )
         self.cathedral = coordinator
@@ -204,23 +204,23 @@ public actor AnigmaMCPServer {
     // MARK: - Gemini Bridge Support
 
     /// List all tools in Gemini-compatible format.
-    public func listToolsForGemini() async throws -> [String: AnyCodable] {
+    public func listToolsForGemini() async throws -> [String: AnigmaCore.AnyCodable] {
         let tools = getTools()
-        var functionDeclarations: [[String: AnyCodable]] = []
+        var functionDeclarations: [[String: AnigmaCore.AnyCodable]] = []
 
         for tool in tools {
             functionDeclarations.append([
-                "name": AnyCodable(tool.name),
-                "description": AnyCodable(tool.description ?? ""),
-                "parameters": AnyCodable(tool.inputSchema)
+                "name": AnigmaCore.AnyCodable(tool.name),
+                "description": AnigmaCore.AnyCodable(tool.description ?? ""),
+                "parameters": AnigmaCore.AnyCodable(tool.inputSchema)
             ])
         }
 
-        return ["function_declarations": AnyCodable(functionDeclarations)]
+        return ["function_declarations": AnigmaCore.AnyCodable(functionDeclarations)]
     }
 
     /// Call a tool using Gemini-compatible parameters.
-    public func callToolForGemini(name: String, arguments: [String: AnyCodable]) async throws -> [String: AnyCodable] {
+    public func callToolForGemini(name: String, arguments: [String: AnigmaCore.AnyCodable]) async throws -> [String: AnigmaCore.AnyCodable] {
         // Convert [String: AnyCodable] to [String: Value] for MCP
         var mcpArgs: [String: Value] = [:]
         for (key, val) in arguments {

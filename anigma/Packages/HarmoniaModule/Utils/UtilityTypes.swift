@@ -15,14 +15,38 @@
 public actor FileAccessLogger {
     public init() {}
     
-    // Stub implementation
+    public func logAccess(filePath: String, size: Int, type: String, duration: TimeInterval) async throws {
+        // Stub
+    }
+    
+    public struct Stats: Sendable {
+        public let totalAccesses: Int
+        public let lastAccessTime: Date
+        public let accessFrequency: Double
+        public let averageAccessTime: TimeInterval
+    }
+    
+    public func getStats(filePath: String) async throws -> Stats {
+        return Stats(totalAccesses: 0, lastAccessTime: Date(), accessFrequency: 0, averageAccessTime: 0)
+    }
 }
 
 /// File caching manager
 public actor FileCachingManager {
     public init() {}
     
-    // Stub implementation
+    public struct CachedFile: Sendable {
+        public let content: String
+        public let hash: String
+    }
+    
+    public func get(_ filePath: String) async -> CachedFile? {
+        return nil
+    }
+    
+    public func cache(filePath: String, content: String, hash: String) async throws {
+        // Stub
+    }
 }
 
 

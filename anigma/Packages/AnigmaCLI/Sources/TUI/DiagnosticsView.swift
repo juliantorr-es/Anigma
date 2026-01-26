@@ -106,8 +106,7 @@ public actor DiagnosticsView {
             await engine.renderText(
                 row: row,
                 col: (size.cols / 2) + 3,
-                text: "\(styledStatus) \(service.name) \(uptimeStr)",
-                maxWidth: servicesWidth - 4
+                text: "\(styledStatus) \(service.name) \(uptimeStr)"
             )
             row += 1
         }
@@ -120,14 +119,14 @@ public actor DiagnosticsView {
         for log in logs.suffix(logsHeight - 2) {
             let logColor: TUIEngine.Color = log.contains("ERROR") ? .red : log.contains("WARN") ? .yellow : .white
             let styledLog = engine.styled(log, color: logColor)
-            await engine.renderText(row: row, col: 5, text: styledLog, maxWidth: size.cols - 10)
+            await engine.renderText(row: row, col: 5, text: styledLog)
             row += 1
         }
 
         // Footer
         let controls = "R: Refresh  •  L: Clear Logs  •  Q: Quit"
         let footer = engine.styled(controls, color: .black, bg: .white)
-        await engine.renderText(row: size.rows, col: 1, text: footer, maxWidth: size.cols)
+        await engine.renderText(row: size.rows, col: 1, text: footer)
     }
 
     private func formatUptime(_ seconds: TimeInterval) -> String {

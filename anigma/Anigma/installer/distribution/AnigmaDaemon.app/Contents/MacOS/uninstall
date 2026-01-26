@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+echo "🗑️ Uninstalling Anigma..."
+if launchctl list | grep -q "com.anigma.daemon"; then
+    launchctl unload "$HOME/Library/LaunchAgents/com.anigma.daemon.plist" 2>/dev/null || true
+fi
+rm -f "$HOME/Library/LaunchAgents/com.anigma.daemon.plist"
+rm -f "/usr/local/bin/anigmad"
+rm -f "/usr/local/bin/anigma-cli"
+rm -rf "/Applications/Anigma.app"
+rm -rf "/Applications/AnigmaDaemon.app"
+rm -rf "$HOME/Library/Application Support/Anigma"
+pkill -f "anigmad" 2>/dev/null || true
+echo "✅ Anigma has been successfully uninstalled."
+exit 0

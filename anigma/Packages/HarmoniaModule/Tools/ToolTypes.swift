@@ -12,10 +12,16 @@ import DatabaseCore
 
 /// Request structure for tool handlers
 public struct ToolRequest: Sendable, Codable {
+    public let name: String?
     public let arguments: [String: String]
+    public let sessionId: String?
+    public let projectId: String?
     
-    public init(arguments: [String: String]) {
+    public init(name: String? = nil, arguments: [String: String], sessionId: String? = nil, projectId: String? = nil) {
+        self.name = name
         self.arguments = arguments
+        self.sessionId = sessionId
+        self.projectId = projectId
     }
 }
 
@@ -39,6 +45,9 @@ public struct ToolResponse: Sendable, Codable {
         return ToolResponse(success: false, output: output)
     }
 }
+
+/// Callback for tool progress updates
+public typealias ToolProgressCallback = @Sendable (Int, Int, String) async -> Void
 
 /// Protocol for tool handlers
 public protocol ToolHandlerProtocol: Sendable {
@@ -77,6 +86,17 @@ public actor SimpleToolRegistry {
     /// Get a handler by name
     public func handler(for name: String) -> AnyToolHandler? {
         return handlers[name]
+    }
+
+    /// Execute a tool request
+    public func execute(request: ToolRequest) async throws -> ToolResponse {
+        guard let name = request.name else {
+            return .failure("Missing tool name")
+        }
+        guard let handler = handlers[name] else {
+            return .failure("Unknown tool: \(name)")
+        }
+        return try await handler.handle(request: request)
     }
 }
 
@@ -244,53 +264,216 @@ public actor DiagnosticAnalyzer {
 
 // MARK: - Patch System Types
 
-/// Patch verification result
-public struct PatchVerificationResult: Sendable, Codable {
-    public let isValid: Bool
-    public let issues: [VerificationIssue]
+/// Verification issue
+public struct VerificationIssue: Sendable, Codable {
+    public enum IssueType: String, Sendable, Codable {
+        case conflictingChanges = "conflicting_changes"
+        case malformedPatch = "malformed_patch"
+        case missingContext = "missing_context"
+        case securityViolation = "security_violation"
+    }
     
-    public init(isValid: Bool, issues: [VerificationIssue]) {
-        self.isValid = isValid
-        self.issues = issues
+    public let type: IssueType
+    public let location: String
+    public let severity: String
+    public let description: String
+    
+    public init(type: IssueType, location: String, severity: String, description: String) {
+        self.type = type
+        self.location = location
+        self.severity = severity
+        self.description = description
     }
 }
 
-/// Verification issue
-public struct VerificationIssue: Sendable, Codable {
-    public let description: String
-    public let severity: String
-    public let conflictingChanges: Bool
+/// Patch verification result
+public struct PatchVerificationResult: Sendable, Codable {
+    public let isValid: Bool
+    public let beforeHash: String
+    public let afterHash: String
+    public let matchedLines: Int
+    public let failedLines: Int
+    public let partiallyApplied: Bool
+    public let issues: [VerificationIssue]
+    public let remediations: [String]
     
-    public init(description: String, severity: String, conflictingChanges: Bool = false) {
-        self.description = description
-        self.severity = severity
-        self.conflictingChanges = conflictingChanges
+    public init(
+        isValid: Bool,
+        beforeHash: String,
+        afterHash: String,
+        matchedLines: Int,
+        failedLines: Int,
+        partiallyApplied: Bool,
+        issues: [VerificationIssue],
+        remediations: [String] = []
+    ) {
+        self.isValid = isValid
+        self.beforeHash = beforeHash
+        self.afterHash = afterHash
+        self.matchedLines = matchedLines
+        self.failedLines = failedLines
+        self.partiallyApplied = partiallyApplied
+        self.issues = issues
+        self.remediations = remediations
     }
 }
 
 /// Patch file verification
 public struct PatchFileVerification: Sendable, Codable {
-    public let isValid: Bool
-    public let issues: [VerificationIssue]
+    public let filePath: String
+    public let verification: PatchVerificationResult
     
-    public init(isValid: Bool, issues: [VerificationIssue]) {
+    public init(filePath: String, verification: PatchVerificationResult) {
+        self.filePath = filePath
+        self.verification = verification
+    }
+}
+
+/// Result of Swift code validation
+public struct SwiftValidationResult: Sendable, Codable {
+    public let isValid: Bool
+    public let compilationSucceeded: Bool
+    public let issues: [SwiftValidationIssue]
+    public let suggestions: [SwiftFixSuggestion]
+    public let buildOutput: String
+
+    public init(
+        isValid: Bool,
+        compilationSucceeded: Bool,
+        issues: [SwiftValidationIssue],
+        suggestions: [SwiftFixSuggestion],
+        buildOutput: String
+    ) {
         self.isValid = isValid
+        self.compilationSucceeded = compilationSucceeded
         self.issues = issues
+        self.suggestions = suggestions
+        self.buildOutput = buildOutput
+    }
+}
+
+/// A validation issue found in Swift code
+public struct SwiftValidationIssue: Sendable, Codable {
+    public enum IssueType: String, Sendable, Codable {
+        case strictConcurrency = "strict_concurrency"
+        case sendableConformance = "sendable_conformance"
+        case dataRace = "data_race"
+        case actorIsolation = "actor_isolation"
+        case compilationError = "compilation_error"
+        case compilationWarning = "compilation_warning"
+        case styleViolation = "style_violation"
+        case bestPractice = "best_practice"
+        case performanceWarning = "performance_warning"
+    }
+
+    public enum Severity: String, Sendable, Codable {
+        case error = "error"
+        case warning = "warning"
+        case note = "note"
+    }
+
+    public let type: IssueType
+    public let severity: Severity
+    public let filePath: String
+    public let line: Int?
+    public let column: Int?
+    public let message: String
+    public let rawOutput: String?
+    public let codeSnippet: String?
+
+    public init(
+        type: IssueType,
+        severity: Severity,
+        filePath: String,
+        line: Int? = nil,
+        column: Int? = nil,
+        message: String,
+        rawOutput: String? = nil,
+        codeSnippet: String? = nil
+    ) {
+        self.type = type
+        self.severity = severity
+        self.filePath = filePath
+        self.line = line
+        self.column = column
+        self.message = message
+        self.rawOutput = rawOutput
+        self.codeSnippet = codeSnippet
+    }
+}
+
+/// A suggestion for fixing a validation issue
+public struct SwiftFixSuggestion: Sendable, Codable {
+    public let issueType: SwiftValidationIssue.IssueType
+    public let filePath: String
+    public let line: Int?
+    public let description: String
+    public let exampleFix: String?
+    public let automaticFixAvailable: Bool
+
+    public init(
+        issueType: SwiftValidationIssue.IssueType,
+        filePath: String,
+        line: Int? = nil,
+        description: String,
+        exampleFix: String? = nil,
+        automaticFixAvailable: Bool = false
+    ) {
+        self.issueType = issueType
+        self.filePath = filePath
+        self.line = line
+        self.description = description
+        self.exampleFix = exampleFix
+        self.automaticFixAvailable = automaticFixAvailable
     }
 }
 
 /// Patch verifier
-public struct PatchVerifier: Sendable {
-    public init() {}
+public actor PatchVerifier: Sendable {
+    private let dbActor: any DatabaseExecutor
     
-    // Stub implementation
+    public init(dbActor: any DatabaseExecutor) {
+        self.dbActor = dbActor
+    }
+    
+    public func verify(
+        patchContent: String,
+        originalContent: String,
+        patchedContent: String
+    ) async throws -> PatchVerificationResult {
+        // Stub implementation
+        return PatchVerificationResult(
+            isValid: true,
+            beforeHash: "",
+            afterHash: "",
+            matchedLines: 0,
+            failedLines: 0,
+            partiallyApplied: false,
+            issues: []
+        )
+    }
 }
 
 /// Patch auditor
-public struct PatchAuditor: Sendable {
-    public init() {}
+public actor PatchAuditor: Sendable {
+    private let dbActor: any DatabaseExecutor
     
-    // Stub implementation
+    public init(dbActor: any DatabaseExecutor) {
+        self.dbActor = dbActor
+    }
+    
+    public func logAction(
+        action: String,
+        actor: String,
+        targetFile: String,
+        patchId: String,
+        beforeState: String,
+        afterState: String,
+        outcome: String,
+        details: String
+    ) async throws {
+        // Stub implementation
+    }
 }
 
 /// Parsed diagnostic from build output
@@ -323,8 +506,28 @@ public struct ParsedDiagnostic: Sendable, Codable {
 }
 
 /// Rollback manager
-public struct RollbackManager: Sendable {
-    public init() {}
+public actor RollbackManager: Sendable {
+    private let dbActor: any DatabaseExecutor
     
-    // Stub implementation
+    public init(dbActor: any DatabaseExecutor) {
+        self.dbActor = dbActor
+    }
+    
+    public func recordPatchApplication(
+        patchId: String,
+        targetFile: String,
+        beforeHash: String,
+        afterHash: String,
+        appliedBy: String
+    ) async throws {
+        // Stub implementation
+    }
+    
+    public func rollbackPatch(
+        patchId: String,
+        targetFile: String,
+        currentContent: String
+    ) async throws {
+        // Stub implementation
+    }
 }

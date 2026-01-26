@@ -128,6 +128,69 @@ struct ExplainableSemanticSearchConfiguration: Sendable {
         )
     }
 
+    /// Perform text search with explainability
+    public func explainableTextSearch(
+        queryText: String,
+        searchFields: [String] = ["content", "content_preview"],
+        maxResults: Int = 50,
+        requestingActor: String,
+        sessionContext: String? = nil,
+        searchPurpose: String? = nil
+    ) async throws -> ExplainableRetrievalResult {
+        let queryId = UUID().uuidString.lowercased()
+        let startTime = Date()
+
+        // Perform full-text search
+        let searchResults = try await performFullTextSearch(
+            queryText: queryText,
+            searchFields: searchFields,
+            maxResults: maxResults
+        )
+
+        let executionTimeMs = Int(Date().timeIntervalSince(startTime) * 1000)
+
+        // Create retrieval evidence (text search has no embedding recipe)
+        let retrievalEvidence = RetrievalEvidence(
+            queryId: queryId,
+            queryText: queryText,
+            embeddingRecipeId: nil,
+            queryEmbeddingHash: nil,
+            similarityThreshold: nil,
+            maxResults: maxResults,
+            results: searchResults,
+            executionTimeMs: executionTimeMs,
+            requestingActor: requestingActor,
+            sessionContext: sessionContext,
+            searchPurpose: searchPurpose,
+            timestamp: startTime
+        )
+
+        // Store evidence
+        try await storeRetrievalEvidence(retrievalEvidence)
+
+        // Create tamper-evident event
+        _ = try await tamperEvidence.appendEvent(
+            eventType: "full_text_search_performed",
+            payload: [
+                "queryId": queryId,
+                "queryText": queryText,
+                "searchFields": searchFields,
+                "resultCount": searchResults.count,
+                "executionTimeMs": executionTimeMs,
+                "actor": requestingActor
+            ],
+            actor: requestingActor,
+            sessionId: sessionContext
+        )
+
+        return ExplainableRetrievalResult(
+            queryId: queryId,
+            queryText: queryText,
+            results: searchResults,
+            evidence: retrievalEvidence
+        )
+    }
+
     // MARK: - Evidence Retrieval and Analysis
 
     /// Get retrieval evidence by query ID

@@ -47,6 +47,22 @@ public actor AIRegistry {
     public func save(benchmark: AIBenchmark) async throws {
         try save(item: benchmark, id: benchmark.id, directory: "benchmarks")
     }
+    
+    // Agents
+    public func listAgents() async throws -> [AIAgent] {
+        return try load(type: AIAgent.self, directory: "agents")
+    }
+    
+    public func save(agent: AIAgent) async throws {
+        try save(item: agent, id: agent.id, directory: "agents")
+    }
+    
+    public func deleteAgent(id: String) async throws {
+        let fileURL = storageURL.appendingPathComponent("agents/\(id).json")
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            try FileManager.default.removeItem(at: fileURL)
+        }
+    }
 
     // Helpers
     private func load<T: Codable>(type: T.Type, directory: String) throws -> [T] {

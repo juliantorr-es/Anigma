@@ -179,7 +179,7 @@ public actor TUIRenderer {
                             VStack(spacing: 1) {
                                 Text("CONTEXT SPANS", foreground: .yellow, attributes: [.bold])
                                 if spans.isEmpty {
-                                    Text("No active context", foreground: .dim)
+                                    Text("No active context", foreground: .gray)
                                 } else {
                                     for span in spans.prefix(8) {
                                         Text("• \(span.prefix(25))...", foreground: .white)
@@ -190,7 +190,7 @@ public actor TUIRenderer {
                                 
                                 Text("EVIDENCE CHAIN", foreground: .brightGreen, attributes: [.bold])
                                 if evidence.isEmpty {
-                                    Text("Awaiting execution...", foreground: .dim)
+                                    Text("Awaiting execution...", foreground: .gray)
                                 } else {
                                     for entry in evidence {
                                         Text("> \(entry.prefix(30))", foreground: .gray)

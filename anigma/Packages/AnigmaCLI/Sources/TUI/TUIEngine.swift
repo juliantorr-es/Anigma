@@ -283,8 +283,13 @@ public actor TUIEngine {
         if let bg = bg, let c = Int(bg.rawValue) {
             codes.append(String(c + 10))
         }
-        guard !codes.isEmpty else { return text }
+
+        if codes.isEmpty { return text }
         return "\u{001B}[\(codes.joined(separator: ";"))m\(text)\u{001B}[0m"
+    }
+
+    public func renderText(row: Int, col: Int, text: String) {
+        addToFrame(row: row, col: col, text: text)
     }
 
     // MARK: - Markdown Rendering

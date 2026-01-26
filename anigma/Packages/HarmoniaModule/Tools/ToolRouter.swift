@@ -7,16 +7,11 @@
 //
 
 import AnigmaPrimitives
-@preconcurrency import CryptoKit
+import CryptoKit
 import DatabaseCore
-@preconcurrency import Foundation
+import Foundation
 
 /// Tool router orchestrator that coordinates tool execution with strict guarantees.
-/// Ensures:
-/// 1. Contract validation before execution
-/// 2. Loop detection and prevention
-/// 3. Policy enforcement
-/// 4. Complete evidence recording
 public actor ToolRouter {
     private let loopBreaker: ToolCallLoopBreaker
     private let policyGate: PolicyGate
@@ -184,13 +179,23 @@ public actor ToolRouter {
         session: SessionContext,
         contract: ToolContract
     ) async -> ToolCallResponse {
+        let toolRequest = ToolRequest(
+            arguments: (try? JSONSerialization.jsonObject(with: Data(request.parameters.utf8)) as? [String: String]) ?? [:]
+        )
+        
         switch name {
         case "read_file":
-            return await ReadFileTool().execute(request, session: session)
+            let response = try? await ReadFileTool().handle(request: toolRequest)
+            return ToolCallResponse(from: response, toolName: name)
         case "swift_build":
-            return await SwiftBuildTool().execute(request, session: session)
+            let response = try? await SwiftBuildTool().handle(request: toolRequest)
+            return ToolCallResponse(from: response, toolName: name)
         case "apply_patch":
-            return await ApplyPatchTool().execute(request, session: session)
+            let response = try? await ApplyPatchTool().handle(request: toolRequest)
+            return ToolCallResponse(from: response, toolName: name)
+        case "enhanced_read_file":
+            let response = try? await EnhancedReadFileTool().handle(request: toolRequest)
+            return ToolCallResponse(from: response, toolName: name)
         case "swift_test":
             return await SwiftTestTool().execute(request, session: session)
         case "git_diff":
@@ -200,7 +205,7 @@ public actor ToolRouter {
         case "context_search":
             return await ContextSearchTool().execute(request, session: session)
         case "digest_codebase":
-            return await EnhancedDigestCodebaseTool().execute(request, session: session)
+            return ToolCallResponse(status: .failed, toolName: name, diagnosis: "EnhancedDigestCodebaseTool not yet implemented")
         case "delegate":
             return await DelegateTool().execute(request, session: session)
         default:
@@ -216,5 +221,24 @@ public actor ToolRouter {
     public func resetSession(_ sessionId: String) async {
         await loopBreaker.resetSession(sessionId: sessionId)
         await policyGate.resetSessionUsage(sessionId)
+    }
+}
+
+extension ToolCallResponse {
+    init(from response: ToolResponse?, toolName: String) {
+        if let response = response {
+            self.init(
+                status: response.success ? .success : .failed,
+                result: response.output.data(using: .utf8),
+                toolName: toolName,
+                diagnosis: response.success ? nil : response.output
+            )
+        } else {
+            self.init(
+                status: .failed,
+                toolName: toolName,
+                diagnosis: "Tool execution returned nil response"
+            )
+        }
     }
 }

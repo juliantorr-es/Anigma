@@ -186,7 +186,7 @@ public actor TamperEvidenceSystem: TamperEvidenceSystemProtocol {
         guard let manifestData = (bundle["manifest_json"] as? String) else {
             fatalError("Failed to cast to String")
         }
-        try manifestData.write(to: URL(fileURLWithPath: manifestPath))
+        try manifestData.write(to: URL(fileURLWithPath: manifestPath), atomically: true, encoding: .utf8)
 
         // Write events
         let eventsDir = "\(exportDir)/events"

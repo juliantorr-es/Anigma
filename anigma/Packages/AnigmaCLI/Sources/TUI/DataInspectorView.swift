@@ -25,7 +25,7 @@ public final class DataInspectorView: TUIBaseComponent {
             width: rect.width, 
             height: rect.height, 
             title: "INSPECTOR", 
-            color: .brightBlack
+            color: TUIEngine.Color.brightBlack
         )
         
         var currentRow = rect.row + 1
@@ -35,12 +35,12 @@ public final class DataInspectorView: TUIBaseComponent {
         guard maxWidth > 0 && rect.height > 4 else { return }
         
         // 1. Context Spans Section
-        let spanTitle = await engine.styled("CONTEXT SPANS", color: .brightYellow, style: .bold)
+        let spanTitle = engine.styled("CONTEXT SPANS", color: .brightYellow, style: .bold)
         await engine.addToFrame(row: currentRow, col: col, text: spanTitle)
         currentRow += 1
         
         if spans.isEmpty {
-            await engine.addToFrame(row: currentRow, col: col, text: await engine.styled("No active context", color: .dim))
+            await engine.addToFrame(row: currentRow, col: col, text: engine.styled("No active context", color: TUIEngine.Color.brightBlack))
             currentRow += 1
         } else {
             for span in spans.prefix(min(8, rect.height / 2 - 2)) {
@@ -54,18 +54,18 @@ public final class DataInspectorView: TUIBaseComponent {
         // 2. Evidence Chain Section (Bottom Half)
         currentRow = rect.row + rect.height / 2
         if currentRow < rect.row + rect.height - 1 {
-            let evidenceTitle = await engine.styled("EVIDENCE CHAIN", color: .brightGreen, style: .bold)
+            let evidenceTitle = engine.styled("EVIDENCE CHAIN", color: .brightGreen, style: .bold)
             await engine.addToFrame(row: currentRow, col: col, text: evidenceTitle)
             currentRow += 1
             
             if evidence.isEmpty {
-                await engine.addToFrame(row: currentRow, col: col, text: await engine.styled("Awaiting execution...", color: .dim))
+                await engine.addToFrame(row: currentRow, col: col, text: engine.styled("Awaiting execution...", color: TUIEngine.Color.brightBlack))
             } else {
                 let maxEvidence = rect.row + rect.height - 2
                 for entry in evidence.suffix(max(1, maxEvidence - currentRow + 1)) {
                     if currentRow > maxEvidence { break }
                     let preview = String(entry.prefix(maxWidth - 2))
-                    await engine.addToFrame(row: currentRow, col: col, text: await engine.styled("> ", color: .green) + preview)
+                    await engine.addToFrame(row: currentRow, col: col, text: engine.styled("> ", color: .green) + preview)
                     currentRow += 1
                 }
             }

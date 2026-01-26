@@ -1,0 +1,61 @@
+{
+  "": {
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/master.swiftdeps"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Coordinator/ObservatoriumCoordinator.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/AlertModels.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/FeedbackModels.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/TelemetryModels.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/ObservatoriumModule.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/AlertService.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/FeedbackService.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/TelemetryService.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.dia"
+  }
+}

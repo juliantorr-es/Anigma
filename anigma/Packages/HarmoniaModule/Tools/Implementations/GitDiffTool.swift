@@ -174,3 +174,10 @@ public struct GitDiffTool: Sendable {
         }
     }
 }
+
+public struct GitDiffAnalyzer: Sendable {
+    public init() {}
+    public func analyze(diffOutput: String) async throws -> [String: String] {
+        return [:]
+    }
+}

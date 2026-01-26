@@ -1,0 +1,2962 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.AnigmaAppMac-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AnigmaApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AppState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DocumentLibraryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/MainContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/ObservatoriumDashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/ObservatoriumModule.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "AnigmaAppMac",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/AnigmaAppMac.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "AnigmaAppMac_main",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "anigma"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/AnigmaAppMac.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AnigmaApp.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AppState.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DashboardView.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DocumentLibraryView.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/MainContentView.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/ObservatoriumDashboardView.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/SettingsView.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AnigmaDaemonCore-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/AnigmaDaemonCore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AnigmaDaemonCore",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/AnigmaDaemonCore.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/AnigmaDaemonCore.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/include/AnigmaDaemonCore-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "anigmadaemoncore"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/AnigmaDaemonCore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/AnigmaDaemonCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/AnigmaDaemonCore.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.EventSource-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncEventsSequence.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncSequence+Events.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/EventSource.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "EventSource",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/EventSource.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/AsyncEventsSequence.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/AsyncSequence+Events.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/EventSource.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx12.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/include/EventSource-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings",
+        "-user-module-version",
+        "1.3.0",
+        "-package-name",
+        "eventsource"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/AsyncEventsSequence.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/AsyncSequence+Events.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/EventSource.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/EventSource.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncEventsSequence.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncSequence+Events.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/EventSource.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.InMemoryLogging-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/InMemoryLogging/InMemoryLogHandler.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/Logging.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "InMemoryLogging",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/InMemoryLogging.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/InMemoryLogHandler.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/include/InMemoryLogging-Swift.h",
+        "-swift-version",
+        "6",
+        "-enable-experimental-feature",
+        "StrictConcurrency=complete",
+        "-enable-upcoming-feature",
+        "MemberImportVisibility",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings",
+        "-user-module-version",
+        "1.9.1",
+        "-package-name",
+        "swift_log"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/InMemoryLogHandler.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/InMemoryLogging.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/InMemoryLogging/InMemoryLogHandler.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.Logging-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Locks.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/LogHandler.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Logging.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/MetadataProvider.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "Logging",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/Logging.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/include/Logging-Swift.h",
+        "-swift-version",
+        "6",
+        "-enable-experimental-feature",
+        "StrictConcurrency=complete",
+        "-enable-upcoming-feature",
+        "MemberImportVisibility",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings",
+        "-user-module-version",
+        "1.9.1",
+        "-package-name",
+        "swift_log"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/Logging.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Locks.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/LogHandler.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Logging.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/MetadataProvider.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.MCP-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Error.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/ID.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Lifecycle.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Messages.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/HTTPClientTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/InMemoryTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/NetworkTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/StdioTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/UnitInterval.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Utilities/Ping.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Value.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Versioning.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Client.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Sampling.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Extensions/Data+Extensions.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Prompts.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Resources.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Server.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Tools.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/SystemPackage.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/Logging.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/EventSource.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "MCP",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/MCP.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Error.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/ID.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Lifecycle.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Messages.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Transport.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/HTTPClientTransport.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/InMemoryTransport.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/NetworkTransport.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/StdioTransport.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/UnitInterval.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Ping.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Value.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Versioning.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Client.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Sampling.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Data+Extensions.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Prompts.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Resources.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Server.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Tools.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/include/MCP-Swift.h",
+        "-swift-version",
+        "6",
+        "-enable-upcoming-feature",
+        "StrictConcurrency",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings",
+        "-user-module-version",
+        "0.10.2",
+        "-package-name",
+        "swift_sdk"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Error.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/ID.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Lifecycle.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Messages.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Transport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/HTTPClientTransport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/InMemoryTransport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/NetworkTransport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/StdioTransport.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/UnitInterval.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Ping.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Value.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Versioning.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Client.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Sampling.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Data+Extensions.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Prompts.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Resources.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Server.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/Tools.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/MCP.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Error.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/ID.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Lifecycle.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Messages.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transport.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/HTTPClientTransport.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/InMemoryTransport.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/NetworkTransport.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/StdioTransport.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/UnitInterval.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Utilities/Ping.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Value.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Versioning.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Client.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Sampling.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Extensions/Data+Extensions.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Prompts.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Resources.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Server.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Tools.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.ObservatoriumModule-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Coordinator/ObservatoriumCoordinator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/AlertModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/FeedbackModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/TelemetryModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/ObservatoriumModule.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/AlertService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/FeedbackService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/TelemetryService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/AnigmaDaemonCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "ObservatoriumModule",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/ObservatoriumModule.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/include/ObservatoriumModule-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "observatoriummodule"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/ObservatoriumModule.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Coordinator/ObservatoriumCoordinator.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/AlertModels.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/FeedbackModels.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/TelemetryModels.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/ObservatoriumModule.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/AlertService.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/FeedbackService.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/TelemetryService.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.SystemPackage-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Errno.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/ErrnoWindows.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileDescriptor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileHelpers.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileOperations.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePath.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponents.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathParsing.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathString.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathSyntax.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTemp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempPosix.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempWindows.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathWindows.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePermissions.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Backcompat.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/CInterop.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Constants.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Exports.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Mocking.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/RawBuffer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Syscalls.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/WindowsSyscallAdapters.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/MachPort.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/PlatformString.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/SystemString.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util+StringArray.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/UtilConsumers.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/CSystem.build/shims.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "SystemPackage",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/SystemPackage.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Errno.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/ErrnoWindows.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FileDescriptor.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FileHelpers.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FileOperations.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePath.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathComponentView.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathComponents.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathParsing.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathString.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathSyntax.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathTemp.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathTempPosix.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathTempWindows.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathWindows.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePermissions.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Backcompat.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/CInterop.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Constants.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Exports.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Mocking.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/RawBuffer.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Syscalls.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/WindowsSyscallAdapters.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/MachPort.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/PlatformString.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/SystemString.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Util+StringArray.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Util.swift.o",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/UtilConsumers.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/include/SystemPackage-Swift.h",
+        "-swift-version",
+        "5",
+        "-DSYSTEM_PACKAGE_DARWIN",
+        "-DSYSTEM_PACKAGE",
+        "-DENABLE_MOCKING",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 0.0.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 0.0.2:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 0.0.3:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.1.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.1.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.2.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.2.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.3.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.3.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.3.2:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.4.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.4.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.4.2:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.5.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.6.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "AvailabilityMacro=System 1.6.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+        "-enable-experimental-feature",
+        "Lifetimes",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings",
+        "-package-name",
+        "swift_system"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Errno.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/ErrnoWindows.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FileDescriptor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FileHelpers.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FileOperations.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePath.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathComponentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathComponents.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathParsing.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathString.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathSyntax.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathTemp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathTempPosix.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathTempWindows.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePathWindows.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/FilePermissions.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Backcompat.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/CInterop.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Constants.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Exports.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Mocking.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/RawBuffer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Syscalls.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/WindowsSyscallAdapters.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/MachPort.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/PlatformString.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/SystemString.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Util+StringArray.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/Util.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/UtilConsumers.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/SystemPackage.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Errno.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/ErrnoWindows.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileDescriptor.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileHelpers.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileOperations.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePath.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponentView.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponents.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathParsing.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathString.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathSyntax.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTemp.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempPosix.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempWindows.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathWindows.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePermissions.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Backcompat.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/CInterop.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Constants.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Exports.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Mocking.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/RawBuffer.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Syscalls.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/WindowsSyscallAdapters.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/MachPort.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/PlatformString.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/SystemString.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util+StringArray.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util.swift",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/UtilConsumers.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.anigmad-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/sources",
+      "importPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/anigmad/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "anigmad",
+      "moduleOutputPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/anigmad.swiftmodule",
+      "objects" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "anigmad_main",
+        "-parse-as-library",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "anigma"
+      ],
+      "outputFileMapPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules/anigmad.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/anigmad/main.swift"
+      ],
+      "tempsPath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "AnigmaAppMac" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AnigmaAppMac",
+      "-package-name",
+      "anigma",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AnigmaApp.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AppState.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DashboardView.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DocumentLibraryView.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/MainContentView.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/ObservatoriumDashboardView.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/SettingsView.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "AnigmaAppMac_main",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "anigma",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AnigmaDaemonCore" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AnigmaDaemonCore",
+      "-package-name",
+      "anigmadaemoncore",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/AnigmaDaemonCore.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/include/AnigmaDaemonCore-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "anigmadaemoncore",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "EventSource" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "EventSource",
+      "-package-name",
+      "eventsource",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncEventsSequence.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncSequence+Events.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/EventSource.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx12.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/include/EventSource-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-user-module-version",
+      "1.3.0",
+      "-package-name",
+      "eventsource",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "InMemoryLogging" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "InMemoryLogging",
+      "-package-name",
+      "swift_log",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/InMemoryLogging/InMemoryLogHandler.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/include/InMemoryLogging-Swift.h",
+      "-swift-version",
+      "6",
+      "-enable-experimental-feature",
+      "StrictConcurrency=complete",
+      "-enable-upcoming-feature",
+      "MemberImportVisibility",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-user-module-version",
+      "1.9.1",
+      "-package-name",
+      "swift_log",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "Logging" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "Logging",
+      "-package-name",
+      "swift_log",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Locks.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/LogHandler.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Logging.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/MetadataProvider.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/include/Logging-Swift.h",
+      "-swift-version",
+      "6",
+      "-enable-experimental-feature",
+      "StrictConcurrency=complete",
+      "-enable-upcoming-feature",
+      "MemberImportVisibility",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-user-module-version",
+      "1.9.1",
+      "-package-name",
+      "swift_log",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "MCP" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "MCP",
+      "-package-name",
+      "swift_sdk",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Error.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/ID.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Lifecycle.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Messages.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transport.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/HTTPClientTransport.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/InMemoryTransport.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/NetworkTransport.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/StdioTransport.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/UnitInterval.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Utilities/Ping.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Value.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Versioning.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Client.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Sampling.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Extensions/Data+Extensions.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Prompts.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Resources.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Server.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Tools.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/include/MCP-Swift.h",
+      "-swift-version",
+      "6",
+      "-enable-upcoming-feature",
+      "StrictConcurrency",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-user-module-version",
+      "0.10.2",
+      "-package-name",
+      "swift_sdk",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "ObservatoriumModule" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "ObservatoriumModule",
+      "-package-name",
+      "observatoriummodule",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Coordinator/ObservatoriumCoordinator.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/AlertModels.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/FeedbackModels.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/TelemetryModels.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/ObservatoriumModule.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/AlertService.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/FeedbackService.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/TelemetryService.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/include/ObservatoriumModule-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "observatoriummodule",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "SystemPackage" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "SystemPackage",
+      "-package-name",
+      "swift_system",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Errno.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/ErrnoWindows.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileDescriptor.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileHelpers.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileOperations.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePath.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponentView.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponents.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathParsing.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathString.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathSyntax.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTemp.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempPosix.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempWindows.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathWindows.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePermissions.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Backcompat.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/CInterop.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Constants.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Exports.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Mocking.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/RawBuffer.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Syscalls.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/WindowsSyscallAdapters.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/MachPort.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/PlatformString.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/SystemString.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util+StringArray.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util.swift",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/UtilConsumers.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/CSystem/include",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/include/SystemPackage-Swift.h",
+      "-swift-version",
+      "5",
+      "-DSYSTEM_PACKAGE_DARWIN",
+      "-DSYSTEM_PACKAGE",
+      "-DENABLE_MOCKING",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 0.0.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 0.0.2:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 0.0.3:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.1.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.1.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.2.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.2.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.3.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.3.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.3.2:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.4.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.4.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.4.2:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.5.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.6.0:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "AvailabilityMacro=System 1.6.1:macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, visionOS 1.0",
+      "-enable-experimental-feature",
+      "Lifetimes",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-package-name",
+      "swift_system",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "anigmad" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "anigmad",
+      "-package-name",
+      "anigma",
+      "-c",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/anigmad/main.swift",
+      "-I",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "anigmad_main",
+      "-parse-as-library",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "anigma",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "AnigmaAppMac" : [
+      "ObservatoriumModule",
+      "AnigmaDaemonCore"
+    ],
+    "AnigmaDaemonCore" : [
+
+    ],
+    "CSystem" : [
+
+    ],
+    "EventSource" : [
+
+    ],
+    "InMemoryLogging" : [
+      "Logging"
+    ],
+    "Logging" : [
+
+    ],
+    "MCP" : [
+      "EventSource",
+      "Logging",
+      "SystemPackage",
+      "CSystem"
+    ],
+    "ObservatoriumModule" : [
+      "AnigmaDaemonCore"
+    ],
+    "SystemPackage" : [
+      "CSystem"
+    ],
+    "anigmad" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac-entitlement.plist"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AnigmaApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AppState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DocumentLibraryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/MainContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/ObservatoriumDashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/SettingsView.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/AnigmaDaemonCore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumCoordinator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.product/Objects.LinkFileList"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/AnigmaDaemonCore.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaDaemonCore.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncEventsSequence.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/AsyncSequence+Events.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/eventsource/Sources/EventSource/EventSource.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/EventSource.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/InMemoryLogging/InMemoryLogHandler.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/InMemoryLogging.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Locks.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/LogHandler.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Logging.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/MetadataProvider.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Error.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/ID.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Lifecycle.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Messages.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/HTTPClientTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/InMemoryTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/NetworkTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Transports/StdioTransport.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/UnitInterval.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Utilities/Ping.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Value.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Base/Versioning.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Client.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Client/Sampling.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Extensions/Data+Extensions.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Prompts.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Resources.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Server.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-sdk/Sources/MCP/Server/Tools.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/MCP.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Coordinator/ObservatoriumCoordinator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/AlertModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/FeedbackModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Models/TelemetryModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/ObservatoriumModule.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/AlertService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/FeedbackService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/TelemetryService.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/ObservatoriumModule.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Errno.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/ErrnoWindows.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileDescriptor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileHelpers.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FileOperations.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePath.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathComponents.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathParsing.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathString.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathSyntax.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTemp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempPosix.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathTempWindows.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePath/FilePathWindows.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/FilePermissions.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Backcompat.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/CInterop.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Constants.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Exports.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Mocking.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/RawBuffer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/Syscalls.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Internals/WindowsSyscallAdapters.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/MachPort.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/PlatformString.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/SystemString.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util+StringArray.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/Util.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-system/Sources/System/UtilConsumers.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/SystemPackage.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad-entitlement.plist"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/anigmad/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/sources"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.product/Objects.LinkFileList"
+    },
+    "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

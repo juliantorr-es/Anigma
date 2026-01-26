@@ -436,14 +436,6 @@ public actor AgentStatsAggregateSystem {
         var aggregationBuilder = AggregationSpecBuilder()
         aggregationBuilder.addMean(columnIndex: 3, outputName: "avg_duration")
 
-        let intervalSeconds: Int
-        switch timeGranularity {
-        case .hour: intervalSeconds = 3600
-        case .day: intervalSeconds = 86400
-        case .week: intervalSeconds = 604800
-        case .month: intervalSeconds = 2592000
-        }
-
         var groupBy: [ColumnReference] = [
             ColumnReference(name: "agent_id", type: .stringUtf8),
             ColumnReference(name: "time_bucket", type: .int64)

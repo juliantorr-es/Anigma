@@ -38,6 +38,9 @@ public actor AgenticLoopExecutor {
         // 1. Observe & Orient (History Management)
         history.append(InferenceMessage(role: "user", content: input))
 
+        // Apply deterministic optimization (e.g. prune superseded writes)
+        history = await compressionService.optimize(history)
+
         // Trigger compression if history is approaching limit
         let tokenEstimate = history.reduce(0) { $0 + ($1.content.count / 4) }
         if tokenEstimate > 24000 {

@@ -608,7 +608,7 @@ public struct BuildIngestionResult {
     public let buildDuration: Int
 }
 
-struct StoreDiagnosticsConfiguration: Sendable {
+fileprivate struct StoreDiagnosticsConfiguration: Sendable {
     let sessionId: String
     let gitStateId: String
     let target: String

@@ -366,7 +366,7 @@ public actor RankFusionCapsuleWrapper {
         // Get top-K results by score (deterministic tie-breaking)
         let indexedScores = filteredIndices.map { ($0, scores[$0]) }
         let sortedScores = indexedScores.sorted { a, b in
-            if abs(a.1 - b.1) < 1e-10 {
+            if Swift.abs(a.1 - b.1) < 1e-10 {
                 let id1 = ids[a.0]
                 let id2 = ids[b.0]
                 return id1 < id2
@@ -397,7 +397,7 @@ public actor RankFusionCapsuleWrapper {
                 let id1 = a.element
                 let id2 = b.element
                 
-                if abs(score1 - score2) < 1e-10 {
+                if Swift.abs(score1 - score2) < 1e-10 {
                     if id1 != id2 {
                         return id1 < id2
                     }

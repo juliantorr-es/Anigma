@@ -110,14 +110,15 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         )
         
         guard status == ANIGMA_OK, let rawHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: rawHandle,
-            destroyFunction: { ptr, err in
+            destroyFunction: { ptr in
                 var mutablePtr: anigma_media_fingerprint_capsule_t? = ptr
-                return anigma_media_fingerprint_capsule_destroy(&mutablePtr, err)
+                var err = anigma_capsule_error_t()
+                _ = anigma_media_fingerprint_capsule_destroy(&mutablePtr, &err)
             }
         )
         
@@ -136,7 +137,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         try handle?.withHandle { rawHandle in
             let status = anigma_media_fingerprint_capsule_reset(rawHandle, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
     }
@@ -148,7 +149,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     /// - Returns: Detected media type.
     public static func detectMediaType(_ data: Data) throws -> MediaType {
         guard !data.isEmpty else {
-            throw CapsuleError(
+            throw capsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
                 error: createError(code: ANIGMA_ERR_INVALID_ARG, message: "Invalid input buffer")
             )
@@ -165,7 +166,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         
         let status = anigma_media_fingerprint_detect_media_type(&buffer, &mediaType, &error)
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         return MediaType(rawValue: UInt8(mediaType.rawValue)) ?? .unknown
@@ -178,7 +179,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     /// - Returns: Media metadata.
     public func analyzeMedia(_ data: Data, mediaType: MediaType = .unknown) throws -> MediaMetadata {
         guard !data.isEmpty else {
-            throw CapsuleError(
+            throw capsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
                 error: createError(code: ANIGMA_ERR_INVALID_ARG, message: "Invalid input buffer")
             )
@@ -204,7 +205,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         return MediaMetadata(
@@ -286,7 +287,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         ) -> anigma_status_t
     ) throws -> FingerprintResult {
         guard !data.isEmpty else {
-            throw CapsuleError(
+            throw capsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
                 error: createError(code: ANIGMA_ERR_INVALID_ARG, message: "Invalid input buffer")
             )
@@ -312,7 +313,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         defer {
@@ -388,7 +389,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         return SimilarityResult(
@@ -451,7 +452,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         return Array(results.prefix(Int(actualCount))).map { result in
@@ -486,4 +487,9 @@ extension VideoFingerprintConfiguration {
     public func validate() throws {
         // Validation logic not available in native shim
     }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
 }

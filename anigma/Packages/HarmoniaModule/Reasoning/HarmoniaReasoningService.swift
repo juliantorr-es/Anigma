@@ -108,7 +108,7 @@ public actor HarmoniaReasoningService {
     private let orchestrator: ReasoningOrchestrator
 
     /// Audit log for reasoning operations.
-    private var auditLog: AuditLog?
+    private var auditLog: (any AuditLogging)?
 
     /// State abstractor for anonymizing inputs.
     private let abstractor = StateAbstractor()
@@ -125,7 +125,7 @@ public actor HarmoniaReasoningService {
     }
 
     /// Configures the service with dependencies.
-    public func configure(auditLog: AuditLog) async {
+    public func configure(auditLog: any AuditLogging) async {
         self.auditLog = auditLog
         await orchestrator.configure(auditLog: auditLog)
     }

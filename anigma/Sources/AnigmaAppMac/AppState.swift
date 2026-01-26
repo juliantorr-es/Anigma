@@ -87,11 +87,11 @@ final class AppState {
                 selectedSurface = .compass
             }
         case .work:
-            if ![.projects, .inbox, .ask, .activity, .data].contains(selectedSurface) {
+            if ![.projects, .inbox, .ask, .activity, .data, .documentLibrary].contains(selectedSurface) {
                 selectedSurface = .projects
             }
         case .insight:
-            if ![.atlas, .activity, .ask, .data].contains(selectedSurface) {
+            if ![.atlas, .activity, .ask, .data, .observatorium].contains(selectedSurface) {
                 selectedSurface = .atlas
             }
         case .build:

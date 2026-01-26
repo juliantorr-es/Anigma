@@ -1,0 +1,4 @@
+module MediaFingerprintNative {
+    header "anigma_media_fingerprint.h"
+    export *
+}

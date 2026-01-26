@@ -14,19 +14,22 @@ public struct DaemonConfiguration: Codable, Sendable {
     public let governance: GovernanceConfig
     public let resources: ResourceConfig
     public let telemetry: TelemetryConfig
+    public let antigravity: AntigravityConfig
 
     public init(
         daemon: DaemonConfig = .default,
         vault: VaultConfig = .default,
         governance: GovernanceConfig = .default,
         resources: ResourceConfig = .default,
-        telemetry: TelemetryConfig = .default
+        telemetry: TelemetryConfig = .default,
+        antigravity: AntigravityConfig = .default
     ) {
         self.daemon = daemon
         self.vault = vault
         self.governance = governance
         self.resources = resources
         self.telemetry = telemetry
+        self.antigravity = antigravity
     }
 
     public static let `default` = DaemonConfiguration()
@@ -264,5 +267,23 @@ public struct TelemetryConfig: Codable, Sendable {
         case enabled
         case exportIntervalSeconds = "export_interval_seconds"
         case retentionDays = "retention_days"
+    }
+}
+
+/// Antigravity OAuth configuration
+public struct AntigravityConfig: Codable, Sendable {
+    public let enabled: Bool
+    public let redirectPort: Int
+
+    public init(enabled: Bool = true, redirectPort: Int = 51121) {
+        self.enabled = enabled
+        self.redirectPort = redirectPort
+    }
+
+    public static let `default` = AntigravityConfig()
+
+    enum CodingKeys: String, CodingKey {
+        case enabled
+        case redirectPort = "redirect_port"
     }
 }

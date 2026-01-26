@@ -1,0 +1,54 @@
+{
+  "": {
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/master.swiftdeps"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AnigmaApp.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AnigmaApp.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/AppState.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/AppState.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DashboardView.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DashboardView.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/DocumentLibraryView.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/DocumentLibraryView.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/MainContentView.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/MainContentView.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/ObservatoriumDashboardView.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/ObservatoriumDashboardView.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/AnigmaAppMac/SettingsView.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/AnigmaAppMac.build/SettingsView.dia"
+  }
+}

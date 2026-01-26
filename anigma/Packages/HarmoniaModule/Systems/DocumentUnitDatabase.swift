@@ -12,7 +12,7 @@ import DatabaseCore
 
 /// Database operations for document units, embeddings, and retrieval
 public actor DocumentUnitDatabase {
-    private let dbActor: any DatabaseCore.DatabaseExecutor
+    internal let dbActor: any DatabaseCore.DatabaseExecutor
 
     public init(dbActor: any DatabaseCore.DatabaseExecutor) {
         self.dbActor = dbActor

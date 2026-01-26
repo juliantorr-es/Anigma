@@ -10,7 +10,7 @@
 
 extension ProjectHarnessStore {
     public func updateFeatureBehavioralHistory(
-        featureId: Int64,
+        featureId: UUID,
         sessionIndex: Int,
         healthScore: Double,
         analysisRatio: Double,

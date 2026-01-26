@@ -36,21 +36,15 @@ public actor RuntimeOrchestrator {
         // 1. Evaluate transforms
         try sceneGraph.evaluateTransforms()
         
-        // 2. Create RenderRequest
-        let request = RenderRequest(
-            viewport: Rect(x: 0, y: 0, w: Float(viewportWidth), h: Float(viewportHeight)),
-            scaleFactor: displayScale,
-            flags: 0
-        )
+        // 2. Iterate through the SceneGraph, extract node transforms/properties, and serialize
+        let nodes = try sceneGraph.getAllNodes()
+        if nodes.isEmpty {
+            return Data()
+        }
         
-        // 3. Generate RenderPlan
-        let plan = try RenderPlan.generate(from: sceneGraph, request: request)
-        
-        // 4. Compute hash (optional, just to verify it works)
-        try plan.computeHash()
-        
-        // Return dummy data for now as the original stub did, 
-        // or return serialized plan if we had serialization.
-        return Data()
+        // Serialize to binary format (simple C-struct array)
+        return nodes.withUnsafeBytes { buffer in
+            return Data(buffer)
+        }
     }
 }

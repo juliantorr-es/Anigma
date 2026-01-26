@@ -51,37 +51,17 @@ public actor ChunkingSystem {
     private func chunkText(_ text: String) async -> [String] {
         guard !text.isEmpty else { return [] }
         
-        // Convert string to UTF-8 data for byte-level chunking
-        let data = Data(text.utf8)
-        
-        // Create configuration based on system parameters
+        // Create configuration based on character-based maxChunkSize
+        let targetBytes = Int(Double(maxChunkSize) * 1.5)
         let config = TextChunkingConfig(
-            targetChunkSize: maxChunkSize,
-            minChunkSize: max(64, maxChunkSize / 4),  // Minimum 64 bytes
-            maxChunkSize: min(maxChunkSize * 2, 8192), // Cap at 8KB
-            windowSize: 48,
-            determinismTier: 1 // ANIGMA_DETERMINISM_TIER_1_RECEIPT_GRADE
+            targetChunkSize: targetBytes,
+            minChunkSize: max(64, targetBytes / 4),
+            maxChunkSize: min(targetBytes * 2, 16384)
         )
         
         do {
-            // Use one-shot chunking for simplicity
-            let wrapper = try TextChunkingCapsuleWrapper(config: config)
-            try await wrapper.processBytes(data)
-            try await wrapper.finalize()
-            
-            // Extract chunks as Data slices
-            let chunkData = try await wrapper.extractChunks(from: data)
-            
-            // Convert Data back to String chunks
-            var stringChunks: [String] = []
-            for chunk in chunkData {
-                if let chunkString = String(data: chunk, encoding: .utf8) {
-                    stringChunks.append(chunkString)
-                } else {
-                    // Fallback: use the original chunking method if UTF-8 conversion fails
-                    return fallbackChunkText(text)
-                }
-            }
+            let capsule = try TextChunkingCapsule(config: config)
+            let stringChunks = try await capsule.chunk(text)
             
             // Apply overlapping if needed (overlapSize > 0)
             if overlapSize > 0 && stringChunks.count > 1 {

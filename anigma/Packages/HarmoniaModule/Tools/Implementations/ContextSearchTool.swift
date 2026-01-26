@@ -37,7 +37,7 @@ public struct ContextSearchTool: Sendable {
         let queryExpander = QueryExpander(dbActor: db)
         let analytics = SearchAnalytics(dbActor: db)
         let ranker = ResultRanker(dbActor: db)
-        let semanticSearch = SemanticCodebaseSearch(dbActor: db)
+        let semanticSearch = EmbeddingIntegration(dbActor: db)
 
         do {
             let expanded = try await queryExpander.expandQuery(query)
@@ -45,15 +45,15 @@ public struct ContextSearchTool: Sendable {
                 ? query
                 : expanded.expanded.joined(separator: " ")
 
-            let rawResults = try await semanticSearch.search(query: searchQuery)
+            let rawResults = try await semanticSearch.vectorSearch(query: searchQuery)
             let limitedResults = Array(rawResults.prefix(safeLimit))
 
             let rankInputs = limitedResults.map { result in
                 SearchResultInput(
-                    resultId: result.filePath,
-                    text: result.fileDescription.isEmpty ? result.matchReason : result.fileDescription,
+                    resultId: result.contentId,
+                    text: result.preview,
                     createdAt: Date(),
-                    semanticScore: result.relevanceScore
+                    semanticScore: result.vectorSimilarity
                 )
             }
 
@@ -68,19 +68,19 @@ public struct ContextSearchTool: Sendable {
                 )
             }
 
-            let resultById = Dictionary(uniqueKeysWithValues: limitedResults.map { ($0.filePath, $0) })
+            let resultById = Dictionary(uniqueKeysWithValues: limitedResults.map { ($0.contentId, $0) })
 
             let responseResults: [ContextSearchResult] = ranked.map { rankedResult in
                 let raw = resultById[rankedResult.resultId]
                 return ContextSearchResult(
                     filePath: rankedResult.resultId,
-                    description: raw?.fileDescription ?? rankedResult.description,
-                    matchReason: raw?.matchReason ?? rankedResult.rankingReason,
-                    relevanceScore: raw?.relevanceScore ?? rankedResult.overallScore,
+                    description: raw?.preview ?? rankedResult.description,
+                    matchReason: rankedResult.rankingReason,
+                    relevanceScore: raw?.vectorSimilarity ?? rankedResult.overallScore,
                     rankingScore: rankedResult.overallScore,
                     rankingReason: rankedResult.rankingReason,
-                    matchingSymbols: raw?.matchingSymbols ?? [],
-                    summary: raw?.summary
+                    matchingSymbols: [],
+                    summary: nil
                 )
             }
 

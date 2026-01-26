@@ -246,7 +246,7 @@ public actor CathedralDatabasePersistence {
         let engineMetadata = Data()
         let recordHash = record.id.sha256Hash
         let createdAt = Int(Date().timeIntervalSince1970)
-        let parameters: [DatabaseParameter] = [
+        let parameters: [DatabaseCore.DatabaseParameter] = [
             .text(record.id),
             .text(record.query.text),
             .int(Int(record.timestamp.timeIntervalSince1970)),

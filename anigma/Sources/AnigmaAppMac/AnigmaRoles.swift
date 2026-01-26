@@ -103,6 +103,7 @@ enum UserSurface: String, CaseIterable, Identifiable {
     case ask        // Research panel
     case projects   // Project workspaces
     case data       // Data workspace
+    case documentLibrary // Document archive
     case studio     // Tool builder
     case export     // Export tool
     case aiConsole  // AI Management Panel
@@ -118,6 +119,7 @@ enum UserSurface: String, CaseIterable, Identifiable {
     case developGithub
     case activity   // Progress lane
     case actionCatalog // Unified Tool Runner
+    case observatorium // Monitoring dashboard
 
     var id: String { rawValue }
 
@@ -132,6 +134,7 @@ enum UserSurface: String, CaseIterable, Identifiable {
         case .ask: return "Ask"
         case .projects: return "Projects"
         case .data: return "Data"
+        case .documentLibrary: return "Document Library"
         case .studio: return "Studio"
         case .develop, .developFiles: return "Files"
         case .developSearch: return "Search"
@@ -143,6 +146,7 @@ enum UserSurface: String, CaseIterable, Identifiable {
         case .developBrowse: return "Browse"
         case .developGithub: return "GitHub"
         case .activity: return "Activity"
+        case .observatorium: return "Observatorium"
         }
     }
 
@@ -154,6 +158,7 @@ enum UserSurface: String, CaseIterable, Identifiable {
         case .ask: return "questionmark.circle.fill"
         case .projects: return "folder.fill"
         case .data: return "tablecells.fill"
+        case .documentLibrary: return "books.vertical.fill"
         case .studio: return "hammer.fill"
         case .export: return "square.and.arrow.up.fill"
         case .aiConsole: return "cpu.fill"
@@ -168,6 +173,7 @@ enum UserSurface: String, CaseIterable, Identifiable {
         case .developGithub: return "network"
         case .activity: return "chart.line.uptrend.xyaxis"
         case .actionCatalog: return "tray.2.fill"
+        case .observatorium: return "waveform.path.ecg"
         }
     }
 }

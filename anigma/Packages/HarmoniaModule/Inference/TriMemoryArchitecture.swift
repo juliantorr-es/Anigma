@@ -12,6 +12,7 @@
 
 @preconcurrency import Foundation
 import AnigmaCore
+import struct ContractsCore.RetentionPolicy
 import DataCore
 
 // MARK: - Memory Types
@@ -114,6 +115,21 @@ public struct ShortTermMemory: MemoryItem {
         self.contentType = try container.decode(ShortTermContentType.self, forKey: .contentType)
         self.content = try container.decode(Data.self, forKey: .content)
         self.source = try container.decode(ShortTermSource.self, forKey: .source)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(memoryType, forKey: .memoryType)
+        try container.encode(tenantId, forKey: .tenantId)
+        try container.encode(sessionId, forKey: .sessionId)
+        try container.encode(createdAt, forKey: .createdAt)
+        try container.encode(accessedAt, forKey: .accessedAt)
+        try container.encode(expiresAt, forKey: .expiresAt)
+        try container.encode(sensitivity, forKey: .sensitivity)
+        try container.encode(contentType, forKey: .contentType)
+        try container.encode(content, forKey: .content)
+        try container.encode(source, forKey: .source)
     }
 }
 
@@ -220,6 +236,24 @@ public struct LongTermMemory: MemoryItem {
         self.legalHolds = try container.decode([String].self, forKey: .legalHolds)
         self.source = try container.decode(LongTermSource.self, forKey: .source)
     }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(memoryType, forKey: .memoryType)
+        try container.encode(tenantId, forKey: .tenantId)
+        try container.encode(createdAt, forKey: .createdAt)
+        try container.encode(accessedAt, forKey: .accessedAt)
+        try container.encode(modifiedAt, forKey: .modifiedAt)
+        try container.encode(sensitivity, forKey: .sensitivity)
+        try container.encode(contentType, forKey: .contentType)
+        try container.encode(version, forKey: .version)
+        try container.encode(previousVersionId, forKey: .previousVersionId)
+        try container.encode(content, forKey: .content)
+        try container.encode(retentionPolicy, forKey: .retentionPolicy)
+        try container.encode(legalHolds, forKey: .legalHolds)
+        try container.encode(source, forKey: .source)
+    }
 }
 
 /// Types of long-term content.
@@ -320,6 +354,21 @@ public struct PersistentMemory: MemoryItem {
         self.releaseId = try container.decode(String.self, forKey: .releaseId)
         self.contentReference = try container.decode(String.self, forKey: .contentReference)
         self.contentHash = try container.decode(String.self, forKey: .contentHash)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(memoryType, forKey: .memoryType)
+        try container.encode(tenantId, forKey: .tenantId)
+        try container.encode(createdAt, forKey: .createdAt)
+        try container.encode(accessedAt, forKey: .accessedAt)
+        try container.encode(sensitivity, forKey: .sensitivity)
+        try container.encode(contentType, forKey: .contentType)
+        try container.encode(version, forKey: .version)
+        try container.encode(releaseId, forKey: .releaseId)
+        try container.encode(contentReference, forKey: .contentReference)
+        try container.encode(contentHash, forKey: .contentHash)
     }
 }
 

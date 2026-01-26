@@ -295,6 +295,8 @@ struct Sidebar: View {
                         .tag(UserSurface.projects)
                     SidebarRow(title: "Data", icon: "tablecells.fill")
                         .tag(UserSurface.data)
+                    SidebarRow(title: "Documents", icon: "books.vertical.fill", count: store.artifacts.count)
+                        .tag(UserSurface.documentLibrary)
                     SidebarRow(title: "Project Inbox", icon: "tray.and.arrow.down.fill", count: store.inboxCount)
                         .tag(UserSurface.inbox)
                 }
@@ -319,6 +321,11 @@ struct Sidebar: View {
                         .tag(UserSurface.data)
                     SidebarRow(title: "Analyze", icon: "magnifyingglass.circle.fill")
                         .tag(UserSurface.ask)
+                }
+
+                Section("Monitoring") {
+                    SidebarRow(title: "Observatorium", icon: "waveform.path.ecg")
+                        .tag(UserSurface.observatorium)
                 }
 
             case .develop:
@@ -446,6 +453,8 @@ struct UserSurfaceView: View {
             }
         case .data:
             DataView()
+        case .documentLibrary:
+            DocumentLibraryView()
         case .studio:
             StudioView()
         case .export:
@@ -458,6 +467,8 @@ struct UserSurfaceView: View {
             ActivityView()
         case .actionCatalog:
             ActionCatalogView()
+        case .observatorium:
+            ObservatoriumDashboardView()
         }
     }
 }

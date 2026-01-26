@@ -1,0 +1,300 @@
+    }
+    var activeWorkspaceID: UUID? {
+        workspaceStore.activeWorkspaceID
+    }
+    var hasMoreJobs: Bool {
+        workspaceStore.hasMoreJobs
+    }
+    var selectedWorkspaceID: WorkspaceID? {
+        if case .workspace(let id) = sidebarSelection {
+            return id
+        }
+        return nil
+    }
+    var isDaemonConnected: Bool {
+        daemonStore.isDaemonConnected
+    }
+    
+    // MARK: - Intake Logic
+    
+    @MainActor func handleIntake(_ providers: [NSItemProvider]) { intakeManager.handleIntake(providers) }
+    @MainActor func handleIntake(url: URL) { intakeManager.handleIntake(url: url) }
+    
+    // MARK: - Context Operations
+    
+    @MainActor func activateContext(_ context: AnigmaContext) { contextManager.activateContext(context) }
+    
+    // MARK: - Job Operations
+    
+    func submitJob(action: String, parameters: [String: BindingValue]) async { await jobManager.submitJob(action: action, parameters: parameters) }
+    func runSimulatedJob(id: UUID, stages: [(Double, String)]) async { await jobManager.runSimulatedJob(id: id, stages: stages) }
+    func cancelJob(id: JobID) async { await jobManager.cancelJob(id: id) }
+    func deleteJob(id: JobID) async { await jobManager.deleteJob(id: id) }
+    func verifyJob(id: JobID) async { await jobManager.verifyJob(id: id) }
+    
+    @MainActor
+    func dispatchJob(_ spec: AnigmaJobSpec) async throws -> AnigmaSubmitJobResponse {
+        let result = try await daemonStore.dispatchJob(spec)
+        self.monitorDaemonJob(daemonId: result.jobID, title: spec.kind)
+        return result
+    }
+    
+    func monitorDaemonJob(daemonId: String, title: String) {
+        let localId = UUID()
+        let initialJob = AnigmaJob(
+            id: localId,
+            daemonJobId: daemonId,
+            title: "Daemon: \(title)",
+            status: .pending,
+            progress: 0,
+            startedAt: Date()
+        )
+
+        Task { @MainActor in
+            self.localJobs.append(initialJob)
+
+            do {
+                let stream = try await self.streamJobEvents(jobId: daemonId)
+                for try await event in stream {
+                    await MainActor.run {
+                        if let index = self.localJobs.firstIndex(where: { $0.id == localId }) {
+                            switch event.type {
+                            case "STATE":
+                                if !event.receiptHash.isEmpty {
+                                    self.localJobs[index].receiptHash = event.receiptHash
+                                }
+                                switch event.message {
+                                case "RUNNING":
+                                    self.localJobs[index].status = .running
+                                    self.showToast(title: "Job Started", subtitle: title, icon: "play.circle.fill")
+                                case "SUCCEEDED":
+                                    self.localJobs[index].status = .completed
+                                    self.localJobs[index].progress = 1.0
+                                    self.localJobs[index].completedAt = Date()
+                                    self.showToast(title: "Job Completed", subtitle: title, icon: "checkmark.circle.fill")
+                                case "FAILED":
+                                    self.localJobs[index].status = .failed
+                                    self.localJobs[index].message = event.message.isEmpty ? "Execution failed" : event.message
+                                    self.showError("Job Failed: \(title)\n\(event.message.isEmpty ? "Check logs for details." : event.message)")
+                                case "CANCELED":
+                                    self.localJobs[index].status = .failed
+                                    self.localJobs[index].message = "Canceled by user"
+                                    self.showToast(title: "Job Canceled", subtitle: title, icon: "xmark.circle.fill")
+                                default: break
+                                }
+                            case "PROGRESS":
+                                self.localJobs[index].progress = Double(event.progressPermille) / 1000.0
+                            case "LOG":
+                                self.localJobs[index].message = event.message
+                            case "OUTPUT":
+                                if !event.receiptHash.isEmpty {
+                                    self.localJobs[index].receiptHash = event.receiptHash
+                                }
+                                self.showToast(title: "Output Generated", subtitle: "New artifact from \(title)", icon: "doc.fill")
+                            case "ERROR":
+                                self.localJobs[index].status = .failed
+                                self.localJobs[index].message = event.message
+                                self.showError("Job Error: \(event.message)")
+                            default: break
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("Monitoring failed for \(daemonId): \(error)")
+                await MainActor.run {
+                    if let index = self.localJobs.firstIndex(where: { $0.id == localId }) {
+                        self.localJobs[index].status = .failed
+                        self.localJobs[index].message = "Connection lost: \(error.localizedDescription)"
+                    }
+                    self.showError("Job Monitoring Failed\nLost connection to daemon for: \(title)\n\(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    // MARK: - Develop Mode Operations
+    
+    func applyChangeSet(_ changeSetId: UUID) async { await developManager.applyChangeSet(changeSetId) }
+    func rejectChangeSet(_ changeSetId: UUID) async { await developManager.rejectChangeSet(changeSetId) }
+    func runCheckProfile(name: String) async { await developManager.runCheckProfile(name: name) }
+    func discoverAgentProviders() async { await developManager.discoverAgentProviders() }
+    func enableAgentProvider(_ providerId: String) async { await developManager.enableAgentProvider(providerId) }
+    func runAgent(id: String, instruction: String) async { await developManager.runAgent(id: id, instruction: instruction) }
+
+    // MARK: - Workspace & Repository
+    
+    func openLocalRepository(at url: URL) async {
+        showToast(title: "Initializing Sandbox", subtitle: "Creating playground for agents...", icon: "clock.arrow.2.circlepath")
+        do {
+            let workspace = try await workspaceStore.openLocalRepository(at: url)
+            sidebarSelection = .workspace(id: workspace.id.uuidString)
+            mode = .develop
+            normalizeSelectionForMode()
+            showToast(title: "Repository Ready", subtitle: "\(workspace.name) (Sandboxed)", icon: "checkmark.shield.fill")
+        } catch {
+            showToast(title: "Failed to Open", subtitle: error.localizedDescription, icon: "exclamationmark.triangle.fill")
+        }
+    }
+    
+    func selectWorkspace(_ id: WorkspaceID) async {
+        sidebarSelection = .workspace(id: id)
+        guard id != selectedWorkspaceID else { return }
+        await workspaceStore.selectWorkspace(id)
+    }
+    
+    func loadMoreWorkspaces() async { await workspaceStore.loadMoreWorkspaces() }
+    func createWorkspace(name: String = "New Workspace") async { 
+        await workspaceStore.createWorkspace(name: name) 
+        if let id = workspaceStore.workspaces.first(where: { $0.name == name })?.id {
+            sidebarSelection = .workspace(id: id)
+        }
+    }
+    func updateWorkspace(id: WorkspaceID, name: String) async { await workspaceStore.updateWorkspace(id: id, name: name) }
+    func deleteWorkspace(id: WorkspaceID) async { 
+        await workspaceStore.deleteWorkspace(id: id)
+        if selectedWorkspaceID == id {
+            if let firstId = workspaces.first?.id {
+                sidebarSelection = .workspace(id: firstId)
+                await selectWorkspace(firstId)
+            } else {
+                sidebarSelection = nil
+            }
+        }
+    }
+
+    // MARK: - Artifact Management
+    
+    func uploadArtifact(name: String, data: Data) async {
+
+        guard let client = client, let workspaceId = selectedWorkspaceID else { return }
+        do {
+            _ = try await client.command.uploadArtifact(workspaceId: workspaceId, name: name, data: data)
+            await selectWorkspace(workspaceId)
+        } catch {
+            print("Error uploading artifact: \(error)")
+        }
+    }
+    
+    func downloadArtifact(id: ArtifactID) async -> Data? {
+        guard let client = client else { return nil }
+        return try? await client.query.downloadArtifact(id: id)
+    }
+    
+    func deleteArtifact(id: ArtifactID) async {
+        guard let client = client, let workspaceId = selectedWorkspaceID else { return }
+        do {
+            try await client.command.deleteArtifact(id: id)
+            await selectWorkspace(workspaceId)
+            if case .artifact(let selectedId) = inspectorSelection, selectedId == id {
+                inspectorSelection = nil
+            }
+        } catch {
+            print("Error deleting artifact: \(error)")
+        }
+    }
+    
+    // MARK: - Daemon Communication
+    
+    func initialLoad() async {
+        do {
+            isInitializing = true
+            connectionMonitor?.start()
+            try await daemonStore.initializeDaemon()
+            self.authority = daemonStore.authority
+            self.surfaceId = daemonStore.surfaceId
+            self.actorId = daemonStore.actorId
+            self.capabilityToken = daemonStore.capabilityToken
+            self.client = daemonStore.client
+            workspaceStore.client = self.client
+            await authority?.ensureDefaultWorkspace()
+            subscribeToIR()
+            await workspaceStore.loadWorkspaces()
+            isInitializing = false
+            daemonStatus = "Ready"
+        } catch {
+            isInitializing = false
+            initializationError = error.localizedDescription
+            daemonStatus = "Error: \(error.localizedDescription)"
+        }
+    }
+    
+    func refreshDaemonStatus() async { await daemonStore.refreshDaemonStatus() }
+    func fetchReceipt(hash: String) async { await daemonStore.fetchReceipt(hash: hash) }
+    func loadGlobalArtifacts(reset: Bool = false) async { await daemonStore.loadGlobalArtifacts(reset: reset) }
+    func refreshDaemonInfo() async { await daemonStore.refreshDaemonInfo() }
+    func streamJobEvents(jobId: String) async throws -> AsyncThrowingStream<AnigmaJobEvent, Error> { try await daemonStore.streamJobEvents(jobId: jobId) }
+    func verifyReceiptChain(headHash: String) async -> Bool { await daemonStore.verifyReceiptChain(headHash: headHash) }
+    
+    // MARK: - UI Support
+    
+    func showToast(title: String, subtitle: String? = nil, icon: String? = nil, actionLabel: String? = nil) {
+        let toast = AnigmaToast(id: UUID(), title: title, subtitle: subtitle, icon: icon, actionLabel: actionLabel)
+        withAnimation { activeToasts.append(toast) }
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(4.0))
+            withAnimation { self.activeToasts.removeAll { $0.id == toast.id } }
+        }
+    }
+    
+    func showError(_ message: String) {
+        let toast = AnigmaToast(id: UUID(), title: "⚠️ Error", subtitle: message, icon: "exclamationmark.octagon.fill")
+        withAnimation { activeToasts.append(toast) }
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(8.0))
+            withAnimation { self.activeToasts.removeAll { $0.id == toast.id } }
+        }
+    }
+    
+    func logNetworkActivity(domain: String, isAllowed: Bool, reason: String? = nil) {
+        let entry = NetworkActivityEntry(domain: domain, timestamp: Date(), isAllowed: isAllowed, reason: reason)
+        networkActivityLog.append(entry)
+        if networkActivityLog.count > 100 { networkActivityLog.removeFirst() }
+    }
+    
+    // MARK: - Internal Helpers
+    
+    private func normalizeSelectionForMode() {
+        switch mode {
+        case .life:
+            if ![.compass, .inbox, .atlas, .ask, .projects, .activity].contains(userSurface) { userSurface = .compass }
+        case .work:
+            if ![.projects, .inbox, .ask, .activity, .data].contains(userSurface) { userSurface = .projects }
+        case .insight:
+            if ![.atlas, .activity, .ask, .data].contains(userSurface) { userSurface = .atlas }
+        case .build:
+            if ![.studio, .activity, .inbox, .atlas].contains(userSurface) { userSurface = .studio }
+        case .develop:
+            let developSurfaces: Set<UserSurface> = [.develop, .developFiles, .developSearch, .developChanges, .developRuns, .developReview, .developTasks, .developAgents, .activity, .ask, .projects]
+            if !developSurfaces.contains(userSurface) { userSurface = .develop }
+        }
+    }
+    
+    private func setSourceConnected(_ sourceType: SourceType, connected: Bool) {
+        if let index = sources.firstIndex(where: { $0.type == sourceType }) {
+            sources[index].status = connected ? .connected : .paused
+            sources[index].isConnected = connected
+            return
+        }
+        guard connected else { return }
+        sources.append(AnigmaSource(name: sourceType.rawValue, type: sourceType, path: sourceType.description, depth: .discovery, computePolicy: ComputePolicy(), storagePolicy: StoragePolicy(), isConnected: true, lastIndexed: nil, status: .connected, stats: nil))
+    }
+    
+    private func syncJobStates() {
+        let state = AppState.shared
+        state.jobStream = jobs.map { job in
+            AppState.JobEntry(id: UUID(uuidString: job.id) ?? UUID(), title: job.name, status: mapJobStatus(job.status), progress: nil, source: "System", receiptLink: nil, timestamp: job.createdAt)
+        }
+        let localRunningCount = localJobs.filter { $0.status == .running || $0.status == .pending }.count
+        state.runningJobsCount = jobs.filter { $0.status.uppercased() == "RUNNING" || $0.status.uppercased() == "QUEUED" }.count + localRunningCount
+        state.blockedJobsCount = jobs.filter { $0.status.uppercased() == "BLOCKED" }.count
+    }
+    
+    private func mapJobStatus(_ status: String) -> Bauhaus.StatusState {
+        switch status.uppercased() {
+        case "RUNNING", "QUEUED": return .running
+        case "SUCCEEDED", "COMPLETED": return .newOutput
+        case "FAILED", "CANCELED": return .blocked
+        case "BLOCKED": return .blocked
+        case "ATTENTION": return .attention
+        default: return .idle

@@ -99,7 +99,7 @@ public struct FileStatistics: Sendable, Codable {
 }
 
 /// Enhanced read_file tool with caching and analytics
-public actor EnhancedReadFileTool {
+public actor EnhancedReadFileTool: ToolHandlerProtocol {
     private let cacheManager: FileCachingManager
     private let accessLogger: FileAccessLogger
     private let repoRoot: String
@@ -114,9 +114,9 @@ public actor EnhancedReadFileTool {
         self.repoRoot = repoRoot
         self.dbActor = dbActor
 
-        let db = dbActor ?? DatabaseActor(dbPath: Self.defaultDatabasePath())
-        self.cacheManager = cacheManager ?? FileCachingManager(dbActor: db)
-        self.accessLogger = accessLogger ?? FileAccessLogger(dbActor: db)
+        let _ = dbActor ?? DatabaseActor(dbPath: Self.defaultDatabasePath())
+        self.cacheManager = cacheManager ?? FileCachingManager()
+        self.accessLogger = accessLogger ?? FileAccessLogger()
     }
 
     /// Enhanced read file with caching
@@ -189,52 +189,27 @@ public actor EnhancedReadFileTool {
         )
     }
 
-    /// Execute as MCP tool
-    public func execute(_ request: ToolCallRequest, session: SessionContext) async -> ToolCallResponse {
-        let paramsData = Data(request.parameters.utf8)
-        let parameters = (try? JSONSerialization.jsonObject(with: paramsData) as? [String: Any]) ?? [:]
+    /// Execute as ToolHandler
+    public func handle(request: ToolRequest) async throws -> ToolResponse {
+        let parameters = request.arguments
 
-        guard let path = (parameters["file_path"] as? String) ?? (parameters["path"] as? String) else {
-            return ToolCallResponse(
-                status: .failed,
-                toolName: request.toolName,
-                diagnosis: "Missing required parameter: file_path"
-            )
+        guard let path = parameters["file_path"] ?? parameters["path"] else {
+            return .failure("Missing required parameter: file_path")
         }
 
-        let useCache = (parameters["cache"] as? Bool) ?? true
+        let useCache = (parameters["cache"] ?? "true") == "true"
 
         do {
             let result = try await readFile(path: path, useCache: useCache)
 
-            var resultJSON: [String: Any] = [:]
-            resultJSON["content"] = result.content
-            resultJSON["path"] = result.metadata.path
-            resultJSON["sha256_hash"] = result.metadata.hash
-            resultJSON["blake3_hash"] = result.metadata.hash
-            resultJSON["size_bytes"] = result.metadata.size
-            resultJSON["mtime"] = Int(result.metadata.modificationTime.timeIntervalSince1970)
-            resultJSON["lines"] = result.metadata.linesOfCode
-            resultJSON["file_type"] = result.metadata.fileType
-            resultJSON["cache_status"] = result.cacheStatus.rawValue
-            resultJSON["accesses"] = result.stats.totalAccesses
-            resultJSON["frequently_accessed"] = result.stats.isFrequentlyAccessed
-            resultJSON["recommendations"] = result.recommendations
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let resultData = try encoder.encode(result)
+            let resultString = String(data: resultData, encoding: .utf8) ?? "{}"
 
-            let resultData = try JSONSerialization.data(withJSONObject: resultJSON)
-
-            return ToolCallResponse(
-                status: .success,
-                result: resultData,
-                toolName: request.toolName,
-                diagnosis: "File read: \(result.metadata.size) bytes, cache \(result.cacheStatus.rawValue)"
-            )
+            return .success(resultString)
         } catch {
-            return ToolCallResponse(
-                status: .failed,
-                toolName: request.toolName,
-                diagnosis: "Failed to read file: \(error.localizedDescription)"
-            )
+            return .failure("Failed to read file: \(error.localizedDescription)")
         }
     }
 

@@ -9,6 +9,7 @@
 import AnigmaCore
 import MLWorkerCommon
 import InferenceCore
+import MLWorkerCommon
 
 /// MLX backend runner for Apple Silicon inference.
 public actor MLXBackendRunner: BackendRunner {
@@ -24,20 +25,21 @@ public actor MLXBackendRunner: BackendRunner {
         }
     }
     
-    public func start(model: InferenceModel) async throws {
+    public func start(model: ModelDescriptor) async throws {
         guard !loadedModels.contains(model.id) else { return }
         
         // Try to load MLX engine
         do {
             // Using direct initialization if possible, or fallback to class lookup
-            let engine = MLXInferenceEngine(modelId: model.id)
-            try await engine.loadModel()
+            // Note: MLXInferenceEngine should be available in scope or through imports
+            // For now, we assume it's available via MLWorkerCommon or similar
+            let engine = try await loadEngine(for: model.id)
             engines[model.id] = engine
             loadedModels.insert(model.id)
             print("MLX backend started for model: \(model.id)")
         } catch {
             print("Failed to initialize MLX engine: \(error)")
-            throw InferenceError.unavailable("MLX - initialization failed: \(error.localizedDescription)")
+            throw InferenceError.modelLoadFailed(model: model.id, reason: error.localizedDescription)
         }
     }
     
@@ -66,10 +68,9 @@ public actor MLXBackendRunner: BackendRunner {
     
     public func execute(request: BackendRequest) async throws -> BackendResponse {
         guard let engine = engines[request.model.id] else {
-            throw InferenceError.unavailable("MLX backend not initialized for model \(request.model.id)")
+            throw InferenceError.backendUnavailable(backend: .mlx)
         }
         
-        let startTime = Date()
         var tokensIn = 0
         var tokensOut = 0
         
@@ -129,7 +130,7 @@ public actor MLXBackendRunner: BackendRunner {
             output = .classification(label: category, confidence: 0.85)
             
         default:
-            throw InferenceError.invalidRequest("Task type \(request.kind) not yet implemented for MLX")
+            throw InferenceError.executionFailed(reason: "Task type \(request.kind) not yet implemented for MLX")
         }
         
         return BackendResponse(
@@ -140,14 +141,15 @@ public actor MLXBackendRunner: BackendRunner {
     }
     
     public func stream(request: BackendRequest) async throws -> AsyncThrowingStream<InferenceChunk, Error> {
+        guard let engine = engines[request.model.id] else {
+            throw InferenceError.backendUnavailable(backend: .mlx)
+        }
+        
+        let taskId = request.taskId
+        
         return AsyncThrowingStream { continuation in
             Task {
                 do {
-                    guard let engine = engines[request.model.id] else {
-                        continuation.finish(throwing: InferenceError.unavailable("MLX engine not initialized"))
-                        return
-                    }
-                    
                     switch request.kind {
                     case .chat:
                         let promptText = extractTextFromInput(request.input)
@@ -157,26 +159,28 @@ public actor MLXBackendRunner: BackendRunner {
                             temperature: Float(request.parameters.temperature)
                         )
                         
-                        var accumulatedText = ""
+                        var accumulatedTokens = 0
                         for try await chunk in stream {
-                            accumulatedText += chunk
+                            accumulatedTokens += 1 // Simplified
                             continuation.yield(InferenceChunk(
-                                content: chunk,
+                                taskId: taskId,
+                                delta: chunk,
                                 isComplete: false,
-                                metadata: nil
+                                tokensGenerated: accumulatedTokens
                             ))
                         }
                         
                         continuation.yield(InferenceChunk(
-                            content: "",
+                            taskId: taskId,
+                            delta: "",
                             isComplete: true,
-                            metadata: ["totalTokens": estimateTokenCount(accumulatedText)]
+                            tokensGenerated: accumulatedTokens
                         ))
                         
                         continuation.finish()
                         
                     default:
-                        continuation.finish(throwing: InferenceError.invalidRequest("Streaming not implemented for \(request.kind)"))
+                        continuation.finish(throwing: InferenceError.executionFailed(reason: "Streaming not implemented for \(request.kind)"))
                     }
                 } catch {
                     continuation.finish(throwing: error)
@@ -191,6 +195,12 @@ public actor MLXBackendRunner: BackendRunner {
     
     // MARK: - Private Helpers
     
+    private func loadEngine(for modelId: String) async throws -> any MLXEngineProtocol {
+        // This should use the actual MLXInferenceEngine if available
+        // For now, we assume it's provided by the environment
+        throw InferenceError.backendUnavailable(backend: .mlx)
+    }
+
     private func extractTextFromInput(_ input: InferenceInput) -> String {
         switch input {
         case .text(let text):

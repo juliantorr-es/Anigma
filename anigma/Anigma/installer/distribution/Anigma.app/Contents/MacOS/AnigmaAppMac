@@ -1,0 +1,2 @@
+#!/bin/bash
+osascript -e 'display dialog "Anigma is now installed and running!\n\n• Daemon: Running in background\n• CLI: Available as anigma-cli\n• Status: Check /tmp/com.anigma.daemon.log" buttons {"OK"} default button "OK" with title "Anigma Status"'

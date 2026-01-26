@@ -81,16 +81,15 @@ public actor ChatPresenter {
             for try await event in try await sidecar.streamJobEvents(jobId: jobId) {
                 switch event.type {
                 case "job.token":
-                    if let token = event.message { // Assuming message field holds the token for this event type
-                        await TUIEventBus.shared.publish(.tokenReceived(token: token))
-                    }
+                    let token = event.message // Assuming message field holds the token for this event type
+                    await TUIEventBus.shared.publish(.tokenReceived(token: token))
                 case "job.progress":
-                    await TUIEventBus.shared.publish(.statusUpdated(message: event.message ?? "Working..."))
+                    await TUIEventBus.shared.publish(.statusUpdated(message: event.message))
                 case "job.completed":
                     await TUIEventBus.shared.publish(.statusUpdated(message: "Done"))
                     NotificationManager.send(title: "Anigma Task Complete", message: "Your task has finished successfully.")
                 case "job.failed":
-                    let msg = event.message ?? "Unknown error"
+                    let msg = event.message
                     await TUIEventBus.shared.publish(.statusUpdated(message: "❌ Error: \(msg)"))
                     await TUIEventBus.shared.publish(.tokenReceived(token: "\n[Error: \(msg)]"))
                     NotificationManager.send(title: "Anigma Task Failed", message: msg)

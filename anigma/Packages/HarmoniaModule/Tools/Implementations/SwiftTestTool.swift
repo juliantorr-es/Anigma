@@ -17,3 +17,10 @@ public struct SwiftTestTool: Sendable {
         return await enhanced.execute(request, session: session)
     }
 }
+
+public struct EnhancedSwiftTestTool: Sendable {
+    public init() {}
+    public func execute(_ request: ToolCallRequest, session: SessionContext) async -> ToolCallResponse {
+        return ToolCallResponse(status: .failed, toolName: request.toolName, diagnosis: "EnhancedSwiftTestTool not yet implemented")
+    }
+}

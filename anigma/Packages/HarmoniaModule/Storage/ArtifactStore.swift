@@ -47,8 +47,9 @@ public actor ArtifactStore {
     ) async throws -> (hash: String, isNew: Bool) {
         if let artifactAuthority = artifactAuthority {
             // Use ArtifactAuthority
+            let hashString = SHA256.hash(data: data).compactMap { String(format: "%02x", $0) }.joined()
             let artifact = Artifact(
-                id: ArtifactID(data),
+                id: ArtifactID(hash: hashString),
                 mimeType: type,
                 size: Int64(data.count),
                 createdAt: Date(),

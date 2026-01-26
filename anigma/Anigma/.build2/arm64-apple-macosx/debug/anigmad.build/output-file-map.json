@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/master.swiftdeps"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/Sources/anigmad/main.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/anigmad.build/main.dia"
+  }
+}

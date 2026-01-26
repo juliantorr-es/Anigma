@@ -52,7 +52,7 @@ public actor ArtifactStoreModule {
             content: content
         )
         
-        let (storedID, receipt) = try await artifactAuthority.store(
+        _ = try await artifactAuthority.store(
             artifact,
             context: systemContext
         )

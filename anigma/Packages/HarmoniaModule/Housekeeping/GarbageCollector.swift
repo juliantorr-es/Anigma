@@ -48,7 +48,7 @@ public actor GarbageCollector {
         dryRun: Bool = true
     ) async throws -> GCReport {
         let startTime = Date()
-        let policyHash = try policy.computeHash()
+        let policyHash = policy.policyHash
 
         print("🧹 Starting garbage collection (dry-run: \(dryRun))")
         print("📋 Policy hash: \(policyHash)")

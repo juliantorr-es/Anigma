@@ -50,23 +50,15 @@ public actor CosineSimilarityCapsuleWrapper {
         guard query.count == candidate.count else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Query and candidate dimensions must match",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Query and candidate dimensions must match"
             )
         }
         guard query.count > 0 else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Vector dimension must be greater than zero",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Vector dimension must be greater than zero"
             )
         }
         
@@ -86,12 +78,8 @@ public actor CosineSimilarityCapsuleWrapper {
                       let candidateBase = candidatePtr.baseAddress else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_INVALID_ARG,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_INVALID_ARG,
-                            message: "Empty vector",
-                            detail: nil,
-                            aux: 0
-                        )
+                        code: ANIGMA_ERR_INVALID_ARG,
+                        message: "Empty vector"
                     )
                 }
                 
@@ -133,12 +121,8 @@ public actor CosineSimilarityCapsuleWrapper {
         guard query.count == candidates[0].count else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Query and candidate dimensions must match",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Query and candidate dimensions must match"
             )
         }
         
@@ -164,12 +148,8 @@ public actor CosineSimilarityCapsuleWrapper {
                       let candidatesBase = candidatesPtr.baseAddress else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_INVALID_ARG,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_INVALID_ARG,
-                            message: "Empty vector",
-                            detail: nil,
-                            aux: 0
-                        )
+                        code: ANIGMA_ERR_INVALID_ARG,
+                        message: "Empty vector"
                     )
                 }
                 
@@ -218,12 +198,8 @@ public actor CosineSimilarityCapsuleWrapper {
         guard query.count == candidates[0].count else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Query and candidate dimensions must match",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Query and candidate dimensions must match"
             )
         }
         
@@ -250,12 +226,8 @@ public actor CosineSimilarityCapsuleWrapper {
                       let candidatesBase = candidatesPtr.baseAddress else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_INVALID_ARG,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_INVALID_ARG,
-                            message: "Empty vector",
-                            detail: nil,
-                            aux: 0
-                        )
+                        code: ANIGMA_ERR_INVALID_ARG,
+                        message: "Empty vector"
                     )
                 }
                 
@@ -358,12 +330,8 @@ public actor CosineSimilarityCapsuleWrapper {
         guard query.count == candidates[0].count else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Query and candidate dimensions must match",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Query and candidate dimensions must match"
             )
         }
         
@@ -389,12 +357,8 @@ public actor CosineSimilarityCapsuleWrapper {
                       let candidatesBase = candidatesPtr.baseAddress else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_INVALID_ARG,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_INVALID_ARG,
-                            message: "Empty vector",
-                            detail: nil,
-                            aux: 0
-                        )
+                        code: ANIGMA_ERR_INVALID_ARG,
+                        message: "Empty vector"
                     )
                 }
                 
@@ -445,12 +409,8 @@ public actor CosineSimilarityCapsuleWrapper {
         guard queryDim == candidateDim else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Query and candidate dimensions must match",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Query and candidate dimensions must match"
             )
         }
         
@@ -479,12 +439,8 @@ public actor CosineSimilarityCapsuleWrapper {
                       let candidatesBase = candidatesPtr.baseAddress else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_INVALID_ARG,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_INVALID_ARG,
-                            message: "Empty vector",
-                            detail: nil,
-                            aux: 0
-                        )
+                        code: ANIGMA_ERR_INVALID_ARG,
+                        message: "Empty vector"
                     )
                 }
                 
@@ -541,23 +497,15 @@ public actor CosineSimilarityCapsuleWrapper {
         guard query.count == candidate.count else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Query and candidate dimensions must match",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Query and candidate dimensions must match"
             )
         }
         guard query.count > 0 else {
             throw CapsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
-                error: anigma_capsule_error_t(
-                    code: ANIGMA_ERR_INVALID_ARG,
-                    message: "Vector dimension must be greater than zero",
-                    detail: nil,
-                    aux: 0
-                )
+                code: ANIGMA_ERR_INVALID_ARG,
+                message: "Vector dimension must be greater than zero"
             )
         }
         
@@ -577,12 +525,8 @@ public actor CosineSimilarityCapsuleWrapper {
                       let candidateBase = candidatePtr.baseAddress else {
                     throw CapsuleError(
                         status: ANIGMA_ERR_INVALID_ARG,
-                        error: anigma_capsule_error_t(
-                            code: ANIGMA_ERR_INVALID_ARG,
-                            message: "Empty vector",
-                            detail: nil,
-                            aux: 0
-                        )
+                        code: ANIGMA_ERR_INVALID_ARG,
+                        message: "Empty vector"
                     )
                 }
                 

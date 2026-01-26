@@ -1,0 +1,48 @@
+//
+//  AnigmaApp.swift
+//  AnigmaAppMac
+//
+//  Main application entry point for the macOS Anigma app.
+//
+
+import SwiftUI
+import ObservatoriumModule
+
+@main
+struct AnigmaApp: App {
+    @State private var appState = AppState()
+    @StateObject private var observatorium = ObservatoriumModule.shared
+    
+    var body: some Scene {
+        WindowGroup {
+            MainContentView()
+                .environment(appState)
+                .environmentObject(observatorium)
+                .onAppear {
+                    Task {
+                        await observatorium.start()
+                        // Set the observatorium reference in app state
+                        await MainActor.run {
+                            appState.observatoriumModule = observatorium
+                        }
+                    }
+                }
+                .onDisappear {
+                    Task {
+                        await observatorium.stop()
+                    }
+                }
+        }
+        .windowStyle(.automatic)
+        .defaultSize(width: 1200, height: 800)
+        .commands {
+            SidebarCommands()
+            ToolbarCommands()
+        }
+        
+        Settings {
+            SettingsView()
+                .environment(appState)
+        }
+    }
+}

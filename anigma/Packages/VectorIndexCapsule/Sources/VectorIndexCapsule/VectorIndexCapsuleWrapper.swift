@@ -33,22 +33,21 @@ internal actor VectorIndexCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: finalHandle,
-            destroyFunction: { ptr, err in
+            destroyFunction: { ptr in
                 var mutablePtr: anigma_vector_index_capsule_t? = ptr
                 anigma_vector_index_capsule_destroy(&mutablePtr)
-                return ANIGMA_OK
             }
         )
     }
     
     func addVector(id: UInt64, vector: [Float]) throws {
         guard vector.count == Int(config.dimension) else {
-            throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
+            throw capsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
         }
         
         var error = anigma_capsule_error_t()
@@ -57,14 +56,14 @@ internal actor VectorIndexCapsuleWrapper {
                 anigma_vector_index_capsule_add_vector(rawHandle, id, buf.baseAddress, &error)
             }
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
     }
     
     func search(query: [Float], k: Int) throws -> [(id: UInt64, distance: Float)] {
         guard query.count == Int(config.dimension) else {
-            throw CapsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
+            throw capsuleError(status: ANIGMA_ERR_INVALID_ARG, error: anigma_capsule_error_t())
         }
         
         var ids = [UInt64](repeating: 0, count: k)
@@ -85,7 +84,7 @@ internal actor VectorIndexCapsuleWrapper {
                 )
             }
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
         
@@ -115,7 +114,7 @@ internal actor VectorIndexCapsuleWrapper {
                 }
             }
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
         
@@ -135,8 +134,13 @@ internal actor VectorIndexCapsuleWrapper {
         try handle?.withHandle { rawHandle in
             let status = anigma_vector_index_capsule_clear(rawHandle, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
     }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
 }

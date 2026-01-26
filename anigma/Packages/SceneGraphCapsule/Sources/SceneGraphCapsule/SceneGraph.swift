@@ -163,6 +163,24 @@ public final class SceneGraph: @unchecked Sendable {
         return count
     }
     
+    /// Get all nodes in the scene graph for serialization.
+    public func getAllNodes() throws -> [anigma_scene_node_t] {
+        guard let h = handle else { throw SceneGraphError("Invalid handle") }
+        var count: Int = 0
+        var error = anigma_capsule_error_t()
+        let status = anigma_scene_graph_get_node_count(h, &count, &error)
+        guard status == ANIGMA_OK else { throw SceneGraphError("Failed to get node count: \(status)") }
+        
+        if count == 0 { return [] }
+        
+        var nodes = [anigma_scene_node_t](repeating: anigma_scene_node_t(), count: count)
+        var actualCount: Int = 0
+        let status2 = anigma_scene_graph_get_nodes(h, &nodes, count, &actualCount, &error)
+        guard status2 == ANIGMA_OK else { throw SceneGraphError("Failed to get nodes: \(status2)") }
+        
+        return Array(nodes.prefix(actualCount))
+    }
+    
     /// Evaluate all world transforms based on parent-child hierarchy.
     public func evaluateTransforms() throws {
         guard let h = handle else { throw SceneGraphError("Invalid handle") }

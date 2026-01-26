@@ -30,7 +30,7 @@ import AnigmaPrimitives
 /// let mutation = DatabaseMutation(sql: "INSERT INTO ...", parameters: [...])
 /// let receipt = try await runtime.database.mutate(mutation, context: context)
 /// ```
-public actor DatabaseAuthorityAdapter {
+public actor DatabaseAuthorityAdapter: DatabaseExecutor {
     private let databaseAuthority: any DatabaseAuthority
     private let systemContext: ExecutionContext
     

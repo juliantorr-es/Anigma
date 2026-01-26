@@ -46,7 +46,7 @@ typedef struct {
     uint8_t preserve_whitespace;
     uint8_t preserve_line_breaks;
     uint32_t determinism_tier;
-} anigma_text_pipeline_config_t;
+} anigma_text_pipeline_config_v2_t;
 
 typedef struct {
     anigma_text_boundary_type_t type;
@@ -64,14 +64,14 @@ typedef struct {
     size_t boundary_count;
     uint64_t operation_hash;
     uint64_t processing_time_us;
-} anigma_text_result_t;
+} anigma_text_result_v2_t;
 
 anigma_capsule_identity_t anigma_text_pipeline_capsule_get_identity(void);
-anigma_text_pipeline_config_t anigma_text_pipeline_capsule_get_default_config(void);
-anigma_status_t anigma_text_pipeline_capsule_validate_config(const anigma_text_pipeline_config_t* config, anigma_capsule_error_t* err);
-anigma_status_t anigma_text_pipeline_capsule_create(const anigma_text_pipeline_config_t* config, anigma_text_pipeline_capsule_t* capsule, anigma_capsule_error_t* err);
+anigma_text_pipeline_config_v2_t anigma_text_pipeline_capsule_get_default_config(void);
+anigma_status_t anigma_text_pipeline_capsule_validate_config(const anigma_text_pipeline_config_v2_t* config, anigma_capsule_error_t* err);
+anigma_status_t anigma_text_pipeline_capsule_create(const anigma_text_pipeline_config_v2_t* config, anigma_text_pipeline_capsule_t* capsule, anigma_capsule_error_t* err);
 anigma_status_t anigma_text_pipeline_capsule_destroy(anigma_text_pipeline_capsule_t capsule, anigma_capsule_error_t* err);
-anigma_status_t anigma_text_pipeline_capsule_transform(anigma_text_pipeline_capsule_t capsule, const uint8_t* input_text, size_t input_length, anigma_text_result_t* result, anigma_capsule_error_t* err);
+anigma_status_t anigma_text_pipeline_capsule_transform(anigma_text_pipeline_capsule_t capsule, const uint8_t* input_text, size_t input_length, anigma_text_result_v2_t* result, anigma_capsule_error_t* err);
 anigma_status_t anigma_text_pipeline_capsule_normalize_unicode(anigma_text_pipeline_capsule_t capsule, const uint8_t* input_text, size_t input_length, anigma_unicode_form_t form, anigma_capsule_buffer_t* output_buffer, anigma_capsule_error_t* err);
 anigma_status_t anigma_text_pipeline_capsule_validate_utf8(anigma_text_pipeline_capsule_t capsule, const uint8_t* input_text, size_t input_length, uint8_t* is_valid, anigma_capsule_error_t* err);
 

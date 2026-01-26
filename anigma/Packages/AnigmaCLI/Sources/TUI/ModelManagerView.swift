@@ -105,6 +105,6 @@ public actor ModelManagerView {
         // Footer with controls
         let controls = "↑/↓: Navigate  •  Enter: Install/Remove  •  R: Refresh  •  Q: Quit"
         let footer = engine.styled(controls, color: .black, bg: .white)
-        await engine.renderText(row: size.rows, col: 1, text: footer, maxWidth: size.cols)
+        await engine.renderText(row: size.rows, col: 1, text: footer)
     }
 }

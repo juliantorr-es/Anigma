@@ -1,5 +1,5 @@
 import Foundation
-import AnigmaCore
+import Foundation
 import AnigmaSystemSpine
 
 public struct AIModel: Identifiable, Codable, Sendable, Hashable {
@@ -74,5 +74,27 @@ public struct AIBenchmark: Identifiable, Codable, Sendable, Hashable {
         self.type = type
         self.result = result
         self.receiptRef = receiptRef
+    }
+}
+
+public struct AIAgent: Identifiable, Codable, Sendable, Hashable {
+    public let id: String
+    public let name: String
+    public let description: String
+    public let capabilities: [AgentCapability]
+    public let isEnabled: Bool
+    public let createdAt: Date
+    public let lastUsed: Date?
+    public let config: [String: String]
+    
+    public init(id: String, name: String, description: String, capabilities: [AgentCapability], isEnabled: Bool = true, createdAt: Date = Date(), lastUsed: Date? = nil, config: [String: String] = [:]) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.capabilities = capabilities
+        self.isEnabled = isEnabled
+        self.createdAt = createdAt
+        self.lastUsed = lastUsed
+        self.config = config
     }
 }

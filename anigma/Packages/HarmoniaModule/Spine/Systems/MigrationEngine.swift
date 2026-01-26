@@ -255,15 +255,18 @@ public struct Swift6MigrationEngine: MigrationEngine {
             logInfo(
                 "AST Sendable path disabled; falling back to regex",
                 category: "Swift6MigrationEngine")
-            await recordTrace(
+            await recordTrace(config: RecordTraceConfiguration(
                 taskId: task.id,
                 rewritePath: "regex",
-                ruleId: nil,
+                ruleId: "unknown",
                 verifyStatus: "not_run",
                 rollbackStatus: "not_needed",
                 rollbackReason: "ast_disabled",
-                detail: "AST Sendable path disabled via ANIGMA_AST_SENDABLE=0"
-            )
+                backupPath: nil,
+                diffArtifactPath: nil,
+                detail: "AST Sendable path disabled via ANIGMA_AST_SENDABLE=0",
+                circuitState: "closed"
+            ))
             return await applySendableConformanceRegex(to: filePath, finding: finding, task: task)
         }
 
@@ -290,13 +293,18 @@ public struct Swift6MigrationEngine: MigrationEngine {
             logInfo(
                 "Missing or invalid AST anchor; falling back to regex",
                 category: "Swift6MigrationEngine")
-            await recordTrace(
+            await recordTrace(config: RecordTraceConfiguration(
                 taskId: task.id,
                 rewritePath: "regex",
                 ruleId: "add-sendable-to-value-types",
+                verifyStatus: "not_run",
+                rollbackStatus: "not_needed",
                 rollbackReason: "missing_ast_anchor",
-                detail: "missing_ast_anchor"
-            )
+                backupPath: nil,
+                diffArtifactPath: nil,
+                detail: "missing_ast_anchor",
+                circuitState: "closed"
+            ))
             return await applySendableConformanceRegex(to: filePath, finding: finding, task: task)
         }
 
@@ -319,15 +327,18 @@ public struct Swift6MigrationEngine: MigrationEngine {
                     category: "Swift6MigrationEngine")
 
                 // Record trace with circuit breaker state
-                await recordTrace(
+                await recordTrace(config: RecordTraceConfiguration(
                     taskId: task.id,
                     rewritePath: "ast",
                     ruleId: "add-sendable-to-value-types",
                     verifyStatus: "failed",
                     rollbackStatus: "not_needed",
                     rollbackReason: "circuit_breaker_blocked",
-                    detail: "AST verification blocked by circuit breaker: \(circuitState)"
-                )
+                    backupPath: nil,
+                    diffArtifactPath: nil,
+                    detail: "AST verification blocked by circuit breaker: \(circuitState)",
+                    circuitState: circuitState
+                ))
 
                 return .failed(
                     errorDescription: "AST verification blocked by circuit breaker: \(circuitState)"
@@ -356,15 +367,18 @@ public struct Swift6MigrationEngine: MigrationEngine {
             "AST path made no changes; falling back to regex", category: "Swift6MigrationEngine")
         let fallbackReason =
             pipelineResult.outcomes.compactMap { $0.reason }.first ?? "ast_no_change"
-        await recordTrace(
+        await recordTrace(config: RecordTraceConfiguration(
             taskId: task.id,
             rewritePath: "regex",
             ruleId: "add-sendable-to-value-types",
             verifyStatus: verification?.success == false ? "passed" : "not_run",
             rollbackStatus: "not_needed",
             rollbackReason: fallbackReason,
-            detail: fallbackReason
-        )
+            backupPath: nil,
+            diffArtifactPath: nil,
+            detail: fallbackReason,
+            circuitState: await verificationCircuitBreaker.getState()
+        ))
         return await applySendableConformanceRegex(to: filePath, finding: finding, task: task)
     }
 
@@ -373,13 +387,18 @@ public struct Swift6MigrationEngine: MigrationEngine {
     ) async -> MigrationResult {
         logInfo(
             "Applying Sendable conformance via regex fallback", category: "Swift6MigrationEngine")
-        await recordTrace(
+        await recordTrace(config: RecordTraceConfiguration(
             taskId: task.id,
             rewritePath: "regex",
             ruleId: "add-sendable-to-value-types",
+            verifyStatus: "not_run",
+            rollbackStatus: "not_needed",
             rollbackReason: "regex fallback",
-            detail: "regex fallback"
-        )
+            backupPath: nil,
+            diffArtifactPath: nil,
+            detail: "regex fallback",
+            circuitState: await verificationCircuitBreaker.getState()
+        ))
         return .success("regex", "regex fallback")
     }
 
@@ -410,14 +429,14 @@ public struct Swift6MigrationEngine: MigrationEngine {
         let config = RecordTraceConfiguration(
             taskId: taskId,
             rewritePath: "ast",
-            ruleId: ruleId,
+            ruleId: ruleId ?? "unknown",
             verifyStatus: verificationStatus,
             rollbackStatus: rollbackStatus,
             rollbackReason: rollbackReason,
             backupPath: matchedOutcome?.backupPath,
             diffArtifactPath: nil,
             detail: nil,
-            circuitState: .closed
+            circuitState: "closed"
         )
         await recordTrace(config: config)
     }

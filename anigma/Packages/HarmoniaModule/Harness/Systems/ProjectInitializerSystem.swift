@@ -371,7 +371,7 @@ public actor ProjectInitializationService {
                 )
             )
             if !response.success {
-                throw HarnessError.invalidProjectState("Failed to write scaffolding script: \(response.error ?? "unknown error")")
+                throw HarnessError.invalidProjectState("Failed to write scaffolding script: \(response.output)")
             }
         } else {
             try scriptContent.write(toFile: scriptPath, atomically: true, encoding: .utf8)

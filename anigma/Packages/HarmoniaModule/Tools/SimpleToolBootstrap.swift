@@ -22,7 +22,7 @@ struct FileReadTool: ToolHandlerProtocol {
 
     func handle(request: ToolRequest) async throws -> ToolResponse {
         guard let filePath = request.arguments["path"] else {
-            return .failure("Missing 'path' parameter", output: "")
+            return .failure("Missing 'path' parameter")
         }
 
         let fullPath = (baseDirectory as NSString).appendingPathComponent(filePath)
@@ -31,7 +31,7 @@ struct FileReadTool: ToolHandlerProtocol {
             let content = try String(contentsOfFile: fullPath, encoding: .utf8)
             return .success("File content (first 1000 chars): \(content.prefix(1000))")
         } catch {
-            return .failure("Failed to read file: \(error)", output: "")
+            return .failure("Failed to read file: \(error)")
         }
     }
 }
@@ -46,11 +46,11 @@ struct FileWriteTool: ToolHandlerProtocol {
 
     func handle(request: ToolRequest) async throws -> ToolResponse {
         guard let filePath = request.arguments["path"] else {
-            return .failure("Missing 'path' parameter", output: "")
+            return .failure("Missing 'path' parameter")
         }
 
         guard let content = request.arguments["content"] else {
-            return .failure("Missing 'content' parameter", output: "")
+            return .failure("Missing 'content' parameter")
         }
 
         let fullPath = (baseDirectory as NSString).appendingPathComponent(filePath)
@@ -59,7 +59,7 @@ struct FileWriteTool: ToolHandlerProtocol {
             try content.write(toFile: fullPath, atomically: true, encoding: .utf8)
             return .success("File written successfully: \(filePath)")
         } catch {
-            return .failure("Failed to write file: \(error)", output: "")
+            return .failure("Failed to write file: \(error)")
         }
     }
 }
@@ -68,7 +68,7 @@ struct FileWriteTool: ToolHandlerProtocol {
 struct ShellCommandTool: ToolHandlerProtocol {
     func handle(request: ToolRequest) async throws -> ToolResponse {
         guard let command = request.arguments["command"] else {
-            return .failure("Missing 'command' parameter", output: "")
+            return .failure("Missing 'command' parameter")
         }
 
         let process = Process()
@@ -93,10 +93,10 @@ struct ShellCommandTool: ToolHandlerProtocol {
             if process.terminationStatus == 0 {
                 return .success("Command executed successfully:\n\(output)")
             } else {
-                return .failure("Command failed with exit code \(process.terminationStatus):\n\(error)", output: output)
+                return .failure("Command failed with exit code \(process.terminationStatus):\n\(error)")
             }
         } catch {
-            return .failure("Failed to execute command: \(error)", output: "")
+            return .failure("Failed to execute command: \(error)")
         }
     }
 }
@@ -110,7 +110,7 @@ struct TestRunnerTool: ToolHandlerProtocol {
         if testPassed {
             return .success("All tests passed! ✅")
         } else {
-            return .failure("Some tests failed ❌", output: "Test output: Simulated failure")
+            return .failure("Some tests failed ❌")
         }
     }
 }
@@ -125,7 +125,7 @@ struct GitTool: ToolHandlerProtocol {
 
     func handle(request: ToolRequest) async throws -> ToolResponse {
         guard let action = request.arguments["action"] else {
-            return .failure("Missing 'action' parameter", output: "")
+            return .failure("Missing 'action' parameter")
         }
 
         switch action {
@@ -137,7 +137,7 @@ struct GitTool: ToolHandlerProtocol {
         case "diff":
             return .success("No changes to diff")
         default:
-            return .failure("Unknown git action: \(action)", output: "")
+            return .failure("Unknown git action: \(action)")
         }
     }
 }
@@ -204,10 +204,11 @@ public struct SimpleToolBootstrap {
         )
 
         // Register modern tools
-        await ModernToolRegistry.shared.register(ModernReadFileTool(repoRoot: config.projectDirectory))
-        await ModernToolRegistry.shared.register(ModernTaskTool())
+        // await ModernToolRegistry.shared.register(ModernReadFileTool(repoRoot: config.projectDirectory))
+        // await ModernToolRegistry.shared.register(ModernTaskTool())
 
         // Register code analysis tools if enabled
+        /*
         if config.enableCodeAnalysis {
             try await SimpleCodeAnalysisTool.registerTools(
                 with: registry,
@@ -215,6 +216,7 @@ public struct SimpleToolBootstrap {
             )
             print("✅ Registered code analysis tools")
         }
+        */
 
         let toolCount = await registry.toolCount
         print("✅ Registered \(toolCount) tools for project at: \(config.projectDirectory)")

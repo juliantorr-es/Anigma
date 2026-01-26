@@ -43,11 +43,12 @@ public final class GeometryPaths64 {
         var err = anigma_capsule_error_t()
         let status = anigma_geometry_paths64_create(&raw, &err)
         guard status == ANIGMA_OK, let h = raw else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
-        self.handle = CapsuleHandle(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_geometry_paths64_destroy(ptr, e)
-        })
+        self.handle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_geometry_paths64_destroy)
+        )
     }
     
     internal init(handle: CapsuleHandle<AnyObject>) {
@@ -62,7 +63,7 @@ public final class GeometryPaths64 {
                 return anigma_geometry_paths64_add_path_coords(h, base, coords.count / 2, closed, &err)
             }
             if status != ANIGMA_OK {
-                throw CapsuleError(status: status, error: err)
+                throw capsuleError(status: status, error: err)
             }
         }
     }
@@ -72,7 +73,7 @@ public final class GeometryPaths64 {
         try handle.withHandle { h in
             let status = anigma_geometry_paths64_clear(h, &err)
             if status != ANIGMA_OK {
-                throw CapsuleError(status: status, error: err)
+                throw capsuleError(status: status, error: err)
             }
         }
     }
@@ -93,14 +94,14 @@ public final class GeometryPaths64 {
         
         return try handle.withHandle { h in
             var status = anigma_geometry_paths64_path_count(h, index, &pathSize, &err)
-            if status != ANIGMA_OK { throw CapsuleError(status: status, error: err) }
+            if status != ANIGMA_OK { throw capsuleError(status: status, error: err) }
             
             var buffer = [Int64](repeating: 0, count: pathSize * 2)
             if pathSize > 0 {
                 status = buffer.withUnsafeMutableBufferPointer { ptr in
                     anigma_geometry_paths64_get_path(h, index, ptr.baseAddress, ptr.count, &err)
                 }
-                if status != ANIGMA_OK { throw CapsuleError(status: status, error: err) }
+                if status != ANIGMA_OK { throw capsuleError(status: status, error: err) }
             }
             return buffer
         }
@@ -116,16 +117,17 @@ public final class GeometryPaths64 {
             try other.handle.withHandle { otherH in
                 let status = op(myH, otherH, fillRule.native, &resultRaw, &err)
                 if status != ANIGMA_OK {
-                    throw CapsuleError(status: status, error: err)
+                    throw capsuleError(status: status, error: err)
                 }
             }
         }
         
-        guard let r = resultRaw else { throw CapsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
+        guard let r = resultRaw else { throw capsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
         
-        let newHandle = CapsuleHandle<AnyObject>(rawHandle: r, destroyFunction: { ptr, e in
-            anigma_geometry_paths64_destroy(ptr, e)
-        })
+        let newHandle = CapsuleHandle<AnyObject>(
+            rawHandle: r,
+            destroyFunction: capsuleDestroyer(anigma_geometry_paths64_destroy)
+        )
         return GeometryPaths64(handle: newHandle)
     }
     
@@ -152,15 +154,16 @@ public final class GeometryPaths64 {
         try handle.withHandle { h in
             let status = anigma_geometry_inflate_paths_64(h, delta, joinType.native, endType.native, miterLimit, arcTolerance, &resultRaw, &err)
             if status != ANIGMA_OK {
-                throw CapsuleError(status: status, error: err)
+                throw capsuleError(status: status, error: err)
             }
         }
         
-        guard let r = resultRaw else { throw CapsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
+        guard let r = resultRaw else { throw capsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
         
-        let newHandle = CapsuleHandle<AnyObject>(rawHandle: r, destroyFunction: { ptr, e in
-            anigma_geometry_paths64_destroy(ptr, e)
-        })
+        let newHandle = CapsuleHandle<AnyObject>(
+            rawHandle: r,
+            destroyFunction: capsuleDestroyer(anigma_geometry_paths64_destroy)
+        )
         return GeometryPaths64(handle: newHandle)
     }
 }
@@ -173,11 +176,12 @@ public final class GeometryPathsD {
         var err = anigma_capsule_error_t()
         let status = anigma_geometry_paths_d_create(&raw, &err)
         guard status == ANIGMA_OK, let h = raw else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
-        self.handle = CapsuleHandle(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_geometry_paths_d_destroy(ptr, e)
-        })
+        self.handle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_geometry_paths_d_destroy)
+        )
     }
     
     internal init(handle: CapsuleHandle<AnyObject>) {
@@ -192,7 +196,7 @@ public final class GeometryPathsD {
                 return anigma_geometry_paths_d_add_path_coords(h, base, coords.count / 2, &err)
             }
             if status != ANIGMA_OK {
-                throw CapsuleError(status: status, error: err)
+                throw capsuleError(status: status, error: err)
             }
         }
     }
@@ -212,14 +216,14 @@ public final class GeometryPathsD {
         
         return try handle.withHandle { h in
             var status = anigma_geometry_paths_d_path_count(h, index, &pathSize, &err)
-            if status != ANIGMA_OK { throw CapsuleError(status: status, error: err) }
+            if status != ANIGMA_OK { throw capsuleError(status: status, error: err) }
             
             var buffer = [Double](repeating: 0, count: pathSize * 2)
             if pathSize > 0 {
                 status = buffer.withUnsafeMutableBufferPointer { ptr in
                     anigma_geometry_paths_d_get_path(h, index, ptr.baseAddress, ptr.count, &err)
                 }
-                if status != ANIGMA_OK { throw CapsuleError(status: status, error: err) }
+                if status != ANIGMA_OK { throw capsuleError(status: status, error: err) }
             }
             return buffer
         }
@@ -235,16 +239,17 @@ public final class GeometryPathsD {
             try other.handle.withHandle { otherH in
                 let status = op(myH, otherH, fillRule.native, Int32(precision), &resultRaw, &err)
                 if status != ANIGMA_OK {
-                    throw CapsuleError(status: status, error: err)
+                    throw capsuleError(status: status, error: err)
                 }
             }
         }
         
-        guard let r = resultRaw else { throw CapsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
+        guard let r = resultRaw else { throw capsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
         
-        let newHandle = CapsuleHandle<AnyObject>(rawHandle: r, destroyFunction: { ptr, e in
-            anigma_geometry_paths_d_destroy(ptr, e)
-        })
+        let newHandle = CapsuleHandle<AnyObject>(
+            rawHandle: r,
+            destroyFunction: capsuleDestroyer(anigma_geometry_paths_d_destroy)
+        )
         return GeometryPathsD(handle: newHandle)
     }
     
@@ -271,15 +276,30 @@ public final class GeometryPathsD {
         try handle.withHandle { h in
             let status = anigma_geometry_inflate_paths_d(h, delta, joinType.native, endType.native, miterLimit, Int32(precision), arcTolerance, &resultRaw, &err)
             if status != ANIGMA_OK {
-                throw CapsuleError(status: status, error: err)
+                throw capsuleError(status: status, error: err)
             }
         }
         
-        guard let r = resultRaw else { throw CapsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
+        guard let r = resultRaw else { throw capsuleError(status: ANIGMA_ERR_INTERNAL, error: err) }
         
-        let newHandle = CapsuleHandle<AnyObject>(rawHandle: r, destroyFunction: { ptr, e in
-            anigma_geometry_paths_d_destroy(ptr, e)
-        })
+        let newHandle = CapsuleHandle<AnyObject>(
+            rawHandle: r,
+            destroyFunction: capsuleDestroyer(anigma_geometry_paths_d_destroy)
+        )
         return GeometryPathsD(handle: newHandle)
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }

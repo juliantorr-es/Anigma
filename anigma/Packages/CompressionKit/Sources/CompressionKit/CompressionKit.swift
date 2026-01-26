@@ -3,7 +3,7 @@
 //  CompressionKit
 //
 //  Unified compression interface.
-//  Modern implementation using CompressionCapsuleWrapper.
+//  Modern implementation using CompressionCapsule.
 //
 
 import Foundation
@@ -11,33 +11,28 @@ import CapsuleCore
 import AnigmaNativeShims
 
 public protocol Compressor: Sendable {
-    func compress(_ data: Data, algorithm: CompressionAlgorithm) throws -> Data
-    func decompress(_ data: Data, algorithm: CompressionAlgorithm) throws -> Data
+    func compress(_ data: Data, algorithm: CompressionAlgorithm) async throws -> Data
+    func decompress(_ data: Data, algorithm: CompressionAlgorithm) async throws -> Data
 }
 
-/// Thread-safe compressor using CompressionCapsuleWrapper.
-/// Provides backward compatibility with the original NativeCompressor API.
+/// Thread-safe compressor using CompressionCapsule actor.
 public final class NativeCompressor: Compressor, @unchecked Sendable {
-    private let lock = NSLock()
-    private var capsuleCache: [CompressionAlgorithm: CompressionCapsuleWrapper] = [:]
+    private let capsules = ThreadSafeDictionary<CompressionAlgorithm, CompressionCapsule>()
     
     public init() {}
     
-    public func compress(_ data: Data, algorithm: CompressionAlgorithm) throws -> Data {
-        let capsule = try getOrCreateCapsule(for: algorithm)
-        return try capsule.compress(data)
+    public func compress(_ data: Data, algorithm: CompressionAlgorithm) async throws -> Data {
+        let capsule = try await getOrCreateCapsule(for: algorithm)
+        return try await capsule.compress(data)
     }
     
-    public func decompress(_ data: Data, algorithm: CompressionAlgorithm) throws -> Data {
-        let capsule = try getOrCreateCapsule(for: algorithm)
-        return try capsule.decompress(data)
+    public func decompress(_ data: Data, algorithm: CompressionAlgorithm) async throws -> Data {
+        let capsule = try await getOrCreateCapsule(for: algorithm)
+        return try await capsule.decompress(data)
     }
     
-    private func getOrCreateCapsule(for algorithm: CompressionAlgorithm) throws -> CompressionCapsuleWrapper {
-        lock.lock()
-        defer { lock.unlock() }
-        
-        if let existing = capsuleCache[algorithm] {
+    private func getOrCreateCapsule(for algorithm: CompressionAlgorithm) async throws -> CompressionCapsule {
+        if let existing = capsules[algorithm] {
             return existing
         }
         
@@ -46,18 +41,31 @@ public final class NativeCompressor: Compressor, @unchecked Sendable {
             algorithm: algorithm,
             mode: .deterministic,
             level: .default,
-            bufferPoolSize: 0,
+            bufferPoolSize: 16,
             determinismTier: 1
         )
         
-        let capsule = try CompressionCapsuleWrapper(config: config)
-        capsuleCache[algorithm] = capsule
+        let capsule = try CompressionCapsule(config: config)
+        capsules[algorithm] = capsule
         return capsule
     }
+}
+
+/// Internal helper for thread-safe dictionary access.
+private final class ThreadSafeDictionary<Key: Hashable, Value>: @unchecked Sendable {
+    private var storage: [Key: Value] = [:]
+    private let lock = NSLock()
     
-    deinit {
-        lock.withLock {
-            capsuleCache.removeAll()
+    subscript(key: Key) -> Value? {
+        get {
+            lock.lock()
+            defer { lock.unlock() }
+            return storage[key]
+        }
+        set {
+            lock.lock()
+            defer { lock.unlock() }
+            storage[key] = newValue
         }
     }
 }

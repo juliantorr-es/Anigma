@@ -150,18 +150,26 @@ public struct CapsuleBuffer: ~Copyable {
 }
 
 /// Error type for capsule operations.
-public struct CapsuleError: Error, Sendable {
-    public let status: AnigmaNativeShims.anigma_status_t
+public struct CapsuleError: Error {
+    public let status: anigma_status_t
     public let error: anigma_capsule_error_t
+    public let message: String?
     
-    public init(status: AnigmaNativeShims.anigma_status_t, error: anigma_capsule_error_t) {
+    public init(status: anigma_status_t, error: anigma_capsule_error_t) {
         self.status = status
         self.error = error
+        self.message = nil
+    }
+
+    public init(status: anigma_status_t, code: anigma_status_t, message: String) {
+        self.status = status
+        self.error = anigma_capsule_error_t(code: code, message: nil, detail: nil, aux: 0)
+        self.message = message
     }
     
     public var localizedDescription: String {
-        let message = error.message.map { String(cString: $0) } ?? "Unknown error"
-        let detail = error.detail.map { String(cString: $0) } ?? ""
-        return "Capsule error \(status): \(message)\(detail.isEmpty ? "" : " (\(detail))")"
+        let msg = message ?? (error.message.map { String(cString: $0) } ?? "Unknown error")
+        let det = error.detail.map { String(cString: $0) } ?? ""
+        return "Capsule error \(status): \(msg)\(det.isEmpty ? "" : " (\(det))")"
     }
 }

@@ -15,14 +15,12 @@ public final class LayoutEngineCapsuleWrapper {
         
         let status = anigma_layout_engine_capsule_create(&cConfig, &rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: finalHandle,
-            destroyFunction: { ptr, err in
-                anigma_layout_engine_capsule_destroy(ptr, err)
-            }
+            destroyFunction: capsuleDestroyer(anigma_layout_engine_capsule_destroy)
         )
     }
     
@@ -44,7 +42,7 @@ public final class LayoutEngineCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         var cLayouts = [anigma_page_layout_t](repeating: anigma_page_layout_t(), count: actualCount)
@@ -62,7 +60,7 @@ public final class LayoutEngineCapsuleWrapper {
         }
         
         guard finalStatus == ANIGMA_OK else {
-            throw CapsuleError(status: finalStatus, error: error)
+            throw capsuleError(status: finalStatus, error: error)
         }
         
         defer {
@@ -282,4 +280,18 @@ public struct DocumentStructure: Sendable, Codable {
 
 public struct ReadingOrder: Sendable, Codable {
     public let elementIds: [UInt32]
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
+    }
 }

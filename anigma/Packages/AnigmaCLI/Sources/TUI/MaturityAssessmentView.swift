@@ -109,7 +109,7 @@ public actor MaturityAssessmentView {
             }
 
             let styledIcon = engine.styled(icon, color: color)
-            await engine.renderText(row: row, col: 5, text: "\(styledIcon) \(issue.message)", maxWidth: size.cols - 10)
+            await engine.renderText(row: row, col: 5, text: "\(styledIcon) \(issue.message)")
             row += 1
         }
 
@@ -146,14 +146,13 @@ public actor MaturityAssessmentView {
             await engine.renderText(
                 row: row,
                 col: 5,
-                text: "\(prefix)\(checkbox) \(priorityIcon) \(titleText)",
-                maxWidth: size.cols - 10
+                text: "\(prefix)\(checkbox) \(priorityIcon) \(titleText)"
             )
             row += 1
 
             if isSelected {
                 let desc = engine.styled(suggestion.description, color: .brightBlack, style: .dim)
-                await engine.renderText(row: row, col: 8, text: desc, maxWidth: size.cols - 13)
+                await engine.renderText(row: row, col: 8, text: desc)
                 row += 1
             }
 
@@ -164,7 +163,7 @@ public actor MaturityAssessmentView {
         // Footer
         let controls = "↑/↓: Navigate  •  Space: Toggle  •  Enter: Apply Selected  •  Q: Quit"
         let footer = engine.styled(controls, color: .black, bg: .white)
-        await engine.renderText(row: size.rows, col: 1, text: footer, maxWidth: size.cols)
+        await engine.renderText(row: size.rows, col: 1, text: footer)
     }
 
     private func renderLevelBar(current: Int, target: Int) -> String {

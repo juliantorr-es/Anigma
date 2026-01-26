@@ -217,49 +217,21 @@ public actor CLIIndexManager {
     private func chunkText(_ text: String, documentPath: String) async -> [String] {
         guard !text.isEmpty else { return [] }
         
-        // Convert to UTF-8 data for byte-level chunking
-        let data = Data(text.utf8)
-        
-        // Compute average bytes per character for this text
-        let avgBytesPerChar = max(1, data.count / text.count)
-        
-        // Convert character-based chunkSize to byte-based target size
-        let targetBytes = chunkSize * avgBytesPerChar
-        
-        // Ensure reasonable bounds for chunk sizes
+        // Create configuration based on character-based chunkSize
+        // Assuming average 1.5 bytes per character for mixed text
+        let targetBytes = Int(Double(chunkSize) * 1.5)
         let minBytes = max(64, targetBytes / 4)
         let maxBytes = min(targetBytes * 2, 16384)
         
         let config = TextChunkingConfig(
             targetChunkSize: targetBytes,
             minChunkSize: minBytes,
-            maxChunkSize: maxBytes,
-            windowSize: 48,
-            determinismTier: 1
+            maxChunkSize: maxBytes
         )
         
         do {
-            // Use one-shot chunking
-            let wrapper = try TextChunkingCapsuleWrapper(config: config)
-            try await wrapper.processBytes(data)
-            try await wrapper.finalize()
-            
-            // Extract chunks as Data slices
-            let chunkData = try await wrapper.extractChunks(from: data)
-            
-            // Convert Data back to String chunks
-            var baseChunks: [String] = []
-            for chunk in chunkData {
-                if let chunkString = String(data: chunk, encoding: .utf8) {
-                    let trimmed = chunkString.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !trimmed.isEmpty {
-                        baseChunks.append(trimmed)
-                    }
-                } else {
-                    // UTF-8 conversion failed, fall back to original line-based chunking
-                    return fallbackChunkText(text, documentPath: documentPath)
-                }
-            }
+            let capsule = try TextChunkingCapsule(config: config)
+            let baseChunks = try await capsule.chunk(text)
             
             if baseChunks.isEmpty {
                 return [text]

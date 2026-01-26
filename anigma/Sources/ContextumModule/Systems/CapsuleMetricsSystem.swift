@@ -172,8 +172,8 @@ public actor CapsuleMetricsSystem {
 
     public init(telemetryEmitter: ((TelemetryEventComponent) -> Void)? = nil) {
         self.telemetryEmitter = telemetryEmitter
-        Task {
-            await initializeDefaultMetrics()
+        for capsule in CapsuleType.allCases {
+            metrics[capsule.rawValue] = CapsuleMetrics(capsuleName: capsule.rawValue)
         }
     }
 

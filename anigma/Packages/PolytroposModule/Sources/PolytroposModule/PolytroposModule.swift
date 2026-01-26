@@ -251,3 +251,69 @@ public struct ProjectInterchangeJobType: JobType {
     public static let identifier = "polytropos.project_interchange"
     public static let displayName = "Project Import/Export"
 }
+
+// MARK: - Video Ingestion Job Types
+
+public struct VideoIngestionJobType: JobType {
+    public static let identifier = "polytropos.video_ingestion"
+    public static let displayName = "Video Ingestion"
+}
+
+public struct FrameExtractionJobType: JobType {
+    public static let identifier = "polytropos.frame_extraction"
+    public static let displayName = "Frame Extraction"
+}
+
+public struct FingerprintGenerationJobType: JobType {
+    public static let identifier = "polytropos.fingerprint_generation"
+    public static let displayName = "Fingerprint Generation"
+}
+
+// MARK: - Module Extensions
+
+extension PolytroposModule {
+    /// Creates a fully configured PolytroposCoordinator with optional artifact store integration.
+    ///
+    /// - Parameters:
+    ///   - configuration: Coordinator configuration.
+    ///   - containerCapsule: Optional pre-configured MediaContainerCapsuleWrapper.
+    ///   - artifactStoreAdapter: Optional adapter for ArtifactStoreModule integration.
+    /// - Returns: A configured PolytroposCoordinator.
+    public static func createCoordinator(
+        configuration: PolytroposCoordinatorConfiguration = .default,
+        containerCapsule: MediaContainerCapsuleWrapper? = nil,
+        artifactStoreAdapter: ArtifactStoreAdapter? = nil
+    ) -> PolytroposCoordinator {
+        if let capsule = containerCapsule {
+            return PolytroposCoordinator(
+                configuration: configuration,
+                containerCapsule: capsule,
+                artifactStoreAdapter: artifactStoreAdapter
+            )
+        } else {
+            return PolytroposCoordinator(
+                configuration: configuration,
+                artifactStoreAdapter: artifactStoreAdapter
+            )
+        }
+    }
+
+    /// Creates a VideoIngestionService with the given configuration.
+    ///
+    /// - Parameters:
+    ///   - configuration: Ingestion configuration.
+    ///   - containerCapsule: Optional pre-configured MediaContainerCapsuleWrapper.
+    ///   - workDirectory: Optional work directory.
+    /// - Returns: A configured VideoIngestionService.
+    public static func createIngestionService(
+        configuration: VideoIngestionConfiguration = .default,
+        containerCapsule: MediaContainerCapsuleWrapper? = nil,
+        workDirectory: URL? = nil
+    ) -> VideoIngestionService {
+        VideoIngestionService(
+            configuration: configuration,
+            containerCapsule: containerCapsule,
+            workDirectory: workDirectory
+        )
+    }
+}

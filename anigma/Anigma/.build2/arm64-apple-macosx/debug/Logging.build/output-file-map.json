@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/master.swiftdeps"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Locks.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Locks.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/LogHandler.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/LogHandler.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/Logging.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/Logging.dia"
+  },
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/checkouts/swift-log/Sources/Logging/MetadataProvider.swift": {
+    "dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider.d",
+    "object": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider.swift.o",
+    "swiftmodule": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider~partial.swiftmodule",
+    "swift-dependencies": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider.swiftdeps",
+    "diagnostics": "/Users/user/Developer/GitHub/Anigma_clean/anigma/Anigma/.build2/arm64-apple-macosx/debug/Logging.build/MetadataProvider.dia"
+  }
+}

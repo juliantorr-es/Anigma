@@ -11,14 +11,12 @@ public final class VizAggregationCapsuleWrapper {
         
         let status = anigma_viz_aggregation_capsule_create(&rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: finalHandle,
-            destroyFunction: { ptr, err in
-                anigma_viz_aggregation_capsule_destroy(ptr, err)
-            }
+            destroyFunction: capsuleDestroyer(anigma_viz_aggregation_capsule_destroy)
         )
     }
     public func createDataset(from columns: [ColumnView]) throws -> DatasetHandle {
@@ -39,7 +37,7 @@ public final class VizAggregationCapsuleWrapper {
         
         let status = anigma_viz_dataset_create_from_columns(cColumns, cColumns.count, &rawDataset, &error)
         guard status == ANIGMA_OK, let finalDataset = rawDataset else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         return DatasetHandle(raw: finalDataset)
@@ -49,7 +47,7 @@ public final class VizAggregationCapsuleWrapper {
         var error = anigma_capsule_error_t()
         let status = anigma_viz_dataset_destroy(dataset.raw, &error)
         if status != ANIGMA_OK {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
     }
     
@@ -162,5 +160,19 @@ public enum ScalarType: Sendable {
         case .timestampMsUtc: return ANIGMA_VIZ_SCALAR_TIMESTAMP_MS_UTC
         case .stringUtf8: return ANIGMA_VIZ_SCALAR_STRING_UTF8
         }
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }

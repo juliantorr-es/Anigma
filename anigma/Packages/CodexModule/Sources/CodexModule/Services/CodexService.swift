@@ -133,6 +133,9 @@ public actor CodexService {
 
         await world.addComponent(entityId, page)
 
+        // Process links
+        try await processLinks(for: entityId, principal: principal)
+
         // Create initial version
         let version = PageVersionComponent.from(
             page: page,
@@ -148,6 +151,11 @@ public actor CodexService {
             var space = spaceResult.1
             space.pageCount += 1
             await world.addComponent(spaceResult.0, space)
+        }
+
+        // If has parent, update parent
+        if let parentId = page.parentPageId {
+            try await addChildToParent(pageId: page.pageId, parentId: parentId)
         }
 
         try? await governance.auditLog.record(
@@ -203,6 +211,11 @@ public actor CodexService {
         // Update page
         page.updateContent(title: title, body: body, excerpt: excerpt, editor: principal)
         await world.addComponent(entityId, page)
+
+        // Process links if body updated
+        if body != nil {
+            try await processLinks(for: entityId, principal: principal)
+        }
 
         // Create new version
         let version = PageVersionComponent.from(
@@ -288,6 +301,75 @@ public actor CodexService {
                 "original_event_type": "page_archived",
                 "entity_id": entityId.raw.uuidString,
                 "page_title": page.title
+            ]
+        )
+    }
+
+    /// Moves a page to a different space or parent.
+    public func movePage(
+        _ entityId: EntityId,
+        newSpaceId: SpaceId? = nil,
+        newParentPageId: PageId? = nil,
+        principal: String
+    ) async throws {
+        guard var page = await world.getComponent(entityId, PageComponent.self) else {
+            throw CodexError.pageNotFound(PageId())
+        }
+
+        let oldSpaceId = page.spaceId
+        let oldParentId = page.parentPageId
+
+        if let newSpaceId = newSpaceId, newSpaceId != oldSpaceId {
+            // Check for circular reference if moving under a parent in new space
+            // (Simplified check here)
+            
+            page.spaceId = newSpaceId
+            
+            // Update space counts
+            if let oldSpace = await findSpaceEntity(oldSpaceId) {
+                var space = oldSpace.1
+                space.pageCount = max(0, space.pageCount - 1)
+                await world.addComponent(oldSpace.0, space)
+            }
+            if let newSpace = await findSpaceEntity(newSpaceId) {
+                var space = newSpace.1
+                space.pageCount += 1
+                await world.addComponent(newSpace.0, space)
+            }
+        }
+
+        if newParentPageId != oldParentId {
+            // Check for circular hierarchy
+            if let newParentId = newParentPageId {
+                if try await isDescendant(parentId: page.pageId, potentialChildId: newParentId) {
+                    throw CodexError.circularHierarchy(newParentId)
+                }
+            }
+
+            // Remove from old parent
+            if let oldParentId = oldParentId {
+                try await removeChildFromParent(pageId: page.pageId, parentId: oldParentId)
+            }
+
+            // Add to new parent
+            page.parentPageId = newParentPageId
+            if let newParentId = newParentPageId {
+                try await addChildToParent(pageId: page.pageId, parentId: newParentId)
+            }
+        }
+
+        await world.addComponent(entityId, page)
+        
+        try? await governance.auditLog.record(
+            eventType: ContractsCore.AuditEventType.custom,
+            principal: principal,
+            module: "CodexService",
+            description: "Moved page: \(page.title)",
+            metadata: [
+                "original_event_type": "page_moved",
+                "entity_id": entityId.raw.uuidString,
+                "old_space_id": oldSpaceId.raw.uuidString,
+                "new_space_id": page.spaceId.raw.uuidString
             ]
         )
     }
@@ -548,6 +630,79 @@ public actor CodexService {
             .map { $0 }
     }
 
+    // MARK: - Linking and Hierarchy Helpers
+
+    private func processLinks(for entityId: EntityId, principal: String) async throws {
+        guard var page = await world.getComponent(entityId, PageComponent.self) else { return }
+        
+        let foundPageIds = extractPageLinks(from: page.body)
+        
+        // Update related pages
+        page.relatedPageIds = Array(foundPageIds)
+        await world.addComponent(entityId, page)
+        
+        // Update backlinks (linkedFromPageIds) on target pages
+        for targetPageId in foundPageIds {
+            if let targetResult = await findPageEntity(targetPageId) {
+                var targetPage = targetResult.1
+                if !targetPage.linkedFromPageIds.contains(page.pageId) {
+                    targetPage.linkedFromPageIds.append(page.pageId)
+                    await world.addComponent(targetResult.0, targetPage)
+                }
+            }
+        }
+    }
+
+    private func extractPageLinks(from text: String) -> Set<PageId> {
+        // Simple regex to find [[UUID]] or [text](page:UUID) style links
+        // For this implementation, we'll look for UUID-like strings in double brackets
+        var pageIds = Set<PageId>()
+        
+        let pattern = "\\[\\[([0-9a-fA-F-]{36})\\]\\]"
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+        
+        let nsString = text as NSString
+        let results = regex.matches(in: text, range: NSRange(location: 0, length: nsString.length))
+        
+        for result in results {
+            let uuidString = nsString.substring(with: result.range(at: 1))
+            if let id = PageId(uuidString: uuidString) {
+                pageIds.insert(id)
+            }
+        }
+        
+        return pageIds
+    }
+
+    private func addChildToParent(pageId: PageId, parentId: PageId) async throws {
+        if let parentResult = await findPageEntity(parentId) {
+            var parentPage = parentResult.1
+            if !parentPage.childPageIds.contains(pageId) {
+                parentPage.childPageIds.append(pageId)
+                await world.addComponent(parentResult.0, parentPage)
+            }
+        }
+    }
+
+    private func removeChildFromParent(pageId: PageId, parentId: PageId) async throws {
+        if let parentResult = await findPageEntity(parentId) {
+            var parentPage = parentResult.1
+            parentPage.childPageIds.removeAll(where: { $0 == pageId })
+            await world.addComponent(parentResult.0, parentPage)
+        }
+    }
+
+    private func isDescendant(parentId: PageId, potentialChildId: PageId) async throws -> Bool {
+        let children = await getChildPages(parentId)
+        for (_, child) in children {
+            if child.pageId == potentialChildId { return true }
+            if try await isDescendant(parentId: child.pageId, potentialChildId: potentialChildId) {
+                return true
+            }
+        }
+        return false
+    }
+
     // MARK: - Helpers
 
     private func findSpaceEntity(_ spaceId: SpaceId) async -> (EntityId, SpaceComponent)? {
@@ -556,6 +711,17 @@ public actor CodexService {
             if let space = await world.getComponent(entityId, SpaceComponent.self),
                space.spaceId == spaceId {
                 return (entityId, space)
+            }
+        }
+        return nil
+    }
+
+    private func findPageEntity(_ pageId: PageId) async -> (EntityId, PageComponent)? {
+        let entities = await world.entitiesWith(PageComponent.self)
+        for entityId in entities {
+            if let page = await world.getComponent(entityId, PageComponent.self),
+               page.pageId == pageId {
+                return (entityId, page)
             }
         }
         return nil

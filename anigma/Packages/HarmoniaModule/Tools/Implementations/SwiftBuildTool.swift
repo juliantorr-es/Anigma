@@ -10,10 +10,6 @@ import AnigmaPrimitives
 import DatabaseCore
 @preconcurrency import Foundation
 
-// Import Build components
-// Note: These are internal to HarmoniaModule, so we use relative paths
-// The actual imports depend on the build system structure
-
 /// Represents the result of a build with rich metadata
 public struct EnhancedBuildResult: Sendable, Codable {
     /// Exit code from the build
@@ -111,8 +107,8 @@ public struct DiagnosticDetail: Sendable, Codable {
 }
 
 /// Enhanced SwiftBuildTool with caching, diagnostics, and performance tracking
-public actor SwiftBuildTool {
-    private let buildExecutor: BuildExecutor
+public actor SwiftBuildTool: ToolHandlerProtocol {
+    private let buildExecutor: any BuildExecutor
     private let sessionManager: BuildSessionManager
     private let buildCache: SwiftBuildCache
     private let diagnosticAnalyzer: DiagnosticAnalyzer
@@ -121,7 +117,7 @@ public actor SwiftBuildTool {
     private let progressCallback: ToolProgressCallback?
 
     public init(
-        buildExecutor: BuildExecutor? = nil,
+        buildExecutor: (any BuildExecutor)? = nil,
         sessionManager: BuildSessionManager? = nil,
         buildCache: SwiftBuildCache? = nil,
         diagnosticAnalyzer: DiagnosticAnalyzer? = nil,
@@ -135,7 +131,7 @@ public actor SwiftBuildTool {
         // If no components provided, create them
         let db = dbActor ?? DatabaseActor(dbPath: Self.defaultDatabasePath())
 
-        self.buildExecutor = buildExecutor ?? BuildExecutor(workingDirectory: workingDirectory)
+        self.buildExecutor = buildExecutor ?? DefaultBuildExecutor(workingDirectory: workingDirectory)
         self.sessionManager = sessionManager ?? BuildSessionManager(dbActor: db)
         self.buildCache = buildCache ?? SwiftBuildCache(dbActor: db)
         self.diagnosticAnalyzer = diagnosticAnalyzer ?? DiagnosticAnalyzer(dbActor: db)
@@ -143,34 +139,41 @@ public actor SwiftBuildTool {
         self.progressCallback = progressCallback
     }
 
+    public func execute(_ request: ToolCallRequest, session: SessionContext) async -> ToolCallResponse {
+        let toolRequest = ToolRequest(
+            arguments: ["parameters": request.parameters],
+            sessionId: request.sessionId
+        )
+        do {
+            let response = try await handle(request: toolRequest)
+            return ToolCallResponse(from: response, toolName: "swift_build")
+        } catch {
+            return ToolCallResponse(status: .failed, toolName: "swift_build", diagnosis: error.localizedDescription)
+        }
+    }
+
     /// Execute a build with caching, diagnostics, and timing
-    public func execute(_ request: ToolCallRequest, session: SessionContext) async
-        -> ToolCallResponse {
-        let paramsData = Data(request.parameters.utf8)
-        let parameters =
-            (try? JSONSerialization.jsonObject(with: paramsData) as? [String: Any]) ?? [:]
+    public func handle(request: ToolRequest) async throws -> ToolResponse {
+        let parameters = request.arguments
 
         // Extract parameters
-        let target = parameters["target"] as? String
-        let packagePath = parameters["package_path"] as? String
-        let configuration = (parameters["configuration"] as? String) ?? "debug"
+        let target = parameters["target"]
+        let packagePath = parameters["package_path"]
+        let configuration = parameters["configuration"] ?? "debug"
         let buildConfig = BuildConfiguration(rawValue: configuration) ?? .debug
-        guard let target = target, !target.isEmpty else {
-            fatalError("Failed to unwrap targetName")
-        }
-        let targetName = target
+        
         let requestWorkingDirectory = packagePath
             .map { URL(fileURLWithPath: $0).standardizedFileURL } ?? workingDirectory
 
         do {
             let executor = requestWorkingDirectory == workingDirectory
                 ? buildExecutor
-                : BuildExecutor(workingDirectory: requestWorkingDirectory)
+                : DefaultBuildExecutor(workingDirectory: requestWorkingDirectory)
 
             // Start build session
             let buildSession = try await sessionManager.startSession(
-                target: targetName,
-                configuration: configuration,
+                target: target,
+                configuration: buildConfig,
                 commandLine: target.map { "swift build --target \($0) --configuration \(configuration)" }
                     ?? "swift build --configuration \(configuration)"
             )
@@ -192,7 +195,7 @@ public actor SwiftBuildTool {
             // Record total timing
             try await timingAnalyzer.recordTiming(
                 sessionId: buildSession.id,
-                phase: .total,
+                phase: "total",
                 duration: buildResult.duration
             )
 
@@ -219,10 +222,10 @@ public actor SwiftBuildTool {
             }
 
             let diagnosticSummary = DiagnosticSummary(
-                errors: diagStats.totalErrors,
-                warnings: diagStats.totalWarnings,
-                notes: diagStats.totalNotes,
-                affectedFiles: Array(diagStats.affectedFiles),
+                errors: diagStats.errorCount,
+                warnings: diagStats.warningCount,
+                notes: diagStats.noteCount,
+                affectedFiles: Array(Set(diagnostics.map { $0.filePath })),
                 topErrors: Array(topDiagnostics)
             )
 
@@ -244,26 +247,16 @@ public actor SwiftBuildTool {
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
             let resultData = try encoder.encode(enhancedResult)
-
-            let toolStatus: ToolCallStatus = buildResult.exitCode == 0 ? .success : .failed
-            let diagnosis = toolStatus == .failed
-                ? "Build failed with \(diagStats.totalErrors) error(s), \(diagStats.totalWarnings) warning(s)"
-                : nil
+            let resultString = String(data: resultData, encoding: .utf8) ?? "{}"
 
             await progressCallback?(4, 4, "Build result ready")
 
-            return ToolCallResponse(
-                status: toolStatus,
-                result: resultData,
-                toolName: request.toolName,
-                diagnosis: diagnosis
+            return ToolResponse(
+                success: buildResult.exitCode == 0,
+                output: resultString
             )
         } catch {
-            return ToolCallResponse(
-                status: .failed,
-                toolName: request.toolName,
-                diagnosis: "Build execution error: \(error.localizedDescription)"
-            )
+            return .failure("Build execution error: \(error.localizedDescription)")
         }
     }
 

@@ -132,9 +132,25 @@ final class AppStore {
         self.dataEngine = DataEngine()
         
         // Initialize Developum Services
-        self.dbService = DevelopumDatabaseService(databaseAuthority: StubDatabaseAuthority())
+        let developumRoot = appSupport.appendingPathComponent("Anigma/Developum", isDirectory: true)
+        let vaultRoot = appSupport.appendingPathComponent("Anigma/Vault", isDirectory: true)
+        do {
+            try FileManager.default.createDirectory(at: developumRoot, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: vaultRoot, withIntermediateDirectories: true)
+        } catch {
+            initializationError = "Developum storage unavailable: \(error.localizedDescription)"
+        }
+
+        let databasePath = developumRoot.appendingPathComponent("developum.sqlite").path
+        let databaseActor = DatabaseActor(dbPath: databasePath)
+        let databaseAuthority = AppDatabaseAuthority(database: databaseActor)
+        let artifactAuthority = AppArtifactAuthority(
+            databaseAuthority: databaseAuthority,
+            vaultRoot: vaultRoot
+        )
+        self.dbService = DevelopumDatabaseService(databaseAuthority: databaseAuthority)
         self.developArtifactService = DevelopumArtifactService(
-            artifactAuthority: StubArtifactAuthority(),
+            artifactAuthority: artifactAuthority,
             databaseService: dbService
         )
         
@@ -166,6 +182,17 @@ final class AppStore {
         self.cacheManager = CacheManager(store: self)
         
         self.connectionMonitor = ConnectionMonitor(capability: daemonCapability)
+
+        Task { @MainActor [weak self] in
+            do {
+                try await databaseAuthority.prepare()
+                try await artifactAuthority.prepare()
+            } catch {
+                if self?.initializationError == nil {
+                    self?.initializationError = error.localizedDescription
+                }
+            }
+        }
         
         setupCallbacks()
         loadCache()
@@ -279,6 +306,28 @@ final class AppStore {
     }
     var hasMoreArtifacts: Bool {
         workspaceStore.hasMoreArtifacts
+    }
+    var activeWorkspace: RepoWorkspace? {
+        workspaceStore.activeWorkspace
+    }
+    var selectedFileURL: URL? {
+        get { workspaceStore.selectedFileURL }
+        set { workspaceStore.selectedFileURL = newValue }
+    }
+    var developNavMode: DevelopNavMode {
+        get { AppState.shared.developNavMode }
+        set { AppState.shared.developNavMode = newValue }
+    }
+    var developWorkbenchTab: DevelopWorkbenchTab {
+        get { workspaceStore.developWorkbenchTab }
+        set { workspaceStore.developWorkbenchTab = newValue }
+    }
+    var userSurface: UserSurface {
+        get { AppState.shared.selectedSurface }
+        set { AppState.shared.selectedSurface = newValue }
+    }
+    var activeWorkspaceID: UUID? {
+        workspaceStore.activeWorkspaceID
     }
     var hasMoreJobs: Bool {
         workspaceStore.hasMoreJobs
@@ -537,9 +586,9 @@ final class AppStore {
         case .life:
             if ![.compass, .inbox, .atlas, .ask, .projects, .activity].contains(userSurface) { userSurface = .compass }
         case .work:
-            if ![.projects, .inbox, .ask, .activity, .data].contains(userSurface) { userSurface = .projects }
+            if ![.projects, .inbox, .ask, .activity, .data, .documentLibrary].contains(userSurface) { userSurface = .projects }
         case .insight:
-            if ![.atlas, .activity, .ask, .data].contains(userSurface) { userSurface = .atlas }
+            if ![.atlas, .activity, .ask, .data, .observatorium].contains(userSurface) { userSurface = .atlas }
         case .build:
             if ![.studio, .activity, .inbox, .atlas].contains(userSurface) { userSurface = .studio }
         case .develop:

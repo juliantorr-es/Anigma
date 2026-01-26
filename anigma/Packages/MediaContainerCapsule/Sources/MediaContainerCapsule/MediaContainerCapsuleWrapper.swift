@@ -36,14 +36,15 @@ public final class MediaContainerCapsuleWrapper: @unchecked Sendable {
         
         let status = anigma_media_container_capsule_create(&cConfig, &rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: finalHandle,
-            destroyFunction: { ptr, err in
+            destroyFunction: { ptr in
                 var mutablePtr: anigma_media_container_capsule_t? = ptr
-                return anigma_media_container_capsule_destroy(&mutablePtr, err)
+                var err = anigma_capsule_error_t()
+                _ = anigma_media_container_capsule_destroy(&mutablePtr, &err)
             }
         )
     }
@@ -63,7 +64,7 @@ public final class MediaContainerCapsuleWrapper: @unchecked Sendable {
             
             let status = anigma_media_container_capsule_analyze_file(h, url.path, &report, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
             
             defer {
@@ -82,7 +83,7 @@ public final class MediaContainerCapsuleWrapper: @unchecked Sendable {
             
             let status = anigma_media_container_capsule_get_video_stream_info(h, index, &info, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
             
             return VideoStreamInfo(from: info)
@@ -96,7 +97,7 @@ public final class MediaContainerCapsuleWrapper: @unchecked Sendable {
             
             let status = anigma_media_container_capsule_get_audio_stream_info(h, index, &info, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
             
             return AudioStreamInfo(from: info)
@@ -231,4 +232,9 @@ public enum AudioCodec: UInt32, Sendable {
     case flac = 5
     case pcmS16LE = 6
     case pcmF32LE = 7
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
 }

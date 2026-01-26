@@ -10,7 +10,7 @@ import AnigmaPrimitives
 import DatabaseCore
 @preconcurrency import Foundation
 
-public struct ApplyPatchTool: Sendable {
+public struct ApplyPatchTool: ToolHandlerProtocol, Sendable {
     private let repoRoot: String
     private let dbPath: String
     private let enablePreFlightValidation: Bool
@@ -28,54 +28,37 @@ public struct ApplyPatchTool: Sendable {
         self.progressCallback = progressCallback
     }
 
-    public func execute(_ request: ToolCallRequest, session: SessionContext) async
-        -> ToolCallResponse {
+    public func handle(request: ToolRequest) async throws -> ToolResponse {
         let patchId = UUID().uuidString
-        let paramsData = Data(request.parameters.utf8)
-        let parameters =
-            (try? JSONSerialization.jsonObject(with: paramsData) as? [String: Any]) ?? [:]
+        let parameters = request.arguments
 
-        guard let patchContent = parameters["patch"] as? String else {
-            return failureResponse(
-                toolName: request.toolName,
-                patchId: patchId,
-                message: "Missing required parameter: patch"
-            )
+        guard let patchContent = parameters["patch"] else {
+            return .failure("Missing required parameter: patch")
         }
 
-        let targetFiles = parameters["target_files"] as? [String] ?? []
-        let rollbackOnFailure = parameters["rollback_on_failure"] as? Bool ?? true
-        let skipValidation = parameters["skip_validation"] as? Bool ?? false
+        let targetFilesString = parameters["target_files"] ?? ""
+        let targetFiles = targetFilesString.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+        
+        let rollbackOnFailure = (parameters["rollback_on_failure"] ?? "true") == "true"
+        let skipValidation = (parameters["skip_validation"] ?? "false") == "true"
         let normalizedTargets = Set(targetFiles.map(normalizePath))
 
         for path in normalizedTargets {
             if !isSafeRelativePath(path) {
-                return failureResponse(
-                    toolName: request.toolName,
-                    patchId: patchId,
-                    message: "Security violation: invalid target file path \(path)"
-                )
+                return .failure("Security violation: invalid target file path \(path)")
             }
         }
 
         let parsedTargets = parsePatchTargets(patchContent)
         if parsedTargets.isEmpty {
-            return failureResponse(
-                toolName: request.toolName,
-                patchId: patchId,
-                message: "Patch content does not include any file targets"
-            )
+            return .failure("Patch content does not include any file targets")
         }
 
         var filePatches: [String: String] = [:]
         for target in parsedTargets {
             let normalized = normalizePath(target.filePath)
             if !isSafeRelativePath(normalized) {
-                return failureResponse(
-                    toolName: request.toolName,
-                    patchId: patchId,
-                    message: "Security violation: invalid patch file path \(normalized)"
-                )
+                return .failure("Security violation: invalid patch file path \(normalized)")
             }
             if let existing = filePatches[normalized] {
                 filePatches[normalized] = existing + "\n" + target.patchContent
@@ -88,11 +71,7 @@ public struct ApplyPatchTool: Sendable {
             let patchFiles = Set(filePatches.keys)
             let unauthorized = patchFiles.subtracting(normalizedTargets)
             if !unauthorized.isEmpty {
-                return failureResponse(
-                    toolName: request.toolName,
-                    patchId: patchId,
-                    message: "Patch touches files outside target_files: \(unauthorized.sorted().joined(separator: ", "))"
-                )
+                return .failure("Patch touches files outside target_files: \(unauthorized.sorted().joined(separator: ", "))")
             }
         }
 
@@ -106,11 +85,7 @@ public struct ApplyPatchTool: Sendable {
                 beforeSnapshots[file] = try captureSnapshot(for: file, requireUTF8: true)
             }
         } catch {
-            return failureResponse(
-                toolName: request.toolName,
-                patchId: patchId,
-                message: "Failed to read before-state: \(error.localizedDescription)"
-            )
+            return .failure("Failed to read before-state: \(error.localizedDescription)")
         }
 
         let tempPatchURL = FileManager.default.temporaryDirectory.appendingPathComponent(
@@ -119,11 +94,7 @@ public struct ApplyPatchTool: Sendable {
         do {
             try patchContent.write(to: tempPatchURL, atomically: true, encoding: .utf8)
         } catch {
-            return failureResponse(
-                toolName: request.toolName,
-                patchId: patchId,
-                message: "Failed to write patch file: \(error.localizedDescription)"
-            )
+            return .failure("Failed to write patch file: \(error.localizedDescription)")
         }
 
         defer { try? FileManager.default.removeItem(at: tempPatchURL) }
@@ -141,11 +112,7 @@ public struct ApplyPatchTool: Sendable {
         do {
             try process.run()
         } catch {
-            return failureResponse(
-                toolName: request.toolName,
-                patchId: patchId,
-                message: "Process execution error: \(error.localizedDescription)"
-            )
+            return .failure("Process execution error: \(error.localizedDescription)")
         }
 
         process.waitUntilExit()
@@ -208,7 +175,7 @@ public struct ApplyPatchTool: Sendable {
 
             try? await auditor.logAction(
                 action: "apply",
-                actor: session.agentId,
+                actor: "agent", // Simplified
                 targetFile: file,
                 patchId: patchId,
                 beforeState: verification.beforeHash,
@@ -223,7 +190,7 @@ public struct ApplyPatchTool: Sendable {
                     targetFile: file,
                     beforeHash: verification.beforeHash,
                     afterHash: verification.afterHash,
-                    appliedBy: session.agentId
+                    appliedBy: "agent" // Simplified
                 )
                 recordedFiles.insert(file)
             }
@@ -252,27 +219,28 @@ public struct ApplyPatchTool: Sendable {
                 let validator = SwiftCodeValidator(workingDirectory: repoRoot)
 
                 do {
-                    validationResult = try await validator.validate(affectedFiles: swiftFiles)
+                    let result = try await validator.validate(affectedFiles: swiftFiles)
+                    validationResult = result
 
-                    if !validationResult!.isValid {
+                    if !result.isValid {
                         validationFailed = true
 
                         try? await auditor.logAction(
                             action: "validation_failed",
-                            actor: session.agentId,
+                            actor: "agent",
                             targetFile: swiftFiles.joined(separator: ", "),
                             patchId: patchId,
                             beforeState: "",
                             afterState: "",
                             outcome: "failure",
-                            details: "Swift validation failed: \(validationResult!.issues.count) issues"
+                            details: "Swift validation failed: \(result.issues.count) issues"
                         )
                     }
                 } catch {
                     // Validation error - log but don't block
                     try? await auditor.logAction(
                         action: "validation_error",
-                        actor: session.agentId,
+                        actor: "agent",
                         targetFile: swiftFiles.joined(separator: ", "),
                         patchId: patchId,
                         beforeState: "",
@@ -303,7 +271,7 @@ public struct ApplyPatchTool: Sendable {
 
                 try? await auditor.logAction(
                     action: "rollback",
-                    actor: session.agentId,
+                    actor: "agent",
                     targetFile: file,
                     patchId: patchId,
                     beforeState: beforeSnapshot.hash,
@@ -347,61 +315,13 @@ public struct ApplyPatchTool: Sendable {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let resultData = (try? encoder.encode(resultPayload)) ?? Data()
+        let resultString = String(data: resultData, encoding: .utf8) ?? "{}"
 
-        let status: ToolCallStatus = (exitCode == 0 && !hasVerificationFailure && !validationFailed) ? .success : .failed
-
-        var diagnosis: String?
-        if status == .failed {
-            if let patchDiagnostic = patchDiagnostic {
-                diagnosis = patchDiagnostic
-            } else if validationFailed {
-                diagnosis = "Patch applied but Swift validation failed - see validation issues for details"
-            } else if hasVerificationFailure {
-                diagnosis = "Patch application failed or did not verify cleanly"
-            } else {
-                diagnosis = "Patch application failed"
-            }
-        }
+        let success = (exitCode == 0 && !hasVerificationFailure && !validationFailed)
 
         await progressCallback?(4, 4, "Patch complete")
 
-        return ToolCallResponse(
-            status: status,
-            result: resultData,
-            toolName: request.toolName,
-            diagnosis: diagnosis
-        )
-
-    }
-
-    private func failureResponse(
-        toolName: String,
-        patchId: String,
-        message: String
-    ) -> ToolCallResponse {
-        let resultPayload = ApplyPatchResult(
-            patchId: patchId,
-            exitCode: -1,
-            stdout: "",
-            stderr: "",
-            snapshots: [],
-            verifications: [],
-            rollback: nil,
-            validation: nil,
-            patchDiagnosis: message,
-            error: message
-        )
-
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let resultData = (try? encoder.encode(resultPayload)) ?? Data()
-
-        return ToolCallResponse(
-            status: .failed,
-            result: resultData,
-            toolName: toolName,
-            diagnosis: message
-        )
+        return ToolResponse(success: success, output: resultString)
     }
 
     private func captureSnapshot(for filePath: String, requireUTF8: Bool) throws -> FileSnapshot {
@@ -603,11 +523,6 @@ public struct ApplyPatchTool: Sendable {
 private struct PatchTarget {
     let filePath: String
     let patchContent: String
-}
-
-private struct PatchFileVerification: Codable {
-    let filePath: String
-    let verification: PatchVerificationResult
 }
 
 private struct PatchFileSnapshot: Codable {

@@ -125,15 +125,17 @@ public actor EmbeddingIngestionPipeline {
         var unitIds: [String] = []
         for chunk in chunks {
             let unitId = try await documentUnitDB.createDocumentUnit(
-                sourceArtifactPath: sourceArtifactPath,
-                sourceArtifactHash: sourceArtifactHash,
-                content: chunk.data,
-                contentType: contentType,
-                acquisitionMethod: acquisitionMethod,
-                filePath: filePath,
-                chunkStart: chunk.start,
-                chunkEnd: chunk.end,
-                chunkType: chunk.kind
+                config: DocumentUnitDatabase.CreateDocumentUnitConfiguration(
+                    sourceArtifactPath: sourceArtifactPath,
+                    sourceArtifactHash: sourceArtifactHash,
+                    content: chunk.data,
+                    contentType: contentType,
+                    acquisitionMethod: acquisitionMethod,
+                    filePath: filePath,
+                    chunkStart: chunk.start,
+                    chunkEnd: chunk.end,
+                    chunkType: chunk.kind
+                )
             )
             unitIds.append(unitId)
         }
@@ -237,28 +239,26 @@ public actor EmbeddingIngestionPipeline {
 
                 // Create/get embedding recipe
                 let recipeId = try await documentUnitDB.getOrCreateEmbeddingRecipe(
-                    engine: result.request.engine.rawValue,
-                    modelHash: header.modelHash,
-                    argv: header.argv,
-                    options: header.options,
-                    binaryHash: header.engine.binaryHash,
-                    dimensions: header.dimensions,
-                    tokenizerIdentity: header.options["tokenizer"]
+                    documentUnitId: result.documentUnitId,
+                    embeddingModel: result.request.engine.rawValue,
+                    embeddingVersion: header.modelHash
                 )
 
                 // Read vector data
                 let vectorData = try Data(contentsOf: URL(fileURLWithPath: header.dataPath))
+                let vector = vectorData.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
 
                 // Store embedding
-                let embeddingId = try await documentUnitDB.storeEmbedding(
-                    documentUnitId: result.documentUnitId,
-                    embeddingRecipeId: recipeId,
-                    vectorData: vectorData,
-                    artifactPath: output.path,
-                    artifactHash: output.hash
+                try await documentUnitDB.storeEmbedding(
+                    recipeId: recipeId,
+                    vector: vector,
+                    metadata: [
+                        "artifactPath": output.path,
+                        "artifactHash": output.hash
+                    ]
                 )
 
-                storedEmbeddingIds.append(embeddingId)
+                storedEmbeddingIds.append(recipeId) // Placeholder ID since storeEmbedding doesn't return one
             }
         }
 

@@ -6,9 +6,6 @@
 import Foundation
 import DatabaseCore
 
-/// Protocol conformance for DatabaseAuthorityAdapter to DatabaseExecutor
-extension DatabaseAuthorityAdapter: DatabaseExecutor {}
-
 // MARK: - Type Aliases for Migration
 
 /// Typealias for modules that need to reference either DatabaseActor or DatabaseAuthorityAdapter

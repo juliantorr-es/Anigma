@@ -20,14 +20,12 @@ public final class TextChunkingCapsuleWrapper {
         
         let status = anigma_text_chunking_capsule_create(&cConfig, &rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: finalHandle,
-            destroyFunction: { ptr, err in
-                anigma_text_chunking_capsule_destroy(ptr, err)
-            }
+            destroyFunction: capsuleDestroyer(anigma_text_chunking_capsule_destroy)
         )
     }
     
@@ -43,7 +41,7 @@ public final class TextChunkingCapsuleWrapper {
                 )
             }
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
     }
@@ -53,7 +51,7 @@ public final class TextChunkingCapsuleWrapper {
         try handle.withHandle { rawHandle in
             let status = anigma_text_chunking_capsule_finalize(rawHandle, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
     }
@@ -63,7 +61,7 @@ public final class TextChunkingCapsuleWrapper {
         try handle.withHandle { rawHandle in
             let status = anigma_text_chunking_capsule_reset(rawHandle, &error)
             guard status == ANIGMA_OK else {
-                throw CapsuleError(status: status, error: error)
+                throw capsuleError(status: status, error: error)
             }
         }
     }
@@ -74,14 +72,14 @@ public final class TextChunkingCapsuleWrapper {
             var count: Int = 0
             let countStatus = anigma_text_chunking_capsule_get_boundary_count(rawHandle, &count, &error)
             guard countStatus == ANIGMA_OK else {
-                throw CapsuleError(status: countStatus, error: error)
+                throw capsuleError(status: countStatus, error: error)
             }
             
             var boundaries = [anigma_chunk_boundary_t](repeating: anigma_chunk_boundary_t(), count: count)
             var actual: Int = 0
             let getStatus = anigma_text_chunking_capsule_get_chunk_info(rawHandle, &boundaries, count, &actual, &error)
             guard getStatus == ANIGMA_OK else {
-                throw CapsuleError(status: getStatus, error: error)
+                throw capsuleError(status: getStatus, error: error)
             }
             
             return Array(boundaries.prefix(actual))
@@ -107,5 +105,19 @@ public final class TextChunkingCapsuleWrapper {
         }
         
         return chunks
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }

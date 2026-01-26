@@ -21,12 +21,13 @@ public final class PDFDocument {
         }
         
         guard status == ANIGMA_OK, let h = raw else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
-        self.handle = CapsuleHandle(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_pdf_document_destroy(ptr, e)
-        })
+        self.handle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_pdf_document_destroy)
+        )
     }
     
     public init(data: Data, password: String? = nil) throws {
@@ -46,12 +47,13 @@ public final class PDFDocument {
         }
         
         guard status == ANIGMA_OK, let h = raw else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
-        self.handle = CapsuleHandle(rawHandle: h, destroyFunction: { ptr, e in
-            anigma_pdf_document_destroy(ptr, e)
-        })
+        self.handle = CapsuleHandle<AnyObject>(
+            rawHandle: h,
+            destroyFunction: capsuleDestroyer(anigma_pdf_document_destroy)
+        )
     }
     
     public var pageCount: Int {
@@ -72,12 +74,13 @@ public final class PDFDocument {
         }
         
         guard status == ANIGMA_OK, let p = rawPage else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
-        let pageHandle = CapsuleHandle<AnyObject>(rawHandle: p, destroyFunction: { ptr, e in
-            anigma_pdf_page_destroy(ptr, e)
-        })
+        let pageHandle = CapsuleHandle<AnyObject>(
+            rawHandle: p,
+            destroyFunction: capsuleDestroyer(anigma_pdf_page_destroy)
+        )
         
         return PDFPage(handle: pageHandle)
     }
@@ -122,12 +125,13 @@ public final class PDFPage {
         
         var status = anigma_pdf_bitmap_create(Int32(width), Int32(height), true, &rawBitmap, &err)
         guard status == ANIGMA_OK, let bmp = rawBitmap else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
-        let bitmapHandle = CapsuleHandle<AnyObject>(rawHandle: bmp, destroyFunction: { ptr, e in
-            anigma_pdf_bitmap_destroy(ptr, e)
-        })
+        let bitmapHandle = CapsuleHandle<AnyObject>(
+            rawHandle: bmp,
+            destroyFunction: capsuleDestroyer(anigma_pdf_bitmap_destroy)
+        )
         
         // Render
         status = try handle.withHandle { pagePtr in
@@ -146,7 +150,7 @@ public final class PDFPage {
         }
         
         if status != ANIGMA_OK {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
         return PDFBitmap(handle: bitmapHandle, width: width, height: height)
@@ -174,11 +178,25 @@ public final class PDFBitmap {
         }
         
         guard status == ANIGMA_OK, let buf = buffer else {
-            throw CapsuleError(status: status, error: err)
+            throw capsuleError(status: status, error: err)
         }
         
         let length = Int(stride) * height
         let ptr = UnsafeBufferPointer(start: buf, count: length)
         return try body(ptr, Int(stride))
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }

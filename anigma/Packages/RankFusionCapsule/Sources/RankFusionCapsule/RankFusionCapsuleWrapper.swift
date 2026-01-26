@@ -20,12 +20,12 @@ public final class RankFusionCapsuleWrapper {
         
         let status = anigma_rank_fusion_capsule_create(&rawHandle, &error)
         guard status == ANIGMA_OK, let rawHandle = rawHandle else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         self.handle = CapsuleHandle<AnyObject>(
             rawHandle: rawHandle,
-            destroyFunction: anigma_rank_fusion_capsule_destroy
+            destroyFunction: capsuleDestroyer(anigma_rank_fusion_capsule_destroy)
         )
     }
     
@@ -62,7 +62,7 @@ public final class RankFusionCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
     }
     
@@ -75,7 +75,7 @@ public final class RankFusionCapsuleWrapper {
         }) ?? ANIGMA_ERR_INTERNAL
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
     }
     
@@ -89,7 +89,7 @@ public final class RankFusionCapsuleWrapper {
         }) ?? ANIGMA_ERR_INTERNAL
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         return Int(count)
@@ -124,7 +124,7 @@ public final class RankFusionCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         // Count valid results (score > 0)
@@ -172,7 +172,7 @@ public final class RankFusionCapsuleWrapper {
         }
         
         guard status == ANIGMA_OK else {
-            throw CapsuleError(status: status, error: error)
+            throw capsuleError(status: status, error: error)
         }
         
         var results = [(id: UInt64, score: Double)]()
@@ -183,5 +183,19 @@ public final class RankFusionCapsuleWrapper {
         }
         
         return results
+    }
+}
+
+private func capsuleError(status: anigma_status_t, error: anigma_capsule_error_t) -> CapsuleError {
+    let message = error.message.map { String(cString: $0) } ?? "Capsule error"
+    return CapsuleError(status: status, code: error.code, message: message)
+}
+
+private func capsuleDestroyer(
+    _ destroy: @escaping (UnsafeMutableRawPointer, UnsafeMutablePointer<anigma_capsule_error_t>) -> anigma_status_t
+) -> (UnsafeMutableRawPointer) -> Void {
+    { ptr in
+        var err = anigma_capsule_error_t()
+        _ = destroy(ptr, &err)
     }
 }
