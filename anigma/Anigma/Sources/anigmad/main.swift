@@ -106,16 +106,46 @@ actor SystemMonitor {
     }
     
     private func getDiskIOMetrics() -> DiskIOMetrics {
+        var readBytes: UInt64 = 0
+        var writeBytes: UInt64 = 0
+        var readOps: UInt64 = 0
+        var writeOps: UInt64 = 0
+        
+        var stats = vfsstat()
+        let result = getvfsstat(&stats, MemoryLayout<vfsstat>.size, 0)
+        
+        if result >= 0 {
+            readBytes = UInt64(stats.v_io_read)
+            writeBytes = UInt64(stats.v_io_write)
+            readOps = UInt64(stats.v_io_readcnt)
+            writeOps = UInt64(stats.v_io_writecnt)
+        }
+        
         return DiskIOMetrics(
-            readBytes: 0,
-            writeBytes: 0,
-            readOps: 0,
-            writeOps: 0
+            readBytes: readBytes,
+            writeBytes: writeBytes,
+            readOps: readOps,
+            writeOps: writeOps
         )
     }
     
     private func getNetworkConnectionCount() -> Int {
-        return 0
+        var connectionCount = 0
+        
+        var ifaddr: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&ifaddr) == 0 else { return 0 }
+        defer { freeifaddrs(ifaddr) }
+        
+        var ptr = ifaddr
+        while ptr != nil {
+            let addr = ptr!.pointee.ifa_addr.pointee
+            if addr.sa_family == AF_INET || addr.sa_family == AF_INET6 {
+                connectionCount += 1
+            }
+            ptr = ptr!.pointee.ifa_next
+        }
+        
+        return connectionCount
     }
     
     private func getUptime() -> TimeInterval {
@@ -187,18 +217,61 @@ actor DaemonServer {
     
     private func handleRequest(_ request: HTTPRequest) async -> HTTPResponse {
         switch request.path {
-        case "/status":
-            let metrics = await monitor.getMetrics()
-            let status = DaemonStatus(
-                isRunning: isRunning,
-                metrics: metrics,
-                timestamp: Date()
-            )
+        case "/session/open":
+            guard request.method.uppercased() == "POST",
+                  let body = request.body else {
+                return HTTPResponse(
+                    statusCode: 400,
+                    headers: ["Content-Type": "application/json"],
+                    body: try? JSONEncoder().encode(["error": "Invalid request"])
+                )
+            }
+            
+            // Simple session opening - in production this would validate scopes, etc.
+            let sessionResponse = [
+                "clientId": UUID().uuidString,
+                "capabilityToken": Data(UUID().uuidString.utf8).base64EncodedString(),
+                "sessionId": UUID().uuidString
+            ]
+            
             return HTTPResponse(
                 statusCode: 200,
                 headers: ["Content-Type": "application/json"],
-                body: try? JSONEncoder().encode(status)
+                body: try? JSONEncoder().encode(sessionResponse)
             )
+            
+        case "/status":
+            if request.method.uppercased() == "POST" {
+                // SidecarBridge format
+                let metrics = await monitor.getMetrics()
+                let statusResponse = [
+                    "daemonVersion": "1.0.0",
+                    "uptimeSeconds": Int(metrics.uptime),
+                    "cpuUsagePercent": metrics.cpuUsage,
+                    "memoryUsagePercent": metrics.memoryUsage,
+                    "activeJobs": 0,
+                    "queuedJobs": await jobRegistry.listJobs().count,
+                    "isHealthy": true
+                ]
+                return HTTPResponse(
+                    statusCode: 200,
+                    headers: ["Content-Type": "application/json"],
+                    body: try? JSONEncoder().encode(statusResponse)
+                )
+            } else {
+                // Current format
+                let metrics = await monitor.getMetrics()
+                let status = DaemonStatus(
+                    isRunning: isRunning,
+                    metrics: metrics,
+                    timestamp: Date()
+                )
+                return HTTPResponse(
+                    statusCode: 200,
+                    headers: ["Content-Type": "application/json"],
+                    body: try? JSONEncoder().encode(status)
+                )
+            }
             
         case "/health":
             return HTTPResponse(
@@ -239,13 +312,98 @@ actor DaemonServer {
                     headers: ["Content-Type": "application/json"],
                     body: try? JSONEncoder().encode(job)
                 )
-            default:
+             default:
                 return HTTPResponse(
                     statusCode: 405,
                     headers: ["Content-Type": "application/json"],
                     body: try? JSONEncoder().encode(["error": "Method not allowed"])
                 )
             }
+            
+        case "/job/submit":
+            guard request.method.uppercased() == "POST",
+                  let body = request.body else {
+                return HTTPResponse(
+                    statusCode: 400,
+                    headers: ["Content-Type": "application/json"],
+                    body: try? JSONEncoder().encode(["error": "Invalid request"])
+                )
+            }
+            
+            // Parse the SidecarBridge job submission
+            // For now, create a simple job from the request
+            let jobId = UUID().uuidString
+            let jobResponse = [
+                "jobId": jobId,
+                "status": "QUEUED",
+                "createdAt": ISO8601DateFormatter().string(from: Date())
+            ]
+            
+            return HTTPResponse(
+                statusCode: 202,
+                headers: ["Content-Type": "application/json"],
+                body: try? JSONEncoder().encode(jobResponse)
+            )
+            
+        case "/job/status":
+            // Extract job ID from query parameters
+            let components = request.path.split(separator: "?")
+            let jobId = components.count > 1 ? String(components[1]) : ""
+            
+            let statusResponse = [
+                "jobId": jobId,
+                "status": "RUNNING",
+                "progress": 0.5,
+                "createdAt": ISO8601DateFormatter().string(from: Date()),
+                "updatedAt": ISO8601DateFormatter().string(from: Date())
+            ]
+            
+            return HTTPResponse(
+                statusCode: 200,
+                headers: ["Content-Type": "application/json"],
+                body: try? JSONEncoder().encode(statusResponse)
+            )
+            
+        case "/job/cancel":
+            guard request.method.uppercased() == "POST",
+                  let body = request.body else {
+                return HTTPResponse(
+                    statusCode: 400,
+                    headers: ["Content-Type": "application/json"],
+                    body: try? JSONEncoder().encode(["error": "Invalid request"])
+                )
+            }
+            
+            let cancelResponse = [
+                "success": true,
+                "message": "Job cancellation requested"
+            ]
+            
+            return HTTPResponse(
+                statusCode: 200,
+                headers: ["Content-Type": "application/json"],
+                body: try? JSONEncoder().encode(cancelResponse)
+            )
+            
+        case "/artifacts/list":
+            guard request.method.uppercased() == "POST" else {
+                return HTTPResponse(
+                    statusCode: 405,
+                    headers: ["Content-Type": "application/json"],
+                    body: try? JSONEncoder().encode(["error": "Method not allowed"])
+                )
+            }
+            
+            let artifactsResponse = [
+                "artifacts": [] as [String],
+                "nextPageToken": ""
+            ]
+            
+            return HTTPResponse(
+                statusCode: 200,
+                headers: ["Content-Type": "application/json"],
+                body: try? JSONEncoder().encode(artifactsResponse)
+            )
             
         default:
             return HTTPResponse(
