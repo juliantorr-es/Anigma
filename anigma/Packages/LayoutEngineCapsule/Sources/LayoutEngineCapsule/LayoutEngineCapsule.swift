@@ -7,4 +7,8 @@ public final class LayoutEngineCapsule: IdentifiableCapsule {
     public init(config: LayoutEngineConfig) throws {
         self.wrapper = try LayoutEngineCapsuleWrapper(config: config)
     }
+    
+    public func analyzePDF(_ data: Data) throws -> [PageLayout] {
+        return try wrapper.analyzePDF(data)
+    }
 }

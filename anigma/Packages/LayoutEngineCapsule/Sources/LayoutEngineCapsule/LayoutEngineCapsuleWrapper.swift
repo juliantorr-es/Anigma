@@ -10,6 +10,8 @@ public final class LayoutEngineCapsuleWrapper {
         var error = anigma_capsule_error_t()
         
         var cConfig = anigma_layout_engine_capsule_get_default_config()
+        cConfig.determinism_tier = UInt32(config.determinismTier)
+        cConfig.flags = config.flags
         
         let status = anigma_layout_engine_capsule_create(&cConfig, &rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
@@ -24,14 +26,76 @@ public final class LayoutEngineCapsuleWrapper {
         )
     }
     
+    public func analyzePDF(_ data: Data) throws -> [PageLayout] {
+        var error = anigma_capsule_error_t()
+        var actualCount: Int = 0
+        
+        let status = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> anigma_status_t in
+            guard let baseAddress = bytes.baseAddress else { return ANIGMA_ERR_INVALID_ARG }
+            return anigma_layout_engine_capsule_analyze_pdf(
+                handle.rawHandle,
+                baseAddress.assumingMemoryBound(to: UInt8.self),
+                data.count,
+                nil,
+                0,
+                &actualCount,
+                &error
+            )
+        }
+        
+        guard status == ANIGMA_OK else {
+            throw CapsuleError(status: status, error: error)
+        }
+        
+        var cLayouts = [anigma_page_layout_t](repeating: anigma_page_layout_t(), count: actualCount)
+        let finalStatus = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> anigma_status_t in
+            guard let baseAddress = bytes.baseAddress else { return ANIGMA_ERR_INVALID_ARG }
+            return anigma_layout_engine_capsule_analyze_pdf(
+                handle.rawHandle,
+                baseAddress.assumingMemoryBound(to: UInt8.self),
+                data.count,
+                &cLayouts,
+                actualCount,
+                &actualCount,
+                &error
+            )
+        }
+        
+        guard finalStatus == ANIGMA_OK else {
+            throw CapsuleError(status: finalStatus, error: error)
+        }
+        
+        defer {
+            for i in 0..<actualCount {
+                var layout = cLayouts[i]
+                _ = anigma_layout_engine_capsule_free_layout(handle.rawHandle, &layout, &error)
+            }
+        }
+        
+        return cLayouts.map { PageLayout(from: $0) }
+    }
+    
     public static func analyzePDF(_ data: Data?, config: LayoutEngineConfig) throws -> [PageLayout] {
-        // Mock implementation for build fix
-        return []
+        guard let data = data else { return [] }
+        let wrapper = try LayoutEngineCapsuleWrapper(config: config)
+        return try wrapper.analyzePDF(data)
     }
 }
 
 public struct LayoutEngineConfig: Sendable, Codable {
-    public init(determinismTier: Int = 1) {}
+    public var determinismTier: Int
+    public var flags: UInt32
+    
+    public init(determinismTier: Int = 1, flags: UInt32 = 0) {
+        self.determinismTier = determinismTier
+        self.flags = flags
+    }
+    
+    public static let extractFontMetrics: UInt32 = 1 << 0
+    public static let detectTables: UInt32 = 1 << 1
+    public static let detectFigures: UInt32 = 1 << 2
+    public static let extractImages: UInt32 = 1 << 3
+    public static let enableProfiling: UInt32 = 1 << 4
 }
 
 public struct BoundingBox: Sendable, Codable {
@@ -45,6 +109,13 @@ public struct BoundingBox: Sendable, Codable {
         self.top = top
         self.right = right
         self.bottom = bottom
+    }
+    
+    init(from cBbox: anigma_bounding_box_t) {
+        self.left = cBbox.left
+        self.top = cBbox.top
+        self.right = cBbox.right
+        self.bottom = cBbox.bottom
     }
 }
 
@@ -63,6 +134,15 @@ public struct TextSegment: Sendable, Codable {
         self.fontSize = fontSize
         self.fontFlags = fontFlags
         self.colorRGB = colorRGB
+    }
+    
+    init(from cSeg: anigma_text_segment_t) {
+        self.bbox = BoundingBox(from: cSeg.bbox)
+        self.text = String(cString: cSeg.text)
+        self.fontName = cSeg.font_name != nil ? String(cString: cSeg.font_name!) : nil
+        self.fontSize = cSeg.font_size
+        self.fontFlags = cSeg.font_flags
+        self.colorRGB = cSeg.color_rgb
     }
 }
 
@@ -88,6 +168,22 @@ public struct ImageData: Sendable, Codable {
         self.colorspace = colorspace
         self.filter = filter
     }
+    
+    init(from cImg: anigma_image_data_t) {
+        self.bbox = BoundingBox(from: cImg.bbox)
+        if let dataPtr = cImg.raw_data {
+            self.rawData = Data(bytes: dataPtr, count: cImg.raw_data_len)
+        } else {
+            self.rawData = nil
+        }
+        self.width = UInt32(cImg.width)
+        self.height = UInt32(cImg.height)
+        self.horizontalDPI = cImg.horizontal_dpi
+        self.verticalDPI = cImg.vertical_dpi
+        self.bitsPerPixel = UInt32(cImg.bits_per_pixel)
+        self.colorspace = Int32(cImg.colorspace)
+        self.filter = cImg.filter != nil ? String(cString: cImg.filter!) : nil
+    }
 }
 
 public struct PageLayout: Sendable, Codable {
@@ -104,10 +200,62 @@ public struct PageLayout: Sendable, Codable {
         self.tableBBoxes = tableBBoxes
         self.figureBBoxes = figureBBoxes
     }
+    
+    init(from cLayout: anigma_page_layout_t) {
+        self.pageIndex = cLayout.page_index
+        
+        var segments = [TextSegment]()
+        if let cSegments = cLayout.segments {
+            for i in 0..<Int(cLayout.segment_count) {
+                segments.append(TextSegment(from: cSegments[i]))
+            }
+        }
+        self.segments = segments
+        
+        var images = [ImageData]()
+        if let cImages = cLayout.images {
+            for i in 0..<Int(cLayout.image_count) {
+                images.append(ImageData(from: cImages[i]))
+            }
+        }
+        self.images = images
+        
+        var tableBBoxes = [BoundingBox]()
+        if let cTables = cLayout.table_bboxes {
+            for i in 0..<Int(cLayout.table_count) {
+                tableBBoxes.append(BoundingBox(from: cTables[i]))
+            }
+        }
+        self.tableBBoxes = tableBBoxes
+        
+        var figureBBoxes = [BoundingBox]()
+        if let cFigures = cLayout.figure_bboxes {
+            for i in 0..<Int(cLayout.figure_count) {
+                figureBBoxes.append(BoundingBox(from: cFigures[i]))
+            }
+        }
+        self.figureBBoxes = figureBBoxes
+    }
 }
 
 public struct LayoutProfilingStats: Sendable, Codable {
-    public init() {}
+    public var totalCharsProcessed: Int
+    public var totalSegmentsCreated: Int
+    public var totalPagesProcessed: Int
+    public var pdfLoadTimeMs: Double
+    public var textExtractionTimeMs: Double
+    public var spatialIndexBuildTimeMs: Double
+    public var totalAnalysisTimeMs: Double
+    
+    init(from cStats: anigma_layout_engine_profiling_stats_t) {
+        self.totalCharsProcessed = Int(cStats.total_chars_processed)
+        self.totalSegmentsCreated = Int(cStats.total_segments_created)
+        self.totalPagesProcessed = Int(cStats.total_pages_processed)
+        self.pdfLoadTimeMs = cStats.pdf_load_time_ms
+        self.textExtractionTimeMs = cStats.text_extraction_time_ms
+        self.spatialIndexBuildTimeMs = cStats.spatial_index_build_time_ms
+        self.totalAnalysisTimeMs = cStats.total_analysis_time_ms
+    }
 }
 
 public struct OCRResult: Sendable, Codable {
