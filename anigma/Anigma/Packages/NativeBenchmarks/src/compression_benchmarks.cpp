@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Anigma
 // Licensed under the MIT License
 
+#include <benchmark_utils.h>
 #include <chrono>
 #include <vector>
 #include <cstdint>
@@ -211,6 +212,17 @@ private:
     }
 
     static void benchmark_compression_rle(const std::vector<uint8_t>& data, const std::string& name) {
+        const BenchmarkMetadata metadata{
+            std::to_string(data.size()) + " bytes",
+            "rle_v1",
+            {{"suite", "compression"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            name,
+            "benchmarks.native.compression",
+            metadata);
+
         const int iterations = 10;
         std::vector<double> measurements;
         measurements.reserve(iterations);
@@ -249,6 +261,17 @@ private:
     }
 
     static void benchmark_compression_lz77(const std::vector<uint8_t>& data, const std::string& name) {
+        const BenchmarkMetadata metadata{
+            std::to_string(data.size()) + " bytes",
+            "lz77_v1",
+            {{"suite", "compression"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            name,
+            "benchmarks.native.compression",
+            metadata);
+
         const int iterations = 5;
         std::vector<double> measurements;
         measurements.reserve(iterations);

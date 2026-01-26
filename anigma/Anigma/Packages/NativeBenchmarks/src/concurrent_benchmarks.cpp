@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Anigma
 // Licensed under the MIT License
 
+#include <benchmark_utils.h>
 #include <chrono>
 #include <vector>
 #include <thread>
@@ -115,6 +116,17 @@ private:
         SimpleThreadPool pool(num_threads);
         std::atomic<int> completed{0};
 
+        const BenchmarkMetadata metadata{
+            "threads=" + std::to_string(num_threads) + ",tasks=" + std::to_string(num_tasks),
+            "thread_pool_v1",
+            {{"suite", "concurrent"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Thread Pool (" + std::to_string(num_threads) + " threads)",
+            "benchmarks.native.concurrent",
+            metadata);
+
         auto start = std::chrono::high_resolution_clock::now();
 
         // Enqueue all tasks
@@ -153,6 +165,17 @@ private:
         const int increments_per_thread = 100000;
         std::vector<double> measurements;
 
+        const BenchmarkMetadata metadata{
+            "threads=8,increments=100000",
+            "atomic_increment_v1",
+            {{"suite", "concurrent"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Atomic Increment (8 threads)",
+            "benchmarks.native.concurrent",
+            metadata);
+
         std::atomic<long long> counter{0};
 
         auto start = std::chrono::high_resolution_clock::now();
@@ -187,6 +210,17 @@ private:
         const int num_threads = 4;
         const int attempts = 10000;
         std::vector<double> measurements;
+
+        const BenchmarkMetadata metadata{
+            "threads=4,attempts=10000",
+            "atomic_cas_v1",
+            {{"suite", "concurrent"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Atomic Compare-Swap (4 threads)",
+            "benchmarks.native.concurrent",
+            metadata);
 
         std::atomic<int> value{0};
 
@@ -235,6 +269,17 @@ private:
         std::mutex mtx;
         long long counter = 0;
 
+        const BenchmarkMetadata metadata{
+            "threads=8,iterations=10000",
+            "mutex_contention_v1",
+            {{"suite", "concurrent"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Mutex Lock Contention (8 threads)",
+            "benchmarks.native.concurrent",
+            metadata);
+
         auto start = std::chrono::high_resolution_clock::now();
 
         std::vector<std::thread> threads;
@@ -280,6 +325,17 @@ private:
 
     static void benchmark_thread_scaling(int num_threads, int work_per_thread) {
         std::atomic<long long> total_work{0};
+
+        const BenchmarkMetadata metadata{
+            "threads=" + std::to_string(num_threads) + ",work=" + std::to_string(work_per_thread),
+            "scaling_v1",
+            {{"suite", "concurrent"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Thread Scaling (" + std::to_string(num_threads) + " threads)",
+            "benchmarks.native.concurrent",
+            metadata);
 
         auto start = std::chrono::high_resolution_clock::now();
 

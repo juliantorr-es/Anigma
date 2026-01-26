@@ -16,6 +16,12 @@
 #include <map>
 #include <limits>
 #include <functional>
+#include <fstream>
+#include <memory>
+#include <mutex>
+#include <random>
+#include <cstdlib>
+#include <ctime>
 
 #ifdef __APPLE__
 #include <mach/mach.h>
@@ -24,6 +30,304 @@
 
 namespace anigma {
 namespace benchmark {
+
+// =============================================================================
+// MARK: - Capsule Diagnostics (C++ Adapter)
+// =============================================================================
+
+enum class SpanStatus {
+    ok,
+    error,
+    cancelled,
+    unknown
+};
+
+class DiagnosticSpan {
+public:
+    virtual ~DiagnosticSpan() = default;
+    virtual void end(SpanStatus status) = 0;
+    virtual void add_tag(const std::string& key, const std::string& value) = 0;
+};
+
+class CapsuleDiagnostics {
+public:
+    virtual ~CapsuleDiagnostics() = default;
+    virtual std::unique_ptr<DiagnosticSpan> begin_span(
+        const std::string& name,
+        const std::string& category,
+        const std::string& correlation_id,
+        const std::map<std::string, std::string>& tags) = 0;
+};
+
+struct BenchmarkMetadata {
+    std::string input_size;
+    std::string algorithm_version;
+    std::map<std::string, std::string> tags;
+
+    std::map<std::string, std::string> to_tags() const {
+        std::map<std::string, std::string> merged = tags;
+        if (!input_size.empty()) {
+            merged["input_size"] = input_size;
+        }
+        if (!algorithm_version.empty()) {
+            merged["algorithm_version"] = algorithm_version;
+        }
+        return merged;
+    }
+};
+
+class DefaultCapsuleDiagnostics;
+
+class DefaultDiagnosticSpan final : public DiagnosticSpan {
+public:
+    DefaultDiagnosticSpan(
+        DefaultCapsuleDiagnostics& diagnostics,
+        std::string name,
+        std::string category,
+        std::string correlation_id,
+        std::map<std::string, std::string> tags);
+
+    void end(SpanStatus status) override;
+    void add_tag(const std::string& key, const std::string& value) override;
+
+private:
+    DefaultCapsuleDiagnostics& diagnostics_;
+    std::string name_;
+    std::string category_;
+    std::string correlation_id_;
+    std::chrono::system_clock::time_point start_time_;
+    std::map<std::string, std::string> tags_;
+    bool ended_ = false;
+};
+
+class DefaultCapsuleDiagnostics final : public CapsuleDiagnostics {
+public:
+    explicit DefaultCapsuleDiagnostics(std::string output_path = default_output_path())
+        : output_path_(std::move(output_path)),
+          output_(output_path_, std::ios::app),
+          correlation_id_(generate_correlation_id()) {}
+
+    std::unique_ptr<DiagnosticSpan> begin_span(
+        const std::string& name,
+        const std::string& category,
+        const std::string& correlation_id,
+        const std::map<std::string, std::string>& tags) override {
+        return std::make_unique<DefaultDiagnosticSpan>(
+            *this,
+            name,
+            category,
+            correlation_id.empty() ? correlation_id_ : correlation_id,
+            tags);
+    }
+
+    static std::shared_ptr<DefaultCapsuleDiagnostics> shared() {
+        static std::shared_ptr<DefaultCapsuleDiagnostics> instance =
+            std::make_shared<DefaultCapsuleDiagnostics>();
+        return instance;
+    }
+
+    void record_span(
+        const std::string& span_id,
+        const std::string& name,
+        const std::string& category,
+        const std::string& correlation_id,
+        const std::chrono::system_clock::time_point& start_time,
+        const std::chrono::system_clock::time_point& end_time,
+        SpanStatus status,
+        const std::map<std::string, std::string>& tags) {
+        std::lock_guard<std::mutex> lock(output_mutex_);
+        if (!output_.is_open()) {
+            return;
+        }
+
+        const auto duration_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            end_time - start_time).count();
+
+        output_ << "{\n"
+                << "  \"type\": \"span\",\n"
+                << "  \"span_id\": \"" << span_id << "\",\n"
+                << "  \"name\": \"" << escape_json(name) << "\",\n"
+                << "  \"category\": \"" << escape_json(category) << "\",\n"
+                << "  \"correlation_id\": \"" << escape_json(correlation_id) << "\",\n"
+                << "  \"start_time\": \"" << format_timestamp(start_time) << "\",\n"
+                << "  \"end_time\": \"" << format_timestamp(end_time) << "\",\n"
+                << "  \"duration_ms\": " << duration_ms << ",\n"
+                << "  \"status\": \"" << status_to_string(status) << "\",\n"
+                << "  \"tags\": " << format_tags(tags) << "\n"
+                << "}\n";
+        output_.flush();
+    }
+
+    std::string generate_span_id() {
+        std::uniform_int_distribution<uint64_t> dist(0, std::numeric_limits<uint64_t>::max());
+        std::ostringstream os;
+        os << std::hex << std::setw(16) << std::setfill('0') << dist(rng_)
+           << std::setw(16) << std::setfill('0') << dist(rng_);
+        return os.str();
+    }
+
+private:
+    static std::string default_output_path() {
+        const char* env_path = std::getenv("ANIGMA_BENCHMARK_TELEMETRY_OUTPUT");
+        if (env_path && env_path[0] != '\0') {
+            return std::string(env_path);
+        }
+        return "benchmark_telemetry.jsonl";
+    }
+
+    static std::string format_timestamp(const std::chrono::system_clock::time_point& time_point) {
+        std::time_t time_value = std::chrono::system_clock::to_time_t(time_point);
+        std::tm tm_value = *std::gmtime(&time_value);
+        std::ostringstream os;
+        os << std::put_time(&tm_value, "%Y-%m-%dT%H:%M:%SZ");
+        return os.str();
+    }
+
+    static std::string escape_json(const std::string& value) {
+        std::ostringstream os;
+        for (char c : value) {
+            switch (c) {
+            case '"': os << "\\\""; break;
+            case '\\': os << "\\\\"; break;
+            case '\n': os << "\\n"; break;
+            case '\r': os << "\\r"; break;
+            case '\t': os << "\\t"; break;
+            default:
+                if (static_cast<unsigned char>(c) < 0x20) {
+                    os << "\\u" << std::hex << std::setw(4) << std::setfill('0')
+                       << static_cast<int>(static_cast<unsigned char>(c));
+                } else {
+                    os << c;
+                }
+                break;
+            }
+        }
+        return os.str();
+    }
+
+    static std::string format_tags(const std::map<std::string, std::string>& tags) {
+        std::ostringstream os;
+        os << "{";
+        bool first = true;
+        for (const auto& kv : tags) {
+            if (!first) {
+                os << ", ";
+            }
+            first = false;
+            os << "\"" << escape_json(kv.first) << "\": \"" << escape_json(kv.second) << "\"";
+        }
+        os << "}";
+        return os.str();
+    }
+
+    static std::string status_to_string(SpanStatus status) {
+        switch (status) {
+        case SpanStatus::ok:
+            return "ok";
+        case SpanStatus::error:
+            return "error";
+        case SpanStatus::cancelled:
+            return "cancelled";
+        case SpanStatus::unknown:
+        default:
+            return "unknown";
+        }
+    }
+
+    static std::string generate_correlation_id() {
+        std::ostringstream os;
+        os << "benchmark-run-" << std::time(nullptr);
+        return os.str();
+    }
+
+    std::string output_path_;
+    std::ofstream output_;
+    std::string correlation_id_;
+    std::mutex output_mutex_;
+    std::mt19937_64 rng_{std::random_device{}()};
+};
+
+inline DefaultDiagnosticSpan::DefaultDiagnosticSpan(
+    DefaultCapsuleDiagnostics& diagnostics,
+    std::string name,
+    std::string category,
+    std::string correlation_id,
+    std::map<std::string, std::string> tags)
+    : diagnostics_(diagnostics),
+      name_(std::move(name)),
+      category_(std::move(category)),
+      correlation_id_(std::move(correlation_id)),
+      start_time_(std::chrono::system_clock::now()),
+      tags_(std::move(tags)) {}
+
+inline void DefaultDiagnosticSpan::end(SpanStatus status) {
+    if (ended_) {
+        return;
+    }
+    ended_ = true;
+    diagnostics_.record_span(
+        diagnostics_.generate_span_id(),
+        name_,
+        category_,
+        correlation_id_,
+        start_time_,
+        std::chrono::system_clock::now(),
+        status,
+        tags_);
+}
+
+inline void DefaultDiagnosticSpan::add_tag(const std::string& key, const std::string& value) {
+    tags_[key] = value;
+}
+
+class ScopedDiagnosticSpan {
+public:
+    explicit ScopedDiagnosticSpan(std::unique_ptr<DiagnosticSpan> span)
+        : span_(std::move(span)) {}
+
+    ScopedDiagnosticSpan(ScopedDiagnosticSpan&& other) noexcept = default;
+    ScopedDiagnosticSpan& operator=(ScopedDiagnosticSpan&& other) noexcept = default;
+
+    ScopedDiagnosticSpan(const ScopedDiagnosticSpan&) = delete;
+    ScopedDiagnosticSpan& operator=(const ScopedDiagnosticSpan&) = delete;
+
+    ~ScopedDiagnosticSpan() {
+        if (span_ && !ended_) {
+            span_->end(status_);
+        }
+    }
+
+    void mark_error() {
+        status_ = SpanStatus::error;
+    }
+
+    void end(SpanStatus status) {
+        if (span_ && !ended_) {
+            ended_ = true;
+            span_->end(status);
+        }
+    }
+
+private:
+    std::unique_ptr<DiagnosticSpan> span_;
+    SpanStatus status_ = SpanStatus::ok;
+    bool ended_ = false;
+};
+
+inline ScopedDiagnosticSpan begin_benchmark_span(
+    const std::shared_ptr<CapsuleDiagnostics>& diagnostics,
+    const std::string& name,
+    const std::string& category,
+    const BenchmarkMetadata& metadata) {
+    if (!diagnostics) {
+        return ScopedDiagnosticSpan(nullptr);
+    }
+    return ScopedDiagnosticSpan(diagnostics->begin_span(
+        name,
+        category,
+        "",
+        metadata.to_tags()));
+}
 
 // =============================================================================
 // MARK: - Timer Utilities
@@ -216,11 +520,15 @@ public:
         std::string description;
     };
 
-    BenchmarkRunner() = default;
+    explicit BenchmarkRunner(
+        std::string category = "benchmarks.native",
+        std::shared_ptr<CapsuleDiagnostics> diagnostics = DefaultCapsuleDiagnostics::shared())
+        : category_(std::move(category)), diagnostics_(std::move(diagnostics)) {}
 
     void run(const std::string& name,
              const std::string& description,
-             Benchmark benchmark,
+             const Benchmark& benchmark,
+             const BenchmarkMetadata& metadata = {},
              size_t min_iterations = 1,
              size_t max_iterations = 10000,
              size_t min_time_ms = 100) {
@@ -228,27 +536,34 @@ public:
         std::cout << "\n[BENCHMARK] " << name << "\n";
         std::cout << "  Description: " << description << "\n";
         
+        ScopedDiagnosticSpan span = begin_benchmark_span(diagnostics_, name, category_, metadata);
+
         std::vector<double> measurements;
         size_t iterations = min_iterations;
         auto total_start = Timer();
 
-        // Warm-up run
-        benchmark(1);
+        try {
+            // Warm-up run
+            benchmark(1);
 
-        // Adaptive iteration count
-        while (total_start.elapsed_ms() < min_time_ms && iterations <= max_iterations) {
-            Timer timer;
-            benchmark(iterations);
-            double elapsed_us = timer.elapsed_us();
-            measurements.push_back(elapsed_us);
+            // Adaptive iteration count
+            while (total_start.elapsed_ms() < min_time_ms && iterations <= max_iterations) {
+                Timer timer;
+                benchmark(iterations);
+                double elapsed_us = timer.elapsed_us();
+                measurements.push_back(elapsed_us);
 
-            // Adapt iteration count
-            double target_us = 10000.0; // Target 10ms per measurement
-            iterations = static_cast<size_t>(
-                iterations * target_us / std::max(1.0, elapsed_us)
-            );
-            iterations = std::min(iterations, max_iterations);
-            iterations = std::max(iterations, min_iterations);
+                // Adapt iteration count
+                double target_us = 10000.0; // Target 10ms per measurement
+                iterations = static_cast<size_t>(
+                    iterations * target_us / std::max(1.0, elapsed_us)
+                );
+                iterations = std::min(iterations, max_iterations);
+                iterations = std::max(iterations, min_iterations);
+            }
+        } catch (...) {
+            span.mark_error();
+            throw;
         }
 
         Statistics stats = Statistics::compute(measurements, iterations);
@@ -276,6 +591,8 @@ public:
 
 private:
     std::vector<Result> results_;
+    std::string category_;
+    std::shared_ptr<CapsuleDiagnostics> diagnostics_;
 };
 
 // =============================================================================

@@ -1,7 +1,9 @@
 // Copyright (c) 2025 Anigma
 // Licensed under the MIT License
 
+#include <benchmark_utils.h>
 #include <chrono>
+#include <array>
 #include <vector>
 #include <cstdint>
 #include <cstring>
@@ -130,6 +132,17 @@ private:
         const std::vector<uint8_t> test_data(data_size, 42);
         const int iterations = 10000;
 
+        const BenchmarkMetadata metadata{
+            "4096 bytes",
+            "v1",
+            {{"suite", "hashing"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "pHash Computation (64x64)",
+            "benchmarks.native.hashing",
+            metadata);
+
         std::vector<double> measurements;
         measurements.reserve(iterations);
 
@@ -169,6 +182,17 @@ private:
         const std::vector<uint8_t> test_data(data_size, 42);
         const int iterations = 10000;
 
+        const BenchmarkMetadata metadata{
+            "4096 bytes",
+            "v1",
+            {{"suite", "hashing"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "dHash Computation (64x64)",
+            "benchmarks.native.hashing",
+            metadata);
+
         std::vector<double> measurements;
         measurements.reserve(iterations);
 
@@ -207,6 +231,17 @@ private:
         const int iterations = 100000;
         std::vector<double> measurements;
         measurements.reserve(iterations);
+
+        const BenchmarkMetadata metadata{
+            "1000 hashes",
+            "v1",
+            {{"suite", "hashing"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Hamming Distance (64-bit)",
+            "benchmarks.native.hashing",
+            metadata);
 
         std::vector<uint64_t> hashes;
         for (int i = 0; i < 1000; ++i) {
@@ -253,6 +288,17 @@ private:
         std::vector<double> measurements;
         measurements.reserve(iterations);
 
+        const BenchmarkMetadata metadata{
+            "1000 hashes",
+            "v1",
+            {{"suite", "hashing"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Hamming Distance (256-bit)",
+            "benchmarks.native.hashing",
+            metadata);
+
         std::vector<std::array<uint64_t, 4>> hashes;
         for (int i = 0; i < 1000; ++i) {
             std::array<uint64_t, 4> hash = {{random_hash(), random_hash(), random_hash(), random_hash()}};
@@ -298,6 +344,17 @@ private:
         const int candidate_count = 10000;
         const int iterations = 100;
         std::vector<double> measurements;
+
+        const BenchmarkMetadata metadata{
+            "10000 candidates",
+            "v1",
+            {{"suite", "hashing"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Hash Batch Search (10K candidates)",
+            "benchmarks.native.hashing",
+            metadata);
 
         std::vector<uint64_t> candidates(candidate_count);
         for (int i = 0; i < candidate_count; ++i) {
@@ -349,6 +406,17 @@ private:
         const size_t data_size = 256; // 16x16 image for 256-bit hash
         const std::vector<uint8_t> test_data(data_size, 42);
         const int iterations = 10000;
+
+        const BenchmarkMetadata metadata{
+            "256 bytes",
+            "v1",
+            {{"suite", "hashing"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "256-bit Hash Generation (16x16)",
+            "benchmarks.native.hashing",
+            metadata);
 
         std::vector<double> measurements;
         measurements.reserve(iterations);

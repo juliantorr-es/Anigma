@@ -1,0 +1,12 @@
+{
+  "generatedAt" : "2026-01-26T12:00:00Z",
+  "results" : [
+    {
+      "durationSeconds" : 0.21,
+      "memoryBytes" : 3145728,
+      "name" : "layout_engine_analysis",
+      "operations" : 10,
+      "opsPerSecond" : 47.62
+    }
+  ]
+}

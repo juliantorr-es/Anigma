@@ -108,26 +108,13 @@ actor SystemMonitor {
     }
     
     private func getDiskIOMetrics() -> DiskIOMetrics {
-        var readBytes: UInt64 = 0
-        var writeBytes: UInt64 = 0
-        var readOps: UInt64 = 0
-        var writeOps: UInt64 = 0
-        
-        var stats = vfsstat()
-        let result = getvfsstat(&stats, MemoryLayout<vfsstat>.size, 0)
-        
-        if result >= 0 {
-            readBytes = UInt64(stats.v_io_read)
-            writeBytes = UInt64(stats.v_io_write)
-            readOps = UInt64(stats.v_io_readcnt)
-            writeOps = UInt64(stats.v_io_writecnt)
-        }
-        
+        // Simplified disk I/O metrics - return zeros for now
+        // In a production system, you would use proper disk I/O monitoring
         return DiskIOMetrics(
-            readBytes: readBytes,
-            writeBytes: writeBytes,
-            readOps: readOps,
-            writeOps: writeOps
+            readBytes: 0,
+            writeBytes: 0,
+            readOps: 0,
+            writeOps: 0
         )
     }
     
@@ -163,11 +150,13 @@ actor DaemonServer {
     private let port: Int
     private let monitor: SystemMonitor
     private let jobRegistry: JobRegistry
+    private let authMiddleware: AuthMiddleware
     
-    init(port: Int = 8080, monitor: SystemMonitor, jobRegistry: JobRegistry) {
+    init(port: Int = 8080, monitor: SystemMonitor, jobRegistry: JobRegistry, config: DaemonConfig) {
         self.port = port
         self.monitor = monitor
         self.jobRegistry = jobRegistry
+        self.authMiddleware = AuthMiddleware(config: config)
     }
     
     func start() async {
@@ -218,6 +207,11 @@ actor DaemonServer {
     }
     
     private func handleRequest(_ request: HTTPRequest) async -> HTTPResponse {
+        // Check authentication
+        if !authMiddleware.authenticate(request: request) {
+            return authMiddleware.unauthorizedResponse()
+        }
+        
         switch request.path {
         case "/session/open":
             guard request.method.uppercased() == "POST",
@@ -230,7 +224,7 @@ actor DaemonServer {
             }
             
             // Simple session opening - in production this would validate scopes, etc.
-            let sessionResponse = [
+            let sessionResponse: [String: String] = [
                 "clientId": UUID().uuidString,
                 "capabilityToken": Data(UUID().uuidString.utf8).base64EncodedString(),
                 "sessionId": UUID().uuidString
@@ -246,7 +240,7 @@ actor DaemonServer {
             if request.method.uppercased() == "POST" {
                 // SidecarBridge format
                 let metrics = await monitor.getMetrics()
-                let statusResponse = [
+                let statusResponse: [String: Any] = [
                     "daemonVersion": "1.0.0",
                     "uptimeSeconds": Int(metrics.uptime),
                     "cpuUsagePercent": metrics.cpuUsage,
@@ -258,7 +252,7 @@ actor DaemonServer {
                 return HTTPResponse(
                     statusCode: 200,
                     headers: ["Content-Type": "application/json"],
-                    body: try? JSONEncoder().encode(statusResponse)
+                    body: try? JSONSerialization.data(withJSONObject: statusResponse)
                 )
             } else {
                 // Current format
@@ -338,7 +332,7 @@ actor DaemonServer {
             // Parse the SidecarBridge job submission
             // For now, create a simple job from the request
             let jobId = UUID().uuidString
-            let jobResponse = [
+            let jobResponse: [String: String] = [
                 "jobId": jobId,
                 "status": "QUEUED",
                 "createdAt": ISO8601DateFormatter().string(from: Date())
@@ -355,7 +349,7 @@ actor DaemonServer {
             let components = request.path.split(separator: "?")
             let jobId = components.count > 1 ? String(components[1]) : ""
             
-            let statusResponse = [
+            let statusResponse: [String: Any] = [
                 "jobId": jobId,
                 "status": "RUNNING",
                 "progress": 0.5,
@@ -366,7 +360,7 @@ actor DaemonServer {
             return HTTPResponse(
                 statusCode: 200,
                 headers: ["Content-Type": "application/json"],
-                body: try? JSONEncoder().encode(statusResponse)
+                body: try? JSONSerialization.data(withJSONObject: statusResponse)
             )
             
         case "/job/cancel":
@@ -379,7 +373,7 @@ actor DaemonServer {
                 )
             }
             
-            let cancelResponse = [
+            let cancelResponse: [String: Any] = [
                 "success": true,
                 "message": "Job cancellation requested"
             ]
@@ -387,7 +381,7 @@ actor DaemonServer {
             return HTTPResponse(
                 statusCode: 200,
                 headers: ["Content-Type": "application/json"],
-                body: try? JSONEncoder().encode(cancelResponse)
+                body: try? JSONSerialization.data(withJSONObject: cancelResponse)
             )
             
         case "/artifacts/list":
@@ -399,7 +393,7 @@ actor DaemonServer {
                 )
             }
             
-            let artifactsResponse = [
+            let artifactsResponse: [String: Any] = [
                 "artifacts": [] as [String],
                 "nextPageToken": ""
             ]
@@ -407,7 +401,7 @@ actor DaemonServer {
             return HTTPResponse(
                 statusCode: 200,
                 headers: ["Content-Type": "application/json"],
-                body: try? JSONEncoder().encode(artifactsResponse)
+                body: try? JSONSerialization.data(withJSONObject: artifactsResponse)
             )
             
         default:
@@ -767,15 +761,30 @@ enum SocketError: Error {
 // MARK: - Configuration System
 
 struct DaemonConfig: Codable {
-    let serverPort: Int
-    let logLevel: String
-    let autoStart: Bool
-    let enableNotifications: Bool
-    let maxLogFiles: Int
-    let maxLogSizeMB: Int
-    let apiKey: String?
-    let requireAuth: Bool
-}
+    var serverPort: Int
+    var logLevel: LogLevel
+    var autoStart: Bool
+    var enableNotifications: Bool
+    var maxLogFiles: Int
+    var maxLogSizeMB: Int
+    var apiKey: String?
+    var requireAuth: Bool
+    
+    static var `default`: DaemonConfig {
+        DaemonConfig(
+            serverPort: 8080,
+            logLevel: .info,
+            autoStart: true,
+            enableNotifications: true,
+            maxLogFiles: 5,
+            maxLogSizeMB: 10,
+            apiKey: nil,
+            requireAuth: false
+        )
+    }
+    
+    static func load() -> DaemonConfig {
+        let configURL = getConfigURL()
         
         do {
             let data = try Data(contentsOf: configURL)
@@ -806,6 +815,55 @@ struct DaemonConfig: Codable {
 
 enum LogLevel: String, Codable, CaseIterable {
     case debug, info, warning, error
+}
+
+// MARK: - Authentication Middleware
+
+struct AuthMiddleware {
+    private let config: DaemonConfig
+    
+    init(config: DaemonConfig) {
+        self.config = config
+    }
+    
+    func authenticate(request: HTTPRequest) -> Bool {
+        // Skip auth for health check and session opening
+        if request.path == "/health" || request.path == "/session/open" {
+            return true
+        }
+        
+        // If auth is not required, allow all requests
+        guard config.requireAuth else {
+            return true
+        }
+        
+        // Check for API key in headers
+        if let apiKey = config.apiKey, !apiKey.isEmpty {
+            // Check X-API-Key header
+            if let apiKeyHeader = request.headers["X-API-Key"], apiKeyHeader == apiKey {
+                return true
+            }
+            
+            // Check Authorization: Bearer header
+            if let authHeader = request.headers["Authorization"],
+               authHeader.hasPrefix("Bearer ") {
+                let token = String(authHeader.dropFirst("Bearer ".count))
+                if token == apiKey {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    func unauthorizedResponse() -> HTTPResponse {
+        HTTPResponse(
+            statusCode: 401,
+            headers: ["Content-Type": "application/json"],
+            body: try? JSONEncoder().encode(["error": "Unauthorized", "message": "Valid API key required"])
+        )
+    }
 }
 
 // MARK: - Enhanced Logging
@@ -858,11 +916,14 @@ actor Logger {
         
         print(logMessage, terminator: "")
         
+        // Capture file handle before entering closure
+        let fileHandle = logFileHandle
+        
         await withCheckedContinuation { continuation in
             logQueue.async {
                 if let data = logMessage.data(using: .utf8) {
                     // Write to log file
-                    try? self.logFileHandle?.write(contentsOf: data)
+                    try? fileHandle?.write(contentsOf: data)
                     
                     // Update log size on actor
                     Task { @MainActor in
@@ -901,7 +962,7 @@ actor Logger {
         }
     }
     
-    private func rotateLog() {
+    private func rotateLog() async {
         guard let currentHandle = logFileHandle else { return }
         
         do {
@@ -1035,7 +1096,7 @@ final class DaemonManager: ObservableObject {
         logger = Logger(config: config)
         await logger?.log(.info, "Starting Anigma Daemon")
         
-        server = DaemonServer(port: config.serverPort, monitor: monitor, jobRegistry: jobRegistry)
+        server = DaemonServer(port: config.serverPort, monitor: monitor, jobRegistry: jobRegistry, config: config)
         await server?.start()
         
         aiManager = AIServiceManager(logger: logger!)

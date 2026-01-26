@@ -4,11 +4,15 @@ on:
   push:
     branches: [ main, develop ]
     paths:
+      - 'Benchmarks/**/*'
       - 'Packages/**/*'
+      - 'Scripts/**/*'
   pull_request:
     branches: [ main, develop ]
     paths:
+      - 'Benchmarks/**/*'
       - 'Packages/**/*'
+      - 'Scripts/**/*'
 
 jobs:
   GATE_TIER_VALIDATION:
@@ -122,3 +126,34 @@ jobs:
               ./Scripts/validate_gates.sh "$capsule" GATE_STRICT_CONCURRENCY
             fi
           done
+
+  BENCHMARK_HARNESS:
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Benchmark Harness (Non-Blocking)
+        continue-on-error: true
+        run: |
+          bash ./Scripts/run_benchmarks.sh
+
+  GATE_BENCHMARK_REGRESSIONS:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Ensure CMake Available
+        run: |
+          if ! command -v cmake >/dev/null 2>&1; then
+            brew install cmake
+          fi
+      - name: Run Benchmark Regression Check
+        run: |
+          chmod +x Scripts/compare_benchmarks.sh
+          Scripts/compare_benchmarks.sh
+      - name: Upload Benchmark Artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results
+          path: Benchmarks/results/

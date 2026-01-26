@@ -1,0 +1,19 @@
+{
+  "generatedAt" : "2026-01-26T12:00:00Z",
+  "results" : [
+    {
+      "durationSeconds" : 0.842,
+      "memoryBytes" : 6291456,
+      "name" : "vector_index_build",
+      "operations" : 12,
+      "opsPerSecond" : 14.25
+    },
+    {
+      "durationSeconds" : 0.218,
+      "memoryBytes" : 1048576,
+      "name" : "vector_index_query",
+      "operations" : 50,
+      "opsPerSecond" : 229.36
+    }
+  ]
+}

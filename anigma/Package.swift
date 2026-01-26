@@ -102,7 +102,8 @@ let executableProducts: [Product] = [
     .executable(name: "anigma-app", targets: ["AnigmaAppMacExecutable"]),
     .executable(name: "anigma-mcp", targets: ["AnigmaMCPExecutable"]),
     .executable(name: "anigma-gemini-bridge", targets: ["AnigmaGeminiBridge"]),
-    .executable(name: "anigma-status-bar", targets: ["AnigmaStatusBar"])
+    .executable(name: "anigma-status-bar", targets: ["AnigmaStatusBar"]),
+    .executable(name: "anigma-daemon-simple", targets: ["AnigmaDaemonSimple"])
 ]
 
 let capabilityProducts: [Product] = [
@@ -713,7 +714,13 @@ let executableTargets: [Target] = [
         path: "Packages/AnigmaStatusBar",
         swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
     ),
-    .executableTarget(name: "AnigmaDaemon", dependencies: ["AnigmaDaemonCore", "AnigmaASTServicesCore", "AnigmaSidecar", "StorageCore", "HarmoniaModule", "SidecarOfficeService", "SidecarPDFService", "SidecarTranslateService"], path: "Packages/AnigmaDaemon", exclude: ["README.md"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)])
+    .executableTarget(name: "AnigmaDaemon", dependencies: ["AnigmaDaemonCore", "AnigmaASTServicesCore", "AnigmaSidecar", "StorageCore", "HarmoniaModule", "SidecarOfficeService", "SidecarPDFService", "SidecarTranslateService"], path: "Packages/AnigmaDaemon", exclude: ["README.md"], swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
+    .executableTarget(
+        name: "AnigmaDaemonSimple",
+        dependencies: [],
+        path: "Sources/AnigmaDaemonSimple",
+        swiftSettings: [.unsafeFlags(["-strict-concurrency=minimal"])]
+    )
 ]
 
 let testTargets: [Target] = [

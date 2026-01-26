@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Anigma
 // Licensed under the MIT License
 
+#include <benchmark_utils.h>
 #include <chrono>
 #include <vector>
 #include <cstdint>
@@ -93,6 +94,17 @@ private:
         std::vector<double> measurements;
         measurements.reserve(iterations);
 
+        const BenchmarkMetadata metadata{
+            "64 bytes",
+            "malloc_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Small Allocations (64 bytes)",
+            "benchmarks.native.memory",
+            metadata);
+
         // Warm-up
         for (int i = 0; i < 100; ++i) {
             void* ptr = malloc(alloc_size);
@@ -131,6 +143,17 @@ private:
         std::vector<double> measurements;
         measurements.reserve(iterations);
 
+        const BenchmarkMetadata metadata{
+            "4096 bytes",
+            "malloc_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Medium Allocations (4 KB)",
+            "benchmarks.native.memory",
+            metadata);
+
         // Warm-up
         for (int i = 0; i < 10; ++i) {
             void* ptr = malloc(alloc_size);
@@ -167,6 +190,17 @@ private:
         const size_t alloc_size = 1024 * 1024; // 1 MB
         std::vector<double> measurements;
         measurements.reserve(iterations);
+
+        const BenchmarkMetadata metadata{
+            "1 MB",
+            "malloc_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Large Allocations (1 MB)",
+            "benchmarks.native.memory",
+            metadata);
 
         // Warm-up
         for (int i = 0; i < 2; ++i) {
@@ -211,6 +245,17 @@ private:
         const size_t array_size = 1024 * 1024;
         const int iterations = 1000;
         std::vector<int> data(array_size);
+
+        const BenchmarkMetadata metadata{
+            "1048576 ints",
+            "sequential_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Sequential Access (1 MB array)",
+            "benchmarks.native.memory",
+            metadata);
         
         // Initialize
         for (size_t i = 0; i < array_size; ++i) {
@@ -259,6 +304,17 @@ private:
         const size_t array_size = 64 * 1024;
         const int iterations = 10000;
         std::vector<int> data(array_size);
+
+        const BenchmarkMetadata metadata{
+            "65536 ints",
+            "random_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Random Access (256 KB array)",
+            "benchmarks.native.memory",
+            metadata);
         
         // Initialize with indices
         for (size_t i = 0; i < array_size; ++i) {
@@ -308,6 +364,17 @@ private:
         const int stride = 16;
         const int iterations = 100;
         std::vector<int> data(array_size);
+
+        const BenchmarkMetadata metadata{
+            "1048576 ints stride=16",
+            "stride_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Strided Access (1 MB array, stride=16)",
+            "benchmarks.native.memory",
+            metadata);
         
         // Initialize
         for (size_t i = 0; i < array_size; ++i) {
@@ -362,6 +429,17 @@ private:
     static void benchmark_buffer_copy() {
         const size_t buffer_size = 64 * 1024 * 1024; // 64 MB
         const int iterations = 10;
+
+        const BenchmarkMetadata metadata{
+            "64 MB",
+            "memcpy_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Buffer Copy (64 MB)",
+            "benchmarks.native.memory",
+            metadata);
         
         std::vector<uint8_t> src(buffer_size);
         std::vector<uint8_t> dst(buffer_size);
@@ -401,6 +479,17 @@ private:
     static void benchmark_buffer_fill() {
         const size_t buffer_size = 64 * 1024 * 1024; // 64 MB
         const int iterations = 10;
+
+        const BenchmarkMetadata metadata{
+            "64 MB",
+            "memset_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Buffer Fill (64 MB)",
+            "benchmarks.native.memory",
+            metadata);
         
         std::vector<uint8_t> dst(buffer_size);
 
@@ -438,6 +527,17 @@ private:
         const int block_count = 1000;
         const size_t block_size = 1024; // 1 KB
         std::vector<void*> blocks;
+
+        const BenchmarkMetadata metadata{
+            "1000x1024 bytes",
+            "fragmentation_v1",
+            {{"suite", "memory"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            "Memory Fragmentation",
+            "benchmarks.native.memory",
+            metadata);
 
         auto start = std::chrono::high_resolution_clock::now();
         
