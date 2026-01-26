@@ -1,0 +1,7 @@
+2026-01-26T12:00:00Z [daemon.job] job_id=job-sample-001 action=vertical_slice status=accepted
+2026-01-26T12:00:00Z [capsule.ingest] source=Samples/daemon/vertical-slice.txt content_type=text/plain digest=b195a669e1482b06
+2026-01-26T12:00:00Z [capsule.chunking] chunks=1 chunk_id=chunk-0-b195a669e1482b06 length=123
+2026-01-26T12:00:00Z [capsule.embedding] vector_digest=e0d98eb11c2b9ef9 dims=6
+2026-01-26T12:00:00Z [capsule.rank_fusion] fused_score=0.6401 lexical=0.5000 embedding=0.7002
+2026-01-26T12:00:00Z [capsule.render_plan] plan_id=plan-eb60702401975d56 output_digest=37b89423e942ed21
+2026-01-26T12:00:00Z [daemon.job] job_id=job-sample-001 status=completed receipt=Docs/daemon/sample_execution_receipt.json
