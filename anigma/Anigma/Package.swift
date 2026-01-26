@@ -16,13 +16,15 @@ let package = Package(
         .library(name: "AnigmaUI", targets: ["AnigmaUI"])
     ],
     dependencies: [
+        .package(path: "../Packages/AnigmaDaemonCore"),
+        .package(path: "../Packages/TelemetryCore"),
         .package(path: "../Packages/ObservatoriumModule"),
         .package(url: "https://github.com/modelcontextprotocol/swift-sdk", from: "0.1.0")
     ],
     targets: [
         .executableTarget(
             name: "anigmad",
-            dependencies: [],
+            dependencies: ["AnigmaDaemonCore", "TelemetryCore"],
             path: "../Sources/anigmad",
             swiftSettings: [.swiftLanguageMode(.v6)],
             linkerSettings: [

@@ -111,7 +111,7 @@ public final class NewCapsule: Sendable {
             category: "newcapsule.process",
             message: "Processing input of length \(input.count)",
             correlationID: corrID,
-            tags: ["phase": "0", "tier": "template"]
+            metadata: ["phase": "0", "tier": "template"]
         )
         
         // Delegate to internal implementation
@@ -124,7 +124,7 @@ public final class NewCapsule: Sendable {
                 category: "newcapsule.process",
                 message: "Processing succeeded, output length: \(result.count)",
                 correlationID: corrID,
-                tags: [:]
+                metadata: [:]
             )
             
             span.end(status: .ok)
@@ -136,7 +136,7 @@ public final class NewCapsule: Sendable {
                 category: "newcapsule.process",
                 message: "Processing failed: \(error)",
                 correlationID: corrID,
-                tags: [:]
+                metadata: [:]
             )
             span.end(status: .error)
             throw CapsuleError.internalError(details: "\(error)")
@@ -174,7 +174,7 @@ internal final class MockDiagnostics: CapsuleDiagnostics {
         category: String,
         message: String,
         correlationID: String? = nil,
-        tags: [String: String] = [:]
+        metadata: [String: String] = [:]
     ) {
         // In tests, diagnostics are collected for assertions
     }

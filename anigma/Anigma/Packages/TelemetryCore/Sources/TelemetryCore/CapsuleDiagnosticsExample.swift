@@ -29,7 +29,7 @@ import Foundation
 ///     category: "textpipeline.unicode",
 ///     message: "processed 1000 chars successfully",
 ///     correlationID: jobID,
-///     tags: ["chars_processed": "1000"]
+///     metadata: ["chars_processed": "1000"]
 /// )
 ///
 /// // 5. Add events to the span for finer granularity
@@ -82,7 +82,7 @@ import Foundation
 /// //   "category": "textpipeline.unicode",
 /// //   "message": "...",
 /// //   "correlationID": "job-123",
-/// //   "tags": { "input_size": "1000" }
+/// //   "metadata": { "input_size": "1000" }
 /// // }
 /// ```
 ///
@@ -138,7 +138,7 @@ import Foundation
 ///
 /// 1. **Set correlation IDs at entry points**: Set the context ID when entering your capsule
 /// 2. **Use categories for organization**: Use hierarchical categories like "textpipeline.unicode.normalization"
-/// 3. **Add tags for context**: Use tags to add queryable metadata
+/// 3. **Add metadata for context**: Use metadata to add queryable tags
 /// 4. **Don't rely on manual redaction**: Trust the built-in redaction rules
 /// 5. **Export periodically**: Retrieve and export events on a schedule
 ///

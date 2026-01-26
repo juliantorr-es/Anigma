@@ -41,6 +41,28 @@ jobs:
     needs: GATE_TIER_VALIDATION
     steps:
       - uses: actions/checkout@v3
+      - name: Fail on Forbidden Logging in Modified Files
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+          fi
+          HEAD_SHA="${{ github.sha }}"
+
+          CHANGED_FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "Packages/**/Sources/**")
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No modified capsule source files to scan for forbidden logging."
+            exit 0
+          fi
+
+          FORBIDDEN_LOGGING=$(git diff -U0 "$BASE_SHA" "$HEAD_SHA" -- $CHANGED_FILES | grep -E '^\+[^+].*(\b(Swift\.)?print\s*\(|\bNSLog\s*\(|\bos_log\s*\()' || true)
+          if [ -n "$FORBIDDEN_LOGGING" ]; then
+            echo "❌ Error: Forbidden logging added in modified files:"
+            echo "$FORBIDDEN_LOGGING"
+            exit 1
+          fi
+          echo "✅ No forbidden logging added in modified capsule sources."
       - name: Validate No Forbidden Diagnostics
         run: |
           for capsule in Packages/*Capsule; do

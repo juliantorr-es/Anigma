@@ -32,7 +32,7 @@ let span = diagnostics.beginSpan(
     name: "process",
     category: "textpipeline.unicode",
     correlationID: jobID,
-    tags: ["input_size": "1000"]
+    metadata: ["input_size": "1000"]
 )
 defer { span.end(status: .ok) }
 
@@ -41,7 +41,7 @@ diagnostics.event(
     level: .info,
     category: "textpipeline.unicode",
     message: "processed 1000 chars successfully",
-    tags: ["chars_processed": "1000"]
+    metadata: ["chars_processed": "1000"]
 )
 ```
 
@@ -84,11 +84,11 @@ The core unit of observability, compliant with the Phase 0 Remediation Contract.
 | `message` | `String` | Redacted diagnostic message |
 | `correlationID` | `String` | ID for distributed tracing |
 | `duration` | `TimeInterval?` | Optional timing information |
-| `tags` | `[String: String]` | Key-value pairs for filtering |
+| `metadata` | `[String: String]` | Key-value pairs for filtering |
 
 ## Best Practices
 
 1. **Hierarchy**: Use categories like `capsule.engine.pipeline`.
-2. **Context**: Prefer `tags` over embedding IDs in message strings for better searchability.
+2. **Context**: Prefer `metadata` over embedding IDs in message strings for better searchability.
 3. **Safety**: Never manually redact; let `TelemetryCore` handle it via `DiagnosticRedactionRules`.
 4. **Lifecycle**: End spans in `defer` blocks to ensure they always close.

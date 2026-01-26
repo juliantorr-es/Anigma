@@ -63,11 +63,23 @@ fi
 # 3. GATE_DIAGNOSTICS_CONFORMANCE
 if run_gate "GATE_DIAGNOSTICS_CONFORMANCE"; then
     echo "🔍 [GATE_DIAGNOSTICS_CONFORMANCE] Checking for forbidden diagnostics..."
-    FORBIDDEN_DIAGS=$(grep -rE "\bprint\(|\bNSLog\(|\bos_log\(" "$CAPSULE_PATH/Sources" || true)
+    FORBIDDEN_PATTERN="\\b(Swift\\.)?print\\s*\\(|\\bNSLog\\s*\\(|\\bos_log\\s*\\("
+    FORBIDDEN_DIAGS=$(grep -rEn --include="*.swift" --include="*.m" --include="*.mm" --include="*.c" --include="*.cpp" "$FORBIDDEN_PATTERN" "$CAPSULE_PATH/Sources" || true)
     if [ -n "$FORBIDDEN_DIAGS" ]; then
         echo "❌ Error: Forbidden diagnostic calls (print, NSLog, os_log) found in capsule sources:"
         echo "$FORBIDDEN_DIAGS"
         exit 1
+    fi
+
+    TIER=$(grep -E "^tier =" "$CAPSULE_PATH/MANIFEST.toml" | cut -d'=' -f2 | tr -d ' ')
+    if [ "$TIER" -eq 5 ] || [ "$TIER" -eq 3 ]; then
+        DIAGNOSTIC_USAGE=$(grep -rE --include="*.swift" "\\.\\s*(beginSpan|event)\\s*\\(" "$CAPSULE_PATH/Sources" || true)
+        if [ -z "$DIAGNOSTIC_USAGE" ]; then
+            echo "❌ Error: Tier $TIER capsules must call diagnostics.beginSpan(...) or diagnostics.event(...) at least once in Sources."
+            echo "   Add a diagnostics span or event in capsule runtime code to satisfy Tier $TIER requirements."
+            exit 1
+        fi
+        echo "✅ Tier $TIER diagnostics adoption check passed."
     fi
     echo "✅ Diagnostics conformance passed."
 fi
@@ -186,13 +198,25 @@ if run_gate "GATE_TEST_COVERAGE"; then
             mkdir -p "$(dirname "$DASHBOARD")"
             if [ ! -f "$DASHBOARD" ]; then
                 echo "# Capsule Coverage Dashboard" > "$DASHBOARD"
-                echo "| Capsule | Tier | Tests | Coverage | Last Updated |" >> "$DASHBOARD"
-                echo "|---------|------|-------|----------|--------------|" >> "$DASHBOARD"
+                echo "| Capsule | Tier | Tests | Coverage | Diagnostics Adoption | Last Updated |" >> "$DASHBOARD"
+                echo "|---------|------|-------|----------|----------------------|--------------|" >> "$DASHBOARD"
+            elif ! grep -q "Diagnostics Adoption" "$DASHBOARD"; then
+                sed -i '' "s/| Capsule | Tier | Tests | Coverage | Last Updated |/| Capsule | Tier | Tests | Coverage | Diagnostics Adoption | Last Updated |/" "$DASHBOARD"
+                sed -i '' "s/|---------|------|-------|----------|--------------|/|---------|------|-------|----------|----------------------|--------------|/" "$DASHBOARD"
+            fi
+
+            TOTAL_DIAG_FILES=$(find "$CAPSULE_PATH/Sources" -type f -name "*.swift" | wc -l | tr -d ' ')
+            ADOPTED_DIAG_FILES=$(grep -rlE --include="*.swift" "\\.\\s*(beginSpan|event)\\s*\\(" "$CAPSULE_PATH/Sources" || true)
+            ADOPTED_DIAG_FILES=$(printf "%s\n" "$ADOPTED_DIAG_FILES" | awk 'NF{count++} END{print count+0}')
+            if [ -n "$TOTAL_DIAG_FILES" ] && [ "$TOTAL_DIAG_FILES" -gt 0 ]; then
+                DIAGNOSTICS_ADOPTION=$((ADOPTED_DIAG_FILES * 100 / TOTAL_DIAG_FILES))
+            else
+                DIAGNOSTICS_ADOPTION=0
             fi
             
             # Remove existing entry for this capsule if it exists
             sed -i '' "/| $CAPSULE_NAME |/d" "$DASHBOARD"
-            echo "| $CAPSULE_NAME | $TIER | $TEST_COUNT | $COVERAGE_PERCENT% | $(date) |" >> "$DASHBOARD"
+            echo "| $CAPSULE_NAME | $TIER | $TEST_COUNT | $COVERAGE_PERCENT% | $DIAGNOSTICS_ADOPTION% | $(date) |" >> "$DASHBOARD"
 
             if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
                 echo "❌ Error: Insufficient coverage for Tier $TIER (Found $COVERAGE_PERCENT%, need $MIN_COVERAGE%)"

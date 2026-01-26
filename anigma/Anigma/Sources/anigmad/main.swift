@@ -2,6 +2,8 @@ import SwiftUI
 import Foundation
 import System
 import Darwin
+import AnigmaDaemonCore
+import TelemetryCore
 @preconcurrency import UserNotifications
 
 // MARK: - Resource Monitoring
@@ -306,7 +308,10 @@ actor DaemonServer {
                         body: try? JSONEncoder().encode(["error": "Invalid job payload"])
                     )
                 }
-                let job = await jobRegistry.createJob(from: jobRequest)
+                let correlationID = UUID().uuidString
+                let job = await CorrelationIDContext.withID(correlationID) {
+                    await jobRegistry.createJob(from: jobRequest, correlationID: correlationID)
+                }
                 return HTTPResponse(
                     statusCode: 202,
                     headers: ["Content-Type": "application/json"],
@@ -430,25 +435,72 @@ struct DaemonJob: Codable {
     let status: String
     let createdAt: Date
     let detail: String?
+    let correlationID: String
 }
 
 actor JobRegistry {
     private var jobs: [DaemonJob] = []
+    private var contexts: [String: JobContext] = [:]
+    private var receipts: [String: ExecutionReceipt] = [:]
 
-    func createJob(from request: DaemonJobRequest) -> DaemonJob {
+    func createJob(from request: DaemonJobRequest, correlationID: String) -> DaemonJob {
         let job = DaemonJob(
             id: UUID().uuidString,
             action: request.action,
             status: "QUEUED",
             createdAt: Date(),
-            detail: "\(request.filePath) • \(request.instruction)"
+            detail: "\(request.filePath) • \(request.instruction)",
+            correlationID: correlationID
         )
         jobs.insert(job, at: 0)
+        let context = JobContext(jobID: job.id, correlationID: correlationID)
+        contexts[job.id] = context
+        Task {
+            await processJob(job: job, request: request, context: context)
+        }
         return job
     }
 
     func listJobs() -> [DaemonJob] {
         jobs
+    }
+
+    func receipt(for jobID: String) -> ExecutionReceipt? {
+        receipts[jobID]
+    }
+
+    private func processJob(job: DaemonJob, request: DaemonJobRequest, context: JobContext) async {
+        let diagnostics = CapsuleDiagnosticsRouter(context: context)
+        await context.withCorrelationID {
+            let pipelineSpan = diagnostics.beginSpan(
+                name: "daemon.job.pipeline",
+                category: "daemon.job",
+                correlationID: context.correlationID,
+                tags: ["action": request.action]
+            )
+
+            let capsuleSpan = diagnostics.beginSpan(
+                name: "capsule.\(request.action)",
+                category: "capsule",
+                correlationID: context.correlationID,
+                tags: ["file": request.filePath]
+            )
+
+            capsuleSpan.recordEvent(level: .info, message: "Capsule execution started")
+            capsuleSpan.end(status: .ok)
+
+            diagnostics.event(
+                level: .info,
+                category: "daemon.job",
+                message: "Job completed",
+                correlationID: context.correlationID,
+                metadata: ["job_id": job.id]
+            )
+
+            pipelineSpan.end(status: .ok)
+        }
+
+        receipts[job.id] = context.executionReceipt(status: "completed")
     }
 }
 

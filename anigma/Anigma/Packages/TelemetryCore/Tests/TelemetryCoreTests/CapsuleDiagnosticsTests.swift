@@ -86,20 +86,20 @@ final class CapsuleDiagnosticsTests: XCTestCase {
         XCTAssertEqual(event.correlationID, "event-123")
     }
     
-    func testEventWithTags() {
+    func testEventWithMetadata() {
         diagnostics.event(
             level: .warning,
             category: "test.event",
             message: "Warning message",
             correlationID: "event-456",
-            tags: ["severity": "high", "service": "capsule"]
+            metadata: ["severity": "high", "service": "capsule"]
         )
         
         let events = diagnostics.getAllEvents()
         let event = events[0]
         
-        XCTAssertEqual(event.tags["severity"], "high")
-        XCTAssertEqual(event.tags["service"], "capsule")
+        XCTAssertEqual(event.metadata["severity"], "high")
+        XCTAssertEqual(event.metadata["service"], "capsule")
     }
     
     func testAutomaticCorrelationID() {
@@ -196,7 +196,7 @@ final class CapsuleDiagnosticsTests: XCTestCase {
             message: "Test message",
             correlationID: "test-123",
             duration: 1.5,
-            tags: ["key": "value"]
+            metadata: ["key": "value"]
         )
         
         let json = event.toJSON()
@@ -207,7 +207,7 @@ final class CapsuleDiagnosticsTests: XCTestCase {
         XCTAssertEqual(json["message"] as? String, "Test message")
         XCTAssertEqual(json["correlationID"] as? String, "test-123")
         XCTAssertEqual(json["duration"] as? TimeInterval, 1.5)
-        XCTAssertEqual(json["tags"] as? [String: String], ["key": "value"])
+        XCTAssertEqual(json["metadata"] as? [String: String], ["key": "value"])
     }
     
     func testEventCodable() throws {
@@ -216,7 +216,7 @@ final class CapsuleDiagnosticsTests: XCTestCase {
             category: "test.codable",
             message: "Codable test",
             correlationID: "test-456",
-            tags: ["encode": "test"]
+            metadata: ["encode": "test"]
         )
         
         let encoder = JSONEncoder()
@@ -305,6 +305,29 @@ final class DiagnosticRedactionTests: XCTestCase {
         XCTAssertTrue(sanitized.contains("[REDACTED_PASSWORD]"))
         XCTAssertTrue(sanitized.contains("[REDACTED_API_KEY]"))
         XCTAssertTrue(sanitized.contains("[REDACTED_EMAIL]"))
+    }
+
+    func testDeepCleanRedaction() {
+        let hexKey = "abcdef0123456789abcdef0123456789"
+        let base64Blob = "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo="
+        let input = "key=\(hexKey) blob=\(base64Blob)"
+        let sanitized = DiagnosticRedactionRules.sanitize(input, deepClean: true)
+
+        XCTAssertFalse(sanitized.contains(hexKey))
+        XCTAssertFalse(sanitized.contains(base64Blob))
+        XCTAssertTrue(sanitized.contains("[REDACTED_HEX_KEY]"))
+        XCTAssertTrue(sanitized.contains("[REDACTED_BASE64_BLOB]"))
+    }
+
+    func testSafeKeysBypassRedaction() {
+        let metadata = [
+            "ID": "capsule-123",
+            "secret": "password=should-redact"
+        ]
+        let sanitized = DiagnosticRedactionRules.sanitizeMetadata(metadata)
+
+        XCTAssertEqual(sanitized["ID"], "capsule-123")
+        XCTAssertTrue(sanitized["secret"]?.contains("[REDACTED_PASSWORD]") == true)
     }
     
     func testContainsSensitiveData() {
@@ -427,7 +450,7 @@ final class CapsuleDiagnosticsIntegrationTests: XCTestCase {
             level: .info,
             category: "textpipeline.unicode",
             message: "Started processing with password=test123",
-            tags: ["step": "start"]
+            metadata: ["step": "start"]
         )
         
         usleep(50_000) // 50ms
@@ -441,7 +464,7 @@ final class CapsuleDiagnosticsIntegrationTests: XCTestCase {
             level: .info,
             category: "textpipeline.unicode",
             message: "Completed processing",
-            tags: ["step": "end"]
+            metadata: ["step": "end"]
         )
         
         // End the span

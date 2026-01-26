@@ -1,12 +1,20 @@
 import Foundation
 import AnigmaNativeShims
 import CapsuleCore
+import TelemetryCore
 
 /// Low-level wrapper for the native text chunking capsule.
 public final class TextChunkingCapsuleWrapper {
     private let handle: CapsuleHandle<AnyObject>
+    private let diagnostics: CapsuleDiagnostics
+    private static let algorithmVersion = "rabin-v1"
     
-    public init(config: TextChunkingConfig) throws {
+    public init(
+        config: TextChunkingConfig,
+        diagnostics: CapsuleDiagnostics? = nil
+    ) throws {
+        let resolvedDiagnostics = diagnostics ?? DefaultCapsuleDiagnostics()
+        self.diagnostics = resolvedDiagnostics
         var rawHandle: anigma_text_chunking_capsule_t?
         var error = anigma_capsule_error_t()
         
@@ -20,6 +28,13 @@ public final class TextChunkingCapsuleWrapper {
         
         let status = anigma_text_chunking_capsule_create(&cConfig, &rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
+            resolvedDiagnostics.event(
+                level: .error,
+                category: "textchunking.init",
+                message: "Failed to create native handle (status: \(status))",
+                correlationID: nil,
+                tags: ["algorithm_version": Self.algorithmVersion]
+            )
             throw capsuleError(status: status, error: error)
         }
         
@@ -30,6 +45,15 @@ public final class TextChunkingCapsuleWrapper {
     }
     
     public func processBytes(_ data: Data) throws {
+        let span = diagnostics.beginSpan(
+            name: "TextChunkingCapsuleWrapper.processBytes",
+            category: "textchunking.native.process",
+            correlationID: nil,
+            tags: [
+                "input_bytes": "\(data.count)",
+                "algorithm_version": Self.algorithmVersion
+            ]
+        )
         var error = anigma_capsule_error_t()
         try handle.withHandle { rawHandle in
             let status = data.withUnsafeBytes { bytes in
@@ -41,37 +65,91 @@ public final class TextChunkingCapsuleWrapper {
                 )
             }
             guard status == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "textchunking.native.process",
+                    message: "Native process failed (status: \(status))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
                 throw capsuleError(status: status, error: error)
             }
         }
+        span.end(status: .ok)
     }
     
     public func finalize() throws {
+        let span = diagnostics.beginSpan(
+            name: "TextChunkingCapsuleWrapper.finalize",
+            category: "textchunking.native.finalize",
+            correlationID: nil,
+            tags: ["algorithm_version": Self.algorithmVersion]
+        )
         var error = anigma_capsule_error_t()
         try handle.withHandle { rawHandle in
             let status = anigma_text_chunking_capsule_finalize(rawHandle, &error)
             guard status == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "textchunking.native.finalize",
+                    message: "Native finalize failed (status: \(status))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
                 throw capsuleError(status: status, error: error)
             }
         }
+        span.end(status: .ok)
     }
     
     public func reset() throws {
+        let span = diagnostics.beginSpan(
+            name: "TextChunkingCapsuleWrapper.reset",
+            category: "textchunking.native.reset",
+            correlationID: nil,
+            tags: ["algorithm_version": Self.algorithmVersion]
+        )
         var error = anigma_capsule_error_t()
         try handle.withHandle { rawHandle in
             let status = anigma_text_chunking_capsule_reset(rawHandle, &error)
             guard status == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "textchunking.native.reset",
+                    message: "Native reset failed (status: \(status))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
                 throw capsuleError(status: status, error: error)
             }
         }
+        span.end(status: .ok)
     }
     
     public func getBoundaries() throws -> [anigma_chunk_boundary_t] {
+        let span = diagnostics.beginSpan(
+            name: "TextChunkingCapsuleWrapper.getBoundaries",
+            category: "textchunking.native.boundaries",
+            correlationID: nil,
+            tags: ["algorithm_version": Self.algorithmVersion]
+        )
         var error = anigma_capsule_error_t()
-        return try handle.withHandle { rawHandle in
+        do {
+            let boundaries = try handle.withHandle { rawHandle in
             var count: Int = 0
             let countStatus = anigma_text_chunking_capsule_get_boundary_count(rawHandle, &count, &error)
             guard countStatus == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "textchunking.native.boundaries",
+                    message: "Boundary count failed (status: \(countStatus))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
                 throw capsuleError(status: countStatus, error: error)
             }
             
@@ -79,10 +157,31 @@ public final class TextChunkingCapsuleWrapper {
             var actual: Int = 0
             let getStatus = anigma_text_chunking_capsule_get_chunk_info(rawHandle, &boundaries, count, &actual, &error)
             guard getStatus == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "textchunking.native.boundaries",
+                    message: "Boundary fetch failed (status: \(getStatus))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
                 throw capsuleError(status: getStatus, error: error)
             }
-            
-            return Array(boundaries.prefix(actual))
+
+                return Array(boundaries.prefix(actual))
+            }
+            span.end(status: .ok)
+            return boundaries
+        } catch {
+            diagnostics.event(
+                level: .error,
+                category: "textchunking.native.boundaries",
+                message: "Boundary read failed: \(error)",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
+            throw error
         }
     }
     

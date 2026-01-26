@@ -13,6 +13,7 @@ struct DaemonJob: Identifiable, Codable, Hashable {
     let status: String
     let createdAt: Date
     let detail: String?
+    let correlationID: String?
 }
 
 struct DaemonJobRequest: Codable {

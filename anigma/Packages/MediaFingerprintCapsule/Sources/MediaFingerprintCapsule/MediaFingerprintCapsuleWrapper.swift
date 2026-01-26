@@ -3,6 +3,7 @@ import AnigmaNativeShims
 import AnigmaPrimitives
 import CapsuleCore
 import MediaFingerprintNative
+import TelemetryCore
 
 // Static error message constants to ensure proper lifetime management
 private let invalidHandleMsg = "Invalid capsule handle"
@@ -73,6 +74,7 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     private let imageConfig: ImageFingerprintConfiguration
     private let audioConfig: AudioFingerprintConfiguration
     private let videoConfig: VideoFingerprintConfiguration
+    private let diagnostics: CapsuleDiagnostics
     private let lock = NSLock()
     
     /// Configuration used for this capsule.
@@ -88,11 +90,24 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     public init(
         imageConfig: ImageFingerprintConfiguration? = nil,
         audioConfig: AudioFingerprintConfiguration? = nil,
-        videoConfig: VideoFingerprintConfiguration? = nil
+        videoConfig: VideoFingerprintConfiguration? = nil,
+        diagnostics: CapsuleDiagnostics? = nil
     ) throws {
+        let resolvedDiagnostics = diagnostics ?? DefaultCapsuleDiagnostics()
         let imageConfig = imageConfig ?? .default
         let audioConfig = audioConfig ?? .default
         let videoConfig = videoConfig ?? .default
+
+        let initSpan = resolvedDiagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.init",
+            category: "mediafingerprint.init",
+            correlationID: nil,
+            tags: [
+                "image_hash_size": "\(imageConfig.hashSize)",
+                "audio_fingerprint_size": "\(audioConfig.fingerprintSize)",
+                "video_fingerprint_size": "\(videoConfig.fingerprintSize)"
+            ]
+        )
         
         var rawHandle: anigma_media_fingerprint_capsule_t?
         var error = anigma_capsule_error_t()
@@ -110,6 +125,14 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         )
         
         guard status == ANIGMA_OK, let rawHandle = rawHandle else {
+            resolvedDiagnostics.event(
+                level: .error,
+                category: "mediafingerprint.init",
+                message: "Failed to create capsule handle (status: \(status))",
+                correlationID: nil,
+                tags: [:]
+            )
+            initSpan.end(status: .error)
             throw capsuleError(status: status, error: error)
         }
         
@@ -121,10 +144,12 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
                 _ = anigma_media_fingerprint_capsule_destroy(&mutablePtr, &err)
             }
         )
-        
+
         self.imageConfig = imageConfig
         self.audioConfig = audioConfig
         self.videoConfig = videoConfig
+        self.diagnostics = resolvedDiagnostics
+        initSpan.end(status: .ok)
     }
     
     deinit {
@@ -133,12 +158,39 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     
     /// Reset the capsule state for new operations.
     public func reset() throws {
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.reset",
+            category: "mediafingerprint.reset",
+            correlationID: nil,
+            tags: [:]
+        )
         var error = anigma_capsule_error_t()
-        try handle?.withHandle { rawHandle in
-            let status = anigma_media_fingerprint_capsule_reset(rawHandle, &error)
-            guard status == ANIGMA_OK else {
-                throw capsuleError(status: status, error: error)
+        do {
+            try handle?.withHandle { rawHandle in
+                let status = anigma_media_fingerprint_capsule_reset(rawHandle, &error)
+                guard status == ANIGMA_OK else {
+                    self.diagnostics.event(
+                        level: .error,
+                        category: "mediafingerprint.reset",
+                        message: "Reset failed (status: \(status))",
+                        correlationID: nil,
+                        tags: [:]
+                    )
+                    span.end(status: .error)
+                    throw capsuleError(status: status, error: error)
+                }
             }
+            span.end(status: .ok)
+        } catch {
+            self.diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.reset",
+                message: "Reset threw error: \(error)",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
+            throw error
         }
     }
     
@@ -147,8 +199,26 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     /// Detect the media type from raw data.
     /// - Parameter data: Raw media data.
     /// - Returns: Detected media type.
-    public static func detectMediaType(_ data: Data) throws -> MediaType {
+    public static func detectMediaType(
+        _ data: Data,
+        diagnostics: CapsuleDiagnostics? = nil
+    ) throws -> MediaType {
+        let diagnostics = diagnostics ?? DefaultCapsuleDiagnostics()
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.detectMediaType",
+            category: "mediafingerprint.detect",
+            correlationID: nil,
+            tags: ["input_bytes": "\(data.count)"]
+        )
         guard !data.isEmpty else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.detect",
+                message: "Detect failed: empty input",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
             throw capsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
                 error: createError(code: ANIGMA_ERR_INVALID_ARG, message: "Invalid input buffer")
@@ -166,10 +236,27 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         
         let status = anigma_media_fingerprint_detect_media_type(&buffer, &mediaType, &error)
         guard status == ANIGMA_OK else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.detect",
+                message: "Detect failed (status: \(status))",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
             throw capsuleError(status: status, error: error)
         }
-        
-        return MediaType(rawValue: UInt8(mediaType.rawValue)) ?? .unknown
+
+        let detected = MediaType(rawValue: UInt8(mediaType.rawValue)) ?? .unknown
+        diagnostics.event(
+            level: .info,
+            category: "mediafingerprint.detect",
+            message: "Media type detected",
+            correlationID: nil,
+            tags: ["media_type": "\(detected)"]
+        )
+        span.end(status: .ok)
+        return detected
     }
     
     /// Analyze media data and extract metadata.
@@ -178,7 +265,24 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
     ///   - mediaType: Known media type (optional, will auto-detect if unknown).
     /// - Returns: Media metadata.
     public func analyzeMedia(_ data: Data, mediaType: MediaType = .unknown) throws -> MediaMetadata {
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.analyzeMedia",
+            category: "mediafingerprint.analyze",
+            correlationID: nil,
+            tags: [
+                "input_bytes": "\(data.count)",
+                "media_type": "\(mediaType)"
+            ]
+        )
         guard !data.isEmpty else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.analyze",
+                message: "Analyze failed: empty input",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
             throw capsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
                 error: createError(code: ANIGMA_ERR_INVALID_ARG, message: "Invalid input buffer")
@@ -205,10 +309,18 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.analyze",
+                message: "Analyze failed (status: \(status))",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
             throw capsuleError(status: status, error: error)
         }
-        
-        return MediaMetadata(
+
+        let result = MediaMetadata(
             mediaType: MediaType(rawValue: UInt8(metadata.media_type.rawValue)) ?? .unknown,
             fileSize: metadata.file_size,
             width: metadata.width,
@@ -223,6 +335,19 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
                 ptr.withMemoryRebound(to: CChar.self, capacity: 16) { String(cString: $0) }
             }
         )
+        diagnostics.event(
+            level: .info,
+            category: "mediafingerprint.analyze",
+            message: "Media analysis completed",
+            correlationID: nil,
+            tags: [
+                "media_type": "\(result.mediaType)",
+                "file_size": "\(result.fileSize)",
+                "duration_ms": "\(result.durationMs)"
+            ]
+        )
+        span.end(status: .ok)
+        return result
     }
     
     // MARK: - Fingerprint Generation
@@ -236,11 +361,43 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         _ data: Data,
         algorithm: FingerprintAlgorithm
     ) throws -> FingerprintResult {
-        return try generateFingerprint(
-            data: data,
-            algorithm: algorithm,
-            generator: anigma_media_fingerprint_generate_image
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.generateImageFingerprint",
+            category: "mediafingerprint.fingerprint",
+            correlationID: nil,
+            tags: [
+                "input_bytes": "\(data.count)",
+                "algorithm": "\(algorithm)"
+            ]
         )
+        do {
+            let result = try generateFingerprint(
+                data: data,
+                algorithm: algorithm,
+                generator: anigma_media_fingerprint_generate_image,
+                diagnostics: diagnostics,
+                kind: "image"
+            )
+            diagnostics.event(
+                level: .info,
+                category: "mediafingerprint.fingerprint",
+                message: "Image fingerprint generated",
+                correlationID: nil,
+                tags: ["hash_size": "\(result.hashSize)"]
+            )
+            span.end(status: .ok)
+            return result
+        } catch {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.fingerprint",
+                message: "Image fingerprint failed: \(error)",
+                correlationID: nil,
+                tags: ["algorithm": "\(algorithm)"]
+            )
+            span.end(status: .error)
+            throw error
+        }
     }
     
     /// Generate fingerprint for audio data.
@@ -252,11 +409,43 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         _ data: Data,
         algorithm: FingerprintAlgorithm
     ) throws -> FingerprintResult {
-        return try generateFingerprint(
-            data: data,
-            algorithm: algorithm,
-            generator: anigma_media_fingerprint_generate_audio
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.generateAudioFingerprint",
+            category: "mediafingerprint.fingerprint",
+            correlationID: nil,
+            tags: [
+                "input_bytes": "\(data.count)",
+                "algorithm": "\(algorithm)"
+            ]
         )
+        do {
+            let result = try generateFingerprint(
+                data: data,
+                algorithm: algorithm,
+                generator: anigma_media_fingerprint_generate_audio,
+                diagnostics: diagnostics,
+                kind: "audio"
+            )
+            diagnostics.event(
+                level: .info,
+                category: "mediafingerprint.fingerprint",
+                message: "Audio fingerprint generated",
+                correlationID: nil,
+                tags: ["hash_size": "\(result.hashSize)"]
+            )
+            span.end(status: .ok)
+            return result
+        } catch {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.fingerprint",
+                message: "Audio fingerprint failed: \(error)",
+                correlationID: nil,
+                tags: ["algorithm": "\(algorithm)"]
+            )
+            span.end(status: .error)
+            throw error
+        }
     }
     
     /// Generate fingerprint for video data.
@@ -268,11 +457,43 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         _ data: Data,
         algorithm: FingerprintAlgorithm
     ) throws -> FingerprintResult {
-        return try generateFingerprint(
-            data: data,
-            algorithm: algorithm,
-            generator: anigma_media_fingerprint_generate_video
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.generateVideoFingerprint",
+            category: "mediafingerprint.fingerprint",
+            correlationID: nil,
+            tags: [
+                "input_bytes": "\(data.count)",
+                "algorithm": "\(algorithm)"
+            ]
         )
+        do {
+            let result = try generateFingerprint(
+                data: data,
+                algorithm: algorithm,
+                generator: anigma_media_fingerprint_generate_video,
+                diagnostics: diagnostics,
+                kind: "video"
+            )
+            diagnostics.event(
+                level: .info,
+                category: "mediafingerprint.fingerprint",
+                message: "Video fingerprint generated",
+                correlationID: nil,
+                tags: ["hash_size": "\(result.hashSize)"]
+            )
+            span.end(status: .ok)
+            return result
+        } catch {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.fingerprint",
+                message: "Video fingerprint failed: \(error)",
+                correlationID: nil,
+                tags: ["algorithm": "\(algorithm)"]
+            )
+            span.end(status: .error)
+            throw error
+        }
     }
     
     private func generateFingerprint(
@@ -284,9 +505,18 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
             anigma_fingerprint_algorithm_t,
             UnsafeMutablePointer<anigma_fingerprint_result_t>,
             UnsafeMutablePointer<anigma_capsule_error_t>
-        ) -> anigma_status_t
+        ) -> anigma_status_t,
+        diagnostics: CapsuleDiagnostics,
+        kind: String
     ) throws -> FingerprintResult {
         guard !data.isEmpty else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.fingerprint",
+                message: "Fingerprint failed: empty \(kind) input",
+                correlationID: nil,
+                tags: ["kind": kind]
+            )
             throw capsuleError(
                 status: ANIGMA_ERR_INVALID_ARG,
                 error: createError(code: ANIGMA_ERR_INVALID_ARG, message: "Invalid input buffer")
@@ -313,6 +543,13 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.fingerprint",
+                message: "Fingerprint failed (status: \(status))",
+                correlationID: nil,
+                tags: ["kind": kind]
+            )
             throw capsuleError(status: status, error: error)
         }
         
@@ -355,6 +592,15 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         _ fingerprint2: FingerprintResult,
         config: SimilarityConfiguration = .default
     ) throws -> SimilarityResult {
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.compareFingerprints",
+            category: "mediafingerprint.compare",
+            correlationID: nil,
+            tags: [
+                "hash_size": "\(fingerprint1.hashSize)",
+                "algorithm": "\(fingerprint1.algorithm)"
+            ]
+        )
         var result = anigma_similarity_result_t()
         var error = anigma_capsule_error_t()
         
@@ -389,15 +635,32 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.compare",
+                message: "Compare failed (status: \(status))",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
             throw capsuleError(status: status, error: error)
         }
-        
-        return SimilarityResult(
+
+        let resultValue = SimilarityResult(
             similarityScore: result.similarity_score,
             hammingDistance: result.hamming_distance,
             isDuplicate: result.is_duplicate,
             isPartialMatch: result.is_partial_match
         )
+        diagnostics.event(
+            level: .info,
+            category: "mediafingerprint.compare",
+            message: "Fingerprint comparison completed",
+            correlationID: nil,
+            tags: ["similarity": "\(resultValue.similarityScore)"]
+        )
+        span.end(status: .ok)
+        return resultValue
     }
     
     /// Batch compare a query fingerprint against multiple candidates.
@@ -411,7 +674,19 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         candidateFingerprints: [FingerprintResult],
         config: SimilarityConfiguration = .default
     ) throws -> [SimilarityResult] {
-        guard !candidateFingerprints.isEmpty else { return [] }
+        let span = diagnostics.beginSpan(
+            name: "MediaFingerprintCapsule.batchCompareFingerprints",
+            category: "mediafingerprint.compare",
+            correlationID: nil,
+            tags: [
+                "candidate_count": "\(candidateFingerprints.count)",
+                "algorithm": "\(queryFingerprint.algorithm)"
+            ]
+        )
+        if candidateFingerprints.isEmpty {
+            span.end(status: .ok)
+            return []
+        }
         
         // Create C array of candidate fingerprints
         var cCandidates = candidateFingerprints.map { fingerprint in
@@ -452,10 +727,18 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
         } ?? ANIGMA_ERR_NOT_INITIALIZED
         
         guard status == ANIGMA_OK else {
+            diagnostics.event(
+                level: .error,
+                category: "mediafingerprint.compare",
+                message: "Batch compare failed (status: \(status))",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
             throw capsuleError(status: status, error: error)
         }
-        
-        return Array(results.prefix(Int(actualCount))).map { result in
+
+        let mapped = Array(results.prefix(Int(actualCount))).map { result in
             SimilarityResult(
                 similarityScore: result.similarity_score,
                 hammingDistance: result.hamming_distance,
@@ -463,6 +746,15 @@ public final class MediaFingerprintCapsuleWrapper: @unchecked Sendable {
                 isPartialMatch: result.is_partial_match
             )
         }
+        diagnostics.event(
+            level: .info,
+            category: "mediafingerprint.compare",
+            message: "Batch comparison completed",
+            correlationID: nil,
+            tags: ["result_count": "\(mapped.count)"]
+        )
+        span.end(status: .ok)
+        return mapped
     }
 }
 
