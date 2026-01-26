@@ -41,12 +41,35 @@ If you need high-performance C++ code:
 
 ## Step 5: Write Tests
 
-Add your tests to `Packages/MyNewCapsule/Tests/MyNewCapsuleTests/MyNewCapsuleTests.swift`.
+Add your tests to `Packages/MyNewCapsule/Tests/MyNewCapsuleTests/`. The template provides several files:
+- `MyNewCapsuleTests.swift`: General unit tests and edge cases.
+- `MyNewCapsuleContractTests.swift`: Validation of `CapsuleError` requirements.
+- `MyNewCapsuleGoldenTests.swift`: Deterministic output verification.
 
-Standard capsules should include:
-- **Contract Tests**: Verify that invalid inputs return the correct `CapsuleError`.
-- **Golden Tests**: Verify deterministic outputs against a known good state.
-- **Edge Case Tests**: Test empty inputs, large inputs, and malformed data.
+### Implementing your first Golden Test
+
+Golden tests ensure that your capsule's output remains deterministic over time. The template includes a `Golden/` directory for this purpose.
+
+1.  **Generate your baseline**: Run your capsule with a specific input and save the output to a file in `Tests/MyNewCapsuleTests/Golden/sample.golden`.
+2.  **Use GoldenKit**: In `MyNewCapsuleGoldenTests.swift`, use the `GoldenKit` placeholder or manual comparison to verify the current output against the golden file.
+
+```swift
+func testGoldenOutput() async throws {
+    let input = "Anigma Golden Test"
+    let result = try await capsule.process(input)
+    
+    // Example using GoldenKit (placeholder API):
+    /*
+    try await GoldenKit.assertMatches(
+        result,
+        named: "sample",
+        in: Bundle.module
+    )
+    */
+}
+```
+
+3.  **Updating goldens**: If you intentionally change the output format, you must update the golden files in the `Golden/` directory to reflect the new expected state.
 
 ## Step 6: Verify Governance Gates
 

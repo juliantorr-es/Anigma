@@ -36,6 +36,8 @@ mv "$TARGET_DIR/Tests/NewCapsuleTests" "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests"
 mv "$TARGET_DIR/Sources/${CAPSULE_NAME}/NewCapsule.swift" "$TARGET_DIR/Sources/${CAPSULE_NAME}/${CAPSULE_NAME}.swift"
 mv "$TARGET_DIR/Sources/${CAPSULE_NAME}/NewCapsuleInternal.swift" "$TARGET_DIR/Sources/${CAPSULE_NAME}/${CAPSULE_NAME}Internal.swift"
 mv "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests/NewCapsuleTests.swift" "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests/${CAPSULE_NAME}Tests.swift"
+mv "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests/NewCapsuleGoldenTests.swift" "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests/${CAPSULE_NAME}GoldenTests.swift"
+mv "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests/NewCapsuleContractTests.swift" "$TARGET_DIR/Tests/${CAPSULE_NAME}Tests/${CAPSULE_NAME}ContractTests.swift"
 
 if [ -f "$TARGET_DIR/Sources/${CAPSULE_NAME}Native/newcapsule.cpp" ]; then
     mv "$TARGET_DIR/Sources/${CAPSULE_NAME}Native/newcapsule.cpp" "$TARGET_DIR/Sources/${CAPSULE_NAME}Native/${CAPSULE_NAME,,}.cpp"

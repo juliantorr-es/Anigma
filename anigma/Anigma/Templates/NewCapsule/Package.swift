@@ -66,6 +66,9 @@ let package = Package(
             name: "NewCapsuleTests",
             dependencies: ["NewCapsule"],
             path: "Tests/NewCapsuleTests",
+            resources: [
+                .process("Golden")
+            ],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]

@@ -51,3 +51,38 @@ do {
     print(error.jsonString ?? "Unknown error")
 }
 ```
+
+## How to Test Your Errors
+
+`CapsuleCore` provides consistent error assertion utilities to verify both the error case and associated metadata.
+
+### `XCTAssertCapsuleError`
+
+Use this assertion in your tests to verify that a block or value matches an expected `CapsuleError` case.
+
+```swift
+import CapsuleCore
+
+func testMyCapsule() {
+    // Assert on a thrown error
+    XCTAssertCapsuleError(
+        try myCapsule.performAction(),
+        matches: .invalidInput,
+        message: "email"
+    )
+    
+    // Assert on a returned error
+    let result = myCapsule.process()
+    if case .failure(let error) = result {
+        XCTAssertCapsuleError(
+            error, 
+            matches: .operationFailed, 
+            underlyingCode: 404
+        )
+    }
+}
+```
+
+- **`matches`**: The `CapsuleErrorCode` case expected.
+- **`message`**: (Optional) Substring expected in the error message.
+- **`underlyingCode`**: (Optional) For `.operationFailed` and `.nativeError`, verifies the internal code.

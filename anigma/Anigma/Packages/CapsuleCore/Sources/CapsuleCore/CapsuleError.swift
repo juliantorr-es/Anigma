@@ -132,3 +132,20 @@ extension CapsuleError: Equatable {
         }
     }
 }
+
+// MARK: - Error Code Mapping
+
+extension CapsuleError {
+    /// Returns the C-compatible error code for this error case.
+    public var errorCode: CapsuleErrorCode {
+        switch self {
+        case .invalidConfiguration: return .invalidConfig
+        case .operationFailed: return .operationFailed
+        case .resourceExhausted: return .resourceExhausted
+        case .invalidInput: return .invalidInput
+        case .nativeError: return .nativeError
+        case .timeout: return .timeout
+        case .internalError: return .internalError
+        }
+    }
+}
