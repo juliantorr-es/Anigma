@@ -19,7 +19,7 @@ jobs:
         run: |
           for capsule in Packages/*Capsule; do
             if [ -d "$capsule" ]; then
-              ./scripts/validate_gates.sh "$capsule" GATE_TIER_VALIDATION
+              ./Scripts/validate_gates.sh "$capsule" GATE_TIER_VALIDATION
             fi
           done
 
@@ -32,7 +32,7 @@ jobs:
         run: |
           for capsule in Packages/*Capsule; do
             if [ -d "$capsule" ]; then
-              ./scripts/validate_gates.sh "$capsule" GATE_ERROR_MODEL
+              ./Scripts/validate_gates.sh "$capsule" GATE_ERROR_MODEL
             fi
           done
 
@@ -45,7 +45,7 @@ jobs:
         run: |
           for capsule in Packages/*Capsule; do
             if [ -d "$capsule" ]; then
-              ./scripts/validate_gates.sh "$capsule" GATE_DIAGNOSTICS_CONFORMANCE
+              ./Scripts/validate_gates.sh "$capsule" GATE_DIAGNOSTICS_CONFORMANCE
             fi
           done
 
@@ -58,7 +58,7 @@ jobs:
         run: |
           for capsule in Packages/*Capsule; do
             if [ -d "$capsule" ]; then
-              ./scripts/validate_gates.sh "$capsule" GATE_BUILD_HYGIENE
+              ./Scripts/validate_gates.sh "$capsule" GATE_BUILD_HYGIENE
             fi
           done
 
@@ -71,6 +71,19 @@ jobs:
         run: |
           for capsule in Packages/*Capsule; do
             if [ -d "$capsule" ]; then
-              ./scripts/validate_gates.sh "$capsule" GATE_TEST_COVERAGE
+              ./Scripts/validate_gates.sh "$capsule" GATE_TEST_COVERAGE
             fi
           done
+      - name: Upload Test Results and Diffs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            Packages/*Capsule/test_output.txt
+            Packages/*Capsule/test-results/diffs/
+      - name: Upload Coverage Dashboard
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-dashboard
+          path: Docs/governance/coverage_dashboard.md

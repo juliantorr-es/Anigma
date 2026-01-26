@@ -15,6 +15,7 @@ fi
 # Resolve absolute path
 CAPSULE_PATH=$(cd "$CAPSULE_PATH" && pwd)
 CAPSULE_NAME=$(basename "$CAPSULE_PATH")
+PROJECT_ROOT=$(cd "$(dirname "$0")/.." && pwd)
 
 run_gate() {
     local gate_name=$1
@@ -104,22 +105,108 @@ if run_gate "GATE_TEST_COVERAGE"; then
     TIER=$(grep -E "^tier =" "$CAPSULE_PATH/MANIFEST.toml" | cut -d'=' -f2 | tr -d ' ')
     MIN_COVERAGE=0
     MIN_TESTS=0
+    REQUIRE_GOLDENS=false
     if [ "$TIER" -eq 5 ]; then
         MIN_COVERAGE=80
         MIN_TESTS=15
+        REQUIRE_GOLDENS=true
     elif [ "$TIER" -eq 3 ]; then
         MIN_COVERAGE=60
         MIN_TESTS=10
+        REQUIRE_GOLDENS=true
     fi
 
-    if [ "$MIN_TESTS" -gt 0 ]; then
+    echo "   Running swift test with coverage for $CAPSULE_NAME..."
+    # Create test results directory for artifacts
+    mkdir -p "$CAPSULE_PATH/test-results/diffs"
+    
+    (cd "$CAPSULE_PATH" && swift test --enable-code-coverage > test_output.txt 2>&1) || {
+        echo "❌ Error: swift test failed for $CAPSULE_NAME"
+        # If there are diffs, they should be in test-results/diffs
+        # (Assuming the test suite is configured to put them there)
+        exit 1
+    }
+
+    # Extract test count from output
+    TEST_COUNT=$(grep "Executed .* tests" "$CAPSULE_PATH/test_output.txt" | sed -E 's/.*Executed ([0-9]+) tests.*/\1/' | awk '{s+=$1} END {print s}')
+    
+    if [ -z "$TEST_COUNT" ] || [ "$TEST_COUNT" -eq 0 ]; then
+        # Fallback to grep if output format is different
         TEST_COUNT=$(grep -r "func test" "$CAPSULE_PATH/Tests" | wc -l | tr -d ' ')
-        echo "   Test count: $TEST_COUNT (Required: $MIN_TESTS)"
-        if [ "$TEST_COUNT" -lt "$MIN_TESTS" ]; then
-            echo "❌ Error: Insufficient test count for Tier $TIER (Found $TEST_COUNT, need $MIN_TESTS)"
-            exit 1
-        fi
     fi
+
+    echo "   Test count: $TEST_COUNT (Required: $MIN_TESTS)"
+    if [ "$TEST_COUNT" -lt "$MIN_TESTS" ]; then
+        echo "❌ Error: Insufficient test count for Tier $TIER (Found $TEST_COUNT, need $MIN_TESTS)"
+        exit 1
+    fi
+
+    # Check for Goldens
+    if [ "$REQUIRE_GOLDENS" = true ]; then
+        echo "   Checking for golden tests..."
+        # Check for directory or files with Golden in name
+        GOLDEN_FOUND=$(find "$CAPSULE_PATH/Tests" -type d -name "Goldens" -o -name "*GoldenTests.swift" | wc -l | tr -d ' ')
+        if [ "$GOLDEN_FOUND" -eq 0 ]; then
+             echo "❌ Error: Golden tests required for Tier $TIER but none found (expected Tests/Goldens directory or *GoldenTests.swift files)"
+             exit 1
+        fi
+        echo "✅ Golden tests present."
+    fi
+
+    # Coverage via llvm-cov
+    BIN_PATH=$(cd "$CAPSULE_PATH" && swift build --show-bin-path)
+    XCTEST_PATH=$(find "$BIN_PATH" -name "${CAPSULE_NAME}PackageTests.xctest" -o -name "${CAPSULE_NAME}Tests.xctest" | head -n 1)
+    
+    if [ -z "$XCTEST_PATH" ]; then
+        XCTEST_PATH=$(find "$BIN_PATH" -name "*.xctest" | head -n 1)
+    fi
+
+    if [ -n "$XCTEST_PATH" ]; then
+        # On macOS, the binary is inside the .xctest bundle
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            BINARY_NAME=$(basename "$XCTEST_PATH" .xctest)
+            XCTEST_BINARY="$XCTEST_PATH/Contents/MacOS/$BINARY_NAME"
+        else
+            XCTEST_BINARY="$XCTEST_PATH"
+        fi
+
+        PROFDATA=$(find "$CAPSULE_PATH/.build" -name "default.profdata" | head -n 1)
+
+        if [ -n "$XCTEST_BINARY" ] && [ -f "$XCTEST_BINARY" ] && [ -n "$PROFDATA" ]; then
+            COVERAGE_REPORT=$(xcrun llvm-cov report "$XCTEST_BINARY" -instr-profile="$PROFDATA" -ignore-filename-regex=".build|Tests")
+            echo "$COVERAGE_REPORT"
+            COVERAGE_PERCENT=$(echo "$COVERAGE_REPORT" | grep "TOTAL" | awk '{print $NF}' | tr -d '%')
+            
+            if [ -z "$COVERAGE_PERCENT" ]; then COVERAGE_PERCENT=0; fi
+            
+            echo "   Coverage: $COVERAGE_PERCENT% (Required: $MIN_COVERAGE%)"
+            
+            # Update coverage dashboard
+            DASHBOARD="$PROJECT_ROOT/Docs/governance/coverage_dashboard.md"
+            mkdir -p "$(dirname "$DASHBOARD")"
+            if [ ! -f "$DASHBOARD" ]; then
+                echo "# Capsule Coverage Dashboard" > "$DASHBOARD"
+                echo "| Capsule | Tier | Tests | Coverage | Last Updated |" >> "$DASHBOARD"
+                echo "|---------|------|-------|----------|--------------|" >> "$DASHBOARD"
+            fi
+            
+            # Remove existing entry for this capsule if it exists
+            sed -i '' "/| $CAPSULE_NAME |/d" "$DASHBOARD"
+            echo "| $CAPSULE_NAME | $TIER | $TEST_COUNT | $COVERAGE_PERCENT% | $(date) |" >> "$DASHBOARD"
+
+            if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
+                echo "❌ Error: Insufficient coverage for Tier $TIER (Found $COVERAGE_PERCENT%, need $MIN_COVERAGE%)"
+                exit 1
+            fi
+        else
+            echo "⚠️ Warning: Could not run llvm-cov (binary or profdata missing or invalid)"
+            [ ! -f "$XCTEST_BINARY" ] && echo "   Missing binary: $XCTEST_BINARY"
+            [ -z "$PROFDATA" ] && echo "   Missing profdata"
+        fi
+    else
+        echo "⚠️ Warning: Could not find .xctest bundle in $BIN_PATH"
+    fi
+
     echo "✅ Test coverage/count requirements met."
 fi
 
