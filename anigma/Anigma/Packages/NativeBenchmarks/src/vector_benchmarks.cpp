@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Anigma
 // Licensed under the MIT License
 
+#include <benchmark_utils.h>
 #include <chrono>
 #include <vector>
 #include <cmath>
@@ -133,6 +134,18 @@ private:
         // Allocate aligned vectors
         std::vector<float> a(vector_size, 1.0f);
         std::vector<float> b(vector_size, 2.0f);
+
+        std::string name = "Dot Product (" + std::to_string(vector_size) + "-dim)";
+        const BenchmarkMetadata metadata{
+            "vector_dim=" + std::to_string(vector_size),
+            "v1",
+            {{"suite", "vector"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            name,
+            "benchmarks.native.vector",
+            metadata);
         
         const int iterations = 100000;
         std::vector<double> measurements;
@@ -163,7 +176,6 @@ private:
         TimingStats stats;
         stats.compute(measurements);
         
-        std::string name = "Dot Product (" + std::to_string(vector_size) + "-dim)";
         stats.print(name);
 
         double throughput = (iterations * vector_size) / (total_time.count() / 1000.0);
@@ -182,6 +194,18 @@ private:
     static void run_cosine_similarity_for_size(size_t vector_size) {
         std::vector<float> a(vector_size, 1.0f);
         std::vector<float> b(vector_size, 2.0f);
+
+        std::string name = "Cosine Similarity (" + std::to_string(vector_size) + "-dim)";
+        const BenchmarkMetadata metadata{
+            "vector_dim=" + std::to_string(vector_size),
+            "v1",
+            {{"suite", "vector"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            name,
+            "benchmarks.native.vector",
+            metadata);
         
         const int iterations = 50000;
         std::vector<double> measurements;
@@ -212,7 +236,6 @@ private:
         TimingStats stats;
         stats.compute(measurements);
         
-        std::string name = "Cosine Similarity (" + std::to_string(vector_size) + "-dim)";
         stats.print(name);
 
         double throughput = iterations / (total_time.count() / 1000.0);
@@ -233,6 +256,18 @@ private:
         const int iterations = 50000;
         std::vector<double> measurements;
         measurements.reserve(iterations);
+
+        std::string name = "Vector Normalization (" + std::to_string(vector_size) + "-dim)";
+        const BenchmarkMetadata metadata{
+            "vector_dim=" + std::to_string(vector_size),
+            "v1",
+            {{"suite", "vector"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            name,
+            "benchmarks.native.vector",
+            metadata);
 
         // Warm-up
         for (int i = 0; i < 10; ++i) {
@@ -260,7 +295,6 @@ private:
         TimingStats stats;
         stats.compute(measurements);
         
-        std::string name = "Vector Normalization (" + std::to_string(vector_size) + "-dim)";
         stats.print(name);
 
         double throughput = (iterations * vector_size) / (total_time.count() / 1000.0);
@@ -281,6 +315,19 @@ private:
         std::vector<float> a(vector_size * pair_count, 1.0f);
         std::vector<float> b(vector_size * pair_count, 2.0f);
         std::vector<float> results(pair_count);
+
+        std::string name = "Batch Dot Product (" + std::to_string(pair_count) + " pairs, " +
+                          std::to_string(vector_size) + "-dim)";
+        const BenchmarkMetadata metadata{
+            "pair_count=" + std::to_string(pair_count) + ",vector_dim=" + std::to_string(vector_size),
+            "v1",
+            {{"suite", "vector"}}
+        };
+        auto span = begin_benchmark_span(
+            DefaultCapsuleDiagnostics::shared(),
+            name,
+            "benchmarks.native.vector",
+            metadata);
         
         const int iterations = 1000;
         std::vector<double> measurements;
@@ -309,8 +356,6 @@ private:
         TimingStats stats;
         stats.compute(measurements);
         
-        std::string name = "Batch Dot Product (" + std::to_string(pair_count) + " pairs, " + 
-                          std::to_string(vector_size) + "-dim)";
         stats.print(name);
 
         double throughput = iterations / (total_time.count() / 1000.0);

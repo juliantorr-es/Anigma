@@ -22,7 +22,7 @@ public:
         std::cout << "TEXT PROCESSING BENCHMARKS\n";
         std::cout << std::string(80, '=') << "\n";
 
-        BenchmarkRunner runner;
+        BenchmarkRunner runner("benchmarks.native.text");
 
         // String trimming benchmark
         run_string_trimming(runner);
@@ -50,6 +50,12 @@ private:
     static void run_string_trimming(BenchmarkRunner& runner) {
         const auto test_strings = DataGenerator::random_strings(1000, 100);
         
+        const BenchmarkMetadata metadata{
+            "1000x100 chars",
+            "v1",
+            {{"suite", "text"}}
+        };
+
         runner.run(
             "String Trimming",
             "Trim whitespace from strings",
@@ -69,6 +75,7 @@ private:
                 }
                 return total;
             },
+            metadata,
             1, 100, 100
         );
     }
@@ -76,6 +83,12 @@ private:
     static void run_lowercase_conversion(BenchmarkRunner& runner) {
         const auto test_strings = DataGenerator::random_strings(1000, 100);
         
+        const BenchmarkMetadata metadata{
+            "1000x100 chars",
+            "v1",
+            {{"suite", "text"}}
+        };
+
         runner.run(
             "Lowercase Conversion",
             "Convert strings to lowercase",
@@ -92,6 +105,7 @@ private:
                 }
                 return total;
             },
+            metadata,
             1, 100, 100
         );
     }
@@ -100,6 +114,12 @@ private:
         const auto test_strings = DataGenerator::random_strings(100, 50);
         const std::regex email_pattern(R"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})");
         
+        const BenchmarkMetadata metadata{
+            "100x50 chars",
+            "v1",
+            {{"suite", "text"}}
+        };
+
         runner.run(
             "Regex Matching (email pattern)",
             "Match email patterns in strings",
@@ -114,6 +134,7 @@ private:
                 }
                 return matches;
             },
+            metadata,
             1, 100, 100
         );
     }
@@ -127,6 +148,12 @@ private:
         utf8_strings.push_back("مرحبا بالعالم");
         utf8_strings.push_back("Привет мир");
         
+        const BenchmarkMetadata metadata{
+            "5 samples",
+            "v1",
+            {{"suite", "text"}}
+        };
+
         runner.run(
             "UTF-8 Validation",
             "Validate UTF-8 encoded strings",
@@ -160,6 +187,7 @@ private:
                 }
                 return valid;
             },
+            metadata,
             1, 1000, 100
         );
     }
@@ -167,6 +195,12 @@ private:
     static void run_character_encoding(BenchmarkRunner& runner) {
         const std::string text = "The quick brown fox jumps over the lazy dog";
         
+        const BenchmarkMetadata metadata{
+            "43 chars",
+            "v1",
+            {{"suite", "text"}}
+        };
+
         runner.run(
             "Character Encoding/Decoding",
             "Encode/decode string to UTF-8",
@@ -185,6 +219,7 @@ private:
                 }
                 return total;
             },
+            metadata,
             1, 10000, 100
         );
     }
@@ -192,6 +227,12 @@ private:
     static void run_string_concatenation(BenchmarkRunner& runner) {
         const auto strings = DataGenerator::random_strings(100, 20);
         
+        const BenchmarkMetadata metadata{
+            "100x20 chars",
+            "v1",
+            {{"suite", "text"}}
+        };
+
         runner.run(
             "String Concatenation",
             "Concatenate multiple strings",
@@ -206,6 +247,7 @@ private:
                 }
                 return total;
             },
+            metadata,
             1, 1000, 100
         );
     }
