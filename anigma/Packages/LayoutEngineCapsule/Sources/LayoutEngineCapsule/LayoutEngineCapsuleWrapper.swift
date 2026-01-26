@@ -1,11 +1,28 @@
 import Foundation
 import AnigmaNativeShims
 import CapsuleCore
+import TelemetryCore
 
 public final class LayoutEngineCapsuleWrapper {
     private let handle: CapsuleHandle<AnyObject>
+    private let diagnostics: CapsuleDiagnostics
+    private static let algorithmVersion = "layout-engine-v1"
     
-    public init(config: LayoutEngineConfig) throws {
+    public init(
+        config: LayoutEngineConfig,
+        diagnostics: CapsuleDiagnostics? = nil
+    ) throws {
+        let resolvedDiagnostics = diagnostics ?? DefaultCapsuleDiagnostics()
+        let span = resolvedDiagnostics.beginSpan(
+            name: "LayoutEngineCapsuleWrapper.init",
+            category: "layoutengine.native.init",
+            correlationID: nil,
+            tags: [
+                "determinism_tier": "\(config.determinismTier)",
+                "flags": "\(config.flags)",
+                "algorithm_version": Self.algorithmVersion
+            ]
+        )
         var rawHandle: anigma_layout_engine_capsule_t?
         var error = anigma_capsule_error_t()
         
@@ -15,6 +32,14 @@ public final class LayoutEngineCapsuleWrapper {
         
         let status = anigma_layout_engine_capsule_create(&cConfig, &rawHandle, &error)
         guard status == ANIGMA_OK, let finalHandle = rawHandle else {
+            resolvedDiagnostics.event(
+                level: .error,
+                category: "layoutengine.native.init",
+                message: "Failed to create native handle (status: \(status))",
+                correlationID: nil,
+                tags: ["algorithm_version": Self.algorithmVersion]
+            )
+            span.end(status: .error)
             throw capsuleError(status: status, error: error)
         }
         
@@ -22,61 +47,163 @@ public final class LayoutEngineCapsuleWrapper {
             rawHandle: finalHandle,
             destroyFunction: capsuleDestroyer(anigma_layout_engine_capsule_destroy)
         )
+        self.diagnostics = resolvedDiagnostics
+        span.end(status: .ok)
     }
     
     public func analyzePDF(_ data: Data) throws -> [PageLayout] {
+        let span = diagnostics.beginSpan(
+            name: "LayoutEngineCapsuleWrapper.analyzePDF",
+            category: "layoutengine.native.analyze",
+            correlationID: nil,
+            tags: [
+                "input_bytes": "\(data.count)",
+                "algorithm_version": Self.algorithmVersion
+            ]
+        )
         var error = anigma_capsule_error_t()
         var actualCount: Int = 0
-        
-        let status = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> anigma_status_t in
-            guard let baseAddress = bytes.baseAddress else { return ANIGMA_ERR_INVALID_ARG }
-            return anigma_layout_engine_capsule_analyze_pdf(
-                handle.rawHandle,
-                baseAddress.assumingMemoryBound(to: UInt8.self),
-                data.count,
-                nil,
-                0,
-                &actualCount,
-                &error
-            )
-        }
-        
-        guard status == ANIGMA_OK else {
-            throw capsuleError(status: status, error: error)
-        }
-        
-        var cLayouts = [anigma_page_layout_t](repeating: anigma_page_layout_t(), count: actualCount)
-        let finalStatus = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> anigma_status_t in
-            guard let baseAddress = bytes.baseAddress else { return ANIGMA_ERR_INVALID_ARG }
-            return anigma_layout_engine_capsule_analyze_pdf(
-                handle.rawHandle,
-                baseAddress.assumingMemoryBound(to: UInt8.self),
-                data.count,
-                &cLayouts,
-                actualCount,
-                &actualCount,
-                &error
-            )
-        }
-        
-        guard finalStatus == ANIGMA_OK else {
-            throw capsuleError(status: finalStatus, error: error)
-        }
-        
-        defer {
-            for i in 0..<actualCount {
-                var layout = cLayouts[i]
-                _ = anigma_layout_engine_capsule_free_layout(handle.rawHandle, &layout, &error)
+        do {
+            let status = try handle.withHandle { rawHandle -> anigma_status_t in
+                data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> anigma_status_t in
+                    guard let baseAddress = bytes.baseAddress else { return ANIGMA_ERR_INVALID_ARG }
+                    return anigma_layout_engine_capsule_analyze_pdf(
+                        rawHandle,
+                        baseAddress.assumingMemoryBound(to: UInt8.self),
+                        data.count,
+                        nil,
+                        0,
+                        &actualCount,
+                        &error
+                    )
+                }
             }
+            guard status == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "layoutengine.native.analyze",
+                    message: "Layout analysis failed (status: \(status))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
+                throw capsuleError(status: status, error: error)
+            }
+            
+            var cLayouts = [anigma_page_layout_t](repeating: anigma_page_layout_t(), count: actualCount)
+            let finalStatus = try handle.withHandle { rawHandle -> anigma_status_t in
+                data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> anigma_status_t in
+                    guard let baseAddress = bytes.baseAddress else { return ANIGMA_ERR_INVALID_ARG }
+                    return anigma_layout_engine_capsule_analyze_pdf(
+                        rawHandle,
+                        baseAddress.assumingMemoryBound(to: UInt8.self),
+                        data.count,
+                        &cLayouts,
+                        actualCount,
+                        &actualCount,
+                        &error
+                    )
+                }
+            }
+            
+            guard finalStatus == ANIGMA_OK else {
+                diagnostics.event(
+                    level: .error,
+                    category: "layoutengine.native.analyze",
+                    message: "Layout analysis failed on fill (status: \(finalStatus))",
+                    correlationID: nil,
+                    tags: [:]
+                )
+                span.end(status: .error)
+                throw capsuleError(status: finalStatus, error: error)
+            }
+            
+            defer {
+                do {
+                    try handle.withHandle { rawHandle in
+                        for i in 0..<actualCount {
+                            var layout = cLayouts[i]
+                            var freeError = anigma_capsule_error_t()
+                            _ = anigma_layout_engine_capsule_free_layout(rawHandle, &layout, &freeError)
+                        }
+                    }
+                } catch {
+                    diagnostics.event(
+                        level: .warning,
+                        category: "layoutengine.native.analyze",
+                        message: "Failed to free layout buffers: \(error)",
+                        correlationID: nil,
+                        tags: [:]
+                    )
+                }
+            }
+            
+            let layouts = cLayouts.map { PageLayout(from: $0) }
+            diagnostics.event(
+                level: .info,
+                category: "layoutengine.native.analyze",
+                message: "Layout analysis completed",
+                correlationID: nil,
+                tags: ["page_count": "\(layouts.count)"]
+            )
+            span.end(status: .ok)
+            return layouts
+        } catch {
+            diagnostics.event(
+                level: .error,
+                category: "layoutengine.native.analyze",
+                message: "Layout analysis failed: \(error)",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
+            throw error
         }
-        
-        return cLayouts.map { PageLayout(from: $0) }
     }
     
-    public static func analyzePDF(_ data: Data?, config: LayoutEngineConfig) throws -> [PageLayout] {
-        guard let data = data else { return [] }
-        let wrapper = try LayoutEngineCapsuleWrapper(config: config)
-        return try wrapper.analyzePDF(data)
+    public static func analyzePDF(
+        _ data: Data?,
+        config: LayoutEngineConfig,
+        diagnostics: CapsuleDiagnostics? = nil
+    ) throws -> [PageLayout] {
+        let resolvedDiagnostics = diagnostics ?? DefaultCapsuleDiagnostics()
+        let span = resolvedDiagnostics.beginSpan(
+            name: "LayoutEngineCapsuleWrapper.analyzePDFStatic",
+            category: "layoutengine.analyze",
+            correlationID: nil,
+            tags: [
+                "algorithm_version": Self.algorithmVersion,
+                "determinism_tier": "\(config.determinismTier)",
+                "flags": "\(config.flags)"
+            ]
+        )
+        guard let data = data else {
+            resolvedDiagnostics.event(
+                level: .error,
+                category: "layoutengine.analyze",
+                message: "PDF data is required",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
+            throw CapsuleError.invalidInput(field: "data", constraint: "must not be nil")
+        }
+        do {
+            let wrapper = try LayoutEngineCapsuleWrapper(config: config, diagnostics: resolvedDiagnostics)
+            let layouts = try wrapper.analyzePDF(data)
+            span.end(status: .ok)
+            return layouts
+        } catch {
+            resolvedDiagnostics.event(
+                level: .error,
+                category: "layoutengine.analyze",
+                message: "Static layout analysis failed: \(error)",
+                correlationID: nil,
+                tags: [:]
+            )
+            span.end(status: .error)
+            throw error
+        }
     }
 }
 
