@@ -436,6 +436,11 @@ actor JobRegistry {
     private var jobs: [DaemonJob] = []
     private var contexts: [String: JobContext] = [:]
     private var receipts: [String: ExecutionReceipt] = [:]
+    private let pipeline: VerticalSlicePipeline
+
+    init(pipeline: VerticalSlicePipeline = VerticalSlicePipeline()) {
+        self.pipeline = pipeline
+    }
 
     func createJob(from request: DaemonJobRequest, correlationID: String) -> DaemonJob {
         let job = DaemonJob(
@@ -470,31 +475,61 @@ actor JobRegistry {
                 name: "daemon.job.pipeline",
                 category: "daemon.job",
                 correlationID: context.correlationID,
-                tags: ["action": request.action]
+                tags: ["action": request.action, "file": request.filePath]
             )
 
-            let capsuleSpan = diagnostics.beginSpan(
-                name: "capsule.\(request.action)",
-                category: "capsule",
-                correlationID: context.correlationID,
-                tags: ["file": request.filePath]
+            do {
+                let pipelineRequest = buildPipelineRequest(job: job, request: request)
+                let output = try await pipeline.execute(request: pipelineRequest, diagnostics: diagnostics)
+
+                diagnostics.event(
+                    level: .info,
+                    category: "daemon.job",
+                    message: "Job completed",
+                    correlationID: context.correlationID,
+                    metadata: ["job_id": job.id, "output_digest": output.outputDigest]
+                )
+
+                pipelineSpan.end(status: .ok)
+                receipts[job.id] = context.executionReceipt(
+                    status: "completed",
+                    output: ExecutionOutput(pipeline: output)
+                )
+            } catch {
+                diagnostics.event(
+                    level: .error,
+                    category: "daemon.job",
+                    message: "Job failed",
+                    correlationID: context.correlationID,
+                    metadata: ["job_id": job.id, "error": error.localizedDescription]
+                )
+                pipelineSpan.end(status: .error)
+                receipts[job.id] = context.executionReceipt(status: "failed")
+            }
+        }
+    }
+
+    private func buildPipelineRequest(job: DaemonJob, request: DaemonJobRequest) -> VerticalSliceRequest {
+        let url = URL(fileURLWithPath: request.filePath)
+        if url.pathExtension.lowercased() == "pdf" {
+            let data = (try? Data(contentsOf: url)) ?? Data(request.instruction.utf8)
+            return VerticalSliceRequest(
+                jobID: job.id,
+                sourcePath: request.filePath,
+                instruction: request.instruction,
+                text: nil,
+                pdfData: data
             )
-
-            capsuleSpan.recordEvent(level: .info, message: "Capsule execution started")
-            capsuleSpan.end(status: .ok)
-
-            diagnostics.event(
-                level: .info,
-                category: "daemon.job",
-                message: "Job completed",
-                correlationID: context.correlationID,
-                metadata: ["job_id": job.id]
-            )
-
-            pipelineSpan.end(status: .ok)
         }
 
-        receipts[job.id] = context.executionReceipt(status: "completed")
+        let text = (try? String(contentsOf: url)) ?? request.instruction
+        return VerticalSliceRequest(
+            jobID: job.id,
+            sourcePath: request.filePath,
+            instruction: request.instruction,
+            text: text,
+            pdfData: nil
+        )
     }
 }
 

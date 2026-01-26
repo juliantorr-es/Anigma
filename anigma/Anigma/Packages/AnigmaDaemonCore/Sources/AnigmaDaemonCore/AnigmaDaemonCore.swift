@@ -13,6 +13,14 @@ public struct CapsuleSpanSummary: Codable, Sendable {
     public let tags: [String: String]
 }
 
+public struct ExecutionOutput: Codable, Sendable {
+    public let pipeline: VerticalSlicePipelineOutput
+
+    public init(pipeline: VerticalSlicePipelineOutput) {
+        self.pipeline = pipeline
+    }
+}
+
 public struct ExecutionReceipt: Codable, Sendable {
     public let jobID: String
     public let correlationID: String
@@ -21,6 +29,7 @@ public struct ExecutionReceipt: Codable, Sendable {
     public let finishedAt: Date
     public let diagnosticEvents: [DiagnosticEvent]
     public let capsuleSpanSummaries: [CapsuleSpanSummary]
+    public let output: ExecutionOutput?
 
     public var duration: TimeInterval {
         finishedAt.timeIntervalSince(startedAt)
@@ -66,7 +75,7 @@ public final class JobContext: @unchecked Sendable {
         return spanSummaries
     }
 
-    public func executionReceipt(status: String, finishedAt: Date = Date()) -> ExecutionReceipt {
+    public func executionReceipt(status: String, output: ExecutionOutput? = nil, finishedAt: Date = Date()) -> ExecutionReceipt {
         ExecutionReceipt(
             jobID: jobID,
             correlationID: correlationID,
@@ -74,7 +83,8 @@ public final class JobContext: @unchecked Sendable {
             startedAt: startedAt,
             finishedAt: finishedAt,
             diagnosticEvents: snapshotEvents(),
-            capsuleSpanSummaries: snapshotSpanSummaries()
+            capsuleSpanSummaries: snapshotSpanSummaries(),
+            output: output
         )
     }
 

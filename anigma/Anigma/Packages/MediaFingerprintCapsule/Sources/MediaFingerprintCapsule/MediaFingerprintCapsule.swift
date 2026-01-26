@@ -54,6 +54,36 @@ public enum MediaFingerprintError: Error, Sendable, CustomStringConvertible {
     }
 }
 
+private extension MediaFingerprintError {
+    var capsuleError: CapsuleError {
+        switch self {
+        case .nullPointer:
+            return .internalError(details: "MediaFingerprintNative returned a null pointer")
+        case .invalidDimensions:
+            return .invalidInput(field: "dimensions", constraint: "invalid image dimensions")
+        case .decodeFailed:
+            return .invalidInput(field: "imageData", constraint: "decode failed")
+        case .memoryAllocation:
+            return .resourceExhausted(resource: "memory", limit: "allocation failed")
+        case .invalidFormat:
+            return .invalidInput(field: "format", constraint: "unsupported format")
+        case .bufferTooSmall:
+            return .invalidInput(field: "buffer", constraint: "buffer too small")
+        case .notImplemented:
+            return .operationFailed(
+                code: 0,
+                message: "Feature not implemented",
+                context: [
+                    "library": "MediaFingerprintNative",
+                    "native_code": "\(MediaFingerprintNativeBridge.errorNotImplemented)"
+                ]
+            )
+        case .unknownError(let code):
+            return .nativeError(code: code, libraryName: "MediaFingerprintNative")
+        }
+    }
+}
+
 // MARK: - Hash Types
 
 /// A 64-bit perceptual hash
@@ -138,20 +168,31 @@ public struct PerceptualHash256: Sendable, Hashable, Codable, CustomStringConver
     
     // Codable conformance for tuple
     public init(from decoder: Decoder) throws /* CapsuleError */ {
-        var container = try decoder.unkeyedContainer()
-        let p0 = try container.decode(UInt64.self)
-        let p1 = try container.decode(UInt64.self)
-        let p2 = try container.decode(UInt64.self)
-        let p3 = try container.decode(UInt64.self)
-        self.parts = (p0, p1, p2, p3)
+        do {
+            var container = try decoder.unkeyedContainer()
+            let p0 = try container.decode(UInt64.self)
+            let p1 = try container.decode(UInt64.self)
+            let p2 = try container.decode(UInt64.self)
+            let p3 = try container.decode(UInt64.self)
+            self.parts = (p0, p1, p2, p3)
+        } catch {
+            throw CapsuleError.invalidInput(
+                field: "PerceptualHash256",
+                constraint: "invalid encoding: \(error.localizedDescription)"
+            )
+        }
     }
     
     public func encode(to encoder: Encoder) throws /* CapsuleError */ {
-        var container = encoder.unkeyedContainer()
-        try container.encode(parts.0)
-        try container.encode(parts.1)
-        try container.encode(parts.2)
-        try container.encode(parts.3)
+        do {
+            var container = encoder.unkeyedContainer()
+            try container.encode(parts.0)
+            try container.encode(parts.1)
+            try container.encode(parts.2)
+            try container.encode(parts.3)
+        } catch {
+            throw CapsuleError.internalError(details: "Failed to encode PerceptualHash256: \(error.localizedDescription)")
+        }
     }
     
     // Hashable conformance for tuple
@@ -267,7 +308,7 @@ public actor MediaFingerprintCapsule {
         try await withCheckedThrowingContinuation { continuation in
             data.withUnsafeBytes { buffer in
                 guard let ptr = buffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else {
-                    continuation.resume(throwing: MediaFingerprintError.nullPointer)
+                    continuation.resume(throwing: MediaFingerprintError.nullPointer.capsuleError)
                     return
                 }
                 
@@ -281,14 +322,14 @@ public actor MediaFingerprintCapsule {
                     result = MediaFingerprintNativeBridge.dhashFromEncoded(ptr, buffer.count, &hash)
                 case .pHash256:
                     // For 256-bit, use separate method
-                    continuation.resume(throwing: MediaFingerprintError.invalidFormat)
+                    continuation.resume(throwing: MediaFingerprintError.invalidFormat.capsuleError)
                     return
                 }
                 
                 if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: PerceptualHash64(hash))
                 } else {
-                    continuation.resume(throwing: MediaFingerprintError(code: result))
+                    continuation.resume(throwing: MediaFingerprintError(code: result).capsuleError)
                 }
             }
         }
@@ -330,7 +371,7 @@ public actor MediaFingerprintCapsule {
         return try await withCheckedThrowingContinuation { continuation in
             pixels.withUnsafeBytes { buffer in
                 guard let ptr = buffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else {
-                    continuation.resume(throwing: MediaFingerprintError.nullPointer)
+                    continuation.resume(throwing: MediaFingerprintError.nullPointer.capsuleError)
                     return
                 }
                 
@@ -355,14 +396,14 @@ public actor MediaFingerprintCapsule {
                         hash: &hash
                     )
                 case .pHash256:
-                    continuation.resume(throwing: MediaFingerprintError.invalidFormat)
+                    continuation.resume(throwing: MediaFingerprintError.invalidFormat.capsuleError)
                     return
                 }
                 
                 if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: PerceptualHash64(hash))
                 } else {
-                    continuation.resume(throwing: MediaFingerprintError(code: result))
+                    continuation.resume(throwing: MediaFingerprintError(code: result).capsuleError)
                 }
             }
         }
@@ -381,7 +422,7 @@ public actor MediaFingerprintCapsule {
         return try await withCheckedThrowingContinuation { continuation in
             pixels.withUnsafeBytes { buffer in
                 guard let ptr = buffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else {
-                    continuation.resume(throwing: MediaFingerprintError.nullPointer)
+                    continuation.resume(throwing: MediaFingerprintError.nullPointer.capsuleError)
                     return
                 }
                 
@@ -397,7 +438,7 @@ public actor MediaFingerprintCapsule {
                 if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: PerceptualHash256(hash))
                 } else {
-                    continuation.resume(throwing: MediaFingerprintError(code: result))
+                    continuation.resume(throwing: MediaFingerprintError(code: result).capsuleError)
                 }
             }
         }
@@ -434,7 +475,7 @@ public actor MediaFingerprintCapsule {
         try await withCheckedThrowingContinuation { continuation in
             samples.withUnsafeBufferPointer { buffer in
                 guard let ptr = buffer.baseAddress else {
-                    continuation.resume(throwing: MediaFingerprintError.nullPointer)
+                    continuation.resume(throwing: MediaFingerprintError.nullPointer.capsuleError)
                     return
                 }
                 
@@ -449,7 +490,7 @@ public actor MediaFingerprintCapsule {
                 if result == MediaFingerprintNativeBridge.success {
                     continuation.resume(returning: AudioFingerprint(fp))
                 } else {
-                    continuation.resume(throwing: MediaFingerprintError(code: result))
+                    continuation.resume(throwing: MediaFingerprintError(code: result).capsuleError)
                 }
             }
         }

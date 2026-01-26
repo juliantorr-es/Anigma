@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "name": "vertical-slice-v1",
+  "description": "Baseline vertical slice output for the text pipeline.",
+  "requestFile": "request.json",
+  "outputFile": "pipeline_output.json"
+}

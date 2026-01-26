@@ -1,0 +1,46 @@
+{
+  "chunks": [
+    {
+      "chunkID": "chunk-0-514e5e03d797cc26",
+      "digest": "514e5e03d797cc26",
+      "length": 28,
+      "offset": 0
+    }
+  ],
+  "embeddings": [
+    {
+      "chunkID": "chunk-0-514e5e03d797cc26",
+      "digest": "0b366fcd357725d2",
+      "dimensions": 6
+    }
+  ],
+  "ingest": {
+    "characterCount": 28,
+    "contentType": "text/plain",
+    "digest": "514e5e03d797cc26",
+    "documentID": "doc-514e5e03d797cc26",
+    "sourcePath": "fixtures/vertical_slice.txt"
+  },
+  "outputDigest": "e017c203ae5e2fa7",
+  "ranks": [
+    {
+      "chunkID": "chunk-0-514e5e03d797cc26",
+      "embeddingScore": 0.5284,
+      "fusedScore": 0.59488,
+      "lexicalScore": 0.75
+    }
+  ],
+  "renderPlan": {
+    "instruction": "Summarize vertical slice output",
+    "planID": "plan-449d984f2e5c7153",
+    "sections": [
+      {
+        "chunkID": "chunk-0-514e5e03d797cc26",
+        "highlight": "Chunk chunk-0-514e5e03d797cc26 aligned to instruction",
+        "score": 0.59488,
+        "title": "Section 1"
+      }
+    ],
+    "summary": "Render plan for fixtures/vertical_slice.txt with 1 sections"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "jobID": "vslice-job-001",
+  "sourcePath": "fixtures/vertical_slice.txt",
+  "instruction": "Summarize vertical slice output",
+  "text": "Hello vertical slice output.",
+  "pdfDataBase64": null
+}
