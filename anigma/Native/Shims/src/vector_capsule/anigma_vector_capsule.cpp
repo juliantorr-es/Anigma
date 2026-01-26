@@ -10,7 +10,7 @@
 
 // Clipper2 wrapper functions
 extern "C" {
-#include "../../../../Packages/CClipper2/clipper2_wrapper.h"
+#include "clipper2_wrapper.h"
 }
 
 // ============================================================================

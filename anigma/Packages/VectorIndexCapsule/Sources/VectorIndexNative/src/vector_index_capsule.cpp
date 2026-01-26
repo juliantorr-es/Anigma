@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
-#include "../include/anigma_capsule_core.h"
-#include "../include/anigma_vector_index_capsule.h"
+#include "anigma_capsule_core.h"
+#include "anigma_vector_index_capsule.h"
 #include <string.h>
 
 extern "C" {

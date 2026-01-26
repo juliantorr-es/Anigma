@@ -36,9 +36,13 @@ let package = Package(
             ],
             publicHeadersPath: "include",
             cSettings: [
+                .headerSearchPath("include"),
+                .headerSearchPath("../../Packages/CClipper2"),
                 .define("ANIGMA_CAPSULE_IMPLEMENTATION")
             ],
             cxxSettings: [
+                .headerSearchPath("include"),
+                .headerSearchPath("../../Packages/CClipper2"),
                 .define("ANIGMA_CAPSULE_IMPLEMENTATION"),
                 .unsafeFlags(["-Wno-everything"])  // Suppress warnings for now
             ],
