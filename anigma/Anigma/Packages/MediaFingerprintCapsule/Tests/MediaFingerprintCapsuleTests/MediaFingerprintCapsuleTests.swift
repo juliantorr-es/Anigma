@@ -3,7 +3,7 @@
 
 import XCTest
 @testable import MediaFingerprintCapsule
-import MediaFingerprintNative
+@preconcurrency import MediaFingerprintNative
 
 final class MediaFingerprintCapsuleTests: XCTestCase {
     
