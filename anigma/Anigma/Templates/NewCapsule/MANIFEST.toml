@@ -1,8 +1,8 @@
-# NewCapsule Manifest
+# VizAggregationCapsule Manifest
 # Phase 0 Remediation Plan
 
 [capsule]
-name = "NewCapsule"
+name = "VizAggregationCapsule"
 version = "0.1.0"
 tier = 2
 description = "Template for new Anigma capsules"

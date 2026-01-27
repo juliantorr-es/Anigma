@@ -1,12 +1,12 @@
-/// NewCapsuleInternal.swift
-/// Internal implementation for the NewCapsule
+/// VizAggregationCapsuleInternal.swift
+/// Internal implementation for the VizAggregationCapsule
 /// This file contains the private logic that is not exposed to users.
 
 import Foundation
 
-/// Internal implementation of the NewCapsule processing logic.
+/// Internal implementation of the VizAggregationCapsule processing logic.
 /// Marked as Sendable to comply with Swift 6 concurrency requirements.
-internal final class NewCapsuleInternal: Sendable {
+internal final class VizAggregationCapsuleInternal: Sendable {
     
     /// Initialize the internal implementation.
     internal init() {}

@@ -1,5 +1,5 @@
-/// NewCapsule.swift
-/// Public API for the NewCapsule
+/// VizAggregationCapsule.swift
+/// Public API for the VizAggregationCapsule
 /// Phase 0 Template: Ready to pass all governance gates
 ///
 /// This file demonstrates:
@@ -8,18 +8,18 @@
 /// - Sendable compliance (Swift 6)
 ///
 /// To use this template:
-/// 1. Run: `./scripts/generate_capsule.sh MyNewCapsule Tier2`
-/// 2. Replace TODO markers in NewCapsuleInternal.swift with your implementation
-/// 3. Add tests in Tests/NewCapsuleTests.swift
+/// 1. Run: `./scripts/generate_capsule.sh MyVizAggregationCapsule Tier2`
+/// 2. Replace TODO markers in VizAggregationCapsuleInternal.swift with your implementation
+/// 3. Add tests in Tests/VizAggregationCapsuleTests.swift
 /// 4. Update README.md with real documentation
 
 import Foundation
 import CapsuleCore
 import TelemetryCore
 
-/// The NewCapsule public API
+/// The VizAggregationCapsule public API
 /// All methods are thread-safe and return structured CapsuleError on failure
-public final class NewCapsule: Sendable {
+public final class VizAggregationCapsule: Sendable {
     /// Unique identifier for this capsule instance
     public let id: String
     
@@ -27,9 +27,9 @@ public final class NewCapsule: Sendable {
     private let diagnostics: CapsuleDiagnostics
     
     /// Internal implementation (separated for clarity)
-    private nonisolated let impl: NewCapsuleInternal
+    private nonisolated let impl: VizAggregationCapsuleInternal
     
-    /// Initialize a NewCapsule instance
+    /// Initialize a VizAggregationCapsule instance
     /// - Parameters:
     ///   - id: Unique identifier for this capsule (UUID recommended)
     ///   - diagnostics: Diagnostics collector for observability
@@ -45,11 +45,11 @@ public final class NewCapsule: Sendable {
         
         self.id = id
         self.diagnostics = diagnostics ?? DefaultCapsuleDiagnostics()
-        self.impl = NewCapsuleInternal()
+        self.impl = VizAggregationCapsuleInternal()
         
         // Emit initialization event
         let span = self.diagnostics.beginSpan(
-            name: "NewCapsule.init",
+            name: "VizAggregationCapsule.init",
             category: "initialization",
             correlationID: nil,
             tags: ["capsule_id": id]
@@ -81,7 +81,7 @@ public final class NewCapsule: Sendable {
     ) async throws -> String {
         let corrID = correlationID ?? CorrelationIDContext.current
         let span = diagnostics.beginSpan(
-            name: "NewCapsule.process",
+            name: "VizAggregationCapsule.process",
             category: "processing",
             correlationID: corrID,
             tags: ["input_length": "\(input.count)"]
@@ -108,7 +108,7 @@ public final class NewCapsule: Sendable {
         // Emit diagnostic event (Contract 2)
         diagnostics.event(
             level: .debug,
-            category: "newcapsule.process",
+            category: "vizaggregationcapsule.process",
             message: "Processing input of length \(input.count)",
             correlationID: corrID,
             metadata: ["phase": "0", "tier": "template"]
@@ -121,7 +121,7 @@ public final class NewCapsule: Sendable {
             // Success event
             diagnostics.event(
                 level: .info,
-                category: "newcapsule.process",
+                category: "vizaggregationcapsule.process",
                 message: "Processing succeeded, output length: \(result.count)",
                 correlationID: corrID,
                 metadata: [:]
@@ -133,7 +133,7 @@ public final class NewCapsule: Sendable {
             // Map implementation errors to canonical CapsuleError
             diagnostics.event(
                 level: .error,
-                category: "newcapsule.process",
+                category: "vizaggregationcapsule.process",
                 message: "Processing failed: \(error)",
                 correlationID: corrID,
                 metadata: [:]
