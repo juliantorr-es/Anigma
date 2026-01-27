@@ -340,7 +340,8 @@ public actor SyntaxCapsule: CapsuleLifecycle {
         defer { span?.end(status: .ok) }
         
         let result = syntax_detect_language(source, UInt32(source.count), filenameHint)
-        let language = SupportedLanguage(rawValue: UInt32(result)) ?? .unknown
+        let languageVal = unsafeBitCast(result, to: UInt32.self)
+        let language = SupportedLanguage(rawValue: languageVal) ?? .unknown
         
         span?.addTag(key: "detected_language", value: language.name)
         
