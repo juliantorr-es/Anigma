@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "anigma-code-search": {
-      "url": "http://localhost:8000/sse",
-      "description": "Local MCP server for Anigma codebase search"
-    }
-  },
-  "defaultServer": "anigma-code-search"
-}
