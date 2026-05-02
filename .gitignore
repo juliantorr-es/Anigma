@@ -68,3 +68,27 @@ anigma/Vendor/lib/
 __MACOSX/
 ._*
 *.zip
+
+# Agent & Environment configuration
+.agents/
+.augment/
+.bob/
+.codeartsdoer/
+.codebuddy/
+.codemaker/
+.codestudio/
+.commandcode/
+.cortex/
+.crush/
+.devin/
+.auto-claude/
+.codegraph/
+
+# Local configuration
+.DS_Store
+.env*
+.vscode/
+.idea/
+
+# Repository infrastructure
+.git/
