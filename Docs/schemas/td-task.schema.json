@@ -267,6 +267,112 @@
         "minLength": 1
       },
       "description": "Free-form tags for categorization."
+    },
+    "research_stage": {
+      "type": ["string", "null"],
+      "enum": ["intake", "source_review", "code_map", "doctrine_alignment", "implementation_plan", "implementation", "verification", "proof", "closed"],
+      "default": null,
+      "description": "Current research stage for this task. See TD_RESEARCH_AND_TIMELINE_DOCTRINE.md for stage semantics."
+    },
+    "research_files": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "default": [],
+      "description": "List of files inspected as part of task-level research."
+    },
+    "inspected_symbols": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "default": [],
+      "description": "List of symbols inspected as part of task research. Only populated when actually inspected."
+    },
+    "change_map": {
+      "type": ["string", "null"],
+      "description": "Path to the task-level change-map.yaml file, if it exists."
+    },
+    "timeline": {
+      "type": ["string", "null"],
+      "description": "Path to the task-level timeline.yaml file, if it exists."
+    },
+    "decisions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "default": [],
+      "description": "List of decision IDs from the task's decision log or referencing epic decisions."
+    },
+    "canonical_doc_effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action", "path"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["add", "modify", "remove", "move", "deprecate"],
+            "description": "Type of documentation change."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the affected documentation file."
+          },
+          "summary": {
+            "type": ["string", "null"],
+            "description": "Brief description of the change."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["proposed", "approved", "implemented", "reverted"],
+            "default": "proposed",
+            "description": "Status of this documentation change."
+          }
+        },
+        "additionalProperties": false
+      },
+      "default": [],
+      "description": "Effects this task has or will have on canonical documentation."
+    },
+    "doctrine_alignment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule", "reference", "status"],
+        "properties": {
+          "rule": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The doctrine rule being aligned with."
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the doctrine document containing this rule."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["compliant", "needs_waiver", "violation", "unknown"],
+            "description": "Alignment status with this rule."
+          },
+          "waiver_requested": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether a waiver has been requested."
+          },
+          "waiver_approved": {
+            "type": ["string", "null"],
+            "description": "Who approved the waiver, if granted."
+          }
+        },
+        "additionalProperties": false
+      },
+      "default": [],
+      "description": "Task-level doctrine alignment for planned changes."
+    },
+    "affected_files": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "default": [],
+      "description": "Files expected to be affected by this task. Only populated when actually identified."
     }
   },
   "additionalProperties": false

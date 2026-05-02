@@ -158,6 +158,91 @@ changes:
     description: "Canonical document change log (this file)"
     author: "anigma-agent"
 
+  - date: "2025-01-15"
+    document: "Docs/governance/TD_RESEARCH_AND_TIMELINE_DOCTRINE.md"
+    action: "created"
+    change_type: "new-doctrine"
+    description: "TD Research State and Timeline System doctrine explaining the task-memory layer, research vs proof, change maps vs git diffs, doctrine alignment, canonical doc effects, timeline rollup, agent workflow, and GC interaction"
+    author: "anigma-agent"
+    related:
+      - "Docs/schemas/td-research.schema.json"
+      - "Docs/schemas/td-change-map.schema.json"
+      - "Docs/schemas/td-timeline-event.schema.json"
+      - "Docs/schemas/td-decision.schema.json"
+      - "Scripts/generate_td_research_scaffold.py"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-research.schema.json"
+    action: "created"
+    change_type: "new-schema"
+    description: "JSON Schema for TD research state artifacts with file_entry, symbol_entry, finding_entry, open_question definitions"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-change-map.schema.json"
+    action: "created"
+    change_type: "new-schema"
+    description: "JSON Schema for TD change map artifacts with line_range, file_modification, doctrine_alignment_entry definitions"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-timeline-event.schema.json"
+    action: "created"
+    change_type: "new-schema"
+    description: "JSON Schema for TD timeline event artifacts with full event structure and rollup support"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-decision.schema.json"
+    action: "created"
+    change_type: "new-schema"
+    description: "JSON Schema for TD decision log entries with options_considered, doctrine_alignment, and risk support"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-task.schema.json"
+    action: "updated"
+    change_type: "schema-extension"
+    description: "Added research_stage, research_files, inspected_symbols, change_map, timeline, decisions, canonical_doc_effects, doctrine_alignment, affected_files fields for task-level research tracking"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-epic.schema.json"
+    action: "updated"
+    change_type: "schema-extension"
+    description: "Added research_stage, research_files, inspected_symbols, change_map, timeline, decisions, canonical_doc_effects, doctrine_alignment, affected_files, expected_proof fields for epic-level research tracking"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Scripts/generate_td_research_scaffold.py"
+    action: "created"
+    change_type: "new-script"
+    description: "Deterministic scaffolding generator for research/, decisions/, timeline/ folders and task-level research files with conservative placeholders"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/project-timeline.md"
+    action: "created"
+    change_type: "new-timeline"
+    description: "Human-readable project timeline generated from project-timeline.yaml with seeded known events"
+    author: "anigma-agent"
+    related:
+      - "Docs/timeline/project-timeline.yaml"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/decisions.yaml"
+    action: "updated"
+    change_type: "timeline-extension"
+    description: "Added AD-004 (TD Research State and Timeline System) decision"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/canonical-doc-changes.yaml"
+    action: "updated"
+    change_type: "timeline-extension"
+    description: "Added entries for TD Research State and Timeline System artifacts"
+    author: "anigma-agent"
+
 change_types:
   - new-doctrine
   - new-manifest

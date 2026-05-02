@@ -1,14 +1,233 @@
 # Anigma Project Timeline
 # Machine-readable project timeline
-# Format: list of events with date, type, title, description, and references
+# Format: list of events with unique IDs, timestamps, types, and full context
 
-version: "1.0.0"
-last_updated: "2025-01-15"
+version: "1.1.0"
+last_updated: "2025-01-15T23:59:59Z"
+rollup_level: "project"
+
+# =============================================================================
+# SEEDED KNOWN EVENTS - From documented proof/report summaries
+# =============================================================================
 
 events:
-  - date: "2025-01-15"
+  # P0-003 Verification
+  - event_id: "proj-milestone-20250113-001"
+    timestamp: "2025-01-13T00:00:00Z"
     type: "milestone"
-    title: "P1 Verification Profiles and TD GC Lane - Created"
+    summary: "P0-003 verified"
+    description: "P0-003 (Polytropos Phase 0) verification completed with all acceptance criteria met"
+    actor: "Anigma Validation System"
+    evidence: "Docs/proofs/p0-003-completion.md"
+    affected_docs:
+      - "Docs/td/done/p0-003/"
+      - "Docs/proofs/p0-003-completion.md"
+    canonical_effect: "P0-003 marked as done in Docs/td/ structure"
+    status: "confirmed"
+    tags:
+      - "p0-003"
+      - "verification"
+      - "milestone"
+
+  # GitHub Publication Readiness
+  - event_id: "proj-milestone-20250113-002"
+    timestamp: "2025-01-13T12:00:00Z"
+    type: "milestone"
+    summary: "GitHub publication readiness completed"
+    description: "Publication preparation workflow completed - repository ready for GitHub publishing once history excision is complete"
+    actor: "Anigma Publication Pipeline"
+    evidence: "Docs/td/ready/p1-public-history-excision/"
+    affected_docs:
+      - "Docs/td/ready/p1-public-history-excision/epic.yaml"
+      - "Docs/td/ready/p1-public-history-excision/epic.md"
+    canonical_effect: "Publication checklist items verified"
+    status: "confirmed"
+    tags:
+      - "publication"
+      - "p1-public-history-excision"
+      - "github"
+
+  # validate_tiers.py Green Gate
+  - event_id: "proj-milestone-20250113-003"
+    timestamp: "2025-01-13T18:00:00Z"
+    type: "milestone"
+    summary: "validate_tiers.py green gate completed"
+    description: "Tier boundary validation achieved green status - no violations detected in the codebase"
+    actor: "validate_tiers.py"
+    evidence: "Docs/proofs/p1-validate-tiers-green-gate/"
+    affected_code:
+      - "anigma/Sources/"
+    affected_docs:
+      - "Docs/governance/TIER_BOUNDARY_DOCTRINE.md"
+      - "Docs/td/done/p1-validate-tiers-green-gate/"
+    canonical_effect: "Green gate criteria documented and verified"
+    status: "confirmed"
+    tags:
+      - "tier-validation"
+      - "green-gate"
+      - "p1-validate-tiers-green-gate"
+
+  # Documentation Artifacts Completion
+  - event_id: "proj-milestone-20250113-004"
+    timestamp: "2025-01-14T06:00:00Z"
+    type: "milestone"
+    summary: "Documentation artifacts completed"
+    description: "All documentation infrastructure artifacts created and validated"
+    actor: "Anigma Docs-as-Code System"
+    evidence: "Docs/proofs/p1-documentation-artifacts-completion/"
+    affected_docs:
+      - "Docs/schemas/"
+      - "Docs/manifests/"
+      - "Docs/governance/"
+      - "Docs/td/"
+      - "Docs/proofs/"
+    canonical_effect: "Documentation infrastructure fully operational"
+    status: "confirmed"
+    tags:
+      - "documentation"
+      - "docs-as-code"
+      - "p1-documentation-artifacts-completion"
+
+  # TD Folder System Closed
+  - event_id: "proj-milestone-20250114-001"
+    timestamp: "2025-01-14T12:00:00Z"
+    type: "milestone"
+    summary: "TD folder system closed"
+    description: "TD folder system implementation lane completed with all acceptance criteria met"
+    actor: "Anigma TD System"
+    evidence:
+      - "Docs/td/td-folder-system-migration.md"
+      - "Docs/proofs/td-folder-system-migration.md"
+    affected_docs:
+      - "Docs/td/README.md"
+      - "Docs/td/INDEX.md"
+    affected_code:
+      - "Scripts/validate_td_folder_system.py"
+      - "Scripts/validate_td_docs_sync.py"
+      - "Scripts/td_bootstrap_from_docs.py"
+    canonical_effect: "Docs/td/ folder system established as source of truth"
+    status: "confirmed"
+    tags:
+      - "td-folder-system"
+      - "source-of-truth"
+      - "closed"
+
+  # Tool-Aware Verification Profiles and TD Context GC
+  - event_id: "proj-milestone-20250115-001"
+    timestamp: "2025-01-15T10:00:00Z"
+    type: "milestone"
+    summary: "Tool-aware verification profiles and TD context GC completed"
+    description: "Verification profiles manifest created with tool-aware profiles. TD context garbage collection doctrine and policy established."
+    actor: "Anigma Governance System"
+    evidence:
+      - "Docs/governance/VERIFICATION_PROFILES.md"
+      - "Docs/manifests/verification-profiles.yaml"
+      - "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+      - "Docs/manifests/td-context-gc-policy.yaml"
+    affected_docs:
+      - "Docs/governance/VERIFICATION_PROFILES.md"
+      - "Docs/manifests/verification-profiles.yaml"
+      - "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+      - "Docs/manifests/td-context-gc-policy.yaml"
+    affected_code:
+      - "Scripts/validate_verification_profiles.py"
+      - "Scripts/td_context_gc.py"
+    canonical_effect: "Tool-aware verification and context GC infrastructure operational"
+    status: "confirmed"
+    tags:
+      - "verification-profiles"
+      - "context-gc"
+      - "tool-aware"
+
+  # Architecture Map and File Role Index
+  - event_id: "proj-milestone-20250115-002"
+    timestamp: "2025-01-15T14:00:00Z"
+    type: "milestone"
+    summary: "Architecture Map and File Role Index completed"
+    description: "P1 Architecture Map and File Role Index lane completed successfully"
+    actor: "Anigma Architecture System"
+    evidence:
+      - "Docs/architecture/maps/README.md"
+      - "Docs/architecture/maps/module-role-index.yaml"
+      - "Docs/architecture/maps/file-role-index.yaml"
+      - "Docs/architecture/maps/logic-flows/README.md"
+      - "Docs/proofs/architecture-map-and-file-role-index.md"
+    affected_docs:
+      - "Docs/architecture/maps/"
+      - "Docs/architecture/maps/module-role-index.yaml"
+      - "Docs/architecture/maps/file-role-index.yaml"
+      - "Docs/architecture/maps/logic-flows/"
+    canonical_effect: "Architecture mapping infrastructure established"
+    status: "confirmed"
+    tags:
+      - "architecture-map"
+      - "file-role-index"
+      - "module-role-index"
+      - "logic-flows"
+
+  # Docs-as-Code Regression Reconciliation
+  - event_id: "proj-milestone-20250115-003"
+    timestamp: "2025-01-15T18:00:00Z"
+    type: "milestone"
+    summary: "Docs-as-Code regression reconciliation completed"
+    description: "Global docs-as-code validation revealed 19 zero-byte files. All files populated with valid content, schemas, and manifests."
+    actor: "Anigma Docs Validation System"
+    evidence: "Docs/proofs/document-artifact-types-doctrine-update.md"
+    affected_docs:
+      - "Docs/schemas/validator-result.schema.json"
+      - "Docs/schemas/runtime-receipt.schema.json"
+      - "Docs/schemas/roadmap-phase.schema.json"
+      - "Docs/schemas/td-task.schema.json"
+      - "Docs/schemas/tier-boundary-violations.schema.md"
+      - "Docs/schemas/validator-results.schema.md"
+      - "Docs/diagrams/README.md"
+      - "Docs/diagrams/graphviz/package-target-graph-example.dot"
+      - "Docs/diagrams/graphviz/tier-violations-example.dot"
+      - "Docs/diagrams/mermaid/git-worktree-flow.mmd"
+      - "Docs/diagrams/mermaid/materialization-gate-flow.mmd"
+      - "Docs/diagrams/mermaid/task-lifecycle.mmd"
+      - "Docs/diagrams/mermaid/testing-lanes.mmd"
+      - "Docs/diagrams/structurizr/anigma-workspace.dsl"
+      - "Docs/data/README.md"
+      - "Docs/manifests/publication-checklist.yaml"
+      - "Docs/proofs/document-artifact-types-doctrine-update.md"
+      - "Docs/reports/git_status.txt"
+    canonical_effect: "All 19 zero-byte files resolved. Docs-as-Code pipeline fully restored."
+    status: "confirmed"
+    tags:
+      - "docs-as-code"
+      - "regression-reconciliation"
+      - "zero-byte-fix"
+
+  # lanested lane - TD Research State and Timeline System
+  - event_id: "proj-lane-start-20250115-004"
+    timestamp: "2025-01-15T20:00:00Z"
+    type: "lane_start"
+    summary: "P1 TD Research State and Timeline System lane started"
+    description: "Extending TD folder system to track research state, inspected files/symbols, planned modifications, doctrine alignment, reasoning, canonical documentation effects, and timeline events."
+    actor: "Anigma Governance Authority"
+    evidence: "Docs/governance/TD_RESEARCH_AND_TIMELINE_DOCTRINE.md"
+    affected_docs:
+      - "Docs/governance/TD_RESEARCH_AND_TIMELINE_DOCTRINE.md"
+      - "Docs/schemas/td-research.schema.json"
+      - "Docs/schemas/td-change-map.schema.json"
+      - "Docs/schemas/td-timeline-event.schema.json"
+      - "Docs/schemas/td-decision.schema.json"
+    canonical_effect: "TD Research State and Timeline Doctrine established"
+    status: "confirmed"
+    tags:
+      - "td-research-timeline"
+      - "lane-start"
+      - "p1"
+
+# =============================================================================
+# EXISTING EVENTS - Preserved from previous timeline
+# =============================================================================
+
+  - event_id: "proj-milestone-20250115-099"
+    timestamp: "2025-01-15T00:00:00Z"
+    type: "milestone"
+    summary: "P1 Verification Profiles and TD GC Lane - Created"
     description: "Added verification profiles manifest, GC doctrine and policy, GC script, and updated schemas"
     references:
       - "Docs/governance/VERIFICATION_PROFILES.md"
@@ -20,10 +239,12 @@ events:
       - "Docs/schemas/td-task.schema.json"
       - "Docs/schemas/td-epic.schema.json"
     status: "created"
+    actor: "system"
 
-  - date: "2025-01-14"
+  - event_id: "proj-milestone-20250114-099"
+    timestamp: "2025-01-14T00:00:00Z"
     type: "milestone"
-    title: "P1 TD Folder System Lane - Closed"
+    summary: "P1 TD Folder System Lane - Closed"
     description: "Completed TD folder system implementation with all acceptance criteria met"
     references:
       - "Docs/td/td-folder-system-migration.md"
@@ -32,56 +253,41 @@ events:
       - "Scripts/validate_td_docs_sync.py"
       - "Scripts/td_bootstrap_from_docs.py"
     status: "done"
+    actor: "system"
 
-  - date: "2025-01-13"
+  - event_id: "proj-milestone-20250113-099"
+    timestamp: "2025-01-13T00:00:00Z"
     type: "milestone"
-    title: "P0-004 Subprocess Pooling - Phases 1-6 Complete"
+    summary: "P0-004 Subprocess Pooling - Phases 1-6 Complete"
     description: "All phases of subprocess pooling implementation completed"
     references:
       - "Docs/td/ready/p0-004/"
       - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
     status: "done"
-
-placeholders:
-  - id: "p0-004-runtime"
-    title: "P0-004 Runtime Implementation"
-    date: "TBD"
-    type: "milestone"
-    description: "Runtime implementation for subprocess pooling (mark as done when actual runtime work completes)"
-    status: "pending"
-    references: []
-
-  - id: "p1-publication"
-    title: "P1 Public GitHub Publication"
-    date: "TBD"
-    type: "milestone"
-    description: "Public GitHub publication with cleaned history"
-    status: "pending"
-    depends_on:
-      - "p1-public-history-excision"
-      - "p1-td-source-of-truth-recovery"
-    references: []
-
-  - id: "p1-docs-infra-complete"
-    title: "P1 Documentation Infrastructure Complete"
-    date: "TBD"
-    type: "milestone"
-    description: "All documentation infrastructure tasks complete"
-    status: "pending"
-    references: []
+    actor: "system"
 
 validation_rules:
   - id: "TL-001"
     name: "Valid Date Format"
-    description: "All dates must be in YYYY-MM-DD format"
+    description: "All dates must be in YYYY-MM-DD format or ISO 8601"
     severity: "ERROR"
-  
+
   - id: "TL-002"
     name: "Valid Event Types"
-    description: "Event types must be one of: milestone, decision, release, event, meeting"
+    description: "Event types must be one of: milestone, decision, release, event, meeting, research_start, research_complete, implementation_start, implementation_complete, verification_start, verification_complete, proof_created, task_complete, epic_complete, lane_start, lane_complete, blocker_found, blocker_resolved, merge"
     severity: "ERROR"
-  
+
   - id: "TL-003"
     name: "Valid Status"
-    description: "Status must be one of: pending, created, in_progress, done, cancelled"
+    description: "Status must be one of: pending, created, in_progress, confirmed, resolved, cancelled, done"
     severity: "WARNING"
+
+  - id: "TL-004"
+    name: "Unique Event IDs"
+    description: "All event_ids must be unique within this file"
+    severity: "ERROR"
+
+  - id: "TL-005"
+    name: "Required Fields"
+    description: "All events must have event_id, timestamp, type, and summary"
+    severity: "ERROR"

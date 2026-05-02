@@ -51,6 +51,31 @@ decisions:
     references:
       - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
 
+  - id: "AD-004"
+    date: "2025-01-15"
+    title: "TD Research State and Timeline System"
+    description: "Extend TD folder system with research state tracking, change maps, decision logs, and timeline event rollup"
+    status: "adopted"
+    context:
+      - "Previously: Research context was ephemeral (TD database only)"
+      - "Problem: Knowledge lost across TD resets, agent handoffs, context switches"
+      - "Solution: Durable task-memory layer in Docs/td/ with research/, decisions/, timeline/ structure"
+    impacts:
+      - "Docs/governance/TD_RESEARCH_AND_TIMELINE_DOCTRINE.md"
+      - "Docs/schemas/td-research.schema.json"
+      - "Docs/schemas/td-change-map.schema.json"
+      - "Docs/schemas/td-timeline-event.schema.json"
+      - "Docs/schemas/td-decision.schema.json"
+      - "Docs/schemas/td-task.schema.json (updated)"
+      - "Docs/schemas/td-epic.schema.json (updated)"
+      - "Scripts/generate_td_research_scaffold.py"
+      - "Docs/td/<status>/<epic>/research/"
+      - "Docs/td/<status>/<epic>/decisions/"
+      - "Docs/td/<status>/<epic>/timeline/"
+    references:
+      - "Docs/governance/TD_RESEARCH_AND_TIMELINE_DOCTRINE.md"
+      - "Scripts/generate_td_research_scaffold.py"
+
 validation_rules:
   - id: "AD-001"
     name: "Valid Decision Status"

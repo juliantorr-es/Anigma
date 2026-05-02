@@ -213,6 +213,144 @@ The bootstrap is **idempotent** - running it multiple times will not duplicate t
 7. Run validation: `python3 Scripts/validate_td_docs_sync.py`
 8. Bootstrap TD: `python3 Scripts/td_bootstrap_from_docs.py --apply`
 
+## Research and Timeline System
+
+The TD Research State and Timeline System provides a **durable task-memory layer** that tracks research state, inspected files/symbols, planned modifications, doctrine alignment, reasoning, canonical documentation effects, and timeline events.
+
+### Research State Workflow
+
+Each task progresses through research stages:
+
+| Stage | Trigger | Required Artifacts | Exit Criteria |
+|-------|---------|-------------------|---------------|
+| `intake` | Task created | `task.yaml`, `task.md` | Task has ID, title, priority |
+| `source_review` | Task claimed | `research-log.md` started | Docs/roadmaps/proofs identified |
+| `code_map` | Source files identified | `file-map.yaml`, `symbol-map.yaml` | Files/symbols listed |
+| `doctrine_alignment` | Files/symbols known | `change-map.yaml` with `doctrine_alignment` | Doctrine rules addressed |
+| `implementation_plan` | Doctrine aligned | `change-map.yaml` complete, `reasoning.md` | Approved shape, non-goals defined |
+| `implementation` | Plan approved | Implementation started | Worktree active |
+| `verification` | Implementation done | Test results, validator outputs | All profiles pass |
+| `proof` | Verification passes | Proof artifacts in `Docs/proofs/` | All criteria met |
+| `closed` | Proof reconciled | All artifacts complete | Status = done/complete |
+
+See `Docs/governance/TD_RESEARCH_AND_TIMELINE_DOCTRINE.md` for full doctrine.
+
+### Extended File Structure
+
+```
+Docs/td/<status>/<epic>/
+├── epic.md
+├── epic.yaml
+├── research/                    # Epic-level research state
+│   ├── research-log.md         # Narrative research log
+│   ├── findings.yaml           # Structured findings
+│   ├── file-map.yaml           # Files identified
+│   ├── symbol-map.yaml         # Symbols identified
+│   └── open-questions.yaml     # Unresolved questions
+├── decisions/                  # Epic-level decisions
+│   └── decision-log.yaml       # Decision log
+├── timeline/                   # Epic-level timeline
+│   ├── timeline.md             # Human-readable timeline
+│   └── events.yaml             # Machine-readable events
+└── tasks/
+    └── <task-id>/
+        ├── task.md
+        ├── task.yaml
+        ├── research.md          # Task-level research
+        ├── change-map.yaml      # Planned modifications
+        ├── reasoning.md         # Decision rationale
+        └── timeline.yaml        # Task events
+```
+
+### Research Artifacts
+
+| File | Purpose | When Created | Schema |
+|------|---------|--------------|--------|
+| `research-log.md` | Narrative of investigation | First inspection | None (markdown) |
+| `findings.yaml` | Structured discoveries | After initial review | `td-research.schema.json` |
+| `file-map.yaml` | Files inspected | When files identified | `td-research.schema.json` |
+| `symbol-map.yaml` | Symbols inspected | When code reviewed | `td-research.schema.json` |
+| `open-questions.yaml` | Unresolved questions | When questions arise | `td-research.schema.json` |
+| `change-map.yaml` | Planned modifications | After doctrine alignment | `td-change-map.schema.json` |
+| `reasoning.md` | Decision rationale | After options considered | None (markdown) |
+| `decision-log.yaml` | Architectural decisions | When decisions made | `td-decision.schema.json` |
+| `timeline.yaml` / `events.yaml` | Timeline events | Throughout lifecycle | `td-timeline-event.schema.json` |
+
+### Scaffolding Generation
+
+To create research/timeline scaffolding for active epics and tasks:
+
+```bash
+# Dry-run: show what would be created
+python3 Scripts/generate_td_research_scaffold.py --dry-run
+
+# Write: create missing files
+python3 Scripts/generate_td_research_scaffold.py --write
+
+# Force overwrite (use with caution)
+python3 Scripts/generate_td_research_scaffold.py --write --overwrite
+
+# Specific epic only
+python3 Scripts/generate_td_research_scaffold.py --write --epic p0-004
+
+# Specific status only
+python3 Scripts/generate_td_research_scaffold.py --write --status ready
+```
+
+The generator uses **conservative placeholders**:
+- `research_stage: intake` (default starting stage)
+- `status: not_started` (for change maps and research)
+- `inspected_symbols: []` (never invent symbols)
+- `affected_files: []` (never invent files)
+- `line_ranges: []` (never invent line numbers)
+
+**Do NOT invent history, inspected file paths, symbols, or line numbers.**
+
+### Timeline Rollup
+
+Events roll up from task to epic to project:
+
+```
+Task Timeline (task/timeline.yaml)
+    ↓ Rollup
+Epic Timeline (epic/timeline/events.yaml)
+    ↓ Rollup
+Project Timeline (Docs/timeline/project-timeline.yaml)
+```
+
+Each timeline file contains events with unique IDs, timestamps, and references.
+
+### Doctrine Alignment Requirement
+
+Before implementation begins, every task that modifies code or documentation **must** record:
+
+```yaml
+# In change-map.yaml or task.yaml
+doctrine_alignment:
+  - rule: "The specific rule from a doctrine document"
+    reference: "Docs/governance/SOME_DOCTRINE.md"
+    status: compliant  # or needs_waiver, violation
+    waiver_requested: false
+    waiver_approved: null
+```
+
+All alignment claims must reference specific doctrine documents. Non-compliant items must have explicit waivers or be blocked.
+
+### Canonical Documentation Effects
+
+Tasks that modify `Docs/` (excluding `Docs/td/` and `Docs/proofs/`) must record effects:
+
+```yaml
+# In task.yaml or epic.yaml
+canonical_doc_effects:
+  - action: add  # or modify, remove, move, deprecate
+    path: Docs/some/file.md
+    summary: "What this change does"
+    status: proposed  # or approved, implemented, reverted
+```
+
+Canonical doc effects roll up to `Docs/timeline/canonical-doc-changes.yaml`.
+
 ## Do NOT Do
 
 - ❌ Store canonical task data only in TD database
@@ -220,3 +358,5 @@ The bootstrap is **idempotent** - running it multiple times will not duplicate t
 - ❌ Create tasks without corresponding Docs/td/ entries
 - ❌ Mark tasks complete without proof artifacts
 - ❌ Move or duplicate `Docs/proofs/` content into task folders
+- ❌ Invent inspected files, symbols, or line numbers in research artifacts
+- ❌ Mark research stages complete without the required artifacts
