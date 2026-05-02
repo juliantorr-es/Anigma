@@ -1,0 +1,21 @@
+# VizAggregationCapsule Manifest
+# Phase 0 Remediation Plan
+
+[capsule]
+name = "VizAggregationCapsule"
+version = "0.1.0"
+tier = 1
+description = "Template for new Anigma capsules"
+owner = "Core Team"
+
+[governance]
+swift_version = "6.0"
+strict_concurrency = true
+type_authority = "Capsule"
+memory_limit = "128MB"
+cpu_limit = "0.5"
+
+[capabilities]
+networking = false
+filesystem = false
+subprocesses = false

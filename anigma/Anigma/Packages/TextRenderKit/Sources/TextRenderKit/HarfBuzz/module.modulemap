@@ -1,0 +1,5 @@
+module CHarfBuzz {
+    header "HarfBuzzBridge.h"
+    link "HarfBuzz"
+    export *
+}

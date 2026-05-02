@@ -1,0 +1,12 @@
+warning: 'anigma': Invalid Exclude '/Users/user/Developer/GitHub/Anigma_clean/anigma/Native/Shims/src/MediaFingerprintCapsule': File not found.
+warning: 'anigma': Source files for target TableExtractionNative should be located under 'Sources/TableExtractionNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target MathOCRNative should be located under 'Sources/MathOCRNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target CitationExtractionNative should be located under 'Sources/CitationExtractionNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target ReferenceResolutionNative should be located under 'Sources/ReferenceResolutionNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target DiffNative should be located under 'Sources/DiffNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': 'ModelRegistry' was identified as an executable target given the presence of a 'main' file. Starting with tools version 5.4.0 executable targets should be declared as 'executableTarget()'
+warning: 'anigma': 'AnigmaMCPExecutable' was identified as an executable target given the presence of a 'main' file. Starting with tools version 5.4.0 executable targets should be declared as 'executableTarget()'
+warning: 'anigma': dependency 'swift-tree-sitter' is not used by any target
+error: Unknown subcommand or plugin name ‘dump-pkg-graph’
+Usage: swift package <options> <subcommand>
+  See 'package -help' for more information.

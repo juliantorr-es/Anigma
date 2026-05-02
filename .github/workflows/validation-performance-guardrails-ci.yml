@@ -1,0 +1,36 @@
+name: Validation Performance Guardrails CI
+
+on:
+  pull_request:
+    paths:
+      - 'anigma/Package.swift'
+      - 'anigma/Scripts/run_performance_guardrails.sh'
+      - 'anigma/Anigma/Packages/SceneGraphCapsule/**'
+      - 'anigma/Anigma/Packages/CoreUtilities/Sources/Capsules/MetricsCollectorCapsule/**'
+      - '.github/workflows/validation-performance-guardrails-ci.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'anigma/Package.swift'
+      - 'anigma/Scripts/run_performance_guardrails.sh'
+      - 'anigma/Anigma/Packages/SceneGraphCapsule/**'
+      - 'anigma/Anigma/Packages/CoreUtilities/Sources/Capsules/MetricsCollectorCapsule/**'
+      - '.github/workflows/validation-performance-guardrails-ci.yml'
+
+jobs:
+  validation-performance-guardrails-ci:
+    name: Validation Performance Guardrails CI
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+
+      - name: Run strict guardrails
+        run: bash ./anigma/Scripts/run_performance_guardrails.sh . strict

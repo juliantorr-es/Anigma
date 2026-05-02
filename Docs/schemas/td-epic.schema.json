@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anigma.dev/schemas/td-epic.schema.json",
+  "title": "TD Epic Descriptor Schema",
+  "description": "Schema for validating Anigma epic descriptors in Docs/td/. Each epic must have a corresponding epic.yaml file that conforms to this schema.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "priority",
+    "status",
+    "lane"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique epic identifier. Must match the directory name.",
+      "examples": ["p0-003-polytropos-phase0", "p0-004-anigmad-subprocess-pooling", "p1-td-source-of-truth-recovery"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Human-readable epic title. Minimum 10 characters."
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["P0", "P1", "P2", "P3", "P4"],
+      "description": "Overall priority level for this epic."
+    },
+    "type": {
+      "type": "string",
+      "default": "epic",
+      "enum": ["epic"],
+      "description": "Must be 'epic' for epic descriptors."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["new", "ready", "in_progress", "in_review", "complete", "done", "blocked", "cancelled", "archived"],
+      "description": "Current status. Must match the directory location under Docs/td/."
+    },
+    "lane": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Functional grouping lane for this epic."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "description": "One-sentence summary for quick scanning."
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the epic's purpose and scope."
+    },
+    "recommended_worktree": {
+      "type": ["string", "null"],
+      "description": "Default worktree path for all tasks in this epic.",
+      "examples": ["anigma/", "docs/", "anigma/Packages/SubprocessPooling/"]
+    },
+    "source_docs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of paths to source documentation that define this epic."
+    },
+    "related_docs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of paths to related documentation (roadmaps, ADRs, architecture docs)."
+    },
+    "proofs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of paths to proof artifacts under Docs/proofs/ for the epic itself."
+    },
+    "diagrams": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of paths to epic-specific diagrams."
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of task IDs that belong to this epic."
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of child task IDs (alias for tasks)."
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Epic-level acceptance criteria that apply to all child tasks."
+    },
+    "non_goals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Epic-level non-goals."
+    },
+    "td_labels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Additional labels to apply to all tasks in this epic when creating TD entries."
+    },
+    "worktree": {
+      "type": ["string", "null"],
+      "description": "Alias for recommended_worktree."
+    },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of task/epic IDs that this epic blocks."
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of task/epic IDs that must be completed before this epic can start."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-form notes about this epic."
+    },
+    " risk": {
+      "type": ["string", "null"],
+      "description": "Risk assessment for this epic."
+    },
+    "created": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when this epic was initially created."
+    },
+    "updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when this epic was last updated."
+    },
+    "completion_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "Date when this epic was marked complete."
+    },
+    "verification_profiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "List of verification profile IDs from verification-profiles.yaml that apply to all tasks in this epic by default."
+    },
+    "verification_overrides": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Override verification profile settings for this specific epic."
+    },
+    "gc_policy": {
+      "type": "string",
+      "enum": ["retain_all", "compact_on_complete", "compact_on_done", "archive_only"],
+      "default": "retain_all",
+      "description": "Garbage collection policy for epic context: retain_all (keep all artifacts), compact_on_complete (remove worktrees on complete), compact_on_done (remove worktrees on done), archive_only (archive but don't delete). Default is retain_all for epics to preserve context for child tasks."
+    },
+    "context_load_policy": {
+      "type": "string",
+      "enum": ["eager", "lazy", "on_demand", "minimal"],
+      "default": "eager",
+      "description": "Context loading policy: eager (load all context upfront), lazy (load as needed), on_demand (load only when explicitly requested), minimal (load only descriptor, not full context). Default is eager for epics."
+    }
+  },
+  "additionalProperties": false
+}

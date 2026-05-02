@@ -1,0 +1,174 @@
+%% Title: TD Bootstrap Flow
+%% Doc ID: TD_BOOTSTRAP_FLOW
+%% Domain: TD System / Governance
+%% Version: 1.0.0
+%% Last Updated: 2026-05-02
+%% Related: Docs/architecture/maps/module-role-index.yaml (Governance Validators)
+%% Related: Docs/architecture/maps/file-role-index.yaml (td_bootstrap_from_docs.py)
+
+flowchart TD
+    %% ========================================================================
+    %% TD BOOTSTRAP FLOW - ANIGMA TD SYSTEM
+    %% ========================================================================
+    
+    %% ----------------------------------------------------------------------
+    %% STYLES
+    %% ----------------------------------------------------------------------
+    classDef script fill:#e91e63,stroke:#333,stroke-width:2px,color:#fff
+    classDef validator fill:#2196f3,stroke:#333,stroke-width:2px,color:#fff
+    classDef manifest fill:#ff9800,stroke:#333,stroke-width:2px,color:#000
+    classDef doctrine fill:#9c27b0,stroke:#333,stroke-width:2px,color:#fff
+    classDef proof fill:#4caf50,stroke:#333,stroke-width:2px,color:#000
+    classDef success fill:#8bc34a,stroke:#333,stroke-width:2px,color:#000
+    classDef failure fill:#f44336,stroke:#333,stroke-width:2px,color:#fff
+    
+    %% ----------------------------------------------------------------------
+    %% START
+    %% ----------------------------------------------------------------------
+    Start([Agent/CLI Triggers\nBootstrap]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% MAIN FLOW
+    %% ----------------------------------------------------------------------
+    Start -->|--emit-commands| TriggerBootstrap
+    
+    TriggerBootstrap["td_bootstrap_from_docs.py\n--emit-commands"]:::script
+    TriggerBootstrap --> ScanDocs
+    
+    ScanDocs["Scan Docs/ Directory\n(find, glob patterns)"]
+    ScanDocs --> IdentifyDocuments
+    
+    IdentifyDocuments["Identify TD-Relevant Documents\n(tasks, epics, proofs, ADRs)"]
+    IdentifyDocuments --> ExtractMetadata
+    
+    ExtractMetadata["Extract Metadata\n(id, title, priority, lane, status)"]
+    ExtractMetadata --> ApplyHeuristics
+    
+    ApplyHeuristics["Apply Naming Heuristics\n(Convention-based detection)"]
+    ApplyHeuristics --> GenerateDescriptors
+    
+    GenerateDescriptors["Generate Descriptor YAML\n(from templates + metadata)"]
+    GenerateDescriptors --> ValidateDescriptors
+    
+    ValidateDescriptors["Validate Against Schemas\n(td-epic.schema.json\n td-task.schema.json)"]:::validator
+    ValidateDescriptors -->|Valid| CreateDescriptors
+    ValidateDescriptors -->|Invalid| SchemaViolation
+    
+    CreateDescriptors["Create/Update Descriptors\n(Docs/td/<status>/<id>/)"]
+    CreateDescriptors -->|Commands emitted| EmitCommands
+    
+    EmitCommands["Emit Bootstrap Commands\n(reproducibility)"]:::proof
+    EmitCommands --> RunValidators
+    
+    RunValidators["Run Governance Validators"]:::validator
+    RunValidators --> RunFolderValidation
+    RunValidators --> RunSyncValidation
+    
+    RunFolderValidation["validate_td_folder_system.py"]:::validator
+    RunSyncValidation["validate_td_docs_sync.py"]:::validator
+    
+    RunFolderValidation -->|Pass| FolderValidationOK
+    RunSyncValidation -->|Pass| SyncValidationOK
+    RunFolderValidation -->|Fail| FolderValidationFail
+    RunSyncValidation -->|Fail| SyncValidationFail
+    
+    FolderValidationOK["Folder Structure Valid"]:::success
+    SyncValidationOK["Sync Valid"]:::success
+    
+    FolderValidationOK --> AllPass
+    SyncValidationOK --> AllPass
+    
+    AllPass([SUCCESS: Descriptors\nBootstrapped and Validated]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% FAILURE PATHS
+    %% ----------------------------------------------------------------------
+    SchemaViolation["FAIL: Schema Violation\n(Descriptor doesn't match schema)"]:::failure
+    FolderValidationFail["FAIL: Folder Structure\n(Wrong location/naming)"]:::failure
+    SyncValidationFail["FAIL: Sync Mismatch\n(source_docs don't exist)"]:::failure
+    
+    SchemaViolation --> EmitSchemaError
+    FolderValidationFail --> EmitFolderError
+    SyncValidationFail --> EmitSyncError
+    
+    EmitSchemaError["Emit Error Proof\n(SchemaViolation)"]:::proof
+    EmitFolderError["Emit Error Proof\n(FolderStructureError)"]:::proof
+    EmitSyncError["Emit Error Proof\n(SyncMismatch)"]:::proof
+    
+    EmitSchemaError --> FinalFailure
+    EmitFolderError --> FinalFailure
+    EmitSyncError --> FinalFailure
+    
+    FinalFailure([FAILURE: Bootstrap Failed]):::failure
+    
+    %% ----------------------------------------------------------------------
+    %% DOCTRINE GATES
+    %% ----------------------------------------------------------------------
+    DoctrineCheck["Source of Truth Doctrine\n(Docs/td descriptors authoritative)"]:::doctrine
+    SyncGate["Sync Gate\n(source_docs must point to real files)"]:::doctrine
+    SchemaGate["Schema Gate\n(Descriptors must validate against JSON Schema)"]:::doctrine
+    
+    %% ----------------------------------------------------------------------
+    %% ANNOTATIONS
+    %% ----------------------------------------------------------------------
+    subgraph BootstrapScript["td_bootstrap_from_docs.py"]
+        TriggerBootstrap
+        ScanDocs
+        IdentifyDocuments
+        ExtractMetadata
+        ApplyHeuristics
+        GenerateDescriptors
+        ValidateDescriptors
+        EmitCommands
+        CreateDescriptors
+    end
+    
+    subgraph Governance["Governance Validation"]
+        RunFolderValidation
+        RunSyncValidation
+        DoctrineCheck
+        SyncGate
+        SchemaGate
+    end
+    
+    subgraph ProofPoints["Proof/Evidence Points"]
+        EmitCommands
+        EmitSchemaError
+        EmitFolderError
+        EmitSyncError
+    end
+    
+    subgraph Manifests["Schema Manifests"]
+        Schema1["td-epic.schema.json"]:::manifest
+        Schema2["td-task.schema.json"]:::manifest
+    end
+
+%% ========================================================================
+%% LEGEND
+%% Type - color - Description
+%% Script - Pink - Bootstrap/generation scripts
+%% Validator - Blue - Validation scripts
+%% Manifest - Orange - Schema/manifest files
+%% Doctrine - Purple - Source of Truth doctrine gates
+%% Proof - Green - Evidence/receipt emission
+%% Success - Lt Green - Successful completion
+%% Failure - Red - Error/failure state
+%% ========================================================================
+
+%% ========================================================================
+%% DOCTRINE REFERENCES
+%% - Source of Truth: Docs/td descriptors are authoritative
+%% - Schema Enforcement: All descriptors must validate against JSON schemas
+%% - Sync Validation: source_docs must point to real files
+%% - Reproducibility: Commands emitted for reproducibility
+%% - Proof on Error: All failures emit error proofs
+%% ========================================================================
+
+%% ========================================================================
+%% FILE REFERENCES
+%% - Scripts/td_bootstrap_from_docs.py (bootstrap script)
+%% - Scripts/validate_td_folder_system.py (folder validator)
+%% - Scripts/validate_td_docs_sync.py (sync validator)
+%% - Docs/schemas/td-epic.schema.json (epic schema)
+%% - Docs/schemas/td-task.schema.json (task schema)
+%% ========================================================================

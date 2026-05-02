@@ -1,0 +1,8 @@
+Anigma Sidecar Daemon
+=====================
+anigmad started
+  API version: 1.0.0
+  Socket: /Users/user/Library/Caches/anigma/anigmad.sock
+  TCP: disabled
+
+Received SIGTERM, shutting down...

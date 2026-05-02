@@ -1,0 +1,6 @@
+.build
+.swiftpm
+Vendor
+.build/stats
+Packages/*/Tests
+Packages/*/Examples

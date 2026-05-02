@@ -1,0 +1,26 @@
+module CHarfBuzz {
+    umbrella header "harfbuzz_wrapper.h"
+    link "harfbuzz"
+    link "freetype"
+    export *
+    
+    module * {
+        export *
+    }
+}
+
+// System module for HarfBuzz
+module HarfBuzzSystem [system] {
+    header "/opt/homebrew/Cellar/harfbuzz/14.2.0/include/harfbuzz/hb.h"
+    header "/opt/homebrew/Cellar/harfbuzz/14.2.0/include/harfbuzz/hb-ft.h"
+    link "harfbuzz"
+    export *
+}
+
+// System module for FreeType
+module FreeTypeSystem [system] {
+    header "/opt/homebrew/opt/freetype/include/freetype2/ft2build.h"
+    header "/opt/homebrew/opt/freetype/include/freetype2/freetype.h"
+    link "freetype"
+    export *
+}

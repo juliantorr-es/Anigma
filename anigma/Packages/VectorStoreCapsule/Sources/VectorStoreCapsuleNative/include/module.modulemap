@@ -1,0 +1,4 @@
+module VectorStoreNative {
+    header "VectorStoreCapsuleNative.hpp"
+    export *
+}

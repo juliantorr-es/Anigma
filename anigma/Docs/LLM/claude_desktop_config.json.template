@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "anigma": {
+      "command": "/usr/local/bin/anigma-mcp",
+      "args": [],
+      "disabled": false,
+      "autoApprove": [
+        "read_file",
+        "list_artifacts",
+        "list_models",
+        "context_search",
+        "get_system_health",
+        "list_active_alerts",
+        "database_query",
+        "trace_query",
+        "git_diff",
+        "verify_evidence_chain"
+      ],
+      "env": {
+        "ANIGMA_MCP_ENABLE": "true",
+        "ANIGMA_LOG_LEVEL": "info"
+      }
+    }
+  }
+}

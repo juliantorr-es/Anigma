@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Anigma Installer Pre-Install Script
+
+set -e
+
+echo "🔍 Checking for previous Anigma installation..."
+
+# Stop existing daemon if running
+if launchctl list | grep -q "com.anigma.daemon"; then
+    echo "Stopping existing AnigmaDaemon..."
+    launchctl unload "$HOME/Library/LaunchAgents/com.anigma.daemon.plist" 2>/dev/null || true
+    sleep 2
+fi
+
+# Kill existing processes
+pkill -f "anigmad" 2>/dev/null || true
+sleep 1
+
+exit 0

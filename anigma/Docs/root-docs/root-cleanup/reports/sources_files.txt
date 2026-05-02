@@ -1,0 +1,13 @@
+AnigmaApp.swift
+AppModel.swift
+AssistantConversationStore.swift
+AssistantSurfacePolicy.swift
+AssistantView.swift
+BinaryManager.swift
+BootstrappedAppClient.swift
+ConversationSessionManager.swift
+DoctrineGovernanceView.swift
+LauncherRootView.swift
+LauncherRuntimeModel.swift
+PrivilegedSurfaces.swift
+ReceiptInspectorView.swift

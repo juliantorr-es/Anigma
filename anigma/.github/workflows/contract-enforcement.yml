@@ -1,0 +1,74 @@
+name: Contract Enforcement
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  accessibility-contract:
+    name: Accessibility Contract
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Accessibility Checks
+        run: ./Scripts/ci/check-accessibility.sh
+
+  design-tokens-contract:
+    name: Design Tokens Contract
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Design Token Checks
+        run: ./Scripts/ci/check-design-tokens.sh
+
+  performance-contract:
+    name: Performance Contract
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+      
+      - name: Run Performance Checks
+        run: ./Scripts/ci/check-performance-budgets.sh
+
+  type-authority:
+    name: Type Authority
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check Type Authority
+        run: ./Scripts/ci/check-type-authority.sh
+
+  contract-summary:
+    name: Contract Summary
+    runs-on: macos-latest
+    needs: [accessibility-contract, design-tokens-contract, performance-contract, type-authority]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate Contract Report
+        run: |
+          echo "# Contract Enforcement Report" > contract-report.md
+          echo "" >> contract-report.md
+          echo "## Status" >> contract-report.md
+          echo "- Accessibility: ${{ needs.accessibility-contract.result }}" >> contract-report.md
+          echo "- Design Tokens: ${{ needs.design-tokens-contract.result }}" >> contract-report.md
+          echo "- Performance: ${{ needs.performance-contract.result }}" >> contract-report.md
+          echo "- Type Authority: ${{ needs.type-authority.result }}" >> contract-report.md
+          cat contract-report.md
+      
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-report
+          path: contract-report.md

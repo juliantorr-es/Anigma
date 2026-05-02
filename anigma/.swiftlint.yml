@@ -1,0 +1,108 @@
+# SwiftLint Custom Rules for Contract Enforcement
+
+# Note: SwiftLint custom rules are disabled during initial noise reduction
+# Re-enable selectively after core linting issues are resolved
+# 
+# Gate 1 linter (no raw Data/[UInt8]/[Float] in hot-path contracts) is implemented as a
+# standalone script at Scripts/lint_hot_path_payloads.py for more precise control.
+# Run: python3 Scripts/lint_hot_path_payloads.py
+custom_rules: {}
+
+# Standard SwiftLint Rules
+# NOTE: P2 governance backlog is intentionally deferred.
+# See Docs/development/swiftlint-remediation-plan.md (P0/P1/P2 lane sequencing).
+disabled_rules:
+  - line_length  # We have long lines in some places
+  - function_body_length  # Some complex views are unavoidable
+  - type_body_length  # AppStore is legitimately large
+  - explicit_type_interface  # P2 deferred backlog control
+  - explicit_acl  # P2 deferred backlog control
+  - explicit_top_level_acl  # P2 deferred backlog control
+
+opt_in_rules:
+  # P0 safety-first rules (keep active)
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - fatal_error_message
+  - first_where
+  - prohibited_super_call
+
+  # P1 maintainability/style rules (active during normal remediation)
+  - closure_spacing
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_parameters
+  - vertical_parameter_alignment_on_call
+  - strict_fileprivate
+  - trailing_closure
+  - joined_default_parameter
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - operator_usage_whitespace
+  - unneeded_parentheses_in_closure_argument
+  - literal_expression_end_indentation
+  - sorted_first_last
+  - toggle_bool
+  - private_action
+  - private_outlet
+  - overridden_super_call
+  - yoda_condition
+  - empty_count
+  - empty_string
+
+  # P2 governance rules are listed for visibility, but disabled above.
+  - explicit_init
+  - explicit_type_interface
+  - explicit_acl
+  - explicit_top_level_acl
+
+# Exclusions
+excluded:
+  - .build
+  - Deprecated
+  - ThirdParty
+  - Tools/Vendor
+  - Native/ThirdParty
+  - Packages/CHarfBuzz
+  - Packages/CFreeType
+  - Packages/CPDFium
+  - Packages/AnigmaNativeShims
+
+# Specific Rule Configurations
+identifier_name:
+  min_length: 1  # Allow single-letter variables in closures
+  max_length: 60
+  excluded:
+    - id
+    - url
+    - URL
+    - x
+    - y
+    - z
+    - i
+    - j
+    - k
+
+type_name:
+  min_length: 3
+  max_length: 50
+  excluded:
+    - IR  # PresentationIR
+
+file_length:
+  warning: 600
+  error: 1200
+
+function_parameter_count:
+  warning: 8
+  error: 10
+
+nesting:
+  type_level: 3
+
+cyclomatic_complexity:
+  warning: 20
+  error: 30
+
+# Contract-specific settings
+reporter: "xcode"  # For Xcode integration

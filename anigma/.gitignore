@@ -1,0 +1,120 @@
+# Swift/Xcode
+.build/
+.swiftpm/
+Sources/AnigmaUI/
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+*.dSYM.zip
+*.dSYM
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Build artifacts
+build/
+*.o
+*.a
+
+# Large binary files
+*.tar
+*.tar.gz
+pdfium-*.tar
+pdfium-*.tar.gz
+
+# Swift Package Manager
+Package.resolved
+
+# Web assets (Node/npm)
+web-assets/*/node_modules/
+web-assets/*/dist/
+web-assets/*/.cache/
+web-assets/*/package-lock.json
+test_uuid*.swift
+test_uuid_bytes.swift
+
+# Repo corpora and ignored node_modules
+Inspiration/INBOX/**
+
+# Node / VitePress
+node_modules/
+Docs/.vitepress/cache/
+Docs/.vitepress/dist/
+Docs/**/node_modules/
+Sources/**/node_modules/
+Tools/**/node_modules/
+Scripts/**/node_modules/
+.github/**/node_modules/
+Tests/**/node_modules/
+
+# Local build caches
+.cache/
+.build/
+.build*/
+.build-check/
+.build-contextpin/
+.build-refactor-check/
+.swiftpm/
+.anigma/
+
+# Swift compiler/module outputs emitted outside build dirs
+*.abi.json
+*.swiftmodule
+*.swiftdoc
+*.swiftsourceinfo
+
+# Local db/log/scratch artifacts
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.log
+*_baseline.log
+scout-run.log
+security-spine-baseline.log
+
+# Scratch scripts (if they’re truly scratch)
+debug_*.swift
+test_*.swift
+test_*
+run_*.swift
+dump-package.json
+Artifacts/
+Benchmarks/results/
+build_output.txt
+*_exit_code.txt
+
+# Transient/workflow artifacts
+.accessum-artifacts/
+.ml-worker-output/
+.remediation/
+.tools/
+.letta/
+bridge.pid
+build_bridge.pid
+build_mcp.pid
+diagnostic_output.txt
+diagnostic_output_v2.txt
+documentprocessing
+filtered_plan_summary.json
+function_params_*.json
+gemini.config.json
+.session-*.md
+session_*.json
+mcp_request.jsonl
+refactoring_analysis.json
+swiftlint_baseline.txt
+swiftlint_execution_summary.md
+swiftlint_master_execution_report.md
+swiftlint_progress_report.md
+
+# opencode scratch
+.opencode/.tmp/
+.opencode/worktrees/

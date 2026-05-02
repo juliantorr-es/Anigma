@@ -1,0 +1,24 @@
+{
+  "type": "span",
+  "span_id": "3b1f5d82e4c92a9f7a8b1c9f3d44e2aa",
+  "name": "String Trimming",
+  "category": "benchmarks.native.text",
+  "correlation_id": "benchmark-run-1769443200",
+  "start_time": "2026-01-26T10:15:12Z",
+  "end_time": "2026-01-26T10:15:12Z",
+  "duration_ms": 187,
+  "status": "ok",
+  "tags": {"suite": "text", "input_size": "1000x100 chars", "algorithm_version": "v1"}
+}
+{
+  "type": "span",
+  "span_id": "8cf4a1b2d18f4e3a9c5d7f2b14ab9e01",
+  "name": "pHash Computation (64x64)",
+  "category": "benchmarks.native.hashing",
+  "correlation_id": "benchmark-run-1769443200",
+  "start_time": "2026-01-26T10:15:13Z",
+  "end_time": "2026-01-26T10:15:14Z",
+  "duration_ms": 920,
+  "status": "ok",
+  "tags": {"suite": "hashing", "input_size": "4096 bytes", "algorithm_version": "v1"}
+}

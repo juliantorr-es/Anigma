@@ -1,0 +1,2154 @@
+Building for production...
+[0/4] Write sources
+[1/4] Write swift-version--58304C5D6DBC2206.txt
+[3/12] Compiling HarmoniaV2Surface HarmoniaAppClient.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaV2/HarmoniaSurface/Sources/HarmoniaAppClient.swift:273:52: warning: instance method 'makeIterator' is unavailable from asynchronous contexts; this is an error in the Swift 6 language mode
+271 |                     }
+272 |                     
+273 |                     for case let fileURL as URL in enumerator {
+    |                                                    `- warning: instance method 'makeIterator' is unavailable from asynchronous contexts; this is an error in the Swift 6 language mode
+274 |                         if Task.isCancelled { break }
+275 |                         
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaV2/HarmoniaSurface/Sources/HarmoniaSurface.swift:120:39: warning: 'MemoryItem' is deprecated: Use ShortTermMemory, LongTermMemory, or VectorMemoryItem instead [#DeprecatedDeclaration]
+118 | // Re-export key types from modules so clients can use them
+119 | public typealias HarmoniaExecutionContext = ExecutionContext
+120 | public typealias HarmoniaMemoryItem = MemoryItem
+    |                                       `- warning: 'MemoryItem' is deprecated: Use ShortTermMemory, LongTermMemory, or VectorMemoryItem instead [#DeprecatedDeclaration]
+121 | public typealias HarmoniaMemoryTier = MemoryTier
+122 | public typealias HarmoniaAgentConfig = AgentConfig
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaV2/HarmoniaSurface/Sources/HarmoniaSurface.swift:121:39: warning: 'MemoryTier' is deprecated: renamed to 'MemoryType' [#DeprecatedDeclaration]
+119 | public typealias HarmoniaExecutionContext = ExecutionContext
+120 | public typealias HarmoniaMemoryItem = MemoryItem
+121 | public typealias HarmoniaMemoryTier = MemoryTier
+    |                                       |- warning: 'MemoryTier' is deprecated: renamed to 'MemoryType' [#DeprecatedDeclaration]
+    |                                       `- note: use 'MemoryType' instead
+122 | public typealias HarmoniaAgentConfig = AgentConfig
+123 | public typealias HarmoniaToolResult = ToolResult
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaV2/HarmoniaSurface/Sources/HarmoniaSurface.swift:31:13: warning: initialization of immutable value 'context' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 29 |     /// Execute a query with full Harmonia pipeline
+ 30 |     public func query(_ text: String, userId: String? = nil) async throws -> QueryResponse {
+ 31 |         let context = ExecutionContext(
+    |             `- warning: initialization of immutable value 'context' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 32 |             sessionId: UUID().uuidString,
+ 33 |             userId: userId,
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[4/13] Compiling TranscriptumModule AcademicComponents.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/TranscriptumModule/TranscriptumModule.swift:157:33: warning: no 'async' operations occur within 'await' expression
+155 |     public static func register(runtime: PlatformRuntime) async throws {
+156 |         // Get database adapter for migration compatibility
+157 |         let databaseAuthority = await runtime.database
+    |                                 `- warning: no 'async' operations occur within 'await' expression
+158 |         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
+159 |         let database = TranscriptumDatabase(dbActor: databaseAdapter)
+[5/14] Compiling ObservatoriumModule ObservatoriumCoordinator.swift
+[6/15] Compiling ModelManagement DownloadQueueManager.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/DownloadQueueManager.swift:109:26: warning: no calls to throwing functions occur within 'try' expression
+107 | 
+108 |         let fileURL = "\(baseURL)/\(download.repo)/resolve/main/\(download.file)"
+109 |         let resumeData = try await downloader.getResumeData(url: fileURL)
+    |                          `- warning: no calls to throwing functions occur within 'try' expression
+110 | 
+111 |         guard resumeData != nil else {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:58:27: warning: no 'async' operations occur within 'await' expression
+ 56 | 
+ 57 |         let cache = try await ModelSearchCache(
+ 58 |             database: try await DatabaseActor(path: ".")
+    |                           `- warning: no 'async' operations occur within 'await' expression
+ 59 |         )
+ 60 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:58:23: warning: no calls to throwing functions occur within 'try' expression
+ 56 | 
+ 57 |         let cache = try await ModelSearchCache(
+ 58 |             database: try await DatabaseActor(path: ".")
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+ 59 |         )
+ 60 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:60:26: warning: no 'async' operations occur within 'await' expression
+ 58 |             database: try await DatabaseActor(path: ".")
+ 59 |         )
+ 60 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+    |                          `- warning: no 'async' operations occur within 'await' expression
+ 61 | 
+ 62 |         let filter = HFSearchFilter(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:60:22: warning: no calls to throwing functions occur within 'try' expression
+ 58 |             database: try await DatabaseActor(path: ".")
+ 59 |         )
+ 60 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+    |                      `- warning: no calls to throwing functions occur within 'try' expression
+ 61 | 
+ 62 |         let filter = HFSearchFilter(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:102:27: warning: no 'async' operations occur within 'await' expression
+100 |         let keychain = HuggingFaceKeychain()
+101 |         let cache = try await ModelSearchCache(
+102 |             database: try await DatabaseActor(path: ".")
+    |                           `- warning: no 'async' operations occur within 'await' expression
+103 |         )
+104 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:102:23: warning: no calls to throwing functions occur within 'try' expression
+100 |         let keychain = HuggingFaceKeychain()
+101 |         let cache = try await ModelSearchCache(
+102 |             database: try await DatabaseActor(path: ".")
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+103 |         )
+104 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:104:26: warning: no 'async' operations occur within 'await' expression
+102 |             database: try await DatabaseActor(path: ".")
+103 |         )
+104 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+    |                          `- warning: no 'async' operations occur within 'await' expression
+105 | 
+106 |         print("Downloading model: \(repo)")
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:104:22: warning: no calls to throwing functions occur within 'try' expression
+102 |             database: try await DatabaseActor(path: ".")
+103 |         )
+104 |         let client = try await HuggingFaceHubClient(keychain: keychain, cache: cache)
+    |                      `- warning: no calls to throwing functions occur within 'try' expression
+105 | 
+106 |         print("Downloading model: \(repo)")
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:153:28: warning: no 'async' operations occur within 'await' expression
+151 |         print()
+152 | 
+153 |         let database = try await DatabaseActor(path: ".")
+    |                            `- warning: no 'async' operations occur within 'await' expression
+154 |         let statement = "SELECT * FROM installed_models ORDER BY installed_at DESC"
+155 |         let rows = try await database.query(statement)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ModelCommands.swift:153:24: warning: no calls to throwing functions occur within 'try' expression
+151 |         print()
+152 | 
+153 |         let database = try await DatabaseActor(path: ".")
+    |                        `- warning: no calls to throwing functions occur within 'try' expression
+154 |         let statement = "SELECT * FROM installed_models ORDER BY installed_at DESC"
+155 |         let rows = try await database.query(statement)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/ResumableModelDownloader.swift:219:19: warning: value 'downloadURL' was defined but never used; consider replacing with boolean test [#no-usage]
+217 |         stateHandler: @escaping @Sendable (DownloadState) -> Void
+218 |     ) async throws -> String {
+219 |         guard let downloadURL = URL(string: url) else {
+    |                   `- warning: value 'downloadURL' was defined but never used; consider replacing with boolean test [#no-usage]
+220 |             throw DownloadError.invalidURL
+221 |         }
+[7/16] Compiling MLWorkerCommon AIReceiptIntegration.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/MLWorkerCommon/GovernedMLRunner.swift:14:8: warning: file 'GovernedMLRunner.swift' is part of module 'MLWorkerCommon'; ignoring import
+ 12 | import AnigmaGovernance
+ 13 | import ContractsCore
+ 14 | import MLWorkerCommon
+    |        `- warning: file 'GovernedMLRunner.swift' is part of module 'MLWorkerCommon'; ignoring import
+ 15 | import AnigmaPrimitives
+ 16 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/MLWorkerCommon/MLWorkerBackend.swift:1148:24: warning: no calls to throwing functions occur within 'try' expression
+1146 |                 }
+1147 |                 
+1148 |                 return try await container.perform { model, tokenizer, pooling in
+     |                        `- warning: no calls to throwing functions occur within 'try' expression
+1149 |                     let tokens = tokenizer.encode(text: text, addSpecialTokens: true)
+1150 |                     let eos = tokenizer.eosTokenId ?? 0
+[8/17] Compiling CapabilityCore Capability.swift
+[9/18] Compiling AnigmaWork DeckEditor.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaWork/Views/WorkbenchView.swift:18:25: warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+16 |                 Section(header: Text("Documents").accessibilityAddTraits(.isHeader)) {
+17 |                     ForEach($project.documents) { $doc in
+18 |                         NavigationLink(destination: DocumentEditor(document: $doc), tag: doc.id, selection: $selectedDocumentId) {
+   |                         `- warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+19 |                             Text(doc.title)
+20 |                         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaWork/Views/WorkbenchView.swift:28:25: warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+26 |                 Section(header: Text("Sheets").accessibilityAddTraits(.isHeader)) {
+27 |                     ForEach($project.sheets) { $sheet in
+28 |                         NavigationLink(destination: SheetEditor(sheet: $sheet), tag: sheet.id, selection: $selectedSheetId) {
+   |                         `- warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+29 |                             Text(sheet.title)
+30 |                         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaWork/Views/WorkbenchView.swift:38:25: warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+36 |                 Section(header: Text("Decks").accessibilityAddTraits(.isHeader)) {
+37 |                     ForEach($project.decks) { $deck in
+38 |                         NavigationLink(destination: DeckEditor(deck: $deck), tag: deck.id, selection: $selectedDeckId) {
+   |                         `- warning: 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+39 |                             Text(deck.title)
+40 |                         }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[10/19] Compiling CodexModule CodexModule.swift
+[11/19] Compiling VectorumModule VectorumModule.swift
+[12/19] Compiling DiaplasionModule DiaplasionComponents.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Formats/Braille/NemethTranslator.swift:255:13: warning: initialization of immutable value 'mathPattern' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+253 |         
+254 |         // Simple pattern to identify math expressions
+255 |         let mathPattern = #"([⠼⠐⠠⠮⠏⠎⠉⠞⠇⠨⠏⠑⠜⠱⠤⠖⠈⠣⠈⠒⠈⠅⠈⠂⠒⠾⠈⠇⠈⠾⠨⠇⠨⠾⠘⠰⠣⠿]+)"#
+    |             `- warning: initialization of immutable value 'mathPattern' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+256 |         
+257 |         // Wrap identified math expressions with indicators
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Streaming/LargeDocumentProcessor.swift:387:32: warning: immutable value 'transform' was never used; consider replacing with '_' or removing it [#no-usage]
+385 |         )
+386 |         
+387 |         for (entity, document, transform) in entities {
+    |                                `- warning: immutable value 'transform' was never used; consider replacing with '_' or removing it [#no-usage]
+388 |             // Skip if already processed
+389 |             if await world.hasComponent(entity, LargeDocumentProcessingComponent.self) {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Streaming/LargeDocumentProcessor.swift:412:15: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+410 |                 )
+411 |                 
+412 |             } catch {
+    |               `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+413 |                 logError(
+414 |                     "Failed to start large document processing: \(error)",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Systems/TextChunkingSystem.swift:234:17: warning: no 'async' operations occur within 'await' expression
+232 |             // Use one-shot chunking
+233 |             let wrapper = try TextChunkingCapsuleWrapper(config: config)
+234 |             try await wrapper.processBytes(data)
+    |                 `- warning: no 'async' operations occur within 'await' expression
+235 |             try await wrapper.finalize()
+236 |             
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Systems/TextChunkingSystem.swift:235:17: warning: no 'async' operations occur within 'await' expression
+233 |             let wrapper = try TextChunkingCapsuleWrapper(config: config)
+234 |             try await wrapper.processBytes(data)
+235 |             try await wrapper.finalize()
+    |                 `- warning: no 'async' operations occur within 'await' expression
+236 |             
+237 |             // Extract chunks as Data slices
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Testing/DocumentFixtures.swift:618:13: warning: variable 'warnings' was never mutated; consider changing to 'let' constant
+616 |         let startTime = Date()
+617 |         var errors: [String] = []
+618 |         var warnings: [String] = []
+    |             `- warning: variable 'warnings' was never mutated; consider changing to 'let' constant
+619 |         
+620 |         do {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DiaplasionModule/Testing/DocumentFixtures.swift:637:11: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+635 |             )
+636 |             
+637 |         } catch {
+    |           `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+638 |             let processingTime = Date().timeIntervalSince(startTime)
+639 |             errors.append("Processing failed: \(error.localizedDescription)")
+[13/19] Compiling ExecutionCore AIReceiptTypes.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ExecutionCore/ReceiptExport.swift:142:26: warning: no calls to throwing functions occur within 'try' expression
+140 |     private static func verifyReceipt(_ receipt: ReceiptWire) throws -> Bool {
+141 |         // Verify receipt ID matches content hash
+142 |         let computedID = try receipt.computeReceiptID()
+    |                          `- warning: no calls to throwing functions occur within 'try' expression
+143 |         return computedID == receipt.receiptID
+144 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ExecutionCore/ReceiptTypes.swift:282:30: warning: 'init(transitionID:fromPhase:toPhase:authority:decision:reasonCode:timestampMs:contextHash:metadata:)' is deprecated: Use PhaseTransitionWire.create(...) instead. Direct transitionID parameter is not allowed due to canonical ID derivation requirement. [#DeprecatedDeclaration]
+280 |         metadata: [String: TelemetryValue] = [:]
+281 |     ) -> PhaseTransitionWire {
+282 |         let tempTransition = PhaseTransitionWire(
+    |                              `- warning: 'init(transitionID:fromPhase:toPhase:authority:decision:reasonCode:timestampMs:contextHash:metadata:)' is deprecated: Use PhaseTransitionWire.create(...) instead. Direct transitionID parameter is not allowed due to canonical ID derivation requirement. [#DeprecatedDeclaration]
+283 |             transitionID: "temp",
+284 |             fromPhase: fromPhase,
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[14/19] Compiling AccessumModule AccessibilityHandlers.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AccessumModule/Sources/AccessumModule/AccessibilityAssessment.swift:98:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 96 | /// Screen reader specific issue
+ 97 | public struct ScreenReaderIssue: Codable, Identifiable, Sendable {
+ 98 |     public let id: UUID = UUID()
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+    |                `- note: make the property mutable instead
+ 99 |     public let element: String
+100 |     public let issue: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AccessumModule/Sources/AccessumModule/AccessibilityAssessment.swift:134:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+132 | /// Focusable element in keyboard navigation
+133 | public struct FocusableElement: Codable, Identifiable, Sendable {
+134 |     public let id: UUID = UUID()
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+    |                `- note: make the property mutable instead
+135 |     public let elementType: String
+136 |     public let selector: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AccessumModule/Sources/AccessumModule/AccessibilityAssessment.swift:150:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+148 | /// Tab order issue
+149 | public struct TabOrderIssue: Codable, Identifiable, Sendable {
+150 |     public let id: UUID = UUID()
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+    |                `- note: make the property mutable instead
+151 |     public let expectedOrder: Int
+152 |     public let actualOrder: Int
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AccessumModule/Sources/AccessumModule/AccessibilityAssessment.swift:166:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+164 | /// Color contrast issue
+165 | public struct ColorContrastIssue: Codable, Identifiable, Sendable {
+166 |     public let id: UUID = UUID()
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+    |                `- note: make the property mutable instead
+167 |     public let foregroundColor: String
+168 |     public let backgroundColor: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AccessumModule/Sources/AccessumModule/AccessibilityAssessment.swift:193:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+191 | /// Alt text suggestion for images
+192 | public struct AltTextSuggestion: Codable, Identifiable, Sendable {
+193 |     public let id: UUID = UUID()
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+    |                `- note: make the property mutable instead
+194 |     public let imageSelector: String
+195 |     public let suggestedAltText: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AccessumModule/Sources/AccessumModule/Integrations/DiaplasionIntegration.swift:163:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+161 | /// Alternative text option with type and confidence
+162 | public struct AltTextOption: Codable, Identifiable, Sendable {
+163 |     public let id: UUID = UUID()
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+    |                `- note: make the property mutable instead
+164 |     public let text: String
+165 |     public let type: AltTextType
+[15/19] Compiling PolytroposModule BackendProtocol.swift
+[16/19] Compiling ContextumModule ArtifactIngestionAdapter.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Adapters/SourceGraphIngestAdapters.swift:241:5: warning: 'public' modifier is redundant for property declared in a public extension
+239 | 
+240 | public extension SourceGraphNode {
+241 |     public var nodeCount: Int {
+    |     `- warning: 'public' modifier is redundant for property declared in a public extension
+242 |         1 + children.reduce(0) { $0 + $1.nodeCount }
+243 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Database/ContextumDatabase.swift:170:17: warning: immutable value 'receipt' was never used; consider replacing with '_' or removing it [#no-usage]
+168 |         )
+169 |         let systemContext = ExecutionContext(principal: .system)
+170 |         let (_, receipt) = try await authority.store(artifact, context: systemContext)
+    |                 `- warning: immutable value 'receipt' was never used; consider replacing with '_' or removing it [#no-usage]
+171 |         // We can log receipt if needed
+172 |         return hash
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:229:6: warning: immutable value 'index' was never used; consider replacing with '_' or removing it [#no-usage]
+ 227 | 
+ 228 | var predicateBuilder = PredicateBuilder()
+ 229 | for (index, filter) in filters.enumerated() {
+     |      `- warning: immutable value 'index' was never used; consider replacing with '_' or removing it [#no-usage]
+ 230 | if let columnIndex = columnIndex(for: filter.dimension, in: columns) {
+ 231 | switch filter.op {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:441:5: warning: variable 'groupBy' was never mutated; consider changing to 'let' constant
+ 439 | aggregationBuilder.addMean(columnIndex: 3, outputName: "avg_duration")
+ 440 | 
+ 441 | var groupBy: [ColumnReference] = [
+     |     `- warning: variable 'groupBy' was never mutated; consider changing to 'let' constant
+ 442 | ColumnReference(name: "agent_id", type: .stringUtf8),
+ 443 | ColumnReference(name: "time_bucket", type: .int64)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:560:5: warning: variable 'metricColumnIndex' was never mutated; consider changing to 'let' constant
+ 558 | aggregationBuilder.addCount(columnIndex: 0, outputName: "count")
+ 559 | 
+ 560 | var metricColumnIndex: UInt32 = 3
+     |     `- warning: variable 'metricColumnIndex' was never mutated; consider changing to 'let' constant
+ 561 | var metricOutputName = "metric_value"
+ 562 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/AgentStatsAggregateSystem.swift:561:5: warning: initialization of variable 'metricOutputName' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 559 | 
+ 560 | var metricColumnIndex: UInt32 = 3
+ 561 | var metricOutputName = "metric_value"
+     |     `- warning: initialization of variable 'metricOutputName' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 562 | 
+ 563 | switch metric {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CosineSimilarityCapsuleWrapper.swift:135:13: warning: variable 'layout' was never mutated; consider changing to 'let' constant
+133 |         let flatCandidates = candidates.flatMap { $0 }
+134 |         
+135 |         var layout = anigma_cosine_vector_layout_t(
+    |             `- warning: variable 'layout' was never mutated; consider changing to 'let' constant
+136 |             dimension: dimension,
+137 |             stride: dimension,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CosineSimilarityCapsuleWrapper.swift:212:13: warning: variable 'layout' was never mutated; consider changing to 'let' constant
+210 |         let flatCandidates = candidates.flatMap { $0 }
+211 |         
+212 |         var layout = anigma_cosine_vector_layout_t(
+    |             `- warning: variable 'layout' was never mutated; consider changing to 'let' constant
+213 |             dimension: dimension,
+214 |             stride: dimension,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CosineSimilarityCapsuleWrapper.swift:289:34: warning: cannot pass 'String' to parameter; argument 'message' must be a pointer that outlives the call to 'init(code:message:detail:aux:)' [#TemporaryPointers]
+287 |                     error: anigma_capsule_error_t(
+288 |                         code: ANIGMA_ERR_INVALID_ARG,
+289 |                         message: "Empty vector",
+    |                                  |- warning: cannot pass 'String' to parameter; argument 'message' must be a pointer that outlives the call to 'init(code:message:detail:aux:)' [#TemporaryPointers]
+    |                                  |- note: implicit argument conversion from 'String' to 'UnsafePointer<CChar>?' (aka 'Optional<UnsafePointer<Int8>>') produces a pointer valid only for the duration of the call to 'init(code:message:detail:aux:)'
+    |                                  `- note: use the 'withCString' method on String in order to explicitly convert argument to pointer valid for a defined scope
+290 |                         detail: nil,
+291 |                         aux: 0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CosineSimilarityCapsuleWrapper.swift:344:13: warning: variable 'layout' was never mutated; consider changing to 'let' constant
+342 |         let flatCandidates = candidates.flatMap { $0 }
+343 |         
+344 |         var layout = anigma_cosine_vector_layout_t(
+    |             `- warning: variable 'layout' was never mutated; consider changing to 'let' constant
+345 |             dimension: dimension,
+346 |             stride: dimension,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/CosineSimilarityCapsuleWrapper.swift:425:13: warning: variable 'layout' was never mutated; consider changing to 'let' constant
+423 |         let flatCandidates = candidates.flatMap { $0 }
+424 |         
+425 |         var layout = anigma_cosine_vector_layout_t(
+    |             `- warning: variable 'layout' was never mutated; consider changing to 'let' constant
+426 |             dimension: dimension,
+427 |             stride: dimension,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/MediaDeduplicationSystem.swift:361:11: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+359 |                 threshold: Double(threshold)
+360 |             )
+361 |         } catch {
+    |           `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+362 |             return findDuplicatesWithHashFallback(
+363 |                 fingerprint: fingerprint,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ContextumModule/Systems/MediaDeduplicationSystem.swift:489:19: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+487 |                         return true
+488 |                     }
+489 |                 } catch {
+    |                   `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+490 |                     continue
+491 |                 }
+
+[#TemporaryPointers]: <https://docs.swift.org/compiler/documentation/diagnostics/temporary-pointers>
+[17/22] Compiling AnigmaCorporate OIDCAdapter.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCorporate/Connectors/IngestionAdapters/GoogleDriveConnectorAdapter.swift:13:8: warning: file 'GoogleDriveConnectorAdapter.swift' is part of module 'AnigmaCorporate'; ignoring import
+ 11 | import ContextumModule
+ 12 | import AnigmaSystemSpine
+ 13 | import AnigmaCorporate
+    |        `- warning: file 'GoogleDriveConnectorAdapter.swift' is part of module 'AnigmaCorporate'; ignoring import
+ 14 | 
+ 15 | /// Google Drive OAuth connector ingestion adapter
+[18/23] Compiling CathedralModule AgentCathedralIntegration.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/CathedralModule/AgentCathedralIntegration.swift:10:8: warning: file 'AgentCathedralIntegration.swift' is part of module 'CathedralModule'; ignoring import
+  8 | 
+  9 | import Foundation
+ 10 | import CathedralModule
+    |        `- warning: file 'AgentCathedralIntegration.swift' is part of module 'CathedralModule'; ignoring import
+ 11 | import ContractsCore
+ 12 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/CathedralModule/CathedralCoordinator.swift:138:13: warning: initialization of immutable value 'enforcement' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+136 |     ) async throws -> OperationResult {
+137 |         // 1. Enforce evidence requirements (Invariant #1)
+138 |         let enforcement = try await enforceOperation(operation, requirement: requirement)
+    |             `- warning: initialization of immutable value 'enforcement' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+139 | 
+140 |         // 2. Create execution lease (Invariant #4)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/CathedralModule/CathedralModule.swift:120:83: warning: forced cast from 'DatabaseAuthorityAdapter' to 'any DatabaseExecutor' always succeeds; did you mean to use 'as'?
+118 |         
+119 |         // Initialize TamperEvidenceSystem with database adapter
+120 |         let tamperEvidenceSystem = TamperEvidenceSystem(database: databaseAdapter as! DatabaseCore.DatabaseExecutor)
+    |                                                                                   `- warning: forced cast from 'DatabaseAuthorityAdapter' to 'any DatabaseExecutor' always succeeds; did you mean to use 'as'?
+121 |         
+122 |         // Load existing chain from database
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/CathedralModule/CathedralModule.swift:120:83: warning: treating a forced downcast to 'any DatabaseExecutor' as optional will never produce 'nil'
+118 |         
+119 |         // Initialize TamperEvidenceSystem with database adapter
+120 |         let tamperEvidenceSystem = TamperEvidenceSystem(database: databaseAdapter as! DatabaseCore.DatabaseExecutor)
+    |                                                                   |               | `- note: use 'as?' to perform a conditional downcast to 'any DatabaseExecutor'
+    |                                                                   |               `- warning: treating a forced downcast to 'any DatabaseExecutor' as optional will never produce 'nil'
+    |                                                                   `- note: add parentheses around the cast to silence this warning
+121 |         
+122 |         // Load existing chain from database
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/CathedralModule/CathedralModule.swift:116:33: warning: no 'async' operations occur within 'await' expression
+114 |     public static func register(runtime: PlatformRuntime) async throws {
+115 |         // Get database adapter for migration compatibility
+116 |         let databaseAuthority = await runtime.database
+    |                                 `- warning: no 'async' operations occur within 'await' expression
+117 |         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
+118 |         
+[19/24] Compiling AnigmaAgents AIModels.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaAgents/AgentOrchestrator.swift:34:30: warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+32 | 
+33 |         // Publish agent action started event
+34 |         await sharedEventBus.publish(
+   |                              `- warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+35 |             AgentActionStartedEvent(
+36 |                 agentId: agentId,
+[20/25] Compiling RLMModule ContextEnvironment.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/ContextEnvironment.swift:332:5: warning: initialization of immutable value 'startTime' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 330 | /// - Returns: Array of headings with level and text.
+ 331 | public func getHeadings(sourceHash: String) async throws -> [(level: Int, text: String, spanRef: SpanRef)] {
+ 332 | let startTime = Date()
+     |     `- warning: initialization of immutable value 'startTime' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 333 | 
+ 334 | // 1. Check if we have a layout engine capsule
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/ContextEnvironment.swift:354:19: warning: no 'async' operations occur within 'await' expression
+ 352 | // NOTE: The current wrapper might need reset or state management
+ 353 | // For simplicity, we'll assume analyzePDF is the entry point
+ 354 | let layouts = try await layoutEngine.analyzePDF(data)
+     |                   `- warning: no 'async' operations occur within 'await' expression
+ 355 | 
+ 356 | var results: [(level: Int, text: String, spanRef: SpanRef)] = []
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/ContextEnvironment.swift:552:24: warning: no 'async' operations occur within 'await' expression
+ 550 | let candidateVectorsFloat = candidateResults.vectors.map { $0.map(Float.init) }
+ 551 | 
+ 552 | let similarities = try await cosineSimilarity.computeBatch(
+     |                        `- warning: no 'async' operations occur within 'await' expression
+ 553 | query: queryVectorFloat,
+ 554 | candidates: candidateVectorsFloat
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/ContextEnvironment.swift:935:11: warning: value 'sourceMetadata' was defined but never used; consider replacing with boolean test [#no-usage]
+ 933 | 
+ 934 | // Get source metadata to get sourceId
+ 935 | guard let sourceMetadata = sourceMetadataCache[sourceHash] else {
+     |           `- warning: value 'sourceMetadata' was defined but never used; consider replacing with boolean test [#no-usage]
+ 936 | // Source not found in cache, try to peek
+ 937 | let sources = try await peek(sourceHashes: [sourceHash])
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/ContextEnvironment.swift:968:9: warning: initialization of immutable value 'evidenceRecord' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 966 | 
+ 967 |     // Create evidence record
+ 968 |     let evidenceRecord = EvidenceRecord(
+     |         `- warning: initialization of immutable value 'evidenceRecord' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 969 |         operation: operation,
+ 970 |         inputs: inputs,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/RLMGovernor.swift:221:17: warning: initialization of immutable value 'errorEvidence' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 219 |         } catch {
+ 220 |             // Record failure evidence
+ 221 |             let errorEvidence = try await recordEvidence(
+     |                 `- warning: initialization of immutable value 'errorEvidence' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 222 |                 operation: operation,
+ 223 |                 inputs: inputs,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/RLMGovernor.swift:533:13: warning: variable 'sampledSpans' was never mutated; consider changing to 'let' constant
+ 531 |         
+ 532 |         // 3. Execute planned tool calls
+ 533 |         var sampledSpans = initialContext
+     |             `- warning: variable 'sampledSpans' was never mutated; consider changing to 'let' constant
+ 534 |         for op in plan.toolCalls {
+ 535 |             do {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/RLMGovernor.swift:545:30: warning: immutable value 'evidence' was never used; consider replacing with '_' or removing it [#no-usage]
+ 543 |                 }
+ 544 |                 
+ 545 |                 let (result, evidence) = try await executeTool(
+     |                              `- warning: immutable value 'evidence' was never used; consider replacing with '_' or removing it [#no-usage]
+ 546 |                     op,
+ 547 |                     inputs: inputs,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/RLMGovernor.swift:555:28: warning: value 'ids' was defined but never used; consider replacing with boolean test [#no-usage]
+ 553 |                     // Extract spans from results
+ 554 |                     // This is a simplification
+ 555 |                     if let ids = result.output["span_refs"]?.arrayValue {
+     |                            `- warning: value 'ids' was defined but never used; consider replacing with boolean test [#no-usage]
+ 556 |                         // Normally we'd convert these to SpanRef
+ 557 |                     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/RLMModule/RLMGovernor.swift:727:19: warning: immutable value 'spanRefsData' was never used; consider replacing with '_' or removing it [#no-usage]
+ 725 |         // Create and register a subtask
+ 726 |         guard let description = inputs["description"]?.stringValue,
+ 727 |               let spanRefsData = inputs["span_refs"]?.arrayValue else {
+     |                   `- warning: immutable value 'spanRefsData' was never used; consider replacing with '_' or removing it [#no-usage]
+ 728 |             throw RLMError.invalidInput("Missing required inputs for spawn_subtask")
+ 729 |         }
+[21/25] Compiling AnigmaAIConsole AIConsoleClient.swift
+[22/25] Compiling AnigmaMCPModule AnigmaMCPBridge.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaMCPModule/AnigmaMCPServer.swift:59:9: warning: actor-isolated instance method 'registerDefaultTools()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 57 | 
+ 58 |         // Register initial tool contracts
+ 59 |         registerDefaultTools()
+    |         `- warning: actor-isolated instance method 'registerDefaultTools()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 60 | 
+ 61 |         if autoInitialize {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaMCPModule/Tools/AnigmaMCPServer+Registration.swift:13:10: note: calls to instance method 'registerDefaultTools()' from outside of its actor context are implicitly asynchronous
+ 11 | 
+ 12 | extension AnigmaMCPServer {
+ 13 |     func registerDefaultTools() {
+    |          `- note: calls to instance method 'registerDefaultTools()' from outside of its actor context are implicitly asynchronous
+ 14 |         // 1. read_file
+ 15 |         toolRegistry.register(contract: ToolContract(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaMCPModule/AnigmaMCPServer.swift:62:18: warning: actor-isolated instance method 'startModuleInitializationIfNeeded()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 60 | 
+ 61 |         if autoInitialize {
+ 62 |             self.startModuleInitializationIfNeeded()
+    |                  `- warning: actor-isolated instance method 'startModuleInitializationIfNeeded()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 63 |         }
+ 64 |     }
+    :
+ 69 |     }
+ 70 | 
+ 71 |     private func startModuleInitializationIfNeeded() {
+    |                  `- note: calls to instance method 'startModuleInitializationIfNeeded()' from outside of its actor context are implicitly asynchronous
+ 72 |         guard !self.hasInitializationStarted else { return }
+ 73 |         self.hasInitializationStarted = true
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaMCPModule/Handlers/AnigmaMCPServer+Context.swift:159:44: warning: string interpolation produces a debug description for an optional value; did you mean to make this explicit?
+157 |             return CallTool.Result(content: [.text("Context search unavailable")], isError: true)
+158 |         }
+159 |         let text = result.chunks.map { "[\($0.score)] \($0.content.prefix(200))" }.joined(separator: "\n---\n")
+    |                                            |  |- note: use a default value parameter to avoid this warning
+    |                                            |  |- note: provide a default value to avoid this warning
+    |                                            |  `- note: use 'String(describing:)' to silence this warning
+    |                                            `- warning: string interpolation produces a debug description for an optional value; did you mean to make this explicit?
+160 |         return CallTool.Result(content: [.text(text.isEmpty ? "No matches" : text)])
+161 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaMCPModule/MCPRequestQueue.swift:160:21: warning: no 'async' operations occur within 'await' expression
+158 |                 let status = await session.getStatus()
+159 |                 if now.timeIntervalSince(status.lastActivityAt) > timeout {
+160 |                     await self.removeClientSession(clientId)
+    |                     `- warning: no 'async' operations occur within 'await' expression
+161 |                 }
+162 |             }
+[23/25] Compiling SwiftSyntax AbsolutePosition.swift
+[24/26] Compiling SwiftParser Attributes.swift
+[25/27] Compiling AnigmaASTServicesCore ASTFacade.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaASTServices/ASTWorker.swift:287:13: warning: initialization of immutable value 'startTime' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+285 |         requestId: String
+286 |     ) async throws -> (ASTWorkerArtifact, Int, Bool) {
+287 |         let startTime = Date()
+    |             `- warning: initialization of immutable value 'startTime' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+288 |         
+289 |         // Get AST from cache or parse
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaASTServices/SwiftAstLens.swift:142:23: warning: type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+135 | 
+136 |     /// Find all nodes of specific type in file.
+137 |     public func findNodes<T: SyntaxProtocol>(
+    |                           `- note: consider making generic parameter 'T' conform to the 'Sendable' protocol
+138 |         ofType type: T.Type,
+139 |         in filePath: String
+140 |     ) throws -> [T] {
+141 |         let (ast, _) = try ast(for: filePath)
+142 |         let visitor = TypeVisitor<T>()
+    |                       `- warning: type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+143 |         _ = visitor.visit(ast)
+144 |         return visitor.results
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaASTServices/SwiftAstLens.swift:142:36: warning: type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+135 | 
+136 |     /// Find all nodes of specific type in file.
+137 |     public func findNodes<T: SyntaxProtocol>(
+    |                           `- note: consider making generic parameter 'T' conform to the 'Sendable' protocol
+138 |         ofType type: T.Type,
+139 |         in filePath: String
+140 |     ) throws -> [T] {
+141 |         let (ast, _) = try ast(for: filePath)
+142 |         let visitor = TypeVisitor<T>()
+    |                                    `- warning: type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+143 |         _ = visitor.visit(ast)
+144 |         return visitor.results
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaASTServices/SwiftAstLens.swift:144:24: warning: type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+135 | 
+136 |     /// Find all nodes of specific type in file.
+137 |     public func findNodes<T: SyntaxProtocol>(
+    |                           `- note: consider making generic parameter 'T' conform to the 'Sendable' protocol
+138 |         ofType type: T.Type,
+139 |         in filePath: String
+    :
+142 |         let visitor = TypeVisitor<T>()
+143 |         _ = visitor.visit(ast)
+144 |         return visitor.results
+    |                        `- warning: type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+145 |     }
+146 | 
+[26/28] Compiling AnigmaDaemonCore AntigravityAuthManager.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Auth/OAuthManager.swift:23:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 21 | public struct TokenResponse: Codable, Sendable {
+ 22 |     public let accessToken: String
+ 23 |     public let tokenType: String = "Bearer"
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'tokenType' case to silence this warning
+    |                `- note: make the property mutable instead
+ 24 |     public let expiresIn: Int
+ 25 |     public let refreshToken: String?
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Auth/OAuthManager.swift:30:9: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 28 | 
+ 29 | struct JWTHeader: Codable {
+ 30 |     let alg: String = "ES256"
+    |         |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |         |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'alg' case to silence this warning
+    |         `- note: make the property mutable instead
+ 31 |     let typ: String = "JWT"
+ 32 |     let kid: String?
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Auth/OAuthManager.swift:31:9: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 29 | struct JWTHeader: Codable {
+ 30 |     let alg: String = "ES256"
+ 31 |     let typ: String = "JWT"
+    |         |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |         |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'typ' case to silence this warning
+    |         `- note: make the property mutable instead
+ 32 |     let kid: String?
+ 33 | }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/HarmoniaWorker.swift:36:20: warning: 'Sendable' class 'HarmoniaWorker' cannot inherit from another class other than 'NSObject'; this is an error in the Swift 6 language mode
+ 34 | 
+ 35 | /// Worker that wraps the Harmonia reasoning engine.
+ 36 | public final class HarmoniaWorker: BaseWorker, JobWorker {
+    |                    `- warning: 'Sendable' class 'HarmoniaWorker' cannot inherit from another class other than 'NSObject'; this is an error in the Swift 6 language mode
+ 37 |     public static let kind = "harmonia.execute"
+ 38 |     
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/HarmoniaWorker.swift:70:31: warning: no 'async' operations occur within 'await' expression
+ 68 |         
+ 69 |         // 3. Create RLM Environment
+ 70 |         let environment = try await ContextEnvironment(
+    |                               `- warning: no 'async' operations occur within 'await' expression
+ 71 |             contextumDatabase: contextumDB,
+ 72 |             artifactAuthority: artifactAuthority,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/HarmoniaWorker.swift:70:27: warning: no calls to throwing functions occur within 'try' expression
+ 68 |         
+ 69 |         // 3. Create RLM Environment
+ 70 |         let environment = try await ContextEnvironment(
+    |                           `- warning: no calls to throwing functions occur within 'try' expression
+ 71 |             contextumDatabase: contextumDB,
+ 72 |             artifactAuthority: artifactAuthority,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/HarmoniaWorker.swift:84:28: warning: no 'async' operations occur within 'await' expression
+ 82 |         // 4. Create Governor
+ 83 |         // The Governor manages the execution loop and budgets
+ 84 |         let governor = try await RLMGovernor(
+    |                            `- warning: no 'async' operations occur within 'await' expression
+ 85 |             policy: .default,
+ 86 |             budgets: .default,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/HarmoniaWorker.swift:84:24: warning: no calls to throwing functions occur within 'try' expression
+ 82 |         // 4. Create Governor
+ 83 |         // The Governor manages the execution loop and budgets
+ 84 |         let governor = try await RLMGovernor(
+    |                        `- warning: no calls to throwing functions occur within 'try' expression
+ 85 |             policy: .default,
+ 86 |             budgets: .default,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift:48:17: warning: stored property 'mlWorker' of 'Sendable'-conforming struct 'IndexingWorker' has non-Sendable type 'MLWorker'; this is an error in the Swift 6 language mode
+ 46 |     private let db: any DatabaseExecutor
+ 47 |     private let vectorDatabase: (any VectorAvailabilityDatabase)?
+ 48 |     private let mlWorker: MLWorker
+    |                 `- warning: stored property 'mlWorker' of 'Sendable'-conforming struct 'IndexingWorker' has non-Sendable type 'MLWorker'; this is an error in the Swift 6 language mode
+ 49 |     
+ 50 |     public init(database: any DatabaseExecutor) {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/MLWorkerCommon/MLWorker.swift:26:14: note: class 'MLWorker' does not conform to the 'Sendable' protocol
+ 24 | /// Direct in-process ML worker for daemon integration.
+ 25 | /// Executes ML tasks using backend runners without spawning separate processes.
+ 26 | public class MLWorker {
+    |              `- note: class 'MLWorker' does not conform to the 'Sendable' protocol
+ 27 |     private let _engine: MLWorkerEngine
+ 28 |     private let backendRunner: BackendRunner
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift:12:1: warning: add '@preconcurrency' to suppress 'Sendable'-related warnings from module 'MLWorkerCommon'
+ 10 | import AnigmaCore
+ 11 | import DatabaseCore
+ 12 | import MLWorkerCommon
+    | `- warning: add '@preconcurrency' to suppress 'Sendable'-related warnings from module 'MLWorkerCommon'
+ 13 | import TextChunkingCapsule
+ 14 | import ContractsCore
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift:271:17: warning: no 'async' operations occur within 'await' expression
+269 |             let wrapper = try TextChunkingCapsuleWrapper(config: config)
+270 |             let data = Data(text.utf8)
+271 |             try await wrapper.processBytes(data)
+    |                 `- warning: no 'async' operations occur within 'await' expression
+272 |             try await wrapper.finalize()
+273 |             let chunkDatas = try await wrapper.extractChunks(from: data)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift:272:17: warning: no 'async' operations occur within 'await' expression
+270 |             let data = Data(text.utf8)
+271 |             try await wrapper.processBytes(data)
+272 |             try await wrapper.finalize()
+    |                 `- warning: no 'async' operations occur within 'await' expression
+273 |             let chunkDatas = try await wrapper.extractChunks(from: data)
+274 |             return chunkDatas.compactMap { String(data: $0, encoding: .utf8) }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/TextChunkingWorker.swift:59:31: warning: conformance of 'TextChunkingConfig' to protocol 'Decodable' was already stated in the type's module 'TextChunkingCapsule'
+57 | 
+58 | // Helper to make TextChunkingConfig Codable for job config
+59 | extension TextChunkingConfig: Codable {
+   |                               `- warning: conformance of 'TextChunkingConfig' to protocol 'Decodable' was already stated in the type's module 'TextChunkingCapsule'
+60 |     enum CodingKeys: String, CodingKey {
+61 |         case targetChunkSize
+   :
+67 |     }
+68 |     
+69 |     public init(from decoder: Decoder) throws {
+   |            `- note: initializer 'init(from:)' will not be used to satisfy the conformance to 'Decodable'
+70 |         let container = try decoder.container(keyedBy: CodingKeys.self)
+71 |         let target = try container.decode(Int.self, forKey: .targetChunkSize)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/TextChunkingCapsule/Sources/TextChunkingCapsule/TextChunkingConfig.swift:5:15: note: 'TextChunkingConfig' declares conformance to protocol 'Decodable' here
+ 3 | 
+ 4 | /// Configuration for text chunking strategies.
+ 5 | public struct TextChunkingConfig: Sendable, Codable {
+   |               `- note: 'TextChunkingConfig' declares conformance to protocol 'Decodable' here
+ 6 |     public var targetChunkSize: Int
+ 7 |     public var minChunkSize: Int
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/TextChunkingWorker.swift:59:31: warning: conformance of 'TextChunkingConfig' to protocol 'Encodable' was already stated in the type's module 'TextChunkingCapsule'
+57 | 
+58 | // Helper to make TextChunkingConfig Codable for job config
+59 | extension TextChunkingConfig: Codable {
+   |                               `- warning: conformance of 'TextChunkingConfig' to protocol 'Encodable' was already stated in the type's module 'TextChunkingCapsule'
+60 |     enum CodingKeys: String, CodingKey {
+61 |         case targetChunkSize
+   :
+86 |     }
+87 |     
+88 |     public func encode(to encoder: Encoder) throws {
+   |                 `- note: instance method 'encode(to:)' will not be used to satisfy the conformance to 'Encodable'
+89 |         var container = encoder.container(keyedBy: CodingKeys.self)
+90 |         try container.encode(targetChunkSize, forKey: .targetChunkSize)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/TextChunkingCapsule/Sources/TextChunkingCapsule/TextChunkingConfig.swift:5:15: note: 'TextChunkingConfig' declares conformance to protocol 'Encodable' here
+ 3 | 
+ 4 | /// Configuration for text chunking strategies.
+ 5 | public struct TextChunkingConfig: Sendable, Codable {
+   |               `- note: 'TextChunkingConfig' declares conformance to protocol 'Encodable' here
+ 6 |     public var targetChunkSize: Int
+ 7 |     public var minChunkSize: Int
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/WorktreeWorker.swift:23:16: warning: stored property 'operation' of 'Sendable'-conforming struct 'WorktreeConfig' has non-Sendable type 'WorktreeConfig.Operation'; this is an error in the Swift 6 language mode
+12 | /// Configuration for worktree management job.
+13 | public struct WorktreeConfig: Codable, Sendable {
+14 |     public enum Operation: String, Codable {
+   |                 `- note: consider making enum 'Operation' conform to the 'Sendable' protocol
+15 |         case list
+16 |         case create
+   :
+21 |     }
+22 |     
+23 |     public let operation: Operation
+   |                `- warning: stored property 'operation' of 'Sendable'-conforming struct 'WorktreeConfig' has non-Sendable type 'WorktreeConfig.Operation'; this is an error in the Swift 6 language mode
+24 |     public let repoRoot: String
+25 |     public let path: String?
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Assistant.swift:193:62: warning: no 'async' operations occur within 'await' expression
+191 |         let startedAt = Date()
+192 |         do {
+193 |             let memoryStore = AssistantMemoryStore(database: await runtime.database)
+    |                                                              `- warning: no 'async' operations occur within 'await' expression
+194 |             try await memoryStore.initializeSchema()
+195 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Assistant.swift:259:62: warning: no 'async' operations occur within 'await' expression
+257 | 
+258 |         do {
+259 |             let memoryStore = AssistantMemoryStore(database: await runtime.database)
+    |                                                              `- warning: no 'async' operations occur within 'await' expression
+260 |             try await memoryStore.initializeSchema()
+261 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Jobs.swift:268:38: warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+266 |             
+267 |             if state == JobState.running.rawValue {
+268 |                 await sharedEventBus.publish(
+    |                                      `- warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+269 |                     JobStatusUpdatedEvent(
+270 |                         jobId: jobId,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Jobs.swift:277:38: warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+275 |                 )
+276 |             } else if state == JobState.succeeded.rawValue {
+277 |                 await sharedEventBus.publish(
+    |                                      `- warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+278 |                     JobCompletedEvent(
+279 |                         jobId: jobId,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Jobs.swift:287:38: warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+285 |                 )
+286 |             } else if state == JobState.failed.rawValue {
+287 |                 await sharedEventBus.publish(
+    |                                      `- warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+288 |                     JobCompletedEvent(
+289 |                         jobId: jobId,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Jobs.swift:300:34: warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+298 |         case .progress:
+299 |             let progress = Double(progressPermille) / 1000.0
+300 |             await sharedEventBus.publish(
+    |                                  `- warning: result of call to 'publish(_:source:)' is unused [#no-usage]
+301 |                 JobStatusUpdatedEvent(
+302 |                     jobId: jobId,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+PTY.swift:38:22: warning: no 'async' operations occur within 'await' expression
+36 |         }
+37 |         
+38 |         let buffer = await session.buffer
+   |                      `- warning: no 'async' operations occur within 'await' expression
+39 |         let data = await buffer.read(from: offset)
+40 |         let output = String(data: data, encoding: .utf8) ?? ""
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Scheduling/MockANETypes.swift:135:9: warning: actor-isolated instance method 'registerDefaultCapabilities()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+133 |     
+134 |     public init() {
+135 |         registerDefaultCapabilities()
+    |         `- warning: actor-isolated instance method 'registerDefaultCapabilities()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+136 |     }
+137 |     
+138 |     private func registerDefaultCapabilities() {
+    |                  `- note: calls to instance method 'registerDefaultCapabilities()' from outside of its actor context are implicitly asynchronous
+139 |         register(MockDefaultANECapabilities.embeddingANEOnly)
+140 |         register(MockDefaultANECapabilities.embeddingMixed)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Scheduling/SimplifiedANESchedulingManager.swift:235:60: warning: conditional downcast from 'String?' to 'String' does nothing
+233 |         
+234 |         // Extract capability level
+235 |         let levelString = metadata["ane_capability_level"] as? String ?? "mixed"
+    |                                                            `- warning: conditional downcast from 'String?' to 'String' does nothing
+236 |         let level = MockANECapabilityLevel(rawValue: levelString.uppercased()) ?? .mixed
+237 |         
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Scheduling/SimplifiedANESchedulingManager.swift:239:68: warning: conditional downcast from 'String?' to 'String' does nothing
+237 |         
+238 |         // Extract preferred compute unit
+239 |         let computeUnitString = metadata["preferred_compute_unit"] as? String ?? "all"
+    |                                                                    `- warning: conditional downcast from 'String?' to 'String' does nothing
+240 |         let preferredComputeUnit = MockANEComputeUnit(rawValue: computeUnitString) ?? .all
+241 |         
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/VFSWatcherService.swift:56:9: warning: 'FSEventStreamScheduleWithRunLoop' was deprecated in macOS 13.0: Use FSEventStreamSetDispatchQueue instead. [#DeprecatedDeclaration]
+54 |         ) else { return }
+55 |         
+56 |         FSEventStreamScheduleWithRunLoop(stream, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue)
+   |         `- warning: 'FSEventStreamScheduleWithRunLoop' was deprecated in macOS 13.0: Use FSEventStreamSetDispatchQueue instead. [#DeprecatedDeclaration]
+57 |         FSEventStreamStart(stream)
+58 |         self.stream = stream
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift:144:16: warning: value 'input' was defined but never used; consider replacing with boolean test [#no-usage]
+142 |         process.standardError = stderrPipe
+143 | 
+144 |         if let input = config.inputData {
+    |                `- warning: value 'input' was defined but never used; consider replacing with boolean test [#no-usage]
+145 |             stdinPipe = Pipe()
+146 |             process.standardInput = stdinPipe
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[27/29] Compiling AnigmaHostKit AnigmaAuthority.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostKit/Sources/AnigmaHostKit/AnigmaHostKit.swift:90:9: warning: actor-isolated property 'hostInfo' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 50 | /// Host manager for system integration
+ 51 | public actor HostManager {
+ 52 |     private let hostInfo: HostInfo
+    |                 `- note: property declared here
+ 53 |     
+ 54 |     public init() async {
+    :
+ 88 |     /// Get current host information
+ 89 |     public nonisolated func getHostInfo() -> HostInfo {
+ 90 |         hostInfo
+    |         `- warning: actor-isolated property 'hostInfo' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 91 |     }
+ 92 |     
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostKit/Sources/AnigmaHostKit/AnigmaHostKit.swift:95:31: warning: actor-isolated property 'hostInfo' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 50 | /// Host manager for system integration
+ 51 | public actor HostManager {
+ 52 |     private let hostInfo: HostInfo
+    |                 `- note: property declared here
+ 53 |     
+ 54 |     public init() async {
+    :
+ 93 |     /// Allocate resources for a task
+ 94 |     public nonisolated func allocateResources(for task: String) -> ResourceAllocation {
+ 95 |         let cpuCores = max(1, hostInfo.cpuCount / 2)
+    |                               `- warning: actor-isolated property 'hostInfo' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 96 |         let memoryMB = max(512, hostInfo.availableMemoryBytes / (1024 * 1024) / 2)
+ 97 |         
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostKit/Sources/AnigmaHostKit/AnigmaHostKit.swift:96:33: warning: actor-isolated property 'hostInfo' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 50 | /// Host manager for system integration
+ 51 | public actor HostManager {
+ 52 |     private let hostInfo: HostInfo
+    |                 `- note: property declared here
+ 53 |     
+ 54 |     public init() async {
+    :
+ 94 |     public nonisolated func allocateResources(for task: String) -> ResourceAllocation {
+ 95 |         let cpuCores = max(1, hostInfo.cpuCount / 2)
+ 96 |         let memoryMB = max(512, hostInfo.availableMemoryBytes / (1024 * 1024) / 2)
+    |                                 `- warning: actor-isolated property 'hostInfo' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 97 |         
+ 98 |         return ResourceAllocation(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostKit/Sources/AnigmaHostKit/AnigmaHostKit.swift:134:27: warning: immutable value 'pid' was never used; consider replacing with '_' or removing it [#no-usage]
+132 |     public func waitForCompletion() async -> Int32? {
+133 |         switch state {
+134 |         case .running(let pid):
+    |                           `- warning: immutable value 'pid' was never used; consider replacing with '_' or removing it [#no-usage]
+135 |             // In real implementation, would wait for process
+136 |             state = .completed(exitCode: 0)
+[28/30] Compiling AnigmaHostMac ASTServicesClient.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:209:43: warning: no calls to throwing functions occur within 'try' expression
+207 |                     Task {
+208 |                         while process.isRunning {
+209 |                             if let data = try? fileHandle.availableData, !data.isEmpty {
+    |                                           `- warning: no calls to throwing functions occur within 'try' expression
+210 |                                 if let line = String(data: data, encoding: .utf8) {
+211 |                                     for outputLine in line.components(separatedBy: .newlines) {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaCommands.swift:41:26: warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+ 39 |     /// Get daemon status.
+ 40 |     public func daemonStatus() async throws -> DaemonStatusResponse {
+ 41 |         return try await execute<DaemonStatusResponse>(["daemon", "status", "--format", "json"])
+    |                          `- warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+ 42 |     }
+ 43 | }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:105:17: note: 'execute(_:timeout:)' declared here
+103 |     ///   - timeout: Maximum execution time in seconds
+104 |     /// - Returns: Decoded JSON response
+105 |     public func execute<T: Decodable>(
+    |                 `- note: 'execute(_:timeout:)' declared here
+106 |         _ arguments: [String],
+107 |         timeout: TimeInterval = 30.0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaCommands.swift:63:26: warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+ 61 |     /// Get vault status.
+ 62 |     public func vaultStatus() async throws -> VaultStatusResponse {
+ 63 |         return try await execute<VaultStatusResponse>(["vault", "status", "--format", "json"])
+    |                          `- warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+ 64 |     }
+ 65 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:105:17: note: 'execute(_:timeout:)' declared here
+103 |     ///   - timeout: Maximum execution time in seconds
+104 |     /// - Returns: Decoded JSON response
+105 |     public func execute<T: Decodable>(
+    |                 `- note: 'execute(_:timeout:)' declared here
+106 |         _ arguments: [String],
+107 |         timeout: TimeInterval = 30.0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaCommands.swift:68:26: warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+ 66 |     /// Verify vault integrity.
+ 67 |     public func vaultVerify() async throws -> VaultVerificationResponse {
+ 68 |         return try await execute<VaultVerificationResponse>(["vault", "verify", "--format", "json"])
+    |                          `- warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+ 69 |     }
+ 70 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:105:17: note: 'execute(_:timeout:)' declared here
+103 |     ///   - timeout: Maximum execution time in seconds
+104 |     /// - Returns: Decoded JSON response
+105 |     public func execute<T: Decodable>(
+    |                 `- note: 'execute(_:timeout:)' declared here
+106 |         _ arguments: [String],
+107 |         timeout: TimeInterval = 30.0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaCommands.swift:199:26: warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+197 |     /// Search the ledger.
+198 |     public func search(query: String, limit: Int = 10) async throws -> SearchResponse {
+199 |         return try await execute<SearchResponse>(["search", query, "--limit", "\(limit)", "--format", "json"])
+    |                          `- warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+200 |     }
+201 | }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:105:17: note: 'execute(_:timeout:)' declared here
+103 |     ///   - timeout: Maximum execution time in seconds
+104 |     /// - Returns: Decoded JSON response
+105 |     public func execute<T: Decodable>(
+    |                 `- note: 'execute(_:timeout:)' declared here
+106 |         _ arguments: [String],
+107 |         timeout: TimeInterval = 30.0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaCommands.swift:222:26: warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+220 |     /// Get tool status.
+221 |     public func toolStatus(toolName: String) async throws -> ToolStatusResponse {
+222 |         return try await execute<ToolStatusResponse>(["tool", "status", toolName, "--format", "json"])
+    |                          `- warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+223 |     }
+224 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:105:17: note: 'execute(_:timeout:)' declared here
+103 |     ///   - timeout: Maximum execution time in seconds
+104 |     /// - Returns: Decoded JSON response
+105 |     public func execute<T: Decodable>(
+    |                 `- note: 'execute(_:timeout:)' declared here
+106 |         _ arguments: [String],
+107 |         timeout: TimeInterval = 30.0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaCommands.swift:269:26: warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+267 |     /// Get stack status.
+268 |     public func stackStatus() async throws -> StackStatusResponse {
+269 |         return try await execute<StackStatusResponse>(["stack", "status", "--format", "json"])
+    |                          `- warning: cannot explicitly specialize instance method 'execute(_:timeout:)'
+270 |     }
+271 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/HarmoniaClient.swift:105:17: note: 'execute(_:timeout:)' declared here
+103 |     ///   - timeout: Maximum execution time in seconds
+104 |     /// - Returns: Decoded JSON response
+105 |     public func execute<T: Decodable>(
+    |                 `- note: 'execute(_:timeout:)' declared here
+106 |         _ arguments: [String],
+107 |         timeout: TimeInterval = 30.0
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/MacAnigmaClient.swift:214:19: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+212 |                     }
+213 |                     continuation.finish()
+214 |                 } catch {
+    |                   `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+215 |                     continuation.finish(throwing: error)
+216 |                 }
+[29/31] Compiling AnigmaAppMacExecutable ActionCatalogView.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppModel.swift:212:21: warning: no 'async' operations occur within 'await' expression
+210 |                     
+211 |                     // Update main actor state
+212 |                     await updateIndexProgress(progress)
+    |                     `- warning: no 'async' operations occur within 'await' expression
+213 |                 }
+214 |                 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppModel.swift:215:17: warning: no 'async' operations occur within 'await' expression
+213 |                 }
+214 |                 
+215 |                 await finishIndex(cancelled: Task.isCancelled)
+    |                 `- warning: no 'async' operations occur within 'await' expression
+216 |                 
+217 |             } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppModel.swift:218:17: warning: no 'async' operations occur within 'await' expression
+216 |                 
+217 |             } catch {
+218 |                 await handleIndexError(error)
+    |                 `- warning: no 'async' operations occur within 'await' expression
+219 |             }
+220 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppStore.swift:174:30: error: 'HFSearchResult' is ambiguous for type lookup in this context
+ 172 |     var storageStatus: Any?
+ 173 |     var storageWarnings: [Any] = []
+ 174 |     var modelSearchResults: [HFSearchResult] = []
+     |                              `- error: 'HFSearchResult' is ambiguous for type lookup in this context
+ 175 |     var isSearchingModels: Bool = false
+ 176 |     
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaClientKit/Sources/AnigmaClientKit/AnigmaClientKit.swift:170:15: note: found this candidate
+168 | // MARK: - Model Search Types
+169 | 
+170 | public struct HFSearchResult: Identifiable, Codable, Sendable, Hashable {
+    |               `- note: found this candidate
+171 |     public let id: String
+172 |     public let modelId: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/HuggingFaceHubModels.swift:10:15: note: found this candidate
+  8 | import Foundation
+  9 | 
+ 10 | public struct HFSearchResult: Identifiable, Codable, Sendable, Hashable {
+    |               `- note: found this candidate
+ 11 |     public let id: String
+ 12 |     public let author: String
+
+macro expansion @ObservationTracked:1:56: error: 'HFSearchResult' is ambiguous for type lookup in this context
+`- /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppStore.swift:174:50: note: expanded code originates here
+ 172 |     var storageStatus: Any?
+ 173 |     var storageWarnings: [Any] = []
+ 174 |     var modelSearchResults: [HFSearchResult] = []
+     +--- macro expansion @ObservationTracked --------------------------
+     |1 | @ObservationIgnored private  var _modelSearchResults: [HFSearchResult] = []
+     |  |                                                        `- error: 'HFSearchResult' is ambiguous for type lookup in this context
+     +------------------------------------------------------------------
+ 175 |     var isSearchingModels: Bool = false
+ 176 |     
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaClientKit/Sources/AnigmaClientKit/AnigmaClientKit.swift:170:15: note: found this candidate
+168 | // MARK: - Model Search Types
+169 | 
+170 | public struct HFSearchResult: Identifiable, Codable, Sendable, Hashable {
+    |               `- note: found this candidate
+171 |     public let id: String
+172 |     public let modelId: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Sources/ModelManagement/HuggingFaceHubModels.swift:10:15: note: found this candidate
+  8 | import Foundation
+  9 | 
+ 10 | public struct HFSearchResult: Identifiable, Codable, Sendable, Hashable {
+    |               `- note: found this candidate
+ 11 |     public let id: String
+ 12 |     public let author: String
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppStore.swift:661:13: warning: no calls to throwing functions occur within 'try' expression
+ 659 |             isInitializing = true
+ 660 |             connectionMonitor?.start()
+ 661 |             try await daemonStore.initializeDaemon()
+     |             `- warning: no calls to throwing functions occur within 'try' expression
+ 662 |             self.authority = daemonStore.authority
+ 663 |             self.surfaceId = daemonStore.surfaceId
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppStore.swift:673:11: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+ 671 |             isInitializing = false
+ 672 |             daemonStatus = "Ready"
+ 673 |         } catch {
+     |           `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+ 674 |             isInitializing = false
+ 675 |             initializationError = error.localizedDescription
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/ArtifactListView.swift:74:44: error: value of type 'AppStore' has no member 'loadMoreArtifacts'
+ 72 |                     if artifact.id == store.filteredArtifacts.last?.id
+ 73 |                         && store.hasMoreArtifacts {
+ 74 |                         Task { await store.loadMoreArtifacts() }
+    |                                            `- error: value of type 'AppStore' has no member 'loadMoreArtifacts'
+ 75 |                     }
+ 76 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/BootstrappedAppClient.swift:140:29: warning: no 'async' operations occur within 'await' expression
+138 |                     while !Task.isCancelled {
+139 |                         let status = try await bridge.getJobStatus(jobId: jobId)
+140 |                         try await self.throwIfNeeded(status.error)
+    |                             `- warning: no 'async' operations occur within 'await' expression
+141 | 
+142 |                         switch status.state.lowercased() {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/BootstrappedAppClient.swift:258:36: error: cannot convert value of type 'String?' to expected argument type 'AnigmaErrorStatus?'
+256 |         try await ensureBootstrapped()
+257 |         let response = try await ensureBridge().getVaultStatus()
+258 |         try throwIfNeeded(response.error)
+    |                                    |- error: cannot convert value of type 'String?' to expected argument type 'AnigmaErrorStatus?'
+    |                                    `- note: arguments to generic parameter 'Wrapped' ('String' and 'AnigmaErrorStatus') are expected to be equal
+259 |         
+260 |         return HarmoniaClient.VaultStatusResponse(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/BootstrappedAppClient.swift:272:36: error: cannot convert value of type 'String?' to expected argument type 'AnigmaErrorStatus?'
+270 |         try await ensureBootstrapped()
+271 |         let response = try await ensureBridge().verifyVault()
+272 |         try throwIfNeeded(response.error)
+    |                                    |- error: cannot convert value of type 'String?' to expected argument type 'AnigmaErrorStatus?'
+    |                                    `- note: arguments to generic parameter 'Wrapped' ('String' and 'AnigmaErrorStatus') are expected to be equal
+273 |         return HarmoniaClient.VaultVerifyResponse(success: response.success, message: response.message)
+274 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/BootstrappedAppClient.swift:279:36: error: cannot convert value of type 'String?' to expected argument type 'AnigmaErrorStatus?'
+277 |         try await ensureBootstrapped()
+278 |         let response = try await ensureBridge().runVaultGC(dryRun: dryRun)
+279 |         try throwIfNeeded(response.error)
+    |                                    |- error: cannot convert value of type 'String?' to expected argument type 'AnigmaErrorStatus?'
+    |                                    `- note: arguments to generic parameter 'Wrapped' ('String' and 'AnigmaErrorStatus') are expected to be equal
+280 |         return HarmoniaClient.VaultGCResponse(success: response.success, deletedCount: response.deletedCount, reclaimedSpace: response.reclaimedSpace)
+281 |     }
+
+macro expansion #Preview:23:30: error: 'async' call in a function that does not support concurrency
+`- /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Components/HarmoniaCliView.swift:310:2: note: expanded code originates here
+302 | }
+303 | 
+304 | #Preview {
+    | `- note: in expansion of macro 'Preview' here
+305 |     HarmoniaCliView(
+306 |         backendResolver: { nil },
+    :
+308 |     )
+309 |     .frame(width: 1000, height: 700)
+310 | }
+    +--- macro expansion #Preview --------------------------------------
+    |21 |                         nil
+    |22 |                     },
+    |23 |                     history: MainActor.run {
+    |   |                              `- error: 'async' call in a function that does not support concurrency
+    |24 |                         HarmoniaCommandHistory()
+    |25 |                     }
+    +-------------------------------------------------------------------
+311 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift:255:35: error: call can throw, but it is not marked with 'try' and the error is not handled
+253 |                     Button {
+254 |                         Task {
+255 |                             await store.verifyModelIntegrity(modelId: entry.id)
+    |                                   `- error: call can throw, but it is not marked with 'try' and the error is not handled
+256 |                         }
+257 |                     } label: {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Components/ModelSearchRow.swift:32:24: warning: value 'size' was defined but never used; consider replacing with boolean test [#no-usage]
+ 30 | 
+ 31 |             HStack(spacing: 12) {
+ 32 |                 if let size = model.size {
+    |                        `- warning: value 'size' was defined but never used; consider replacing with boolean test [#no-usage]
+ 33 |                     HStack(spacing: 4) {
+ 34 |                         Image(systemName: "externaldrive")
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Components/ModelSearchRow.swift:155:24: warning: value 'size' was defined but never used; consider replacing with boolean test [#no-usage]
+153 | 
+154 |             HStack(spacing: 16) {
+155 |                 if let size = model.size {
+    |                        `- warning: value 'size' was defined but never used; consider replacing with boolean test [#no-usage]
+156 |                     Label(model.formattedSize, systemImage: "externaldrive")
+157 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Components/ToolRunnerView.swift:92:13: error: no exact matches in call to initializer 
+ 90 |                 .font(Bauhaus.Font.subHeader)
+ 91 | 
+ 92 |             ForEach(action.parameters.keys.sorted(), id: \.self) { key in
+    |             `- error: no exact matches in call to initializer 
+ 93 |                 guard let schema = action.parameters[key] else {
+    |                 |- note: closure containing control flow statement cannot be used with result builder 'ViewBuilder'
+    |                 |- note: closure containing control flow statement cannot be used with result builder 'AccessibilityRotorContentBuilder'
+    |                 |- note: closure containing control flow statement cannot be used with result builder 'TableRowBuilder'
+    |                 `- note: closure containing control flow statement cannot be used with result builder 'ChartContentBuilder'
+ 94 |                     fatalError("Failed to unwrap schema")
+ 95 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Components/ToolRunnerView.swift:408:21: warning: initialization of immutable value 'configData' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+406 |                 let encoder = JSONEncoder()
+407 |                 encoder.outputFormatting = [.sortedKeys]
+408 |                 let configData = try encoder.encode(configDict)
+    |                     `- warning: initialization of immutable value 'configData' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+409 | 
+410 |                 // 2-3. Skip job dispatch - missing type definitions
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/ConnectionMonitor.swift:51:17: warning: initialization of immutable value 'previousStatus' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 49 |         // Detect state changes
+ 50 |         if isOnline != newStatus {
+ 51 |             let previousStatus = isOnline
+    |                 `- warning: initialization of immutable value 'previousStatus' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 52 |             isOnline = newStatus
+ 53 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/ConnectionMonitor.swift:95:34: warning: result of call to 'ensureDaemonRunning()' is unused [#no-usage]
+ 93 | 
+ 94 |         do {
+ 95 |             try await capability.ensureDaemonRunning()
+    |                                  `- warning: result of call to 'ensureDaemonRunning()' is unused [#no-usage]
+ 96 |             Self.logger.info("Daemon recovery successful")
+ 97 |             // Don't reset consecutiveFailures here - let checkConnection() do it on next successful check
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/DashboardView.swift:327:38: error: cannot convert value of type '[String]' to expected argument type 'Range<Int>'
+325 |             } else {
+326 |                 LazyVStack(spacing: 8) {
+327 |                     ForEach(appState.filteredTelemetry) { entry in
+    |                                      `- error: cannot convert value of type '[String]' to expected argument type 'Range<Int>'
+328 |                         TelemetryRow(entry: entry)
+329 |                     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/DashboardView.swift:328:45: error: cannot convert value of type 'Int' to expected argument type 'GovernanceTelemetryEntry'
+326 |                 LazyVStack(spacing: 8) {
+327 |                     ForEach(appState.filteredTelemetry) { entry in
+328 |                         TelemetryRow(entry: entry)
+    |                                             `- error: cannot convert value of type 'Int' to expected argument type 'GovernanceTelemetryEntry'
+329 |                     }
+330 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/DashboardView.swift:355:32: error: value of type 'GovernanceTelemetryEntry' has no member 'module'
+353 |                     Text(entry.eventType)
+354 |                         .font(.headline)
+355 |                     Text(entry.module)
+    |                                `- error: value of type 'GovernanceTelemetryEntry' has no member 'module'
+356 |                         .font(.caption)
+357 |                         .padding(.horizontal, 6)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/DevelopumAuthorities.swift:41:30: error: actor-isolated instance method 'open()' cannot be called from outside of the actor
+ 39 |                 try await databaseActor.open()
+ 40 |             } else {
+ 41 |                 try database.open()
+    |                              `- error: actor-isolated instance method 'open()' cannot be called from outside of the actor
+ 42 |             }
+ 43 |             try await MigrationRegistry.applyMigrations(using: database)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:171:29: error: cannot find type 'OrchestratorPlan' in scope
+169 |     public var messages: [OrchestratorMessage] = []
+170 |     public var isProcessing: Bool = false
+171 |     public var currentPlan: OrchestratorPlan?
+    |                             `- error: cannot find type 'OrchestratorPlan' in scope
+172 |     public var currentStepIndex: Int = 0
+173 | 
+
+macro expansion @ObservationTracked:1:48: error: cannot find type 'OrchestratorPlan' in scope
+`- /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:171:46: note: expanded code originates here
+169 |     public var messages: [OrchestratorMessage] = []
+170 |     public var isProcessing: Bool = false
+171 |     public var currentPlan: OrchestratorPlan?
+    +--- macro expansion @ObservationTracked ---------------------------
+    |1 | @ObservationIgnored private  var _currentPlan: OrchestratorPlan?
+    |  |                                                `- error: cannot find type 'OrchestratorPlan' in scope
+    +-------------------------------------------------------------------
+172 |     public var currentStepIndex: Int = 0
+173 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:295:43: error: value of type 'AIReceiptIntegration' has no member 'recordAgentIntent'
+293 | 
+294 |         // Record intent to find context
+295 |         await AIReceiptIntegration.shared.recordAgentIntent(
+    |                                           `- error: value of type 'AIReceiptIntegration' has no member 'recordAgentIntent'
+296 |             agentId: "orchestrator",
+297 |             intent: "gather_context",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:298:23: error: cannot infer contextual base in reference to member 'success'
+296 |             agentId: "orchestrator",
+297 |             intent: "gather_context",
+298 |             outcome: .success,
+    |                       `- error: cannot infer contextual base in reference to member 'success'
+299 |             diagnosticPayload: [
+300 |                 "query": task,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:316:47: error: value of type 'ContextumModule' has no member 'search'
+314 | 
+315 |         do {
+316 |             let results = try await contextum.search(request: searchRequest)
+    |                                               `- error: value of type 'ContextumModule' has no member 'search'
+317 |             // Extract content from results
+318 |             return results.chunks.map { $0.content }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:329:13: warning: initialization of immutable value 'prompt' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+327 |     private func generatePlan(_ task: String, context: [String]) async throws -> OrchestrationPlan {
+328 |         // Construct prompt for the LLM
+329 |         let prompt = """
+    |             `- warning: initialization of immutable value 'prompt' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+330 |         You are Anigma Orchestrator. Your goal is to plan a sequence of CLI tool executions to solve a coding task.
+331 |         Available tools: \(availableTools.filter { $0.isInstalled }.map { $0.tool.rawValue }.joined(separator: ", "))
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/LocalLLMOrchestrator.swift:367:29: error: value of type 'ContextumModule' has no member 'recordAgentExecution'
+365 |         }
+366 | 
+367 |         try await contextum.recordAgentExecution(
+    |                             `- error: value of type 'ContextumModule' has no member 'recordAgentExecution'
+368 |             agentId: config.agentId,
+369 |             taskTaxonomy: config.taskTaxonomy,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/SandboxedOrchestrator.swift:328:13: warning: initialization of immutable value 'promptArtifact' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+326 | 
+327 |         let promptHash = prompt.sha256Hash()
+328 |         let promptArtifact = ContractsCore.MLArtifactRef(
+    |             `- warning: initialization of immutable value 'promptArtifact' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+329 |             path: "",
+330 |             hash: promptHash
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Governance/SandboxedOrchestrator.swift:521:44: error: type 'CLIToolRegistry' has no member 'discoverAvailableTools'
+519 | 
+520 |         // Find agent binary (reuse discovery from LocalLLMOrchestrator)
+521 |         let availability = CLIToolRegistry.discoverAvailableTools()
+    |                                            `- error: type 'CLIToolRegistry' has no member 'discoverAvailableTools'
+522 |             .first { $0.tool == track.agent && $0.isInstalled }
+523 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/IndexPanelView.swift:128:18: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+126 |                 .background(Color(NSColor.textBackgroundColor))
+127 |                 .cornerRadius(4)
+128 |                 .onChange(of: model.indexingState.logLines.count) { _ in
+    |                  `- warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+129 |                     if let last = model.indexingState.logLines.last {
+130 |                         proxy.scrollTo(last, anchor: .bottom)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Integration/ContextumIntegration.swift:32:33: error: argument type 'ConcreteEmbeddingComputing' does not conform to expected type 'EmbeddingComputing'
+ 30 |         // (returns EmbeddingComputeResult, not ContractsCore.EmbeddingResult)
+ 31 |         return MLWorkerEmbeddingExecutor(
+ 32 |             embeddingComputing: computing,
+    |                                 `- error: argument type 'ConcreteEmbeddingComputing' does not conform to expected type 'EmbeddingComputing'
+ 33 |             modelRegistry: registry
+ 34 |         )
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Integration/ContextumIntegration.swift:33:28: error: argument type 'ConcreteModelRegistry' does not conform to expected type 'ModelRegistryProtocol'
+ 31 |         return MLWorkerEmbeddingExecutor(
+ 32 |             embeddingComputing: computing,
+ 33 |             modelRegistry: registry
+    |                            `- error: argument type 'ConcreteModelRegistry' does not conform to expected type 'ModelRegistryProtocol'
+ 34 |         )
+ 35 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Integration/ContextumIntegration.swift:120:34: error: extra arguments at positions #1, #2 in call
+118 | 
+119 |         let contractsModelSpec = try convertToContractsModelSpec(appModelSpec)
+120 |         return ModelRegistryEntry(id: id, spec: contractsModelSpec)
+    |                                  `- error: extra arguments at positions #1, #2 in call
+121 |     }
+122 | 
+
+AnigmaAppMacExecutable.ModelRegistryEntry.init:2:8: note: 'init(from:)' declared here
+1 | struct ModelRegistryEntry {
+2 | public init(from decoder: any Decoder) throws}
+  |        `- note: 'init(from:)' declared here
+3 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Integration/ContextumIntegration.swift:120:35: error: missing argument for parameter 'from' in call
+118 | 
+119 |         let contractsModelSpec = try convertToContractsModelSpec(appModelSpec)
+120 |         return ModelRegistryEntry(id: id, spec: contractsModelSpec)
+    |                                   `- error: missing argument for parameter 'from' in call
+121 |     }
+122 | 
+
+AnigmaAppMacExecutable.ModelRegistryEntry.init:2:8: note: 'init(from:)' declared here
+1 | struct ModelRegistryEntry {
+2 | public init(from decoder: any Decoder) throws}
+  |        `- note: 'init(from:)' declared here
+3 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/JobInspector.swift:199:73: error: value of type 'JobSummary' has no member 'isTerminal'
+197 |                     }
+198 | 
+199 |                     if case .denied(let reason) = deleteEvaluation, job.isTerminal {
+    |                                                                         `- error: value of type 'JobSummary' has no member 'isTerminal'
+200 |                         Text(reason)
+201 |                             .font(.caption)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/JobInspector.swift:239:44: error: value of optional type 'IntentEvaluation?' must be unwrapped to a value of type 'IntentEvaluation'
+237 | 
+238 |         if job.status.uppercased() == "RUNNING" || job.status.uppercased() == "QUEUED" {
+239 |             cancelEvaluation = await store.evaluateAction(
+    |                                            |- error: value of optional type 'IntentEvaluation?' must be unwrapped to a value of type 'IntentEvaluation'
+    |                                            |- note: coalesce using '??' to provide a default when the optional value contains 'nil'
+    |                                            `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+240 |                 action: "job.cancel",
+241 |                 parameters: ["jobId": .string(jobId)]
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/JobInspector.swift:247:44: error: value of optional type 'IntentEvaluation?' must be unwrapped to a value of type 'IntentEvaluation'
+245 |         if job.status.uppercased() == "SUCCEEDED" || job.status.uppercased() == "FAILED"
+246 |             || job.status.uppercased() == "CANCELED" {
+247 |             deleteEvaluation = await store.evaluateAction(
+    |                                            |- error: value of optional type 'IntentEvaluation?' must be unwrapped to a value of type 'IntentEvaluation'
+    |                                            |- note: coalesce using '??' to provide a default when the optional value contains 'nil'
+    |                                            `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+248 |                 action: "job.delete",
+249 |                 parameters: ["jobId": .string(jobId)]
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/JobListView.swift:15:25: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 13 |     @State private var selection: Set<AnigmaClientKit.JobID> = []
+ 14 | 
+ 15 |     var body: some View {
+    |                         `- error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+ 16 |         @Bindable var bindableStore = store
+ 17 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/LauncherRootView.swift:289:9: error: switch must be exhaustive
+287 |         }
+288 | 
+289 |         switch modeSource {
+    |         |- error: switch must be exhaustive
+    |         `- note: add missing case: '.overrideMode'
+290 |         case .project: return "Project"
+291 |         case .global: return "Global"
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/LegacyDevelopView.swift:14:47: error: value of type 'AppState' has no member 'developState'
+12 |     
+13 |     var body: some View {
+14 |         @Bindable var developState = appState.developState
+   |                                               `- error: value of type 'AppState' has no member 'developState'
+15 |         
+16 |         HSplitView {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/MacShell.swift:88:62: error: cannot use optional chaining on non-optional value of type 'DaemonHostCapability'
+ 86 |             HarmoniaCliView(
+ 87 |                 backendResolver: {
+ 88 |                     guard let client = store.daemonCapability?.harmonia else { return nil }
+    |                                                              `- error: cannot use optional chaining on non-optional value of type 'DaemonHostCapability'
+ 89 |                     return HarmoniaClientBackend(client: client)
+ 90 |                 },
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/MacShell.swift:511:13: error: cannot find 'DeveloperConsoleView' in scope
+509 |             AdminAuditView()
+510 |         case .developerConsole:
+511 |             DeveloperConsoleView()
+    |             `- error: cannot find 'DeveloperConsoleView' in scope
+512 |         case .developerReceipts:
+513 |             DeveloperReceiptsView()
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/MacShell.swift:478:40: error: cannot convert value of type 'AnigmaAppMacExecutable.WorkbenchProject' to expected argument type 'AnigmaWork.WorkbenchProject'
+476 |         case .projects:
+477 |             if let project = store.currentProject {
+478 |                 WorkbenchView(project: project)
+    |                                        `- error: cannot convert value of type 'AnigmaAppMacExecutable.WorkbenchProject' to expected argument type 'AnigmaWork.WorkbenchProject'
+479 |             } else {
+480 |                 ProjectsView()
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/MacShell.swift:553:31: error: cannot assign to property: 'daemonBridge' is a get-only property
+551 |                     do {
+552 |                         _ = try await store.daemonCapability.ensureDaemonRunning()
+553 |                         store.daemonBridge = try await SidecarBridge.create(
+    |                               `- error: cannot assign to property: 'daemonBridge' is a get-only property
+554 |                             clientName: "AnigmaAppMac",
+555 |                             scopes: ["Anigma.All"]
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/MainContentView.swift:103:15: error: type 'UserSurface' has no member 'observe'
+101 |         case .inbox:
+102 |             DocumentLibraryView()
+103 |         case .observe:
+    |               `- error: type 'UserSurface' has no member 'observe'
+104 |             ObservatoriumDashboardView()
+105 |         case .studio:
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Managers/CacheManager.swift:42:17: error: cannot assign to property: 'workspaces' is a get-only property
+40 |         if let data = UserDefaults.standard.data(forKey: "cache_workspaces"),
+41 |           let decoded = try? decoder.decode([AnigmaClientKit.WorkspaceSummary].self, from: data) {
+42 |           store.workspaces = decoded
+   |                 `- error: cannot assign to property: 'workspaces' is a get-only property
+43 |         }
+44 |         if let data = UserDefaults.standard.data(forKey: "cache_artifacts"),
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Managers/ContextManager.swift:56:28: error: cannot find 'AnigmaEvidence' in scope
+54 |             ])
+55 | 
+56 |             let evidence = AnigmaEvidence(
+   |                            `- error: cannot find 'AnigmaEvidence' in scope
+57 |                 id: UUID(),
+58 |                 jobId: id,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Managers/ContextManager.swift:61:24: error: cannot infer contextual base in reference to member 'jobCompletion'
+59 |                 contextId: context.id,
+60 |                 timestamp: Date(),
+61 |                 type: .jobCompletion,
+   |                        `- error: cannot infer contextual base in reference to member 'jobCompletion'
+62 |                 summary: "Atlas baseline established for \(context.name)"
+63 |             )
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Managers/JobManager.swift:152:27: warning: immutable value 'url' was never used; consider replacing with '_' or removing it [#no-usage]
+150 |                 guard let html = html,
+151 |                       let urlStr = urlStr,
+152 |                       let url = URL(string: urlStr),
+    |                           `- warning: immutable value 'url' was never used; consider replacing with '_' or removing it [#no-usage]
+153 |                       let title = title
+154 |                 else { return }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/MemoPanelView.swift:78:67: error: type 'OperatingMode' has no member 'readOnly'
+76 |                     
+77 |                     Text("Mode: \(status.operatingMode.rawValue)")
+78 |                         .foregroundColor(status.operatingMode == .readOnly ? .orange : .primary)
+   |                                                                   `- error: type 'OperatingMode' has no member 'readOnly'
+79 |                 }
+80 |                 .font(.caption2)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Resilience/CircuitBreaker.swift:86:13: warning: no 'async' operations occur within 'await' expression
+ 84 | 
+ 85 |             // Record success
+ 86 |             await recordSuccess()
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 87 | 
+ 88 |             return result
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Resilience/CircuitBreaker.swift:91:13: warning: no 'async' operations occur within 'await' expression
+ 89 |         } catch {
+ 90 |             // Record failure
+ 91 |             await recordFailure()
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 92 | 
+ 93 |             throw error
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/BinaryManager.swift:225:25: warning: capture of 'outputHandler' with non-Sendable type '(String) -> Void' in a '@Sendable' closure; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+223 |                 if !data.isEmpty, let output = String(data: data, encoding: .utf8) {
+224 |                     Task { @MainActor in
+225 |                         outputHandler(output)
+    |                         |- warning: capture of 'outputHandler' with non-Sendable type '(String) -> Void' in a '@Sendable' closure; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+    |                         `- note: a function type must be marked '@Sendable' to conform to 'Sendable'
+226 |                     }
+227 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/CodeAnalysisView.swift:74:39: error: value of type 'AppStore' has no member 'symbolReferences'
+72 |             }
+73 | 
+74 |             if let references = store.symbolReferences {
+   |                                       `- error: value of type 'AppStore' has no member 'symbolReferences'
+75 |                 Text("\(references.count) references found")
+76 |                     .font(.caption)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/ContractAnalytics.swift:79:9: warning: actor-isolated instance method 'loadFromDisk()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 77 |     public init(storageURL: URL) {
+ 78 |         self.storageURL = storageURL
+ 79 |         loadFromDisk()
+    |         `- warning: actor-isolated instance method 'loadFromDisk()' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+ 80 |     }
+ 81 | 
+    :
+261 |     }
+262 | 
+263 |     private func loadFromDisk() {
+    |                  `- note: calls to instance method 'loadFromDisk()' from outside of its actor context are implicitly asynchronous
+264 |         let decoder = JSONDecoder()
+265 |         decoder.dateDecodingStrategy = .iso8601
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/GoogleOAuthService.swift:125:44: warning: reference to captured var 'request' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+123 |         // Execute with retry and timeout
+124 |         let (data, response) = try await withRetry(maxAttempts: 3, initialDelay: 1.0) {
+125 |             try await urlSession.data(for: request)
+    |                                            `- warning: reference to captured var 'request' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+126 |         }
+127 |         if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/GoogleOAuthService.swift:165:44: warning: reference to captured var 'request' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+163 |         // Execute with retry and timeout
+164 |         let (data, response) = try await withRetry(maxAttempts: 3, initialDelay: 1.0) {
+165 |             try await urlSession.data(for: request)
+    |                                            `- warning: reference to captured var 'request' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+166 |         }
+167 |         if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HarmoniaBackgroundSync.swift:54:14: warning: capture of 'self' in a closure that outlives deinit; this is an error in the Swift 6 language mode
+ 52 | 
+ 53 |     deinit {
+ 54 |         Task { @MainActor in
+    |              `- warning: capture of 'self' in a closure that outlives deinit; this is an error in the Swift 6 language mode
+ 55 |             self.stop()
+ 56 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HarmoniaBackgroundSync.swift:228:13: error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'pendingJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+226 |         let pipeline = appStore.pipelineStatus
+227 |         let current = (
+228 |             pipeline.pendingJobs,
+    |             |- error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'pendingJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+    |             |- note: chain the optional using '?' to access member 'pendingJobs' only for non-'nil' base values
+    |             `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+229 |             pipeline.runningJobs,
+230 |             pipeline.completedJobs,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HarmoniaBackgroundSync.swift:229:13: error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'runningJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+227 |         let current = (
+228 |             pipeline.pendingJobs,
+229 |             pipeline.runningJobs,
+    |             |- error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'runningJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+    |             |- note: chain the optional using '?' to access member 'runningJobs' only for non-'nil' base values
+    |             `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+230 |             pipeline.completedJobs,
+231 |             pipeline.failedJobs
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HarmoniaBackgroundSync.swift:230:13: error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'completedJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+228 |             pipeline.pendingJobs,
+229 |             pipeline.runningJobs,
+230 |             pipeline.completedJobs,
+    |             |- error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'completedJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+    |             |- note: chain the optional using '?' to access member 'completedJobs' only for non-'nil' base values
+    |             `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+231 |             pipeline.failedJobs
+232 |         )
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HarmoniaBackgroundSync.swift:231:13: error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'failedJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+229 |             pipeline.runningJobs,
+230 |             pipeline.completedJobs,
+231 |             pipeline.failedJobs
+    |             |- error: value of optional type 'HarmoniaClient.PipelineStatusResponse?' must be unwrapped to refer to member 'failedJobs' of wrapped base type 'HarmoniaClient.PipelineStatusResponse'
+    |             |- note: chain the optional using '?' to access member 'failedJobs' only for non-'nil' base values
+    |             `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+232 |         )
+233 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HuggingFaceAdapter.swift:120:13: warning: initialization of immutable value 'descriptor' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+118 |         progressHandler: @escaping (Double) -> Void = { _ in }
+119 |     ) async throws -> URL {
+120 |         let descriptor = try await describe(repo: repo, revision: revision)
+    |             `- warning: initialization of immutable value 'descriptor' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+121 | 
+122 |         // Create install directory
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/HuggingFaceAdapter.swift:210:19: error: cannot convert value of type 'AnigmaAppMacExecutable.ModelSpec' to expected argument type 'IntelligenceContracts.ModelSpec'
+208 | 
+209 |         return ModelImportResult(
+210 |             spec: spec,
+    |                   `- error: cannot convert value of type 'AnigmaAppMacExecutable.ModelSpec' to expected argument type 'IntelligenceContracts.ModelSpec'
+211 |             installPath: installDir.path,
+212 |             conversionNeeded: conversionNeeded,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/ModelRegistry.swift:44:13: warning: initialization of immutable value 'specHash' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 42 |     /// Register a new model with governed ModelSpec
+ 43 |     public func register(_ spec: ModelSpec) async throws {
+ 44 |         let specHash = try spec.canonicalHash()
+    |             `- warning: initialization of immutable value 'specHash' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 45 |         specs[spec.modelId] = spec
+ 46 |         try save()
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Services/VaultManagementView.swift:79:60: error: value of type 'HarmoniaClient.VaultStatusResponse' has no member 'status'
+ 77 |             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 12) {
+ 78 |                 GridRow {
+ 79 |                     statRow(label: "Status", value: status.status)
+    |                                                            `- error: value of type 'HarmoniaClient.VaultStatusResponse' has no member 'status'
+ 80 |                     statRow(label: "Disk Usage", value: status.diskUsage)
+ 81 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/StatusPanelView.swift:26:61: error: type 'OperatingMode' has no member 'autopilot'
+24 |                     )) {
+25 |                         Text("Assistive").tag(OperatingMode.assistive)
+26 |                         Text("Autopilot").tag(OperatingMode.autopilot)
+   |                                                             `- error: type 'OperatingMode' has no member 'autopilot'
+27 |                         Text("Read Only").tag(OperatingMode.readOnly)
+28 |                     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/DaemonStore.swift:216:53: warning: result of call to 'ensureDaemonRunning()' is unused [#no-usage]
+214 |                 // Attempt daemon reconnection with proper error handling
+215 |                 do {
+216 |                     try await self.daemonCapability.ensureDaemonRunning()
+    |                                                     `- warning: result of call to 'ensureDaemonRunning()' is unused [#no-usage]
+217 |                 } catch {
+218 |                     throw DaemonStoreError.daemonStartFailed(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/DaemonStore.swift:291:22: error: call can throw but is not marked with 'try'
+289 |             throw DaemonStoreError.notConnected
+290 |         }
+291 |         return await bridge.streamJobEvents(jobId: jobId)
+    |                      |- error: call can throw but is not marked with 'try'
+    |                      |- note: did you mean to use 'try'?
+    |                      |- note: did you mean to handle error as optional value?
+    |                      `- note: did you mean to disable error propagation?
+292 |     }
+293 |     
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/HarmoniaStore.swift:126:34: error: cannot assign value of type '(response: HarmoniaClient.TechDebtAuditResponse, latency: TimeInterval)' (aka '(response: HarmoniaClient.TechDebtAuditResponse, latency: Double)') to type 'HarmoniaClient.TechDebtAuditResponse'
+124 |     func runTechDebtAudit(path: String) async {
+125 |         do {
+126 |             techDebtReport = try await harmoniaClient.techDebtAudit(path: path)
+    |                                  `- error: cannot assign value of type '(response: HarmoniaClient.TechDebtAuditResponse, latency: TimeInterval)' (aka '(response: HarmoniaClient.TechDebtAuditResponse, latency: Double)') to type 'HarmoniaClient.TechDebtAuditResponse'
+127 |             if let report = techDebtReport {
+128 |                 showToast(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/HarmoniaStore.swift:134:11: warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+132 |                 )
+133 |             }
+134 |         } catch {
+    |           `- warning: 'catch' block is unreachable because no errors are thrown in 'do' block
+135 |             showError("Failed to run tech debt audit: \(error)")
+136 |         }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/MLStore.swift:180:23: error: cannot convert value of type 'ModelTaskKind' to expected argument type 'TaskKind'
+178 |             modelId: modelEntry.modelId,
+179 |             modelHash: modelEntry.artifactHash,
+180 |             taskKind: mapRunTaskToModelTask(config.taskKind),
+    |                       `- error: cannot convert value of type 'ModelTaskKind' to expected argument type 'TaskKind'
+181 |             backendFormat: config.backend.rawValue,
+182 |             dimension: nil,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/MLStore.swift:185:24: error: cannot convert value of type 'ModelTrustTier' to expected argument type 'TrustTier'
+183 |             tokenizerHash: modelEntry.tokenizerHash,
+184 |             license: modelEntry.license.declared,
+185 |             trustTier: mapTrustTier(modelEntry.trustTier),
+    |                        `- error: cannot convert value of type 'ModelTrustTier' to expected argument type 'TrustTier'
+186 |             source: ModelSource(
+187 |                 type: .local,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/MLStore.swift:195:15: error: type 'MLTaskKind' (aka 'MLWorkerTask') has no member 'inference'
+193 |         let taskParams: TaskParams
+194 |         switch config.taskKind {
+195 |         case .inference:
+    |               `- error: type 'MLTaskKind' (aka 'MLWorkerTask') has no member 'inference'
+196 |             taskParams = .inference(InferenceParams(
+197 |                 maxTokens: config.maxTokens,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/MLStore.swift:201:15: error: type 'MLTaskKind' (aka 'MLWorkerTask') has no member 'embedding'
+199 |                 topP: config.topP
+200 |             ))
+201 |         case .embedding:
+    |               `- error: type 'MLTaskKind' (aka 'MLWorkerTask') has no member 'embedding'
+202 |             taskParams = .embedding(EmbeddingParams())
+203 |         default:
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/ServiceIntegrationStore.swift:65:70: error: value of optional type 'SidecarBridge?' must be unwrapped to a value of type 'SidecarBridge'
+ 63 |         
+ 64 |         // Initialize PipelineStore with daemon bridge
+ 65 |         self.pipelineStore = PipelineStore(daemonBridge: daemonStore.daemonBridge)
+    |                                                                      |- error: value of optional type 'SidecarBridge?' must be unwrapped to a value of type 'SidecarBridge'
+    |                                                                      |- note: coalesce using '??' to provide a default when the optional value contains 'nil'
+    |                                                                      `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+ 66 |         
+ 67 |         // Initialize DoctrineStore with dependencies
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/SourceConnectionStore.swift:92:9: error: main actor-isolated property 'googleRefreshTask' can not be referenced from a nonisolated context
+ 51 |     
+ 52 |     /// Background task for token refresh loop
+ 53 |     private var googleRefreshTask: Task<Void, Never>?
+    |                 `- note: property declared here
+ 54 |     
+ 55 |     // MARK: - Dependencies (Injected)
+    :
+ 90 |     
+ 91 |     deinit {
+ 92 |         googleRefreshTask?.cancel()
+    |         `- error: main actor-isolated property 'googleRefreshTask' can not be referenced from a nonisolated context
+ 93 |     }
+ 94 |     
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AnalysisCanvasView.swift:484:59: error: extra trailing closure passed in call
+ 482 |             }
+ 483 | 
+ 484 |             TimelineView(.periodic(from: .now, by: 1/60)) { context in
+     |                                                           `- error: extra trailing closure passed in call
+ 485 |                 Canvas { canvas, size in
+ 486 |                     let phase = max(0, analysis.elapsedTime)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AnalysisCanvasView.swift:484:27: error: type 'Analysis' has no member 'periodic'
+ 482 |             }
+ 483 | 
+ 484 |             TimelineView(.periodic(from: .now, by: 1/60)) { context in
+     |                           `- error: type 'Analysis' has no member 'periodic'
+ 485 |                 Canvas { canvas, size in
+ 486 |                     let phase = max(0, analysis.elapsedTime)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AnalysisCanvasView.swift:484:43: error: cannot infer contextual base in reference to member 'now'
+ 482 |             }
+ 483 | 
+ 484 |             TimelineView(.periodic(from: .now, by: 1/60)) { context in
+     |                                           `- error: cannot infer contextual base in reference to member 'now'
+ 485 |                 Canvas { canvas, size in
+ 486 |                     let phase = max(0, analysis.elapsedTime)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AnalysisCanvasView.swift:813:55: error: value of type 'AnalysisStatus' has no member 'phaseName'
+ 811 |             VStack(alignment: .leading, spacing: Bauhaus.Grid.unit) {
+ 812 |                 InfoRow(label: "Capsule", value: status.capsuleName ?? "Unknown")
+ 813 |                 InfoRow(label: "Phase", value: status.phaseName)
+     |                                                       `- error: value of type 'AnalysisStatus' has no member 'phaseName'
+ 814 |                 
+ 815 |                 if let device = status.metalDevice {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AtlasView.swift:18:60: error: call can throw, but it is not marked with 'try' and it is executed in a non-throwing autoclosure
+ 16 | 
+ 17 |     init() {
+ 18 |         self._canvasController = StateObject(wrappedValue: CanvasController())
+    |                                                            `- error: call can throw, but it is not marked with 'try' and it is executed in a non-throwing autoclosure
+ 19 |     }
+ 20 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AtlasView.swift:57:21: error: cannot find 'RuntimeCanvasContainerView' in scope
+ 55 |                 ZStack {
+ 56 |                     // Replace legacy ZStack switches with the high-performance Native Engine
+ 57 |                     RuntimeCanvasContainerView(controller: canvasController)
+    |                     `- error: cannot find 'RuntimeCanvasContainerView' in scope
+ 58 |                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+ 59 |                         .onAppear {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AtlasView.swift:58:43: error: cannot infer contextual base in reference to member 'infinity'
+ 56 |                     // Replace legacy ZStack switches with the high-performance Native Engine
+ 57 |                     RuntimeCanvasContainerView(controller: canvasController)
+ 58 |                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    |                                           `- error: cannot infer contextual base in reference to member 'infinity'
+ 59 |                         .onAppear {
+ 60 |                             syncAtlasToEngine()
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/AtlasView.swift:58:65: error: cannot infer contextual base in reference to member 'infinity'
+ 56 |                     // Replace legacy ZStack switches with the high-performance Native Engine
+ 57 |                     RuntimeCanvasContainerView(controller: canvasController)
+ 58 |                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    |                                                                 `- error: cannot infer contextual base in reference to member 'infinity'
+ 59 |                         .onAppear {
+ 60 |                             syncAtlasToEngine()
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelBrowserView.swift:112:37: error: 'topBarTrailing' is unavailable in macOS
+110 |         .navigationTitle("Browse Models")
+111 |         .toolbar {
+112 |             ToolbarItem(placement: .topBarTrailing) {
+    |                                     `- error: 'topBarTrailing' is unavailable in macOS
+113 |                 HStack(spacing: 12) {
+114 |                     Button {
+
+SwiftUI.ToolbarItemPlacement.topBarTrailing:5:21: note: 'topBarTrailing' has been explicitly marked unavailable here
+3 |   @backDeployed(before: iOS 17.0, tvOS 17.0)
+4 |   @available(macOS, unavailable)
+5 |   public static var topBarTrailing: ToolbarItemPlacement { get }}
+  |                     `- note: 'topBarTrailing' has been explicitly marked unavailable here
+6 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelBrowserView.swift:309:30: error: value of type 'ModelBrowserViewModel' has no member 'isSearching'
+307 |                 guard let client = appStore.hfClient else {
+308 |                     await MainActor.run {
+309 |                         self.isSearching = false
+    |                              `- error: value of type 'ModelBrowserViewModel' has no member 'isSearching'
+310 |                         self.cacheStatusText = "HF Client not available"
+311 |                     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelBrowserView.swift:348:46: error: value of type 'Any?' has no member 'hasToken'
+346 |     func loadInitialState() async {
+347 |         guard let appStore = appStore else { return }
+348 |         hasToken = await appStore.hfKeychain.hasToken
+    |                                              `- error: value of type 'Any?' has no member 'hasToken'
+349 |         cacheStatusText = "Ready to search"
+350 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelBrowserView.swift:354:53: error: value of type 'Any?' has no member 'runBenchmark'
+352 |     func runBenchmark() async {
+353 |         guard let appStore = appStore else { return }
+354 |         let result = await appStore.systemBenchmark.runBenchmark()
+    |                                                     `- error: value of type 'Any?' has no member 'runBenchmark'
+355 |         await MainActor.run {
+356 |             self.benchmarkResult = result
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelBrowserView.swift:363:37: error: value of optional type 'DownloadQueueManager?' must be unwrapped to refer to member 'enqueue' of wrapped base type 'DownloadQueueManager'
+361 |         guard let appStore = appStore else { return }
+362 |         for file in files {
+363 |             _ = try? await appStore.downloadQueue.enqueue(
+    |                                     |- error: value of optional type 'DownloadQueueManager?' must be unwrapped to refer to member 'enqueue' of wrapped base type 'DownloadQueueManager'
+    |                                     |- note: chain the optional using '?' to access member 'enqueue' only for non-'nil' base values
+    |                                     `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+364 |                 repo: repo,
+365 |                 file: file,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelDetailView.swift:87:57: error: value of type 'Any' has no member 'tier'
+ 85 |                 Spacer()
+ 86 | 
+ 87 |                 if let tier = appStore.benchmarkResult?.tier {
+    |                                                         |- error: value of type 'Any' has no member 'tier'
+    |                                                         `- note: cast 'Any' to 'AnyObject' or use 'as!' to force downcast to a more specific type to access members
+ 88 |                     TierBadge(tier: tier)
+ 89 |                 }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelDetailView.swift:179:49: error: missing argument label 'file:' in call
+177 |                         )
+178 |                         .onTapGesture {
+179 |                             toggleFileSelection(file)
+    |                                                 `- error: missing argument label 'file:' in call
+180 |                         }
+181 |                     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelDetailView.swift:243:39: error: value of type 'AppStore' has no member 'storageWarning'
+241 | 
+242 |             // Storage warning
+243 |             if let warning = appStore.storageWarning {
+    |                                       `- error: value of type 'AppStore' has no member 'storageWarning'
+244 |                 HStack {
+245 |                     Image(systemName: "exclamationmark.triangle.fill")
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelDetailView.swift:274:45: error: value of optional type 'HuggingFaceHubClient?' must be unwrapped to refer to member 'getModelInfo' of wrapped base type 'HuggingFaceHubClient'
+272 | 
+273 |         do {
+274 |             let detail = try await appStore.hfClient.getModelInfo(repo: model.id)
+    |                                             |- error: value of optional type 'HuggingFaceHubClient?' must be unwrapped to refer to member 'getModelInfo' of wrapped base type 'HuggingFaceHubClient'
+    |                                             |- note: chain the optional using '?' to access member 'getModelInfo' only for non-'nil' base values
+    |                                             `- note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+275 |             await MainActor.run {
+276 |                 self.modelDetail = detail
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelDetailView.swift:302:53: error: value of type 'Any?' has no member 'runBenchmark'
+300 | 
+301 |     private func runBenchmark() async {
+302 |         let result = await appStore.systemBenchmark.runBenchmark()
+    |                                                     `- error: value of type 'Any?' has no member 'runBenchmark'
+303 |         await MainActor.run {
+304 |             self.appStore.benchmarkResult = result
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelDetailView.swift:317:52: error: value of type 'Any' has no member 'tier'
+315 | 
+316 |     private func isRecommended(file: HFFileInfo) -> Bool {
+317 |         guard let tier = appStore.benchmarkResult?.tier else { return false }
+    |                                                    |- error: value of type 'Any' has no member 'tier'
+    |                                                    `- note: cast 'Any' to 'AnyObject' or use 'as!' to force downcast to a more specific type to access members
+318 | 
+319 |         let path = file.path.lowercased()
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelRegistryView.swift:142:22: warning: no 'async' operations occur within 'await' expression
+140 |         }
+141 |         .task {
+142 |             models = await appStore.modelRegistry.installedModels
+    |                      `- warning: no 'async' operations occur within 'await' expression
+143 |         }
+144 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/OrchestratorView.swift:241:52: error: value of type 'WorkspaceStore' has no member 'selectedWorkspace'
+239 |         inputText = ""
+240 | 
+241 |         guard let workspace = store.workspaceStore.selectedWorkspace else {
+    |                                                    `- error: value of type 'WorkspaceStore' has no member 'selectedWorkspace'
+242 |             orchestrator?.addMessage(.system, "⚠️ No workspace selected. Please open a repository first.")
+243 |             return
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/OrchestratorView.swift:274:46: error: value of type 'ToolCallInfo' has no member 'tool'
+272 | 
+273 |                     if let toolCall = message.toolCall {
+274 |                         Text("• \(toolCall.tool.displayName)")
+    |                                            `- error: value of type 'ToolCallInfo' has no member 'tool'
+275 |                             .font(Bauhaus.Font.caption)
+276 |                             .foregroundStyle(Bauhaus.Color.textSecondary)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/OrchestratorView.swift:388:15: error: type 'OrchestrationStep.StepStatus' has no member 'skipped'
+386 |         case .completed: return Bauhaus.Color.trusted
+387 |         case .failed: return Bauhaus.Color.error
+388 |         case .skipped: return Bauhaus.Color.textTertiary
+    |               `- error: type 'OrchestrationStep.StepStatus' has no member 'skipped'
+389 |         }
+390 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/OrchestratorView.swift:398:15: error: type 'OrchestrationStep.StepStatus' has no member 'skipped'
+396 |         case .completed: return "checkmark"
+397 |         case .failed: return "xmark"
+398 |         case .skipped: return "forward.fill"
+    |               `- error: type 'OrchestrationStep.StepStatus' has no member 'skipped'
+399 |         }
+400 |     }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/OrchestratorView.swift:434:25: error: 'async' call in a function that does not support concurrency
+432 |                 ToolbarItem(placement: .primaryAction) {
+433 |                     Button {
+434 |                         orchestrator.refreshAvailableTools()
+    |                         `- error: 'async' call in a function that does not support concurrency
+435 |                     } label: {
+436 |                         Image(systemName: "arrow.clockwise")
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/OrchestratorView.swift:486:44: error: value of type 'CLIToolRegistry.Tool' has no member 'strengths'
+484 |                         .font(Bauhaus.Font.caption)
+485 |                         .foregroundStyle(Bauhaus.Color.textSecondary)
+486 |                     Text(availability.tool.strengths.joined(separator: ", "))
+    |                                            `- error: value of type 'CLIToolRegistry.Tool' has no member 'strengths'
+487 |                         .font(Bauhaus.Font.caption)
+488 |                         .foregroundStyle(Bauhaus.Color.textTertiary)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ProjectPlanningView.swift:127:78: error: cannot find 'rootPath' in scope
+125 | 
+126 |     private func createProject() {
+127 |         store.currentProject = WorkbenchProject(name: projectName, rootPath: rootPath)
+    |                                                                              `- error: cannot find 'rootPath' in scope
+128 | 
+129 |         store.showToast(
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ProjectsView.swift:106:45: error: value of type 'WorkspaceSummary' has no member 'path'
+104 |                         id: workspace.id,
+105 |                         name: workspace.name,
+106 |                         rootPath: workspace.path
+    |                                             `- error: value of type 'WorkspaceSummary' has no member 'path'
+107 |                     )
+108 |                     store.currentProject = project
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ProvenanceView.swift:147:37: error: value of type 'SourceReference' has no member 'excerpt'
+145 |             }
+146 |             
+147 |             if let excerpt = source.excerpt {
+    |                                     `- error: value of type 'SourceReference' has no member 'excerpt'
+148 |                 Text(excerpt)
+149 |                     .font(Bauhaus.Font.caption)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ProvenanceView.swift:178:34: error: value of type 'Receipt' (aka 'CoreReceipt') has no member 'operationType'
+176 |                         .foregroundStyle(Bauhaus.Color.accent)
+177 |                     
+178 |                     Text(receipt.operationType)
+    |                                  `- error: value of type 'Receipt' (aka 'CoreReceipt') has no member 'operationType'
+179 |                         .font(Bauhaus.Font.caption)
+180 |                         .foregroundStyle(Bauhaus.Color.textPrimary)
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ProvenanceView.swift:211:49: error: value of type 'Receipt' (aka 'CoreReceipt') has no member 'operationType'
+209 |         .animation(.easeInOut(duration: 0.2), value: isSelected)
+210 |         .accessibilityElement(children: .combine)
+211 |         .accessibilityLabel("Receipt: \(receipt.operationType)")
+    |                                                 `- error: value of type 'Receipt' (aka 'CoreReceipt') has no member 'operationType'
+212 |     }
+213 | }
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/ProvenanceView.swift:229:62: error: value of type 'AnalysisResult' has no member 'timestamp'
+227 |             )
+228 |             
+229 |             if let firstResultTime = analysis.results.first?.timestamp {
+    |                                                              `- error: value of type 'AnalysisResult' has no member 'timestamp'
+230 |                 TimelineEvent(
+231 |                     icon: "sparkles",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/SourceConnectionView.swift:130:53: error: cannot convert value of type 'GoogleOAuthToken' to expected argument type 'String'
+128 |                             codeVerifier: authRequest.codeVerifier
+129 |                         )
+130 |                         store.storeGoogleOAuthToken(token)
+    |                                                     `- error: cannot convert value of type 'GoogleOAuthToken' to expected argument type 'String'
+131 |                         store.showToast(title: "Google Connected", subtitle: "Account linked via system browser.", icon: "checkmark.circle.fill")
+132 |                     } catch {
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Surfaces/StudioView.swift:32:21: warning: initialization of immutable value 'tool' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 30 |             // Right: Inspector & Register
+ 31 |             StudioTruthPanel(name: toolName, description: toolDescription, inputs: toolInputs, outputs: toolOutputs) {
+ 32 |                 let tool = AnigmaTool(
+    |                     `- warning: initialization of immutable value 'tool' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 33 |                     id: UUID(),
+ 34 |                     name: toolName,
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#SendableClosureCaptures]: <https://docs.swift.org/compiler/documentation/diagnostics/sendable-closure-captures>

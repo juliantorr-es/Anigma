@@ -1,0 +1,62 @@
+[
+  {
+    "id": "benchmark_bert_int8_ane",
+    "modelId": "bert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuAndNeuralEngine",
+    "quantization": "int8",
+    "iterations": 10,
+    "warmupIterations": 2,
+    "expectedThroughput": 0.5,
+    "maxLatency": 30.0,
+    "memoryBudget": 2147483648
+  },
+  {
+    "id": "benchmark_bert_int8_cpu",
+    "modelId": "bert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuOnly",
+    "quantization": "int8",
+    "iterations": 10,
+    "warmupIterations": 2,
+    "expectedThroughput": 0.2,
+    "maxLatency": 60.0,
+    "memoryBudget": 2147483648
+  },
+  {
+    "id": "benchmark_clip_fp16_gpu",
+    "modelId": "clip-vit-base-patch32",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuAndGPU",
+    "quantization": "fp16",
+    "iterations": 8,
+    "warmupIterations": 2,
+    "expectedThroughput": 0.3,
+    "maxLatency": 45.0,
+    "memoryBudget": 4294967296
+  },
+  {
+    "id": "benchmark_llama_fp16_all",
+    "modelId": "llama-2-7b",
+    "targetFormat": "mlprogram",
+    "computeUnits": "all",
+    "quantization": "fp16",
+    "iterations": 3,
+    "warmupIterations": 1,
+    "expectedThroughput": 0.05,
+    "maxLatency": 300.0,
+    "memoryBudget": 17179869184
+  },
+  {
+    "id": "benchmark_distilbert_fp32_cpu",
+    "modelId": "distilbert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuOnly",
+    "quantization": "fp32",
+    "iterations": 15,
+    "warmupIterations": 3,
+    "expectedThroughput": 0.8,
+    "maxLatency": 20.0,
+    "memoryBudget": 1073741824
+  }
+]

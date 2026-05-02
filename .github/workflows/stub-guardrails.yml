@@ -1,0 +1,26 @@
+name: Stub Guardrails
+
+on:
+  pull_request:
+    paths:
+      - 'anigma/**/*.swift'
+      - 'Tests/GovernanceHarness/**'
+      - 'check_stubs.sh'
+      - 'STUB_GUARDRAILS.md'
+  push:
+    paths:
+      - 'anigma/**/*.swift'
+      - 'Tests/GovernanceHarness/**'
+      - 'check_stubs.sh'
+      - 'STUB_GUARDRAILS.md'
+
+jobs:
+  verify-stub-guardrails:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run stub guardrails
+        run: |
+          chmod +x check_stubs.sh
+          ./check_stubs.sh all

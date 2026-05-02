@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-01-07T07:00:05Z",
+  "contracts": {
+    "type-authority": {
+      "status": "passing",
+      "violations": 0,
+      "coverage": 1.0
+    },
+    "design-tokens": {
+      "status": "failing",
+      "violations": 26,
+      "coverage": 0.84
+    },
+    "accessibility": {
+      "status": "unknown",
+      "violations": 0,
+      "coverage": 0.0
+    },
+    "performance": {
+      "status": "unknown",
+      "violations": 0,
+      "coverage": 0.0
+    }
+  },
+  "summary": {
+    "total_violations": 26,
+    "critical_violations": 26,
+    "contracts_passing": 1,
+    "contracts_failing": 1,
+    "contracts_unknown": 2
+  }
+}

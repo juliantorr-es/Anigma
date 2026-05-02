@@ -1,0 +1,185 @@
+%% Title: Subprocess Pooling Planned Flow
+%% Doc ID: SUBPROCESS_POOLING_PLANNED_FLOW
+%% Domain: anigmad / SubprocessPooling
+%% Version: 1.0.0
+%% Last Updated: 2026-05-02
+%% Related: Docs/architecture/maps/module-role-index.yaml (AnigmaDaemon, SubprocessPooling)
+%% Related: Docs/td/ready/p0-004/
+%% Related: Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+
+flowchart TD
+    %% ========================================================================
+    %% SUBPROCESS POOLING FLOW - ANIGMAD
+    %% ========================================================================
+    
+    %% ----------------------------------------------------------------------
+    %% STYLES
+    %% ----------------------------------------------------------------------
+    classDef daemon fill:#673ab7,stroke:#333,stroke-width:2px,color:#fff
+    classDef pool fill:#ff5722,stroke:#333,stroke-width:2px,color:#fff
+    classDef worker fill:#00bcd4,stroke:#333,stroke-width:2px,color:#000
+    classDef gate fill:#e91e63,stroke:#333,stroke-width:2px,color:#fff
+    classDef proof fill:#4caf50,stroke:#333,stroke-width:2px,color:#000
+    classDef metrics fill:#ff9800,stroke:#333,stroke-width:2px,color:#000
+    classDef success fill:#8bc34a,stroke:#333,stroke-width:2px,color:#000
+    classDef failure fill:#f44336,stroke:#333,stroke-width:2px,color:#fff
+    
+    %% ----------------------------------------------------------------------
+    %% PART 1: POOL INITIALIZATION (Daemon Startup)
+    %% ----------------------------------------------------------------------
+    subgraph PoolInit["=== PART 1: Pool Initialization ==="]
+        StartInit([anigmad Startup]):::success
+        
+        LoadConfig["Load Pool Configuration\n(size, workerType, timeout)"]:::daemon
+        CreateMetrics["Create PoolMetrics\n(observability)"]:::metrics
+        InitState["Initialize WorkerState\n(tracking)"]:::daemon
+        PreWarm["Pre-warm Workers\n(create initial pool)"]:::pool
+        Register["Register with\nRuntimeOrchestrator"]:::daemon
+        
+        StartInit --> LoadConfig
+        LoadConfig --> CreateMetrics
+        CreateMetrics --> InitState
+        InitState --> PreWarm
+        PreWarm --> Register
+        Register --> InitComplete
+        
+        InitComplete([Pool Ready\nfor Tasks]):::success
+    end
+    
+    %% ----------------------------------------------------------------------
+    %% PART 2: WORKER LIFECYCLE (Task Execution)
+    %% ----------------------------------------------------------------------
+    subgraph WorkerLifecycle["=== PART 2: Worker Lifecycle ==="]
+        StartTask([Task Submission]):::success
+        
+        Checkout["Checkout Worker\nfrom Pool"]:::pool
+        ValidateHealth["Validate Worker Health\n(heartbeat, responsiveness)"]:::gate
+        
+        StartTask --> Checkout
+        Checkout --> ValidateHealth
+        
+        ValidateHealth -->|Unhealthy| RecycleRoute
+        ValidateHealth -->|Healthy| AssignRoute
+        
+        %% Healthy path
+        AssignRoute --> AssignTask
+        AssignTask["Assign Task\nto Worker"]:::daemon
+        AssignTask --> StartHeartbeat
+        StartHeartbeat["Start Heartbeat\nMonitoring"]:::metrics
+        StartHeartbeat --> Execute
+        Execute["Worker Executes\nTask"]:::worker
+        Execute --> ReturnResults
+        ReturnResults["Return Results\nto Client"]:::worker
+        ReturnResults --> Checkin
+        Checkin["Checkin Worker\nto Pool"]:::pool
+        Checkin --> UpdateMetrics
+        UpdateMetrics["Update PoolMetrics\n(counts, timing)"]:::metrics
+        UpdateMetrics --> TaskSuccess
+        TaskSuccess([Task Complete\nSuccess]):::success
+        
+        %% Unhealthy path
+        RecycleRoute --> RecycleWorker
+        RecycleWorker["Recycle Worker\n(kill, create new)"]:::pool
+        RecycleWorker --> WaitNew
+        WaitNew["Wait for New\nWorker Ready"]:::pool
+        WaitNew --> RetryCheckout
+        RetryCheckout["Retry Checkout\nWorker"]:::pool
+        RetryCheckout --> ValidateHealth
+    end
+    
+    %% ----------------------------------------------------------------------
+    %% PART 3: CRASH DETECTION & RECOVERY
+    %% ----------------------------------------------------------------------
+    subgraph CrashRecovery["=== PART 3: Crash Detection ==="]
+        Execute -->|Worker silent| DetectCrash
+        DetectCrash["Detect Crash\n(heartbeat timeout)"]:::gate
+        DetectCrash --> LogCrash
+        LogCrash["Log Crash Event\n(WorkerState crash count)"]:::proof
+        LogCrash --> RetireWorkers
+        RetireWorkers["Retire Crashed Worker\n(mark as crashed)"]:::worker
+        RetireWorkers --> CreateReplacement
+        CreateReplacement["Create Replacement\n(new worker)"]:::pool
+        CreateReplacement --> RecoverSlot
+        RecoverSlot["Recover Pool Slot\n(maintain pool size)"]:::pool
+    end
+    
+    %% ----------------------------------------------------------------------
+    %% PART 4: DETERMINISTIC SHUTDOWN
+    %% ----------------------------------------------------------------------
+    subgraph DeterministicShutdown["=== PART 4: Deterministic Shutdown ==="]
+        ShutdownStart([Shutdown Signal\nReceived]):::daemon
+        
+        DrainQueue["Drain Task Queue\n(complete current tasks)"]:::daemon
+        RejectNew["Reject New Tasks\n(shutdown mode)"]:::daemon
+        GracefulTerminate["Graceful Terminate\nWorkers"]:::worker
+        WaitCompletion["Wait for Completion\n(all workers idle)"]:::daemon
+        CleanupResources["Cleanup Resources\n(sockets, memory, files)"]:::daemon
+        
+        ShutdownStart --> DrainQueue
+        DrainQueue --> RejectNew
+        RejectNew --> GracefulTerminate
+        GracefulTerminate --> WaitCompletion
+        WaitCompletion --> CleanupResources
+        CleanupResources --> ForceKill
+        
+        ForceKill["Force Kill Remaining\n(if timeout)"]:::gate
+        ForceKill --> EmitShutdownProof
+        EmitShutdownProof["Emit Shutdown Proof\n(Clean shutdown receipt)"]:::proof
+        EmitShutdownProof --> ShutdownComplete
+        ShutdownComplete([Daemon Stopped]):::success
+    end
+    
+    %% ----------------------------------------------------------------------
+    %% PART 5: POOL EXHAUSTION HANDLING
+    %% ----------------------------------------------------------------------
+    subgraph Exhaustion["=== PART 5: Pool Exhaustion ==="]
+        Checkout -->|No workers available| QueueTask
+        QueueTask["Queue Task\n(wait for worker)"]
+        
+        TimeoutCheck["Check Queue Timeout"]:::gate
+        QueueTask --> TimeoutCheck
+        TimeoutCheck -->|Timeout| ScaleUp
+        ScaleUp["Scale Up Pool\n(create additional workers)"]:::pool
+        ScaleUp --> ResumeCheckout
+        ResumeCheckout["Resume Checkout\nfrom Queue"]:::pool
+        ResumeCheckout --> AssignRoute
+        
+        TimeoutCheck -->|No timeout| ContinueWait
+        ContinueWait["Continue Waiting\nfor worker"]:::pool
+        ContinueWait --> RecheckQueue
+        RecheckQueue["Recheck Queue\n(worker available?)"]:::pool
+        RecheckQueue --> Checkout
+    end
+
+%% ========================================================================
+%% LEGEND
+%% Type - color - Description
+%% Daemon - Purple - Daemon core components
+%% Pool - Orange - Pool management
+%% Worker - Cyan - Individual worker subprocesses
+%% Gate - Pink - Health check and control gates
+%% Proof - Green - Evidence/receipt emission
+%% Metrics - Orange - Observability and telemetry
+%% Success - Lt Green - Successful completion
+%% Failure - Red - Error/failure state
+%% ========================================================================
+
+%% ========================================================================
+%% DOCTRINE REFERENCES
+%% - Warm Pool Pattern: Pre-warm workers for instant availability
+%% - Crash Detection: Monitor and recover from worker crashes automatically
+%% - Deterministic Shutdown: Clean shutdown on daemon exit
+%% - Pool Metrics: Collect observability data for all operations
+%% - Zero-Copy: UMA buffer pool for tensor sharing between workers
+%% - Lease Lifecycle: Workers checked out, used, checked in
+%% ========================================================================
+
+%% ========================================================================
+%% FILE REFERENCES
+%% - Sources/AnigmaDaemonCore/KernelBridge.swift (daemon core)
+%% - Sources/RuntimeOrchestrator/RuntimeOrchestrator.swift (orchestrator)
+%% - Sources/RuntimeOrchestrator/RuntimeTypes.swift (types)
+%% ========================================================================
+
+%% Related TD:
+%% - p0-004: anigmad Subprocess Pooling epic

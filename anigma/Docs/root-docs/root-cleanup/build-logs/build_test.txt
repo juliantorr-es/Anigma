@@ -1,0 +1,808 @@
+[1/1] Compiling plugin GenerateManual
+[2/2] Compiling plugin GenerateDoccReference
+Building for debugging...
+[2/46] Write sources
+[3/46] Write swift-version--58304C5D6DBC2206.txt
+[5/201] Compiling HarmoniaModule DoctrinalRegistry.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[6/201] Compiling HarmoniaModule DoctrinalScouts.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[7/201] Compiling HarmoniaModule DoctrineBridge.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[8/201] Compiling HarmoniaModule DoctrineGuards.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[9/201] Compiling HarmoniaModule DoctrineIntegration.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[10/201] Compiling HarmoniaModule DoctrineMigrationIntegration.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[11/201] Compiling HarmoniaModule DoctrinePacks.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[12/201] Compiling HarmoniaModule SecurityDoctrinePack.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[13/201] Compiling HarmoniaModule VersionedDoctrinePacks.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[14/201] Compiling HarmoniaModule GovernanceEventSchemas.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[15/201] Compiling HarmoniaModule HarmoniaGovernanceAdapter.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[16/201] Compiling HarmoniaModule ToolchainFingerprint.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[17/201] Compiling HarmoniaModule WorkspaceSnapshotCapture.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[18/201] Compiling HarmoniaModule BanditConfigSelector.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[19/201] Compiling HarmoniaModule BanditPolicy.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[20/201] Compiling HarmoniaModule BehavioralHealthMetrics.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[21/201] Compiling HarmoniaModule CodeQualityService.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[22/201] Compiling HarmoniaModule GameProjectState.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[23/201] Compiling HarmoniaModule GameStepIntent.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[24/201] Compiling HarmoniaModule GovernanceEventSinks.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[25/201] Compiling HarmoniaModule GovernanceImplementations.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[26/201] Compiling HarmoniaModule GovernanceProtocols.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[27/201] Compiling HarmoniaModule HarnessRegistration.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[28/201] Compiling HarmoniaModule PrincipalityProjectController+Scouts.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:123:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+121 |             for violation in criticalViolations {
+122 |                 // Assuming SecurityEventsManager.logDoctrineViolation takes DoctrineCore.DoctrineViolation
+123 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+124 |                     engineId: "cs-doctrine-guard",
+125 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Doctrine/DoctrineGuards.swift:151:38: error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+149 |             // Log security event for error violations
+150 |             for violation in errorViolations {
+151 |                 await securityEvents.logDoctrineViolation(
+    |                                      `- error: value of type 'SecurityEventsManager' has no member 'logDoctrineViolation'
+152 |                     engineId: "cs-doctrine-guard",
+153 |                     operation: "file_scan",
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:39:28: error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+37 |             ]
+38 |         )
+39 |         try await database.registerSchema(schema)
+   |                            `- error: value of type 'any DatabaseAuthority' has no member 'registerSchema'
+40 |     }
+41 | 
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Governance/HarmoniaGovernanceAdapter.swift:59:20: error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+57 |         )
+58 | 
+59 |         return try await database.mutate(mutation, context: context)
+   |                    `- error: cannot convert return expression of type 'Receipt' to return type 'MutationReceipt'
+60 |     }
+61 | }
+[29/225] Compiling PolytroposModule VideoIngestionService.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/VideoIngestionService.swift:195:53: error: cannot convert value of type 'MediaContainerCapsule.VideoCodec' to expected argument type 'PolytroposModule.VideoCodec'
+193 |                         height: Int(videoInfo.height)
+194 |                     )
+195 |                     codec = mapVideoCodec(videoInfo.codec)
+    |                                                     `- error: cannot convert value of type 'MediaContainerCapsule.VideoCodec' to expected argument type 'PolytroposModule.VideoCodec'
+196 |                     frameRate = Double(videoInfo.frameRate.num) / Double(videoInfo.frameRate.den)
+197 |                     bitrate = Int(videoInfo.bitRate) > 0 ? Int(videoInfo.bitRate) : nil
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/VideoIngestionService.swift:286:15: error: type 'VideoCodec' has no member 'h265'
+284 |         case .h264:
+285 |             return .h264
+286 |         case .h265:
+    |               `- error: type 'VideoCodec' has no member 'h265'
+287 |             return .hevc
+288 |         case .vp9:
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/VideoIngestionService.swift:288:15: error: type 'VideoCodec' has no member 'vp9'
+286 |         case .h265:
+287 |             return .hevc
+288 |         case .vp9:
+    |               `- error: type 'VideoCodec' has no member 'vp9'
+289 |             return .vp9
+290 |         case .av1:
+[30/225] Emitting module PolytroposModule
+[31/225] Compiling PolytroposModule ArtifactStoreIntegration.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/ArtifactStoreIntegration.swift:114:13: error: cannot convert return expression of type 'ArtifactStoreModule.VerificationResult' to return type 'PolytroposModule.VerificationResult'
+112 |     /// Verify integrity of a stored VideoAsset.
+113 |     public func verifyAsset(artifactID: String) async throws -> VerificationResult {
+114 |         try await artifactStore.verify(artifactID: artifactID)
+    |             `- error: cannot convert return expression of type 'ArtifactStoreModule.VerificationResult' to return type 'PolytroposModule.VerificationResult'
+115 |     }
+116 | }
+[31/225] Linking harmonia-surface
+[31/225] Linking ml-worker

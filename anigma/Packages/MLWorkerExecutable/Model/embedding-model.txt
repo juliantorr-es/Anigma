@@ -1,0 +1,1 @@
+Anigma MLX embedding model placeholder.

@@ -1,0 +1,4 @@
+module TableExtractionNative {
+    header "table_extraction_capsule.h"
+    export *
+}

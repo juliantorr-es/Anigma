@@ -1,0 +1,42 @@
+[
+  {
+    "id": "determinism_bert_int8",
+    "modelId": "bert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuAndNeuralEngine",
+    "quantization": "int8",
+    "runs": 5,
+    "requireExactMatch": true,
+    "tolerance": 0.0
+  },
+  {
+    "id": "determinism_clip_fp16",
+    "modelId": "clip-vit-base-patch32",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuAndGPU",
+    "quantization": "fp16",
+    "runs": 5,
+    "requireExactMatch": true,
+    "tolerance": 0.0
+  },
+  {
+    "id": "determinism_llama_fp16",
+    "modelId": "llama-2-7b",
+    "targetFormat": "mlprogram",
+    "computeUnits": "all",
+    "quantization": "fp16",
+    "runs": 3,
+    "requireExactMatch": true,
+    "tolerance": 0.0
+  },
+  {
+    "id": "determinism_distilbert_fp32",
+    "modelId": "distilbert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuOnly",
+    "quantization": "fp32",
+    "runs": 7,
+    "requireExactMatch": true,
+    "tolerance": 0.0
+  }
+]

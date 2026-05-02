@@ -1,0 +1,63 @@
+# Anigma Architectural Decision Timeline
+# Records key architectural decisions and their context
+
+version: "1.0.0"
+last_updated: "2025-01-15"
+
+decisions:
+  - id: "AD-001"
+    date: "2025-01-15"
+    title: "Verification Profiles Standardization"
+    description: "Adopt standardized verification profiles for consistent task validation across all lanes"
+    status: "adopted"
+    context:
+      - "Previously: ad-hoc command sets for each task"
+      - "Problem: inconsistent validation, agents inventing commands"
+      - "Solution: predefined profiles with required/optional tools and commands"
+    impacts:
+      - "Scripts/validate_verification_profiles.py"
+      - "Docs/manifests/verification-profiles.yaml"
+    references:
+      - "Docs/governance/VERIFICATION_PROFILES.md"
+
+  - id: "AD-002"
+    date: "2025-01-15"
+    title: "TD Context Garbage Collection"
+    description: "Implement automated GC for TD task context with configurable policies"
+    status: "adopted"
+    context:
+      - "Previously: manual cleanup, inconsistent retention"
+      - "Problem: repository bloat from accumulated artifacts"
+      - "Solution: policy-based GC with retain/compact/archive options"
+    impacts:
+      - "Scripts/td_context_gc.py"
+      - "Docs/manifests/td-context-gc-policy.yaml"
+    references:
+      - "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+
+  - id: "AD-003"
+    date: "2025-01-14"
+    title: "Docs/ as TD Source of Truth"
+    description: "Establish Docs/ as the durable source of truth with TD as local execution queue"
+    status: "adopted"
+    context:
+      - "Previously: TD database was source of truth"
+      - "Problem: database reset loses history, descriptive context"
+      - "Solution: Docs/ contains all descriptors, proofs, manifests; TD is ephemeral"
+    impacts:
+      - "Docs/td/ structure"
+      - "Scripts/td_bootstrap_from_docs.py"
+      - "Scripts/validate_td_docs_sync.py"
+    references:
+      - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+
+validation_rules:
+  - id: "AD-001"
+    name: "Valid Decision Status"
+    description: "Status must be one of: proposed, adopted, superseded, deprecated, retired"
+    severity: "ERROR"
+  
+  - id: "AD-002"
+    name: "Required Fields"
+    description: "Each decision must have id, date, title, description, status"
+    severity: "ERROR"

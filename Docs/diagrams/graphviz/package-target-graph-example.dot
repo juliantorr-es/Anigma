@@ -1,0 +1,90 @@
+// package-target-graph-example.dot
+// Example Graphviz DOT file for package target dependency graph
+// Used for visualization with: dot -Tpng this_file.dot -o output.png
+
+// Graph attributes
+digraph package_targets {
+    // Global graph settings
+    rankdir = "TB";           // Top to bottom layout
+    bgcolor = "transparent"; // Transparent background
+    fontname = "Helvetica";   // Font family
+    fontsize = 12;           // Base font size
+    node [fontname = "Helvetica", fontsize = 12, shape = "box", style = "rounded"];
+    edge [fontname = "Helvetica", fontsize = 10, arrowsize = 0.5];
+
+    // Legend/Key section
+    subgraph cluster_legend {
+        label = "Legend";
+        style = "dotted";
+        bgcolor = "lightgrey";
+
+        legend_tier1 [label = "Tier 1: Contracts\n(Portable interfaces)", shape = "box", fillcolor = "#e3f2fd", style = "filled"];
+        legend_tier2 [label = "Tier 2: Substrate\n(Media, rendering)", shape = "box", fillcolor = "#fff3e0", style = "filled"];
+        legend_tier3 [label = "Tier 3: Features\n(GUI, CLI, daemon)", shape = "box", fillcolor = "#f3e5f5", style = "filled"];
+    }
+
+    // Tier 1: Contracts
+    subgraph cluster_tier1 {
+        label = "Tier 1: ContractsCore";
+        color = "#2196f3";
+        style = "rounded";
+
+        ContractsCore [label = "ContractsCore\nType-safe service contracts"];
+    }
+
+    // Tier 2: Substrate
+    subgraph cluster_tier2 {
+        label = "Tier 2: Substrate";
+        color = "#ff9800";
+        style = "rounded";
+
+        MediaCore [label = "MediaCore\nMedia processing substrate"];
+        RendererKit [label = "RendererKit\nPlatform-agnostic rendering"];
+        SceneGraphCapsule [label = "SceneGraphCapsule\nScene graph representation"];
+        CoreUtilities [label = "CoreUtilities\nShared utilities"];
+    }
+
+    // Tier 3: Features
+    subgraph cluster_tier3 {
+        label = "Tier 3: Features";
+        color = "#9c27b0";
+        style = "rounded";
+
+        AnigmaAppMac [label = "AnigmaAppMac\nmacOS GUI application"];
+        AnigmaCLI [label = "AnigmaCLI\nCommand-line interface"];
+        AnigmaDaemon [label = "AnigmaDaemon\nBackground daemon"];
+    }
+
+    // Dependencies: Tier 1 -> Tier 2 -> Tier 3
+    // Tier 2 depends on Tier 1
+    ContractsCore -> MediaCore [label = "uses");
+    ContractsCore -> RendererKit [label = "uses"];
+    ContractsCore -> SceneGraphCapsule [label = "uses"];
+    ContractsCore -> CoreUtilities [label = "uses");
+
+    // Tier 3 depends on Tier 1 and Tier 2
+    MediaCore -> AnigmaAppMac [label = "used by");
+    RendererKit -> AnigmaAppMac [label = "used by"];
+    SceneGraphCapsule -> AnigmaAppMac [label = "used by");
+    CoreUtilities -> AnigmaAppMac [label = "used by");
+
+    MediaCore -> AnigmaCLI [label = "used by");
+    RendererKit -> AnigmaCLI [label = "used by");
+    CoreUtilities -> AnigmaCLI [label = "used by");
+
+    MediaCore -> AnigmaDaemon [label = "used by");
+    CoreUtilities -> AnigmaDaemon [label = "used by");
+
+    // Invalid: Would cause tier violation
+    // AnigmaAppMac -> MediaCore [label = "X: Tier 3 -> Tier 2 FORBIDDEN"];
+    // AnigmaDaemon -> AnigmaAppMac [label = "X: Tier 3 -> Tier 3 cross-module OK"];
+
+    // Annotations for tier boundaries (red = violation)
+    // This would be added for actual violations:
+    // AnigmaAppMac -> AnigmaDaemon [label = "VIOLATION", color = "red", penwidth = 2];
+
+    // Additional info
+    label = "Anigma Package Target Dependencies\n(Direction: down = allowed, up = forbidden)";
+    fontcolor = "#666";
+    fontsize = 14;
+}

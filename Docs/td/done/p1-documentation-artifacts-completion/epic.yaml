@@ -1,0 +1,34 @@
+id: p1-documentation-artifacts-completion
+title: P1 Documentation-as-Code Artifact Completion
+type: epic
+priority: P1
+status: complete
+lane: documentation-infrastructure
+summary: null
+description: ''
+recommended_worktree: anigma/
+source_docs:
+- Docs/manifests/documentation-artifacts.yaml
+- Docs/manifests/publication-checklist.yaml
+- Docs/proofs/documentation-artifacts-completion.md
+related_docs: []
+proofs:
+- Docs/proofs/documentation-artifacts-completion.md
+proof_required: []
+expected_proof: []
+tasks: &id001 []
+children: *id001
+acceptance:
+- No 0-byte artifact files in Docs/schemas, Docs/manifests, Docs/diagrams
+- All JSON schemas parse as valid JSON
+- All YAML manifests parse as valid YAML
+- All Mermaid diagrams have valid syntax
+- All Graphviz diagrams have valid DOT syntax
+- Structurizr DSL workspace is valid
+- Proof document records validation
+non_goals:
+- Rendering diagrams to SVG
+- Creating additional schemas beyond the 5 specified
+td_labels:
+- lane:documentation-infrastructure
+- type:epic

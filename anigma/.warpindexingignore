@@ -1,0 +1,71 @@
+# Files and directories to EXCLUDE from Warp indexing.
+# Goal: keep indexed set < ~10k files while preserving core Sources, Tests, and key metadata.
+
+############################################################
+# 1. Build outputs / artifacts / caches
+############################################################
+.build/
+.swiftpm/
+Artifacts/
+swift6_harness/
+
+# Local SwiftPM / toolchain caches (if present)
+.cache/
+
+############################################################
+# 2. Governance receipts and generated patches
+############################################################
+.opencode/
+harmonia_harness.sqlite*
+:memory:*
+
+############################################################
+# 3. Node / JS dependencies (root + Docs + web-assets)
+############################################################
+node_modules/
+Docs/node_modules/
+web-assets/**/node_modules/
+
+############################################################
+# 4. Vendored or external large trees
+############################################################
+Tools/Vendor/
+Vendor/
+anigma-mlx-backend/
+
+# Installer / package artifacts
+swiftly.pkg
+
+############################################################
+# 5. Transient DBs, sessions, and scratch files
+############################################################
+*.db
+*.db-*
+*.sqlite*
+*.sqlite-shm*
+*.sqlite-wal*
+session-ses_*.md
+
+############################################################
+# 6. Large or secondary documentation trees
+# (Core architecture docs live in Docs/, but we can safely
+#  exclude bulk/legacy/automation to keep index small.)
+############################################################
+Docs/legacy/
+Docs/releases/
+Docs/incidents/
+Docs/reports/
+Docs/status/
+Docs/sprints/
+# Docs/roadmap/   # re-included for indexing
+Docs/Atlas/
+Docs/automation/
+Docs/scripts/
+Docs/node_modules/
+
+# If indexing pressure remains high, you can temporarily
+# add a blanket rule:
+#   Docs/
+# and then selectively re-include individual files using
+# gitignore-style negation (e.g. `!Docs/Overview.md`) once
+# Warp adds or confirms support for that behavior.

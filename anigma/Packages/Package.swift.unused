@@ -1,0 +1,31 @@
+// swift-tools-version: 5.10
+// Inactive package-level manifest retained for Observatorium source ownership.
+// Active backend build wiring is defined in ../Package.swift.
+
+import PackageDescription
+
+let package = Package(
+    name: "ObservatoriumModule",
+    platforms: [
+        .macOS(.v14),
+        .iOS(.v17)
+    ],
+    products: [
+        .library(name: "ObservatoriumModule", targets: ["ObservatoriumModule"])
+    ],
+    dependencies: [],
+    targets: [
+        .target(
+            name: "ObservatoriumModule",
+            path: "ObservatoriumModule",
+            exclude: [
+                "Components",
+                "Sources"
+            ],
+            sources: ["ObservatoriumModuleStub.swift"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        )
+    ]
+)

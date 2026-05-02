@@ -1,0 +1,197 @@
+# TD Context Garbage Collection Policy Manifest
+# Machine-readable GC policy definitions for Anigma TD system
+# Used by: Scripts/td_context_gc.py
+
+version: "1.0.0"
+last_updated: "2025-01-15"
+
+# Default GC policies by priority level
+default_policies:
+  P0:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    rationale: "P0 tasks are critical path and serve as reference implementations"
+  P1:
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+    rationale: "P1 tasks need balance between retention and cleanup"
+  P2:
+    gc_policy: "compact_on_done"
+    context_load_policy: "on_demand"
+    rationale: "P2 tasks can be more aggressively cleaned"  
+  P3:
+    gc_policy: "compact_on_done"
+    context_load_policy: "minimal"
+    rationale: "P3 tasks are lower priority, minimal retention"
+  P4:
+    gc_policy: "compact_on_done"
+    context_load_policy: "minimal"
+    rationale: "P4 tasks are lowest priority, minimal retention"
+
+# Default GC policies by lane
+lane_policies:
+  p0-critical-path:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    status_filter: ["new", "ready", "in_progress", "in_review", "complete", "done"]
+    rationale: "P0 critical path needs full retention"
+  daemon-runtime-isolation:
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+    status_filter: ["complete", "done"]
+    rationale: "Daemon runtime work needs retention during active development"
+  architecture-governance:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    rationale: "Architecture decisions need permanent reference"
+  documentation-infrastructure:
+    gc_policy: "compact_on_done"
+    context_load_policy: "lazy"
+    rationale: "Docs infrastructure can be cleaned after completion"
+  publication-cleanup:
+    gc_policy: "compact_on_done"
+    context_load_policy: "minimal"
+    rationale: "Publication prep work is ephemeral"
+
+# Task-specific overrides (task_id -> policy override)
+task_overrides:
+  # P0-004 subtasks - retain all for reference
+  td-a84da2:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    reason: "Phase 1 foundation for p0-004"
+  td-73aea8:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    reason: "Phase 2 pool lifecycle for p0-004"
+  td-bfe7a3:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    reason: "Phase 3 warm pool for p0-004"
+  td-c5d8f1:
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+    reason: "Phase 4 duration tracking for p0-004"
+
+# Protected paths - NEVER deleted by GC
+# These patterns are safe from any GC operation
+protected_patterns:
+  - "Docs/td/*/task.yaml"
+  - "Docs/td/*/epic.yaml"
+  - "Docs/proofs/**/*"
+  - "Docs/schemas/**/*"
+  - "Docs/manifests/**/*"
+  - "Docs/diagrams/**/*"
+  - "Docs/governance/**/*"
+  - ".git/**/*"
+  - "**/node_modules/**/*"
+
+# File patterns that ARE targeted for cleanup by GC
+cleanup_patterns:
+  worktree:
+    - "worktree/"
+    - "snapshot/"
+    - "snapshots/"
+  build:
+    - ".build/"
+    - "DerivedData/"
+    - "*.build/"
+    - "build/"
+  test:
+    - "test-results/"
+    - "*.test/"
+    - "*.log"
+    - "*.output"
+  cache:
+    - ".cache/"
+    - "*.cache/"
+    - "cache/"
+    - "*.tmp"
+    - ".tmp/"
+    - "temp/"
+    - "*.temp"
+  analysis:
+    - "analysis/"
+    - "*.analysis"
+    - "validators-output/"
+
+# Status-based GC triggers
+gc_triggers:
+  - status: "complete"
+    min_duration_days: 7
+    action: "apply_gc_policy"
+    description: "Apply GC policy after task is complete for 7 days"
+    
+  - status: "done"
+    min_duration_days: 1
+    action: "apply_gc_policy"
+    description: "Apply GC policy after task is done for 1 day"
+
+  - status: "cancelled"
+    min_duration_days: 0
+    action: "archive"
+    description: "Immediately archive cancelled tasks"
+
+  - status: "blocked"
+    min_duration_days: 30
+    action: "warn_only"
+    description: "Warn about blocked tasks older than 30 days"
+
+# Archive settings
+archive:
+  target_directory: "Docs/td/archived/"
+  create_meta_file: true
+  meta_filename: "archived_meta.yaml"
+  preserve_structure: false
+  
+# Logging settings
+logging:
+  log_directory: "Docs/logs/gc/"
+  log_retention_days: 90
+  log_format: "yaml"
+  
+# Dry run settings (for CI/scheduled runs)
+dry_run:
+  default: true
+  auto_apply: false
+  ci_override: false
+  
+# Validation rules
+validation:
+  rules:
+    - id: "GC-001"
+      name: "Valid GC Policy"
+      description: "gc_policy must be one of: retain_all, compact_on_complete, compact_on_done, archive_only"
+      severity: "ERROR"
+      
+    - id: "GC-002"
+      name: "Valid Context Load Policy"
+      description: "context_load_policy must be one of: eager, lazy, on_demand, minimal"
+      severity: "ERROR"
+      
+    - id: "GC-003"
+      name: "No Active Task Compaction"
+      description: "Tasks with status ready, in_progress, in_review must not use compact_on_done or archive_only"
+      severity: "ERROR"
+      
+    - id: "GC-004"
+      name: "Descriptor Protection"
+      description: "task.yaml and epic.yaml must never be in GC deletion list"
+      severity: "ERROR"
+      
+    - id: "GC-005"
+      name: "Proof Protection"
+      description: "Proof artifacts (Docs/proofs/*) must never be in GC deletion list"
+      severity: "ERROR"
+      
+    - id: "GC-006"
+      name: "Archive Directory Exists"
+      description: "If archive_only policy is used, archived/ directory must exist"
+      severity: "WARN"
+
+# GC execution limits (for --apply mode)
+execution:
+  max_deletions_per_run: 1000
+  max_total_size_mb: 1024
+  batch_size: 50
+  confirm_with_user: true

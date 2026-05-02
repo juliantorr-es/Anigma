@@ -1,0 +1,36 @@
+Rank,Capsule,Tier,Refinement,Swift Integration,Linker Resolution,Debuggability,C++ Practices,Documentation,Overall,Maturity %,Swift Files,C++ Files,Tests,Priority,Effort Weeks,Quick Wins
+1,MediaFingerprintCapsule,5,Complete,Complete,Complete,Partial,Partial,Partial,A+,70,5,4,0,"Testing, Benchmarks",1,Golden corpus
+2,TextPipelineCapsule,5,Complete,Partial,Partial,Partial,Partial,Complete,A,60,2,1,1,"Testing, Expansion",1,@preconcurrency + tests
+3,VectorIndexCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,50,3,1,0,"C++ completion, Tests",2,"Create test suite, Sendable check"
+4,RankFusionCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,50,2,1,0,"C++ validation, Tests",2,Algorithm tests
+5,CosineSimilarityCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,50,2,1,0,"SIMD validation, Tests",1,Validation tests
+6,TextChunkingCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,45,4,1,0,"C++ completion, Tests",2,Corpus validation
+7,VectorCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,40,1,1,0,"Implementation, Tests",2,Implement stubs
+8,PDFCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,45,1,1,0,"Testing, Validation",2,PDF corpus tests
+9,CompressionKit,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,45,2,1,0,"Testing, Benchmarks",1,Round-trip tests
+10,LayoutEngineCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,40,2,1,0,"C++ completion, Tests",2,Layout tests
+11,SceneGraphCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,50,1,1,0,"Implementation, Tests",2,Scene tests
+12,RenderPlanCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,50,1,1,0,"Render validation, Tests",2,Render tests
+13,HitTestCapsule,3,Partial,Partial,Partial,Needs Work,Partial,Partial,B,50,1,1,0,"Hit detection, Tests",2,Hit tests
+14,MarkdownCapsule,2,Partial,Partial,Partial,Needs Work,Partial,Partial,C,35,1,1,0,"Dependency audit, Tests",2,Understand headers
+15,SyntaxCapsule,2,Partial,Partial,Partial,Needs Work,Partial,Partial,C,35,1,1,0,"Language tests, Validation",2,Multi-language tests
+16,GeometryCapsule,2,Partial,Partial,Partial,Needs Work,Partial,Partial,C,40,1,8,0,"CGAL integration, Tests",2,Geometry tests
+17,VizAggregationCapsule,2,Partial,Partial,Partial,Needs Work,Partial,Partial,C,35,2,1,0,"FFmpeg validation, Tests",1,Format tests
+18,MediaContainerCapsule,2,Partial,Partial,Partial,Needs Work,Partial,Partial,C,35,2,1,0,"Container parsing, Tests",1,Container tests
+19,VectorStoreCapsule,2,Partial,Partial,Partial,Needs Work,Partial,Partial,C,40,1,1,0,"Vector DB tests, Validation",2,Storage tests
+20,AnimationKit,2,Partial,Partial,Partial,Needs Work,Partial,Needs Work,C,30,1,2,0,"Curve validation, Tests",2,Animation tests
+21,DocumentIRKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Spec, Implementation",3,Define IR spec
+22,DocumentRenderKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Rendering layer, Implementation",3,Design rendering
+23,ContainerKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Container formats, Implementation",2,Define container API
+24,OOXMLKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Office parsing, Implementation",3,OOXML support
+25,VectorOpsKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Vector ops, Implementation",2,Define ops API
+26,ObservabilityKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Observability, Implementation",2,Define observability
+27,AnigmaClientKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,5,0,0,0,"Client SDK, Implementation",4,Design client SDK
+28,AnigmaHostKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,5,0,0,0,"Host integration, Implementation",3,Design host layer
+29,RendererKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,5,0,0,0,"Rendering abstraction, Implementation",3,Design renderer
+30,GlyphAtlasCapsule,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Glyph atlas, Implementation",2,Font glyph management
+31,ImageDecodeCapsule,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,5,0,0,0,"Image decoding, Implementation",2,Image format support
+32,TessellationCapsule,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Tessellation, Implementation",2,Geometric tessellation
+33,TileCacheCapsule,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Tile caching, Implementation",2,Cache tile layer
+34,TypographyKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Typography, Implementation",2,Font metrics/shaping
+35,ColorKit,1,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,Needs Work,D,10,1,0,0,"Color handling, Implementation",1,Color space conversion

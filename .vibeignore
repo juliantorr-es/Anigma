@@ -1,0 +1,24 @@
+# Build artifacts
+.build/
+*.swiftmodule
+*.o
+*.dia
+*.d
+*.swiftinterface
+*.swiftsourceinfo
+
+# Anigma-specific
+.accessum-artifacts/
+.letta/
+.ml-worker-output/
+.remediation/
+.opencode/
+.venv/
+.venv_tools/
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+Thumbs.db

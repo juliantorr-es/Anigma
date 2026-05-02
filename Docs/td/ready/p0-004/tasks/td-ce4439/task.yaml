@@ -1,0 +1,47 @@
+id: td-ce4439
+title: 'Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep'
+type: task
+priority: P0
+status: ready
+lane: daemon-runtime-isolation
+epic: p0-004
+parent: p0-004
+verification_profiles:
+  - p0-daemon-runtime
+  - governance
+  - swift-runtime
+  - swift-lint-format
+gc_policy: retain_all
+context_load_policy: eager
+summary: null
+description: ''
+worktree: null
+source_docs:
+- Docs/td/TD_PHASE6_UPDATE.md
+- anigma/Docs/LLM/Migration/GeminiBridge_Migration_Guide.md
+- anigma/Docs/LLM/Retirement/AnigmaGeminiBridge_Retirement_Summary.md
+- anigma/Packages/SubprocessPooling/Sources/LLMProviders/
+related_docs: []
+related_diagrams: []
+acceptance:
+- 'Architectural decision: AnigmaGeminiBridge eliminated'
+- Unified LLM provider framework implemented (6.1)
+- All provider implementations complete (6.2-6.6)
+- Daemon HTTP endpoints for LLM routing (6.7)
+- Security and rate limiting implemented (6.8)
+- Migration and deprecation complete (6.9)
+- AnigmaGeminiBridge removed from Package.swift
+non_goals:
+- Re-adding AnigmaGeminiBridge
+proof: []
+proof_required:
+- Verification that AnigmaGeminiBridge is removed from Package.swift
+- Verification that all migrations are complete
+expected_proof: []
+validator_commands: []
+td_labels:
+- epic:p0-004
+- lane:daemon-runtime-isolation
+- parent:p0-004
+- task_id:td-ce4439
+- type:task

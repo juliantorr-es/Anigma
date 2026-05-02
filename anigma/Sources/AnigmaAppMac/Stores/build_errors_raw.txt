@@ -1,0 +1,125 @@
+warning: 'anigma': Invalid Exclude '/Users/user/Developer/GitHub/Anigma_clean/anigma/Native/Shims/src/MediaFingerprintCapsule': File not found.
+warning: 'anigma': Source files for target TableExtractionNative should be located under 'Sources/TableExtractionNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target MathOCRNative should be located under 'Sources/MathOCRNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target CitationExtractionNative should be located under 'Sources/CitationExtractionNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target ReferenceResolutionNative should be located under 'Sources/ReferenceResolutionNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': Source files for target DiffNative should be located under 'Sources/DiffNative', or a custom sources path can be set with the 'path' property in Package.swift
+warning: 'anigma': 'ModelRegistry' was identified as an executable target given the presence of a 'main' file. Starting with tools version 5.4.0 executable targets should be declared as 'executableTarget()'
+warning: 'anigma': 'AnigmaMCPExecutable' was identified as an executable target given the presence of a 'main' file. Starting with tools version 5.4.0 executable targets should be declared as 'executableTarget()'
+warning: 'anigma': dependency 'swift-tree-sitter' is not used by any target
+warning: 'anigma': found 12 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/build_errors_raw.txt
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/suggest_fixes.sh
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/ObservatoriumDashboardView.swift.backup
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/BUILD_DEBUG_INSTALLATION.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AnigmaApp.swift.backup
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/QUICK_REFERENCE.txt
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/debug_build.sh
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/AppState.swift.backup
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/BUILD_DEBUG_TOOLS_README.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/analyze_build_errors.py
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/capture_build_errors.sh
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaAppMac/Stores/setup_debug_tools.sh
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaWork/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ExportUI/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaAIConsole/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DataUI/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/RendererKit/README.md
+warning: 'anigma': found 2 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/Resources/Monaco/placeholder.txt
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostMac/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaHostKit/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaSidecar/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaAgents/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/PraxisCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaEducation/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCorporate/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ExportCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DataEngine/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaSystemSpine/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/VectorumModule/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/TechDebtAudit/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/AnigmaMCPModule/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ObservatoriumModule/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ModelRegistry/Sources/CLI/README.md
+warning: 'anigma': found 10 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Sources/HarmoniaModule/Adapters/IMPLEMENTATION_GUIDE.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Sources/HarmoniaAPI/INTEGRATION_GUIDE.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Sources/HarmoniaAPI/README.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Sources/HarmoniaModule/Adapters/INDEX.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/DELIVERABLES.txt
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Sources/HarmoniaModule/Adapters/DELIVERY_SUMMARY.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Harness/Prompts/CodingAgentPrompt.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Harness/Prompts/InitializerPrompt.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/Sources/HarmoniaModule/Adapters/README.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/HarmoniaModule/HARMONIA_API_IMPLEMENTATION_SUMMARY.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DataCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Orchestrator/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Database/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCLI/Core/CLIAnalyticsIntegrationGuide.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/GovernedMigrationCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaASTServices/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/DoctrineCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/CapabilityCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ExecutionCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/MLWorkerCommon/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaCore/Sources/AnigmaCore/Jobs/README.md
+warning: 'anigma': found 2 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/TelemetryCore/DiagnosticsSchema.md
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/TelemetryCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/SecurityEventsManager/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/InferenceCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/StorageCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/GovernanceCore/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaClientKit/README.md
+warning: 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ContractsCore/README.md
+Building for debugging...
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/DevelopView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/DocumentLibraryView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/ObservatoriumDashboardView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaClientKit.build/AnigmaClient.swift.o because of multiple producers: Compiling Swift Module 'AnigmaClientKit' (7 sources), Compiling Swift Module 'AnigmaClientKit' (7 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaDaemonCore.build/DaemonServer.swift.o because of multiple producers: Compiling Swift Module 'AnigmaDaemonCore' (93 sources), Compiling Swift Module 'AnigmaDaemonCore' (93 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/CoreMLEmbeddingComputer.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/HarmoniaModule.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/Swift6MigrationState.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/Swift6StepEngine.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)

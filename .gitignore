@@ -1,0 +1,70 @@
+# Local agent/tool state
+.codex/
+.codex-orch/
+.gemini/
+.vibe/
+.continue/
+.aider*/
+.adal/
+.opencode/
+.claude/
+.cursor/
+.windsurf/
+
+# Local scratch / generated diagnostics
+*.log
+*.tmp
+*.bak
+anigma/build_*.txt
+
+# OS metadata
+.DS_Store
+
+# Build artifacts
+.build/
+# Local agent/tool state
+.codex/
+.codex-orch/
+.gemini/
+.vibe/
+.continue/
+.aider*/
+.adal/
+.opencode/
+.claude/
+.cursor/
+.windsurf/
+
+# Local scratch / generated diagnostics
+*.log
+*.tmp
+*.bak
+anigma/build_*.txt
+anigma-worktrees/
+.worktrees/
+
+# Generated build artifacts
+.build/
+.build-check/
+anigma/.build/
+anigma/.build-check/
+anigma/.venv_tools/
+DerivedData/
+
+# Cscope
+cscope.out
+cscope.po.out
+
+# Local packages/installers
+*.dmg
+*.pkg
+*.app
+
+# Vendored native binaries excluded from public source repo
+anigma/Vendor/lib/
+
+# macOS archive metadata
+.DS_Store
+__MACOSX/
+._*
+*.zip

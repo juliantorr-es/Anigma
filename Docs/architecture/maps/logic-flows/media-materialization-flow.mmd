@@ -1,0 +1,149 @@
+%% Title: Media Materialization Flow
+%% Doc ID: MEDIA_MATERIALIZATION_FLOW
+%% Domain: MediaCore
+%% Version: 1.0.0
+%% Last Updated: 2026-05-02
+%% Related: Docs/architecture/maps/module-role-index.yaml (MediaCore)
+%% Related: Docs/architecture/maps/file-role-index.yaml (SurfaceAuthority, MaterializationGate)
+
+flowchart TD
+    %% ========================================================================
+    %% MEDIA MATERIALIZATION FLOW - ANIGMA MEDIACORE
+    %% ========================================================================
+    
+    %% ----------------------------------------------------------------------
+    %% STYLES
+    %% ----------------------------------------------------------------------
+    classDef authority fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    classDef gate fill:#bbf,stroke:#333,stroke-width:2px,color:#fff
+    classDef proof fill:#dfd,stroke:#333,stroke-width:2px,color:#000
+    classDef failure fill:#fbb,stroke:#333,stroke-width:2px,color:#000
+    classDef success fill:#bfb,stroke:#333,stroke-width:2px,color:#000
+    
+    %% ----------------------------------------------------------------------
+    %% START
+    %% ----------------------------------------------------------------------
+    Start([Surface Request\nfrom Client]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% MAIN FLOW - Hot Path (Zero-Copy)
+    %% ----------------------------------------------------------------------
+    Start -->|Requests Surface| AuthorityLookup
+    
+    AuthorityLookup["Authority Lookup\n(SurfaceAuthority)"]:::authority
+    AuthorityLookup -->|Validates type/capabilities| GateCheck
+    
+    GateCheck["Gate Check\n(MaterializationGate.canMaterialize)"]:::gate
+    GateCheck -->|Zero-copy available| ZeroCopyReturn
+    
+    ZeroCopyReturn["Return Zero-Copy Surface\n(SurfaceHandle)"]
+    ZeroCopyReturn --> EmitZeroCopyProof
+    
+    EmitZeroCopyProof["Emit Proof\n(ZeroCopyProof)"]:::proof
+    EmitZeroCopyProof --> HotPathSuccess
+    
+    HotPathSuccess([Success: Zero-Copy\nHot-Path Complete]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% MAIN FLOW - Cold Path (Materialization Required)
+    %% ----------------------------------------------------------------------
+    GateCheck -->|Materialization required| GateApproval
+    
+    GateApproval["Gate Approval\n(MaterializationGate.performMaterialization)"]:::gate
+    GateApproval --> MaterializeSurface
+    
+    MaterializeSurface["Materialize Surface\n(Allocate/Copy as needed)"]
+    MaterializeSurface --> EmitMaterializationProof
+    
+    EmitMaterializationProof["Emit Proof\n(MaterializationProof)"]:::proof
+    EmitMaterializationProof --> ColdPathSuccess
+    
+    ColdPathSuccess([Success: Materialized\nCold-Path Complete]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% FAILURE PATHS
+    %% ----------------------------------------------------------------------
+    AuthorityLookup -->|Invalid surface type| AuthorityRejection
+    GateCheck -->|Materialization denied| GateRejection
+    MaterializeSurface -->|Out of resources| ResourceExhaustion
+    
+    AuthorityRejection["FAIL: Authority Rejection\n(Invalid type/access)"]:::failure
+    GateRejection["FAIL: Gate Denied\n(Hot-path only mode)"]:::failure
+    ResourceExhaustion["FAIL: Resource Exhaustion\n(Memory/GPU limits)"]:::failure
+    
+    AuthorityRejection --> EmitAuthorityError
+    GateRejection --> EmitGateError
+    ResourceExhaustion --> EmitResourceError
+    
+    EmitAuthorityError["Emit Error Proof\n(AuthorityViolation)"]:::proof
+    EmitGateError["Emit Error Proof\n(GateDenial)"]:::proof
+    EmitResourceError["Emit Error Proof\n(ResourceExhaustion)"]:::proof
+    
+    EmitAuthorityError --> FinalFailure
+    EmitGateError --> FinalFailure
+    EmitResourceError --> FinalFailure
+    
+    FinalFailure([FAILURE: Surface Request Failed]):::failure
+    
+    %% ----------------------------------------------------------------------
+    %% ANNOTATIONS
+    %% ----------------------------------------------------------------------
+    %% Hot path annotation
+    subgraph HotPath["Hot-Path: Zero-Copy Fast Path"]
+        AuthorityLookup
+        GateCheck
+        ZeroCopyReturn
+        EmitZeroCopyProof
+        HotPathSuccess
+    end
+    
+    %% Cold path annotation
+    subgraph ColdPath["Cold-Path: Materialization Required"]
+        GateCheck
+        GateApproval
+        MaterializeSurface
+        EmitMaterializationProof
+        ColdPathSuccess
+    end
+    
+    %% Governance annotation
+    subgraph Governance["Governance Points"]
+        AuthorityLookup
+        GateCheck
+        GateApproval
+    end
+    
+    %% Proof annotation
+    subgraph ProofPoints["Proof Emission Points"]
+        EmitZeroCopyProof
+        EmitMaterializationProof
+        EmitAuthorityError
+        EmitGateError
+        EmitResourceError
+    end
+
+%% ========================================================================
+%% LEGEND
+%% Type - color - Description
+%% Authority - Pink - Single source of truth for a capability
+%% Gate - Blue - Control point for access/transitions
+%% Proof - Green - Evidence/receipt emission
+%% Success - Lt Green - Successful completion
+%% Failure - Lt Red - Error/failure state
+%% ========================================================================
+
+%% ========================================================================
+%% DOCTRINE REFERENCES
+%% - ZeroCopyProof: All hot-path payloads must have zero-copy option
+%% - MaterializationGate: Materialization requires explicit authority
+%% - SurfaceAuthority: Single authority per surface type
+%% - Hot-path: Avoid copies in performance-critical code
+%% - Proof Emission: Every significant operation emits proof
+%% ========================================================================
+
+%% ========================================================================
+%% FILE REFERENCES
+%% - Sources/MediaCore/Governance/SurfaceAuthority.swift (authority)
+%% - Sources/MediaCore/Governance/MaterializationGate.swift (gate)
+%% - Sources/MediaCore/Executors/*Executor.swift (executors using surfaces)
+%% ========================================================================

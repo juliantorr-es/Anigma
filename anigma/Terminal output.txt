@@ -1,0 +1,483 @@
+AccessControl.swift
+AccessumModule.swift
+AccessumSystems.swift
+ActivityComponent.swift
+AdversarialScenarios.swift
+AgentCathedralIntegration.swift
+AgenticLoopExecutor.swift
+AINodes.swift
+AlertService.swift
+AnalysisComponents.swift
+AnigmaClient.swift
+AnigmaCore.swift
+AnigmaCoreAdapters.swift
+AnigmaPlatform.swift
+AnigmaWebServer.swift
+AnthropicProvider.swift
+APIModels.swift
+Argument.swift
+ArgumentDecoder.swift
+ArgumentDefinition.swift
+ArgumentDiscussion.swift
+ArgumentHelp.swift
+ArgumentParser+Markdown.swift
+ArgumentParser+MDoc.swift
+ArgumentParserToolInfoTests.swift
+ArgumentSet.swift
+ArgumentSynopsis.swift
+ArgumentVisibility.swift
+ArtifactComponent.swift
+ArtifactStore.swift
+AsyncCommandEndToEndTests.swift
+AsyncParsableCommand.swift
+AttemptComponent.swift
+AttemptReviewLinkComponent.swift
+AudioProcessing.swift
+AuditLog.swift
+AuditLogger.swift
+AuthConductor.swift
+Author.swift
+AuthorArgument.swift
+Authorities.swift
+AuthorityImplementations.swift
+Authors.swift
+AutoEditEngine.swift
+Automation.swift
+AutomationService.swift
+BashCompletionsGenerator.swift
+BrandingComponents.swift
+BuiltInVibeProfiles.swift
+CacheManager.swift
+CampaignPlanners.swift
+CaseComponent.swift
+CathedralCoordinator.swift
+CathedralDatabasePersistence.swift
+CathedralFacade.swift
+CathedralMLServices.swift
+CathedralModule.swift
+ChangelogAuthors.swift
+Checkpointing.swift
+ChunkedCodeEditorDemoView.swift
+Clean.swift
+CodexModule.swift
+CodexService.swift
+CodingKeyValidator.swift
+CollectionExtensions.swift
+Color.swift
+ColorGrading.swift
+CommandConfiguration.swift
+CommandGroup.swift
+CommandLedger.swift
+CommandParser.swift
+CommentComponent.swift
+CompletionKind.swift
+CompletionScriptTests.swift
+CompletionsGenerator.swift
+Compliance.swift
+Component.swift
+ConexusModule.swift
+ConexusService.swift
+Config.swift
+Configuration.swift
+ConfigWatcher.swift
+ContactComponent.swift
+Container.swift
+ContextCompressionService.swift
+ContinuousMonitoring.swift
+ContinuousReasoning.swift
+ControlCatalog.swift
+ControlImplementation.swift
+CoreMLEmbeddingComputer.swift
+CosineSimilarityCapsuleWrapper.swift
+CountLines.swift
+CountLinesExampleTests.swift
+CryptographicSecurity.swift
+CustomParsingEndToEndTests.swift
+DaemonServer.swift
+DatabaseAuthorityAdapter.swift
+DatabaseExecutor.swift
+Date+ExpressibleByArgument.swift
+DealComponent.swift
+DeepSeekProvider.swift
+DefaultsEndToEndTests.swift
+DefaultSubcommandEndToEndTests.swift
+Describe.swift
+DeterminismContext.swift
+DevelopumArtifactService.swift
+DevelopView.swift
+Discussion.swift
+Document.swift
+DocumentDate.swift
+DocumentExportSystem.swift
+DocumentGeneration.swift
+DocumentLibraryView.swift
+DomainPuzzleBuilders.swift
+DomainReasoningIntegration.swift
+DSPSComponents.swift
+DumpHelpGenerationTests.swift
+DumpHelpGenerator.swift
+EditProfileConfiguration.swift
+EmbeddingComputing.swift
+EmbeddingProvider.swift
+EmbedTextContract.swift
+Empty.swift
+EnginePolicy.swift
+EnumEndToEndTests.swift
+EnumerableFlag.swift
+EqualsEndToEndTests.swift
+ErrorMessageTests.swift
+Errors.swift
+Evidence.swift
+EvidenceEnforcement.swift
+EvidenceSubstrate.swift
+ExampleModuleRegistration.swift
+Exit.swift
+ExitCodeTests.swift
+ExplainableAI.swift
+ExportComponents.swift
+ExportService.swift
+ExpressibleByArgument.swift
+FeedbackService.swift
+FishCompletionsGenerator.swift
+Flag.swift
+FlagsEndToEndTests.swift
+ForEach.swift
+ForensicMetadataTracker.swift
+Foundation.swift
+GenerateDoccReference.swift
+GenerateDoccReferenceError.swift
+GenerateDoccReferenceTests.swift
+GenerateManual.swift
+GenerateManualPlugin.swift
+GenerateManualPluginError.swift
+GenerateManualTests.swift
+GenerateXcodeProject.swift
+GoogleProvider.swift
+Governance.swift
+GovernedResearchWorkflow.swift
+GrapheneCore.swift
+GrapheneEngine.swift
+GrapheneInferenceBridge.swift
+GraphenePrimitives.swift
+GrapheneProfiling.swift
+GrapheneRegistry.swift
+GrapheneStreaming.swift
+GrapheneSubgraph.swift
+GrapheneVerticalSlice.swift
+HardeningAttestationContract.swift
+HarmoniaModule.swift
+HarmoniaPolytroposIntegration.swift
+HealthManager.swift
+HelpCommand.swift
+HelpGenerationTests.swift
+HelpGenerationTests+AtArgument.swift
+HelpGenerationTests+AtOption.swift
+HelpGenerationTests+GroupName.swift
+HelpGenerator.swift
+HelpTests.swift
+HierarchicalConfig.swift
+HuggingFaceAdapter.swift
+HybridSearchContract.swift
+Identity.swift
+IndexEmbeddingsContract.swift
+InferencePlaneAdapter.swift
+InferenceTypes.swift
+InferenceWatchdog.swift
+InputKey.swift
+InputOrigin.swift
+InputOriginTests.swift
+IRService.swift
+Job.swift
+JobPersistence.swift
+JobQueue.swift
+JoinedEndToEndTests.swift
+LegacyTypes.swift
+LifecycleManagerDebug.swift
+List.swift
+Logging.swift
+LongNameWithShortDashEndToEndTests.swift
+main.swift
+Main.swift
+MakerEngine.swift
+MakerEnhancementLayer.swift
+MakerEnhancementSupport.swift
+MakerReceipt.swift
+ManualEditing.swift
+Math.swift
+MathExampleTests.swift
+MaturityAnalyzer.swift
+MCPConductor.swift
+MCPProgressNotification.swift
+MDocASTNode.swift
+MDocASTNodeWrapper.swift
+MDocBuilder.swift
+MDocComponent.swift
+MDocMacro.swift
+MDocSerializationContext.swift
+MediaAssetComponents.swift
+MemoryComponent.swift
+MemorySystem.swift
+MessageInfo.swift
+MetaPuzzles.swift
+MetopticonDashboard.swift
+MetopticonIntegration.swift
+MetopticonManifest.swift
+MetopticonModule.swift
+MetopticonRBAC.swift
+MetopticonRunner.swift
+MigrationEngine.swift
+MigrationTypes.swift
+MigrationUtilities.swift
+MirrorTests.swift
+MLConsentComponents.swift
+MLModelProvisioningSystem.swift
+MLOutputCache.swift
+MLWorkerEmbeddingComputer.swift
+MLWorkerInterface.swift
+ModelIntegrity.swift
+ModelRecommender.swift
+ModelRegistry.swift
+ModelRegistryStore.swift
+Models.swift
+MulticamComponents.swift
+MultiPageDescription.swift
+MusicComponents.swift
+MusicGenerationService.swift
+MusicLearningIntegration.swift
+MusicSystems.swift
+Mutex.swift
+Name.swift
+NameSpecification.swift
+NameSpecificationTests.swift
+NestedCommandEndToEndTests.swift
+NonsenseFlagsValidator.swift
+NotificationComponent.swift
+ObservatoriumDashboardView.swift
+ObservatoriumModule.swift
+OCREngineCoordinator.swift
+OpenAIProvider.swift
+Option.swift
+OptionalEndToEndTests.swift
+OptionGroup.swift
+OptionGroupEndToEndTests.swift
+Options.swift
+OrganizationComponent.swift
+Package.swift
+Package@swift-5.8.swift
+PackagePlugin+Helpers.swift
+PageCommentComponent.swift
+PageComponent.swift
+PageVersionComponent.swift
+ParentCommand.swift
+Parsable
+ParsableArguments.swift
+ParsableArgumentsValidation.swift
+ParsableArgumentsValidationTests.swift
+ParsableCommand.swift
+Parsed.swift
+ParsedValues.swift
+ParserError.swift
+PatternDetectors.swift
+PDFExtractContract.swift
+PDFIngestContract.swift
+PDFLayoutExtractContract.swift
+PDFProcessing.swift
+PDFQACheckContract.swift
+PDFSegmentContract.swift
+PipelineContractRegistry.swift
+PipelineECS.swift
+PipelineGraph.swift
+PipelineModule.swift
+PipelineRunner.swift
+PipelineStatus.swift
+PipelineStatusSerializer.swift
+PlaceholderComponents.swift
+PlaceholderPipelines.swift
+PlanCompiler.swift
+Platform.swift
+PlatformRuntime.swift
+PluginSystem.swift
+PolicyEnforcement.swift
+PolytroposModule.swift
+PolytroposProRoadmap.swift
+PolytroposService.swift
+PolytroposSystems.swift
+PolytroposWorkflows.swift
+PositionalArgumentsValidator.swift
+PositionalEndToEndTests.swift
+PragmaModule.swift
+Preamble.swift
+Process+SimpleAPI.swift
+ProComponents.swift
+ProExport.swift
+ProjectComponent.swift
+ProjectComponents.swift
+PromptRouter.swift
+ProSystems.swift
+ProviderRegistry.swift
+PuzzleBuilders.swift
+RAGPipeline.swift
+RankFusionCapsuleWrapper.swift
+RateLimiter.swift
+RawRepresentableEndToEndTests.swift
+ReasoningIntegration.swift
+ReasoningKernel.swift
+ReasoningOrchestrator.swift
+Redaction.swift
+ReflexiveAnalytics.swift
+RelationshipComponent.swift
+Renderer.swift
+RenderPlan.swift
+Repeat.swift
+RepeatExampleTests.swift
+RepeatingEndToEndTests.swift
+RepeatingEndToEndTests+ParsingStrategy.swift
+RepoIdentityGate.swift
+resource_bundle_accessor.swift
+RetentionPolicy.swift
+RetrievalExplainability.swift
+RollDiceExampleTests.swift
+RunSwiftTestsContract.swift
+RuntimeTypes.swift
+Sampling.swift
+SandboxAuthorityImpl.swift
+SandboxConfig.swift
+SceneGraph.swift
+Scheduler.swift
+SearchCommand.swift
+Section.swift
+SecuredWorld.swift
+Security.swift
+SecurityHardening.swift
+SeeAlso.swift
+SendableTests.swift
+SequenceExtensions.swift
+SequenceExtensionTests.swift
+SessionManager.swift
+SharedComponents.swift
+SharedPDFTypes.swift
+ShortNameEndToEndTests.swift
+SimpleEndToEndTests.swift
+SinglePageDescription.swift
+SingleValueParsingStrategyTests.swift
+SourceCompatEndToEndTests.swift
+SpaceComponent.swift
+SplitArguments.swift
+SplitArgumentTests.swift
+SplitMix64.swift
+StateAccess.swift
+Storage.swift
+String+Escaping.swift
+StringEditDistanceTests.swift
+StringExtensions.swift
+StringSnakeCaseTests.swift
+StringWrappingTests.swift
+SubcommandEndToEndTests.swift
+Swift6MigrationState.swift
+Swift6StepEngine.swift
+SwiftExtensions.swift
+SyncInfrastructure.swift
+SyncService.swift
+Synopsis.swift
+System.swift
+SystemBenchmark.swift
+TamperEvidenceSystem.swift
+TaskComponent.swift
+TelemetryClient.swift
+TelemetryError.swift
+TelemetryEvent.swift
+TelemetryService.swift
+TelemetrySink.swift
+TelemetrySystem.swift
+TelemetryValue.swift
+TemplateComponent.swift
+Tenant.swift
+TestHelpers.swift
+Tests.swift
+TimelineComponents.swift
+ToolInfo.swift
+TranscriptComponents.swift
+TransformEndToEndTests.swift
+TranslatorRegistry.swift
+Tree.swift
+TreeTests.swift
+TrustModels.swift
+TwoTierReasoning.swift
+UniqueNamesValidator.swift
+UnparsedValuesEndToEndTest.swift
+UpdateCodexIntegration.swift
+UpdateIntegration.swift
+UpdateObservability.swift
+UpdateOrchestrator.swift
+UpdateService.swift
+UsageGenerationTests.swift
+UsageGenerator.swift
+Util.swift
+ValidationEndToEndTests.swift
+VectorStore.swift
+VersionManagement.swift
+ViewService.swift
+VulnerabilityDisclosure.swift
+WorkBoardContracts.swift
+WorkBoardMCPBridge.swift
+WorkBoardProviding.swift
+WorkBoardService.swift
+Workflow.swift
+WorkService.swift
+WorktreeComponent.swift
+World.swift
+ZshCompletionsGenerator.swift
+user@Julians-MacBook-Pro anigma %
+
+user@Julians-MacBook-Pro anigma % ls -la Native/Shims/include/
+total 400
+drwxr-xr-x  45 user  staff   1440 Feb  5 16:58 .
+drwxr-xr-x   6 user  staff    192 Jan 27 01:37 ..
+-rw-r--r--   1 user  staff    275 Jan 23 17:02 anigma_animation_kernel.h
+-rw-r--r--   1 user  staff    935 Jan 15 23:48 anigma_animation.h
+-rw-r--r--   1 user  staff    336 Jan 23 12:41 anigma_arena.h
+-rw-r--r--   1 user  staff    304 Jan 23 17:02 anigma_blob.h
+-rw-r--r--   1 user  staff   7542 Jan 23 17:04 anigma_capsule_core.h
+-rw-r--r--   1 user  staff    882 Jan 23 17:12 anigma_color.h
+-rw-r--r--   1 user  staff    188 Jan 23 17:02 anigma_compression_capsule_impl.h
+-rw-r--r--   1 user  staff   9255 Jan 23 17:04 anigma_compression_capsule.h
+-rw-r--r--   1 user  staff   1765 Jan 15 23:48 anigma_compression.h
+-rw-r--r--   1 user  staff   1332 Jan 15 23:48 anigma_container.h
+-rw-r--r--   1 user  staff  10703 Jan 23 17:04 anigma_cosine_similarity_capsule.h
+-rw-r--r--   1 user  staff    715 Jan 25 01:24 anigma_determinism_profile.h
+-rw-r--r--   1 user  staff    473 Jan 23 17:02 anigma_hash.h
+-rw-r--r--   1 user  staff    377 Jan 23 17:02 anigma_hit_test.h
+-rw-r--r--   1 user  staff   1459 Jan 23 17:02 anigma_kernel_abi.h
+-rw-r--r--   1 user  staff   7265 Jan 23 17:02 anigma_kernel_types.h
+-rw-r--r--   1 user  staff   8277 Jan 23 17:04 anigma_layout_engine_capsule.h
+-rw-r--r--   1 user  staff   6045 Jan 23 17:02 anigma_media_container_capsule.h
+-rw-r--r--   1 user  staff    277 Jan 23 12:33 anigma_media_fingerprint_capsule.h
+-rw-r--r--   1 user  staff   2231 Jan 23 17:05 anigma_native_common.h
+-rw-r--r--   1 user  staff   1021 Jan 15 23:48 anigma_observability.h
+-rw-r--r--   1 user  staff   3555 Jan 23 17:04 anigma_rank_fusion_capsule.h
+-rw-r--r--   1 user  staff   1246 Jan 23 17:02 anigma_render_plan.h
+-rw-r--r--   1 user  staff   1170 Jan 15 23:48 anigma_render.h
+-rw-r--r--   1 user  staff    433 Jan 23 17:02 anigma_scene_graph.h
+-rw-r--r--   1 user  staff    238 Jan 23 12:33 anigma_status.h
+-rw-r--r--   1 user  staff   7001 Jan 23 17:04 anigma_text_chunking_capsule.h
+-rw-r--r--   1 user  staff   2893 Jan 23 17:02 anigma_text_pipeline_capsule.h
+-rw-r--r--   1 user  staff  12106 Jan 21 18:09 anigma_text_pipeline_capsule.h_duplicate
+-rw-r--r--   1 user  staff    853 Jan 15 23:48 anigma_typography.h
+-rw-r--r--   1 user  staff   6908 Jan 23 17:04 anigma_vector_capsule.h
+-rw-r--r--   1 user  staff   2303 Jan 23 12:55 anigma_vector_index_capsule.h
+-rw-r--r--   1 user  staff    682 Jan 15 23:48 anigma_vector.h
+-rw-r--r--   1 user  staff   9709 Jan 23 17:04 anigma_viz_aggregation_capsule.h
+-rw-r--r--   1 user  staff    987 Jan 15 23:48 anigma_xml.h
+drwxr-xr-x   3 user  staff     96 Jan 23 17:02 AnigmaMediaProcessing
+drwxr-xr-x@  3 user  staff     96 Feb  5 16:54 CitationExtractionCapsule
+drwxr-xr-x@  3 user  staff     96 Feb  5 16:58 DiffCapsule
+drwxr-xr-x@  3 user  staff     96 Feb  5 16:41 MathOCRCapsule
+drwxr-xr-x   3 user  staff     96 Jan 23 17:02 MediaFingerprintCapsule
+drwxr-xr-x@  3 user  staff     96 Feb  5 16:56 ReferenceResolutionCapsule
+drwxr-xr-x@  3 user  staff     96 Feb  5 16:31 TableExtractionCapsule
+drwxr-xr-x   3 user  staff     96 Jan 23 17:02 TextPipelineCapsule
+user@Julians-MacBook-Pro anigma %
+
+No modulemap
+
+the last command came out empty 

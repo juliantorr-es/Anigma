@@ -1,0 +1,86 @@
+{
+  "dtmVersion": "dtm-0001",
+  "artifact": "scan-2024-04-09",
+  "pages": [
+    {
+      "id": "page-1",
+      "geometry": {
+        "width": 612,
+        "height": 792,
+        "unit": "pt"
+      },
+      "artifactRef": "scan-2024-04-09"
+    }
+  ],
+  "textHierarchy": [
+    {
+      "blockId": "block-1",
+      "type": "paragraph",
+      "language": "en",
+      "readingOrder": 1,
+      "runs": [
+        {
+          "runId": "run-1",
+          "tokens": [
+            { "tokenId": "token-0001", "text": "Anigma", "confidence": 0.98 },
+            { "tokenId": "token-0002", "text": "explains", "confidence": 0.97 },
+            { "tokenId": "token-0003", "text": "governance.", "confidence": 0.96 }
+          ]
+        }
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "obj-figure-1",
+      "type": "figure",
+      "children": [],
+      "metadata": {
+        "description": "Diagram showing the governance loop.",
+        "source": "scan-2024-04-09"
+      }
+    }
+  ],
+  "semantics": {
+    "headings": [
+      {
+        "id": "heading-1",
+        "level": 1,
+        "textSpan": ["token-0001", "token-0002", "token-0003"],
+        "provenance": {
+          "jobId": "ocr-job-13",
+          "timestamp": "2024-04-10T18:01:00Z"
+        }
+      }
+    ],
+    "links": []
+  ],
+  "accessibility": {
+    "altText": [
+      {
+        "objectId": "obj-figure-1",
+        "text": "Governance loop with engine, policy, and renderer."
+      }
+    ],
+    "readingOrderOverrides": [],
+    "labels": [
+      {
+        "nodeId": "heading-1",
+        "label": "Manifesto headline"
+      }
+    ],
+    "remediation": {
+      "status": "complete",
+      "actor": "remediation-job-5",
+      "timestamp": "2024-04-10T19:22:00Z"
+    }
+  ],
+  "provenance": {
+    "createdBy": "ocr-job-13",
+    "inputs": ["scan-2024-04-09"],
+    "policy": {
+      "name": "ocr-default",
+      "mode": "governed"
+    }
+  }
+}

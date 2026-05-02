@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0099cc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main background -->
+  <rect width="256" height="256" fill="url(#bgGradient)"/>
+
+  <!-- Anigma "A" symbol with geometric style -->
+  <g transform="translate(128, 128)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="90" fill="none" stroke="url(#accentGradient)" stroke-width="3" opacity="0.3"/>
+
+    <!-- Inner geometric A shape -->
+    <g stroke="url(#accentGradient)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Left diagonal -->
+      <line x1="-35" y1="45" x2="0" y2="-45"/>
+      <!-- Right diagonal -->
+      <line x1="35" y1="45" x2="0" y2="-45"/>
+      <!-- Horizontal bar -->
+      <line x1="-15" y1="5" x2="15" y2="5"/>
+    </g>
+
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="4" fill="url(#accentGradient)"/>
+  </g>
+
+  <!-- Corner accent elements -->
+  <g stroke="url(#accentGradient)" stroke-width="2" opacity="0.4">
+    <line x1="20" y1="20" x2="40" y2="20"/>
+    <line x1="20" y1="20" x2="20" y2="40"/>
+  </g>
+
+  <g stroke="url(#accentGradient)" stroke-width="2" opacity="0.4">
+    <line x1="236" y1="20" x2="216" y2="20"/>
+    <line x1="236" y1="20" x2="236" y2="40"/>
+  </g>
+</svg>

@@ -1,0 +1,64 @@
+{
+  "answerText" : "No grounded answer yet for “What is the answer when context is missing?” in project-beta.",
+  "confidence" : 0.050000000000000003,
+  "contextPolicy" : {
+    "excludedSourceIDs" : [
+
+    ],
+    "pinnedSourceIDs" : [
+
+    ],
+    "updatedAt" : "1970-01-01T00:00:00Z"
+  },
+  "generatedAt" : "1970-01-01T00:00:00Z",
+  "id" : "332094d167883b811b5dda8e739dd8814f7717a18fceea22dc1de5d20a2213a7",
+  "missingContext" : [
+    "Project metadata unavailable",
+    "No recall hits",
+    "No source chips",
+    "Scan limit reached"
+  ],
+  "modelName" : "llama-3.2-1b",
+  "principalId" : "test-user",
+  "projectId" : "project-beta",
+  "projectName" : "project-beta",
+  "query" : "What is the answer when context is missing?",
+  "receipts" : [
+    {
+      "hash" : "a30ca183673fa4cf01a6f2eff54a7c9d45775634b8a39dd3a27d86920ded0cde",
+      "id" : "0EB27BD7-43C2-4ED1-91D7-3128EEA5FEB9",
+      "operationType" : "assistant-recall",
+      "timestamp" : "2026-04-25T03:16:45Z"
+    },
+    {
+      "hash" : "abeae171f9e0c680cde9c92b9d14573066011b6acfd1674c62698b1a29ed818a",
+      "id" : "40D518B3-9724-47C6-963E-0E18B7E5A2D7",
+      "operationType" : "assistant-provenance-seal",
+      "timestamp" : "2026-04-25T03:16:45Z"
+    }
+  ],
+  "replay" : {
+    "contextPolicyHash" : "565d240f5343e625ae579a4d45a770f1f02c6368b5ed4d06da4fbe6f47c28866",
+    "deterministic" : false,
+    "mode" : "regenerate",
+    "nondeterminismReasons" : [
+      "No grounded source chain for replay",
+      "Missing context: Project metadata unavailable",
+      "Missing context: No recall hits",
+      "Missing context: No source chips",
+      "Missing context: Scan limit reached"
+    ],
+    "notes" : "Replay is blocked or inconsistent because the run is non-deterministic.",
+    "receiptChainHash" : "46a8f79daf2248764e32b1336473b79b306cda0d9aadbdfd14eb058ec81e9c6c",
+    "replayable" : false,
+    "replayToken" : "332094d167883b811b5dda8e739dd8814f7717a18fceea22dc1de5d20a2213a7",
+    "sourceGraphHash" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scanLimit" : 100,
+  "sessionId" : "global",
+  "sources" : [
+
+  ],
+  "threshold" : 0.69999998807907104,
+  "topK" : 4
+}

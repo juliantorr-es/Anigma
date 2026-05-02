@@ -1,0 +1,164 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                 ANIGMA BUILD DEBUGGER - QUICK REFERENCE                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📋 CHEAT SHEET - Pin this to your monitor!
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ FIRST TIME SETUP                                                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  bash setup_debug_tools.sh
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MAIN COMMAND (Use This!)                                                ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  bash debug_build.sh
+
+  → Captures errors
+  → Analyzes patterns
+  → Suggests fixes
+  → Shows statistics
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ VIEW RESULTS                                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  cat suggested_fixes.md              ← Start here! Your action plan
+  cat build_errors_report.txt         ← All errors, organized
+  cat build_errors_analysis.txt       ← Deep analysis (if Python)
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ TRACK PROGRESS                                                           ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  grep -c "error:" build_errors_raw.txt     ← Current error count
+  bash debug_build.sh                       ← Re-analyze after fixes
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ COMMON FIXES                                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+╭─ Type Ambiguity ─────────────────────────────────────────────────────────╮
+│ ERROR: ambiguous use of 'TypeName'                                       │
+│                                                                           │
+│ FIX: Use fully qualified name                                            │
+│   [TypeName]  →  [ModuleName.TypeName]                                   │
+│                                                                           │
+│ Example:                                                                  │
+│   stages: [PipelineStage]  →  stages: [AnigmaHostMac.PipelineStage]     │
+╰───────────────────────────────────────────────────────────────────────────╯
+
+╭─ Missing Member ─────────────────────────────────────────────────────────╮
+│ ERROR: value of type 'X' has no member 'y'                               │
+│                                                                           │
+│ FIX: API changed - check module docs                                     │
+│   1. Find the type definition                                            │
+│   2. Check available properties                                          │
+│   3. Update your code                                                    │
+╰───────────────────────────────────────────────────────────────────────────╯
+
+╭─ Cannot Find Type ───────────────────────────────────────────────────────╮
+│ ERROR: cannot find type 'X' in scope                                     │
+│                                                                           │
+│ FIX: Add import statement                                                │
+│   import ModuleName                                                      │
+╰───────────────────────────────────────────────────────────────────────────╯
+
+╭─ Argument Mismatch ──────────────────────────────────────────────────────╮
+│ ERROR: missing argument for parameter 'x'                                │
+│                                                                           │
+│ FIX: Function signature changed                                          │
+│   1. Check function definition                                           │
+│   2. Update call site with new parameters                                │
+╰───────────────────────────────────────────────────────────────────────────╯
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ USEFUL SEARCHES                                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  # Find all uses of a type
+  grep -r "TypeName" Sources/AnigmaAppMac/
+
+  # Find files with most errors
+  grep "error:" build_errors_raw.txt | cut -d: -f1 | sort | uniq -c | sort -rn
+
+  # Show only specific error type
+  grep "ambiguous use of" build_errors_raw.txt
+  grep "has no member" build_errors_raw.txt
+  grep "cannot find" build_errors_raw.txt
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ BATCH FIXES (Use with Caution!)                                         ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  # Replace all instances of ambiguous type (test first!)
+  find Sources/AnigmaAppMac -name "*.swift" \
+    -exec sed -i '' 's/\bOldName\b/NewModule.OldName/g' {} \;
+
+  # ALWAYS test one file first:
+  sed 's/\bOldName\b/NewModule.OldName/g' path/to/File.swift
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ FIX WORKFLOW (Repeat Until Error Count = 0)                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  1. bash debug_build.sh              ← Capture errors
+  2. cat suggested_fixes.md           ← Review suggestions
+  3. [Make fixes in Xcode/editor]     ← Fix code
+  4. grep -c "error:" build_errors_raw.txt ← Check count
+  5. Repeat from step 1
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ AFTER ALL ERRORS FIXED                                                   ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  swift build --product anigma-app          ← Verify clean build
+  bash build_mac_app.sh                     ← Create app bundle
+  open .build/release/Anigma.app            ← Test it!
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ FILES REFERENCE                                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  📘 BUILD_DEBUG_INSTALLATION.md     ← Getting started guide
+  📘 BUILD_DEBUG_TOOLS_README.md     ← Complete documentation
+  📘 suggested_fixes.md              ← Your action plan (generated)
+  📊 build_errors_report.txt         ← Human-readable errors (generated)
+  📊 build_errors_analysis.txt       ← Advanced analysis (generated)
+  🔧 debug_build.sh                  ← Main tool
+  🔧 capture_build_errors.sh         ← Just capture
+  🔧 suggest_fixes.sh                ← Just suggest
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ QUICK TIPS                                                               ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  ✓ Fix errors in priority order (imports → types → members → arguments)
+  ✓ Many errors cascade - first few fixes often clear many others
+  ✓ Focus on files with most errors first
+  ✓ Check BINARY_BUNDLE_COMPLETE.md for known issues
+  ✓ Test build after every batch of fixes
+  ✓ Commit working fixes before starting next batch
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ KNOWN FIXED ISSUES                                                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  ✅ PipelineStage ambiguity in PipelineStore.swift (line 62)
+     → Now uses AnigmaHostMac.PipelineStage
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ NEED HELP?                                                               ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  1. Read BUILD_DEBUG_INSTALLATION.md for setup help
+  2. Read BUILD_DEBUG_TOOLS_README.md for detailed usage
+  3. Check suggested_fixes.md for specific fix instructions
+  4. Run debug_build.sh again to refresh analysis
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║  Remember: bash debug_build.sh is your friend! Run it after each batch   ║
+║  of fixes to see your progress and get updated suggestions.               ║
+╚════════════════════════════════════════════════════════════════════════════╝

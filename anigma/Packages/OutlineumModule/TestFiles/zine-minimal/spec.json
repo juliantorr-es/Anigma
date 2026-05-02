@@ -1,0 +1,11 @@
+{
+  "title": "Minimal Zine",
+  "version": "1.0",
+  "images": [
+    "page-0.png"
+  ],
+  "metadata": {
+    "audience": "internal",
+    "purpose": "demo"
+  }
+}

@@ -1,0 +1,8 @@
+#!/bin/bash
+ANIGMA_DAEMON="/Applications/AnigmaDaemon.app/Contents/MacOS/anigmad"
+if [ -f "$ANIGMA_DAEMON" ]; then
+    "$ANIGMA_DAEMON" "$@"
+else
+    echo "Error: AnigmaDaemon not found. Please reinstall Anigma."
+    exit 1
+fi

@@ -1,0 +1,44 @@
+id: p1-public-history-excision
+title: Public History Excision
+type: epic
+priority: P1
+status: ready
+lane: publication-cleanup
+summary: Remove sensitive data, large binaries, and generated artifacts from
+description: 'Remove sensitive data, large binaries, and generated artifacts from
+
+  Git history before public GitHub publication.
+
+  '
+recommended_worktree: anigma/
+verification_profiles:
+  - history-excision
+  - repo-hygiene
+  - publication
+gc_policy: retain_all
+context_load_policy: eager
+source_docs:
+- .gitignore
+- Docs/proofs/github-publication-readiness.md
+- Docs/proofs/p1-validate-tiers-green-gate.md
+- Docs/reports/public-release-dependency-exclusion-audit.md
+related_docs: []
+proofs: []
+proof_required:
+- Docs/proofs/public-history-excision-proof.md
+expected_proof: []
+tasks: &id001 []
+children: *id001
+acceptance:
+- Generated artifacts are removed from Git history
+- Vendored binaries with unclear provenance are excluded
+- No blobs over 100MB remain in history
+- Remote push succeeds without errors
+- Repository builds cleanly after cleanup
+non_goals:
+- Public website generation
+- Rewriting commit history (only cleanup)
+- Removing canonical documentation
+td_labels:
+- lane:publication-cleanup
+- type:epic

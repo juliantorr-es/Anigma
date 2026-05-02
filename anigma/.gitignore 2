@@ -1,0 +1,43 @@
+# Xcode indexing performance - exclude these from your project
+.build/
+.swiftpm/
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Build artifacts
+*.o
+*.a
+*.dylib
+*.framework
+*.dSYM.zip
+*.dSYM
+
+# SPM build artifacts
+.build/
+Packages/
+*.xcodeproj
+!default.xcodeproj
+
+# Vendor libraries (already compiled, don't index)
+Vendor/
+*.xcframework
+
+# Stats output from debug performance settings
+.build/stats/
+
+# Large generated/vendored sources
+**/node_modules/
+**/Pods/
+**/Carthage/
+
+# ML models (large binary files)
+*.mlmodel
+*.mlmodelc
+*.mlpackage
+
+# Test artifacts
+*.profraw
+*.profdata
+xcov_output/

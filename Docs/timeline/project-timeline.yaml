@@ -1,0 +1,87 @@
+# Anigma Project Timeline
+# Machine-readable project timeline
+# Format: list of events with date, type, title, description, and references
+
+version: "1.0.0"
+last_updated: "2025-01-15"
+
+events:
+  - date: "2025-01-15"
+    type: "milestone"
+    title: "P1 Verification Profiles and TD GC Lane - Created"
+    description: "Added verification profiles manifest, GC doctrine and policy, GC script, and updated schemas"
+    references:
+      - "Docs/governance/VERIFICATION_PROFILES.md"
+      - "Docs/manifests/verification-profiles.yaml"
+      - "Scripts/validate_verification_profiles.py"
+      - "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+      - "Docs/manifests/td-context-gc-policy.yaml"
+      - "Scripts/td_context_gc.py"
+      - "Docs/schemas/td-task.schema.json"
+      - "Docs/schemas/td-epic.schema.json"
+    status: "created"
+
+  - date: "2025-01-14"
+    type: "milestone"
+    title: "P1 TD Folder System Lane - Closed"
+    description: "Completed TD folder system implementation with all acceptance criteria met"
+    references:
+      - "Docs/td/td-folder-system-migration.md"
+      - "Docs/proofs/td-folder-system-migration.md"
+      - "Scripts/validate_td_folder_system.py"
+      - "Scripts/validate_td_docs_sync.py"
+      - "Scripts/td_bootstrap_from_docs.py"
+    status: "done"
+
+  - date: "2025-01-13"
+    type: "milestone"
+    title: "P0-004 Subprocess Pooling - Phases 1-6 Complete"
+    description: "All phases of subprocess pooling implementation completed"
+    references:
+      - "Docs/td/ready/p0-004/"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    status: "done"
+
+placeholders:
+  - id: "p0-004-runtime"
+    title: "P0-004 Runtime Implementation"
+    date: "TBD"
+    type: "milestone"
+    description: "Runtime implementation for subprocess pooling (mark as done when actual runtime work completes)"
+    status: "pending"
+    references: []
+
+  - id: "p1-publication"
+    title: "P1 Public GitHub Publication"
+    date: "TBD"
+    type: "milestone"
+    description: "Public GitHub publication with cleaned history"
+    status: "pending"
+    depends_on:
+      - "p1-public-history-excision"
+      - "p1-td-source-of-truth-recovery"
+    references: []
+
+  - id: "p1-docs-infra-complete"
+    title: "P1 Documentation Infrastructure Complete"
+    date: "TBD"
+    type: "milestone"
+    description: "All documentation infrastructure tasks complete"
+    status: "pending"
+    references: []
+
+validation_rules:
+  - id: "TL-001"
+    name: "Valid Date Format"
+    description: "All dates must be in YYYY-MM-DD format"
+    severity: "ERROR"
+  
+  - id: "TL-002"
+    name: "Valid Event Types"
+    description: "Event types must be one of: milestone, decision, release, event, meeting"
+    severity: "ERROR"
+  
+  - id: "TL-003"
+    name: "Valid Status"
+    description: "Status must be one of: pending, created, in_progress, done, cancelled"
+    severity: "WARNING"

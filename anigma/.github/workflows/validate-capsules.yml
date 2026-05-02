@@ -1,0 +1,87 @@
+name: Capsule Marshalling Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  swiftlint-capsule:
+    name: SwiftLint Capsule Rules
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+      
+      - name: Run SwiftLint Capsule Validation
+        run: ./Scripts/ci/run-swiftlint-capsule.sh
+
+  abi-boundary-check:
+    name: ABI Boundary Validation
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Capsule ABI Boundary Check
+        run: ./Scripts/ci/check-capsule-abi.sh
+
+  static-validation:
+    name: Static Validation Scripts
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+      
+      - name: Run Capsule Validation Script
+        run: swift run --package-path Scripts validate_capsules
+
+  budget-validation:
+    name: Budget Validation
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+      
+      - name: Run Marshalling Budget Validation
+        run: swift run --package-path Scripts check_marshalling_budgets
+
+  summary:
+    name: Capsule Validation Summary
+    runs-on: macos-latest
+    needs: [swiftlint-capsule, abi-boundary-check, static-validation, budget-validation]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate Capsule Validation Report
+        run: |
+          echo "# Capsule Marshalling Validation Report" > capsule-report.md
+          echo "" >> capsule-report.md
+          echo "## Status" >> capsule-report.md
+          echo "- SwiftLint Capsule Rules: ${{ needs.swiftlint-capsule.result }}" >> capsule-report.md
+          echo "- ABI Boundary Check: ${{ needs.abi-boundary-check.result }}" >> capsule-report.md
+          echo "- Static Validation: ${{ needs.static-validation.result }}" >> capsule-report.md
+          echo "- Budget Validation: ${{ needs.budget-validation.result }}" >> capsule-report.md
+          echo "" >> capsule-report.md
+          echo "## Details" >> capsule-report.md
+          echo "Run date: $(date)" >> capsule-report.md
+          cat capsule-report.md
+      
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: capsule-validation-report
+          path: capsule-report.md

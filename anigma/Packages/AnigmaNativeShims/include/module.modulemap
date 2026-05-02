@@ -1,0 +1,4 @@
+module AnigmaNativeShims [system] {
+    umbrella header "AnigmaNativeShims.h"
+    export *
+}

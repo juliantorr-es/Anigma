@@ -1,0 +1,30 @@
+// swift-tools-version: 5.10
+import PackageDescription
+
+let package = Package(
+    name: "TelemetryCore",
+    platforms: [
+        .macOS(.v14),
+        .iOS(.v17)
+    ],
+    products: [
+        .library(name: "TelemetryCore", targets: ["TelemetryCore"])
+    ],
+    dependencies: [],
+    targets: [
+        .target(
+            name: "TelemetryCore",
+            dependencies: [],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .testTarget(
+            name: "TelemetryCoreTests",
+            dependencies: ["TelemetryCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        )
+    ]
+)

@@ -1,0 +1,441 @@
+name: Capsule Phase 0 Gates
+
+on:
+  pull_request:
+    paths:
+      - 'anigma/Anigma/Packages/**'
+      - '.github/workflows/capsule-gates.yml'
+      - 'scripts/validate_gates.sh'
+  push:
+    branches:
+      - main
+    paths:
+      - 'anigma/Anigma/Packages/**'
+      - '.github/workflows/capsule-gates.yml'
+      - 'scripts/validate_gates.sh'
+
+jobs:
+  gate-error-model:
+    name: GATE_ERROR_MODEL
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed capsules
+        id: detect
+        run: |
+          # Find all Packages/* directories that were modified
+          CHANGED=$(git diff origin/main...HEAD --name-only 2>/dev/null | grep '^anigma/Anigma/Packages/' | cut -d/ -f4 | sort -u || echo "")
+          if [[ -z "$CHANGED" ]]; then
+            CHANGED=$(ls -1 anigma/Anigma/Packages/ | grep -v "^\." | head -1)
+          fi
+          echo "capsules=$CHANGED" >> $GITHUB_OUTPUT
+
+      - name: Verify error model compliance
+        run: |
+          set -e
+          RESULT=0
+          
+          # Get list of capsules
+          CAPSULES="${{ steps.detect.outputs.capsules }}"
+          echo "Checking capsules: $CAPSULES"
+          
+          for CAPSULE in $CAPSULES; do
+            SOURCES_DIR="anigma/Anigma/Packages/${CAPSULE}/Sources/${CAPSULE}"
+            if [[ ! -d "$SOURCES_DIR" ]]; then
+              echo "⚠ Skipping $CAPSULE - no sources directory"
+              continue
+            fi
+            
+            echo "━━ Checking $CAPSULE for non-CapsuleError throws ━━"
+            
+            # Check for NSError throws
+            if grep -r "throw NSError" "$SOURCES_DIR" 2>/dev/null || grep -r "NSError(" "$SOURCES_DIR" 2>/dev/null | grep -v "^[[:space:]]*//"; then
+              echo "❌ GATE_ERROR_MODEL FAILED"
+              echo "   Reason: Public API throws NSError instead of CapsuleError"
+              echo "   File: $(grep -r 'NSError(' $SOURCES_DIR | head -1 | cut -d: -f1)"
+              echo "   Fix: Use CapsuleError enum instead"
+              echo ""
+              echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 1"
+              RESULT=1
+            else
+              echo "✅ No non-CapsuleError exceptions detected"
+            fi
+          done
+          
+          exit $RESULT
+
+  gate-diagnostics-conformance:
+    name: GATE_DIAGNOSTICS_CONFORMANCE
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed capsules
+        id: detect
+        run: |
+          CHANGED=$(git diff origin/main...HEAD --name-only 2>/dev/null | grep '^anigma/Anigma/Packages/' | cut -d/ -f4 | sort -u || echo "")
+          if [[ -z "$CHANGED" ]]; then
+            CHANGED=$(ls -1 anigma/Anigma/Packages/ | grep -v "^\." | head -1)
+          fi
+          echo "capsules=$CHANGED" >> $GITHUB_OUTPUT
+
+      - name: Check for direct logging
+        run: |
+          set -e
+          RESULT=0
+          
+          CAPSULES="${{ steps.detect.outputs.capsules }}"
+          echo "Checking capsules: $CAPSULES"
+          
+          for CAPSULE in $CAPSULES; do
+            SOURCES_DIR="anigma/Anigma/Packages/${CAPSULE}/Sources/${CAPSULE}"
+            if [[ ! -d "$SOURCES_DIR" ]]; then
+              echo "⚠ Skipping $CAPSULE - no sources directory"
+              continue
+            fi
+            
+            echo "━━ Checking $CAPSULE for print/NSLog/os_log ━━"
+            
+            FOUND_LOGGING=0
+            
+            # Check for print()
+            if grep -rn "print(" "$SOURCES_DIR" 2>/dev/null | grep -v "^[[:space:]]*//"; then
+              echo "❌ Found print() statement"
+              FOUND_LOGGING=1
+              RESULT=1
+            fi
+            
+            # Check for NSLog()
+            if grep -rn "NSLog(" "$SOURCES_DIR" 2>/dev/null | grep -v "^[[:space:]]*//"; then
+              echo "❌ Found NSLog() statement"
+              FOUND_LOGGING=1
+              RESULT=1
+            fi
+            
+            # Check for os_log()
+            if grep -rn "os_log(" "$SOURCES_DIR" 2>/dev/null | grep -v "^[[:space:]]*//"; then
+              echo "❌ Found os_log() statement"
+              FOUND_LOGGING=1
+              RESULT=1
+            fi
+            
+            if [[ $FOUND_LOGGING -eq 1 ]]; then
+              echo ""
+              echo "❌ GATE_DIAGNOSTICS_CONFORMANCE FAILED"
+              echo "   Reason: Direct logging detected (print/NSLog/os_log)"
+              echo "   Fix: Use CapsuleDiagnostics.event(...) instead"
+              echo ""
+              echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 2"
+            else
+              echo "✅ No direct logging detected"
+            fi
+          done
+          
+          exit $RESULT
+
+  gate-build-hygiene:
+    name: GATE_BUILD_HYGIENE
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed capsules
+        id: detect
+        run: |
+          CHANGED=$(git diff origin/main...HEAD --name-only 2>/dev/null | grep '^anigma/Anigma/Packages/' | cut -d/ -f4 | sort -u || echo "")
+          if [[ -z "$CHANGED" ]]; then
+            CHANGED=$(ls -1 anigma/Anigma/Packages/ | grep -v "^\." | head -1)
+          fi
+          echo "capsules=$CHANGED" >> $GITHUB_OUTPUT
+
+      - name: Verify build hygiene
+        run: |
+          set -e
+          RESULT=0
+          
+          CAPSULES="${{ steps.detect.outputs.capsules }}"
+          echo "Checking capsules: $CAPSULES"
+          
+          for CAPSULE in $CAPSULES; do
+            PKG_SWIFT="anigma/Anigma/Packages/${CAPSULE}/Package.swift"
+            if [[ ! -f "$PKG_SWIFT" ]]; then
+              echo "⚠ Skipping $CAPSULE - no Package.swift"
+              continue
+            fi
+            
+            echo "━━ Checking $CAPSULE for hardcoded paths ━━"
+            
+            # Check for hardcoded /opt/homebrew paths
+            if grep -E "[\"\']\/opt\/homebrew" "$PKG_SWIFT"; then
+              echo "❌ GATE_BUILD_HYGIENE FAILED"
+              echo "   Reason: Hardcoded /opt/homebrew path detected"
+              echo "   Fix: Use system pkg-config or conditional linker settings"
+              echo ""
+              echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 4"
+              RESULT=1
+            else
+              echo "✅ No hardcoded homebrew paths"
+            fi
+            
+            # Check for undocumented linker settings
+            echo "━━ Checking $CAPSULE for documented linker flags ━━"
+            
+            if grep -E "(unsafeFlags|linkedLibrary)" "$PKG_SWIFT" > /dev/null; then
+              # Check if they have justification comments
+              PROBLEMATIC=0
+              while IFS= read -r line; do
+                LINE_NUM=$(echo "$line" | cut -d: -f1)
+                # Check if there's a REASON or EXTERNAL_DEP comment nearby
+                CONTEXT=$(sed -n "$((LINE_NUM-3)),$((LINE_NUM+1))p" "$PKG_SWIFT")
+                if ! echo "$CONTEXT" | grep -qE "(REASON|EXTERNAL_DEP|unsafe_flag|UNSAFE_FLAG)"; then
+                  echo "❌ Undocumented linker setting at line $LINE_NUM:"
+                  echo "   $line" | cut -d: -f2-
+                  PROBLEMATIC=1
+                  RESULT=1
+                fi
+              done < <(grep -n "unsafeFlags\|linkedLibrary" "$PKG_SWIFT")
+              
+              if [[ $PROBLEMATIC -eq 1 ]]; then
+                echo ""
+                echo "❌ GATE_BUILD_HYGIENE FAILED"
+                echo "   Reason: Linker settings missing justification comments"
+                echo "   Fix: Add REASON/EXTERNAL_DEP comments explaining why flags are needed"
+                echo ""
+                echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 4"
+              else
+                echo "✅ All linker settings documented"
+              fi
+            fi
+          done
+          
+          exit $RESULT
+
+  gate-test-coverage:
+    name: GATE_TEST_COVERAGE
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed capsules
+        id: detect
+        run: |
+          CHANGED=$(git diff origin/main...HEAD --name-only 2>/dev/null | grep '^anigma/Anigma/Packages/' | cut -d/ -f4 | sort -u || echo "")
+          if [[ -z "$CHANGED" ]]; then
+            CHANGED=$(ls -1 anigma/Anigma/Packages/ | grep -v "^\." | head -1)
+          fi
+          echo "capsules=$CHANGED" >> $GITHUB_OUTPUT
+
+      - name: Check test coverage requirements
+        run: |
+          set -e
+          RESULT=0
+          
+          CAPSULES="${{ steps.detect.outputs.capsules }}"
+          echo "Checking capsules: $CAPSULES"
+          
+          for CAPSULE in $CAPSULES; do
+            MANIFEST="anigma/Anigma/Packages/${CAPSULE}/MANIFEST.toml"
+            if [[ ! -f "$MANIFEST" ]]; then
+              echo "ℹ Skipping $CAPSULE - no MANIFEST.toml (assuming Tier 2)"
+              continue
+            fi
+            
+            TIER=$(grep "^tier" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            COVERAGE=$(grep "^coverage_percent" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            TESTS=$(grep "^test_count" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            
+            echo "━━ $CAPSULE: Tier $TIER ━━"
+            
+            if [[ "$TIER" == "5" ]]; then
+              echo "Requirements: 80% coverage, 15+ tests"
+              if (( COVERAGE < 80 )); then
+                echo "❌ Coverage ${COVERAGE}% < 80%"
+                RESULT=1
+              fi
+              if (( TESTS < 15 )); then
+                echo "❌ Tests ${TESTS} < 15"
+                RESULT=1
+              fi
+              if [[ $RESULT -eq 0 ]]; then
+                echo "✅ Tier 5: ${COVERAGE}% coverage, ${TESTS} tests"
+              fi
+            elif [[ "$TIER" == "3" ]]; then
+              echo "Requirements: 60% coverage, 10+ tests"
+              if (( COVERAGE < 60 )); then
+                echo "❌ Coverage ${COVERAGE}% < 60%"
+                RESULT=1
+              fi
+              if (( TESTS < 10 )); then
+                echo "❌ Tests ${TESTS} < 10"
+                RESULT=1
+              fi
+              if [[ $RESULT -eq 0 ]]; then
+                echo "✅ Tier 3: ${COVERAGE}% coverage, ${TESTS} tests"
+              fi
+            else
+              echo "✅ Tier 2+ (coverage optional in Phase 0)"
+            fi
+          done
+          
+          if [[ $RESULT -ne 0 ]]; then
+            echo ""
+            echo "❌ GATE_TEST_COVERAGE FAILED"
+            echo "   Fix: Increase test count and/or coverage in MANIFEST.toml"
+            echo ""
+            echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 3"
+          fi
+          
+          exit $RESULT
+
+  gate-tier-validation:
+    name: GATE_TIER_VALIDATION
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed capsules
+        id: detect
+        run: |
+          CHANGED=$(git diff origin/main...HEAD --name-only 2>/dev/null | grep '^anigma/Anigma/Packages/' | cut -d/ -f4 | sort -u || echo "")
+          if [[ -z "$CHANGED" ]]; then
+            CHANGED=$(ls -1 anigma/Anigma/Packages/ | grep -v "^\." | head -1)
+          fi
+          echo "capsules=$CHANGED" >> $GITHUB_OUTPUT
+
+      - name: Validate tier requirements
+        run: |
+          set -e
+          RESULT=0
+          
+          CAPSULES="${{ steps.detect.outputs.capsules }}"
+          echo "Checking capsules: $CAPSULES"
+          
+          for CAPSULE in $CAPSULES; do
+            MANIFEST="anigma/Anigma/Packages/${CAPSULE}/MANIFEST.toml"
+            if [[ ! -f "$MANIFEST" ]]; then
+              echo "⚠ $CAPSULE: No MANIFEST.toml (create one if this is a Tier 3+ capsule)"
+              continue
+            fi
+            
+            echo "━━ Validating $CAPSULE MANIFEST.toml ━━"
+            
+            NAME=$(grep "^name" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            TIER=$(grep "^tier" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            OWNER=$(grep "^owner" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            STATUS=$(grep "^status" "$MANIFEST" | cut -d= -f2 | tr -d ' "')
+            
+            if [[ -z "$NAME" ]] || [[ -z "$TIER" ]]; then
+              echo "❌ GATE_TIER_VALIDATION FAILED"
+              echo "   Reason: MANIFEST.toml missing required fields (name, tier)"
+              echo "   Fix: Add all required fields to MANIFEST.toml"
+              echo ""
+              echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 5"
+              RESULT=1
+            elif ! [[ "$TIER" =~ ^[1-5]$ ]]; then
+              echo "❌ GATE_TIER_VALIDATION FAILED"
+              echo "   Reason: Invalid tier value: $TIER"
+              echo "   Fix: Tier must be 1-5"
+              echo ""
+              echo "   Reference: Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md - Contract 5"
+              RESULT=1
+            else
+              echo "✅ $CAPSULE: Tier $TIER"
+              echo "   Name: $NAME"
+              echo "   Owner: $OWNER"
+              echo "   Status: $STATUS"
+            fi
+          done
+          
+          exit $RESULT
+
+  all-gates-summary:
+    name: Phase 0 Gates Summary
+    needs: [gate-error-model, gate-diagnostics-conformance, gate-build-hygiene, gate-test-coverage, gate-tier-validation]
+    runs-on: macos-latest
+    if: always()
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comment PR with gate results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const errorModel = ${{ needs.gate-error-model.result == 'success' }};
+            const diagnostics = ${{ needs.gate-diagnostics-conformance.result == 'success' }};
+            const buildHygiene = ${{ needs.gate-build-hygiene.result == 'success' }};
+            const testCoverage = ${{ needs.gate-test-coverage.result == 'success' }};
+            const tierValidation = ${{ needs.gate-tier-validation.result == 'success' }};
+            
+            const allPassed = errorModel && diagnostics && buildHygiene && testCoverage && tierValidation;
+            
+            const statusIcon = (passed) => passed ? '✅' : '❌';
+            
+            const comment = `
+            ## Phase 0 CI Gate Status
+            
+            | Gate | Status |
+            |------|--------|
+            | GATE_ERROR_MODEL | ${statusIcon(errorModel)} |
+            | GATE_DIAGNOSTICS_CONFORMANCE | ${statusIcon(diagnostics)} |
+            | GATE_BUILD_HYGIENE | ${statusIcon(buildHygiene)} |
+            | GATE_TEST_COVERAGE | ${statusIcon(testCoverage)} |
+            | GATE_TIER_VALIDATION | ${statusIcon(tierValidation)} |
+            
+            ${allPassed ? '### All gates passed! ✅' : '### Some gates failed. Please review the logs above.'}
+            
+            **Reference:** [Phase 0 Remediation Contracts](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/anigma/Docs/governance/PHASE0_REMEDIATION_CONTRACTS.md)
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment,
+            });
+
+      - name: Report final status
+        run: |
+          echo "Phase 0 Gate Execution Complete"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "ERROR_MODEL: ${{ needs.gate-error-model.result }}"
+          echo "DIAGNOSTICS_CONFORMANCE: ${{ needs.gate-diagnostics-conformance.result }}"
+          echo "BUILD_HYGIENE: ${{ needs.gate-build-hygiene.result }}"
+          echo "TEST_COVERAGE: ${{ needs.gate-test-coverage.result }}"
+          echo "TIER_VALIDATION: ${{ needs.gate-tier-validation.result }}"
+          
+          if [[ "${{ needs.gate-error-model.result }}" != "success" || \
+                "${{ needs.gate-diagnostics-conformance.result }}" != "success" || \
+                "${{ needs.gate-build-hygiene.result }}" != "success" || \
+                "${{ needs.gate-test-coverage.result }}" != "success" || \
+                "${{ needs.gate-tier-validation.result }}" != "success" ]]; then
+            echo "❌ Phase 0 gates FAILED"
+            exit 1
+          else
+            echo "✅ Phase 0 gates PASSED"
+            exit 0
+          fi

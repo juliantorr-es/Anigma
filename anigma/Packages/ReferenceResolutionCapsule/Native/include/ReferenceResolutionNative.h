@@ -1,0 +1,6 @@
+#ifndef REFERENCERESOLUTIONNATIVE_H
+#define REFERENCERESOLUTIONNATIVE_H
+
+#include "reference_resolution_capsule.h"
+
+#endif // REFERENCERESOLUTIONNATIVE_H

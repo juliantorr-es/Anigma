@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0",
+  "dependencies": [
+    {
+      "name": "Skia",
+      "version": "m116",
+      "url": "https://skia.googlesource.com/skia.git",
+      "license": "BSD-3-Clause",
+      "hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ICU",
+      "version": "73.2",
+      "url": "https://github.com/unicode-org/icu.git",
+      "license": "ICU",
+      "hash": "sha256:818a80712ed3caacd9b652305e01afc7fa167e6f2e94996da44b90c2ab604ce1"
+    },
+    {
+      "name": "HarfBuzz",
+      "version": "8.1.1",
+      "url": "https://github.com/harfbuzz/harfbuzz.git",
+      "license": "MIT",
+      "hash": "sha256:d1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "FreeType",
+      "version": "2.13.2",
+      "url": "https://gitlab.freedesktop.org/freetype/freetype.git",
+      "license": "FreeType",
+      "hash": "sha256:f1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "libzip",
+      "version": "1.10.1",
+      "url": "https://github.com/nih-at/libzip.git",
+      "license": "BSD-3-Clause",
+      "hash": "sha256:z1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "pugixml",
+      "version": "1.14",
+      "url": "https://github.com/zeux/pugixml.git",
+      "license": "MIT",
+      "hash": "sha256:p1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "LibreOfficeKit",
+      "version": "7.6.0",
+      "url": "https://github.com/LibreOffice/core.git",
+      "license": "MPL-2.0",
+      "hash": "sha256:l1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "MuPDF",
+      "version": "1.23.3",
+      "url": "https://git.ghostscript.com/mupdf.git",
+      "license": "AGPL-3.0",
+      "hash": "sha256:m1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "Marian NMT",
+      "version": "1.12.0",
+      "url": "https://github.com/marian-nmt/marian.git",
+      "license": "MIT",
+      "hash": "sha256:n1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "spdlog",
+      "version": "1.12.0",
+      "url": "https://github.com/gabime/spdlog.git",
+      "license": "MIT",
+      "hash": "sha256:s1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    },
+    {
+      "name": "fmt",
+      "version": "10.1.1",
+      "url": "https://github.com/fmtlib/fmt.git",
+      "license": "MIT",
+      "hash": "sha256:t1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcde"
+    }
+  ]
+}

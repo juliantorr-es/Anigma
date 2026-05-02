@@ -1,0 +1,39 @@
+// ... (omitted parts for brevity)
+    func recordEvidence(
+        operation: CoreOperationType,
+        inputs: [String: AnyCodable],
+        result: ToolResult,
+        spanRefs: [SpanRef],
+        parentEvidenceIds: [String]
+    ) async throws -> String {
+        guard let evidenceAuthority = evidenceAuthority else {
+            throw RLMError.missingDependency("EvidenceAuthority")
+        }
+        
+        // Construct the EvidenceRecord
+        let evidenceRecord = EvidenceRecord(
+            operation: operation,
+            inputs: inputs,
+            result: result,
+            parentEvidenceIds: parentEvidenceIds,
+            spanRefs: spanRefs
+        )
+        
+        // Map to EvidenceAuthority requirements
+        let receipt = try await evidenceAuthority.record(
+            operation: operation, // CoreOperationType
+            principal: .system,   // Simplified for now
+            payload: EvidencePayload(record: evidenceRecord), 
+            governanceDecision: .approved, 
+            context: ContractContext(
+                contractID: "rlm-evidence",
+                runID: "rlm-run",
+                sessionID: "rlm-session",
+                trustTier: .standard,
+                securityZone: .internal,
+                budgets: ContractBudgets(),
+                executorIdentity: "rlm-gov"
+            )
+        )
+        return receipt.evidenceHash
+    }

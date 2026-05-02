@@ -1,0 +1,30 @@
+id: p0-003
+title: Polytropos Phase 0 Implementation
+type: epic
+priority: P0
+status: complete
+lane: p0-critical-path
+summary: 'Phase 0: Core materialization gate, media primitives, execution foundation.'
+description: 'Phase 0: Core materialization gate, media primitives, execution foundation.'
+recommended_worktree: anigma/
+source_docs:
+- Docs/proofs/p0-003-polytropos-phase0-implementation.md
+- Docs/proofs/p0-003-test-results.md
+related_docs: []
+proofs:
+- Docs/proofs/p0-003-polytropos-phase0-implementation.md
+- Docs/proofs/p0-003-test-results.md
+tasks: &id001 []
+children: *id001
+acceptance:
+- Materialization gate enforcement is complete
+- Media primitive types are defined and tested
+- Execution foundation supports zero-copy path
+- MediaCore tests pass (55/55)
+- Governance validators pass or have known tracked debt
+non_goals:
+- Phase 1+ Polytropos features
+- Public GitHub publication
+td_labels:
+- lane:p0-critical-path
+- type:epic

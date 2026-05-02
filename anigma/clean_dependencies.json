@@ -1,0 +1,2126 @@
+  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma",
+  "dependencies": [
+    {
+      "identity": "swift-argument-parser",
+      "name": "swift-argument-parser",
+      "url": "https://github.com/apple/swift-argument-parser.git",
+      "version": "1.7.0",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-argument-parser",
+      "dependencies": [
+
+      ]
+    },
+    {
+      "identity": "swift-syntax",
+      "name": "swift-syntax",
+      "url": "https://github.com/apple/swift-syntax.git",
+      "version": "510.0.3",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-syntax",
+      "dependencies": [
+
+      ]
+    },
+    {
+      "identity": "mlx-swift",
+      "name": "mlx-swift",
+      "url": "https://github.com/ml-explore/mlx-swift.git",
+      "version": "0.30.3",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/mlx-swift",
+      "dependencies": [
+        {
+          "identity": "swift-numerics",
+          "name": "swift-numerics",
+          "url": "https://github.com/apple/swift-numerics.git",
+          "version": "1.1.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+          "dependencies": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "identity": "mlx-swift-lm",
+      "name": "mlx-swift-lm",
+      "url": "https://github.com/ml-explore/mlx-swift-lm.git",
+      "version": "2.30.3",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/mlx-swift-lm",
+      "dependencies": [
+        {
+          "identity": "mlx-swift",
+          "name": "mlx-swift",
+          "url": "https://github.com/ml-explore/mlx-swift.git",
+          "version": "0.30.3",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/mlx-swift",
+          "dependencies": [
+            {
+              "identity": "swift-numerics",
+              "name": "swift-numerics",
+              "url": "https://github.com/apple/swift-numerics.git",
+              "version": "1.1.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-transformers",
+          "name": "swift-transformers",
+          "url": "https://github.com/huggingface/swift-transformers",
+          "version": "1.1.6",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-transformers",
+          "dependencies": [
+            {
+              "identity": "swift-jinja",
+              "name": "Jinja",
+              "url": "https://github.com/huggingface/swift-jinja.git",
+              "version": "2.3.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-jinja",
+              "dependencies": [
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-collections",
+              "name": "swift-collections",
+              "url": "https://github.com/apple/swift-collections.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "identity": "grdb.swift",
+      "name": "GRDB",
+      "url": "https://github.com/groue/GRDB.swift.git",
+      "version": "6.29.3",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/GRDB.swift",
+      "dependencies": [
+
+      ]
+    },
+    {
+      "identity": "swift-numerics",
+      "name": "swift-numerics",
+      "url": "https://github.com/apple/swift-numerics.git",
+      "version": "1.1.1",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+      "dependencies": [
+
+      ]
+    },
+    {
+      "identity": "swift-toml",
+      "name": "Toml",
+      "url": "https://github.com/jdfergason/swift-toml.git",
+      "version": "1.0.0",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-toml",
+      "dependencies": [
+
+      ]
+    },
+    {
+      "identity": "swift-crypto",
+      "name": "swift-crypto",
+      "url": "https://github.com/apple/swift-crypto.git",
+      "version": "3.15.1",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-crypto",
+      "dependencies": [
+        {
+          "identity": "swift-asn1",
+          "name": "swift-asn1",
+          "url": "https://github.com/apple/swift-asn1.git",
+          "version": "1.5.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+          "dependencies": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "identity": "swift-tree-sitter",
+      "name": "SwiftTreeSitter",
+      "url": "https://github.com/tree-sitter/swift-tree-sitter.git",
+      "version": "0.25.0",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-tree-sitter",
+      "dependencies": [
+        {
+          "identity": "tree-sitter",
+          "name": "TreeSitter",
+          "url": "https://github.com/tree-sitter/tree-sitter",
+          "version": "0.25.10",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/tree-sitter",
+          "dependencies": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "identity": "swift-cmark",
+      "name": "cmark-gfm",
+      "url": "https://github.com/apple/swift-cmark.git",
+      "version": "0.7.1",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-cmark",
+      "dependencies": [
+
+      ]
+    },
+    {
+      "identity": "hummingbird",
+      "name": "hummingbird",
+      "url": "https://github.com/hummingbird-project/hummingbird.git",
+      "version": "2.19.0",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/hummingbird",
+      "dependencies": [
+        {
+          "identity": "swift-async-algorithms",
+          "name": "swift-async-algorithms",
+          "url": "https://github.com/apple/swift-async-algorithms.git",
+          "version": "1.1.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+          "dependencies": [
+            {
+              "identity": "swift-collections",
+              "name": "swift-collections",
+              "url": "https://github.com/apple/swift-collections.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-atomics",
+          "name": "swift-atomics",
+          "url": "https://github.com/apple/swift-atomics.git",
+          "version": "1.3.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-collections",
+          "name": "swift-collections",
+          "url": "https://github.com/apple/swift-collections.git",
+          "version": "1.3.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-log",
+          "name": "swift-log",
+          "url": "https://github.com/apple/swift-log.git",
+          "version": "1.9.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-http-types",
+          "name": "swift-http-types",
+          "url": "https://github.com/apple/swift-http-types.git",
+          "version": "1.5.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-types",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-metrics",
+          "name": "swift-metrics",
+          "url": "https://github.com/apple/swift-metrics.git",
+          "version": "2.7.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-metrics",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-distributed-tracing",
+          "name": "swift-distributed-tracing",
+          "url": "https://github.com/apple/swift-distributed-tracing.git",
+          "version": "1.3.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-distributed-tracing",
+          "dependencies": [
+            {
+              "identity": "swift-service-context",
+              "name": "swift-service-context",
+              "url": "https://github.com/apple/swift-service-context.git",
+              "version": "1.2.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-context",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio",
+          "name": "swift-nio",
+          "url": "https://github.com/apple/swift-nio.git",
+          "version": "2.93.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+          "dependencies": [
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-collections",
+              "name": "swift-collections",
+              "url": "https://github.com/apple/swift-collections.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-system",
+              "name": "swift-system",
+              "url": "https://github.com/apple/swift-system.git",
+              "version": "1.6.4",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-extras",
+          "name": "swift-nio-extras",
+          "url": "https://github.com/apple/swift-nio-extras.git",
+          "version": "1.32.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-extras",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-http2",
+              "name": "swift-nio-http2",
+              "url": "https://github.com/apple/swift-nio-http2.git",
+              "version": "1.39.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-http2",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-http-types",
+              "name": "swift-http-types",
+              "url": "https://github.com/apple/swift-http-types.git",
+              "version": "1.5.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-types",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-http-structured-headers",
+              "name": "swift-http-structured-headers",
+              "url": "https://github.com/apple/swift-http-structured-headers.git",
+              "version": "1.6.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-structured-headers",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-algorithms",
+              "name": "swift-algorithms",
+              "url": "https://github.com/apple/swift-algorithms.git",
+              "version": "1.2.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-algorithms",
+              "dependencies": [
+                {
+                  "identity": "swift-numerics",
+                  "name": "swift-numerics",
+                  "url": "https://github.com/apple/swift-numerics.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-certificates",
+              "name": "swift-certificates",
+              "url": "https://github.com/apple/swift-certificates.git",
+              "version": "1.17.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-certificates",
+              "dependencies": [
+                {
+                  "identity": "swift-crypto",
+                  "name": "swift-crypto",
+                  "url": "https://github.com/apple/swift-crypto.git",
+                  "version": "3.15.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-crypto",
+                  "dependencies": [
+                    {
+                      "identity": "swift-asn1",
+                      "name": "swift-asn1",
+                      "url": "https://github.com/apple/swift-asn1.git",
+                      "version": "1.5.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-asn1",
+                  "name": "swift-asn1",
+                  "url": "https://github.com/apple/swift-asn1.git",
+                  "version": "1.5.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-ssl",
+              "name": "swift-nio-ssl",
+              "url": "https://github.com/apple/swift-nio-ssl.git",
+              "version": "2.36.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-ssl",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-asn1",
+              "name": "swift-asn1",
+              "url": "https://github.com/apple/swift-asn1.git",
+              "version": "1.5.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-service-lifecycle",
+              "name": "swift-service-lifecycle",
+              "url": "https://github.com/swift-server/swift-service-lifecycle.git",
+              "version": "2.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-lifecycle",
+              "dependencies": [
+                {
+                  "identity": "swift-log",
+                  "name": "swift-log",
+                  "url": "https://github.com/apple/swift-log.git",
+                  "version": "1.9.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-async-algorithms",
+                  "name": "swift-async-algorithms",
+                  "url": "https://github.com/apple/swift-async-algorithms.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+                  "dependencies": [
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-async-algorithms",
+              "name": "swift-async-algorithms",
+              "url": "https://github.com/apple/swift-async-algorithms.git",
+              "version": "1.1.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+              "dependencies": [
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-log",
+              "name": "swift-log",
+              "url": "https://github.com/apple/swift-log.git",
+              "version": "1.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-http2",
+          "name": "swift-nio-http2",
+          "url": "https://github.com/apple/swift-nio-http2.git",
+          "version": "1.39.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-http2",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-ssl",
+          "name": "swift-nio-ssl",
+          "url": "https://github.com/apple/swift-nio-ssl.git",
+          "version": "2.36.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-ssl",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-transport-services",
+          "name": "swift-nio-transport-services",
+          "url": "https://github.com/apple/swift-nio-transport-services.git",
+          "version": "1.26.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-transport-services",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-service-lifecycle",
+          "name": "swift-service-lifecycle",
+          "url": "https://github.com/swift-server/swift-service-lifecycle.git",
+          "version": "2.9.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-lifecycle",
+          "dependencies": [
+            {
+              "identity": "swift-log",
+              "name": "swift-log",
+              "url": "https://github.com/apple/swift-log.git",
+              "version": "1.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-async-algorithms",
+              "name": "swift-async-algorithms",
+              "url": "https://github.com/apple/swift-async-algorithms.git",
+              "version": "1.1.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+              "dependencies": [
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "async-http-client",
+          "name": "async-http-client",
+          "url": "https://github.com/swift-server/async-http-client.git",
+          "version": "1.30.3",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/async-http-client",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-ssl",
+              "name": "swift-nio-ssl",
+              "url": "https://github.com/apple/swift-nio-ssl.git",
+              "version": "2.36.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-ssl",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-http2",
+              "name": "swift-nio-http2",
+              "url": "https://github.com/apple/swift-nio-http2.git",
+              "version": "1.39.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-http2",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-extras",
+              "name": "swift-nio-extras",
+              "url": "https://github.com/apple/swift-nio-extras.git",
+              "version": "1.32.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-extras",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-nio-http2",
+                  "name": "swift-nio-http2",
+                  "url": "https://github.com/apple/swift-nio-http2.git",
+                  "version": "1.39.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-http2",
+                  "dependencies": [
+                    {
+                      "identity": "swift-nio",
+                      "name": "swift-nio",
+                      "url": "https://github.com/apple/swift-nio.git",
+                      "version": "2.93.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                      "dependencies": [
+                        {
+                          "identity": "swift-atomics",
+                          "name": "swift-atomics",
+                          "url": "https://github.com/apple/swift-atomics.git",
+                          "version": "1.3.0",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                          "dependencies": [
+
+                          ]
+                        },
+                        {
+                          "identity": "swift-collections",
+                          "name": "swift-collections",
+                          "url": "https://github.com/apple/swift-collections.git",
+                          "version": "1.3.0",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                          "dependencies": [
+
+                          ]
+                        },
+                        {
+                          "identity": "swift-system",
+                          "name": "swift-system",
+                          "url": "https://github.com/apple/swift-system.git",
+                          "version": "1.6.4",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                          "dependencies": [
+
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-http-types",
+                  "name": "swift-http-types",
+                  "url": "https://github.com/apple/swift-http-types.git",
+                  "version": "1.5.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-types",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-http-structured-headers",
+                  "name": "swift-http-structured-headers",
+                  "url": "https://github.com/apple/swift-http-structured-headers.git",
+                  "version": "1.6.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-structured-headers",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-algorithms",
+                  "name": "swift-algorithms",
+                  "url": "https://github.com/apple/swift-algorithms.git",
+                  "version": "1.2.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-algorithms",
+                  "dependencies": [
+                    {
+                      "identity": "swift-numerics",
+                      "name": "swift-numerics",
+                      "url": "https://github.com/apple/swift-numerics.git",
+                      "version": "1.1.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-certificates",
+                  "name": "swift-certificates",
+                  "url": "https://github.com/apple/swift-certificates.git",
+                  "version": "1.17.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-certificates",
+                  "dependencies": [
+                    {
+                      "identity": "swift-crypto",
+                      "name": "swift-crypto",
+                      "url": "https://github.com/apple/swift-crypto.git",
+                      "version": "3.15.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-crypto",
+                      "dependencies": [
+                        {
+                          "identity": "swift-asn1",
+                          "name": "swift-asn1",
+                          "url": "https://github.com/apple/swift-asn1.git",
+                          "version": "1.5.1",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                          "dependencies": [
+
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "identity": "swift-asn1",
+                      "name": "swift-asn1",
+                      "url": "https://github.com/apple/swift-asn1.git",
+                      "version": "1.5.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-nio-ssl",
+                  "name": "swift-nio-ssl",
+                  "url": "https://github.com/apple/swift-nio-ssl.git",
+                  "version": "2.36.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-ssl",
+                  "dependencies": [
+                    {
+                      "identity": "swift-nio",
+                      "name": "swift-nio",
+                      "url": "https://github.com/apple/swift-nio.git",
+                      "version": "2.93.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                      "dependencies": [
+                        {
+                          "identity": "swift-atomics",
+                          "name": "swift-atomics",
+                          "url": "https://github.com/apple/swift-atomics.git",
+                          "version": "1.3.0",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                          "dependencies": [
+
+                          ]
+                        },
+                        {
+                          "identity": "swift-collections",
+                          "name": "swift-collections",
+                          "url": "https://github.com/apple/swift-collections.git",
+                          "version": "1.3.0",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                          "dependencies": [
+
+                          ]
+                        },
+                        {
+                          "identity": "swift-system",
+                          "name": "swift-system",
+                          "url": "https://github.com/apple/swift-system.git",
+                          "version": "1.6.4",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                          "dependencies": [
+
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-asn1",
+                  "name": "swift-asn1",
+                  "url": "https://github.com/apple/swift-asn1.git",
+                  "version": "1.5.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-service-lifecycle",
+                  "name": "swift-service-lifecycle",
+                  "url": "https://github.com/swift-server/swift-service-lifecycle.git",
+                  "version": "2.9.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-lifecycle",
+                  "dependencies": [
+                    {
+                      "identity": "swift-log",
+                      "name": "swift-log",
+                      "url": "https://github.com/apple/swift-log.git",
+                      "version": "1.9.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-async-algorithms",
+                      "name": "swift-async-algorithms",
+                      "url": "https://github.com/apple/swift-async-algorithms.git",
+                      "version": "1.1.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+                      "dependencies": [
+                        {
+                          "identity": "swift-collections",
+                          "name": "swift-collections",
+                          "url": "https://github.com/apple/swift-collections.git",
+                          "version": "1.3.0",
+                          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                          "dependencies": [
+
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-async-algorithms",
+                  "name": "swift-async-algorithms",
+                  "url": "https://github.com/apple/swift-async-algorithms.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+                  "dependencies": [
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-log",
+                  "name": "swift-log",
+                  "url": "https://github.com/apple/swift-log.git",
+                  "version": "1.9.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-transport-services",
+              "name": "swift-nio-transport-services",
+              "url": "https://github.com/apple/swift-nio-transport-services.git",
+              "version": "1.26.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-transport-services",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-log",
+              "name": "swift-log",
+              "url": "https://github.com/apple/swift-log.git",
+              "version": "1.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-algorithms",
+              "name": "swift-algorithms",
+              "url": "https://github.com/apple/swift-algorithms.git",
+              "version": "1.2.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-algorithms",
+              "dependencies": [
+                {
+                  "identity": "swift-numerics",
+                  "name": "swift-numerics",
+                  "url": "https://github.com/apple/swift-numerics.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-distributed-tracing",
+              "name": "swift-distributed-tracing",
+              "url": "https://github.com/apple/swift-distributed-tracing.git",
+              "version": "1.3.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-distributed-tracing",
+              "dependencies": [
+                {
+                  "identity": "swift-service-context",
+                  "name": "swift-service-context",
+                  "url": "https://github.com/apple/swift-service-context.git",
+                  "version": "1.2.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-context",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-configuration",
+          "name": "swift-configuration",
+          "url": "https://github.com/apple/swift-configuration.git",
+          "version": "1.0.2",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-configuration",
+          "dependencies": [
+            {
+              "identity": "swift-system",
+              "name": "swift-system",
+              "url": "https://github.com/apple/swift-system.git",
+              "version": "1.6.4",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-collections",
+              "name": "swift-collections",
+              "url": "https://github.com/apple/swift-collections.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-service-lifecycle",
+              "name": "swift-service-lifecycle",
+              "url": "https://github.com/swift-server/swift-service-lifecycle.git",
+              "version": "2.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-lifecycle",
+              "dependencies": [
+                {
+                  "identity": "swift-log",
+                  "name": "swift-log",
+                  "url": "https://github.com/apple/swift-log.git",
+                  "version": "1.9.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-async-algorithms",
+                  "name": "swift-async-algorithms",
+                  "url": "https://github.com/apple/swift-async-algorithms.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+                  "dependencies": [
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "identity": "async-http-client",
+      "name": "async-http-client",
+      "url": "https://github.com/swift-server/async-http-client.git",
+      "version": "1.30.3",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/async-http-client",
+      "dependencies": [
+        {
+          "identity": "swift-nio",
+          "name": "swift-nio",
+          "url": "https://github.com/apple/swift-nio.git",
+          "version": "2.93.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+          "dependencies": [
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-collections",
+              "name": "swift-collections",
+              "url": "https://github.com/apple/swift-collections.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-system",
+              "name": "swift-system",
+              "url": "https://github.com/apple/swift-system.git",
+              "version": "1.6.4",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-ssl",
+          "name": "swift-nio-ssl",
+          "url": "https://github.com/apple/swift-nio-ssl.git",
+          "version": "2.36.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-ssl",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-http2",
+          "name": "swift-nio-http2",
+          "url": "https://github.com/apple/swift-nio-http2.git",
+          "version": "1.39.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-http2",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-extras",
+          "name": "swift-nio-extras",
+          "url": "https://github.com/apple/swift-nio-extras.git",
+          "version": "1.32.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-extras",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-http2",
+              "name": "swift-nio-http2",
+              "url": "https://github.com/apple/swift-nio-http2.git",
+              "version": "1.39.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-http2",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-http-types",
+              "name": "swift-http-types",
+              "url": "https://github.com/apple/swift-http-types.git",
+              "version": "1.5.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-types",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-http-structured-headers",
+              "name": "swift-http-structured-headers",
+              "url": "https://github.com/apple/swift-http-structured-headers.git",
+              "version": "1.6.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-http-structured-headers",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-algorithms",
+              "name": "swift-algorithms",
+              "url": "https://github.com/apple/swift-algorithms.git",
+              "version": "1.2.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-algorithms",
+              "dependencies": [
+                {
+                  "identity": "swift-numerics",
+                  "name": "swift-numerics",
+                  "url": "https://github.com/apple/swift-numerics.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-certificates",
+              "name": "swift-certificates",
+              "url": "https://github.com/apple/swift-certificates.git",
+              "version": "1.17.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-certificates",
+              "dependencies": [
+                {
+                  "identity": "swift-crypto",
+                  "name": "swift-crypto",
+                  "url": "https://github.com/apple/swift-crypto.git",
+                  "version": "3.15.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-crypto",
+                  "dependencies": [
+                    {
+                      "identity": "swift-asn1",
+                      "name": "swift-asn1",
+                      "url": "https://github.com/apple/swift-asn1.git",
+                      "version": "1.5.1",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "identity": "swift-asn1",
+                  "name": "swift-asn1",
+                  "url": "https://github.com/apple/swift-asn1.git",
+                  "version": "1.5.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-nio-ssl",
+              "name": "swift-nio-ssl",
+              "url": "https://github.com/apple/swift-nio-ssl.git",
+              "version": "2.36.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-ssl",
+              "dependencies": [
+                {
+                  "identity": "swift-nio",
+                  "name": "swift-nio",
+                  "url": "https://github.com/apple/swift-nio.git",
+                  "version": "2.93.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+                  "dependencies": [
+                    {
+                      "identity": "swift-atomics",
+                      "name": "swift-atomics",
+                      "url": "https://github.com/apple/swift-atomics.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    },
+                    {
+                      "identity": "swift-system",
+                      "name": "swift-system",
+                      "url": "https://github.com/apple/swift-system.git",
+                      "version": "1.6.4",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-asn1",
+              "name": "swift-asn1",
+              "url": "https://github.com/apple/swift-asn1.git",
+              "version": "1.5.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-asn1",
+              "dependencies": [
+
+              ]
+            },
+            {
+              "identity": "swift-service-lifecycle",
+              "name": "swift-service-lifecycle",
+              "url": "https://github.com/swift-server/swift-service-lifecycle.git",
+              "version": "2.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-lifecycle",
+              "dependencies": [
+                {
+                  "identity": "swift-log",
+                  "name": "swift-log",
+                  "url": "https://github.com/apple/swift-log.git",
+                  "version": "1.9.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-async-algorithms",
+                  "name": "swift-async-algorithms",
+                  "url": "https://github.com/apple/swift-async-algorithms.git",
+                  "version": "1.1.1",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+                  "dependencies": [
+                    {
+                      "identity": "swift-collections",
+                      "name": "swift-collections",
+                      "url": "https://github.com/apple/swift-collections.git",
+                      "version": "1.3.0",
+                      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                      "dependencies": [
+
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-async-algorithms",
+              "name": "swift-async-algorithms",
+              "url": "https://github.com/apple/swift-async-algorithms.git",
+              "version": "1.1.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-async-algorithms",
+              "dependencies": [
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-log",
+              "name": "swift-log",
+              "url": "https://github.com/apple/swift-log.git",
+              "version": "1.9.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-nio-transport-services",
+          "name": "swift-nio-transport-services",
+          "url": "https://github.com/apple/swift-nio-transport-services.git",
+          "version": "1.26.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio-transport-services",
+          "dependencies": [
+            {
+              "identity": "swift-nio",
+              "name": "swift-nio",
+              "url": "https://github.com/apple/swift-nio.git",
+              "version": "2.93.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-nio",
+              "dependencies": [
+                {
+                  "identity": "swift-atomics",
+                  "name": "swift-atomics",
+                  "url": "https://github.com/apple/swift-atomics.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-collections",
+                  "name": "swift-collections",
+                  "url": "https://github.com/apple/swift-collections.git",
+                  "version": "1.3.0",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-collections",
+                  "dependencies": [
+
+                  ]
+                },
+                {
+                  "identity": "swift-system",
+                  "name": "swift-system",
+                  "url": "https://github.com/apple/swift-system.git",
+                  "version": "1.6.4",
+                  "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+                  "dependencies": [
+
+                  ]
+                }
+              ]
+            },
+            {
+              "identity": "swift-atomics",
+              "name": "swift-atomics",
+              "url": "https://github.com/apple/swift-atomics.git",
+              "version": "1.3.0",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-log",
+          "name": "swift-log",
+          "url": "https://github.com/apple/swift-log.git",
+          "version": "1.9.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-atomics",
+          "name": "swift-atomics",
+          "url": "https://github.com/apple/swift-atomics.git",
+          "version": "1.3.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-atomics",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-algorithms",
+          "name": "swift-algorithms",
+          "url": "https://github.com/apple/swift-algorithms.git",
+          "version": "1.2.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-algorithms",
+          "dependencies": [
+            {
+              "identity": "swift-numerics",
+              "name": "swift-numerics",
+              "url": "https://github.com/apple/swift-numerics.git",
+              "version": "1.1.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-numerics",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        },
+        {
+          "identity": "swift-distributed-tracing",
+          "name": "swift-distributed-tracing",
+          "url": "https://github.com/apple/swift-distributed-tracing.git",
+          "version": "1.3.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-distributed-tracing",
+          "dependencies": [
+            {
+              "identity": "swift-service-context",
+              "name": "swift-service-context",
+              "url": "https://github.com/apple/swift-service-context.git",
+              "version": "1.2.1",
+              "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-service-context",
+              "dependencies": [
+
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "identity": "swift-sdk",
+      "name": "mcp-swift-sdk",
+      "url": "https://github.com/modelcontextprotocol/swift-sdk.git",
+      "version": "0.10.2",
+      "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-sdk",
+      "dependencies": [
+        {
+          "identity": "swift-system",
+          "name": "swift-system",
+          "url": "https://github.com/apple/swift-system.git",
+          "version": "1.6.4",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-system",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "swift-log",
+          "name": "swift-log",
+          "url": "https://github.com/apple/swift-log.git",
+          "version": "1.9.1",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/swift-log",
+          "dependencies": [
+
+          ]
+        },
+        {
+          "identity": "eventsource",
+          "name": "EventSource",
+          "url": "https://github.com/mattt/eventsource.git",
+          "version": "1.3.0",
+          "path": "/Users/user/Developer/GitHub/Anigma_clean/anigma/.build/checkouts/eventsource",
+          "dependencies": [
+
+          ]
+        }
+      ]
+    }
+  ]
+}
+

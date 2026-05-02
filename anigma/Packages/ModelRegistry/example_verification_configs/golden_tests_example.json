@@ -1,0 +1,50 @@
+[
+  {
+    "id": "example_bert_int8_ane",
+    "modelId": "bert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuAndNeuralEngine",
+    "quantization": "int8",
+    "minOSVersion": "macos15",
+    "expectedOutputHash": "REPLACE_WITH_ACTUAL_HASH_AFTER_FIRST_SUCCESSFUL_CONVERSION",
+    "expectedPlacement": "ANE",
+    "tolerance": 0.0,
+    "description": "BERT base model with INT8 quantization for Apple Neural Engine"
+  },
+  {
+    "id": "example_clip_fp16_gpu",
+    "modelId": "clip-vit-base-patch32",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuAndGPU",
+    "quantization": "fp16",
+    "minOSVersion": "macos15",
+    "expectedOutputHash": "REPLACE_WITH_ACTUAL_HASH_AFTER_FIRST_SUCCESSFUL_CONVERSION",
+    "expectedPlacement": "GPU",
+    "tolerance": 0.0,
+    "description": "CLIP vision model with FP16 quantization for GPU"
+  },
+  {
+    "id": "example_llama_fp16_all",
+    "modelId": "llama-2-7b",
+    "targetFormat": "mlprogram",
+    "computeUnits": "all",
+    "quantization": "fp16",
+    "minOSVersion": "macos15",
+    "expectedOutputHash": "REPLACE_WITH_ACTUAL_HASH_AFTER_FIRST_SUCCESSFUL_CONVERSION",
+    "expectedPlacement": "CPU+GPU",
+    "tolerance": 0.0,
+    "description": "LLaMA 2 7B model with FP16 quantization"
+  },
+  {
+    "id": "example_distilbert_fp32_cpu",
+    "modelId": "distilbert-base-uncased",
+    "targetFormat": "mlprogram",
+    "computeUnits": "cpuOnly",
+    "quantization": "fp32",
+    "minOSVersion": "macos14",
+    "expectedOutputHash": "REPLACE_WITH_ACTUAL_HASH_AFTER_FIRST_SUCCESSFUL_CONVERSION",
+    "expectedPlacement": "CPU",
+    "tolerance": 0.0,
+    "description": "DistilBERT model with FP32 quantization for CPU-only execution"
+  }
+]

@@ -1,0 +1,38 @@
+id: td-80575e
+title: 'Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable'
+type: task
+priority: P0
+status: ready
+lane: daemon-runtime-isolation
+epic: p0-004
+parent: p0-004
+summary: null
+description: ''
+worktree: null
+source_docs:
+- Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+- anigma/Package.swift
+- anigma/Packages/AnigmaCLI/
+- anigma/Packages/AnigmaDaemon/CLI.swift
+- anigma/Packages/HarmoniaV2CLI/
+related_docs: []
+related_diagrams: []
+acceptance:
+- HarmoniaV2CLI commands ported to AnigmaDaemon/CLI.swift
+- CLI integration preserves command intent
+- HarmoniaV2CLIKernel provides testable isolation
+- All legacy CLI functionality consolidated
+non_goals:
+- New CLI features
+- CLI refactoring beyond consolidation
+proof: []
+proof_required:
+- Verification that CLI commands produce expected output
+expected_proof: []
+validator_commands: []
+td_labels:
+- epic:p0-004
+- lane:daemon-runtime-isolation
+- parent:p0-004
+- task_id:td-80575e
+- type:task

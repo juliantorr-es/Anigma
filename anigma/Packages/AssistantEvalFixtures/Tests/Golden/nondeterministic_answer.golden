@@ -1,0 +1,54 @@
+{
+  "answerText" : "No grounded answer yet for “What is the answer when context is missing?” in project-beta.",
+  "confidence" : 0.05,
+  "contextPolicy" : {
+    "excludedSourceIDs" : [],
+    "pinnedSourceIDs" : [],
+    "updatedAt" : "1970-01-01T00:00:00Z"
+  },
+  "generatedAt" : "1970-01-01T00:00:00Z",
+  "id" : "d7306fa1a59c895869689e177c73d060c54aefa5ded92067f33fb65d10647a73",
+  "missingContext" : [
+    "Project metadata unavailable",
+    "No recall hits",
+    "No source chips",
+    "Scan limit reached"
+  ],
+  "modelName" : "llama-3.2-1b",
+  "principalId" : "test-user",
+  "projectId" : "project-beta",
+  "projectName" : "project-beta",
+  "query" : "What is the answer when context is missing?",
+  "receipts" : [
+    {
+      "hash" : "a30ca183673fa4cf01a6f2eff54a7c9d45775634b8a39dd3a27d86920ded0cde",
+      "operationType" : "assistant-recall"
+    },
+    {
+      "hash" : "62da2d8411f2da335330c10b1c2e3baebb6b576ce9eba5df58813a5f5041470b",
+      "operationType" : "assistant-provenance-seal"
+    }
+  ],
+  "replay" : {
+    "contextPolicyHash" : "565d240f5343e625ae579a4d45a770f1f02c6368b5ed4d06da4fbe6f47c28866",
+    "deterministic" : false,
+    "mode" : "regenerate",
+    "nondeterminismReasons" : [
+      "No grounded source chain for replay",
+      "Missing context: Project metadata unavailable",
+      "Missing context: No recall hits",
+      "Missing context: No source chips",
+      "Missing context: Scan limit reached"
+    ],
+    "notes" : "Replay is blocked or inconsistent because the run is non-deterministic.",
+    "receiptChainHash" : "7fda8f16beb597d1214504453bb58e2dcd9939d04ba64d15dc2c050aee97dcc3",
+    "replayToken" : "d7306fa1a59c895869689e177c73d060c54aefa5ded92067f33fb65d10647a73",
+    "replayable" : false,
+    "sourceGraphHash" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scanLimit" : 100,
+  "sessionId" : "global",
+  "sources" : [],
+  "threshold" : 0.699999988079071,
+  "topK" : 4
+}

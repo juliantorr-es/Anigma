@@ -1,0 +1,300 @@
+//
+//  AppStore.swift
+//  AnigmaAppMac
+//
+//   Bauhaus Architecture - God object refactored into focused managers.
+//
+
+import AnigmaClientKit
+import AnigmaSystemSpine
+import ExportCore
+import AnigmaWork
+import DataEngine
+import ContractsCore
+import AnigmaPrimitives
+import CryptoKit
+import Foundation
+import Combine
+import SwiftUI
+import Observation
+import UniformTypeIdentifiers
+import DevelopumModule
+import DatabaseCore
+
+@MainActor
+@Observable
+final class AppStore {
+    // MARK: - Bauhaus Architecture State
+    
+    /// Artifact service for chunking and virtualization
+    let developArtifactService: DevelopumArtifactService
+    private let dbService: DevelopumDatabaseService
+    
+    /// Current role determines which surfaces are available
+    var role: AnigmaRole = .user
+    
+    /// App mode: Life (compass, inbox, projects) vs Build (studio, tools)
+    var mode: AppMode = .life {
+        didSet { normalizeSelectionForMode() }
+    }
+    
+    /// Knowledge and work state
+    var sources: [AnigmaSource] = []
+    var contexts: [AnigmaContext] = []
+    var scopes: [IngestionScope] = []
+    var consoleLogs: [ConsoleEntry] = []
+    var agentProviders: [AgentProvider] = []
+    var agentProfiles: [AgentProfile] = []
+    var workItems: [WorkItem] = []
+    var tools: [AnigmaTool] = []
+    var localJobs: [AnigmaJob] = [] {
+        didSet { syncJobStates() }
+    }
+    var networkActivityLog: [NetworkActivityEntry] = []
+    
+    // MARK: - Managers (Phase 2 Extraction)
+    let intakeManager: IntakeManager
+    let contextManager: ContextManager
+    let jobManager: JobManager
+    let developManager: DevelopManager
+    let cacheManager: CacheManager
+    
+    // MARK: - Sub-stores
+    let serviceIntegrationStore: ServiceIntegrationStore
+    let sourceConnectionStore: SourceConnectionStore
+    let workspaceStore: WorkspaceStore
+    let daemonStore: DaemonStore
+    
+    // MARK: - Infrastructure
+    internal let daemonCapability: DaemonHostCapability
+    let systemSpine: SystemSpine
+    let dataEngine: DataEngine
+    let agentOrchestrator: AgentOrchestrator
+    let exportEngine: ExportEngine
+    let aiConsoleClient: AIConsoleClient
+    
+    internal private(set) var connectionMonitor: ConnectionMonitor?
+    private var irSubscriptionTask: Task<Void, Never>?
+    internal private(set) var authority: AnigmaAuthority?
+    internal private(set) var client: MacAnigmaClient?
+    private(set) public var surfaceId: SurfaceId?
+    private(set) public var actorId: ActorId?
+    private var capabilityToken: ContractsCore.CapabilityToken?
+    
+    // MARK: - UI & Session State
+    var chrome = ChromeState()
+    var isSourceConnectionPresented = false
+    var isExportPresented = false
+    var session = SessionState()
+    var inspectorSelection: AnigmaClientKit.InspectorSelection?
+    private(set) var isInitializing: Bool = true
+    private(set) var initializationError: String?
+    var isOnline: Bool = true
+    var activeToasts: [AnigmaToast] = []
+    var isJobCenterPresented: Bool = false
+    var isAIConsolePresented: Bool = false
+    var focusOmniBar: Bool = false
+    var triggerQuickLook: Bool = false
+    
+    enum SidebarItem: Hashable {
+        case workspace(id: WorkspaceID)
+        case actionCatalog
+        case settings
+    }
+    
+    var sidebarSelection: SidebarItem? {
+        didSet {
+            if case .workspace(let id) = sidebarSelection {
+                workspaceStore._selectedWorkspaceID = id
+            }
+        }
+    }
+    
+    var isRepoPickerPresented: Bool = false
+    var artifactSearchQuery: String = ""
+    var sidecarError: String?
+    var jobSearchQuery: String = ""
+    var jobStatusFilter: JobStatusFilter = .all
+    var jobTrustFilter: JobTrustFilter = .all
+    var actionCatalog: [ActionDefinition] = []
+    var hosts: [DaemonHost] = []
+    var pinnedActions: [PinnedAction] = []
+    
+    // MARK: - Harmonia Background Services
+    public private(set) var harmoniaBackgroundSync: HarmoniaBackgroundSync?
+    public private(set) var harmoniaCommandHistory: HarmoniaCommandHistory?
+
+    // MARK: - Initialization
+    
+    init() {
+        self.daemonCapability = DaemonHostCapability()
+        self.systemSpine = SystemSpine.shared
+        self.dataEngine = DataEngine()
+        
+        // Initialize Developum Services
+        self.dbService = DevelopumDatabaseService(databaseAuthority: StubDatabaseAuthority())
+        self.developArtifactService = DevelopumArtifactService(
+            artifactAuthority: StubArtifactAuthority(),
+            databaseService: dbService
+        )
+        
+        // Initialize AI Registry
+        guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            fatalError("Failed to unwrap appSupport")
+        }
+        let registryURL = appSupport.appendingPathComponent("Anigma/AIRegistry")
+        let registry = AIRegistry(storageURL: registryURL)
+        
+        self.agentOrchestrator = AgentOrchestrator(jobEngine: systemSpine.jobEngine, dataEngine: dataEngine, registry: registry)
+        self.exportEngine = ExportEngine(jobEngine: systemSpine.jobEngine)
+        self.aiConsoleClient = AIConsoleClient(jobEngine: systemSpine.jobEngine, registry: registry)
+        self.harmoniaCommandHistory = HarmoniaCommandHistory()
+        
+        self.daemonStore = DaemonStore(daemonCapability: daemonCapability)
+        self.serviceIntegrationStore = ServiceIntegrationStore(
+            daemonCapability: daemonCapability,
+            daemonStore: daemonStore
+        )
+        self.sourceConnectionStore = SourceConnectionStore()
+        self.workspaceStore = WorkspaceStore()
+        
+        // Initialize Managers
+        self.intakeManager = IntakeManager(store: self)
+        self.contextManager = ContextManager(store: self)
+        self.jobManager = JobManager(store: self)
+        self.developManager = DevelopManager(store: self)
+        self.cacheManager = CacheManager(store: self)
+        
+        self.connectionMonitor = ConnectionMonitor(capability: daemonCapability)
+        
+        setupCallbacks()
+        loadCache()
+        loadHosts()
+    }
+    
+    private func setupCallbacks() {
+        serviceIntegrationStore.showToast = { [weak self] title, subtitle, icon in
+            self?.showToast(title: title, subtitle: subtitle, icon: icon)
+        }
+        serviceIntegrationStore.showError = { [weak self] message in
+            self?.showError(message)
+        }
+        serviceIntegrationStore.logNetworkActivity = { [weak self] event, domain, purpose, classification in
+            self?.logNetworkActivity(domain: domain, isAllowed: true, reason: "\(event): \(purpose) (\(classification))")
+        }
+        serviceIntegrationStore.configureCallbacks()
+        
+        sourceConnectionStore.showToast = { [weak self] title, subtitle, icon in
+            self?.showToast(title: title, subtitle: subtitle, icon: icon)
+        }
+        sourceConnectionStore.showError = { [weak self] message in
+            self?.showError(message)
+        }
+        sourceConnectionStore.logNetworkActivity = { [weak self] event, domain, purpose, classification in
+            self?.logNetworkActivity(domain: domain, isAllowed: true, reason: "\(event): \(purpose) (\(classification))")
+        }
+        sourceConnectionStore.onSourceConnectionChanged = { [weak self] sourceType, connected in
+            self?.setSourceConnected(sourceType, connected: connected)
+        }
+        sourceConnectionStore.setup()
+        
+        workspaceStore.showToast = { [weak self] title, subtitle, icon in
+            self?.showToast(title: title, subtitle: subtitle, icon: icon)
+        }
+        workspaceStore.showError = { [weak self] message in
+            self?.showError(message)
+        }
+        workspaceStore.logNetworkActivity = { [weak self] event, domain, purpose, classification in
+            self?.logNetworkActivity(domain: domain, isAllowed: true, reason: "\(event): \(purpose) (\(classification))")
+        }
+        workspaceStore.onJobsChanged = { [weak self] in
+            self?.syncJobStates()
+        }
+        
+        daemonStore.showToast = { [weak self] title, subtitle, icon in
+            self?.showToast(title: title, subtitle: subtitle, icon: icon)
+        }
+        daemonStore.showError = { [weak self] message in
+            self?.showError(message)
+        }
+        daemonStore.logNetworkActivity = { [weak self] event, domain, purpose, classification in
+            self?.logNetworkActivity(domain: domain, isAllowed: true, reason: "\(event): \(purpose) (\(classification))")
+        }
+        daemonStore.syncJobStates = { [weak self] in
+            self?.syncJobStates()
+        }
+        
+        SystemUXSupport.shared.registerNotificationCategories()
+        self.harmoniaBackgroundSync = HarmoniaBackgroundSync(appStore: self)
+        self.harmoniaBackgroundSync?.start()
+    }
+    
+    // MARK: - State Delegation
+    
+    var repoWorkspaces: [RepoWorkspace] {
+        get { workspaceStore.repoWorkspaces }
+        set { workspaceStore.repoWorkspaces = newValue }
+    }
+    var changeSets: [ChangeSet] {
+        get { workspaceStore.changeSets }
+        set { workspaceStore.changeSets = newValue }
+    }
+    var selectedChangeSetID: UUID? {
+        get { workspaceStore.selectedChangeSetID }
+        set { workspaceStore.selectedChangeSetID = newValue }
+    }
+    var currentProject: WorkbenchProject? {
+        get { workspaceStore.currentProject }
+        set { workspaceStore.currentProject = newValue }
+    }
+    var workspaces: [AnigmaClientKit.WorkspaceSummary] {
+        workspaceStore.workspaces
+    }
+    var artifacts: [AnigmaClientKit.ArtifactSummary] {
+        get { workspaceStore.artifacts }
+        set { workspaceStore.artifacts = newValue }
+    }
+    var jobs: [AnigmaClientKit.JobSummary] {
+        get { workspaceStore.jobs }
+        set { workspaceStore.jobs = newValue }
+    }
+    var daemonStatus: String {
+        get { daemonStore.daemonStatus }
+        set { daemonStore.daemonStatus = newValue }
+    }
+    var daemonDetailedStatus: AnigmaStatusResponse? {
+        daemonStore.daemonDetailedStatus
+    }
+    var selectedReceiptJson: String? {
+        daemonStore.selectedReceiptJson
+    }
+    var globalArtifacts: [AnigmaArtifactRef] {
+        daemonStore.globalArtifacts
+    }
+    var globalArtifactsCursor: String? {
+        daemonStore.globalArtifactsCursor
+    }
+    var hasMoreWorkspaces: Bool {
+        workspaceStore.hasMoreWorkspaces
+    }
+    var hasMoreArtifacts: Bool {
+        workspaceStore.hasMoreArtifacts
+    }
+    var activeWorkspace: RepoWorkspace? {
+        workspaceStore.activeWorkspace
+    }
+    var selectedFileURL: URL? {
+        get { workspaceStore.selectedFileURL }
+        set { workspaceStore.selectedFileURL = newValue }
+    }
+    var developNavMode: DevelopNavMode {
+        get { AppState.shared.developNavMode }
+        set { AppState.shared.developNavMode = newValue }
+    }
+    var developWorkbenchTab: DevelopWorkbenchTab {
+        get { workspaceStore.developWorkbenchTab }
+        set { workspaceStore.developWorkbenchTab = newValue }
+    }
+    var userSurface: UserSurface {
+        get { AppState.shared.selectedSurface }
+        set { AppState.shared.selectedSurface = newValue }

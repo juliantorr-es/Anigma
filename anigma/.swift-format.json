@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "rules": {
+    "blankLinesBetweenImports": true,
+    "indentation": {
+      "spaces": 4
+    },
+    "lineWrapping": {
+      "lineLength": 120,
+      "preserveLineBreaks": false
+    },
+    "spacesAroundComments": {
+      "left": true,
+      "right": true
+    },
+    "spacesAroundDelimiters": {
+      "leftBrace": false,
+      "rightBrace": false,
+      "openingBrace": true,
+      "closingBrace": true
+    }
+  },
+  "definitions": {
+    "languageVersion": "v5.9",
+    "braces": {
+      "style": "allman"
+    },
+    "imports": {
+      "sort": "alphabetical"
+    },
+    "comments": {
+      "block": {
+        "style": "star",
+        "spacesBefore": 1,
+        "spacesAfter": 1
+      },
+      "line": {
+        "style": "doubleSlash",
+        "spacesBefore": 1,
+        "spacesAfter": 1
+      }
+    }
+  }
+}

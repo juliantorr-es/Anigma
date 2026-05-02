@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActionProposal",
+  "description": "Schema for an AI agent's proposed action, intended for validation by Harmonia's governance.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "action_type",
+    "description",
+    "scope",
+    "justification",
+    "test_plan",
+    "rollback_plan"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for the task or issue this proposal addresses (e.g., GH-Issue-XXX)."
+    },
+    "action_type": {
+      "type": "string",
+      "enum": ["code_change", "doc_update", "config_change", "new_feature", "bug_fix", "refactor"],
+      "description": "The type of action being proposed."
+    },
+    "description": {
+      "type": "string",
+      "description": "A concise description of the proposed action."
+    },
+    "scope": {
+      "type": "object",
+      "required": ["files_affected", "modules_affected"],
+      "properties": {
+        "files_affected": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of specific files or file patterns that will be affected by this action (e.g., `Sources/HarmoniaModule/Security/`)."
+        },
+        "modules_affected": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of modules that will be affected (e.g., `AnigmaCore`, `GovernedMigrationCore`)."
+        },
+        "new_files_created": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of new files to be created."
+        }
+      },
+      "description": "Defines the scope of the proposed action."
+    },
+    "code_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file_path", "old_content", "new_content"],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Path to the file to be changed."
+          },
+          "old_content": {
+            "type": "string",
+            "description": "The exact content to be replaced (with context)."
+          },
+          "new_content": {
+            "type": "string",
+            "description": "The new exact content."
+          }
+        }
+      },
+      "description": "Detailed code modifications. This should be a series of atomic replacements."
+    },
+    "justification": {
+      "type": "string",
+      "description": "Detailed explanation of why this action is necessary, with citations to repo docs/ADRs."
+    },
+    "adrs_referenced": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of ADRs that support or are affected by this proposal (e.g., `ADR/0004-module-boundaries.md`)."
+    },
+    "test_plan": {
+      "type": "string",
+      "description": "Detailed plan for testing the proposed changes, including new/modified tests and expected outcomes."
+    },
+    "rollback_plan": {
+      "type": "string",
+      "description": "Clear instructions on how to revert the changes if necessary."
+    },
+    "forbidden_patterns_avoided": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of forbidden patterns explicitly considered and avoided in this proposal (e.g., `No Python runtime`, `Single ECS violation`)."
+    },
+    "debt_tracking": {
+      "type": "object",
+      "properties": {
+        "new_stubs_created": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["file_path", "description", "tech_debt_md_entry"],
+            "properties": {
+              "file_path": { "type": "string" },
+              "description": { "type": "string" },
+              "tech_debt_md_entry": { "type": "string" }
+            }
+          },
+          "description": "Details of any STUB_TRACK entries created."
+        },
+        "stubs_resolved": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of STUB_TRACK entries resolved by this action."
+        }
+      },
+      "description": "Information related to technical debt tracking."
+    }
+  },
+  "additionalProperties": false
+}

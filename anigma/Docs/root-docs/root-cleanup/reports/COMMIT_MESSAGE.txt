@@ -1,0 +1,38 @@
+feat: Add dedicated Harmonia CLI surface to SwiftUI app
+
+Add a focused CLI view for command execution, streaming output, and history.
+This provides power users direct access to Harmonia CLI while maintaining
+the assistant-first product direction.
+
+Changes:
+- New HarmoniaCliView component (489 lines)
+  * Command input with "harmonia" prefix
+  * Real-time streaming output via ConsoleView
+  * Command history sidebar with timestamps and status
+  * Backend availability checking with clear error messages
+  * Quick-command suggestions in empty state
+  
+- Toolbar integration
+  * New "CLI" button in MacShell toolbar
+  * Sheet presentation pattern (800x600 minimum)
+  
+- Reuses existing infrastructure
+  * HarmoniaClient via DaemonHostCapability.harmonia
+  * HarmoniaCommandHistory for persistence
+  * ConsoleView for output display
+  * Bauhaus design system for consistent styling
+
+Blast radius: Minimal
+- No changes to core business logic
+- No changes to assistant/analysis surfaces
+- Self-contained view component
+- Graceful degradation when backend unavailable
+
+Modified:
+  anigma/Sources/AnigmaAppMac/AppStore.swift (+1)
+  anigma/Sources/AnigmaAppMac/MacShell.swift (+5)
+  anigma/Sources/AnigmaAppMac/Chrome/ChromeComponents.swift (+34)
+
+Added:
+  anigma/Sources/AnigmaAppMac/Components/HarmoniaCliView.swift (+489)
+  HARMONIA_CLI_VIEW_IMPLEMENTATION.md

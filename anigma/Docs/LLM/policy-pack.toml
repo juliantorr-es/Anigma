@@ -1,0 +1,20 @@
+[repo]
+language = "swift"
+runtime_python_allowed = false
+runtime_node_allowed = false
+ecs_single_source = "AnigmaCore"
+job_model_single_source = "AnigmaCore"
+
+[boundaries]
+allowed_layers = ["AppShell", "DomainModule", "Core"]
+no_circular_dependencies = true
+
+[governance]
+required = true
+write_gate_required = true
+kill_switch_supported = true
+cctv_required = true
+
+[defaults]
+data_mode = "strict-silo"
+commercial_assumptions = "non-commercial"

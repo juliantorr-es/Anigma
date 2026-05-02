@@ -1,0 +1,4 @@
+module TextPipelineNative {
+    umbrella header "TextPipelineNative.h"
+    export *
+}

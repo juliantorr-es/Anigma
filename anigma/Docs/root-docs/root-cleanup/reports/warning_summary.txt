@@ -1,0 +1,70 @@
+  54 'anigma': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+  50 result of call to 'publish(_:source:)' is unused [#no-usage]
+  38 no calls to throwing functions occur within 'try' expression
+  26 no 'async' operations occur within 'await' expression
+  16 variable 'issues' was never mutated; consider changing to 'let' constant
+  16 immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+   8 variable 'layout' was never mutated; consider changing to 'let' constant
+   8 initialization of immutable value 'duration' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   8 'catch' block is unreachable because no errors are thrown in 'do' block
+   6 type 'T' does not conform to the 'Sendable' protocol; this is an error in the Swift 6 language mode
+   6 forced cast from 'DatabaseAuthorityAdapter' to 'any DatabaseExecutor' always succeeds; did you mean to use 'as'?
+   6 'init(destination:tag:selection:label:)' was deprecated in macOS 13.0: use NavigationLink(value:label:), or navigationDestination(isPresented:destination:), inside a NavigationStack or NavigationSplitView [#DeprecatedDeclaration]
+   4 instance method 'makeIterator' is unavailable from asynchronous contexts; this is an error in the Swift 6 language mode
+   4 initialization of immutable value 'startTime' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   4 case is already handled by previous patterns; consider removing it
+   4 capture of 'progress' with non-Sendable type '((Double) -> Void)?' in a '@Sendable' closure; this is an error in the Swift 6 language mode [#SendableClosureCaptures]
+   2 variable 'warnings' was never mutated; consider changing to 'let' constant
+   2 variable 'sampledSpans' was never mutated; consider changing to 'let' constant
+   2 variable 'resultContentHash' was never mutated; consider changing to 'let' constant
+   2 variable 'metricColumnIndex' was never mutated; consider changing to 'let' constant
+   2 variable 'groupBy' was never mutated; consider changing to 'let' constant
+   2 variable 'err' was never mutated; consider changing to 'let' constant
+   2 value 'sourceMetadata' was defined but never used; consider replacing with boolean test [#no-usage]
+   2 value 'ids' was defined but never used; consider replacing with boolean test [#no-usage]
+   2 value 'downloadURL' was defined but never used; consider replacing with boolean test [#no-usage]
+   2 value 'content' was defined but never used; consider replacing with boolean test [#no-usage]
+   2 treating a forced downcast to 'any DatabaseExecutor' as optional will never produce 'nil'
+   2 stored property 'metrics' of 'Sendable'-conforming class 'VectorCapsuleANE' is mutable; this is an error in the Swift 6 language mode
+   2 stored property 'metrics' of 'Sendable'-conforming class 'SyntaxCapsuleANE' is mutable; this is an error in the Swift 6 language mode
+   2 stored property 'metrics' of 'Sendable'-conforming class 'SceneGraphCapsuleANE' is mutable; this is an error in the Swift 6 language mode
+   2 stored property 'currentDate' of 'Sendable'-conforming struct 'AnswerProvenanceGate' has non-Sendable type '() -> Date'; this is an error in the Swift 6 language mode
+   2 stored property 'compressionCapsule' of 'Sendable'-conforming class 'CompressionCapsuleANE' is mutable; this is an error in the Swift 6 language mode
+   2 stored property 'ast' of 'Sendable'-conforming struct 'AstCacheEntry' has non-Sendable type 'SourceFileSyntax'; this is an error in the Swift 6 language mode
+   2 result of call to 'unsafeBitCast(_:to:)' is unused [#no-usage]
+   2 instance method 'execute(renderPlanData:renderPassDescriptor:drawable:viewportSize:textures:)' took 786ms to type-check (limit: 100ms)
+   2 initialization of variable 'metricOutputName' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'warningReceipt' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'numLayers' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'mathPattern' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'errorEvidence' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'enforcement' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'elapsedMs' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 initialization of immutable value 'context' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+   2 immutable value 'transform' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 immutable value 'spanRefsData' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 immutable value 'receipt' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 immutable value 'pushToken' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 immutable value 'index' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 immutable value 'evidence' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 immutable value 'emailAddress' was never used; consider replacing with '_' or removing it [#no-usage]
+   2 file 'GovernedMLRunner.swift' is part of module 'MLWorkerCommon'; ignoring import
+   2 file 'CompressionCapsuleANE.swift' is part of module 'CompressionKit'; ignoring import
+   2 file 'AgentCathedralIntegration.swift' is part of module 'CathedralModule'; ignoring import
+   2 conditional downcast from 'String?' to 'String' does nothing
+   2 capture of 'progress' with non-Sendable type '((Double) -> Void)?' in a '@Sendable' closure [#SendableClosureCaptures]
+   2 capture of 'exportSession' with non-Sendable type 'AVAssetExportSession' in a '@Sendable' closure [#SendableClosureCaptures]
+   2 cannot pass 'String' to parameter; argument 'message' must be a pointer that outlives the call to 'init(code:message:detail:aux:)' [#TemporaryPointers]
+   2 associated value 'attach' of 'Sendable'-conforming enum 'SceneGraphMutation' has non-Sendable type 'SceneNode'; this is an error in the Swift 6 language mode
+   2 add '@preconcurrency' to suppress 'Sendable'-related warnings from module 'SwiftSyntax'
+   2 'public' modifier is redundant for property declared in a public extension
+   2 'MemoryTier' is deprecated: renamed to 'MemoryType' [#DeprecatedDeclaration]
+   2 'MemoryItem' is deprecated: Use ShortTermMemory, LongTermMemory, or VectorMemoryItem instead [#DeprecatedDeclaration]
+   2 'init(transitionID:fromPhase:toPhase:authority:decision:reasonCode:timestampMs:contextHash:metadata:)' is deprecated: Use PhaseTransitionWire.create(...) instead. Direct transitionID parameter is not allowed due to canonical ID derivation requirement. [#DeprecatedDeclaration]
+   2 'anigma': found 4 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+   2 'anigma': found 3 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+   1 'anigma': found 6 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+   1 'anigma': found 39 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+   1 'anigma': found 2 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+   1 'anigma': found 16 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+   1 'anigma': found 12 file(s) which are unhandled; explicitly declare them as resources or exclude from the target

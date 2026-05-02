@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.anigma.daemon</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/anigmad</string>
+        <string>--daemonize</string>
+    </array>
+    
+    <key>RunAtLoad</key>
+    <true/>
+    
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+        <key>NetworkState</key>
+        <true/>
+    </dict>
+    
+    <key>StandardOutPath</key>
+    <string>~/Library/Logs/com.anigma.daemon.log</string>
+    
+    <key>StandardErrorPath</key>
+    <string>~/Library/Logs/com.anigma.daemon.error.log</string>
+    
+    <key>WorkingDirectory</key>
+    <string>~/Library/Application Support/Anigma</string>
+    
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>ANIGMA_DAEMON_MODE</key>
+        <string>production</string>
+        <key>ANIGMA_LOG_LEVEL</key>
+        <string>info</string>
+    </dict>
+    
+    <key>HardResourceLimits</key>
+    <dict>
+        <key>NumberOfFiles</key>
+        <integer>1024</integer>
+        <key>Memory</key>
+        <integer>2147483648</integer>
+    </dict>
+    
+    <key>SoftResourceLimits</key>
+    <dict>
+        <key>NumberOfFiles</key>
+        <integer>512</integer>
+        <key>Memory</key>
+        <integer>1073741824</integer>
+    </dict>
+    
+    <key>StartInterval</key>
+    <integer>300</integer>
+    
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+</dict>
+</plist>

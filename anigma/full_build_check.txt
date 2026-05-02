@@ -1,0 +1,27 @@
+[1/1] Compiling plugin GenerateManual
+[2/2] Compiling plugin GenerateDoccReference
+Building for debugging...
+[2/50] Write swift-version--58304C5D6DBC2206.txt
+[3/39] Write Objects.LinkFileList
+[6/84] Linking outlineum-zine
+[8/84] Compiling AnigmaWork WorkbenchProject.swift
+[9/85] Emitting module ArtifactStoreModule
+[10/85] Compiling ArtifactStoreModule ArtifactStoreModule.swift
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ArtifactStoreModule/ArtifactStoreModule.swift:171:17: error: cannot find 'RuntimeError' in scope
+169 |                 actualHash: actualHash
+170 |             )
+171 |         } catch RuntimeError.artifactNotFound {
+    |                 `- error: cannot find 'RuntimeError' in scope
+172 |             return VerificationResult(
+173 |                 artifactID: artifactID,
+
+/Users/user/Developer/GitHub/Anigma_clean/anigma/Sources/ArtifactStoreModule/ArtifactStoreModule.swift:224:70: warning: forced cast from 'DatabaseAuthorityAdapter' to 'any DatabaseExecutor' always succeeds; did you mean to use 'as'?
+222 |         let databaseAuthority = await runtime.database
+223 |         let databaseAdapter = DatabaseAuthorityAdapter(databaseAuthority: databaseAuthority)
+224 |         _ = try await ArtifactStoreDatabase(dbActor: databaseAdapter as! DatabaseCore.DatabaseExecutor)
+    |                                                                      `- warning: forced cast from 'DatabaseAuthorityAdapter' to 'any DatabaseExecutor' always succeeds; did you mean to use 'as'?
+225 |     }
+226 | }
+[11/85] Emitting module VectorumModule
+[11/85] Linking harmonia-surface
+[11/85] Linking ml-worker

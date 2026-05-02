@@ -1,0 +1,104 @@
+name: Performance Regression Benchmarks
+
+on:
+  pull_request:
+    paths:
+      - 'anigma/Package.swift'
+      - 'anigma/Scripts/ci/benchmark-capsules.sh'
+      - 'anigma/Scripts/check_marshalling_budgets.swift'
+      - 'anigma/Anigma/Benchmarks/BenchmarkHarness/**'
+      - 'anigma/Packages/VectorIndexCapsule/Benchmarks/**'
+      - 'anigma/Packages/RankFusionCapsule/Benchmarks/**'
+      - 'anigma/Packages/TextChunkingCapsule/Benchmarks/**'
+      - 'anigma/Packages/PDFCapsule/Benchmarks/**'
+      - 'anigma/Packages/LayoutEngineCapsule/Benchmarks/**'
+      - 'anigma/Packages/VectorOpsKit/**'
+      - 'anigma/Packages/ANECapsuleIntegration/**'
+      - 'anigma/Packages/HarmoniaModule/Sources/HarmoniaModule/Inference/**'
+      - 'anigma/Native/Shims/include/anigma_vector*.h'
+      - 'anigma/Native/Shims/src/vector_ops/**'
+      - 'anigma/Native/Shims/src/vector_capsule/**'
+      - 'anigma/Native/Shims/src/cosine_similarity_capsule/**'
+      - '.github/workflows/performance-regression-benchmarks.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'anigma/Package.swift'
+      - 'anigma/Scripts/ci/benchmark-capsules.sh'
+      - 'anigma/Scripts/check_marshalling_budgets.swift'
+      - 'anigma/Anigma/Benchmarks/BenchmarkHarness/**'
+      - 'anigma/Packages/VectorIndexCapsule/Benchmarks/**'
+      - 'anigma/Packages/RankFusionCapsule/Benchmarks/**'
+      - 'anigma/Packages/TextChunkingCapsule/Benchmarks/**'
+      - 'anigma/Packages/PDFCapsule/Benchmarks/**'
+      - 'anigma/Packages/LayoutEngineCapsule/Benchmarks/**'
+      - 'anigma/Packages/VectorOpsKit/**'
+      - 'anigma/Packages/ANECapsuleIntegration/**'
+      - 'anigma/Packages/HarmoniaModule/Sources/HarmoniaModule/Inference/**'
+      - 'anigma/Native/Shims/include/anigma_vector*.h'
+      - 'anigma/Native/Shims/src/vector_ops/**'
+      - 'anigma/Native/Shims/src/vector_capsule/**'
+      - 'anigma/Native/Shims/src/cosine_similarity_capsule/**'
+      - '.github/workflows/performance-regression-benchmarks.yml'
+  schedule:
+    - cron: '0 2 * * 1'
+
+jobs:
+  performance-regression-benchmarks:
+    name: Performance Regression Benchmarks
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+
+      - name: Run vector index benchmarks
+        env:
+          CAPSULE_BENCH_SUITE: vector-index
+        run: bash ./anigma/Scripts/ci/benchmark-capsules.sh
+
+      - name: Run rank fusion benchmarks
+        env:
+          CAPSULE_BENCH_SUITE: rank-fusion
+        run: bash ./anigma/Scripts/ci/benchmark-capsules.sh
+
+      - name: Run text chunking benchmarks
+        env:
+          CAPSULE_BENCH_SUITE: text-chunking
+        run: bash ./anigma/Scripts/ci/benchmark-capsules.sh
+
+      - name: Run PDF benchmarks
+        continue-on-error: true
+        env:
+          CAPSULE_BENCH_SUITE: pdf
+        run: bash ./anigma/Scripts/ci/benchmark-capsules.sh
+
+      - name: Run layout engine benchmarks
+        continue-on-error: true
+        env:
+          CAPSULE_BENCH_SUITE: layout-engine
+        run: bash ./anigma/Scripts/ci/benchmark-capsules.sh
+
+  compute-performance-validation:
+    name: Compute Performance Validation
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+
+      - name: Run compute-focused benchmarks
+        env:
+          CAPSULE_BENCH_SUITE: vector-index
+        run: bash ./anigma/Scripts/ci/benchmark-capsules.sh

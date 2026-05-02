@@ -1,0 +1,50 @@
+import SwiftUI
+import Client
+import HostApp
+
+@main
+struct AnigmaApp: App {
+    @StateObject private var appStore = AppStore()
+    
+    // Explicit initialization to avoid race conditions
+    init() {
+        // Initialize core services
+        ServiceLocator.shared.initialize()
+        
+        // Check for required resources
+        if !ServiceLocator.shared.checkResources() {
+            // Handle missing resources gracefully
+            print("Warning: Resources missing")
+        }
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(appStore)
+        }
+        .commands {
+            SidebarCommands()
+            // Add other commands
+        }
+    }
+}
+
+class ServiceLocator {
+    static let shared = ServiceLocator()
+    
+    private var isInitialized = false
+    
+    func initialize() {
+        guard !isInitialized else { return }
+        // Setup XPC connection
+        // Setup Database
+        // Setup Logging
+        isInitialized = true
+    }
+    
+    func checkResources() -> Bool {
+        // Verify essential files exist
+        return true
+    }
+}

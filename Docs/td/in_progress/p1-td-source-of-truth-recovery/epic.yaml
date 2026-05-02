@@ -1,0 +1,49 @@
+id: p1-td-source-of-truth-recovery
+title: "P1 \u2014 TD Source-of-Truth Recovery and Docs Sync"
+type: epic
+priority: P1
+status: in_progress
+lane: documentation-infrastructure
+verification_profiles:
+  - docs-td
+  - docs-artifacts
+  - governance
+gc_policy: retain_all
+context_load_policy: eager
+summary: After TD database reset on 2026-05-02, establish Docs/ as the durable
+description: 'After TD database reset on 2026-05-02, establish Docs/ as the durable
+
+  source of truth and TD as the local execution queue. Create bootstrap
+
+  and validation scripts to make TD reconstructible from Docs/.
+
+  '
+recommended_worktree: anigma/
+source_docs:
+- Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md
+- Docs/td/td-task-registry.yaml
+related_docs: []
+proofs: []
+proof_required: []
+expected_proof: []
+tasks: &id001 []
+children: *id001
+acceptance:
+- TD source-of-truth doctrine exists and is canonical
+- TD task registry exists with active lanes defined
+- Bootstrap script emits reproducible td commands from registry
+- Sync validator passes on registry and TD state
+- Proof artifact exists documenting the recovery
+- Existing architecture validators still pass
+- No runtime source changes
+non_goals:
+- Implement P0-004 runtime work
+- Rewrite roadmap content broadly
+- Recreate every historical task
+- Depend on stale local TD database contents
+- Make TD the canonical source of truth
+- Mutate runtime source
+- Weaken existing validators
+td_labels:
+- lane:documentation-infrastructure
+- type:epic

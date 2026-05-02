@@ -1,0 +1,33 @@
+name: Capsule Performance Benchmarks
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
+
+jobs:
+  benchmark:
+    name: Run Capsule Benchmarks
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+      
+      - name: Run Capsule Benchmarks
+        run: ./Scripts/ci/benchmark-capsules.sh
+      
+      - name: Upload Benchmark Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capsule-benchmark-results
+          path: |
+            anigma/Benchmarks/results/performance-regression/**
+        continue-on-error: true

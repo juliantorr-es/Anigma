@@ -1,0 +1,101 @@
+// swift-tools-version: 5.10
+// Inactive package-level manifest retained for HarmoniaV2 source ownership.
+// Active backend build wiring is defined in ../../Package.swift.
+
+import PackageDescription
+
+let package = Package(
+    name: "HarmoniaV2",
+    platforms: [
+        .macOS(.v14)
+    ],
+    products: [
+        // Public surface - the only module clients should import
+        .library(name: "HarmoniaSurface", targets: ["HarmoniaSurface"]),
+        
+        // Internal modules (for testing and migration)
+        .library(name: "HarmoniaCore", targets: ["HarmoniaCore"]),
+        .library(name: "HarmoniaInference", targets: ["HarmoniaInference"]),
+        .library(name: "HarmoniaOrchestration", targets: ["HarmoniaOrchestration"]),
+        .library(name: "HarmoniaMemory", targets: ["HarmoniaMemory"]),
+    ],
+    dependencies: [],
+    targets: [
+        // ================================================================
+        // TIER 1: Core Shared Infrastructure
+        // ================================================================
+        .target(
+            name: "HarmoniaCore",
+            dependencies: [],
+            path: "HarmoniaCore/Sources"
+        ),
+        
+        // ================================================================
+        // TIER 2: Domain Capabilities
+        // ================================================================
+        
+        /// Inference: MLX/CoreML embeddings, TwoTierReasoning
+        .target(
+            name: "HarmoniaInference",
+            dependencies: [
+                "HarmoniaCore",
+            ],
+            path: "HarmoniaInference/Sources"
+        ),
+        
+        /// Memory: Retrieval, vector operations, context management
+        .target(
+            name: "HarmoniaMemory",
+            dependencies: [
+                "HarmoniaCore",
+            ],
+            path: "HarmoniaMemory/Sources"
+        ),
+        
+        /// Orchestration: Phase9 loop, agents, tools, workflows
+        .target(
+            name: "HarmoniaOrchestration",
+            dependencies: [
+                "HarmoniaCore",
+                "HarmoniaInference",
+                "HarmoniaMemory",
+            ],
+            path: "HarmoniaOrchestration/Sources"
+        ),
+        
+        // ================================================================
+        // TIER 3: Public Surface
+        // ================================================================
+        
+        /// Surface: Public API façade (the ONLY import for clients)
+        .target(
+            name: "HarmoniaSurface",
+            dependencies: [
+                "HarmoniaCore",
+                "HarmoniaInference",
+                "HarmoniaMemory",
+                "HarmoniaOrchestration",
+            ],
+            path: "HarmoniaSurface/Sources"
+        ),
+        
+        // ================================================================
+        // Tests
+        // ================================================================
+        .testTarget(
+            name: "HarmoniaInferenceTests",
+            dependencies: ["HarmoniaInference"],
+            path: "HarmoniaInference/Tests"
+        ),
+        .testTarget(
+            name: "HarmoniaMemoryTests",
+            dependencies: ["HarmoniaMemory"],
+            path: "HarmoniaMemory/Tests"
+        ),
+        .testTarget(
+            name: "HarmoniaOrchestrationTests",
+            dependencies: ["HarmoniaOrchestration"],
+            path: "HarmoniaOrchestration/Tests"
+        ),
+    ]
+)

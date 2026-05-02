@@ -1,0 +1,45 @@
+sequenceDiagram
+    participant Agent as AI Agent
+    participant ML as ML Worker
+    participant Core as Core Layer
+    participant HW as Hardware
+    participant TSA as Timestamp Authority
+    participant DB as Evidence DB
+    
+    Agent->>ML: Submit Query Request
+    ML->>Core: Validate Query & Permissions
+    Core->>ML: Query Approved (with runId)
+    
+    ML->>ML: Execute ML Inference
+    Note over ML: Generate embeddings/chat completion
+    
+    ML->>Core: Create Evidence Bundle
+    Core->>DB: Store Raw Results
+    Core->>HW: Request Hardware Signature
+    HW->>HW: Sign Evidence Head
+    HW->>Core: Return Signature
+    
+    Core->>TSA: Request Trusted Timestamp
+    TSA->>TSA: Generate RFC3161 Timestamp
+    TSA->>Core: Return Timestamp Token
+    
+    Core->>DB: Store Complete Evidence Bundle
+    Note over DB: Includes: results, signature, timestamp, metadata
+    
+    Core->>Agent: Return Evidence Receipt
+    Note over Agent: Contains: bundleId, verificationUrl, hash
+    
+    Agent->>Core: Request Verification (optional)
+    Core->>DB: Retrieve Evidence Bundle
+    Core->>HW: Verify Hardware Signature
+    Core->>TSA: Verify Timestamp Token
+    Core->>Agent: Return Verification Result
+    
+    %% Offline Verification Flow
+    participant Auditor as External Auditor
+    
+    Note over Auditor: Air-gapped verification possible
+    Auditor->>DB: Download Evidence Bundle
+    Auditor->>HW: Verify Signature (offline)
+    Auditor->>TSA: Verify Timestamp (offline)
+    Auditor->>Auditor: Generate Verification Report

@@ -1,0 +1,243 @@
+{
+  "version": "1.0",
+  "description": "Navigation metadata for Anigma documentation. Used by agents and humans to discover and navigate documentation.",
+  "last_updated": "2026-04-16",
+  
+  "structure": {
+    "landing": "README.md",
+    "categories": [
+      {
+        "name": "Getting Started",
+        "path": "getting-started/",
+        "icon": "🚀",
+        "description": "First steps with Anigma",
+        "docs": [
+          {"name": "Getting Started Hub", "file": "README.md", "time": "5min", "complexity": "beginner"},
+          {"name": "Installation", "file": "installation.md", "time": "5min", "complexity": "beginner", "keywords": ["install", "setup", "prerequisites"]},
+          {"name": "First Project", "file": "first-project.md", "time": "15min", "complexity": "beginner", "keywords": ["hello-world", "example", "tutorial"]},
+          {"name": "Project Structure Overview", "file": "project-structure.md", "time": "20min", "complexity": "intermediate", "keywords": ["structure", "monorepo", "layout", "epics"]},
+          {"name": "Quick Start Commands", "file": "quick-start-commands.md", "time": "5min", "complexity": "beginner"},
+          {"name": "FAQ", "file": "faq.md", "time": "varies", "complexity": "beginner"}
+        ]
+      },
+      {
+        "name": "Concepts",
+        "path": "concepts/",
+        "icon": "📚",
+        "description": "Understand core concepts and architecture",
+        "docs": [
+          {"name": "Concepts Hub", "file": "README.md", "time": "10min", "complexity": "intermediate"},
+          {"name": "Architecture Overview", "file": "architecture.md", "time": "20min", "complexity": "intermediate", "keywords": ["architecture", "design"]},
+          {"name": "Module Inventory", "file": "modules.md", "time": "15min", "complexity": "intermediate"},
+          {"name": "Data Model", "file": "data-model.md", "time": "15min", "complexity": "intermediate"},
+          {"name": "Execution Model", "file": "execution-model.md", "time": "15min", "complexity": "intermediate"},
+          {"name": "Design Principles", "file": "design-principles.md", "time": "10min", "complexity": "intermediate"}
+        ]
+      },
+      {
+        "name": "Guides",
+        "path": "guides/",
+        "icon": "🔨",
+        "description": "Step-by-step how-to guides",
+        "docs": [
+          {"name": "Guides Hub", "file": "README.md", "time": "5min", "complexity": "beginner"},
+          {"name": "Building Anigma", "file": "building.md", "time": "15min", "complexity": "intermediate", "keywords": ["build", "compile"]},
+          {"name": "Testing", "file": "testing.md", "time": "15min", "complexity": "intermediate", "keywords": ["test", "unit test"]},
+          {"name": "Debugging", "file": "debugging.md", "time": "20min", "complexity": "intermediate", "keywords": ["debug", "troubleshoot"]},
+          {"name": "Implementing Features", "file": "implementing-features.md", "time": "30min", "complexity": "advanced", "keywords": ["implement", "develop"]},
+          {"name": "Contributing", "file": "CONTRIBUTING.md", "time": "15min", "complexity": "intermediate", "keywords": ["contribute", "contributing"]},
+          {"name": "Running in Production", "file": "running-in-production.md", "time": "20min", "complexity": "advanced"}
+        ]
+      },
+      {
+        "name": "Reference",
+        "path": "reference/",
+        "icon": "🔧",
+        "description": "Technical reference and API documentation",
+        "docs": [
+          {"name": "Reference Hub", "file": "README.md", "time": "5min", "complexity": "beginner"},
+          {"name": "API Reference", "file": "api.md", "time": "varies", "complexity": "advanced", "keywords": ["api", "function", "method"]},
+          {"name": "Module Reference", "file": "module-reference.md", "time": "varies", "complexity": "advanced"},
+          {"name": "Task System Reference", "file": "task-system-reference.md", "time": "20min", "complexity": "intermediate", "keywords": ["tasks", "td", "epics", "system", "reference"]},
+          {"name": "Configuration", "file": "configuration.md", "time": "15min", "complexity": "intermediate"},
+          {"name": "Environment Variables", "file": "environment-variables.md", "time": "10min", "complexity": "intermediate"},
+          {"name": "Command Line Reference", "file": "command-line.md", "time": "10min", "complexity": "beginner"},
+          {"name": "Data Formats", "file": "data-formats.md", "time": "15min", "complexity": "intermediate"}
+        ]
+      },
+      {
+        "name": "Architecture",
+        "path": "architecture/",
+        "icon": "🏗️",
+        "description": "Deep architectural explorations",
+        "docs": [
+          {"name": "Architecture Hub", "file": "README.md", "time": "10min", "complexity": "advanced"},
+          {"name": "Plugin System", "file": "plugin-system.md", "time": "20min", "complexity": "advanced"},
+          {"name": "Database Architecture", "file": "database-architecture.md", "time": "20min", "complexity": "advanced"},
+          {"name": "Observability", "file": "observability.md", "time": "20min", "complexity": "advanced"},
+          {"name": "Networking", "file": "networking.md", "time": "20min", "complexity": "advanced"},
+          {"name": "Security", "file": "security.md", "time": "20min", "complexity": "advanced"},
+          {"name": "Performance", "file": "performance.md", "time": "20min", "complexity": "advanced"}
+        ]
+      },
+      {
+        "name": "Troubleshooting",
+        "path": "troubleshooting/",
+        "icon": "❓",
+        "description": "Problem-solving guides",
+        "docs": [
+          {"name": "Troubleshooting Hub", "file": "README.md", "time": "5min", "complexity": "beginner"},
+          {"name": "Build Issues", "file": "build-issues.md", "time": "15min", "complexity": "intermediate", "keywords": ["build", "error"]},
+          {"name": "Runtime Issues", "file": "runtime-issues.md", "time": "15min", "complexity": "intermediate"},
+          {"name": "Performance Issues", "file": "performance-issues.md", "time": "20min", "complexity": "intermediate"},
+          {"name": "Error Reference", "file": "error-reference.md", "time": "varies", "complexity": "intermediate"}
+        ]
+      },
+      {
+        "name": "Development",
+        "path": "development/",
+        "icon": "👨‍💻",
+        "description": "For developers working on Anigma itself",
+        "docs": [
+          {"name": "Development Hub", "file": "README.md", "time": "10min", "complexity": "advanced"},
+          {"name": "Project Structure", "file": "project-structure.md", "time": "15min", "complexity": "advanced"},
+          {"name": "Development Workflow", "file": "development-workflow.md", "time": "15min", "complexity": "advanced"},
+          {"name": "Testing Strategy", "file": "testing-strategy.md", "time": "15min", "complexity": "advanced"},
+          {"name": "Code Style Guide", "file": "code-style-guide.md", "time": "15min", "complexity": "intermediate"},
+          {"name": "Performance Guidelines", "file": "performance-guidelines.md", "time": "20min", "complexity": "advanced"},
+          {"name": "CI/CD Pipeline", "file": "ci-cd-pipeline.md", "time": "15min", "complexity": "advanced"},
+          {"name": "Task System: Research Phase", "file": "task-system-research-phase.md", "time": "15min", "complexity": "intermediate", "keywords": ["tasks", "research", "td"]},
+          {"name": "Task System: Design Phase", "file": "task-system-design-phase.md", "time": "15min", "complexity": "intermediate", "keywords": ["tasks", "design", "td"]},
+          {"name": "Task System: Implementation Phase", "file": "task-system-implementation-phase.md", "time": "15min", "complexity": "intermediate", "keywords": ["tasks", "implementation", "td"]}
+        ]
+      },
+      {
+        "name": "Releases",
+        "path": "releases/",
+        "icon": "📝",
+        "description": "Release notes and changelog",
+        "docs": [
+          {"name": "Releases Hub", "file": "README.md", "time": "5min", "complexity": "beginner"},
+          {"name": "Changelog", "file": "changelog.md", "time": "varies", "complexity": "beginner"},
+          {"name": "Roadmap", "file": "roadmap.md", "time": "10min", "complexity": "beginner"}
+        ]
+      }
+    ]
+  },
+  
+  "primary_questions": {
+    "install": {"route": "getting-started/installation.md", "keywords": ["install", "setup"], "time": "5min"},
+    "quick_start": {"route": "getting-started/first-project.md", "keywords": ["hello world", "first"], "time": "15min"},
+    "structure": {"route": "getting-started/project-structure.md", "keywords": ["structure", "layout", "monorepo"], "time": "20min"},
+    "architecture": {"route": "concepts/architecture.md", "keywords": ["architecture", "design"], "time": "20min"},
+    "build": {"route": "guides/building.md", "keywords": ["build", "compile"], "time": "15min"},
+    "test": {"route": "guides/testing.md", "keywords": ["test", "unit test"], "time": "15min"},
+    "debug": {"route": "guides/debugging.md", "keywords": ["debug", "troubleshoot"], "time": "20min"},
+    "api": {"route": "reference/api.md", "keywords": ["api", "function"], "time": "varies"},
+    "error": {"route": "troubleshooting/error-reference.md", "keywords": ["error", "failed"], "time": "5min"},
+    "implement": {"route": "guides/implementing-features.md", "keywords": ["implement", "feature"], "time": "30min"},
+    "tasks": {"route": "reference/task-system-reference.md", "keywords": ["tasks", "td", "epic", "work"], "time": "20min"},
+    "contribute": {"route": "guides/CONTRIBUTING.md", "keywords": ["contribute", "contributing"], "time": "15min"},
+    "modules": {"route": "concepts/modules.md", "keywords": ["modules", "components"], "time": "15min"},
+    "config": {"route": "reference/configuration.md", "keywords": ["config", "settings"], "time": "15min"},
+    "production": {"route": "guides/running-in-production.md", "keywords": ["production", "deploy"], "time": "20min"}
+  },
+  
+  "module_map": {
+    "HarmoniaModule": "reference/module-reference.md#harmonia",
+    "AnigmaCore": "reference/module-reference.md#anigmacore",
+    "HarmoniaCLI": "reference/module-reference.md#harmonia-cli"
+  },
+  
+  "task_routes": {
+    "research": "development/task-system-research-phase.md",
+    "design": "development/task-system-design-phase.md",
+    "implementation": "development/task-system-implementation-phase.md",
+    "task_system": "reference/task-system-reference.md",
+    "contributing": "guides/CONTRIBUTING.md"
+  },
+  
+  "epic_mapping": {
+    "harmonia_migration": {
+      "id": "td-333894",
+      "title": "Harmonia Migration: V2 to V3 Transition",
+      "status": "open",
+      "priority": "P0",
+      "task_count": 18,
+      "docs": "architecture/harmonia-backend.md",
+      "related_packages": ["HarmoniaModule", "HarmoniaRuntime"]
+    },
+    "backend_integration": {
+      "id": "td-2c38e1",
+      "title": "Backend executable rebuild stabilization track",
+      "status": "in_progress",
+      "priority": "P1",
+      "task_count": 22,
+      "docs": "guides/building.md",
+      "related_packages": ["AnigmaDaemon", "AnigmaCore"]
+    },
+    "cli_enhancement": {
+      "id": "td-9bf6ea",
+      "title": "CLI Enhancement Track",
+      "status": "open",
+      "priority": "P1",
+      "task_count": 8,
+      "docs": "reference/command-line.md",
+      "related_packages": ["scripts", "AnigmaDaemon"]
+    },
+    "performance_optimization": {
+      "id": "td-9f6d1d",
+      "title": "Backend Optimization Epic: Efficient Load Distribution",
+      "status": "open",
+      "priority": "P1",
+      "task_count": 12,
+      "docs": "architecture/performance.md",
+      "related_packages": ["AnigmaCore"]
+    },
+    "testing_infrastructure": {
+      "id": "td-0b6df7",
+      "title": "Implement Automated Planning Pipeline - Parallel Review",
+      "status": "open",
+      "priority": "P2",
+      "task_count": 15,
+      "docs": "guides/testing.md",
+      "related_packages": ["Tests", "anigma/Tests"]
+    },
+    "architecture_consolidation": {
+      "id": "td-cb6861",
+      "title": "Module Redundancy Audit & Consolidation",
+      "status": "open",
+      "priority": "P2",
+      "task_count": 20,
+      "docs": "concepts/architecture.md",
+      "related_packages": ["All packages"]
+    },
+    "api_governance": {
+      "id": "td-40a6ce",
+      "title": "Consolidate backend database architecture onto canonical persistence stack",
+      "status": "open",
+      "priority": "P1",
+      "task_count": 14,
+      "docs": "reference/api-governance.md",
+      "related_packages": ["AnigmaCore"]
+    }
+  },
+  
+  "task_to_docs_routing": {
+    "ready": "reference/task-system-reference.md#quick-reference-table-all-7-key-epics",
+    "research_phase": "development/task-system-research-phase.md",
+    "design_phase": "development/task-system-design-phase.md",
+    "implementation_phase": "development/task-system-implementation-phase.md",
+    "blockers": "reference/task-system-reference.md#handling-blockers",
+    "progress_tracking": "development/task-system-implementation-phase.md#daily-work-log-template",
+    "contribution_workflow": "guides/CONTRIBUTING.md#code-contribution-workflow"
+  },
+  
+  "quick_reference": {
+    "build_commands": "reference/command-line.md",
+    "environment_variables": "reference/environment-variables.md",
+    "common_errors": "troubleshooting/error-reference.md",
+    "modules": "reference/module-reference.md",
+    "api_overview": "reference/api.md"
+  }
+}

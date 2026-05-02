@@ -1,0 +1,45 @@
+{
+  "codegraph_mcp_server": {
+    "projects": [
+      {
+        "name": "Anigma",
+        "path": "/Users/user/Developer/GitHub/Anigma_clean",
+        "languages": ["python", "swift", "javascript", "typescript", "markdown", "yaml"],
+        "indexing": {
+          "full_index_on_start": true,
+          "watch_for_changes": true,
+          "ignore_patterns": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/build/**",
+            "**/dist/**",
+            "**/.venv/**",
+            "**/__pycache__/**"
+          ]
+        }
+      }
+    ],
+    "server": {
+      "port": 8080,
+      "host": "0.0.0.0",
+      "transport": "http",
+      "log_level": "info"
+    },
+    "database": {
+      "type": "sqlite",
+      "path": "~/codegraph-mcp/codegraph.db"
+    },
+    "mcp_client_config": {
+      "server_name": "codegraph-anigma",
+      "description": "CodeGraph MCP Server for Anigma codebase",
+      "url": "http://localhost:8080",
+      "tools": [
+        "symbol_lookup",
+        "reference_tracking",
+        "impact_analysis",
+        "context_retrieval",
+        "community_detection"
+      ]
+    }
+  }
+}

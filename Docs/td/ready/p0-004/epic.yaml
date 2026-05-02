@@ -1,0 +1,48 @@
+id: p0-004
+title: anigmad Subprocess Pooling
+type: epic
+priority: P0
+status: ready
+lane: daemon-runtime-isolation
+summary: Unify under anigmad with warm subprocess pooling for parallel execution.
+description: Unify under anigmad with warm subprocess pooling for parallel execution.
+recommended_worktree: anigma/
+verification_profiles:
+  - p0-daemon-runtime
+  - governance
+  - swift-runtime
+  - swift-lint-format
+gc_policy: retain_all
+context_load_policy: eager
+source_docs:
+- Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+- Docs/td/TD_PHASE6_UPDATE.md
+- Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md
+related_docs: []
+proofs:
+- Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+proof_required:
+- Test results for crash detection and recovery
+- Test results for deterministic shutdown
+- Test results for worker lease lifecycle
+expected_proof: []
+tasks: &id001
+- td-a84da2
+- td-80575e
+- td-bfe7a3
+- td-0dfb09
+- td-73aea8
+- td-ce4439
+children: *id001
+acceptance:
+- anigmad subprocess pool lifecycle is implemented
+- worker lease checkout/checkin is tested
+- crashed workers are detected and recycled or retired
+- shutdown reaps child processes deterministically
+- governance validators pass
+non_goals:
+- Runtime implementation (already existed pre-P0-004)
+- New CLIs beyond anigmad consolidation
+td_labels:
+- lane:daemon-runtime-isolation
+- type:epic

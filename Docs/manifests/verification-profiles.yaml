@@ -1,0 +1,333 @@
+# Verification Profiles Manifest
+# Machine-readable definitions of verification profiles for task validation
+# Used by: Scripts/validate_verification_profiles.py, agent workflows
+
+version: "1.1.0"
+last_updated: "2025-01-15"
+
+profiles:
+
+  - id: "governance"
+    description: "Architecture and code governance validation"
+    when_to_use: "All tasks that affect architecture or cross-module dependencies"
+    proof_required: ["Validation output logs", "Exit codes from all validators"]
+    expected_outputs: ["All validators exit 0", "No tier violations", "No dependency cycles", "No invalid exported imports"]
+    failure_policy: "BLOCK - Do not merge/PR if any governance validator fails"
+    required_tools: ["python3", "git", "rg", "fd"]
+    optional_tools: ["jq", "yq"]
+    commands:
+      - command: |
+          python3 Scripts/validate_tiers.py anigma/
+        description: "Validate tier boundaries"
+        expected_exit: 0
+        timeout_seconds: 60
+      - command: |
+          python3 Scripts/validate_no_cycles.py .build/anigma-package.json
+        description: "Detect dependency cycles"
+        expected_exit: 0
+        timeout_seconds: 30
+      - command: |
+          python3 Scripts/validate_exported_imports.py
+        description: "Check for invalid @_exported imports"
+        expected_exit: 0
+        timeout_seconds: 30
+
+  - id: "swift-runtime"
+    description: "Swift compilation and runtime validation"
+    when_to_use: "Tasks affecting Swift source code, Package.swift, or build configuration"
+    proof_required: ["Build logs", "Test results"]
+    expected_outputs: ["Build succeeds", "All relevant tests pass"]
+    failure_policy: "BLOCK on build failure; WARN on test failure"
+    required_tools: ["python3", "git", "swift"]
+    optional_tools: ["swiftlint", "swift-format"]
+    commands:
+      - command: |
+          swift build
+        description: "Clean build of all targets"
+        expected_exit: 0
+        timeout_seconds: 300
+      - command: |
+          swift test
+        description: "Run all tests"
+        expected_exit: 0
+        timeout_seconds: 300
+      - command: |
+          swift build -c release
+        description: "Release build verification"
+        expected_exit: 0
+        timeout_seconds: 300
+
+  - id: "swift-lint-format"
+    description: "Code style and formatting compliance"
+    when_to_use: "Tasks involving source code changes"
+    proof_required: ["Lint output", "Format check output"]
+    expected_outputs: ["No lint warnings", "Code is formatted"]
+    failure_policy: "REPORT lint/format issues; do NOT auto-fix without explicit task; do NOT hide failures"
+    required_tools: ["python3", "git", "swift"]
+    optional_tools: ["swiftlint", "swift-format"]
+    commands:
+      - command: |
+          swiftlint lint --strict anigma/ 2>/dev/null || true
+        description: "Lint check (strict mode)"
+        expected_exit: 0
+        timeout_seconds: 120
+        optional_tool: "swiftlint"
+      - command: |
+          swift-format lint -r anigma/ 2>/dev/null || true
+        description: "Format check"
+        expected_exit: 0
+        timeout_seconds: 120
+        optional_tool: "swift-format"
+
+  - id: "docs-td"
+    description: "Documentation and TD system validation"
+    when_to_use: "Tasks in documentation-infrastructure lane or affecting Docs/td/"
+    proof_required: ["Validation reports", "Descriptor counts"]
+    expected_outputs: ["All validations pass", "Descriptors generated correctly"]
+    failure_policy: "BLOCK if structure validation fails"
+    required_tools: ["python3", "git", "td", "yq"]
+    optional_tools: ["jq"]
+    commands:
+      - command: |
+          python3 Scripts/validate_td_folder_system.py
+        description: "Validate TD folder structure"
+        expected_exit: 0
+        timeout_seconds: 30
+      - command: |
+          python3 Scripts/validate_td_docs_sync.py
+        description: "Validate TD docs sync"
+        expected_exit: 0
+        timeout_seconds: 30
+      - command: |
+          python3 Scripts/td_bootstrap_from_docs.py --emit-commands
+        description: "Bootstrap TD from Docs/ (dry run)"
+        expected_exit: 0
+        timeout_seconds: 30
+      - command: |
+          python3 Scripts/generate_td_descriptors.py --dry-run
+        description: "Generate descriptors (dry run)"
+        expected_exit: 0
+        timeout_seconds: 30
+
+  - id: "docs-artifacts"
+    description: "Documentation-as-Code artifact validation"
+    when_to_use: "Tasks in documentation-infrastructure lane or affecting documentation artifacts"
+    proof_required: ["Artifact inventory", "Validation results"]
+    expected_outputs: ["All artifacts valid", "No parse errors"]
+    failure_policy: "BLOCK on parse errors; WARN on missing optional tools"
+    required_tools: ["python3", "git"]
+    optional_tools: ["jq", "yq", "dot", "mermaid-cli", "likec4"]
+    commands:
+      - command: |
+          find Docs/schemas Docs/manifests Docs/diagrams -type f -size 0 | wc -l | grep -q '^0$'
+        description: "No 0-byte files in critical directories"
+        expected_exit: 0
+        timeout_seconds: 10
+      - command: |
+          python3 -m json.tool Docs/schemas/td-task.schema.json > /dev/null
+        description: "JSON schema validation example"
+        expected_exit: 0
+        timeout_seconds: 5
+      - command: |
+          python3 Scripts/validate_yaml_manifests.py
+        description: "YAML manifest validation"
+        expected_exit: 0
+        timeout_seconds: 5
+
+  - id: "architecture-diagrams"
+    description: "Architecture diagram validation using LikeC4 as primary tool"
+    when_to_use: "Tasks in architecture-governance lane or affecting architecture diagrams"
+    proof_required: ["LikeC4 build output", "Diagram validation report"]
+    expected_outputs: ["All diagrams parse successfully", "LikeC4 build succeeds"]
+    failure_policy: "BLOCK on diagram parse errors; WARN on missing optional tools"
+    required_tools: ["python3", "git"]
+    optional_tools: ["likec4", "dot", "mermaid-cli"]
+    commands:
+      - command: |
+          likec4 build Docs/diagrams/likec4 -o /tmp/anigma-likec4-diagrams
+        description: "Validate LikeC4 architecture model"
+        expected_exit: 0
+        timeout_seconds: 60
+      - command: |
+          likec4 --version
+        description: "Check LikeC4 CLI version"
+        expected_exit: 0
+        timeout_seconds: 5
+      - command: |
+          find Docs/diagrams/likec4 -name "*.c4" -type f | wc -l | grep -q '^[1-9]'
+        description: "At least one LikeC4 model file exists"
+        expected_exit: 0
+        timeout_seconds: 5
+
+  - id: "repo-hygiene"
+    description: "Repository cleanliness and file health"
+    when_to_use: "Tasks affecting repository structure or cleanup"
+    proof_required: ["Hygiene scan results"]
+    expected_outputs: ["No forbidden files", "No large binaries in history"]
+    failure_policy: "BLOCK on forbidden files; WARN on hygiene issues"
+    required_tools: ["python3", "git", "rg", "fd"]
+    optional_tools: ["git-filter-repo"]
+    commands:
+      - command: |
+          git status --porcelain | grep -q '^??' && echo 'Untracked files found' || true
+        description: "No untracked files in critical paths"
+        expected_exit: 0
+        timeout_seconds: 10
+      - command: |
+          git ls-files | grep -q -E '.DS_Store|__MACOSX' && echo 'Forbidden files tracked' || true
+        description: "No .DS_Store or __MACOSX in git"
+        expected_exit: 0
+        timeout_seconds: 10
+      - command: |
+          git log --find-object --all -e '(.*\.bin|\.dll|\.so|\.dylib|\.exe|\.app|\.pkg|\.dmg|\.iso)$' | wc -l | grep -q '^0$'
+        description: "No large files in history"
+        expected_exit: 0
+        timeout_seconds: 30
+      - command: |
+          rg --files | rg -E '\.(pyc|swp|log|tmp|bak)$' | wc -l | grep -q '^0$'
+        description: "Check for common unwanted patterns"
+        expected_exit: 0
+        timeout_seconds: 30
+
+  - id: "publication"
+    description: "Public GitHub publication readiness"
+    when_to_use: "Tasks in publication-cleanup lane"
+    proof_required: ["Publication checklist status", "Build verification"]
+    expected_outputs: ["All required files present", "Build succeeds"]
+    failure_policy: "BLOCK on missing required files; WARN on build issues"
+    required_tools: ["python3", "git"]
+    optional_tools: ["jq", "yq"]
+    commands:
+      - command: |
+          test -f LICENSE && echo OK || echo MISSING
+        description: "Check LICENSE exists"
+        expected_exit: 0
+        timeout_seconds: 1
+      - command: |
+          test -f README.md && echo OK || echo MISSING
+        description: "Check README exists"
+        expected_exit: 0
+        timeout_seconds: 1
+      - command: |
+          test -f .gitignore && echo OK || echo MISSING
+        description: "Check .gitignore exists"
+        expected_exit: 0
+        timeout_seconds: 1
+      - command: |
+          swift build 2>&1 | tail -5
+        description: "Build verification"
+        expected_exit: 0
+        timeout_seconds: 300
+
+  - id: "history-excision"
+    description: "Git history cleanup before publication"
+    when_to_use: "Tasks in publication-cleanup lane, specifically history cleanup"
+    proof_required: ["Before/after history audit", "Excision log"]
+    expected_outputs: ["No large forbidden objects", "Pack integrity maintained"]
+    failure_policy: "WARN if large objects found; BLOCK on pack corruption"
+    required_tools: ["python3", "git"]
+    optional_tools: ["git-filter-repo"]
+    commands:
+      - command: |
+          git log --find-object --all | head -20
+        description: "List large objects"
+        expected_exit: 0
+        timeout_seconds: 30
+      - command: |
+          git verify-pack -v .git/objects/pack/*.idx 2>&1 | tail -3
+        description: "Check pack integrity"
+        expected_exit: 0
+        timeout_seconds: 30
+
+  - id: "p0-media-substrate"
+    description: "MediaCore and materialization gate validation"
+    when_to_use: "Tasks in p0-critical-path lane affecting MediaCore"
+    proof_required: ["Test results", "Materialization gate status"]
+    expected_outputs: ["MediaCore tests pass", "Materialization gate enforced"]
+    failure_policy: "BLOCK on MediaCore test failures"
+    required_tools: ["python3", "swift"]
+    optional_tools: ["swiftlint", "rg"]
+    commands:
+      - command: |
+          swift test --filter MediaCore 2>&1 | tail -10
+        description: "MediaCore tests"
+        expected_exit: 0
+        timeout_seconds: 300
+      - command: |
+          swift test --filter MaterializationGate 2>&1 | tail -10
+        description: "Materialization gate tests"
+        expected_exit: 0
+        timeout_seconds: 300
+
+  - id: "p0-daemon-runtime"
+    description: "Subprocess pooling and daemon runtime validation"
+    when_to_use: "Tasks in daemon-runtime-isolation lane, specifically p0-004 subtasks"
+    proof_required: ["Test results", "Pool lifecycle verification"]
+    expected_outputs: ["SubprocessPooling tests pass", "Worker pools functional"]
+    failure_policy: "BLOCK if critical pool tests fail"
+    required_tools: ["python3", "swift"]
+    optional_tools: ["swiftlint", "rg"]
+    commands:
+      - command: |
+          swift test --filter SubprocessPooling 2>&1 | tail -10
+        description: "SubprocessPooling tests"
+        expected_exit: 0
+        timeout_seconds: 300
+      - command: |
+          swift test --filter MLWorkerPool 2>&1 | tail -10
+        description: "MLWorker pool tests"
+        expected_exit: 0
+        timeout_seconds: 300
+
+profile_groups:
+  p0-critical-path:
+    description: "P0 Critical Path lane default profiles"
+    profiles: ["swift-runtime", "governance", "p0-media-substrate"]
+  daemon-runtime-isolation:
+    description: "Daemon Runtime Isolation lane default profiles"
+    profiles: ["swift-runtime", "governance", "p0-daemon-runtime"]
+  architecture-governance:
+    description: "Architecture Governance lane default profiles"
+    profiles: ["governance", "swift-runtime", "architecture-diagrams"]
+  documentation-infrastructure:
+    description: "Documentation Infrastructure lane default profiles"
+    profiles: ["docs-td", "docs-artifacts", "governance"]
+  publication-cleanup:
+    description: "Publication Cleanup lane default profiles"
+    profiles: ["publication", "history-excision", "repo-hygiene"]
+
+validation:
+  rules:
+    - id: "VP-001"
+      name: "Required Tools Present"
+      description: "All required tools for referenced profiles must be installed"
+      severity: "ERROR"
+    - id: "VP-002"
+      name: "Valid Profile IDs"
+      description: "Tasks must reference valid profile IDs from this manifest"
+      severity: "ERROR"
+    - id: "VP-003"
+      name: "Non-empty Commands"
+      description: "Every profile command must be non-empty"
+      severity: "ERROR"
+    - id: "VP-004"
+      name: "Required Fields Present"
+      description: "Every profile must have id, description, commands"
+      severity: "ERROR"
+
+tool_availability:
+  python3: { available: null, version: null, status: "required" }
+  git: { available: null, version: null, status: "required" }
+  swift: { available: null, version: null, status: "required" }
+  td: { available: null, version: null, status: "required" }
+  swiftlint: { available: null, version: null, status: "optional" }
+  swift-format: { available: null, version: null, status: "optional" }
+  rg: { available: null, version: null, status: "optional" }
+  fd: { available: null, version: null, status: "optional" }
+  jq: { available: null, version: null, status: "optional" }
+  yq: { available: null, version: null, status: "optional" }
+  dot: { available: null, version: null, status: "optional" }
+  mermaid-cli: { available: null, version: null, status: "optional" }
+  likec4: { available: null, version: null, status: "optional" }
+  structurizr: { available: null, version: null, status: "legacy" }
+  git-filter-repo: { available: null, version: null, status: "optional" }

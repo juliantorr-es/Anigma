@@ -1,0 +1,4 @@
+module DiffNative {
+    header "diff_capsule.h"
+    export *
+}

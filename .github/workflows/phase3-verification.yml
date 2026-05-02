@@ -1,0 +1,47 @@
+name: Phase 3 Verification
+
+on:
+  push:
+    paths:
+      - 'anigma/Package.swift'
+      - 'anigma/Sources/AnigmaAppMac/**'
+      - 'anigma/Packages/HarmoniaV2/**'
+      - 'anigma/Packages/AnigmaCore/Sources/AnigmaCore/Governance/**'
+      - 'anigma/Packages/GovernanceCore/**'
+      - 'Tests/GovernanceHarness/**'
+      - 'verify_phase3_build.sh'
+      - 'run_prototype.sh'
+  pull_request:
+    paths:
+      - 'anigma/Package.swift'
+      - 'anigma/Sources/AnigmaAppMac/**'
+      - 'anigma/Packages/HarmoniaV2/**'
+      - 'anigma/Packages/AnigmaCore/Sources/AnigmaCore/Governance/**'
+      - 'anigma/Packages/GovernanceCore/**'
+      - 'Tests/GovernanceHarness/**'
+      - 'verify_phase3_build.sh'
+      - 'run_prototype.sh'
+
+jobs:
+  verify:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure scripts are executable
+        run: |
+          chmod +x verify_phase3_build.sh
+          chmod +x run_prototype.sh || true
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.swiftpm
+            .build
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swiftpm-
+
+      - name: Phase 3 Verification
+        run: ./verify_phase3_build.sh

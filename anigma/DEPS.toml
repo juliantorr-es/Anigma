@@ -1,0 +1,26 @@
+# Anigma native dependency manifest
+# TD source of truth: td-f9e8b9
+#
+# This manifest pins native dependency inputs that cross Swift's managed package
+# boundary. Current task scope covers the native targets named in td-f9e8b9.
+
+version = 1
+hash_algorithm = "sha256"
+
+[[native_dependency]]
+target = "GeometryNative"
+path = "Packages/GeometryCapsule/Sources/GeometryNative"
+source = "vendored_source"
+provenance = "repository"
+file_count = 25
+content_sha256 = "9c6a144fe541b7ac341da85f3510748179c616937a099c1b68204899e0417e62"
+notes = "Geometry native target including vendored Clipper2 source snapshot."
+
+[[native_dependency]]
+target = "MediaFingerprintNative"
+path = "Packages/MediaFingerprintCapsule/Sources/MediaFingerprintNative"
+source = "vendored_source"
+provenance = "repository"
+file_count = 8
+content_sha256 = "0085f98f40a1d1cd7c318b589ac5ad29b2b51c92e80e9f3f4d9fcc45695f41ee"
+notes = "Media fingerprint native target including vendored stb image headers."

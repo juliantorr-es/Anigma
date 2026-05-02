@@ -1,0 +1,4 @@
+module ReferenceResolutionNative {
+    header "reference_resolution_capsule.h"
+    export *
+}

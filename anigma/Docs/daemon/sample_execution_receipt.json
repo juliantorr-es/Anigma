@@ -1,0 +1,99 @@
+{
+  "jobID": "job-sample-001",
+  "correlationID": "corr-sample-001",
+  "status": "completed",
+  "startedAt": "2026-01-26T12:00:00Z",
+  "finishedAt": "2026-01-26T12:00:01Z",
+  "diagnosticEvents": [
+    {
+      "timestamp": "2026-01-26T12:00:00Z",
+      "level": "info",
+      "category": "daemon.pipeline",
+      "message": "Render plan emitted",
+      "correlationID": "corr-sample-001",
+      "spanID": null,
+      "parentSpanID": null,
+      "duration": null,
+      "metadata": {
+        "plan_id": "plan-eb60702401975d56",
+        "output_digest": "37b89423e942ed21"
+      }
+    }
+  ],
+  "capsuleSpanSummaries": [
+    {
+      "spanID": "span-ingest-001",
+      "name": "capsule.ingest",
+      "category": "capsule",
+      "correlationID": "corr-sample-001",
+      "startTime": "2026-01-26T12:00:00Z",
+      "endTime": "2026-01-26T12:00:00Z",
+      "duration": 0,
+      "status": "ok",
+      "tags": {
+        "source": "Samples/daemon/vertical-slice.txt"
+      }
+    },
+    {
+      "spanID": "span-render-001",
+      "name": "capsule.render_plan",
+      "category": "capsule",
+      "correlationID": "corr-sample-001",
+      "startTime": "2026-01-26T12:00:00Z",
+      "endTime": "2026-01-26T12:00:00Z",
+      "duration": 0,
+      "status": "ok",
+      "tags": {
+        "ranked_count": "1"
+      }
+    }
+  ],
+  "output": {
+    "pipeline": {
+      "ingest": {
+        "documentID": "doc-b195a669e1482b06",
+        "sourcePath": "Samples/daemon/vertical-slice.txt",
+        "contentType": "text/plain",
+        "characterCount": 123,
+        "digest": "b195a669e1482b06"
+      },
+      "chunks": [
+        {
+          "chunkID": "chunk-0-b195a669e1482b06",
+          "offset": 0,
+          "length": 123,
+          "digest": "b195a669e1482b06"
+        }
+      ],
+      "embeddings": [
+        {
+          "chunkID": "chunk-0-b195a669e1482b06",
+          "dimensions": 6,
+          "digest": "e0d98eb11c2b9ef9"
+        }
+      ],
+      "ranks": [
+        {
+          "chunkID": "chunk-0-b195a669e1482b06",
+          "fusedScore": 0.6401262833638413,
+          "lexicalScore": 0.5,
+          "embeddingScore": 0.7001804048054876
+        }
+      ],
+      "renderPlan": {
+        "planID": "plan-eb60702401975d56",
+        "instruction": "Summarize vertical slice pipeline",
+        "summary": "Render plan for Samples/daemon/vertical-slice.txt with 1 sections",
+        "sections": [
+          {
+            "chunkID": "chunk-0-b195a669e1482b06",
+            "title": "Section 1",
+            "highlight": "Chunk chunk-0-b195a669e1482b06 aligned to instruction",
+            "score": 0.6401262833638413
+          }
+        ]
+      },
+      "outputDigest": "37b89423e942ed21"
+    }
+  }
+}

@@ -1,0 +1,179 @@
+# Assistant Analysis Surface - Component Map
+
+## File Dependencies
+
+AssistantView.swift
+    ├─ Imports: SwiftUI
+    ├─ Uses: AssistantState (@StateObject)
+    ├─ Uses: AnalysisCanvasView (conditional)
+    ├─ Uses: Bauhaus design system
+    └─ Components:
+        ├─ RecentAnalysisRow
+        └─ ContextSummaryCard
+
+AnalysisCanvasView.swift
+    ├─ Imports: SwiftUI
+    ├─ Uses: AssistantState (@ObservedObject)
+    ├─ Uses: ProvenanceView (conditional)
+    ├─ Uses: Bauhaus design system
+    └─ Components:
+        ├─ AnalysisResultCard
+        ├─ ComputeStatusCard
+        ├─ SourcesDisclosureGroup
+        └─ SourceReferenceRow
+
+ProvenanceView.swift
+    ├─ Imports: SwiftUI
+    ├─ Uses: Analysis (model)
+    ├─ Uses: Bauhaus design system
+    └─ Components:
+        ├─ ProvenanceSourceCard
+        ├─ ReceiptCard
+        ├─ TimelineView
+        └─ TimelineEvent
+
+AssistantState.swift
+    ├─ Imports: SwiftUI, Combine
+    ├─ @MainActor class
+    └─ Models:
+        ├─ Analysis
+        ├─ AnalysisPhase
+        ├─ AnalysisResult
+        ├─ SourceReference
+        ├─ Receipt
+        └─ ComputeStatus
+
+## Integration Points
+
+┌─────────────────────────────────────────┐
+│         Existing App Layer              │
+│  (HarmoniaRootView, AppModel, etc.)     │
+└────────────┬────────────────────────────┘
+             │
+             │ Integration Point:
+             │ Add AssistantView to TabView
+             │
+┌────────────▼────────────────────────────┐
+│        AssistantView                    │
+│        (New Surface)                    │
+└────────────┬────────────────────────────┘
+             │
+             ├─► AssistantState (local)
+             │   └─► TODO: Wire to existing DB
+             │
+             ├─► AnalysisCanvasView
+             │   └─► ProvenanceView
+             │
+             └─► Bauhaus Design System ✓
+
+## Data Sources (To Wire)
+
+Local LLM
+    │
+    └─► AssistantState.runLocalInference()
+        └─► TODO: Connect to llama.cpp/MLX
+
+Vector Database
+    │
+    └─► AssistantState.retrieveSources()
+        └─► TODO: Use existing RecallPanelView logic
+
+Evidence System
+    │
+    └─► Receipt generation
+        └─► TODO: Use existing EvidenceRecorder
+
+Metal Compute
+    │
+    └─► ComputeStatus tracking
+        └─► TODO: Wire compute capsules
+
+## UI Flow
+
+Home State (Calm)
+    │
+    │ User enters query
+    │ User presses Enter or clicks arrow
+    │
+    ├─► AssistantState.startNewAnalysis()
+    │   ├─ Phase: preparing
+    │   ├─ Phase: computing
+    │   └─ Phase: complete
+    │
+    └─► Transition to Canvas State
+        │
+        ├─ Show results
+        ├─ Show compute status
+        ├─ Show sources (collapsed)
+        │
+        └─ Optional: Show provenance panel
+            ├─ Verification badge
+            ├─ Source chain
+            ├─ Receipts
+            └─ Timeline
+
+## Isolation Strategy
+
+✓ New files in Surfaces/ directory
+✓ New state in Model/ directory
+✓ No changes to existing views
+✓ No changes to daemon/admin surfaces
+✓ No backend dependencies
+✓ Uses existing design system
+
+## Testing Hierarchy
+
+Unit Tests
+    └─ AssistantState
+        ├─ Phase transitions
+        ├─ Result accumulation
+        ├─ Receipt generation
+        └─ Persistence
+
+Integration Tests
+    └─ Full flow
+        ├─ Query → Analysis
+        ├─ Source retrieval
+        ├─ Provenance tracking
+        └─ Export
+
+UI Tests
+    └─ Navigation
+        ├─ Home → Canvas
+        ├─ Provenance toggle
+        ├─ Recent selection
+        └─ Accessibility
+
+## Minimal Wiring Path
+
+Step 1: Add to TabView
+    └─ Edit HarmoniaRootView.swift
+        └─ Add AssistantView() with .tabItem
+
+Step 2: Test Navigation
+    └─ Launch app
+        └─ Verify tab appears
+        └─ Verify query input works
+        └─ Verify canvas transition
+
+Step 3: Wire Context
+    └─ Edit AssistantState.refreshContext()
+        └─ Query existing database
+        └─ Update counts
+
+Step 4: Wire LLM
+    └─ Edit AssistantState.startNewAnalysis()
+        └─ Replace mock sleep
+        └─ Call local inference
+
+Step 5: Wire Sources
+    └─ Add retrieveSources() call
+        └─ Use existing recall infrastructure
+        └─ Map to SourceReference
+
+Done! ✓
+    └─ Minimal viable assistant
+        ├─ Can accept queries
+        ├─ Shows real results
+        ├─ Displays sources
+        └─ Tracks provenance

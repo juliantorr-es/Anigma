@@ -1,0 +1,422 @@
+{"ts":"2026-05-02T11:34:25.884856-07:00","cmd":"init","session":"ses_1785d6","ok":true,"dur_ms":228}
+{"ts":"2026-05-02T11:34:29.590922-07:00","cmd":"init","session":"ses_1785d6","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T11:34:32.747107-07:00","cmd":"list","session":"ses_1785d6","ok":true,"dur_ms":189}
+{"ts":"2026-05-02T11:34:36.422699-07:00","cmd":"usage","flags":{"new-session":"true"},"session":"ses_509a9b","ok":true,"dur_ms":145}
+{"ts":"2026-05-02T11:34:39.937731-07:00","cmd":"list","flags":{"priority":"P0"},"session":"ses_509a9b","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:34:42.978152-07:00","cmd":"list","session":"ses_509a9b","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:43:52.225023-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":9,"err":"issue not found: td-p0-003"}
+{"ts":"2026-05-02T11:43:52.812584-07:00","cmd":"\"Polytropos Phase 0 Implementation\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Polytropos Phase 0 Implementation\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:53.165802-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":1,"err":"issue not found: td-p0-004"}
+{"ts":"2026-05-02T11:43:53.657714-07:00","cmd":"\"anigmad Subprocess Pooling\"","ok":false,"dur_ms":3,"err":"unknown command \"\\\"anigmad Subprocess Pooling\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:53.964289-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":3,"err":"issue not found: td-a84da2"}
+{"ts":"2026-05-02T11:43:54.475055-07:00","cmd":"\"Phase 1: Implement SubprocessManager foundation with pool lifecycle\"","ok":false,"dur_ms":1,"err":"unknown command \"\\\"Phase 1: Implement SubprocessManager foundation with pool lifecycle\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:54.803837-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":3,"err":"issue not found: td-80575e"}
+{"ts":"2026-05-02T11:43:55.299091-07:00","cmd":"\"Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:55.582015-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":4,"err":"issue not found: td-bfe7a3"}
+{"ts":"2026-05-02T11:43:56.081941-07:00","cmd":"\"Phase 3: Implement MLWorker warm pool with UMA shared memory\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 3: Implement MLWorker warm pool with UMA shared memory\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:56.333349-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":2,"err":"issue not found: td-0dfb09"}
+{"ts":"2026-05-02T11:43:56.889568-07:00","cmd":"\"Phase 4: Implement anigma-mcp warm pool with Unix domain sockets\"","ok":false,"dur_ms":1,"err":"unknown command \"\\\"Phase 4: Implement anigma-mcp warm pool with Unix domain sockets\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:57.16044-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":2,"err":"issue not found: td-73aea8"}
+{"ts":"2026-05-02T11:43:57.617495-07:00","cmd":"\"Phase 5: On-demand subprocesses for PDF, Gemini Bridge, and benchmarks\"","ok":false,"dur_ms":1,"err":"unknown command \"\\\"Phase 5: On-demand subprocesses for PDF, Gemini Bridge, and benchmarks\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:57.946874-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":5,"err":"issue not found: td-ce4439"}
+{"ts":"2026-05-02T11:43:58.416891-07:00","cmd":"\"Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep\"","ok":false,"dur_ms":1,"err":"unknown command \"\\\"Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:58.710971-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":1,"err":"issue not found: td-p1-validate-tiers-green-gate"}
+{"ts":"2026-05-02T11:43:59.2671-07:00","cmd":"\"Validate Tiers Green Gate\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Validate Tiers Green Gate\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:43:59.535836-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":4,"err":"issue not found: td-p1-documentation-artifacts-completion"}
+{"ts":"2026-05-02T11:43:59.995682-07:00","cmd":"\"P1 Documentation-as-Code Artifact Completion\"","ok":false,"dur_ms":1,"err":"unknown command \"\\\"P1 Documentation-as-Code Artifact Completion\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:00.294752-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":1,"err":"issue not found: td-p1-td-source-of-truth-recovery"}
+{"ts":"2026-05-02T11:44:00.764878-07:00","cmd":"\"P1 — TD Source-of-Truth Recovery and Docs Sync\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"P1 — TD Source-of-Truth Recovery and Docs Sync\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:01.011679-07:00","cmd":"show","session":"ses_509a9b","ok":false,"dur_ms":5,"err":"issue not found: td-p1-public-history-excision"}
+{"ts":"2026-05-02T11:44:01.519631-07:00","cmd":"\"Public History Excision\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Public History Excision\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:11.207975-07:00","cmd":"","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:44:12.688857-07:00","cmd":"usage","flags":{"new-session":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":181}
+{"ts":"2026-05-02T11:44:15.071563-07:00","cmd":"list","session":"ses_c4bf1f","ok":true,"dur_ms":202}
+{"ts":"2026-05-02T11:44:22.11371-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:44:25.245262-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-p0-003"}
+{"ts":"2026-05-02T11:44:25.64832-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p0-004"}
+{"ts":"2026-05-02T11:44:26.028329-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-a84da2"}
+{"ts":"2026-05-02T11:44:26.428239-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-80575e"}
+{"ts":"2026-05-02T11:44:26.796565-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-bfe7a3"}
+{"ts":"2026-05-02T11:44:27.199468-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-0dfb09"}
+{"ts":"2026-05-02T11:44:27.59186-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-73aea8"}
+{"ts":"2026-05-02T11:44:28.017253-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-ce4439"}
+{"ts":"2026-05-02T11:44:28.373833-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p1-validate-tiers-green-gate"}
+{"ts":"2026-05-02T11:44:28.723823-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-p1-documentation-artifacts-completion"}
+{"ts":"2026-05-02T11:44:29.192166-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p1-td-source-of-truth-recovery"}
+{"ts":"2026-05-02T11:44:29.573302-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-p1-public-history-excision"}
+{"ts":"2026-05-02T11:44:32.172728-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p0-003"}
+{"ts":"2026-05-02T11:44:32.615168-07:00","cmd":"\"Polytropos Phase 0 Implementation\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Polytropos Phase 0 Implementation\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:32.842145-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p0-004"}
+{"ts":"2026-05-02T11:44:33.235793-07:00","cmd":"\"anigmad Subprocess Pooling\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"anigmad Subprocess Pooling\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:33.42105-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-a84da2"}
+{"ts":"2026-05-02T11:44:33.810569-07:00","cmd":"\"Phase 1: Implement SubprocessManager foundation with pool lifecycle\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 1: Implement SubprocessManager foundation with pool lifecycle\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:34.009955-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-80575e"}
+{"ts":"2026-05-02T11:44:34.396231-07:00","cmd":"\"Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:34.582646-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-bfe7a3"}
+{"ts":"2026-05-02T11:44:35.045568-07:00","cmd":"\"Phase 3: Implement MLWorker warm pool with UMA shared memory\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 3: Implement MLWorker warm pool with UMA shared memory\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:35.35605-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":2,"err":"issue not found: td-0dfb09"}
+{"ts":"2026-05-02T11:44:35.710547-07:00","cmd":"\"Phase 4: Implement anigma-mcp warm pool with Unix domain sockets\"","ok":false,"dur_ms":2,"err":"unknown command \"\\\"Phase 4: Implement anigma-mcp warm pool with Unix domain sockets\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:35.926448-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-73aea8"}
+{"ts":"2026-05-02T11:44:36.255478-07:00","cmd":"\"Phase 5: On-demand subprocesses for PDF, Gemini Bridge, and benchmarks\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 5: On-demand subprocesses for PDF, Gemini Bridge, and benchmarks\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:36.473602-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-ce4439"}
+{"ts":"2026-05-02T11:44:36.808456-07:00","cmd":"\"Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:37.023212-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p1-validate-tiers-green-gate"}
+{"ts":"2026-05-02T11:44:37.383438-07:00","cmd":"\"Validate Tiers Green Gate\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Validate Tiers Green Gate\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:37.587454-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p1-documentation-artifacts-completion"}
+{"ts":"2026-05-02T11:44:37.942653-07:00","cmd":"\"P1 Documentation-as-Code Artifact Completion\"","ok":false,"dur_ms":1,"err":"unknown command \"\\\"P1 Documentation-as-Code Artifact Completion\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:38.128631-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p1-td-source-of-truth-recovery"}
+{"ts":"2026-05-02T11:44:38.483556-07:00","cmd":"\"P1 — TD Source-of-Truth Recovery and Docs Sync\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"P1 — TD Source-of-Truth Recovery and Docs Sync\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:38.671622-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p1-public-history-excision"}
+{"ts":"2026-05-02T11:44:38.974242-07:00","cmd":"\"Public History Excision\"","ok":false,"dur_ms":0,"err":"unknown command \"\\\"Public History Excision\\\"\" for \"td\""}
+{"ts":"2026-05-02T11:44:42.014236-07:00","cmd":"show","session":"ses_c4bf1f","ok":false,"dur_ms":1,"err":"issue not found: td-p0-003"}
+{"ts":"2026-05-02T11:44:45.288068-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:45.449433-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:45.609845-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:45.790096-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:45.97614-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:46.160441-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:46.33521-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:46.525424-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:46.723776-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:46.926383-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:47.139732-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:47.335683-07:00","cmd":"add","ok":false,"dur_ms":0,"err":"unknown flag: --id"}
+{"ts":"2026-05-02T11:44:50.243762-07:00","cmd":"create","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T11:44:51.975165-07:00","cmd":"create","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T11:45:07.22407-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":6}
+{"ts":"2026-05-02T11:45:07.400356-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:45:07.57815-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:07.746801-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:45:07.917351-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:08.083502-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:08.238557-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:08.396252-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:08.564232-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:08.746155-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:08.91131-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:45:09.091808-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:09.247946-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:09.422179-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:09.579446-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:09.738991-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:09.917301-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":6}
+{"ts":"2026-05-02T11:45:10.085729-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:10.259308-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:45:10.453285-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:10.619051-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:10.783549-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:45:10.959493-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:45:11.135706-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:13.938194-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:45:27.001452-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:27.189235-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:45:27.370019-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:27.546468-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:45:27.716234-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:27.898908-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:28.077596-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:28.23961-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:28.4109-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:28.584306-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:28.727857-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:28.875674-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:29.025386-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:29.169543-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:29.323673-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:29.471122-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:29.616557-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:29.772761-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:29.919646-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:30.065082-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:30.205256-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:30.364634-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:45:30.530198-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:30.696268-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:45:37.433971-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:37.619764-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:40.78582-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:45:40.964429-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:00.34975-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":7}
+{"ts":"2026-05-02T11:46:00.57705-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":6}
+{"ts":"2026-05-02T11:46:00.7315-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:00.918905-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":13}
+{"ts":"2026-05-02T11:46:01.180563-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:01.401379-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:01.617764-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:01.84053-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:02.057323-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:02.278953-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:02.508622-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:02.749546-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:06.691922-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:06.952837-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:07.197943-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:07.464184-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:07.723394-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:07.965632-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:08.204408-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:08.447411-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:08.669575-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:08.903317-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:09.143444-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:09.375572-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:12.830854-07:00","cmd":"create","flags":{"description":"Phase 0: Core materialization gate","labels":"lane:p0-critical-path,task_id:p0-003","priority":"P0","type":"epic"},"session":"ses_c4bf1f","ok":true,"dur_ms":386}
+{"ts":"2026-05-02T11:46:17.249587-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:17.502505-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:17.68657-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":4}
+{"ts":"2026-05-02T11:46:17.871933-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:18.106652-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:46:18.310798-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:18.52801-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:18.769924-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:19.049372-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:19.263109-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:19.487361-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:19.687686-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:19.912223-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:20.132341-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:20.384166-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:20.620733-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":5}
+{"ts":"2026-05-02T11:46:20.857741-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:21.083569-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:21.309974-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:21.548936-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:21.80419-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:22.085651-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:22.353507-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:46:22.641238-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:22.885294-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:25.711825-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:29.386026-07:00","cmd":"list","session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:32.078686-07:00","cmd":"close","flags":{"reason":"bootstrap test cleanup"},"session":"ses_c4bf1f","ok":true,"dur_ms":230}
+{"ts":"2026-05-02T11:46:34.647198-07:00","cmd":"list","session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:37.018817-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:37.274448-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:46:37.48254-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:46:37.701803-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:46:37.951415-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:38.219651-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:38.490554-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":5}
+{"ts":"2026-05-02T11:46:38.745171-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:39.017826-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:39.224978-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:39.431081-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:39.620606-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:39.854317-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:40.089207-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:40.321188-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:40.629413-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:40.852522-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:46:41.089254-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:41.316801-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:41.568066-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:41.80796-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:42.042791-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:46:42.284066-07:00","cmd":"list","flags":{"json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:46:42.540424-07:00","cmd":"create","ok":false,"dur_ms":2,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:46:45.563933-07:00","cmd":"list","ok":false,"dur_ms":0,"err":"flag needs an argument: --closed"}
+{"ts":"2026-05-02T11:46:47.855722-07:00","cmd":"list","flags":{"all":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:00.47391-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":9}
+{"ts":"2026-05-02T11:47:03.676159-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:05.681238-07:00","cmd":"","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:08.85038-07:00","cmd":"delete","session":"ses_c4bf1f","ok":true,"dur_ms":223}
+{"ts":"2026-05-02T11:47:11.709492-07:00","cmd":"list","flags":{"all":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:14.906068-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":4}
+{"ts":"2026-05-02T11:47:15.171903-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:15.434673-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:15.644802-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:15.853842-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:16.073557-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:16.301783-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:16.549552-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:16.855181-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:17.093529-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:17.319836-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:17.572367-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:17.827838-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:18.07563-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:18.301729-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:18.530811-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:18.776585-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:18.988647-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:19.228783-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:19.450489-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:19.712014-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:19.986855-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:20.306553-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":4}
+{"ts":"2026-05-02T11:47:20.581678-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:23.546875-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:27.311841-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:27.603517-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:27.875699-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:32.452213-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:32.724042-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":7}
+{"ts":"2026-05-02T11:47:35.524928-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":4}
+{"ts":"2026-05-02T11:47:35.794342-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:36.05967-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:36.289189-07:00","cmd":"create","ok":false,"dur_ms":7,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:36.525373-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:36.742259-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:36.959398-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:37.194338-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:37.416659-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:37.630609-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:37.837138-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:38.039466-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:38.279561-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:38.516006-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:38.701821-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:38.93569-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:39.186346-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:39.494321-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:39.754745-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:40.001391-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:40.289213-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:40.524064-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:40.746505-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:40.969303-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:44.133024-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:44.370376-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:44.599676-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:44.809337-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:45.017872-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:47:45.245985-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:45.507963-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:45.748421-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:45.98655-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":6}
+{"ts":"2026-05-02T11:47:46.227935-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:46.46801-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:46.705402-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:46.878466-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:47.09276-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:47.289157-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:47.521756-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:47.744235-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:47.975582-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:48.211596-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:48.439893-07:00","cmd":"create","ok":false,"dur_ms":2,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:47:48.639018-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:47:48.860606-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:47:49.12888-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:47:49.377299-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:03.708572-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":12}
+{"ts":"2026-05-02T11:48:09.40119-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:48:09.597055-07:00","cmd":"create","ok":false,"dur_ms":1,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:48:09.794253-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:10.03419-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:48:10.332168-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:10.524293-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:10.738926-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:10.933189-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:11.145362-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:48:11.373048-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:11.587537-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:11.807072-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:12.043633-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:12.252376-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:12.470863-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":5}
+{"ts":"2026-05-02T11:48:12.697449-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:12.910832-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:13.134161-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:13.383242-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:13.62953-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:13.878601-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:14.115282-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:48:14.3463-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:14.573304-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:21.931024-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:48:22.156044-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:48:22.445389-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":5}
+{"ts":"2026-05-02T11:48:22.730008-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:48:23.026295-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:23.31764-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:23.530784-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:23.727009-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:23.934582-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:24.140931-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:24.344016-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:24.586109-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:24.819188-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:25.053572-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:25.280076-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:25.512988-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:25.736575-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:25.932662-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:26.160808-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:26.379492-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:26.611008-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:26.855644-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type epic"}
+{"ts":"2026-05-02T11:48:27.058074-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:27.281786-07:00","cmd":"create","ok":false,"dur_ms":0,"err":"unknown flag: --type task"}
+{"ts":"2026-05-02T11:48:36.014785-07:00","cmd":"create","session":"ses_c4bf1f","ok":false,"dur_ms":7,"err":"title too short (12 chars, need 15) - e.g. 'Fix login timeout' not 'Fix bug'"}
+{"ts":"2026-05-02T11:48:47.023203-07:00","cmd":"create","flags":{"description":"Phase 0 test","labels":"lane:p0-critical-path,task_id:p0-003","priority":"P0","type":"epic"},"session":"ses_c4bf1f","ok":true,"dur_ms":326}
+{"ts":"2026-05-02T11:48:50.260377-07:00","cmd":"delete","session":"ses_c4bf1f","ok":true,"dur_ms":193}
+{"ts":"2026-05-02T11:48:53.139407-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:53.343299-07:00","cmd":"create","flags":{"description":"Phase 0: Core materialization gate, media primitives, execution foundation.\n\nAcceptance Criteria:\n  - Materialization gate enforcement is complete\n  - Media primitive types are defined and tested\n  - Execution foundation supports zero-copy path\n  - MediaCore tests pass (55/55)\n  - Governance validators pass or have known tracked debt\n\nProof:\n  - Docs/proofs/p0-003-polytropos-phase0-implementation.md\n  - Docs/proofs/p0-003-test-results.md","labels":"lane:p0-critical-path,task_id:p0-003","priority":"P0","type":"epic"},"session":"ses_c4bf1f","ok":true,"dur_ms":287}
+{"ts":"2026-05-02T11:48:53.779884-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:53.96768-07:00","cmd":"create","flags":{"description":"Unify under anigmad with warm subprocess pooling for parallel execution.\n\nAcceptance Criteria:\n  - anigmad subprocess pool lifecycle is implemented\n  - worker lease checkout/checkin is tested\n  - crashed workers are detected and recycled or retired\n  - shutdown reaps child processes deterministically\n  - governance validators pass\n\nProof:\n  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md","labels":"lane:daemon-runtime-isolation,task_id:p0-004","priority":"P0","type":"epic"},"session":"ses_c4bf1f","ok":true,"dur_ms":306}
+{"ts":"2026-05-02T11:48:54.437154-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":7}
+{"ts":"2026-05-02T11:48:54.628759-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - ProcessPool\u003cW\u003e generic pool manager implemented\n  - SubprocessWorker protocol defined\n  - WorkerInfo and WorkerState tracking implemented\n  - PoolConfiguration and PoolMetrics support complete\n  - Per-worker-type pools functional\n\nProof:\n  - anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift\n  - anigma/Packages/SubprocessPooling/Tests/SubprocessManagerTests.swift","labels":"lane:daemon-runtime-isolation,parent:p0-004,task_id:td-a84da2","priority":"P0","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":359}
+{"ts":"2026-05-02T11:48:55.149542-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:55.406103-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - HarmoniaV2CLI commands ported to AnigmaDaemon/CLI.swift\n  - CLI integration preserves command intent\n  - HarmoniaV2CLIKernel provides testable isolation\n  - All legacy CLI functionality consolidated\n\nProof:\n  - anigma/Packages/AnigmaDaemon/CLI.swift\n  - anigma/Package.swift","labels":"lane:daemon-runtime-isolation,parent:p0-004,task_id:td-80575e","priority":"P0","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":299}
+{"ts":"2026-05-02T11:48:55.874531-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:56.04011-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - MLWorkerPool with round-robin workload balancing\n  - UMABufferPool for zero-copy tensor data transfer\n  - ModelCache for GPU model caching and reuse\n  - Multi-GPU support with per-GPU worker pools\n  - MLPoolMetrics for observability\n\nProof:\n  - anigma/Packages/SubprocessPooling/Sources/MLWorker.swift\n  - anigma/Packages/SubprocessPooling/Tests/MLWorkerPoolIntegrationTests.swift","labels":"lane:daemon-runtime-isolation,parent:p0-004,task_id:td-bfe7a3","priority":"P0","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":302}
+{"ts":"2026-05-02T11:48:56.509931-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:56.710254-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - MCPWorkerPool for JSON-RPC communication\n  - UnixDomainSocketIPC for low-latency IPC\n  - Streaming MCP request handling in SubprocessManager\n  - MCPPoolMetrics for pool observability\n  - JSON-RPC request/response structures defined\n\nProof:\n  - anigma/Packages/SubprocessPooling/Sources/MCPWorker.swift\n  - anigma/Packages/SubprocessPooling/Sources/IPC/UnixDomainSocketIPC.swift\n  - anigma/Packages/SubprocessPooling/Tests/MCPWorkerIntegrationTests.swift","labels":"lane:daemon-runtime-isolation,parent:p0-004,task_id:td-0dfb09","priority":"P0","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":335}
+{"ts":"2026-05-02T11:48:57.221193-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:48:57.408476-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - PDFSidecarWorker for isolated PDF processing\n  - BenchmarkWorker for performance testing\n  - On-demand spawning with macOS sandbox support\n  - Per-request subprocess isolation\n\nProof:\n  - anigma/Packages/SubprocessPooling/Sources/PDFSidecarWorker.swift\n  - anigma/Packages/SubprocessPooling/Sources/BenchmarkWorker.swift\n  - anigma/Packages/SubprocessPooling/Tests/Phase5OnDemandSubprocessTests.swift","labels":"lane:daemon-runtime-isolation,parent:p0-004,task_id:td-73aea8","priority":"P0","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":309}
+{"ts":"2026-05-02T11:48:57.911412-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:58.112452-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - Architectural decision: AnigmaGeminiBridge eliminated\n  - Unified LLM provider framework implemented (6.1)\n  - All provider implementations complete (6.2-6.6)\n  - Daemon HTTP endpoints for LLM routing (6.7)\n  - Security and rate limiting implemented (6.8)\n  - Migration and deprecation complete (6.9)\n  - AnigmaGeminiBridge removed from Package.swift\n\nProof:\n  - Docs/td/TD_PHASE6_UPDATE.md\n  - anigma/Docs/LLM/Retirement/AnigmaGeminiBridge_Retirement_Summary.md\n  - anigma/Docs/LLM/Migration/GeminiBridge_Migration_Guide.md\n  - anigma/Packages/SubprocessPooling/Sources/LLMProviders/","labels":"lane:daemon-runtime-isolation,parent:p0-004,task_id:td-ce4439","priority":"P0","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":480}
+{"ts":"2026-05-02T11:48:58.75447-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:48:58.934091-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - validate_tiers.py exits with code 0\n  - SecurityEventsManager correctly classified as TIER_2\n  - SubprocessPooling added to TIER_2\n  - AnigmaDaemonCore and AnigmaDaemon added to TIER_3\n  - Package.swift dependencies corrected\n  - All three governance validators pass\n\nProof:\n  - Docs/proofs/p1-validate-tiers-green-gate.md","labels":"lane:architecture-governance,task_id:p1-validate-tiers-green-gate","priority":"P1","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":299}
+{"ts":"2026-05-02T11:48:59.501288-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:48:59.865067-07:00","cmd":"create","flags":{"description":"\nAcceptance Criteria:\n  - No 0-byte artifact files in Docs/schemas, Docs/manifests, Docs/diagrams\n  - All JSON schemas parse as valid JSON\n  - All YAML manifests parse as valid YAML\n  - All Mermaid diagrams have valid syntax\n  - All Graphviz diagrams have valid DOT syntax\n  - Structurizr DSL workspace is valid\n  - Proof document records validation\n\nProof:\n  - Docs/proofs/documentation-artifacts-completion.md","labels":"lane:documentation-infrastructure,task_id:p1-documentation-artifacts-completion","priority":"P1","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":398}
+{"ts":"2026-05-02T11:49:00.42262-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:49:00.601454-07:00","cmd":"create","flags":{"description":"After TD database reset on 2026-05-02, establish Docs/ as the durable\nsource of truth and TD as the local execution queue. Create bootstrap\nand validation scripts to make TD reconstructible from Docs/.\n\n\nAcceptance Criteria:\n  - TD source-of-truth doctrine exists and is canonical\n  - TD task registry exists with active lanes defined\n  - Bootstrap script emits reproducible td commands from registry\n  - Sync validator passes on registry and TD state\n  - Proof artifact exists documenting the recovery\n  - Existing architecture validators still pass\n  - No runtime source changes","labels":"lane:documentation-infrastructure,task_id:p1-td-source-of-truth-recovery","priority":"P1","type":"epic"},"session":"ses_c4bf1f","ok":true,"dur_ms":521}
+{"ts":"2026-05-02T11:49:01.321062-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:49:01.583489-07:00","cmd":"create","flags":{"description":"Remove sensitive data, large binaries, and generated artifacts from\nGit history before public GitHub publication.\n\n\nAcceptance Criteria:\n  - Generated artifacts are removed from Git history\n  - Vendored binaries with unclear provenance are excluded\n  - No blobs over 100MB remain in history\n  - Remote push succeeds without errors\n  - Repository builds cleanly after cleanup","labels":"lane:publication-cleanup,task_id:p1-public-history-excision","priority":"P1","type":"task"},"session":"ses_c4bf1f","ok":true,"dur_ms":281}
+{"ts":"2026-05-02T11:49:14.383845-07:00","cmd":"list","flags":{"all":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:17.371744-07:00","cmd":"show","session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:49:20.162061-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:20.308184-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:20.452771-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:20.599415-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:20.74538-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:20.896234-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:21.050021-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:21.202269-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:21.350159-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:21.503237-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:21.655764-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:21.807549-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:34.908035-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:35.054587-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:35.207947-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T11:49:35.368335-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:35.513675-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T11:49:35.666386-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:35.817862-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:35.968007-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:36.109091-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:36.254597-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:36.399739-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T11:49:36.544951-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T12:05:40.797913-07:00","cmd":"list","ok":false,"dur_ms":1,"err":"unknown flag: --quiet"}
+{"ts":"2026-05-02T12:05:47.733432-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T12:05:47.969976-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T12:05:48.215425-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T12:05:48.466437-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":6}
+{"ts":"2026-05-02T12:05:48.74822-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T12:05:49.018122-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T12:05:49.299906-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":6}
+{"ts":"2026-05-02T12:05:49.569915-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":2}
+{"ts":"2026-05-02T12:05:49.77337-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T12:05:49.981393-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T12:05:50.222942-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":1}
+{"ts":"2026-05-02T12:05:50.489186-07:00","cmd":"list","flags":{"all":"true","json":"true"},"session":"ses_c4bf1f","ok":true,"dur_ms":3}
+{"ts":"2026-05-02T12:43:19.298665-07:00","cmd":"","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T12:49:33.420442-07:00","cmd":"","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T12:58:32.635919-07:00","cmd":"","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T12:58:41.829443-07:00","cmd":"","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T12:58:59.920608-07:00","cmd":"","ok":true,"dur_ms":0}
+{"ts":"2026-05-02T13:06:10.20373-07:00","cmd":"","ok":true,"dur_ms":0}

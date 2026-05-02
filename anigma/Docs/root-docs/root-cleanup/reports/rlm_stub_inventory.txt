@@ -1,0 +1,10 @@
+anigma/Sources/RLMModule/RLMGovernor.swift:    /// STUB_TRACK: rlm-tool-implementations – Some tool operations may have partial/stub implementations
+anigma/Sources/RLMModule/RLMGovernor.swift:        // STUB_TRACK: rlm-subtask-result – Actual subtask result retrieval not implemented
+anigma/Sources/RLMModule/RLMGovernor.swift:        // STUB_TRACK: rlm-artifact-synthesis – Artifact synthesis not implemented
+anigma/Sources/RLMModule/RLMGovernor.swift:        // STUB_TRACK: rlm-provenance-generation – Provenance generation not implemented
+anigma/Sources/RLMModule/ContextEnvironment.swift:// STUB_TRACK: rlm-claim-verification – RLM claim verification not implemented
+anigma/Sources/RLMModule/ContextEnvironment.swift:// STUB_TRACK: rlm-consistency-checking – Consistency checking not implemented
+anigma/Sources/RLMModule/ContextEnvironment.swift:// STUB_TRACK: rlm-artifact-synthesis – Artifact synthesis not implemented
+anigma/Sources/RLMModule/ContextEnvironment.swift:// STUB_TRACK: rlm-provenance-generation – Provenance chain generation not implemented
+anigma/Sources/RLMModule/ContextEnvironment.swift:// STUB_TRACK: rlm-evidence-recording – Evidence recording requires authority
+anigma/Sources/RLMModule/ContextEnvironment.swift:// STUB_TRACK: rlm-evidence-recording-hash – Evidence hash storage not fully implemented

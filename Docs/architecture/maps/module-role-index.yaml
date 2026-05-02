@@ -1,0 +1,787 @@
+# Module Role Index
+# Machine-readable catalog of Anigma modules, their responsibilities, tiers, and constraints
+# Used by: agents for context loading, governance validators, documentation generators
+
+version: "1.0.0"
+last_updated: "2026-05-02"
+schema: "Docs/schemas/module-role-index.schema.json"
+
+modules:
+
+  # ============================================================================
+  # TIER 1: CONSTITUTIONAL / CONTRACT LAYER
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - module: "ContractsCore"
+    tier: "Tier 1"
+    responsibility: "Type-safe service contracts and portable interfaces. Defines what services exist and how they communicate without implementation."
+    allowed_dependencies: []
+    forbidden_dependencies: 
+      - "Tier 2"  # Must not import any Tier 2 modules
+      - "Tier 3"  # Must not import any Tier 3 modules
+    key_files: []
+    tests: []
+    related_docs:
+      - "Docs/ANIGMA_ARCHITECTURE_DIAGRAM.md"
+      - "Docs/governance/TIER_GOVERNANCE.md"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+
+  # ============================================================================
+  # TIER 2: SUBSTRATE LAYER
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - module: "MediaCore"
+    tier: "Tier 2"
+    responsibility: "Media processing substrate with zero-copy materialization enforcement. Authoritative source for image, PDF, video, audio processing with SurfaceAuthority gates and MaterializationGate protection."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "VectorOpsKit"
+    forbidden_dependencies:
+      - "AnigmaAppMac"  # Tier 3 must not depend on Tier 2
+      - "AnigmaCLI"    # Tier 3 must not depend on Tier 2
+      - "AnigmaDaemon" # Tier 3 must not depend on Tier 2
+    key_files:
+      - "Sources/MediaCore/Governance/SurfaceAuthority.swift"
+      - "Sources/MediaCore/Governance/MaterializationGate.swift"
+      - "Sources/MediaCore/Governance/MediaTypeAuthority.swift"
+      - "Sources/MediaCore/Governance/MediaMemoryAuthority.swift"
+      - "Sources/MediaCore/Governance/CaptureAuthority.swift"
+      - "Sources/MediaCore/Governance/PacketStreamAuthority.swift"
+      - "Sources/MediaCore/Governance/AudioBufferAuthority.swift"
+      - "Sources/MediaCore/Governance/CaptureAcceptanceGate.swift"
+      - "Sources/MediaCore/Substrate/SaturationSubstrate.swift"
+      - "Sources/MediaCore/Orchestrator/MediaSubstrateOrchestrator.swift"
+      - "Sources/MediaCore/Executors/*"
+      - "Sources/MediaCore/Backends/*"
+    tests:
+      - "Tests/MediaCoreTests/*"
+    related_docs:
+      - "Docs/ANIGMA_ARCHITECTURE_DIAGRAM.md"
+      - "Docs/diagrams/likec4/anigma.c4"
+      - "Docs/architecture/maps/logic-flows/media-materialization-flow.mmd"
+    related_tasks:
+      - "p0-004"
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+      - "swift-lint-format"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+
+  - module: "DocumentIRKit"
+    tier: "Tier 2"
+    responsibility: "Document model and intermediate representation for structured documents (PDF, OOXML). Portable types for document structure independent of rendering backend."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+    forbidden_dependencies:
+      - "RendererKit"  # Avoid circular dependency; use contracts
+      - "MediaCore"   # Both Tier 2, but avoid tight coupling
+    key_files:
+      - "Sources/DocumentIRKit/*"
+    tests:
+      - "Tests/DocumentIRKitTests/*"
+    related_docs:
+      - "Docs/ANIGMA_ARCHITECTURE_DIAGRAM.md"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "DocumentRenderKit"
+    tier: "Tier 2"
+    responsibility: "Document rendering pipeline. Converts DocumentIR to rendered output using platform-specific backends (CPDFium, Core Graphics, etc.)."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "DocumentIRKit"
+      - "CoreUtilities"
+    forbidden_dependencies:
+      - "MediaCore"  # Use contracts for media surface requests
+    key_files:
+      - "Sources/DocumentRenderKit/*"
+    tests:
+      - "Tests/DocumentRenderKitTests/*"
+    related_docs:
+      - "Docs/ANIGMA_ARCHITECTURE_DIAGRAM.md"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "SceneGraphCapsule"
+    tier: "Tier 2"
+    responsibility: "Scene graph representation and manipulation for rendering. Geometric layout, styling, and unified rendering abstraction."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "GeometryCapsule"
+      - "CoreUtilities"
+    forbidden_dependencies:
+      - "RendererKit"  # Renderer depends on SceneGraph, not vice versa
+    key_files:
+      - "Sources/SceneGraphCapsule/*"
+    tests:
+      - "Tests/SceneGraphCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "RendererKit"
+    tier: "Tier 2"
+    responsibility: "Platform-agnostic rendering engine. Uses SceneGraphCapsule for scene representation and DocumentRenderKit for document rendering."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "SceneGraphCapsule"
+      - "DocumentRenderKit"
+      - "GeometryCapsule"
+      - "GlyphAtlasCapsule"
+      - "VectorOpsKit"
+    forbidden_dependencies:
+      - "AnigmaAppMac"  # Tier 3 -> Tier 2 only
+      - "MediaCore"     # Use contracts for media surface requests
+    key_files:
+      - "Sources/RendererKit/*"
+    tests:
+      - "Tests/RendererKitTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "GeometryCapsule"
+    tier: "Tier 2"
+    responsibility: "Geometric primitives, transformations, and spatial calculations. Foundation for layout and rendering."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "VectorOpsKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/GeometryCapsule/*"
+    tests:
+      - "Tests/GeometryCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "VectorOpsKit"
+    tier: "Tier 2"
+    responsibility: "Vector mathematics and SIMD-accelerated operations. Core math utilities for geometry, rendering, and ML."
+    allowed_dependencies:
+      - "ContractsCore"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/VectorOpsKit/*"
+    tests:
+      - "Tests/VectorOpsKitTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "minimal"
+
+  - module: "GlyphAtlasCapsule"
+    tier: "Tier 2"
+    responsibility: "Glyph/character caching and rendering. Manages font glyphs as texture atlases for efficient rendering."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "VectorOpsKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/GlyphAtlasCapsule/*"
+    tests:
+      - "Tests/GlyphAtlasCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "CoreUtilities"
+    tier: "Tier 2"
+    responsibility: "Shared utilities and helpers used across the codebase. Must have minimal dependencies to avoid tier pollution."
+    allowed_dependencies: []
+    forbidden_dependencies:
+      - "MediaCore"
+      - "RendererKit"
+      - "SceneGraphCapsule"
+      - "any Tier 3 module"
+    key_files:
+      - "Sources/CoreUtilities/*"
+    tests:
+      - "Tests/CoreUtilitiesTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "minimal"
+
+  - module: "ObservabilityKit"
+    tier: "Tier 2"
+    responsibility: "Telemetry, metrics, tracing, and logging infrastructure. Cross-cutting concern for monitoring and debugging."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/ObservabilityKit/*"
+    tests:
+      - "Tests/ObservabilityKitTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "eager"
+
+  - module: "SyntaxCapsule"
+    tier: "Tier 2"
+    responsibility: "Syntax highlighting and text parsing for code documentation and display."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/SyntaxCapsule/*"
+    tests:
+      - "Tests/SyntaxCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "AudioRenderCapsule"
+    tier: "Tier 2"
+    responsibility: "Audio processing and rendering substrate. Real-time audio graph and effects processing."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "VectorOpsKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/AudioRenderCapsule/*"
+    tests:
+      - "Tests/AudioRenderCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "VideoRenderCapsule"
+    tier: "Tier 2"
+    responsibility: "Video processing and rendering. Frame-level operations, encoding, and decoding."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "MediaCore"
+      - "CoreUtilities"
+      - "VectorOpsKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/VideoRenderCapsule/*"
+    tests:
+      - "Tests/VideoRenderCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "MarkdownCapsule"
+    tier: "Tier 2"
+    responsibility: "Markdown parsing, rendering, and AST manipulation. Used for documentation and markdown-based content."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "SyntaxCapsule"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/MarkdownCapsule/*"
+    tests:
+      - "Tests/MarkdownCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "OOXMLKit"
+    tier: "Tier 2"
+    responsibility: "Office Open XML (DOCX, XLSX, PPTX) parsing and manipulation."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/OOXMLKit/*"
+    tests:
+      - "Tests/OOXMLKitTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "ImageDecodeCapsule"
+    tier: "Tier 2"
+    responsibility: "Image decoding and processing. Platform-agnostic image I/O with format-specific backends."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "MediaCore"
+      - "CoreUtilities"
+      - "VectorOpsKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/ImageDecodeCapsule/*"
+    tests:
+      - "Tests/ImageDecodeCapsuleTests/*"
+    related_docs:
+      - "Docs/architecture/maps/logic-flows/media-materialization-flow.mmd"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "VectorStoreCapsule"
+    tier: "Tier 2"
+    responsibility: "Vector database integration for semantic search and RAG. Embedding storage, index management, and query execution."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "VectorOpsKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/VectorStoreCapsule/*"
+    tests:
+      - "Tests/VectorStoreCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "MediaContainerCapsule"
+    tier: "Tier 2"
+    responsibility: "Container formats for media assets. Manages media packaging, compression, and container-level metadata."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "MediaCore"
+      - "CoreUtilities"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/MediaContainerCapsule/*"
+    tests:
+      - "Tests/MediaContainerCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "VizAggregationCapsule"
+    tier: "Tier 2"
+    responsibility: "Visualization aggregation and composition. Combines multiple rendered outputs into unified visualizations."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "RendererKit"
+      - "SceneGraphCapsule"
+      - "CoreUtilities"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/VizAggregationCapsule/*"
+    tests:
+      - "Tests/VizAggregationCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "TileCacheCapsule"
+    tier: "Tier 2"
+    responsibility: "Tile-based caching for large documents and high-resolution rendering. Manages tile generation, caching, and retrieval for efficient rendering of large content."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "RendererKit"
+      - "CoreUtilities"
+      - "GeometryCapsule"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/TileCacheCapsule/*"
+    tests:
+      - "Tests/TileCacheCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  # ============================================================================
+  # TIER 3: FEATURE / DAEMON LAYER
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - module: "AnigmaAppMac"
+    tier: "Tier 3"
+    responsibility: "Main macOS GUI application. Entry point for user interaction, document management, and workflow execution."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "MediaCore"
+      - "RendererKit"
+      - "SceneGraphCapsule"
+      - "DocumentIRKit"
+      - "DocumentRenderKit"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+      - "AnigmaCLI"
+      - "AnigmaDaemonControl"
+      - "HarmoniaModule"
+      - "ContextumModule"
+      - "RLMModule"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/AnigmaAppMac/*"
+    tests:
+      - "Tests/AnigmaAppMacTests/*"
+    related_docs:
+      - "Docs/CLI_Client_Architecture.md"
+      - "Docs/diagrams/likec4/anigma.c4"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+      - "swift-lint-format"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+
+  - module: "AnigmaCLI"
+    tier: "Tier 3"
+    responsibility: "Command-line interface for Anigma automation. Headless mode, scriptable operations, and CI/CD integration."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "MediaCore"
+      - "RendererKit"
+      - "CoreUtilities"
+      - "AnigmaDaemonControl"
+      - "ObservabilityKit"
+    forbidden_dependencies:
+      - "AnigmaAppMac"  # CLI should not depend on GUI
+    key_files:
+      - "Sources/AnigmaCLI/*"
+    tests:
+      - "Tests/AnigmaCLITests/*"
+    related_docs:
+      - "Docs/CLI_Client_Architecture.md"
+      - "Docs/cli/"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+      - "swift-lint-format"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+
+  - module: "AnigmaDaemon"
+    tier: "Tier 3"
+    responsibility: "Background daemon for long-running tasks, subprocess pooling, and resource management. Manages ML worker pools, MCP workers, and benchmark workers."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "MediaCore"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+      - "AnigmaDaemonCore"
+      - "SubprocessPooling"
+      - "AnigmaMCPModule"
+    forbidden_dependencies:
+      - "AnigmaAppMac"  # Daemon should not depend on GUI
+      - "AnigmaCLI"    # Daemon should not depend on CLI
+    key_files:
+      - "Sources/AnigmaDaemon/*"
+      - "Sources/AnigmaDaemonSimple/*"
+      - "Sources/AnigmaDaemonCore/*"
+      - "Sources/RuntimeOrchestrator/*"
+    tests:
+      - "Tests/AnigmaDaemonTests/*"
+    related_docs:
+      - "Docs/CLI_DAEMON_INTEGRATION_SUMMARY.md"
+      - "Docs/CLI_Daemon_Protocol_Specification.md"
+      - "Docs/diagrams/likec4/anigma.c4"
+      - "Docs/architecture/maps/logic-flows/subprocess-pooling-planned-flow.mmd"
+    related_tasks:
+      - "p0-004"
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+      - "swift-lint-format"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+
+  - module: "SubprocessPooling"
+    tier: "Tier 3"
+    responsibility: "Generic warm pool management for parallel execution. Provides ProcessPool<W> for managing pools of worker subprocesses with lifecycle management, crash detection, and deterministic shutdown."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+    forbidden_dependencies:
+      - "AnigmaAppMac"  # Pool should be reusable, not GUI-dependent
+    key_files:
+      - "Sources/SubprocessPooling/*"  # Note: May be under AnigmaDaemon or separate
+    tests:
+      - "Tests/SubprocessPoolingTests/*"
+    related_docs:
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+      - "Docs/architecture/maps/logic-flows/subprocess-pooling-planned-flow.mmd"
+    related_tasks:
+      - "p0-004"
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"
+
+  - module: "AnigmaMCPModule"
+    tier: "Tier 3"
+    responsibility: "Model Context Protocol integration. Provides MCP server and client capabilities for Anigma."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+      - "HarmoniaModule"
+      - "ContextumModule"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/AnigmaMCPModule/*"
+      - "Sources/AnigmaMCPExecutable/*"
+    tests:
+      - "Tests/AnigmaMCPTests/*"
+    related_docs:
+      - "Docs/diagrams/likec4/anigma.c4"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "AnigmaWebServer"
+    tier: "Tier 3"
+    responsibility: "HTTP/WebSocket server for Anigma services. Provides REST and WebSocket APIs for remote clients."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+      - "HTTPServerCapsule"
+    forbidden_dependencies:
+      - "AnigmaAppMac"  # Server should not depend on GUI
+    key_files:
+      - "Sources/AnigmaWebServer/*"
+    tests:
+      - "Tests/AnigmaWebServerTests/*"
+    related_docs:
+      - "Docs/CLI_Daemon_Protocol_Specification.md"
+      - "Docs/diagrams/likec4/anigma.c4"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "HTTPServerCapsule"
+    tier: "Tier 3"
+    responsibility: "HTTP server implementation for Anigma web services."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/HTTPServerCapsule/*"
+    tests:
+      - "Tests/HTTPServerCapsuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "HarmoniaModule"
+    tier: "Tier 3"
+    responsibility: "LLM integration, memory management, and RAG orchestration. Manages LLM provider connections, prompt engineering, and context management."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "ObservabilityKit"
+      - "VectorStoreCapsule"
+      - "SyntaxCapsule"
+      - "MarkdownCapsule"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/HarmoniaModule/*"
+    tests:
+      - "Tests/HarmoniaModuleTests/*"
+    related_docs:
+      - "Docs/ENHANCED_CATHEDRAL_RECEIPT_SYSTEM.md"
+      - "Docs/Agents/"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "ContextumModule"
+    tier: "Tier 3"
+    responsibility: "Context management and layout engine. Handles document layout, spatial relationships, and contextual understanding for rendering and analysis."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "GeometryCapsule"
+      - "SceneGraphCapsule"
+      - "RendererKit"
+      - "DocumentIRKit"
+      - "DocumentRenderKit"
+      - "ObservabilityKit"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/ContextumModule/*"
+    tests:
+      - "Tests/ContextumModuleTests/*"
+    related_docs:
+      - "Docs/LAYOUT_ENGINE_CAPSULE_IMPLEMENTATION_PLAN.md"
+      - "Docs/LAYOUT_ENGINE_INTEGRATION_ASSESSMENT.md"
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "RLMModule"
+    tier: "Tier 3"
+    responsibility: "Relationship and dependency management. Tracks inter-document relationships and dependency graphs."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/RLMModule/*"
+    tests:
+      - "Tests/RLMModuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  - module: "ModelRegistryModule"
+    tier: "Tier 3"
+    responsibility: "Model registry and management. Catalogs available ML models, their capabilities, and lifecycle management."
+    allowed_dependencies:
+      - "ContractsCore"
+      - "CoreUtilities"
+      - "VectorStoreCapsule"
+    forbidden_dependencies: []
+    key_files:
+      - "Sources/ModelRegistryModule/*"
+    tests:
+      - "Tests/ModelRegistryModuleTests/*"
+    related_docs: []
+    related_tasks: []
+    verification_profiles:
+      - "governance"
+      - "swift-runtime"
+    gc_policy: "compact_on_complete"
+    context_load_policy: "lazy"
+
+  # ============================================================================
+  # GOVERNANCE / TOOLING MODULES (Not Tiered - Support Infrastructure)
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - module: "Governance Validators"
+    tier: "Governance"
+    responsibility: "Python-based architecture governance validators.Enforce tier boundaries, detect cycles, validate exported imports, and check YAML/JSON manifests."
+    allowed_dependencies: []
+    forbidden_dependencies: []
+    key_files:
+      - "Scripts/validate_tiers.py"
+      - "Scripts/validate_no_cycles.py"
+      - "Scripts/validate_exported_imports.py"
+      - "Scripts/validate_yaml_manifests.py"
+      - "Scripts/validate_verification_profiles.py"
+      - "Scripts/validate_td_folder_system.py"
+      - "Scripts/validate_td_docs_sync.py"
+      - "Scripts/td_bootstrap_from_docs.py"
+      - "Scripts/generate_td_descriptors.py"
+      - "Scripts/td_context_gc.py"
+    tests:
+      - "Tests/GovernanceHarness/*"
+    related_docs:
+      - "Docs/governance/TIER_GOVERNANCE.md"
+      - "Docs/governance/DEPENDENCY_GOVERNANCE.md"
+      - "Docs/governance/VERIFICATION_PROFILES.md"
+      - "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+      - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+      - "Docs/diagrams/likec4/anigma.c4"
+      - "Docs/architecture/maps/logic-flows/td-bootstrap-flow.mmd"
+      - "Docs/architecture/maps/logic-flows/public-history-excision-flow.mmd"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification_profiles:
+      - "governance"
+      - "docs-td"
+      - "docs-artifacts"
+      - "architecture-diagrams"
+    gc_policy: "retain_all"
+    context_load_policy: "eager"

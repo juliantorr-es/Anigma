@@ -1,0 +1,46 @@
+{
+  "storage" : "model.espresso.weights",
+  "analyses" : {
+
+  },
+  "properties" : {
+
+  },
+  "format_version" : 200,
+  "metadata_in_weights" : [
+
+  ],
+  "layers" : [
+    {
+      "bottom" : "input",
+      "alpha" : 0.5,
+      "operation" : 1,
+      "weights" : {
+
+      },
+      "fused_relu" : 0,
+      "debug_info" : "3",
+      "top" : "3",
+      "type" : "elementwise",
+      "name" : "3",
+      "beta" : 0
+    },
+    {
+      "bottom" : "3",
+      "alpha" : 0.10000000149011612,
+      "operation" : 0,
+      "beta" : 0,
+      "weights" : {
+
+      },
+      "fused_relu" : 0,
+      "debug_info" : "var_6",
+      "top" : "var_6",
+      "type" : "elementwise",
+      "name" : "var_6",
+      "attributes" : {
+        "is_output" : 1
+      }
+    }
+  ]
+}

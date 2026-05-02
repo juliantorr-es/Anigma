@@ -1,0 +1,28 @@
+{
+  "timestamp": "2024-04-10T19:25:02Z",
+  "action": "approve-alt-text-fix",
+  "rendererId": "swiftui-remediation-shell-1",
+  "capability": "write:alt-text",
+  "scope": {
+    "artifact": "scan-2024-04-09",
+    "object": "obj-figure-1"
+  },
+  "policyEvaluation": {
+    "gate": "alt-text-review",
+    "trustMode": "strict",
+    "riskScore": 0.13,
+    "result": "approved"
+  },
+  "provenance": {
+    "dtmVersion": "dtm-0001",
+    "jobId": "remediation-job-5",
+    "triggeringNode": "alt-text-field",
+    "inputs": ["dtm-0001", "projection-remediation-ui:20240410"],
+    "outputs": ["dtm-0001-alt-text"]
+  },
+  "outcome": {
+    "status": "completed",
+    "events": ["dtm-update", "projection-refresh"],
+    "notification": "Alt-text fix persisted."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "action_type": "code_change",
+  "description": "Attempt to refactor without a task ID - INVALID.",
+  "scope": {
+    "files_affected": [
+      "Sources/HarmoniaModule/Security/SomeFile.swift"
+    ],
+    "modules_affected": ["HarmoniaModule"]
+  },
+  "justification": "This justification is missing a task ID, which is a required field according to the schema. (intentionally invalid)",
+  "test_plan": "No tests.",
+  "rollback_plan": "No rollback."
+}

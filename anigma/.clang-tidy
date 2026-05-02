@@ -1,0 +1,38 @@
+---
+Checks: >
+    -*,
+    clang-analyzer-*,
+    cppcoreguidelines-*,
+    performance-*,
+    readability-*,
+    modernize-*,
+    bugprone-*,
+    -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+    -cppcoreguidelines-pro-type-vararg,
+    -cppcoreguidelines-pro-type-union-access,
+    -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+    -cppcoreguidelines-pro-type-const-cast,
+    -cppcoreguidelines-pro-type-reinterpret-cast,
+    -cppcoreguidelines-pro-type-static-cast-downcast,
+    -cppcoreguidelines-avoid-c-arrays,
+    -modernize-use-trailing-return-type,
+    -readability-identifier-length,
+    -readability-magic-numbers
+CheckOptions:
+  - key: cppcoreguidelines-pro-type-member-init.UseAssignment
+    value: '0'
+  - key: cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions
+    value: '1'
+  - key: cppcoreguidelines-special-member-functions.AllowMissingDestructor
+    value: '1'
+  - key: modernize-use-nodiscard.Replacement
+    value: 'Macro'
+  - key: modernize-use-nullptr.NullMacros
+    value: 'NULL'
+  - key: readability-identifier-length.Minimum
+    value: '2'
+  - key: readability-identifier-length.Exceptions
+    value: 'i,j,k,x,y,z'
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*/Native/Shims/include/.*\.h'
+FormatStyle: none

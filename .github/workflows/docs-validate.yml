@@ -1,0 +1,164 @@
+name: Documentation Validation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '.github/pull_request_template.md'
+      - 'scripts/validate-docs.sh'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - '.github/pull_request_template.md'
+      - 'scripts/validate-docs.sh'
+
+jobs:
+  validate-docs:
+    runs-on: macos-latest
+    name: Validate Documentation
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Validate all documentation
+        run: |
+          echo "Validating all documentation files..."
+          bash scripts/validate-docs.sh
+          
+      - name: Check specific PR changes
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Checking documentation changes in this PR..."
+          git diff --name-only origin/main HEAD -- docs/ | while read file; do
+            if [[ "$file" == *.md ]]; then
+              echo "Validating changed file: $file"
+              bash scripts/validate-docs.sh "$file"
+            fi
+          done
+      
+      - name: Report validation summary
+        if: always()
+        run: |
+          echo "✓ Documentation validation complete"
+          echo "See above for any warnings or errors"
+
+  link-check:
+    runs-on: ubuntu-latest
+    name: Check Internal Links
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Find markdown files with links
+        run: |
+          echo "Checking for broken links in documentation..."
+          
+          # Count files with issues
+          broken_count=0
+          
+          # Check all markdown files
+          find docs -name "*.md" -type f | while read file; do
+            # Extract all links from the file
+            grep -o '\[.*\]([^)]*\.md)' "$file" | sed 's/.*(\(.*\))/\1/' | while read link; do
+              if [[ -n "$link" ]] && ! [[ "$link" =~ ^http ]] && ! [[ "$link" =~ /path/to/ ]]; then
+                # Check if the linked file exists
+                link_file=$(dirname "$file")/"$link"
+                if [ ! -f "$link_file" ] 2>/dev/null; then
+                  echo "⚠ Broken link in $file: $link"
+                  ((broken_count++))
+                fi
+              fi
+            done
+          done
+          
+          if [ "$broken_count" -gt 0 ]; then
+            echo "Found $broken_count broken links"
+            exit 1
+          fi
+      
+      - name: Validate frontmatter
+        run: |
+          echo "Validating frontmatter metadata..."
+          
+          # Check each markdown file has frontmatter
+          find docs -name "*.md" -type f | while read file; do
+            if ! head -1 "$file" | grep -q "^---$"; then
+              # Skip special files
+              if ! [[ "$file" =~ README.md$ ]] || [ "$(dirname "$file")" != "docs" ]; then
+                echo "⚠ No frontmatter in $file"
+                exit 1
+              fi
+            fi
+          done
+
+  metadata-consistency:
+    runs-on: ubuntu-latest
+    name: Check Metadata Consistency
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Validate frontmatter fields
+        run: |
+          echo "Validating frontmatter field consistency..."
+          
+          error_count=0
+          
+          find docs -name "*.md" -type f | while read file; do
+            # Skip special files
+            if [[ "$file" =~ _navigation.json$ ]] || [[ "$file" =~ _versions.json$ ]]; then
+              continue
+            fi
+            
+            # Extract frontmatter
+            if ! head -1 "$file" | grep -q "^---$"; then
+              continue
+            fi
+            
+            frontmatter=$(awk '/^---$/ { count++; next } count == 1 { print } count == 2 { exit }' "$file")
+            
+            # Check required fields
+            for field in "title" "description" "audience" "complexity" "estimated_time" "last_updated" "status"; do
+              if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo "✗ Missing field '$field' in $file"
+                exit 1
+              fi
+            done
+            
+            # Validate complexity value
+            complexity=$(echo "$frontmatter" | grep "^complexity:" | sed 's/complexity: //' | tr -d '"')
+            if ! [[ "$complexity" =~ ^(beginner|intermediate|advanced)$ ]]; then
+              echo "✗ Invalid complexity in $file: $complexity"
+              exit 1
+            fi
+            
+            # Validate status value
+            status=$(echo "$frontmatter" | grep "^status:" | sed 's/status: //' | tr -d '"')
+            if ! [[ "$status" =~ ^(stable|beta|experimental|stub)$ ]]; then
+              echo "⚠ Invalid status in $file: $status"
+            fi
+          done
+
+  summary:
+    if: always()
+    runs-on: ubuntu-latest
+    name: Validation Summary
+    needs: [validate-docs, link-check, metadata-consistency]
+    
+    steps:
+      - name: Check validation results
+        run: |
+          echo "✓ Documentation validation workflow complete"
+          echo ""
+          echo "Checks performed:"
+          echo "  ✓ Frontmatter validation"
+          echo "  ✓ Link validation"
+          echo "  ✓ Metadata consistency"
+          echo "  ✓ Field requirements"

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Anigma Installer Post-Install Script
+
+set -e
+
+INSTALL_DIR="$2"
+DEST_PATH="$3"
+
+echo "🚀 Configuring Anigma..."
+
+# Install LaunchAgent
+echo "Installing LaunchAgent..."
+LAUNCH_AGENT_DIR="$HOME/Library/LaunchAgents"
+mkdir -p "$LAUNCH_AGENT_DIR"
+cp "$INSTALL_DIR/LaunchAgents/com.anigma.daemon.plist" "$LAUNCH_AGENT_DIR/"
+
+# Load LaunchAgent
+echo "Loading LaunchAgent..."
+launchctl load "$LAUNCH_AGENT_DIR/com.anigma.daemon.plist"
+
+# Install CLI tools
+echo "Installing CLI tools..."
+CLI_DIR="/usr/local/bin"
+mkdir -p "$CLI_DIR"
+
+# Create symlinks
+ln -sf "/Applications/AnigmaDaemon.app/Contents/MacOS/anigmad" "$CLI_DIR/anigmad"
+ln -sf "$INSTALL_DIR/cli/anigma-cli" "$CLI_DIR/anigma-cli"
+
+# Set permissions
+echo "Setting permissions..."
+chmod +x "$CLI_DIR/anigmad"
+chmod +x "$CLI_DIR/anigma-cli"
+
+# Create Anigma directory in Application Support
+mkdir -p "$HOME/Library/Application Support/Anigma"
+
+echo "✅ Anigma installation completed successfully!"
+echo ""
+echo "To get started:"
+echo "  • GUI App: Open Anigma.app from Applications"
+echo "  • CLI Tool: Run 'anigma-cli --help' in terminal"
+echo "  • Daemon: Automatically started and will run in background"
+echo ""
+echo "To uninstall: Run '/Applications/AnigmaDaemon.app/Contents/MacOS/uninstall'"
+
+exit 0

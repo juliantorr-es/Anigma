@@ -1,0 +1,4 @@
+Toolchain Swift 6.2.1 could not be located in
+/Users/user/Library/Developer/Toolchains/swift-6.2.1-RELEASE.xctoolchain/usr/bin.
+You can try `swiftly uninstall Swift 6.2.1` to uninstall it and then `swiftly
+install Swift 6.2.1` to install it again.

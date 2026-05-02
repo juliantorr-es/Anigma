@@ -1,0 +1,30 @@
+id: p1-validate-tiers-green-gate
+title: Validate Tiers Green Gate
+type: epic
+priority: P1
+status: complete
+lane: architecture-governance
+summary: null
+description: ''
+recommended_worktree: anigma/
+source_docs:
+- Docs/proofs/p1-validate-tiers-green-gate.md
+- tools/governance/scripts/validate_tiers.py
+related_docs: []
+proofs:
+- Docs/proofs/p1-validate-tiers-green-gate.md
+proof_required: []
+expected_proof: []
+tasks: &id001 []
+children: *id001
+acceptance:
+- validate_tiers.py exits with code 0
+- SecurityEventsManager correctly classified as TIER_2
+- SubprocessPooling added to TIER_2
+- AnigmaDaemonCore and AnigmaDaemon added to TIER_3
+- Package.swift dependencies corrected
+- All three governance validators pass
+non_goals: []
+td_labels:
+- lane:architecture-governance
+- type:epic

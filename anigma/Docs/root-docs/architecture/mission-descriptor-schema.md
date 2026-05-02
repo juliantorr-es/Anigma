@@ -1,0 +1,108 @@
+# Design: Pre-Signed Mission Descriptor Schema
+
+## Status: 🏗️ RESEARCH DRAFT
+Defining the binary "Token of Authority" for Saturated Autonomous Missions.
+
+TD is the source of truth for live task status, blockers, dependency order, and review state. The privacy and regulated-decision fields below are canonical design requirements tracked under `td-cbe207`; they are not proof that implementation is complete.
+
+## Overview
+The **Pre-Signed Mission Descriptor** is a cryptographically signed binary structure that defines the execution boundaries for a hardware-saturated mission. It is the core of the **Governance Wall** elimination, moving policy evaluation out of the hot-path.
+
+---
+
+## 1. The Binary Structure
+
+To ensure zero-latency parsing on the GPU, the descriptor uses a **Fixed-Width Binary Layout** (128-byte aligned).
+
+### A. Header (32 bytes)
+- `Magic`: 4 bytes (`ANMS`)
+- `Version`: 2 bytes
+- `Algorithm`: 2 bytes (Signature type, e.g., Ed25519)
+- `Timestamp`: 8 bytes (Creation)
+- `Expiration`: 8 bytes (Expiry)
+- `Padding`: 8 bytes
+
+### B. Identity & Context (64 bytes)
+- `MissionID`: 16 bytes (UUID)
+- `CorrelationID`: 16 bytes (Trace ID)
+- `PrincipalID`: 16 bytes (Identity of the caller)
+- `ProjectID`: 16 bytes (The Governing Context)
+
+### C. Resource Boundaries (64 bytes)
+- `TimeBudgetMs`: 8 bytes (Maximum execution time)
+- `TokenBudget`: 8 bytes (For LLM missions)
+- `MemoryAtlasCount`: 4 bytes
+- `CapabilityBits`: 4 bytes (e.g., ReadOnly, Edit, Nexus)
+- `ThermalLimit`: 4 bytes
+- `Reserved`: 36 bytes
+
+### D. Memory Atlas Ranges (Variable)
+Each entry is 24 bytes:
+- `AtlasID`: 8 bytes (Hash/Index of the binary atlas)
+- `Offset`: 8 bytes (128-byte aligned)
+- `Length`: 8 bytes (Size in bytes)
+
+### E. Privacy, Purpose, and Regulated Decision Metadata
+
+The descriptor must carry policy metadata for any mission that touches user, customer, employee, patient, applicant, tenant, or regulated business data. GPU-facing layouts may encode these as fixed-width enums or bitfields, but the signing authority must preserve the semantic fields:
+
+- `PrivacyClass`: public, internal, confidential, personal, sensitive, or regulated.
+- `DataSubjectScope`: none, user, customer, employee, child, patient, applicant, tenant, or mixed.
+- `AllowedPurpose`: search, retrieval, summarization, audit, support, evaluation, training, decision_support, or regulated_decision.
+- `TrainingAllowed`: whether payloads or derived artifacts may be used for model improvement.
+- `EvalAllowed`: whether payloads or derived artifacts may be used for evaluation datasets.
+- `RetentionClass`: transient, short, audit, legal_hold, or subject_to_deletion.
+- `RedactionRequired`: whether payloads must pass through redaction before storage or operator display.
+- `ExportAllowed`: whether payloads/results may leave the local/project boundary.
+- `Jurisdiction`: US, CA, CO, EU, HIPAA_adjacent, financial, employment, or custom.
+- `RegulatedDecisionClass`: none, recommendation_only, decision_support, substantial_factor, or automated_decision.
+- `HumanReviewRequired`: whether publication requires a named human or operator review lane.
+- `AppealOrReviewPath`: none, operator_review, user_appeal, or compliance_review.
+
+Missing privacy metadata is a signing failure for sensitive or regulated missions.
+
+---
+
+## 2. Cryptographic Signing (Tier 1 Handshake)
+
+1.  **Proposal**: Tier 3 requests a mission.
+2.  **Signing**: Tier 1 evaluates the policy and generates the binary descriptor.
+3.  **Signature**: Tier 1 signs the descriptor hash using its private key (Ed25519).
+4.  **Verification (Hardware)**: The Megakernel (DSL) receives the descriptor and signature. It can verify the signature once at start-up to ensure authenticity.
+
+### Descriptor Hash Policy (Explicit)
+
+- Descriptor header `Version = 1` maps to hash policy `sha256Tier1V1`.
+- Tier-1 signatures are over `SHA-256(canonicalBinaryEncoding(descriptor))` for this policy.
+- Descriptor versions without an explicit policy mapping are rejected.
+- Signature verification rejects policy mismatches (for example, a signature tagged as a different descriptor-hash policy than the descriptor version requires).
+- Descriptor signing hashes are CPU-only and deterministic; Metal/ANE acceleration is not used for this Tier-1 signature hash path.
+- BLAKE3 remains the digest family for evidence/receipts and hardware-accelerated digest paths, not for v1 descriptor signatures.
+
+---
+
+## 3. In-Kernel Enforcement (The DSL Rule)
+
+All Saturated Megakernels must follow these rules when consuming the descriptor:
+
+1.  **Memory Bound Check**: All loads from an atlas must be checked against the `Offset` and `Length` defined in the descriptor.
+2.  **Time Heartbeat**: The kernel checks its internal `TimeCounter`. If `TimeCounter > TimeBudgetMs`, the kernel must terminate via the **KillBit**.
+3.  **Evidence Binding**: The `MissionID` must be included in every **SIMD-Blake3 Heartbeat** generated by the kernel.
+4.  **Privacy Binding**: Heartbeats and receipts must bind to the descriptor hash and privacy metadata, but must not include raw sensitive payloads.
+5.  **Regulated Decision Binding**: Missions classified as `substantial_factor` or `automated_decision` must not publish a result until assessment, human oversight, explanation, and appeal metadata are present.
+
+---
+
+## 4. Why This Schema?
+
+- **Compactness**: Fits in a single GPU constant-buffer.
+- **Fast Parsing**: No string parsing or complex deserialization. All fields are fixed-offset.
+- **Security**: The "Token of Authority" is non-repudiable and time-bound.
+
+---
+
+## 5. Next Steps for Implementation
+1.  **Swift Implementation**: Create the `SaturatedMissionDescriptor` struct in `AnigmaCore`.
+2.  **Privacy Contract**: Implement the privacy, purpose, retention, provider, and regulated-decision fields from `anigma/Docs/design/PRIVACY_COMPLIANCE_REGULATED_DECISIONING_SPINE.md`.
+3.  **Metal Integration**: Add the descriptor to the `SearchMegakernel` input buffers.
+4.  **Signing Engine**: Implement the Ed25519 signing in the `GovernanceController`.

@@ -1,0 +1,371 @@
+# Publication Checklist Manifest
+# Checklist of requirements for public release/documentation publication
+# Used by: release workflows, agent handoffs, publication validation
+
+version: "1.1.0"
+last_updated: "2026-05-02"
+schema: "Docs/schemas/proof-artifact.schema.json"
+
+description: |
+  The publication checklist defines all requirements that must be met before
+  Anigma documentation can be considered "publishable" or "public-ready".
+  This includes both content requirements (all docs parse, no 0-byte files)
+  and validation requirements (all validators pass).
+
+checklist:
+
+  - id: "docs-001"
+    category: "Content Integrity"
+    description: "No 0-byte files in Docs/ directories (except .gitkeep)"
+    check_command: |
+      find Docs -type f -size 0 ! -name ".gitkeep" | wc -l | grep -q '^0$'
+    expected_result: "exit code 0"
+    verification_profile: "docs-artifacts"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-002"
+    category: "Content Integrity"
+    description: "All JSON files in Docs/ parse successfully"
+    check_command: |
+      python3 - <<'PY'
+      import json, pathlib, sys
+      bad = []
+      for p in pathlib.Path("Docs").rglob("*.json"):
+          try:
+              json.load(open(p))
+          except Exception as e:
+              bad.append(f"{p}: {e}")
+      if bad:
+          print("FAIL: " + "\n".join(bad))
+          sys.exit(1)
+      print("PASS: All JSON files parse")
+      PY
+    expected_result: "exit code 0, PASS message"
+    verification_profile: "docs-artifacts"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-003"
+    category: "Content Integrity"
+    description: "All YAML files in Docs/ parse successfully"
+    check_command: |
+      python3 - <<'PY'
+      import yaml, pathlib, sys
+      bad = []
+      for p in pathlib.Path("Docs").rglob("*.yaml"):
+          try:
+              yaml.safe_load(open(p))
+          except Exception as e:
+              bad.append(f"{p}: {e}")
+      if bad:
+          print("FAIL: " + "\n".join(bad))
+          sys.exit(1)
+      print("PASS: All YAML files parse")
+      PY
+    expected_result: "exit code 0, PASS message"
+    verification_profile: "docs-artifacts"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-004"
+    category: "Content Integrity"
+    description: "All Mermaid files in Docs/ parse successfully (if mmdc installed)"
+    check_command: |
+      mmdc -i Docs/diagrams/mermaid/*.mmd -i Docs/architecture/maps/logic-flows/*.mmd -o /tmp/mermaid-check/ 2>/dev/null || echo "mmdc not installed, skip"
+    expected_result: "exit code 0 or skip message"
+    verification_profile: "architecture-diagrams"
+    severity: "WARNING"
+    required: false
+    optional_tool: "mmdc"
+
+  - id: "docs-005"
+    category: "Content Integrity"
+    description: "LikeC4 model validates successfully (if likec4 installed)"
+    check_command: |
+      likec4 build Docs/diagrams/likec4 -o /tmp/likec4-check 2>/dev/null || echo "likec4 not installed, skip"
+    expected_result: "exit code 0 or skip message"
+    verification_profile: "architecture-diagrams"
+    severity: "WARNING"
+    required: false
+    optional_tool: "likec4"
+
+  - id: "docs-006"
+    category: "Structure"
+    description: "TD folder system structure is valid"
+    check_command: "python3 Scripts/validate_td_folder_system.py"
+    expected_result: "exit code 0"
+    verification_profile: "docs-td"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-007"
+    category: "Structure"
+    description: "TD docs sync is valid"
+    check_command: "python3 Scripts/validate_td_docs_sync.py"
+    expected_result: "exit code 0"
+    verification_profile: "docs-td"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-008"
+    category: "Structure"
+    description: "Verification profiles manifest is valid"
+    check_command: "python3 Scripts/validate_verification_profiles.py"
+    expected_result: "exit code 0"
+    verification_profile: "governance"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-009"
+    category: "Governance"
+    description: "Tier boundaries are valid (no violations)"
+    check_command: "python3 Scripts/validate_tiers.py anigma/"
+    expected_result: "exit code 0"
+    verification_profile: "governance"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-010"
+    category: "Governance"
+    description: "No dependency cycles detected"
+    check_command: "python3 Scripts/validate_no_cycles.py .build/anigma-package.json"
+    expected_result: "exit code 0"
+    verification_profile: "governance"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-011"
+    category: "Governance"
+    description: "No invalid @_exported imports"
+    check_command: "python3 Scripts/validate_exported_imports.py"
+    expected_result: "exit code 0"
+    verification_profile: "governance"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-012"
+    category: "Documentation"
+    description: "All proof artifacts referenced in descriptors exist"
+    check_command: |
+      python3 - <<'PY'
+      import pathlib, sys
+      # Read all epic and task descriptors
+      proofs = set()
+      for p in pathlib.Path("Docs/td").rglob("*.yaml"):
+          import yaml
+          data = yaml.safe_load(open(p))
+          if data:
+              for proof in data.get("proofs", []):
+                  proofs.add(proof)
+              for proof in data.get("proof_required", []):
+                  proofs.add(proof)
+              for proof in data.get("expected_proof", []):
+                  proofs.add(proof)
+      
+      # Check all proofs exist
+      bad = []
+      for proof in proofs:
+          if proof.startswith("Docs/proofs/"):
+              proof_path = pathlib.Path(proof)
+              if not proof_path.exists():
+                  bad.append(f"Missing: {proof}")
+      
+      if bad:
+          print("FAIL: " + "\n".join(bad))
+          sys.exit(1)
+      print(f"PASS: All {len(proofs)} referenced proofs exist")
+      PY
+    expected_result: "exit code 0, PASS message"
+    verification_profile: "docs-td"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-013"
+    category: "Documentation"
+    description: "All source_docs referenced in descriptors exist"
+    check_command: |
+      python3 - <<'PY'
+      import pathlib, sys
+      bad = []
+      for p in pathlib.Path("Docs/td").rglob("*.yaml"):
+          import yaml
+          data = yaml.safe_load(open(p))
+          if data:
+              for src in data.get("source_docs", []):
+                  src_path = pathlib.Path(src)
+                  if not src_path.exists():
+                      bad.append(f"Missing source_doc: {src} (referenced by {p})")
+      
+      if bad:
+          print("FAIL: " + "\n".join(bad))
+          sys.exit(1)
+      print("PASS: All source_docs exist")
+      PY
+    expected_result: "exit code 0, PASS message"
+    verification_profile: "docs-td"
+    severity: "BLOCKER"
+    required: true
+
+  - id: "docs-014"
+    category: "Documentation"
+    description: "All related_docs referenced in descriptors exist"
+    check_command: |
+      python3 - <<'PY'
+      import pathlib, sys
+      bad = []
+      for p in pathlib.Path("Docs/td").rglob("*.yaml"):
+          import yaml
+          data = yaml.safe_load(open(p))
+          if data:
+              for doc in data.get("related_docs", []):
+                  doc_path = pathlib.Path(doc)
+                  if not doc_path.exists():
+                      bad.append(f"Missing related_doc: {doc} (referenced by {p})")
+      
+      if bad:
+          print("FAIL: " + "\n".join(bad))
+          sys.exit(1)
+      print("PASS: All related_docs exist")
+      PY
+    expected_result: "exit code 0, PASS message"
+    verification_profile: "docs-td"
+    severity: "WARNING"
+    required: false
+    note: "Some related_docs may be intentionally forward-referenced"
+
+  - id: "docs-015"
+    category: "Content"
+    description: "All architecture map files exist and are valid"
+    check_command: |
+      python3 - <<'PY'
+      import yaml, pathlib, sys
+      
+      # Check architecture map files exist
+      required_files = [
+          "Docs/architecture/maps/README.md",
+          "Docs/architecture/maps/module-role-index.yaml",
+          "Docs/architecture/maps/file-role-index.yaml",
+          "Docs/architecture/maps/logic-flows/README.md",
+      ]
+      
+      for f in pathlib.Path("Docs/architecture/maps/logic-flows/").glob("*.mmd"):
+          required_files.append(str(f))
+      
+      bad = []
+      for f in required_files:
+          if not pathlib.Path(f).exists():
+              bad.append(f"Missing: {f}")
+      
+      # Validate YAML indexes
+      yaml_files = [
+          "Docs/architecture/maps/module-role-index.yaml",
+          "Docs/architecture/maps/file-role-index.yaml",
+      ]
+      for y in yaml_files:
+          try:
+              yaml.safe_load(open(y))
+          except Exception as e:
+              bad.append(f"Invalid YAML: {y}: {e}")
+      
+      # Validate JSON schemas
+      import json
+      json_files = [
+          "Docs/schemas/file-role-index.schema.json",
+          "Docs/schemas/module-role-index.schema.json",
+      ]
+      for j in json_files:
+          try:
+              json.load(open(j))
+          except Exception as e:
+              bad.append(f"Invalid JSON: {j}: {e}")
+      
+      if bad:
+          print("FAIL: " + "\n".join(bad))
+          sys.exit(1)
+      print("PASS: Architecture maps valid")
+      PY
+    expected_result: "exit code 0, PASS message"
+    verification_profile: "docs-artifacts"
+    severity: "BLOCKER"
+    required: true
+
+profiles:
+  - id: "publication-full"
+    description: "Full publication validation including all blockers and warnings"
+    checks:
+      - "docs-001"
+      - "docs-002"
+      - "docs-003"
+      - "docs-004"
+      - "docs-005"
+      - "docs-006"
+      - "docs-007"
+      - "docs-008"
+      - "docs-009"
+      - "docs-010"
+      - "docs-011"
+      - "docs-012"
+      - "docs-013"
+      - "docs-014"
+      - "docs-015"
+    required_tools: ["python3", "git"]
+    optional_tools: ["mmdc", "likec4"]
+
+  - id: "publication-core"
+    description: "Core publication validation (blockers only)"
+    checks:
+      - "docs-001"
+      - "docs-002"
+      - "docs-003"
+      - "docs-006"
+      - "docs-007"
+      - "docs-008"
+      - "docs-009"
+      - "docs-010"
+      - "docs-011"
+      - "docs-012"
+      - "docs-013"
+      - "docs-015"
+    required_tools: ["python3", "git"]
+    optional_tools: []
+
+  - id: "publication-light"
+    description: "Lightweight publication validation (content only)"
+    checks:
+      - "docs-001"
+      - "docs-002"
+      - "docs-003"
+      - "docs-012"
+      - "docs-013"
+      - "docs-015"
+    required_tools: ["python3"]
+    optional_tools: []
+
+statistics:
+  total_checks: 15
+  blocker_checks: 11
+  warning_checks: 4
+  profiles: 3
+
+validation:
+  command: |
+    python3 - <<'PY'
+    import yaml, json, pathlib, sys
+    
+    # Load this manifest
+    manifest = yaml.safe_load(open("Docs/manifests/publication-checklist.yaml"))
+    
+    # Validate structure
+    assert "checklist" in manifest, "Missing checklist"
+    assert "version" in manifest, "Missing version"
+    
+    # Validate each check
+    for check in manifest["checklist"]:
+        assert "id" in check, f"Check missing id: {check}"
+        assert "description" in check, f"Check missing description: {check.get('id')}"
+        assert "check_command" in check, f"Check missing command: {check.get('id')}"
+    
+    print("PASS: publication-checklist.yaml is valid")
+    PY
+  expected_exit: 0

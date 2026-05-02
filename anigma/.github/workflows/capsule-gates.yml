@@ -1,0 +1,132 @@
+name: Capsule CI Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'Packages/**/*'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'Packages/**/*'
+
+jobs:
+  GATE_TIER_VALIDATION:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Tier and MANIFEST.toml
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_TIER_VALIDATION
+            fi
+          done
+
+  GATE_ERROR_MODEL:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Error Model Conformance
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_ERROR_MODEL
+            fi
+          done
+
+  GATE_DIAGNOSTICS_CONFORMANCE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Fail on Forbidden Logging in Modified Files
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+          fi
+          HEAD_SHA="${{ github.sha }}"
+
+          CHANGED_FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "Packages/**/Sources/**")
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No modified capsule source files to scan for forbidden logging."
+            exit 0
+          fi
+
+          FORBIDDEN_LOGGING=$(git diff -U0 "$BASE_SHA" "$HEAD_SHA" -- $CHANGED_FILES | grep -E '^\+[^+].*(\b(Swift\.)?print\s*\(|\bNSLog\s*\(|\bos_log\s*\()' || true)
+          if [ -n "$FORBIDDEN_LOGGING" ]; then
+            echo "❌ Error: Forbidden logging added in modified files:"
+            echo "$FORBIDDEN_LOGGING"
+            exit 1
+          fi
+          echo "✅ No forbidden logging added in modified capsule sources."
+      - name: Validate No Forbidden Diagnostics
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_DIAGNOSTICS_CONFORMANCE
+            fi
+          done
+
+  GATE_LOGGING_COVERAGE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Critical Logging Coverage
+        run: ./Scripts/validate_gates.sh . GATE_LOGGING_COVERAGE
+
+  GATE_BUILD_HYGIENE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Build Hygiene
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_BUILD_HYGIENE
+            fi
+          done
+
+  GATE_TEST_COVERAGE:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Test Coverage and Count
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_TEST_COVERAGE
+            fi
+          done
+      - name: Upload Test Results and Diffs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            Packages/*Capsule/test_output.txt
+            Packages/*Capsule/test-results/diffs/
+      - name: Upload Coverage Dashboard
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-dashboard
+          path: Docs/governance/coverage_dashboard.md
+
+  GATE_STRICT_CONCURRENCY:
+    runs-on: macos-latest
+    needs: GATE_TIER_VALIDATION
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate Strict Concurrency (Tier 5/3)
+        run: |
+          for capsule in Packages/*Capsule; do
+            if [ -d "$capsule" ]; then
+              ./Scripts/validate_gates.sh "$capsule" GATE_STRICT_CONCURRENCY
+            fi
+          done

@@ -1,0 +1,61 @@
+================================================================================
+ANIGMA BUILD ERROR REPORT
+================================================================================
+Generated: $(date)
+
+This report contains all compilation errors, warnings, and notes from building
+the anigma-app executable. Errors are grouped by type and file for easy fixing.
+
+================================================================================
+ERROR SUMMARY
+================================================================================
+
+Total Errors:   13
+Total Warnings: 49
+Total Notes:    0
+0
+
+COMPILATION ERRORS (Grouped by Type)
+================================================================================
+
+
+ALL ERRORS (Detailed)
+================================================================================
+
+    /Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/ContractsCore/README.md
+Building for debugging...
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/DevelopView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/DocumentLibraryView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/ObservatoriumDashboardView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaClientKit.build/AnigmaClient.swift.o because of multiple producers: Compiling Swift Module 'AnigmaClientKit' (7 sources), Compiling Swift Module 'AnigmaClientKit' (7 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaDaemonCore.build/DaemonServer.swift.o because of multiple producers: Compiling Swift Module 'AnigmaDaemonCore' (93 sources), Compiling Swift Module 'AnigmaDaemonCore' (93 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/CoreMLEmbeddingComputer.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/HarmoniaModule.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/Swift6MigrationState.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/Swift6StepEngine.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+
+FILES WITH ERRORS (Quick Reference)
+================================================================================
+
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/DevelopView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/DocumentLibraryView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaAppMacExecutable.build/ObservatoriumDashboardView.swift.o because of multiple producers: Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources), Compiling Swift Module 'AnigmaAppMacExecutable' (159 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaClientKit.build/AnigmaClient.swift.o because of multiple producers: Compiling Swift Module 'AnigmaClientKit' (7 sources), Compiling Swift Module 'AnigmaClientKit' (7 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/AnigmaDaemonCore.build/DaemonServer.swift.o because of multiple producers: Compiling Swift Module 'AnigmaDaemonCore' (93 sources), Compiling Swift Module 'AnigmaDaemonCore' (93 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/CoreMLEmbeddingComputer.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/HarmoniaModule.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/Swift6MigrationState.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/HarmoniaModule.build/Swift6StepEngine.swift.o because of multiple producers: Compiling Swift Module 'HarmoniaModule' (248 sources), Compiling Swift Module 'HarmoniaModule' (248 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/AlertService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/FeedbackService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/ObservatoriumModule.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+error: couldn't build /Users/user/Developer/GitHub/Anigma_clean/anigma/.build/arm64-apple-macosx/debug/ObservatoriumModule.build/TelemetryService.swift.o because of multiple producers: Compiling Swift Module 'ObservatoriumModule' (22 sources), Compiling Swift Module 'ObservatoriumModule' (22 sources)
+
+================================================================================
+
+END OF REPORT
+================================================================================

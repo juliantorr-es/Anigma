@@ -1,0 +1,56 @@
+// swift-tools-version: 5.9
+import PackageDescription
+
+let package = Package(
+    name: "AnigmaNativeShims",
+    platforms: [.macOS(.v14), .iOS(.v17), .tvOS(.v17), .watchOS(.v10)],
+    products: [
+        .library(
+            name: "AnigmaNativeShims",
+            type: .static,
+            targets: ["AnigmaNativeShims"]
+        )
+    ],
+    dependencies: [],
+    targets: [
+        .target(
+            name: "AnigmaNativeShims",
+            dependencies: [],
+            path: ".",
+            sources: [
+                "src/capsule_core",
+                "src/vector_capsule",
+                "src/observability",
+                "src/animation",
+                "src/container",
+                "src/xml",
+                "src/typography",
+                "src/render",
+                "src/color",
+                "src/compression",
+                "src/kernel",
+                "src/layout_engine_capsule",
+                "src/viz_aggregation_capsule",
+                "src/MediaFingerprintCapsule",
+                "src/common"
+            ],
+            publicHeadersPath: "include",
+            cSettings: [
+                .headerSearchPath("include"),
+                .headerSearchPath("../../Packages/CClipper2"),
+                .define("ANIGMA_CAPSULE_IMPLEMENTATION")
+            ],
+            cxxSettings: [
+                .headerSearchPath("include"),
+                .headerSearchPath("../../Packages/CClipper2"),
+                .define("ANIGMA_CAPSULE_IMPLEMENTATION"),
+                .unsafeFlags(["-Wno-everything"])  // Suppress warnings for now
+            ],
+            linkerSettings: [
+                .linkedFramework("Foundation"),
+                .linkedFramework("CoreFoundation")
+            ]
+        )
+    ],
+    cLanguageStandard: .c11
+)

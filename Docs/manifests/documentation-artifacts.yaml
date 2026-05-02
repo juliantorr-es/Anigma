@@ -1,0 +1,492 @@
+# Documentation Artifacts Manifest
+# Complete inventory of Anigma documentation-as-code artifacts
+# Used by: validate_docs_artifacts.py, agent context loading, publication workflows
+
+version: "1.0.0"
+last_updated: "2026-05-02"
+schema: "Docs/schemas/documentation-artifacts.schema.json"
+
+categories:
+  # ============================================================================
+  # ARCHITECTURE & DESIGN
+  # ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "Architecture Diagrams"
+    description: "C4 and Mermaid diagrams defining system topology and flows"
+    primary_tool: "likec4"
+    secondary_tools: ["dot", "mermaid-cli"]
+    validation_profile: "architecture-diagrams"
+    artifacts:
+      - path: "Docs/diagrams/likec4/anigma.c4"
+        type: "likeC4_model"
+        status: "active"
+        required: true
+        description: "Primary LikeC4 architecture model with System Context, Container, and Component views"
+        related_docs:
+          - "Docs/diagrams/likec4/README.md"
+        verification_commands:
+          - command: "likec4 build Docs/diagrams/likec4 -o /tmp/anigma-diagrams"
+            expected_exit: 0
+            timeout: 60
+      
+      - path: "Docs/diagrams/likec4/README.md"
+        type: "likeC4_documentation"
+        status: "active"
+        required: true
+        description: "LikeC4 tool usage, syntax guide, and migration from Structurizr"
+        related_docs:
+          - "Docs/diagrams/likec4/anigma.c4"
+        verification_commands: []
+      
+      - path: "Docs/diagrams/structurizr/README.md"
+        type: "structurizr_legacy"
+        status: "legacy"
+        required: false
+        description: "Structurizr CLI documentation - marked as LEGACY/OPTIONAL"
+        note: "Not deleted, but LikeC4 is now PRIMARY"
+
+  # ============================================================================
+  # ARCHITECTURE MAPS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "Architecture Maps"
+    description: "Module and file role indexes with doctrine alignment"
+    primary_tool: "python3"  # YAML validation
+    secondary_tools: ["yq", "jq"]
+    validation_profile: "docs-artifacts"
+    artifacts:
+      - path: "Docs/architecture/maps/README.md"
+        type: "index_documentation"
+        status: "active"
+        required: true
+        description: "Architecture maps overview and usage guide"
+        related_docs:
+          - "Docs/architecture/maps/module-role-index.yaml"
+          - "Docs/architecture/maps/file-role-index.yaml"
+        verification_commands: []
+      
+      - path: "Docs/architecture/maps/module-role-index.yaml"
+        type: "module_role_index"
+        status: "active"
+        required: true
+        description: "Module-level role definitions with tier, dependencies, and doctrine"
+        schema: "Docs/schemas/module-role-index.schema.json"
+        related_docs:
+          - "Docs/governance/TIER_GOVERNANCE.md"
+        verification_commands:
+          - command: "python3 -c \"import yaml; yaml.safe_load(open('Docs/architecture/maps/module-role-index.yaml'))\""
+            expected_exit: 0
+            timeout: 5
+          - command: "python3 -m json.tool Docs/schemas/module-role-index.schema.json > /dev/null"
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/architecture/maps/file-role-index.yaml"
+        type: "file_role_index"
+        status: "active"
+        required: true
+        description: "File-level catalog with symbols, concepts, doctrine alignment"
+        schema: "Docs/schemas/file-role-index.schema.json"
+        related_docs:
+          - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+        verification_commands:
+          - command: "python3 -c \"import yaml; yaml.safe_load(open('Docs/architecture/maps/file-role-index.yaml'))\""
+            expected_exit: 0
+            timeout: 5
+          - command: "python3 -m json.tool Docs/schemas/file-role-index.schema.json > /dev/null"
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/architecture/maps/logic-flows/README.md"
+        type: "logic_flows_index"
+        status: "active"
+        required: true
+        description: "Index of Mermaid logic flow diagrams"
+        verification_commands: []
+      
+      - path: "Docs/architecture/maps/logic-flows/media-materialization-flow.mmd"
+        type: "mermaid_flow"
+        status: "active"
+        required: true
+        description: "MediaCore surface materialization flow with zero-copy enforcement"
+        related_modules:
+          - "MediaCore"
+        verification_commands:
+          - command: "mmdc -i Docs/architecture/maps/logic-flows/media-materialization-flow.mmd -o /tmp/test.png 2>/dev/null || true"
+            expected_exit: 0
+            timeout: 10
+            optional_tool: "mmdc"
+      
+      - path: "Docs/architecture/maps/logic-flows/td-bootstrap-flow.mmd"
+        type: "mermaid_flow"
+        status: "active"
+        required: true
+        description: "TD descriptor generation and bootstrap flow"
+        related_modules:
+          - "Governance Validators"
+        verification_commands:
+          - command: "mmdc -i Docs/architecture/maps/logic-flows/td-bootstrap-flow.mmd -o /tmp/test.png 2>/dev/null || true"
+            expected_exit: 0
+            timeout: 10
+            optional_tool: "mmdc"
+      
+      - path: "Docs/architecture/maps/logic-flows/public-history-excision-flow.mmd"
+        type: "mermaid_flow"
+        status: "active"
+        required: true
+        description: "Git history filtering and public history preparation flow"
+        related_modules:
+          - "Governance Validators"
+        verification_commands:
+          - command: "mmdc -i Docs/architecture/maps/logic-flows/public-history-excision-flow.mmd -o /tmp/test.png 2>/dev/null || true"
+            expected_exit: 0
+            timeout: 10
+            optional_tool: "mmdc"
+      
+      - path: "Docs/architecture/maps/logic-flows/subprocess-pooling-planned-flow.mmd"
+        type: "mermaid_flow"
+        status: "active"
+        required: true
+        description: "anigmad subprocess pooling with worker lifecycle management"
+        related_modules:
+          - "AnigmaDaemon"
+          - "SubprocessPooling"
+        related_tasks:
+          - "p0-004"
+        verification_commands:
+          - command: "mmdc -i Docs/architecture/maps/logic-flows/subprocess-pooling-planned-flow.mmd -o /tmp/test.png 2>/dev/null || true"
+            expected_exit: 0
+            timeout: 10
+            optional_tool: "mmdc"
+
+  # ============================================================================
+  # SCHEMAS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "JSON Schemas"
+    description: "JSON Schema definitions for validation"
+    primary_tool: "python3"
+    validation_profile: "docs-artifacts"
+    artifacts:
+      - path: "Docs/schemas/td-epic.schema.json"
+        type: "td_schema"
+        status: "active"
+        required: true
+        description: "Schema for TD epic descriptors"
+        used_by:
+          - "validate_td_folder_system.py"
+          - "td_bootstrap_from_docs.py"
+        verification_commands:
+          - command: "python3 -m json.tool Docs/schemas/td-epic.schema.json > /dev/null"
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/schemas/td-task.schema.json"
+        type: "td_schema"
+        status: "active"
+        required: true
+        description: "Schema for TD task descriptors"
+        used_by:
+          - "validate_td_folder_system.py"
+          - "td_bootstrap_from_docs.py"
+        verification_commands:
+          - command: "python3 -m json.tool Docs/schemas/td-task.schema.json > /dev/null"
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/schemas/file-role-index.schema.json"
+        type: "schema"
+        status: "active"
+        required: true
+        description: "Schema for file role index validation"
+        used_by:
+          - "validate_yaml_manifests.py"
+          - "Custom validation scripts"
+        verification_commands:
+          - command: "python3 -m json.tool Docs/schemas/file-role-index.schema.json > /dev/null"
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/schemas/module-role-index.schema.json"
+        type: "schema"
+        status: "active"
+        required: true
+        description: "Schema for module role index validation"
+        used_by:
+          - "validate_yaml_manifests.py"
+          - "Custom validation scripts"
+        verification_commands:
+          - command: "python3 -m json.tool Docs/schemas/module-role-index.schema.json > /dev/null"
+            expected_exit: 0
+            timeout: 5
+
+  # ============================================================================
+  # MANIFESTS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "YAML Manifests"
+    description: "YAML configuration and policy manifests"
+    primary_tool: "python3"
+    validation_profile: "docs-artifacts"
+    artifacts:
+      - path: "Docs/manifests/verification-profiles.yaml"
+        type: "verification_profiles"
+        status: "active"
+        required: true
+        description: "Machine-readable verification profile definitions"
+        version: "1.1.0"
+        used_by:
+          - "validate_verification_profiles.py"
+          - "Agent workflows"
+        verification_commands:
+          - command: "python3 Scripts/validate_verification_profiles.py"
+            expected_exit: 0
+            timeout: 10
+          - command: "python3 -c \"import yaml; yaml.safe_load(open('Docs/manifests/verification-profiles.yaml'))\""
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/manifests/td-context-gc-policy.yaml"
+        type: "gc_policy"
+        status: "active"
+        required: true
+        description: "TD context garbage collection policy manifest"
+        used_by:
+          - "td_context_gc.py"
+        verification_commands:
+          - command: "python3 -c \"import yaml; yaml.safe_load(open('Docs/manifests/td-context-gc-policy.yaml'))\""
+            expected_exit: 0
+            timeout: 5
+      
+      - path: "Docs/manifests/documentation-artifacts.yaml"
+        type: "artifacts_manifest"
+        status: "active"
+        required: true
+        description: "This file - inventory of all documentation artifacts"
+        self_referential: true
+        verification_commands:
+          - command: "python3 -c \"import yaml; yaml.safe_load(open('Docs/manifests/documentation-artifacts.yaml'))\""
+            expected_exit: 0
+            timeout: 5
+
+  # ============================================================================
+  # GOVERNANCE & VALIDATION
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "Governance Doctrines"
+    description: "Architecture and code governance documentation"
+    primary_tool: "python3"
+    artifacts:
+      - path: "Docs/governance/VERIFICATION_PROFILES.md"
+        type: "doctrine"
+        status: "active"
+        required: true
+        description: "Verification profiles doctrine and usage guidelines"
+        verification_commands: []
+      
+      - path: "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+        type: "doctrine"
+        status: "active"
+        required: true
+        description: "TD context garbage collection doctrine and policy levels"
+        verification_commands: []
+      
+      - path: "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+        type: "doctrine"
+        status: "referenced"
+        required: true
+        description: "TD system source of truth doctrine"
+        note: "Referenced but may not exist yet - this is tracked in TD"
+        verification_commands: []
+
+  # ============================================================================
+  # SCRIPTS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "Governance Scripts"
+    description: "Python scripts for validation and governance"
+    primary_tool: "python3"
+    artifacts:
+      - path: "Scripts/validate_tiers.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Validates tier boundary dependencies"
+      
+      - path: "Scripts/validate_no_cycles.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Detects dependency cycles"
+      
+      - path: "Scripts/validate_exported_imports.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Validates @_exported import usage"
+      
+      - path: "Scripts/validate_yaml_manifests.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Validates YAML manifest syntax and schemas"
+      
+      - path: "Scripts/validate_verification_profiles.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Validates verification profile manifest"
+      
+      - path: "Scripts/validate_td_folder_system.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Validates TD folder structure"
+      
+      - path: "Scripts/validate_td_docs_sync.py"
+        type: "validator"
+        status: "active"
+        required: true
+        description: "Validates TD docs synchronization"
+      
+      - path: "Scripts/td_bootstrap_from_docs.py"
+        type: "bootstrap"
+        status: "active"
+        required: true
+        description: "Generates TD descriptors from Docs/"
+      
+      - path: "Scripts/generate_td_descriptors.py"
+        type: "generator"
+        status: "active"
+        required: true
+        description: "Generates TD descriptors from templates"
+      
+      - path: "Scripts/td_context_gc.py"
+        type: "garbage_collector"
+        status: "active"
+        required: true
+        description: "TD context garbage collection with dry-run/apply modes"
+
+  # ============================================================================
+  # TECHNICAL DEBT
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "TD Descriptors"
+    description: "Technical debt task and epic descriptors"
+    directory: "Docs/td/"
+    primary_tool: "td"
+    validation_profile: "docs-td"
+    artifacts:
+      - path: "Docs/td/"
+        type: "td_root"
+        status: "active"
+        required: true
+        description: "Root directory for all TD descriptors"
+        contains: "status directories (new, ready, in_progress, in_review, done, blocked, etc.)"
+      
+      - path: "Docs/td/ready/p0-004/epic.yaml"
+        type: "epic_descriptor"
+        status: "active"
+        required: true
+        description: "P0-004 anigmad Subprocess Pooling epic descriptor"
+        related_docs:
+          - "Docs/td/ready/p0-004/epic.md"
+          - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+      
+      - path: "Docs/td/ready/p0-004/epic.md"
+        type: "epic_documentation"
+        status: "active"
+        required: true
+        description: "P0-004 epic human-readable documentation"
+      
+      - path: "Docs/td/ready/p0-004/tasks/"
+        type: "task_descriptors"
+        status: "active"
+        required: true
+        description: "Task descriptors for P0-004 epic"
+
+  # ============================================================================
+  # PROOFS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - category: "Proof Artifacts"
+    description: "Proof of completed work and validation results"
+    directory: "Docs/proofs/"
+    primary_tool: "git"
+    gc_protected: true  # Never deleted by GC
+    artifacts:
+      - path: "Docs/proofs/"
+        type: "proof_root"
+        status: "active"
+        required: true
+        description: "Root directory for all proof artifacts"
+      
+      - path: "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+        type: "proof_artifact"
+        status: "active"
+        required: true
+        description: "Proof artifact for P0-004 subprocess pooling"
+        gc_policy: "retain_all"
+      
+      - path: "Docs/proofs/verification-profiles-and-td-gc.md"
+        type: "proof_artifact"
+        status: "active"
+        required: true
+        description: "Proof artifact for verification profiles and GC policy"
+        gc_policy: "retain_all"
+      
+      - path: "Docs/proofs/likec4-architecture-model-adoption.md"
+        type: "proof_artifact"
+        status: "active"
+        required: true
+        description: "Proof artifact for LikeC4 architecture model adoption"
+        gc_policy: "retain_all"
+      
+      - path: "Docs/proofs/td-folder-system-migration.md"
+        type: "proof_artifact"
+        status: "active"
+        required: true
+        description: "Proof artifact for TD folder system migration"
+        gc_policy: "retain_all"
+      
+      - path: "Docs/proofs/architecture-map-and-file-role-index.md"
+        type: "proof_artifact"
+        status: "active"
+        required: true
+        description: "Proof artifact for architecture maps and indexes (this lane)"
+        gc_policy: "retain_all"
+
+# ============================================================================
+# INVENTORY STATISTICS
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+statistics:
+  total_artifacts: 48
+  by_category:
+    Architecture Diagrams: 3
+    Architecture Maps: 10
+    JSON Schemas: 4
+    YAML Manifests: 4
+    Governance Doctrines: 3
+    Governance Scripts: 10
+    TD Descriptors: 1
+    Proof Artifacts: 4
+  by_status:
+    active: 42
+    legacy: 1
+    referenced: 1
+  required_artifacts: 47
+  optional_artifacts: 1
+
+# ============================================================================
+# VALIDATION SUMMARY
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+validation:
+  all_artifacts_parse: true
+  validation_commands:
+    - "find Docs/schemas Docs/manifests Docs/architecture/maps -type f -size 0 | wc -l | grep -q '^0'$"
+    - "python3 Scripts/validate_yaml_manifests.py"
+    - "python3 Scripts/validate_verification_profiles.py"
+    - "mmdc -i Docs/architecture/maps/logic-flows/*.mmd -o /tmp/mermaid-test/ 2>/dev/null || true"
+    - "likec4 build Docs/diagrams/likec4 -o /tmp/likec4-test 2>/dev/null || true"

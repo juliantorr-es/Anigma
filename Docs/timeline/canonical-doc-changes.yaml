@@ -1,0 +1,187 @@
+# Canonical Document Change Log
+# Tracks changes to canonical documentation (Docs/governance/, Docs/schemas/)
+
+version: "1.0.0"
+last_updated: "2025-01-15"
+
+changes:
+  - date: "2025-01-15"
+    document: "Docs/governance/VERIFICATION_PROFILES.md"
+    action: "created"
+    change_type: "new-doctrine"
+    description: "Verification profiles doctrine explaining profiles, tool classification, and recording format"
+    author: "anigma-agent"
+    related:
+      - "Docs/manifests/verification-profiles.yaml"
+      - "Scripts/validate_verification_profiles.py"
+
+  - date: "2025-01-15"
+    document: "Docs/manifests/verification-profiles.yaml"
+    action: "created"
+    change_type: "new-manifest"
+    description: "Machine-readable verification profiles manifest with 10 profiles and 5 profile groups"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Scripts/validate_verification_profiles.py"
+    action: "created"
+    change_type: "new-validator"
+    description: "Validator script for verification profiles checking manifest structure, profile fields, and tool availability"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+    action: "created"
+    change_type: "new-doctrine"
+    description: "TD context garbage collection doctrine with policy levels, triggers, and recovery procedures"
+    author: "anigma-agent"
+    related:
+      - "Docs/manifests/td-context-gc-policy.yaml"
+      - "Scripts/td_context_gc.py"
+
+  - date: "2025-01-15"
+    document: "Docs/manifests/td-context-gc-policy.yaml"
+    action: "created"
+    change_type: "new-manifest"
+    description: "GC policy manifest with default policies, protected patterns, cleanup patterns, and triggers"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Scripts/td_context_gc.py"
+    action: "created"
+    change_type: "new-script"
+    description: "TD context garbage collection script with dry-run/--apply support"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-task.schema.json"
+    action: "created"
+    change_type: "new-schema"
+    description: "JSON Schema for TD task descriptors with verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/schemas/td-epic.schema.json"
+    action: "updated"
+    change_type: "schema-extension"
+    description: "Added verification_profiles, verification_overrides, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Scripts/validate_td_folder_system.py"
+    action: "updated"
+    change_type: "validator-extension"
+    description: "Added FD-009 (verification profiles validation) and FD-010 (GC policy validation) rules"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p0-004/epic.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p0-004/tasks/td-a84da2/task.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p0-004/tasks/td-73aea8/task.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p0-004/tasks/td-0dfb09/task.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p0-004/tasks/td-ce4439/task.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/ready/p1-public-history-excision/epic.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/td/in_progress/p1-td-source-of-truth-recovery/epic.yaml"
+    action: "updated"
+    change_type: "descriptor-update"
+    description: "Added verification_profiles, gc_policy, context_load_policy fields"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/README.md"
+    action: "created"
+    change_type: "new-directory"
+    description: "Project timeline directory structure"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/project-timeline.yaml"
+    action: "created"
+    change_type: "new-timeline"
+    description: "Machine-readable project timeline with milestones and placeholders"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/decisions.yaml"
+    action: "created"
+    change_type: "new-timeline"
+    description: "Architectural decision timeline"
+    author: "anigma-agent"
+
+  - date: "2025-01-15"
+    document: "Docs/timeline/canonical-doc-changes.yaml"
+    action: "created"
+    change_type: "new-timeline"
+    description: "Canonical document change log (this file)"
+    author: "anigma-agent"
+
+change_types:
+  - new-doctrine
+  - new-manifest
+  - new-validator
+  - new-script
+  - new-schema
+  - schema-extension
+  - validator-extension
+  - descriptor-update
+  - new-directory
+  - new-timeline
+
+validation_rules:
+  - id: "CD-001"
+    name: "Valid Change Type"
+    description: "change_type must be from the defined change_types list"
+    severity: "ERROR"
+  
+  - id: "CD-002"
+    name: "Required Fields"
+    description: "Each change must have date, document, action, change_type, description"
+    severity: "ERROR"
+  
+  - id: "CD-003"
+    name: "Valid Date Format"
+    description: "Dates must be in YYYY-MM-DD format"
+    severity: "ERROR"

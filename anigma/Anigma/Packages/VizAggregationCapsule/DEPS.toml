@@ -1,0 +1,10 @@
+# VizAggregationCapsule Dependencies
+# Phase 0 Remediation Plan
+
+[dependencies]
+# List external C/C++ dependencies here if using VizAggregationCapsuleNative
+# format: name = { version = "x.y.z", source = "github.com/org/repo" }
+
+[internal]
+CapsuleCore = { path = "../../Packages/CapsuleCore" }
+TelemetryCore = { path = "../../Packages/TelemetryCore" }

@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-01-07T06:52:01Z",
+  "proposals": [
+    {
+      "id": "contract-001",
+      "contract": "design-tokens",
+      "type": "color-token-migration",
+      "severity": "critical",
+      "affected_files": 16,
+      "description": "Replace hardcoded Color.red/blue/etc with Bauhaus.Color tokens",
+      "automated": true,
+      "estimated_effort": "low"
+    },
+    {
+      "id": "contract-002",
+      "contract": "design-tokens",
+      "type": "font-token-migration",
+      "severity": "critical",
+      "affected_files": 10,
+      "description": "Replace .font(.system()) with Bauhaus.Font tokens",
+      "automated": true,
+      "estimated_effort": "low"
+    },
+    {
+      "id": "contract-003",
+      "contract": "design-tokens",
+      "type": "button-style-migration",
+      "severity": "warning",
+      "affected_files": 44,
+      "description": "Apply standardized button styles",
+      "automated": true,
+      "estimated_effort": "medium"
+    }
+  ]
+}

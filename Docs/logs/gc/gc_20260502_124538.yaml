@@ -1,0 +1,26 @@
+end_time: '2026-05-02T12:45:38.965452'
+entries:
+- level: INFO
+  message: Starting GC run (apply=False)
+  timestamp: '2026-05-02T12:45:38.961372'
+- level: INFO
+  message: 'Policy file: /Users/user/Developer/GitHub/Anigma_clean/Docs/manifests/td-context-gc-policy.yaml'
+  timestamp: '2026-05-02T12:45:38.961379'
+- level: INFO
+  message: Found 6 task directories
+  timestamp: '2026-05-02T12:45:38.962001'
+- level: INFO
+  message: '
+
+    === GC Actions ==='
+  timestamp: '2026-05-02T12:45:38.965318'
+- level: INFO
+  message: 'Total actions: 0'
+  timestamp: '2026-05-02T12:45:38.965322'
+- level: INFO
+  message: '  Delete: 0'
+  timestamp: '2026-05-02T12:45:38.965324'
+- level: INFO
+  message: '  Archive: 0'
+  timestamp: '2026-05-02T12:45:38.965326'
+start_time: '2026-05-02T12:45:38.961365'

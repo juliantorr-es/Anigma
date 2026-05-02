@@ -1,0 +1,1101 @@
+# File Role Index
+# Machine-readable catalog of significant Anigma files, their roles, and doctrine alignment
+# Used by: agents for context loading, impact analysis, documentation generators
+
+version: "1.0.0"
+last_updated: "2026-05-02"
+schema: "Docs/schemas/file-role-index.schema.json"
+
+# ============================================================================
+# MEDIACORE SURFACE / MATERIALIZATION
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+files:
+
+  - path: "Sources/MediaCore/Governance/SurfaceAuthority.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "authority"
+    key_symbols:
+      - "SurfaceAuthority"
+      - "SurfaceAuthorityProtocol"
+      - "SurfaceHandle"
+      - "SurfaceToken"
+      - "SurfaceRequest"
+      - "SurfaceRelease"
+    canonical_concepts:
+      - "Zero-copy surface management"
+      - "Hot-path protection"
+      - "Materialization gate enforcement"
+      - "Surface lifecycle management"
+    doctrine:
+      - "ZeroCopyProof: All hot-path payloads must have zero-copy option"
+      - "MaterializationGate: Materialization requires explicit authority"
+      - "SurfaceAuthority: Single authority per surface type"
+      - "Tier 2: Substrate layer - no Tier 3 dependencies"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "validate_exported_imports.py: No @_exported in authority files"
+    context_load_policy: "eager"
+    update_policy: "strict - changes require tier validation"
+
+  - path: "Sources/MediaCore/Governance/MaterializationGate.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "gate"
+    key_symbols:
+      - "MaterializationGate"
+      - "MaterializationGateProtocol"
+      - "MaterializationRequest"
+      - "MaterializationProof"
+      - "canMaterialize"
+      - "performMaterialization"
+      - "ZeroCopyProof"
+    canonical_concepts:
+      - "Gate pattern for controlled materialization"
+      - "Proof emission on materialization"
+      - "Zero-copy first, materialize only when necessary"
+      - "Hot-path vs cold-path separation"
+    doctrine:
+      - "MaterializationGate: All materializations must pass through gate"
+      - "ZeroCopyProof: Proof artifact emitted for every materialization decision"
+      - "Hot-path: Avoid copies in performance-critical code"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "Proof artifacts exist for materialization decisions"
+    context_load_policy: "eager"
+    update_policy: "strict - changes require gate test updates"
+
+  - path: "Sources/MediaCore/Governance/MediaMemoryAuthority.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "authority"
+    key_symbols:
+      - "MediaMemoryAuthority"
+      - "MediaBuffer"
+      - "MediaBufferHandle"
+      - "MemoryLayoutProof"
+    canonical_concepts:
+      - "Unified memory architecture (UMA)"
+      - "Buffer lifecycle management"
+      - "Cross-device memory sharing"
+    doctrine:
+      - "UMA: Minimize copies between CPU/GPU"
+      - "MemoryLayoutProof: Proof of memory layout decisions"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "strict"
+
+  - path: "Sources/MediaCore/Governance/MediaTypeAuthority.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "authority"
+    key_symbols:
+      - "MediaTypeAuthority"
+      - "MediaType"
+      - "MediaTypeID"
+      - "ContentType"
+      - "MIMEType"
+      - "UTType"
+    canonical_concepts:
+      - "Canonical media type registry"
+      - "Type identification and validation"
+      - "Platform-agnostic type system"
+    doctrine:
+      - "MediaTypeAuthority: Single source of truth for media type definitions"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Governance/CaptureAuthority.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "authority"
+    key_symbols:
+      - "CaptureAuthority"
+      - "CaptureDevice"
+      - "CaptureSession"
+      - "CaptureProof"
+    canonical_concepts:
+      - "Hardware capture device management"
+      - "Capture session lifecycle"
+      - "Capture capability probing"
+    doctrine:
+      - "CaptureAuthority: Single authority for all capture operations"
+      - "CaptureProof: Proof artifact for every capture"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Governance/PacketStreamAuthority.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "authority"
+    key_symbols:
+      - "PacketStreamAuthority"
+      - "PacketStream"
+      - "PacketBuffer"
+      - "StreamProof"
+    canonical_concepts:
+      - "Network packet stream management"
+      - "Real-time streaming"
+      - "Protocol-agnostic transport"
+    doctrine:
+      - "PacketStreamAuthority: Single authority for stream operations"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Governance/AudioBufferAuthority.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "authority"
+    key_symbols:
+      - "AudioBufferAuthority"
+      - "AudioBuffer"
+      - "AudioFormat"
+      - "AudioProof"
+    canonical_concepts:
+      - "Audio buffer management"
+      - "Real-time audio processing"
+      - "Sample rate conversion"
+    doctrine:
+      - "AudioBufferAuthority: Single authority for audio buffers"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Governance/CaptureAcceptanceGate.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "gate"
+    key_symbols:
+      - "CaptureAcceptanceGate"
+      - "acceptCapture"
+      - "rejectCapture"
+      - "CaptureAcceptanceProof"
+    canonical_concepts:
+      - " Gate pattern for capture requests"
+      - "Acceptance criteria validation"
+      - "Capability-based authorization"
+    doctrine:
+      - "CaptureAcceptanceGate: All capture requests must pass gate"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Governance/GovernanceLogger.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "infrastructure"
+    key_symbols:
+      - "GovernanceLogger"
+      - "logTierViolation"
+      - "logCycleDetected"
+      - "logExportViolation"
+    canonical_concepts:
+      - "Governance event logging"
+      - "Audit trail for architecture decisions"
+      - "Machine-readable log output"
+    doctrine:
+      - "GovernanceLogger: All governance events must be logged"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Governance/CryptoKitEvidenceAdapter.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "adapter"
+    key_symbols:
+      - "CryptoKitEvidenceAdapter"
+      - "HashProof"
+      - "SignatureProof"
+      - "EvidenceHash"
+    canonical_concepts:
+      - "Cryptographic proof generation"
+      - "Evidence hashing"
+      - "Integrity verification"
+    doctrine:
+      - "Evidence: All significant operations must emit cryptographic proof"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Substrate/SaturationSubstrate.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "substrate"
+    key_symbols:
+      - "SaturationSubstrate"
+      - "HardwareSaturation"
+      - "ResourcePressure"
+      - "SaturationProof"
+    canonical_concepts:
+      - "Hardware resource saturation detection"
+      - "Backpressure signaling"
+      - "Adaptive quality adjustment"
+    doctrine:
+      - "SaturationSubstrate: Detect and respond to hardware limits"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Orchestrator/MediaSubstrateOrchestrator.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "orchestrator"
+    key_symbols:
+      - "MediaSubstrateOrchestrator"
+      - "executeMediaPipeline"
+      - "MediaPipeline"
+      - "OrchestrationProof"
+    canonical_concepts:
+      - "Pipeline orchestration"
+      - "Executor dispatch"
+      - "Receipt aggregation"
+    doctrine:
+      - "Orchestrator: Coordinates executors without direct implementation"
+      - "Receipt: Every pipeline execution produces receipts"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "No direct executor instantiation in orchestrator"
+    context_load_policy: "eager"
+    update_policy: "strict"
+
+  # ============================================================================
+  # MEDIACORE EXECUTORS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Sources/MediaCore/Executors/AccelerateDSPExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "AccelerateDSPExecutor"
+      - "executeDSP"
+      - "DSPProof"
+    canonical_concepts:
+      - "Accelerate framework integration"
+      - "Digital signal processing"
+      - "SIMD acceleration"
+    doctrine:
+      - "Executor: Implements media operation, declares capabilities"
+      - "Proof: Emits proof of operation completion"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "Executor registered in MediaBackendRegistry"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/AccelerateValidationLane.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "AccelerateValidationLane"
+      - "validateAccelerate"
+      - "ValidationProof"
+    canonical_concepts:
+      - "Validation lane pattern"
+      - "Test-time acceleration verification"
+    doctrine:
+      - "ValidationLane: Specialized executor for validation"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/CameraCaptureExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "CameraCaptureExecutor"
+      - "startCapture"
+      - "stopCapture"
+      - "CaptureFrameProof"
+    canonical_concepts:
+      - "Camera capture execution"
+      - "Frame-by-frame processing"
+      - "Hardware capability probing"
+    doctrine:
+      - "Executor: Uses CaptureAuthority for device access"
+      - "Proof: Frame capture produces proof artifacts"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "Uses CaptureAuthority, not direct AVCapture"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/MicrophoneCaptureExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "MicrophoneCaptureExecutor"
+      - "startAudioCapture"
+      - "stopAudioCapture"
+      - "AudioCaptureProof"
+    canonical_concepts:
+      - "Microphone capture execution"
+      - "Audio stream processing"
+    doctrine:
+      - "Executor: Uses CaptureAuthority for microphone access"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/CoreImageTransformExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "CoreImageTransformExecutor"
+      - "applyFilter"
+      - "TransformProof"
+    canonical_concepts:
+      - "Core Image filter execution"
+      - "Image transformation pipeline"
+    doctrine:
+      - "Executor: Uses SurfaceAuthority for image surface access"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/MetalTransformExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "MetalTransformExecutor"
+      - "executeMetalShader"
+      - "MetalProof"
+    canonical_concepts:
+      - "Metal shaders for image processing"
+      - "GPU acceleration"
+      - "Unity memory with CPU"
+    doctrine:
+      - "Executor: Uses UMA for zero-copy GPU access"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/ImageIODecodeExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "ImageIODecodeExecutor"
+      - "decodeImage"
+      - "DecodeProof"
+    canonical_concepts:
+      - "ImageIO-based decoding"
+      - "Format-specific decoders"
+    doctrine:
+      - "Executor: Uses SurfaceAuthority for decoded surface"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/AudioToolboxDecodeExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "AudioToolboxDecodeExecutor"
+      - "decodeAudio"
+      - "AudioDecodeProof"
+    canonical_concepts:
+      - "AudioToolbox-based decoding"
+      - "Audio format conversion"
+    doctrine:
+      - "Executor: Uses AudioBufferAuthority for buffer management"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/VideoToolboxDecodeExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "VideoToolboxDecodeExecutor"
+      - "decodeVideo"
+      - "VideoDecodeProof"
+    canonical_concepts:
+      - "VideoToolbox-based decoding"
+      - "Frame extraction"
+    doctrine:
+      - "Executor: Uses MediaMemoryAuthority for video buffers"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/VideoToolboxEncodeExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "VideoToolboxEncodeExecutor"
+      - "encodeVideo"
+      - "VideoEncodeProof"
+    canonical_concepts:
+      - "VideoToolbox-based encoding"
+      - "Compression configuration"
+    doctrine:
+      - "Executor: Produces encoded output with proof"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Executors/MockMediaExecutor.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "executor"
+    key_symbols:
+      - "MockMediaExecutor"
+      - "MockExecutionContext"
+    canonical_concepts:
+      - "Test-only executor"
+      - "Controlled mock behavior"
+    doctrine:
+      - "Mock: Only for testing, never production"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "#if DEBUG only"
+    context_load_policy: "lazy"
+    update_policy: "test-only"
+
+  # ============================================================================
+  # MEDIACORE BACKENDS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Sources/MediaCore/Backends/SurfaceAuthority+CVPixelBuffer.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "backend"
+    key_symbols:
+      - "SurfaceAuthority+CVPixelBuffer"
+      - "createCVPixelBufferSurface"
+      - "CVPixelBufferHandle"
+    canonical_concepts:
+      - "Core Video pixel buffer backend"
+      - "Platform-specific surface creation"
+      - "Zero-copy CVPixelBuffer handling"
+    doctrine:
+      - "Backend: Platform-specific implementation behind authority"
+      - "ZeroCopy: CVPixelBuffer as zero-copy surface"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+      - "No platform imports in authority, only in backend"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Sources/MediaCore/Backends/MediaTypeAuthority+UTType.swift"
+    module: "MediaCore"
+    tier: "Tier 2"
+    role: "backend"
+    key_symbols:
+      - "MediaTypeAuthority+UTType"
+      - "registerUTTypes"
+      - "UTTypeMapping"
+    canonical_concepts:
+      - "Uniform Type Identifier backend"
+      - "Apple UTType integration"
+    doctrine:
+      - "Backend: Platform-specific type registration"
+    related_tasks: []
+    verification:
+      - "validate_tiers.py: Tier 2 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  # == 시대========================================================================
+  # DAEMON / SUBPROCESS POOLING
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Sources/AnigmaDaemonCore/KernelBridge.swift"
+    module: "AnigmaDaemon"
+    tier: "Tier 3"
+    role: "bridge"
+    key_symbols:
+      - "KernelBridge"
+      - "DaemonIPC"
+      - "MessageChannel"
+      - "IPCProof"
+    canonical_concepts:
+      - "Daemon to kernel communication"
+      - "Unix domain socket IPC"
+      - "Message serialization"
+    doctrine:
+      - "KernelBridge: Single IPC bridge for daemon"
+      - "IPCProof: Proof of every IPC message"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "validate_tiers.py: Tier 3 compliance"
+      - "No GUI dependencies in daemon core"
+    context_load_policy: "eager"
+    update_policy: "strict"
+
+  - path: "Sources/RuntimeOrchestrator/RuntimeOrchestrator.swift"
+    module: "AnigmaDaemon"
+    tier: "Tier 3"
+    role: "orchestrator"
+    key_symbols:
+      - "RuntimeOrchestrator"
+      - "RuntimeTypes"
+      - "orchestrate"
+      - "RuntimeProof"
+    canonical_concepts:
+      - "Runtime environment orchestration"
+      - "Worker process lifecycle"
+      - "Resource isolation"
+    doctrine:
+      - "RuntimeOrchestrator: Manages runtime environments"
+      - "RuntimeProof: Proof of runtime state transitions"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "validate_tiers.py: Tier 3 compliance"
+    context_load_policy: "eager"
+    update_policy: "strict"
+
+  - path: "Sources/RuntimeOrchestrator/RuntimeTypes.swift"
+    module: "AnigmaDaemon"
+    tier: "Tier 3"
+    role: "types"
+    key_symbols:
+      - "RuntimeConfiguration"
+      - "WorkerPoolConfiguration"
+      - "ProcessLifecycle"
+    canonical_concepts:
+      - "Runtime type definitions"
+      - "Configuration management"
+    doctrine:
+      - "Types: Portable across runtime environments"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "validate_tiers.py: Tier 3 compliance"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  # ============================================================================
+  # GOVERNANCE VALIDATORS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Scripts/validate_tiers.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "validate_tier_boundaries"
+      - "check_tieraid_violations"
+      - "TierViolation"
+    canonical_concepts:
+      - "Tier boundary validation"
+      - "Dependency direction enforcement"
+      - "Tier 1 -> Tier 2 -> Tier 3 only"
+    doctrine:
+      - "Tier Governance: Tier 1 cannot import Tier 2 or Tier 3"
+      - "Tier Governance: Tier 2 cannot import Tier 3"
+      - "BLOCK on tier violations"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "self-validating: exit 0 on valid repo"
+      - "Script validates its own tier assumptions"
+    context_load_policy: "eager"
+    update_policy: "strict - core governance validator"
+
+  - path: "Scripts/validate_no_cycles.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "detect_cycles"
+      - "DependencyGraph"
+      - "CycleError"
+    canonical_concepts:
+      - "Dependency cycle detection"
+      - "Directed graph analysis"
+      - "Topological sorting validation"
+    doctrine:
+      - "No Cycles: Dependency graph must be acyclic"
+      - "BLOCK on detected cycles"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "self-validating: exit 0 on acyclic graph"
+    context_load_policy: "eager"
+    update_policy: "strict - core governance validator"
+
+  - path: "Scripts/validate_exported_imports.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "check_exported_imports"
+      - "ExportedImport"
+      - "ExportViolation"
+    canonical_concepts:
+      - "@_exported import validation"
+      - "Tier 1 facade enforcement"
+      - "Allowed exported list"
+    doctrine:
+      - "Export Governance: @_exported only in Tier 1 facades"
+      - "BLOCK on invalid @_exported imports"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "self-validating: exit 0 on valid exported usage"
+    context_load_policy: "eager"
+    update_policy: "strict - core governance validator"
+
+  - path: "Scripts/validate_yaml_manifests.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "validate_yaml_syntax"
+      - "validate_yaml_schema"
+      - "YAMLValidationError"
+    canonical_concepts:
+      - "YAML manifest validation"
+      - "Schema compliance checking"
+      - "Parse error detection"
+    doctrine:
+      - "Manifests: All YAML must be valid and schema-compliant"
+      - "BLOCK on parse errors"
+    related_tasks: []
+    verification:
+      - "self-validating: exit 0 on valid YAML"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Scripts/validate_verification_profiles.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "validate_profiles"
+      - "check_tool_availability"
+      - "ProfileValidationError"
+    canonical_concepts:
+      - "Verification profile validation"
+      - "Tool availability checking"
+      - "Profile manifest validation"
+    doctrine:
+      - "Profiles: All profiles must be well-formed and tool-checkable"
+      - "BLOCK on profile syntax errors"
+    related_tasks: []
+    verification:
+      - "self-validating: exit 0 on valid profiles"
+    context_load_policy: "eager"
+    update_policy: "standard"
+
+  - path: "Scripts/validate_td_folder_system.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "validate_folder_structure"
+      - "check_descriptors"
+      - "TDFolderError"
+    canonical_concepts:
+      - "TD folder structure validation"
+      - "Descriptor file validation"
+      - "Proof field validation"
+    doctrine:
+      - "TD System: Folder structure mirrors task lifecycle"
+      - "BLOCK on structure violations"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "self-validating: exit 0 on valid TD structure"
+    context_load_policy: "eager"
+    update_policy: "standard"
+
+  - path: "Scripts/validate_td_docs_sync.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "validator"
+    key_symbols:
+      - "main"
+      - "validate_sync"
+      - "check_descriptor_source"
+      - "SyncError"
+    canonical_concepts:
+      - "TD/Docs synchronization validation"
+      - "Descriptor-source_docs alignment"
+      - "Proof existence checking"
+    doctrine:
+      - "Source of Truth: Docs/td descriptors are authoritative"
+      - "Sync: Descriptors must point to real source files"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "self-validating: exit 0 on valid sync"
+    context_load_policy: "eager"
+    update_policy: "standard"
+
+  - path: "Scripts/td_bootstrap_from_docs.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "bootstrap"
+    key_symbols:
+      - "main"
+      - "bootstrap_descriptors"
+      - "generate_descriptors"
+      - "BootstrapError"
+    canonical_concepts:
+      - "TD descriptor generation from Docs/"
+      - "Descriptor emission"
+      - "Command emission for reproducibility"
+    doctrine:
+      - "Bootstrap: Generate descriptors from existing documentation"
+      - "Reproducibility: Emit commands used for generation"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "Validated by validate_td_folder_system.py"
+    context_load_policy: "eager"
+    update_policy: "standard"
+
+  - path: "Scripts/generate_td_descriptors.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "generator"
+    key_symbols:
+      - "main"
+      - "generate_descriptors"
+      - "DescriptorGenerator"
+    canonical_concepts:
+      - "Descriptor generation from task metadata"
+      - "Template-based descriptor creation"
+    doctrine:
+      - "Generation: Descriptors generated from templates"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "Validated by validate_td_folder_system.py"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Scripts/td_context_gc.py"
+    module: "Governance Validators"
+    tier: "Governance"
+    role: "garbage_collector"
+    key_symbols:
+      - "main"
+      - "garbage_collect"
+      - "apply_gc_policy"
+      - "dry_run"
+    canonical_concepts:
+      - "TD context garbage collection"
+      - "Policy-based cleanup"
+      - "Dry-run and apply modes"
+    doctrine:
+      - "GC Policy: Never delete proof artifacts"
+      - "GC: Respect context_load_policy and gc_policy"
+    related_tasks:
+      - "p1-td-source-of-truth-recovery"
+    verification:
+      - "self-validating: dry-run mode always safe"
+    context_load_policy: "eager"
+    update_policy: "standard"
+
+  # ============================================================================
+  # TD SYSTEM FILES
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Docs/td/ready/p0-004/epic.yaml"
+    module: "TD Descriptors"
+    tier: "Governance"
+    role: "descriptor"
+    key_symbols:
+      - "id: p0-004"
+      - "lane: daemon-runtime-isolation"
+      - "subprocess pooling"
+    canonical_concepts:
+      - "Epic descriptor"
+      - "Task aggregation"
+      - "Verification profile assignment"
+    doctrine:
+      - "TD System: Epic describes cohesive work stream"
+      - "Source of Truth: Epic descriptor is authoritative"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "Validated by validate_td_folder_system.py"
+      - "Validated by validate_td_docs_sync.py"
+    context_load_policy: "eager"
+    update_policy: "strict - epic changes require review"
+
+  - path: "Docs/td/ready/p0-004/epic.md"
+    module: "TD Descriptors"
+    tier: "Governance"
+    role: "documentation"
+    key_symbols:
+      - "p0-004"
+      - "anigmad Subprocess Pooling"
+    canonical_concepts:
+      - "Epic human-readable documentation"
+      - "Acceptance criteria"
+      - "Non-goals"
+    doctrine:
+      - "TD System: Epic.md contains human details"
+      - "Source of Truth: epic.yaml is machine-readable, epic.md is human-readable"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "Markdown parseable"
+    context_load_policy: "eager"
+    update_policy: "standard"
+
+  - path: "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    module: "TD Proofs"
+    tier: "Governance"
+    role: "proof"
+    key_symbols:
+      - "p0-004"
+      - "proof artifact"
+      - "verification results"
+    canonical_concepts:
+      - "Proof of completed work"
+      - "Validation command results"
+      - "Evidence artifacts"
+    doctrine:
+      - "Proof: Never deleted by GC"
+      - "Proof: Contains structured command/result pairs"
+    related_tasks:
+      - "p0-004"
+    verification:
+      - "Proof artifact existence checked by validators"
+    context_load_policy: "lazy"
+    update_policy: "append-only - new proofs appended, never modified"
+
+  # ============================================================================
+  # ARCHITECTURE DIAGRAMS
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Docs/diagrams/likec4/anigma.c4"
+    module: "Architecture Diagrams"
+    tier: "Governance"
+    role: "model"
+    key_symbols:
+      - "System Context"
+      - "Container Views"
+      - "Component Views"
+      - "Data Flow"
+    canonical_concepts:
+      - "LikeC4 architecture model-as-code"
+      - "C4 model (Context, Containers, Components, Code)"
+      - "Text-to-diagram"
+    doctrine:
+      - "Architecture as Code: Diagrams are code, not images"
+      - "LikeC4: PRIMARY architecture modeling tool"
+      - "VALIDATION: likec4 build must succeed"
+    related_tasks: []
+    verification:
+      - "likec4 build Docs/diagrams/likec4 -o /tmp/test"
+      - "Validated by validate_verification_profiles.py (architecture-diagrams profile)"
+    context_load_policy: "eager"
+    update_policy: "strict - model changes require review"
+
+  - path: "Docs/diagrams/likec4/README.md"
+    module: "Architecture Diagrams"
+    tier: "Governance"
+    role: "documentation"
+    key_symbols:
+      - "LikeC4"
+      - "usage"
+      - "syntax"
+      - "migration"
+    canonical_concepts:
+      - "LikeC4 tool documentation"
+      - "Migration from Structurizr"
+      - "Best practices"
+    doctrine:
+      - "Documentation as Code: README explains the model"
+    related_tasks: []
+    verification:
+      - "Markdown parseable"
+    context_load_policy: "lazy"
+    update_policy: "standard"
+
+  - path: "Docs/diagrams/structurizr/README.md"
+    module: "Architecture Diagrams"
+    tier: "Governance"
+    role: "documentation"
+    key_symbols:
+      - "Structurizr"
+      - "LEGACY"
+      - "OPTIONAL"
+    canonical_concepts:
+      - "Legacy architecture tool"
+      - "Not required"
+      - "Not deleted (historical)"
+    doctrine:
+      - "Structurizr: LEGACY status"
+      - "LikeC4: PRIMARY replacement"
+    related_tasks: []
+    verification:
+      - "Markdown parseable"
+    context_load_policy: "lazy"
+    update_policy: "minimal - legacy, minimal updates"
+
+  # ============================================================================
+  # VERIFICATION PROFILES
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Docs/manifests/verification-profiles.yaml"
+    module: "Verification Profiles"
+    tier: "Governance"
+    role: "manifest"
+    key_symbols:
+      - "version: 1.1.0"
+      - "profiles"
+      - "required_tools"
+      - "optional_tools"
+      - "commands"
+    canonical_concepts:
+      - "Verification profile definitions"
+      - "Tool classification (required/optional)"
+      - "Command sets per profile"
+    doctrine:
+      - "Verification Profiles: Standardized validation command sets"
+      - "Tool Availability: Required tools must exist"
+      - "Profile Validation: validate_verification_profiles.py enforces rules"
+    related_tasks: []
+    verification:
+      - "Validated by validate_verification_profiles.py"
+      - "YAML parseable"
+      - "Schema compliant"
+    context_load_policy: "eager"
+    update_policy: "strict - profile changes affect all tasks"
+
+  - path: "Docs/governance/VERIFICATION_PROFILES.md"
+    module: "Verification Profiles"
+    tier: "Governance"
+    role: "doctrine"
+    key_symbols:
+      - "Verification Profiles"
+      - "Profile Selection"
+      - "Tool Classification"
+    canonical_concepts:
+      - "Verification profile doctrine"
+      - "Agent workflow integration"
+      - "Proof recording structure"
+    doctrine:
+      - "Standardization: No ad-hoc command invention"
+      - "Explicit: Tool requirements are documented"
+      - "Reproducible: Commands can be re-run"
+    related_tasks: []
+    verification:
+      - "Markdown parseable"
+    context_load_policy: "eager"
+    update_policy: "strict"
+
+  # ============================================================================
+  # GC POLICY
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  - path: "Docs/manifests/td-context-gc-policy.yaml"
+    module: "GC Policy"
+    tier: "Governance"
+    role: "manifest"
+    key_symbols:
+      - "version"
+      - "policies"
+      - "retain_all"
+      - "compact_on_complete"
+      - "compact_on_done"
+      - "archive_only"
+    canonical_concepts:
+      - "GC policy per task type"
+      - "Context load policy"
+      - "Automatic cleanup rules"
+    doctrine:
+      - "GC Policy: Never delete proof artifacts"
+      - "GC: Respect task lifecycle"
+      - "GC: Dry-run before apply"
+    related_tasks: []
+    verification:
+      - "Validated by td_context_gc.py"
+      - "YAML parseable"
+      - " td_context_gc.py --dry-run always safe"
+    context_load_policy: "eager"
+    update_policy: "strict"
+
+  - path: "Docs/governance/TD_CONTEXT_GARBAGE_COLLECTION.md"
+    module: "GC Policy"
+    tier: "Governance"
+    role: "doctrine"
+    key_symbols:
+      - "Garbage Collection Doctrine"
+      - "Guiding Principles"
+      - "GC Policy Levels"
+    canonical_concepts:
+      - "GC doctrine for TD context"
+      - "Active tasks rich"
+      - "Completed tasks compacted"
+    doctrine:
+      - "No Data Loss: Proof artifacts NEVER deleted"
+      - "Reproducibility: Sufficient context to reproduce"
+      - "Audit Trail: All GC operations logged"
+    related_tasks: []
+    verification:
+      - "Markdown parseable"
+    context_load_policy: "eager"
+    update_policy: "strict"

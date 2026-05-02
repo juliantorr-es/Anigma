@@ -1,0 +1,34 @@
+name: Capsule Determinism Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 3 * * 1'  # Weekly on Monday at 3 AM
+
+jobs:
+  determinism:
+    name: Verify Capsule Determinism
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "6.0"
+      
+      - name: Run Determinism Checks
+        run: ./Scripts/ci/check-determinism.sh
+      
+      - name: Upload Determinism Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: determinism-report
+          path: |
+            /tmp/determinism-output.log
+            /tmp/determinism-build.log
+        continue-on-error: true

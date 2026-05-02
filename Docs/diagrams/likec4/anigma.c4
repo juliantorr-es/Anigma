@@ -1,0 +1,189 @@
+# LikeC4 Architecture Model for Anigma
+# Primary architecture model-as-code replacing Structurizr
+
+$shapeDescriptions = {
+  person: "User or external actor"
+  system: "Autonomous software system with data"
+  container: "Application or service, deployed as a unit"
+  component: "Module or library within a container"
+}
+
+$externalFootnotes = true
+
+'''
+== Anigma System Context
+
+This is the highest-level view of the Anigma architecture.
+'''
+
+person(user, "End User", "Operator", "Interacts with Anigma via GUI and CLI")
+
+system(anigmaMacApp, "Anigma macOS Application", "Swift/SwiftUI", "Main GUI application for document processing, analysis, and workflow execution")
+
+system(anigmad, "anigmad Daemon", "Swift", "Background service managing subprocess pooling, ML worker pools, and long-running tasks")
+
+system(governance, "Governance Control Plane", "Python/Swift", "Validates tier boundaries, detects dependency cycles, checks exported imports")
+
+system(mediaCore, "MediaCore", "Swift/C++", "Media processing substrate for images, PDF, video with zero-copy materialization gates")
+
+system(subprocessPooling, "SubprocessPooling", "Swift", "Warm pool management for parallel execution with lifecycle management")
+
+systemDB(db, "Postgres/SQLite", "Database", "Primary persistent storage for Anigma data")
+
+system(llmProviders, "LLM Providers", "External", "Gemini, Claude, and other LLM services")
+
+Rel(user, anigmaMacApp, "Uses", "HTTP/gRPC/IPC")
+Rel(anigmaMacApp, anigmad, "Commands", "IPC/Unix Domain Sockets")
+Rel(anigmaMacApp, governance, "Validates", "In-process")
+Rel(anigmaMacApp, mediaCore, "Processes through", "In-process")
+Rel(anigmad, subprocessPooling, "Manages", "In-process")
+Rel(anigmad, mediaCore, "Uses", "In-process")
+Rel(anigmaMacApp, db, "Stores in")
+Rel(subprocessPooling, db, "Logs to")
+Rel(anigmaMacApp, llmProviders, "Queries")
+Rel(governance, anigmaMacApp, "Governs")
+
+'''
+== Anigma macOS Application - Container View
+
+The main application container structure.
+'''
+
+container(anigmaMacApp, "Anigma macOS Application", "Swift/SwiftUI", "Main application container") {
+    container(anigmaCLI, "AnigmaCLI", "Swift", "Command-line interface for automation")
+    container(ui, "UI Layer", "SwiftUI/Swift", "User interface components")
+    container(dataUI, "DataUI", "Swift", "Data binding and UI state management")
+    container(contracts, "ContractsCore", "Swift", "Type-safe interfaces and service contracts")
+    container(execution, "ExecutionCore", "Swift", "Task execution orchestration and workflow")
+    container(harmonia, "HarmoniaModule", "Swift", "LLM integration, memory management, RAG")
+    container(daemonControl, "AnigmaDaemonControl", "Swift", "Daemon communication and lifecycle control")
+}
+
+Rel(anigmaCLI, ui, "Commands", "CLI -> UI")
+Rel(ui, dataUI, "Updates", "UI -> Data")
+Rel(dataUI, contracts, "Uses", "Data -> Contracts")
+Rel(contracts, execution, "Defines", "Contracts -> Execution")
+Rel(execution, harmonia, "Integrates", "Execution -> LLM")
+Rel(execution, anigmad, "Delegates to", "IPC")
+Rel(ui, daemonControl, "Controls", "UI -> Daemon Control")
+Rel(daemonControl, anigmad, "Commands", "Unix Domain Sockets")
+
+'''
+== anigmad Daemon - Container View
+
+Subprocess pooling and daemon services.
+'''
+
+container(anigmad, "anigmad Daemon", "Swift", "Background service for subprocess pooling") {
+    container(daemonCore, "AnigmaDaemonCore", "Swift", "Core daemon services and lifecycle")
+    container(pooling, "SubprocessPooling", "Swift", "Generic warm pool management")
+    
+    containerPool(pools, "Worker Pools") {
+        container(mlPool, "MLWorkerPool", "Swift", "Machine learning worker pool with GPU support")
+        container(mcpPool, "MCPWorkerPool", "Swift", "Model Context Protocol workers")
+        container(benchPool, "BenchmarkWorkerPool", "Swift", "Performance testing and benchmark workers")
+    }
+}
+
+Rel(daemonCore, pooling, "Manages", "Core -> Pooling")
+Rel(pooling, mlPool, "Contains", "Generic -> Specific")
+Rel(pooling, mcpPool, "Contains")
+Rel(pooling, benchPool, "Contains")
+
+'''
+== MediaCore - Container View
+
+Media processing substrate with zero-copy enforcement.
+'''
+
+container(mediaCore, "MediaCore", "Swift", "Core media processing substrate") {
+    container(core, "MediaCore", "Swift", "Core media operations")
+    container(cpdfium, "CPDFium", "C++/ObjC", "PDF rendering engine wrapper")
+    container(vector, "VectorCapsule", "Swift", "Vector graphics processing")
+    container(image, "ImageDecodeCapsule", "Swift", "Image decoding and processing")
+    container(docRender, "DocumentRenderKit", "Swift", "Document rendering pipeline")
+    component(gate, "MaterializationGate", "Swift", "Zero-copy enforcement and hot-path protection")
+}
+
+Rel(core, cpdfium, "Uses", "MediaCore -> CPDFium")
+Rel(core, vector, "Uses", "MediaCore -> Vector")
+Rel(core, image, "Uses", "MediaCore -> Image")
+Rel(core, docRender, "Uses", "MediaCore -> DocRender")
+Rel(docRender, cpdfium, "Calls", "Rendering -> PDF Engine")
+Rel(core, gate, "Enforces", "MediaCore -> Gate")
+
+'''
+== Governance Control Plane - Component View
+
+Validation scripts and tooling.
+'''
+
+container(governance, "Governance Control Plane", "Python/Swift", "Architecture and code governance") {
+    component(tiers, "validate_tiers.py", "Python", "Validates tier boundary dependencies")
+    component(cycles, "validate_no_cycles.py", "Python", "Detects dependency cycles")
+    component(exports, "validate_exported_imports.py", "Python", "Checks @_exported import usage")
+    component(yaml, "validate_yaml_manifests.py", "Python", "Validates YAML manifest structure")
+    component(profiles, "validate_verification_profiles.py", "Python", "Validates verification profile manifest")
+    component(folders, "validate_td_folder_system.py", "Python", "Validates TD folder system structure")
+    component(docsSync, "validate_td_docs_sync.py", "Python", "Validates TD/Docs synchronization")
+}
+
+folder(schemas, "Docs/schemas/", "JSON Schema definitions")
+folder(manifests, "Docs/manifests/", "YAML manifests")
+folder(govDocs, "Docs/governance/", "Governance documentation")
+folder(td, "Docs/td/", "Technical debt tracking")
+
+Rel(tiers, schemas, "Validates against", "Script -> Schemas")
+Rel(cycles, schemas, "Uses", "Script -> Schemas")
+Rel(exports, schemas, "Uses", "Script -> Schemas")
+Rel(yaml, manifests, "Validates", "Script -> Manifests")
+Rel(profiles, manifests, "Validates", "Script -> Manifests")
+Rel(profiles, govDocs, "References", "Script -> Docs")
+Rel(folders, td, "Validates", "Script -> TD")
+Rel(docsSync, td, "Validates", "Script -> TD")
+Rel(docsSync, manifests, "Validates", "Script -> Manifests")
+
+'''
+== SubprocessPooling - Component View
+
+Worker pool management components.
+'''
+
+container(subprocessPooling, "SubprocessPooling", "Swift", "Warm pool management") {
+    component(manager, "SubprocessManager", "Swift", "Generic pool lifecycle management (ProcessPool<W>)")
+    component(mlWorker, "MLWorker", "Swift", "Machine learning subprocess worker protocol")
+    component(mcpWorker, "MCPWorker", "Swift", "Model Context Protocol worker implementation")
+    component(benchWorker, "BenchmarkWorker", "Swift", "Performance testing worker")
+    component(poolMetrics, "PoolMetrics", "Swift", "Pool observability and metrics collection")
+    component(config, "PoolConfiguration", "Swift", "Pool sizing and configuration management")
+    component(state, "WorkerState", "Swift", "Worker lifecycle and state tracking")
+    component(umaPool, "UMABufferPool", "Swift", "Unified Memory Architecture for zero-copy tensor sharing")
+    component(modelCache, "ModelCache", "Swift", "GPU model caching and reuse across workers")
+}
+
+Rel(manager, mlWorker, "Manages", "Generic -> Type parameter W")
+Rel(manager, mcpWorker, "Manages")
+Rel(manager, benchWorker, "Manages")
+Rel(manager, poolMetrics, "Reports to", "Manager -> Metrics")
+Rel(manager, config, "Uses", "Manager -> Config")
+Rel(manager, state, "Tracks", "Manager -> State")
+Rel(umaPool, mlWorker, "Provides to", "zero-copy buffers")
+Rel(modelCache, mlWorker, "Caches for", "GPU models")
+
+'''
+== Evidence Store - Data Flow
+
+Proof artifacts and documentation as code.
+'''
+
+folder(proofs, "Docs/proofs/", "Markdown", "Proof artifacts for completed work")
+folder(td, "Docs/td/", "YAML/Markdown", "Technical debt task descriptors")
+folder(schemas, "Docs/schemas/", "JSON", "JSON Schema definitions for validation")
+folder(diagrams, "Docs/diagrams/", "C4/PlantUML/Mermaid", "Architecture diagrams as code")
+
+Rel_D(anigmaMacApp, proofs, "Writes to", "Application generates proof artifacts")
+Rel_D(subprocessPooling, proofs, "Generates", "Pool tests create proof artifacts")
+Rel_D(mediaCore, proofs, "Generates", "Materialization gate creates proof artifacts")
+Rel_D(anigmaMacApp, td, "Syncs with", "Application maintains TD descriptors")
+Rel_D(anigmaMacApp, schemas, "Validates against", "Application validates against schemas")
+Rel_D(anigmaMacApp, diagrams, "Renders from", "Application generates diagrams")

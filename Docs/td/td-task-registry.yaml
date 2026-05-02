@@ -1,0 +1,568 @@
+---
+# TD Task Registry
+# Canonical task definitions for Anigma
+# Source of truth: This file defines all active tasks
+# Generated from: Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md
+# 
+# This registry is the canonical source for task IDs, titles, acceptance criteria,
+# and proof requirements. TD database is rebuilt from this file.
+#
+# Validation: python3 Scripts/validate_td_docs_sync.py
+# Bootstrap: python3 Scripts/td_bootstrap_from_docs.py --apply
+
+version: "1.0.0"
+source: "Docs/td/td-task-registry.yaml"
+generated_for: "td"
+description: |
+  Canonical registry of all active Anigma tasks. TD database should be
+  rebuilt from this file after any reset. Tasks not in this registry
+  are considered ad-hoc and must be explicitly marked.
+
+# ============================================================================
+# LANE DEFINITIONS
+# Lanes group related tasks. Worktrees map to lanes, not individual tasks.
+# ============================================================================
+
+lanes:
+  p0-critical-path:
+    id: "p0-critical-path"
+    title: "P0 Critical Path"
+    description: "Blocking work for public GitHub release. Must complete before publication."
+    owner: "Core Team"
+    priority: "P0"
+    worktree: "anigma/"
+
+  daemon-runtime-isolation:
+    id: "daemon-runtime-isolation"
+    title: "Daemon Runtime Isolation"
+    description: "Subprocess pooling and daemon hardyfication for reliable execution."
+    owner: "Daemon Team"
+    priority: "P0"
+    worktree: "anigma/"
+
+  publication-cleanup:
+    id: "publication-cleanup"
+    title: "Publication Cleanup"
+    description: "Prepare repository for public GitHub publication. Documentation, validation, proofs."
+    owner: "Architecture Team"
+    priority: "P1"
+    worktree: "docs/"
+
+  architecture-governance:
+    id: "architecture-governance"
+    title: "Architecture Governance"
+    description: "Tier validation, cycle detection, exported import enforcement."
+    owner: "Architecture Team"
+    priority: "P1"
+    worktree: "anigma/"
+
+  documentation-infrastructure:
+    id: "documentation-infrastructure"
+    title: "Documentation Infrastructure"
+    description: "Documentation-as-Code, schema validation, diagram rendering."
+    owner: "Architecture Team"
+    priority: "P1"
+    worktree: "docs/"
+
+# ============================================================================
+# TASK DEFINITIONS
+# Each task must have: id, title, priority, type, lane
+# Optional: description, source_docs, acceptance, proof, children, non_goals
+# ============================================================================
+
+tasks:
+
+  # ==========================================================================
+  # P0 CRITICAL PATH
+  # ==========================================================================
+
+  - id: "p0-003"
+    title: "Polytropos Phase 0 Implementation"
+    priority: "P0"
+    type: "epic"
+    lane: "p0-critical-path"
+    status: "complete"
+    description: "Phase 0: Core materialization gate, media primitives, execution foundation."
+    
+    source_docs:
+      - "Docs/proofs/p0-003-polytropos-phase0-implementation.md"
+      - "Docs/proofs/p0-003-test-results.md"
+    
+    acceptance:
+      - "Materialization gate enforcement is complete"
+      - "Media primitive types are defined and tested"
+      - "Execution foundation supports zero-copy path"
+      - "MediaCore tests pass (55/55)"
+      - "Governance validators pass or have known tracked debt"
+    
+    proof:
+      - "Docs/proofs/p0-003-polytropos-phase0-implementation.md"
+      - "Docs/proofs/p0-003-test-results.md"
+    
+    non_goals:
+      - "Phase 1+ Polytropos features"
+      - "Public GitHub publication"
+
+  - id: "p0-004"
+    title: "anigmad Subprocess Pooling"
+    priority: "P0"
+    type: "epic"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    description: "Unify under anigmad with warm subprocess pooling for parallel execution."
+    
+    source_docs:
+      - "Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md"
+      - "Docs/td/TD_PHASE6_UPDATE.md"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    acceptance:
+      - "anigmad subprocess pool lifecycle is implemented"
+      - "worker lease checkout/checkin is tested"
+      - "crashed workers are detected and recycled or retired"
+      - "shutdown reaps child processes deterministically"
+      - "governance validators pass"
+    
+    proof:
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    proof_required:
+      - "Test results for worker lease lifecycle"
+      - "Test results for crash detection and recovery"
+      - "Test results for deterministic shutdown"
+    
+    children:
+      - "td-a84da2"
+      - "td-80575e"
+      - "td-bfe7a3"
+      - "td-0dfb09"
+      - "td-73aea8"
+      - "td-ce4439"
+    
+    non_goals:
+      - "Runtime implementation (already existed pre-P0-004)"
+      - "New CLIs beyond anigmad consolidation"
+
+  # P0-004 Child Tasks (implementation exists but test proof needed)
+  
+  - id: "td-a84da2"
+    title: "Phase 1: Implement SubprocessManager foundation with pool lifecycle"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-004"
+    
+    source_docs:
+      - "anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift"
+      - "anigma/Packages/SubprocessPooling/Tests/SubprocessManagerTests.swift"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    acceptance:
+      - "ProcessPool<W> generic pool manager implemented"
+      - "SubprocessWorker protocol defined"
+      - "WorkerInfo and WorkerState tracking implemented"
+      - "PoolConfiguration and PoolMetrics support complete"
+      - "Per-worker-type pools functional"
+    
+    proof_required:
+      - "Test results from SubprocessManagerTests.swift"
+    
+    non_goals:
+      - "Separate process spawning (Phase 2)"
+    
+    # Conforms to td-task.schema.json - has required: task_id, title, status
+
+  - id: "td-80575e"
+    title: "Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-004"
+    
+    source_docs:
+      - "anigma/Packages/AnigmaDaemon/CLI.swift"
+      - "anigma/Packages/HarmoniaV2CLI/"
+      - "anigma/Packages/AnigmaCLI/"
+      - "anigma/Package.swift"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    acceptance:
+      - "HarmoniaV2CLI commands ported to AnigmaDaemon/CLI.swift"
+      - "CLI integration preserves command intent"
+      - "HarmoniaV2CLIKernel provides testable isolation"
+      - "All legacy CLI functionality consolidated"
+    
+    proof_required:
+      - "Verification that CLI commands produce expected output"
+    
+    non_goals:
+      - "New CLI features"
+      - "CLI refactoring beyond consolidation"
+
+  - id: "td-bfe7a3"
+    title: "Phase 3: Implement MLWorker warm pool with UMA shared memory"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-004"
+    
+    source_docs:
+      - "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift"
+      - "anigma/Packages/SubprocessPooling/Tests/MLWorkerPoolIntegrationTests.swift"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    acceptance:
+      - "MLWorkerPool with round-robin workload balancing"
+      - "UMABufferPool for zero-copy tensor data transfer"
+      - "ModelCache for GPU model caching and reuse"
+      - "Multi-GPU support with per-GPU worker pools"
+      - "MLPoolMetrics for observability"
+    
+    proof_required:
+      - "Test results from MLWorkerPoolIntegrationTests.swift"
+    
+    non_goals:
+      - "Actual CoreML/MLX model loading"
+      - "Production model inference"
+
+  - id: "td-0dfb09"
+    title: "Phase 4: Implement anigma-mcp warm pool with Unix domain sockets"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-004"
+    
+    source_docs:
+      - "anigma/Packages/SubprocessPooling/Sources/MCPWorker.swift"
+      - "anigma/Packages/SubprocessPooling/Sources/IPC/UnixDomainSocketIPC.swift"
+      - "anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    acceptance:
+      - "MCPWorkerPool for JSON-RPC communication"
+      - "UnixDomainSocketIPC for low-latency IPC"
+      - "Streaming MCP request handling in SubprocessManager"
+      - "MCPPoolMetrics for pool observability"
+      - "JSON-RPC request/response structures defined"
+    
+    proof_required:
+      - "Test results for MCP worker pool and IPC"
+      - "anigma/Packages/SubprocessPooling/Tests/MCPWorkerIntegrationTests.swift"
+    
+    non_goals:
+      - "Actual MCP server implementation"
+      - "External MCP client integration"
+
+  - id: "td-73aea8"
+    title: "Phase 5: On-demand subprocesses for PDF, Gem, and benchmarks"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-004"
+    
+    source_docs:
+      - "anigma/Packages/SubprocessPooling/Sources/PDFSidecarWorker.swift"
+      - "anigma/Packages/SubprocessPooling/Sources/BenchmarkWorker.swift"
+      - "Docs/td/TD_PHASE6_UPDATE.md"
+      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
+    
+    acceptance:
+      - "PDFSidecarWorker for isolated PDF processing"
+      - "BenchmarkWorker for performance testing"
+      - "On-demand spawning with macOS sandbox support"
+      - "Per-request subprocess isolation"
+    
+    proof_required:
+      - "Test results for PDF sidecar worker"
+      - "Test results for benchmark worker"
+      - "anigma/Packages/SubprocessPooling/Tests/Phase5OnDemandSubprocessTests.swift"
+    
+    non_goals:
+      - "Per-request PDFium server (future optimization)"
+
+  - id: "td-ce4439"
+    title: "Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-004"
+    
+    source_docs:
+      - "Docs/td/TD_PHASE6_UPDATE.md"
+      - "anigma/Docs/LLM/Retirement/AnigmaGeminiBridge_Retirement_Summary.md"
+      - "anigma/Docs/LLM/Migration/GeminiBridge_Migration_Guide.md"
+      - "anigma/Packages/SubprocessPooling/Sources/LLMProviders/"
+    
+    acceptance:
+      - "Architectural decision: AnigmaGeminiBridge eliminated"
+      - "Unified LLM provider framework implemented (6.1)"
+      - "All provider implementations complete (6.2-6.6)"
+      - "Daemon HTTP endpoints for LLM routing (6.7)"
+      - "Security and rate limiting implemented (6.8)"
+      - "Migration and deprecation complete (6.9)"
+      - "AnigmaGeminiBridge removed from Package.swift"
+    
+    proof_required:
+      - "Verification that AnigmaGeminiBridge is removed from Package.swift"
+      - "Verification that all migrations are complete"
+    
+    subtasks:
+      - "6.1: Unified LLM Provider Framework (COMPLETE)"
+      - "6.2: Gemini Provider Implementation (COMPLETE)"
+      - "6.3: Claude Provider Implementation (COMPLETE)"
+      - "6.4: OpenAI Codex Provider Implementation (COMPLETE)"
+      - "6.5: Mistral AI Provider Implementation (COMPLETE)"
+      - "6.6: OpenCode Provider Implementation (COMPLETE)"
+      - "6.7: Daemon HTTP Endpoints (COMPLETE)"
+      - "6.8: Security & Rate Limiting (COMPLETE)"
+      - "6.9: Migration & Deprecation (COMPLETE)"
+    
+    non_goals:
+      - "Re-adding AnigmaGeminiBridge"
+
+  # ==========================================================================
+  # P1: ARCHITECTURE GOVERNANCE
+  # ==========================================================================
+
+  - id: "p1-validate-tiers-green-gate"
+    title: "Validate Tiers Green Gate"
+    priority: "P1"
+    type: "task"
+    lane: "architecture-governance"
+    status: "complete"
+    
+    source_docs:
+      - "Docs/proofs/p1-validate-tiers-green-gate.md"
+      - "tools/governance/scripts/validate_tiers.py"
+    
+    acceptance:
+      - "validate_tiers.py exits with code 0"
+      - "SecurityEventsManager correctly classified as TIER_2"
+      - "SubprocessPooling added to TIER_2"
+      - "AnigmaDaemonCore and AnigmaDaemon added to TIER_3"
+      - "Package.swift dependencies corrected"
+      - "All three governance validators pass"
+    
+    proof:
+      - "Docs/proofs/p1-validate-tiers-green-gate.md"
+    
+    validator_commands:
+      - "cd anigma && python3 ../Scripts/validate_tiers.py"
+      - "cd anigma && python3 ../Scripts/validate_no_cycles.py .build/anigma-package.json"
+      - "cd anigma && python3 ../Scripts/validate_exported_imports.py"
+
+  # ==========================================================================
+  # P1: DOCUMENTATION INFRASTRUCTURE
+  # ==========================================================================
+
+  - id: "p1-documentation-artifacts-completion"
+    title: "P1 Documentation-as-Code Artifact Completion"
+    priority: "P1"
+    type: "task"
+    lane: "documentation-infrastructure"
+    status: "complete"
+    
+    source_docs:
+      - "Docs/proofs/documentation-artifacts-completion.md"
+      - "Docs/manifests/documentation-artifacts.yaml"
+      - "Docs/manifests/publication-checklist.yaml"
+    
+    acceptance:
+      - "No 0-byte artifact files in Docs/schemas, Docs/manifests, Docs/diagrams"
+      - "All JSON schemas parse as valid JSON"
+      - "All YAML manifests parse as valid YAML"
+      - "All Mermaid diagrams have valid syntax"
+      - "All Graphviz diagrams have valid DOT syntax"
+      - "Structurizr DSL workspace is valid"
+      - "Proof document records validation"
+    
+    proof:
+      - "Docs/proofs/documentation-artifacts-completion.md"
+    
+    artifacts_created:
+      - "Docs/schemas/validator-result.schema.json"
+      - "Docs/schemas/runtime-receipt.schema.json"
+      - "Docs/schemas/roadmap-phase.schema.json"
+      - "Docs/schemas/td-task.schema.json"
+      - "Docs/manifests/documentation-artifacts.yaml"
+      - "Docs/manifests/publication-checklist.yaml"
+      - "Docs/diagrams/mermaid/git-worktree-flow.mmd"
+      - "Docs/diagrams/mermaid/materialization-gate-flow.mmd"
+      - "Docs/diagrams/mermaid/task-lifecycle.mmd"
+      - "Docs/diagrams/mermaid/testing-lanes.mmd"
+      - "Docs/diagrams/graphviz/package-target-graph-example.dot"
+      - "Docs/diagrams/graphviz/tier-violations-example.dot"
+      - "Docs/diagrams/structurizr/anigma-workspace.dsl"
+      - "Docs/diagrams/README.md"
+    
+    non_goals:
+      - "Rendering diagrams to SVG"
+      - "Creating additional schemas beyond the 5 specified"
+
+  # ==========================================================================
+  # P1: TD SOURCE-OF-TRUTH RECOVERY (THIS LANE)
+  # ==========================================================================
+
+  - id: "p1-td-source-of-truth-recovery"
+    title: "P1 — TD Source-of-Truth Recovery and Docs Sync"
+    priority: "P1"
+    type: "epic"
+    lane: "documentation-infrastructure"
+    status: "in_progress"
+    
+    description: |
+      After TD database reset on 2026-05-02, establish Docs/ as the durable
+      source of truth and TD as the local execution queue. Create bootstrap
+      and validation scripts to make TD reconstructible from Docs/.
+    
+    source_docs:
+      - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+      - "Docs/td/td-task-registry.yaml"
+    
+    acceptance:
+      - "TD source-of-truth doctrine exists and is canonical"
+      - "TD task registry exists with active lanes defined"
+      - "Bootstrap script emits reproducible td commands from registry"
+      - "Sync validator passes on registry and TD state"
+      - "Proof artifact exists documenting the recovery"
+      - "Existing architecture validators still pass"
+      - "No runtime source changes"
+    
+    deliverables:
+      - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+      - "Docs/td/td-task-registry.yaml"
+      - "Scripts/td_bootstrap_from_docs.py"
+      - "Scripts/validate_td_docs_sync.py"
+      - "Docs/proofs/td-source-of-truth-recovery.md"
+    
+    non_goals:
+      - "Implement P0-004 runtime work"
+      - "Rewrite roadmap content broadly"
+      - "Recreate every historical task"
+      - "Depend on stale local TD database contents"
+      - "Make TD the canonical source of truth"
+      - "Mutate runtime source"
+      - "Weaken existing validators"
+
+  # ==========================================================================
+  # P1: PUBLICATION CLEANUP
+  # ==========================================================================
+
+  - id: "p1-public-history-excision"
+    title: "Public History Excision"
+    priority: "P1"
+    type: "task"
+    lane: "publication-cleanup"
+    status: "ready"
+    
+    description: |
+      Remove sensitive data, large binaries, and generated artifacts from
+      Git history before public GitHub publication.
+    
+    source_docs:
+      - "Docs/reports/public-release-dependency-exclusion-audit.md"
+      - "Docs/proofs/github-publication-readiness.md"
+      - "Docs/proofs/p1-validate-tiers-green-gate.md"
+      - ".gitignore"
+    
+    acceptance:
+      - "Generated artifacts are removed from Git history"
+      - "Vendored binaries with unclear provenance are excluded"
+      - "No blobs over 100MB remain in history"
+      - "Remote push succeeds without errors"
+      - "Repository builds cleanly after cleanup"
+    
+    proof_required:
+      - "Docs/proofs/public-history-excision-proof.md"
+    
+    validator_commands:
+      - "git log --stat --find-object --all"  # Verify no large objects
+      - "git verify-pack -v .git/objects/pack/*.idx"  # Verify pack integrity
+      - "swift build"  # Verify build after cleanup
+    
+    non_goals:
+      - "Public website generation"
+      - "Rewriting commit history (only cleanup)"
+      - "Removing canonical documentation"
+
+# ============================================================================
+# VALIDATION RULES
+# These rules are enforced by Scripts/validate_td_docs_sync.py
+# ============================================================================
+
+validation:
+  rules:
+    - id: "SRC-001"
+      name: "Registry Coverage"
+      description: "Every non-ad-hoc TD task must have a registry entry"
+      severity: "ERROR"
+      check: "SELECT id FROM td_tasks WHERE ad_hoc = false AND id NOT IN (SELECT id FROM registry_tasks)"
+      
+    - id: "SRC-002"
+      name: "Schema Compliance"
+      description: "Every registry task must validate against td-task.schema.json"
+      severity: "ERROR"
+      check: "json_schema_validation"
+      
+    - id: "SRC-003"
+      name: "Proof Existence"
+      description: "Every completed task must have a proof artifact in Docs/proofs/"
+      severity: "ERROR"
+      check: "file_exists(Docs/proofs/<task-id>.md) OR file_exists(proof.path)"
+      
+    - id: "SRC-004"
+      name: "Proof Path Validity"
+      description: "Every proof path in registry must point to existing file"
+      severity: "ERROR"
+      check: "all(proof_file in registry.proof for proof_file in registry.proofs if exists(proof_file))"
+      
+    - id: "SRC-005"
+      name: "Source Docs Validity"
+      description: "Every source_docs path in registry must point to existing file"
+      severity: "ERROR"
+      check: "all(doc in registry.source_docs for doc in registry.source_docs if exists(doc))"
+      
+    - id: "SRC-006"
+      name: "Unique Task IDs"
+      description: "Task IDs in registry must be unique"
+      severity: "ERROR"
+      check: "no duplicate ids in tasks list"
+      
+    - id: "SRC-007"
+      name: "Children Registration"
+      description: "Child task IDs should be listed in parent's children array"
+      severity: "WARNING"
+      check: "all(child in parent.children for child in tasks if child.parent == parent.id)"
+
+# ============================================================================
+# META
+# ============================================================================
+
+metadata:
+  created: "2026-05-02"
+  last_updated: "2026-05-02"
+  owner: "Architecture Team"
+  repository: "Anigma_clean"
+  
+  # Statistics
+  total_tasks: 13
+  p0_tasks: 7
+  p1_tasks: 6
+  complete_tasks: 10
+  ready_tasks: 1
+  in_progress_tasks: 1
+  
+  # Related artifacts
+  doctrine: "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
+  schema: "Docs/schemas/td-task.schema.json"
+  bootstrap_script: "Scripts/td_bootstrap_from_docs.py"
+  validator_script: "Scripts/validate_td_docs_sync.py"
+  proof: "Docs/proofs/td-source-of-truth-recovery.md"
+
+# End of registry

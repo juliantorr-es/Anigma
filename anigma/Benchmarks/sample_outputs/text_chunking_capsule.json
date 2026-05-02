@@ -1,0 +1,12 @@
+{
+  "generatedAt" : "2026-01-26T12:00:00Z",
+  "results" : [
+    {
+      "durationSeconds" : 0.145,
+      "memoryBytes" : 1572864,
+      "name" : "text_chunking_large_input",
+      "operations" : 20,
+      "opsPerSecond" : 137.93
+    }
+  ]
+}

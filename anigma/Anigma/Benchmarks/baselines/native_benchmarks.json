@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "format": "benchmark_results_v1",
+    "source": "anigma_benchmarks",
+    "generated_at": "2026-01-26T00:00:00Z"
+  },
+  "results": [
+    {
+      "name": "vector_index_build",
+      "durationSeconds": 0.842,
+      "operations": 12,
+      "opsPerSecond": 14.25,
+      "memoryBytes": 6291456
+    },
+    {
+      "name": "vector_index_query",
+      "durationSeconds": 0.218,
+      "operations": 50,
+      "opsPerSecond": 229.36,
+      "memoryBytes": 1048576
+    },
+    {
+      "name": "rank_fusion_merge",
+      "durationSeconds": 0.032,
+      "operations": 200,
+      "opsPerSecond": 6250.0,
+      "memoryBytes": 262144
+    },
+    {
+      "name": "text_chunking_large_input",
+      "durationSeconds": 0.145,
+      "operations": 20,
+      "opsPerSecond": 137.93,
+      "memoryBytes": 1572864
+    },
+    {
+      "name": "pdf_text_extraction",
+      "durationSeconds": 0.09,
+      "operations": 30,
+      "opsPerSecond": 333.33,
+      "memoryBytes": 524288
+    },
+    {
+      "name": "layout_engine_analysis",
+      "durationSeconds": 0.21,
+      "operations": 10,
+      "opsPerSecond": 47.62,
+      "memoryBytes": 3145728
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "current": "1.0",
+  "versions": {
+    "1.0": {
+      "release_date": "2026-04-16",
+      "docs_path": "/Docs/",
+      "breaking_changes": [],
+      "highlights": [
+        "Restructured documentation for faster discovery",
+        "Added navigation metadata for agents",
+        "Landing page with clear entry points"
+      ]
+    },
+    "0.9": {
+      "release_date": "2026-02-01",
+      "docs_path": "/Docs/",
+      "deprecation_warnings": [],
+      "status": "archived"
+    }
+  },
+  "metadata": {
+    "total_documents": 50,
+    "total_sections": 8,
+    "last_updated": "2026-04-16",
+    "coverage": "95%"
+  }
+}

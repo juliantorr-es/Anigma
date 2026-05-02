@@ -1,0 +1,24 @@
+{
+  "manifest_version": "0.2",
+  "name": "Anigma-mcp",
+  "version": "1.0.0",
+  "description": "Anigma MCP Server - Governed AI coding environment with tool contracts, evidence chains, and multi-tier architecture",
+  "author": {
+    "name": "Julian Torres"
+  },
+  "server": {
+    "type": "binary",
+    "entry_point": "server/my-server",
+    "mcp_config": {
+      "command": "${__dirname}/server/my-server",
+      "args": [],
+      "env": {}
+    }
+  },
+  "tools": [
+    {
+      "name": "Anigma"
+    }
+  ],
+  "license": "MIT"
+}

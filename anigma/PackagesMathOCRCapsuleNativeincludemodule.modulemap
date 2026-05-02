@@ -1,0 +1,4 @@
+module MathOCRNative {
+    header "math_ocr_capsule.h"
+    export *
+}

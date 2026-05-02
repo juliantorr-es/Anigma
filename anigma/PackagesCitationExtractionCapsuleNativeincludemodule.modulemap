@@ -1,0 +1,4 @@
+module CitationExtractionNative {
+    header "citation_extraction_capsule.h"
+    export *
+}

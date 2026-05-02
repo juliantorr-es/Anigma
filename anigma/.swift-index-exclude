@@ -1,0 +1,17 @@
+.build
+.swiftpm
+Vendor
+DerivedData
+*.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
+*.profraw
+*.profdata
+.build/stats
+Packages/CClipper2/Clipper2/CPP/Examples
+Packages/CClipper2/Clipper2/CPP/Tests
+Packages/CClipper2/Clipper2/Delphi
+Packages/CClipper2/Clipper2/CSharp
+Packages/CClipper2/Clipper2/DotNet
+Native/Shims/Tests
+Native/Shims/Examples
+Native/Kernel/Tests

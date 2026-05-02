@@ -1,0 +1,64 @@
+{
+  "answerText" : "Grounded answer for “How do I regenerate a grounded assistant answer?” in Atlas: Use the stored query, project, and recall policy to regenerate the grounded assistant answer.",
+  "confidence" : 0.92700001835823065,
+  "contextPolicy" : {
+    "excludedSourceIDs" : [
+
+    ],
+    "pinnedSourceIDs" : [
+
+    ],
+    "updatedAt" : "1970-01-01T00:00:00Z"
+  },
+  "generatedAt" : "1970-01-01T00:00:00Z",
+  "id" : "84d87b487b1d627de3421554823a8ac71f5d476af36f33ca0fa421cb15852c15",
+  "missingContext" : [
+
+  ],
+  "modelName" : "llama-3.2-1b",
+  "principalId" : "test-user",
+  "projectId" : "project-alpha",
+  "projectName" : "Atlas",
+  "query" : "How do I regenerate a grounded assistant answer?",
+  "receipts" : [
+    {
+      "hash" : "4078064780de8be6a9ce06ffce7ee52ece666ce0c2216cd2a3a002ef1e979bfa",
+      "id" : "42C62F33-B3D4-4C08-A8FC-FA5B1A668C5F",
+      "operationType" : "assistant-recall",
+      "timestamp" : "2026-04-25T03:16:45Z"
+    },
+    {
+      "hash" : "78f5578b4f013d7f081883bf0709637db74d2a0e24a458777f8f5b6739dd57fd",
+      "id" : "74E51F68-93F3-432F-BA79-E9E0F5C86400",
+      "operationType" : "assistant-provenance-seal",
+      "timestamp" : "2026-04-25T03:16:45Z"
+    }
+  ],
+  "replay" : {
+    "contextPolicyHash" : "565d240f5343e625ae579a4d45a770f1f02c6368b5ed4d06da4fbe6f47c28866",
+    "deterministic" : true,
+    "mode" : "regenerate",
+    "nondeterminismReasons" : [
+
+    ],
+    "notes" : "Replay regenerates from the stored query, project, recall policy, and source pin\/exclude policy.",
+    "receiptChainHash" : "f2691ebd1feaffeb29728095927cea70524b99cb752ff41d8f6ed82f191f5fec",
+    "replayable" : true,
+    "replayToken" : "84d87b487b1d627de3421554823a8ac71f5d476af36f33ca0fa421cb15852c15",
+    "sourceGraphHash" : "3e8893117bde3ba7a75fe73125aed74cf37fb805cf5039c894512509d1e97041"
+  },
+  "scanLimit" : 100,
+  "sessionId" : "global",
+  "sources" : [
+    {
+      "excerpt" : "Use the stored query, project, and recall policy to regenerate the grounded assistant answer.",
+      "id" : "chunk-1",
+      "path" : "Docs\/assistant-guidance.md",
+      "similarity" : 0.9100000262260437,
+      "sourceHash" : "466f3b7746f9921cac49a3e81a446ae50edc77b08585cb8fee042133a51858ff",
+      "title" : "assistant-guidance.md"
+    }
+  ],
+  "threshold" : 0.69999998807907104,
+  "topK" : 4
+}

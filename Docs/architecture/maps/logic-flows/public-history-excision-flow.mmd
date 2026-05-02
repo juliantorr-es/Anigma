@@ -1,0 +1,209 @@
+%% Title: Public History Excision Flow
+%% Doc ID: PUBLIC_HISTORY_EXCISION_FLOW
+%% Domain: History Management / Governance
+%% Version: 1.0.0
+%% Last Updated: 2026-05-02
+%% Related: Docs/architecture/maps/module-role-index.yaml (Governance Validators)
+%% Related: Docs/td/p1-public-history-excision/
+
+flowchart TD
+    %% ========================================================================
+    %% PUBLIC HISTORY EXCISION FLOW - ANIGMA
+    %% ========================================================================
+    
+    %% ----------------------------------------------------------------------
+    %% STYLES
+    %% ----------------------------------------------------------------------
+    classDef action fill:#00bcd4,stroke:#333,stroke-width:2px,color:#000
+    classDef gate fill:#e91e63,stroke:#333,stroke-width:2px,color:#fff
+    classDef tool fill:#ff5722,stroke:#333,stroke-width:2px,color:#fff
+    classDef proof fill:#4caf50,stroke:#333,stroke-width:2px,color:#000
+    classDef backup fill:#ff9800,stroke:#333,stroke-width:2px,color:#000
+    classDef success fill:#8bc34a,stroke:#333,stroke-width:2px,color:#000
+    classDef failure fill:#f44336,stroke:#333,stroke-width:2px,color:#fff
+    
+    %% ----------------------------------------------------------------------
+    %% START
+    %% ----------------------------------------------------------------------
+    Start([Start: History Excision\nTask Preparation]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% PHASE 1: PLANNING
+    %% ----------------------------------------------------------------------
+    Start --> DefineCriteria
+    
+    DefineCriteria["Define Filter Criteria\n(paths, messages, authors, dates)"]:::action
+    DefineCriteria --> ReviewCriteria
+    
+    ReviewCriteria["Review Criteria\n(Team approval of what to remove)"]:::gate
+    ReviewCriteria -->|Not approved| RefineCriteria
+    RefineCriteria["Refine Criteria"]:::action
+    RefineCriteria --> ReviewCriteria
+    
+    ReviewCriteria -->|Approved| IdentifyCommits
+    
+    IdentifyCommits["Identify Sensitive Commits\n(git log --all --grep, --, paths)"]:::tool
+    
+    %% ----------------------------------------------------------------------
+    %% PHASE 2: SAFETY PREPARATION
+    %% ----------------------------------------------------------------------
+    IdentifyCommits --> CreateBackup
+    
+    CreateBackup["Create Backup\n(git clone --mirror OR git bundle)"]:::backup
+    CreateBackup --> VerifyBackup
+    
+    VerifyBackup["Verify Backup\n(git log, git fsck, test clone)"]:::gate
+    VerifyBackup -->|Backup invalid| CreateBackup
+    VerifyBackup -->|Backup valid| DryRun
+    
+    %% ----------------------------------------------------------------------
+    %% PHASE 3: DRY RUN
+    %% ----------------------------------------------------------------------
+    DryRun["Dry Run\n(git filter-repo --dry-run --analyze)"]:::tool
+    DryRun --> ReviewChanges
+    
+    ReviewChanges["Review Changes\n(Analyze blobs, files, commits to be removed)"]:::gate
+    ReviewChanges -->|Too much removed| RefineCriteria
+    ReviewChanges -->|Looks correct| ApproveApply
+    
+    ApproveApply["Approve Apply\n(Final human approval)"]:::gate
+    
+    %% ----------------------------------------------------------------------
+    %% PHASE 4: APPLY (Only if approved)
+    %% ----------------------------------------------------------------------
+    ApproveApply --> ApplyFilter
+    
+    ApplyFilter["Apply Filter\n(git filter-repo --force --replace-message)"]:::tool
+    ApplyFilter --> ExpireRefs
+    
+    ExpireRefs["Expire Old Refs\n(git reflog expire --all)"]:::tool
+    ExpireRefs --> GarbageCollect
+    
+    GarbageCollect["Garbage Collect\n(git gc --prune=now --aggressive)"]:::tool
+    GarbageCollect --> PushNewRemote
+    
+    PushNewRemote["Push to New Remote\n(git push --force --all)"]:::tool
+    PushNewRemote --> VerifyNewHistory
+    
+    VerifyNewHistory["Verify New History\n(git fsck, build test, git log)"]:::gate
+    VerifyNewHistory -->|Build fails| RestoreFromBackup
+    VerifyNewHistory -->|All good| CreateExcisionProof
+    
+    %% ----------------------------------------------------------------------
+    %% PHASE 5: CLEANUP & PROOF
+    %% ----------------------------------------------------------------------
+    CreateExcisionProof["Create Excision Proof\n(Document what was removed)"]:::proof
+    CreateExcisionProof --> Success
+    
+    Success([SUCCESS: Public History\nReady for Publication]):::success
+    
+    %% ----------------------------------------------------------------------
+    %% RECOVERY PATHS
+    %% ----------------------------------------------------------------------
+    RestoreFromBackup["Restore from Backup\n(git fetch, reset, reflog)"]:::backup
+    RestoreFromBackup --> Abort
+    
+    Abort([ABORT: Excision Cancelled\nNo Changes Applied]):::success
+    
+    %% Also recovery from apply failure
+    VerifyNewHistory -->|Verify fails| RestoreFromBackup
+    
+    %% ----------------------------------------------------------------------
+    %% FAILURE PATHS
+    %% ----------------------------------------------------------------------
+    DefineCriteria -->|Cannot agree| CriteriaDispute
+    CreateBackup -->|Backup fails| BackupFailure
+    DryRun -->|Dry run fails| DryRunFailure
+    ApplyFilter -->|Apply fails| ApplyFailure
+    
+    CriteriaDispute["FAIL: Criteria Dispute\n(Cannot agree on filter)"]:::failure
+    BackupFailure["FAIL: Backup Creation Failed"]:::failure
+    DryRunFailure["FAIL: Dry Run Failed\n(Filter errors)"]:::failure
+    ApplyFailure["FAIL: Apply Failed\n(Filter-repo crash)"]:::failure
+    
+    CriteriaDispute --> EmitDisputeError
+    BackupFailure --> EmitBackupError
+    DryRunFailure --> EmitDryRunError
+    ApplyFailure --> EmitApplyError
+    
+    EmitDisputeError["Emit Error Proof\n(CriteriaDispute)"]:::proof
+    EmitBackupError["Emit Error Proof\n(BackupFailure)"]:::proof
+    EmitDryRunError["Emit Error Proof\n(DryRunFailure)"]:::proof
+    EmitApplyError["Emit Error Proof\n(ApplyFailure)"]:::proof
+    
+    EmitDisputeError --> FinalFailure
+    EmitBackupError --> FinalFailure
+    EmitDryRunError --> FinalFailure
+    EmitApplyError --> FinalFailure
+    
+    FinalFailure([FAILURE: Excision Failed\nHistory Unchanged]):::failure
+    
+    %% ----------------------------------------------------------------------
+    %% ANNOTATIONS
+    %% ----------------------------------------------------------------------
+    subgraph Planning["Phase 1: Planning"]
+        DefineCriteria
+        ReviewCriteria
+        RefineCriteria
+        IdentifyCommits
+    end
+    
+    subgraph SafetyPrep["Phase 2: Safety Preparation"]
+        CreateBackup
+        VerifyBackup
+    end
+    
+    subgraph TestRun["Phase 3: Dry Run"]
+        DryRun
+        ReviewChanges
+    end
+    
+    subgraph ApplyPhase["Phase 4: Apply"]
+        ApproveApply
+        ApplyFilter
+        ExpireRefs
+        GarbageCollect
+        PushNewRemote
+        VerifyNewHistory
+    end
+    
+    subgraph Cleanup["Phase 5: Cleanup & Proof"]
+        CreateExcisionProof
+        Success
+    end
+    
+    subgraph Proofs["Proof/Evidence Points"]
+        CreateBackup
+        VerifyBackup
+        EmitDisputeError
+        EmitBackupError
+        EmitDryRunError
+        EmitApplyError
+        CreateExcisionProof
+    end
+
+%% ========================================================================
+%% LEGEND
+%% Type - color - Description
+%% Action - Cyan - Human/agent actions
+%% Gate - Pink - Safety/approval checkpoints
+%% Tool - Orange - External tools used
+%% Proof - Green - Evidence/artifacts created
+%% Backup - Orange - Backup and restore operations
+%% Success - Lt Green - Successful completion
+%% Failure - Red - Error/failure state
+%% ========================================================================
+
+%% ========================================================================
+%% DOCTRINE REFERENCES
+%% - Safety First: Dry-run before apply, backup before rewrite
+%% - No Data Loss: Original repo can always be restored from backup
+%% - Proof Required: All operations and decisions documented
+%% - Human in Loop: Final approval required before destructive operations
+%% - Verification: New history must build and pass all checks
+%% ========================================================================
+
+%% ========================================================================
+%% RELATED TASKS
+%% - p1-public-history-excision: Main epic for public history preparation
+%% ========================================================================

@@ -1,0 +1,12 @@
+{
+  "generatedAt" : "2026-01-26T12:00:00Z",
+  "results" : [
+    {
+      "durationSeconds" : 0.09,
+      "memoryBytes" : 524288,
+      "name" : "pdf_text_extraction",
+      "operations" : 30,
+      "opsPerSecond" : 333.33
+    }
+  ]
+}

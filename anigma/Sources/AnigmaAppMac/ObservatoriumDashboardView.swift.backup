@@ -1,0 +1,653 @@
+import SwiftUI
+import ObservatoriumModule
+
+// MARK: - Observatorium Dashboard View
+struct ObservatoriumDashboardView: View {
+    @StateObject private var observatorium = ObservatoriumModule.shared
+    @State private var dashboardData: DashboardData?
+    @State private var selectedTimeRange: TimeRange = .lastDay
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                if isLoading {
+                    ProgressView("Loading dashboard...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if let errorMessage = errorMessage {
+                    VStack {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 50))
+                            .foregroundColor(.orange)
+                        Text("Dashboard Error")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Text(errorMessage)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                } else if let dashboardData = dashboardData {
+                    DashboardContentView(
+                        dashboardData: dashboardData,
+                        selectedTimeRange: $selectedTimeRange,
+                        onRefresh: loadDashboardData
+                    )
+                } else {
+                    VStack {
+                        Image(systemName: "chart.bar.doc.horizontal")
+                            .font(.system(size: 50))
+                            .foregroundColor(.gray)
+                        Text("No Data Available")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Text("Start collecting telemetry data to see the dashboard")
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                }
+            }
+            .navigationTitle("Observatorium")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        ForEach(TimeRange.allCases, id: \.self) { range in
+                            Button(action: {
+                                selectedTimeRange = range
+                                loadDashboardData()
+                            }) {
+                                Label(timeRangeLabel(range), systemImage: timeRangeIcon(range))
+                            }
+                            .disabled(selectedTimeRange == range)
+                        }
+                    } label: {
+                        Label(selectedTimeRange, systemImage: "calendar")
+                    }
+                }
+            }
+            .onAppear {
+                loadDashboardData()
+            }
+        }
+    }
+    
+    private func loadDashboardData() {
+        isLoading = true
+        errorMessage = nil
+        
+        Task {
+            do {
+                let data = await observatorium.coordinator.getDashboardData()
+                await MainActor.run {
+                    self.dashboardData = data
+                    self.isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+    
+    private func timeRangeLabel(_ range: TimeRange) -> String {
+        switch range {
+        case .lastHour: return "Last Hour"
+        case .lastDay: return "Last Day"
+        case .lastWeek: return "Last Week"
+        case .lastMonth: return "Last Month"
+        case .custom: return "Custom"
+        }
+    }
+    
+    private func timeRangeIcon(_ range: TimeRange) -> String {
+        switch range {
+        case .lastHour: return "clock"
+        case .lastDay: return "sun.max"
+        case .lastWeek: return "calendar"
+        case .lastMonth: return "calendar.badge.plus"
+        case .custom: return "calendar.badge.clock"
+        }
+    }
+}
+
+// MARK: - Dashboard Content View
+private struct DashboardContentView: View {
+    let dashboardData: DashboardData
+    @Binding var selectedTimeRange: TimeRange
+    let onRefresh: () -> Void
+    
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 20) {
+                // System Health Card
+                SystemHealthCard(health: dashboardData.systemHealth)
+                
+                // Metrics Overview
+                if let metrics = dashboardData.recentMetrics {
+                    MetricsOverviewCard(metrics: metrics, timeRange: selectedTimeRange)
+                }
+                
+                // Active Alerts
+                AlertsCard(alerts: dashboardData.activeAlerts)
+                
+                // Feedback Trends
+                if let trends = dashboardData.feedbackTrends {
+                    FeedbackTrendsCard(trends: trends)
+                }
+                
+                // Quick Actions
+                QuickActionsCard()
+                
+                // Last Updated
+                Text("Last updated: \(dashboardData.lastUpdated, style: .relative) ago")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+        }
+        .refreshable {
+            onRefresh()
+        }
+    }
+}
+
+// MARK: - System Health Card
+private struct SystemHealthCard: View {
+    let health: SystemHealth
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "heart.fill")
+                    .foregroundColor(Color(health.overallStatus.color))
+                Text("System Health")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                Spacer()
+                Text(health.overallStatus.rawValue.capitalized)
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color(health.overallStatus.color).opacity(0.2))
+                    .foregroundColor(Color(health.overallStatus.color))
+                    .cornerRadius(8)
+            }
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Status")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(health.isRunning ? "Running" : "Stopped")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing) {
+                    Text("Uptime")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(formatUptime(health.uptime))
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+            }
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Active Alerts")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(health.activeAlertsCount)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(health.activeAlertsCount > 0 ? .red : .green)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing) {
+                    Text("Open Feedback")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(health.openFeedbackCount)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(health.openFeedbackCount > 0 ? .orange : .green)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(12)
+    }
+    
+    private func formatUptime(_ interval: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.unitsStyle = .abbreviated
+        return formatter.string(from: interval) ?? "0m"
+    }
+}
+
+// MARK: - Metrics Overview Card
+private struct MetricsOverviewCard: View {
+    let metrics: AggregatedMetrics
+    let timeRange: TimeRange
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "chart.line.uptrend.xyaxis")
+                    .foregroundColor(.blue)
+                Text("Performance Metrics")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                Spacer()
+                Text(timeRangeLabel(timeRange))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 16) {
+                MetricItem(
+                    title: "CPU Usage",
+                    value: "\(Int(metrics.averageCPUUsage * 100))%",
+                    icon: "cpu",
+                    color: .blue
+                )
+                
+                MetricItem(
+                    title: "Memory",
+                    value: formatBytes(metrics.averageMemoryUsage),
+                    icon: "memorychip",
+                    color: .purple
+                )
+                
+                MetricItem(
+                    title: "Network In",
+                    value: formatBytes(metrics.totalNetworkIn),
+                    icon: "arrow.down.circle",
+                    color: .green
+                )
+                
+                MetricItem(
+                    title: "Network Out",
+                    value: formatBytes(metrics.totalNetworkOut),
+                    icon: "arrow.up.circle",
+                    color: .orange
+                )
+            }
+            
+            Divider()
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Events")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(metrics.eventCount)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .center) {
+                    Text("Errors")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(metrics.errorCount)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(metrics.errorCount > 0 ? .red : .green)
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .trailing) {
+                    Text("Warnings")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("\(metrics.warningCount)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(metrics.warningCount > 0 ? .orange : .green)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(12)
+    }
+    
+    private func timeRangeLabel(_ range: TimeRange) -> String {
+        switch range {
+        case .lastHour: return "Last Hour"
+        case .lastDay: return "Last Day"
+        case .lastWeek: return "Last Week"
+        case .lastMonth: return "Last Month"
+        case .custom: return "Custom"
+        }
+    }
+    
+    private func formatBytes(_ bytes: UInt64) -> String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = [.useKB, .useMB, .useGB, .useTB]
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: Int64(bytes))
+    }
+}
+
+// MARK: - Metric Item
+private struct MetricItem: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.bold)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Alerts Card
+private struct AlertsCard: View {
+    let alerts: [Alert]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundColor(.orange)
+                Text("Active Alerts")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                Spacer()
+                Text("\(alerts.count)")
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(alerts.isEmpty ? Color.green.opacity(0.2) : Color.orange.opacity(0.2))
+                    .foregroundColor(alerts.isEmpty ? .green : .orange)
+                    .cornerRadius(8)
+            }
+            
+            if alerts.isEmpty {
+                VStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.green)
+                    Text("No active alerts")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+            } else {
+                LazyVStack(spacing: 8) {
+                    ForEach(alerts.prefix(3), id: \.id) { alert in
+                        AlertRow(alert: alert)
+                    }
+                    
+                    if alerts.count > 3 {
+                        Button("View all \(alerts.count) alerts") {
+                            // Navigate to all alerts
+                        }
+                        .font(.caption)
+                        .foregroundColor(.blue)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - Alert Row
+private struct AlertRow: View {
+    let alert: Alert
+    
+    var body: some View {
+        HStack {
+            Circle()
+                .fill(Color(alertSeverityColor(alert.severity)))
+                .frame(width: 8, height: 8)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(alert.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                Text(alert.message)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+            
+            Spacer()
+            
+            Text(alert.triggeredAt, style: .relative)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private func alertSeverityColor(_ severity: AlertSeverity) -> String {
+        switch severity {
+        case .low: return "green"
+        case .medium: return "yellow"
+        case .high: return "orange"
+        case .critical: return "red"
+        }
+    }
+}
+
+// MARK: - Feedback Trends Card
+private struct FeedbackTrendsCard: View {
+    let trends: FeedbackTrendAnalysis
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "chart.bar.fill")
+                    .foregroundColor(.purple)
+                Text("Feedback Trends")
+                    .font(.headline)
+                    .fontWeight(.bold)
+            }
+            
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 16) {
+                FeedbackMetricItem(
+                    title: "Total Feedback",
+                    value: "\(trends.totalFeedback)",
+                    icon: "doc.text"
+                )
+                
+                FeedbackMetricItem(
+                    title: "Avg Resolution",
+                    value: formatDuration(trends.averageResolutionTime),
+                    icon: "clock"
+                )
+            }
+            
+            if !trends.topIssues.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Top Issues")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    
+                    ForEach(Array(trends.topIssues.prefix(3).enumerated()), id: \.offset) { index, issue in
+                        HStack {
+                            Text("\(index + 1). \(issue.key)")
+                                .font(.caption)
+                            Spacer()
+                            Text("\(issue.value)")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(12)
+    }
+    
+    private func formatDuration(_ interval: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour]
+        formatter.unitsStyle = .abbreviated
+        return formatter.string(from: interval) ?? "0h"
+    }
+}
+
+// MARK: - Feedback Metric Item
+private struct FeedbackMetricItem: View {
+    let title: String
+    let value: String
+    let icon: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.purple)
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.bold)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Quick Actions Card
+private struct QuickActionsCard: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "bolt.fill")
+                    .foregroundColor(.yellow)
+                Text("Quick Actions")
+                    .font(.headline)
+                    .fontWeight(.bold)
+            }
+            
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 12) {
+                QuickActionButton(
+                    title: "New Alert Rule",
+                    icon: "plus.circle",
+                    color: .blue
+                ) {
+                    // Create new alert rule
+                }
+                
+                QuickActionButton(
+                    title: "Export Data",
+                    icon: "square.and.arrow.up",
+                    color: .green
+                ) {
+                    // Export data
+                }
+                
+                QuickActionButton(
+                    title: "System Logs",
+                    icon: "doc.text",
+                    color: .orange
+                ) {
+                    // View system logs
+                }
+                
+                QuickActionButton(
+                    title: "Settings",
+                    icon: "gear",
+                    color: .gray
+                ) {
+                    // Open settings
+                }
+            }
+        }
+        .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - Quick Action Button
+private struct QuickActionButton: View {
+    let title: String
+    let icon: String
+    let color: Color
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(color)
+                Text(title)
+                    .font(.caption)
+                    .foregroundColor(.primary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(color.opacity(0.1))
+            .cornerRadius(8)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - TimeRange Extension
+extension TimeRange: CaseIterable, Identifiable {
+    public static var allCases: [TimeRange] {
+        [.lastHour, .lastDay, .lastWeek, .lastMonth]
+    }
+    
+    public var id: String {
+        switch self {
+        case .lastHour: return "lastHour"
+        case .lastDay: return "lastDay"
+        case .lastWeek: return "lastWeek"
+        case .lastMonth: return "lastMonth"
+        case .custom: return "custom"
+        }
+    }
+}
+
+#Preview {
+    ObservatoriumDashboardView()
+}

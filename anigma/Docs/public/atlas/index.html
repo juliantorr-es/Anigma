@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anigma Accessibility Atlas</title>
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --primary-text: #1a1a1a;
+            --accent-color: #007aff;
+            --border-color: #d1d1d6;
+            --tab-bg: #f5f5f7;
+            --tab-active-bg: #ffffff;
+            --focus-ring-color: #007aff;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-bg: #121212;
+                --primary-text: #e5e5e5;
+                --accent-color: #0a84ff;
+                --border-color: #38383a;
+                --tab-bg: #1c1c1e;
+                --tab-active-bg: #121212;
+            }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            font-size: 16px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        header p {
+            font-size: 1.2rem;
+            color: #8a8a8e;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tab-button {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background-color: var(--tab-bg);
+            color: var(--primary-text);
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -1px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .tab-button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        .tab-button.active {
+            border-bottom-color: var(--accent-color);
+            background-color: var(--tab-active-bg);
+        }
+        .tab-button:focus-visible {
+            outline: 2px solid var(--focus-ring-color);
+            outline-offset: 2px;
+        }
+        .tab-content {
+            display: none;
+            padding: 2rem 0;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        h3 {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+        }
+        p, li {
+            font-size: 1.1rem;
+        }
+        code {
+            font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+            background-color: var(--tab-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .principle {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .mapping-table th, .mapping-table td {
+            text-align: left;
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .mapping-table th {
+            font-weight: 600;
+        }
+        svg {
+            width: 100%;
+            height: auto;
+            margin: 1rem 0;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true});</script>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Anigma Accessibility Atlas</h1>
+            <p>A guide to the Anigma ecosystem and its accessibility-first architecture.</p>
+        </header>
+
+        <nav class="tabs" role="tablist">
+            <button role="tab" aria-selected="true" aria-controls="anigma-panel" id="anigma-tab" class="tab-button active">1. The Anigma Core</button>
+            <button role="tab" aria-selected="false" aria-controls="wcag-panel" id="wcag-tab" class="tab-button">2. WCAG 2.2 AAA Principles</button>
+            <button role="tab" aria-selected="false" aria-controls="hig-panel" id="hig-tab" class="tab-button">3. Accessibility in Practice (HIG)</button>
+        </nav>
+
+        <main>
+            <section id="anigma-panel" role="tabpanel" tabindex="0" aria-labelledby="anigma-tab" class="tab-content active">
+                <h2>The Foundational Framework</h2>
+                <p>
+                    <strong>Anigma</strong> is the shared foundation for a new generation of intelligent, accessible applications. It provides a clean, robust, and reusable core based on an **Entity-Component-System (ECS)** architecture. This design promotes a clear separation of data (Components), logic (Systems), and identity (Entities), which is essential for building complex, maintainable software.
+                </p>
+                <h3>Core Concepts</h3>
+                <ul>
+                    <li><strong>Entity:</strong> A unique identifier, representing an object like a document, a user, or a request.</li>
+                    <li><strong>Component:</strong> Pure data attached to an entity, such as a name, a file path, or a status.</li>
+                    <li><strong>System:</strong> Stateless logic that operates on entities with specific components, like a system that processes all documents needing OCR.</li>
+                    <li><strong>World:</strong> The container that manages all entities, components, and systems, ensuring data integrity and thread safety.</li>
+                </ul>
+                <p>This modular architecture allows different applications, like `Harmonia` (the AI brain) and `Apertum Accessum` (the student-facing client), to share the same underlying structure while implementing their own unique features.</p>
+                
+                <h3>Architectural Diagram</h3>
+                <pre class="mermaid">
+    graph TD
+        subgraph Legend
+            direction LR
+            L1(Section)
+            L2(Core Concept)
+            L3(Ecosystem Component)
+            L4(Interactive Link)
+            classDef legend fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#333
+            class L1,L2,L3,L4 legend;
+        end
+
+        subgraph "1. History & Purpose"
+            A1[Origin: Code Consolidation] --> A2{Anigma Framework};
+            A3[Fragmented Code in Harmonia] --> A1;
+            A4[Legacy ECS in Apertum Accessum] --> A1;
+            A2 --> A5[Goal: A Single, Reusable Foundation for Future Development];
+        end
+        
+        subgraph "2. Operational Principles (Entity-Component-System)"
+            B1(World: The Container) --> B2(Entity: Unique ID);
+            B1 --> B3(Component: Raw Data);
+            B1 --> B4(System: Stateless Logic);
+            B2 -- Has --> B3;
+            B4 -- Operates On --> B3;
+        end
+
+        subgraph "3. Architectural & Governance Significance"
+            C1["Anigma is NOT a Cryptographic Tool"] -- "Clarification for Stakeholders" --> C2["It provides structure, not encryption."];
+            C3["Architectural Value"] --> C4["Promotes Separation of Concerns <br/>(Data vs. Logic)"];
+            C3 --> C5["Enables Code Reusability Across Projects"];
+            C3 --> C6["Simplifies Testing and Maintenance"];
+        end
+
+        subgraph "4. Ecosystem Impact & Data Flow"
+            D1(Anigma Core) --> D2(Harmonia Module);
+            D1 --> D3(Apertum Accessum Module);
+            D1 --> D4(Outlineum Module);
+            D2 & D3 & D4 --> D5[Consistent, Stable, & Predictable Applications];
+            D6(Job & Workflow System) --> D7[Manages background tasks like OCR & Reporting];
+        end
+
+        subgraph "5. Interactive Documentation (Simulated Links)"
+            E1{"ECS Deep Dive"}
+            E2{"Job & Workflow API"}
+            E3{"Module Integration Guide"}
+            click E1 "javascript:void(0)" "Explore the ECS Core"
+            click E2 "javascript:void(0)" "Understand the Job & Pipeline API"
+            click E3 "javascript:void(0)" "Learn how to add a new module"
+        end
+        
+        %% Styling
+        classDef section fill:#eef,stroke:#333,stroke-width:2px;
+        classDef coreConcept fill:#efe,stroke:#333,stroke-width:2px;
+        classDef ecosystem fill:#fee,stroke:#333,stroke-width:2px;
+        classDef interactive fill:#def,stroke:#007aff,stroke-width:2px,color:#007aff;
+        
+        class A1,A2,A3,A4,A5 section;
+        class B1,B2,B3,B4 coreConcept;
+        class C1,C2,C3,C4,C5,C6 section;
+        class D1,D2,D3,D4,D5,D6,D7 ecosystem;
+        class E1,E2,E3 interactive;
+
+        %% Links
+        A2 -- "Provides Principles" --> B1;
+        B1 -- "Enables" --> C3;
+        C5 -- "Impacts" --> D1;
+                </pre>
+
+            </section>
+
+            <section id="wcag-panel" role="tabpanel" tabindex="0" aria-labelledby="wcag-tab" class="tab-content">
+                <h2>The Four Pillars of Accessibility</h2>
+                <p>Our commitment to accessibility is codified by targeting **WCAG 2.2 Level AAA**, the highest global standard. This framework is organized around four core principles, known as **POUR**.</p>
+                
+                <div class="principle">
+                    <h3>1. Perceivable</h3>
+                    <p>Users must be able to perceive the information being presented; it can't be invisible to all of their senses.</p>
+                    <ul>
+                        <li>Providing text alternatives for non-text content (like images).</li>
+                        <li>Ensuring high contrast between text and background.</li>
+                        <li>Allowing users to resize text up to 300% without breaking the layout.</li>
+                        <li>Not relying on color alone to convey information.</li>
+                    </ul>
+                </div>
+
+                <div class="principle">
+                    <h3>2. Operable</h3>
+                    <p>Users must be able to operate the interface; the interface cannot require interaction that a user cannot perform.</p>
+                    <ul>
+                        <li>Making all functionality available from a keyboard.</li>
+                        <li>Giving users enough time to read and use content.</li>
+                        <li>Not designing content in a way that is known to cause seizures.</li>
+                        <li>Providing clear focus indicators for all interactive elements.</li>
+                    </ul>
+                </div>
+
+                <div class="principle">
+                    <h3>3. Understandable</h3>
+                    <p>Users must be able to understand the information as well as the operation of the user interface.</p>
+                    <ul>
+                        <li>Making text readable and understandable.</li>
+                        <li>Making web pages appear and operate in predictable ways.</li>
+                        <li>Helping users avoid and correct mistakes with clear error messages and confirmation dialogues.</li>
+                    </ul>
+                </div>
+
+                <div class="principle">
+                    <h3>4. Robust</h3>
+                    <p>Users must be able to access the content as technologies advance. Content must be robust enough that it can be interpreted reliably by a wide variety of user agents, including assistive technologies like screen readers.</p>
+                    <ul>
+                        <li>Maximizing compatibility with current and future user agents, including assistive technologies.</li>
+                        <li>Using semantic HTML and native UI components correctly.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="hig-panel" role="tabpanel" tabindex="0" aria-labelledby="hig-tab" class="tab-content">
+                <h2>From Principle to Practice with Apple's HIG</h2>
+                <p>WCAG principles provide the "what," and Apple's Human Interface Guidelines (HIG) provide the "how." Here is how we translate WCAG AAA goals into practical implementation on macOS and iOS.</p>
+
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th>WCAG AAA Goal</th>
+                            <th>Apple HIG Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>High Contrast (Perceivable)</strong><br>Ensure a minimum 7:1 contrast ratio for text.</td>
+                            <td>We strictly adhere to Apple's color system, support Light/Dark Modes, and provide a dedicated High-Contrast theme. We use tools to verify our color palettes meet this ratio.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Text Resizing (Perceivable)</strong><br>Allow text to be resized up to 300% without loss of content or functionality.</td>
+                            <td>Our apps fully support <strong>Dynamic Type</strong>. All layouts are built to reflow gracefully when the user adjusts their system-wide text size, ensuring no content is clipped or obscured.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Keyboard Accessible (Operable)</strong><br>All functionality must be available via keyboard.</td>
+                            <td>We implement full keyboard navigation, ensuring every interactive element is reachable via the `Tab` key. We design visible <strong>Focus Rings</strong> so users always know where they are.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Text Alternatives (Perceivable)</strong><br>Provide labels and descriptions for non-text content.</td>
+                            <td>We use SwiftUI's Accessibility API extensively. All icons and images have descriptive <code>.accessibilityLabel()</code> for <strong>VoiceOver</strong>, and decorative elements are hidden with <code>.accessibilityHidden(true)</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Feedback & Error Handling (Understandable)</strong><br>Provide clear feedback and help users correct mistakes.</td>
+                            <td>We use native alerts and confirmation dialogues to prevent data loss. Error messages are clear, human-readable, and suggest a path to recovery, following HIG patterns for system feedback.</td>
+                        </tr>
+                         <tr>
+                            <td><strong>Reduce Motion (Operable)</strong><br>Respect user preference for reduced motion to avoid vestibular triggers.</td>
+                            <td>Our application queries the system's "Reduce Motion" setting. When enabled, all non-essential animations are disabled or replaced with simple cross-fade transitions.</td>
+                        </tr>
+                         <tr>
+                            <td><strong>Robustness with Assistive Tech</strong><br>Ensure compatibility with screen readers and other tools.</td>
+                            <td>By using native SwiftUI components and correctly applying accessibility traits (e.g., <code>.isButton</code>, <code>.isHeader</code>), we ensure that <strong>VoiceOver</strong> and other assistive technologies can interpret and present our UI reliably.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Deactivate all
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Activate clicked
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                const targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            });
+            
+            tab.addEventListener('keydown', (e) => {
+                let index = Array.from(tabs).indexOf(e.target);
+                let newIndex = -1;
+                if (e.key === 'ArrowRight') {
+                    newIndex = (index + 1) % tabs.length;
+                } else if (e.key === 'ArrowLeft') {
+                    newIndex = (index - 1 + tabs.length) % tabs.length;
+                }
+
+                if (newIndex !== -1) {
+                    tabs[newIndex].focus();
+                    tabs[newIndex].click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

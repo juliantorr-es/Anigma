@@ -1,0 +1,62 @@
+{
+  "artifactPaths": [
+    "/tmp/anigmad-test-vault/session_verify-00000001.events.jsonl",
+    "/tmp/anigmad-test-vault/session_verify-00000001.bundle.json"
+  ],
+  "bundleType": "verifier-lane-runtime",
+  "createdAt": "2026-04-16T00:00:00Z",
+  "createdBy": "DaemonVerifierHarness",
+  "daemonExecutablePath": "./.build/debug/anigmad",
+  "description": "Evidence-backed verifier lane bundle for ./.build/debug/anigmad",
+  "id": "verify-00000001",
+  "matrix": [
+    {
+      "evidence": [
+        "echo-1"
+      ],
+      "name": "performance",
+      "notes": [
+        "Echo worker completed successfully."
+      ],
+      "score": 100,
+      "status": "pass"
+    },
+    {
+      "evidence": [
+        "leak-1"
+      ],
+      "name": "safety",
+      "notes": [
+        "Memory leak job was not terminated on this host."
+      ],
+      "score": 65,
+      "status": "warn"
+    },
+    {
+      "evidence": [
+        "cpu-1"
+      ],
+      "name": "reliability",
+      "notes": [
+        "CPU guard terminated the worker as expected."
+      ],
+      "score": 100,
+      "status": "pass"
+    },
+    {
+      "evidence": [
+        "vault-1"
+      ],
+      "name": "compliance",
+      "notes": [
+        "Vault round-tripped the streamed artifact without corruption."
+      ],
+      "score": 100,
+      "status": "pass"
+    }
+  ],
+  "maturityLevel": "L4",
+  "sessionId": "verify-00000001",
+  "socketPath": "/tmp/anigmad-test.sock",
+  "summary": "4 checks executed, 1 non-pass findings, overall score 91/100."
+}

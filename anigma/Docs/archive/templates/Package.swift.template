@@ -1,0 +1,54 @@
+// swift-tools-version: 5.9
+import PackageDescription
+
+let package = Package(
+    name: "AnigmaPackages",
+    platforms: [
+        .macOS(.v14)
+    ],
+    products: [
+        .library(name: "Client", targets: ["Client"]),
+        .library(name: "HostApp", targets: ["HostApp"]),
+        .library(name: "SharedUIComponents", targets: ["SharedUIComponents"]),
+        .library(name: "XPCShared", targets: ["XPCShared"]),
+        // Add other modules here
+    ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
+        // Add other external dependencies here
+    ],
+    targets: [
+        .target(
+            name: "Client",
+            dependencies: [
+                "SharedUIComponents",
+                "XPCShared"
+            ],
+            path: "Packages/Client"
+        ),
+        .target(
+            name: "HostApp",
+            dependencies: [
+                "SharedUIComponents",
+                "XPCShared"
+            ],
+            path: "Packages/HostApp"
+        ),
+        .target(
+            name: "SharedUIComponents",
+            dependencies: [],
+            path: "Packages/SharedUIComponents"
+        ),
+        .target(
+            name: "XPCShared",
+            dependencies: [],
+            path: "Packages/XPCShared"
+        ),
+        .testTarget(
+            name: "ClientTests",
+            dependencies: ["Client"],
+            path: "Tests/ClientTests"
+        ),
+        // Add other targets here
+    ]
+)

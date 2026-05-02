@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1.0">
+    <title>Anigma</title>
+    <organization>com.anigma</organization>
+    <domain>user</domain>
+    <options customize="never" require-scripts="true" rootVolumeOnly="true"/>
+    
+    <pkg-ref id="com.anigma.installer"/>
+    <choices-outline>
+        <line choice="default">
+            <line choice="com.anigma.installer"/>
+        </line>
+    </choices-outline>
+    
+    <choice id="default" title="Anigma" description="Install Anigma applications and tools">
+        <pkg-ref id="com.anigma.installer"/>
+    </choice>
+    
+    <choice id="com.anigma.installer" visible="false">
+        <pkg-ref id="com.anigma.installer"/>
+    </choice>
+    
+    <pkg-ref id="com.anigma.installer" version="1.0.0" onConclusion="none">AnigmaInstaller.pkg</pkg-ref>
+</installer-gui-script>
