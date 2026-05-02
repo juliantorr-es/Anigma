@@ -25,3 +25,9 @@ Anigma uses a tiered architecture. Known tier-boundary violations are tracked in
 ## License
 
 Anigma is provided under the terms of the repository LICENSE file.
+
+## License
+Anigma is dual-licensed.
+The public source code in this repository is licensed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
+Commercial, private, embedded, proprietary, or non-AGPL use is available only under a separate written commercial license from the copyright holder.
+Unless a file states otherwise, all source files in this repository are covered by the AGPL-3.0-or-later public license.
