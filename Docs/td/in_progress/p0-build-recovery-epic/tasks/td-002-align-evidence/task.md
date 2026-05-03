@@ -1,0 +1,1 @@
+- td-002 paused after inventory/canonical contract draft.
