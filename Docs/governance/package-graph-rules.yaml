@@ -1,0 +1,402 @@
+# Anigma Package Graph Rules
+# Defines tier and role classification and dependency rules for Anigma package graph auditing.
+# Used by Scripts/anigma_package_graph_audit.py
+#
+# Classification adoption note:
+# The baseline target is not zero warnings yet. The next governance milestone is reducing
+# unclassified targets. no_unclassified_target is currently WARNING-severity to allow
+# incremental classification adoption.
+
+---
+schema: "anigma.package_graph_rules.v1"
+baseline_adoption: true
+
+# ============================================================================
+# TIER DEFINITIONS
+# ============================================================================
+# Tiers are ordered: Tier 1 (lowest) -> Tier 2 -> Tier 3 (highest)
+# Dependency direction must flow downward: Tier 3 -> Tier 2 -> Tier 1
+# ============================================================================
+tiers:
+  tier1:
+    description: "Contract / Constitutional Layer - Portable types, protocols, and policy"
+    targets:
+      # Core primitives
+      - AnigmaPrimitives
+      
+      # Contract modules
+      - FoundationContracts
+      - GovernanceContracts
+      - EvidenceContracts
+      - IntelligenceContracts
+      - MessagingContracts
+      - MediaPipelineContracts
+      - PersistenceContracts
+      - DaemonFeatureContracts
+      - RendererBackendContracts
+      - ContractsCore
+      - InferenceContracts
+      - HarmoniaAPIContracts
+      - HarmoniaInferenceContracts
+      - HarmoniaWorkflowContracts
+      
+      # Other Tier 1 modules
+      - DoctrineCore
+      - SecurityEventsManager
+      - TelemetryCore
+
+  tier2:
+    description: "Substrate / Execution Layer - Platform capabilities and infrastructure"
+    targets:
+      - AnigmaCore
+      - AnigmaFoundation
+      - AnigmaGovernance
+      - AnigmaJobs
+      - AnigmaPipeline
+      - AnigmaEvents
+      
+      # Core substrate
+      - CapsuleCore
+      - DatabaseCore
+      - StorageCore
+      - ExecutionCore
+      - InferenceCore
+      - GrapheneEngine
+      - CapabilityCore
+      - AnigmaSystemSpine
+      - GovernedMigrationCore
+      
+      # Media infrastructure
+      - MediaContainerCapsule
+      - MediaFingerprintCapsule
+      
+      # Intelligence infrastructure  
+      - VectorCapsule
+      - TextPipelineCapsule
+      - TextChunkingCapsule
+      - cosinesimilarity
+      - CosineSimilarityCapsule
+      - RankFusionCapsule
+      - VizAggregationCapsule
+      - SearchPipelineCapsule
+      - CompressionCapsule
+      - CanonicalTokenizer
+      - ContextumModule
+
+  tier3:
+    description: "Feature / Daemon / Application Layer - End-user capabilities"
+    targets:
+      # Daemon components
+      - AnigmaDaemonCore
+      - DaemonKernel
+      - DaemonCore
+      - SidecarService
+      - NativeShims
+      - AnigmaNativeShims
+      - PlatformCore
+      
+      # Feature modules
+      - PolytroposModule
+      - HarmoniaModule
+      - HarmoniaV2CLI
+      - DiaplasionModule
+      - AccessumModule
+      - OutlineumModule
+      - PragmaModule
+      - ConexusModule
+      - CodexModule
+      - TranscriptumModule
+      - ObservatoriumModule
+      - VectorumModule
+      - PraxisModule
+      - AnigmaAppMac
+      - AnigmaAppMacCore
+      - AnigmaCLIExecutable
+      - anigma
+      - Demo
+      - CLIPlayer
+      
+      # Inference
+      - SaturationInferenceCore
+      - SaturatedModelRegistry
+      - SaturationKit
+      
+      # Modeling
+      - MLWorkerCommon
+      - MLWorkerInterfaces
+      - SubprocessPooling
+      - SubprocessManager
+
+# ============================================================================
+# ROLE DEFINITIONS
+# ============================================================================
+# Roles are orthogonal to tiers. A target can have both a tier and a role.
+# ============================================================================
+roles:
+  contract:
+    description: "Pure protocol/interface module with no implementation"
+    patterns:
+      - "*Contracts"
+      - "*Contracts/*"
+    recommended_tier: tier1
+    
+  runtime:
+    description: "Runtime execution engine or core implementation"
+    patterns:
+      - "*Core"
+      - "*Engine"
+    recommended_tier: tier2
+    
+  substrate:
+    description: "Platform infrastructure and substrate capabilities"
+    patterns:
+      - "*Substrate"
+      - "*Infrastructure"
+    recommended_tier: tier2
+    
+  daemon:
+    description: "Long-running process or service"
+    patterns:
+      - "*Daemon"
+      - "*Service"
+    recommended_tier: tier3
+    
+  app:
+    description: "End-user application or CLI"
+    patterns:
+      - "*App*"
+      - "*CLI*"
+      - "anigma"
+    recommended_tier: tier3
+    
+  sidecar:
+    description: "Daemon-spawnable sidecar subprocess"
+    patterns:
+      - "*Sidecar*"
+      - "*PDFSidecar*"
+    recommended_tier: tier3
+    
+  executable:
+    description: "Executable product (non-daemon)"
+    patterns: []
+    detection: product_type == "executable"
+    recommended_tier: tier3
+    
+  test:
+    description: "Test target"
+    patterns:
+      - "*Test*"
+      - "*Tests"
+    detection: target_type == "test"
+    # Tests are not production tier - they're test infrastructure
+    recommended_tier: null
+    
+  plugin:
+    description: "Build tool plugin"
+    patterns:
+      - "*Plugin*"
+    detection: target_type == "plugin"
+    recommended_tier: null
+    
+  tooling:
+    description: "Build/debug/development tooling"
+    patterns:
+      - "*Tool*"
+      - "*Tooling*"
+    recommended_tier: null
+    
+  unknown:
+    description: "Unclassified target"
+    patterns: []
+    recommended_tier: null
+
+# ============================================================================
+# DEPENDENCY RULES
+# ============================================================================
+rules:
+  - id: no_upward_tier_dependency
+    severity: error
+    description: "Lower tiers must not depend on higher tiers. Dependencies must flow downward: Tier 3 -> Tier 2 -> Tier 1."
+    check: "fromTier in tier_order and toTier in tier_order and tier_order[fromTier] > tier_order[toTier]"
+    
+  - id: no_contract_to_runtime_dependency
+    severity: error
+    description: "Contract targets (Tier 1) must not depend on runtime/execution/app targets (Tier 2/3)."
+    check: "fromTier == 'tier1' and toTier in ['tier2', 'tier3']"
+    
+  - id: no_same_tier_cycle
+    severity: error
+    description: "Targets within the same tier must not create dependency cycles."
+    check: "fromTier == toTier and creates_cycle"
+    
+  - id: no_broad_umbrella_dependency
+    severity: warning
+    description: "Avoid broad umbrella modules when a narrow contract module exists."
+    check: "uses_umbrella_module and narrow_alternative_exists"
+    
+  - id: no_unclassified_target
+    severity: warning
+    description: "Every Anigma target should be classified by tier/role for doctrine enforcement. Currently warning-severity during baseline adoption."
+    check: "target not in classified_targets"
+    # May become error-severity once classification coverage reaches threshold
+    upgrade_to_error_threshold: 0.95  # 95% classification coverage
+
+# ============================================================================
+# PLANNED RULES (NOT YET IMPLEMENTED)
+# ============================================================================
+planned_rules:
+  - id: sidecar_reachable_from_generic_readiness
+    severity: warning
+    status: planned
+    description: "Sidecar executables must not be reachable from generic readiness lanes. Required for td-7c0153 PDFSidecarExecutable readiness lane."
+    reason: "PDFSidecarExecutable should only be validated by dedicated sidecar readiness lane, not generic BackendReadiness"
+    implementation_note: "Requires reachability analysis from BackendReadiness test targets to sidecar executables"
+
+# ============================================================================
+# ALLOWLIST
+# ============================================================================
+allowlist:
+  edges:
+    # Add explicit exceptions here if doctrine allows specific upward dependencies
+    # Format: "fromTarget -> toTarget"
+    []
+  
+  targets:
+    # Targets explicitly exempt from classification
+    []
+
+# ============================================================================
+# EXTERNAL PACKAGE CLASSIFICATION
+# ============================================================================
+external:
+  # Packages that should be treated as Tier 1 equivalents
+  tier1_equivalents:
+    - swift-collections
+    - swift-argument-parser
+    - swift-atomics
+    - swift-concurrency-extras
+    
+  # Packages that are infrastructure (Tier 2 equivalent)
+  tier2_equivalents:
+    - PostgresNIO
+    - Hummingbird
+    - SwiftNIO
+    - Logging
+    
+  # Packages that are application-level (Tier 3 equivalent)
+  tier3_equivalents: []
+
+# ============================================================================
+# SEVERITY CONTROL
+# ============================================================================
+severity_control:
+  # During baseline adoption (current state), only error-severity violations block builds
+  baseline_mode: true
+  
+  # --fail-on-violation behavior:
+  # - Exits nonzero only on error-severity violations
+  # - Warning-severity findings are reported but non-blocking
+  # - This allows incremental adoption of classification rules
+  fail_on_violation_exits_on: error
+  
+  # Threshold for promoting no_unclassified_target from warning to error
+  # Currently: no_unclassified_target is WARNING
+  # When unclassified target count drops below this percentage, may upgrade to ERROR
+  unclassified_threshold_for_error: 0.05  # 5% unclassified = acceptable
+
+# ============================================================================
+# SUGGESTION HEURISTICS (for suggest-classifications subcommand)
+# ============================================================================
+suggestion_heuristics:
+  # Tier suggestions based on path patterns
+  path_patterns:
+    - pattern: "Packages/*Contracts*"
+      suggested_tier: tier1
+      suggested_role: contract
+      confidence: high
+      
+    - pattern: "Packages/ContractsCore/Sources/*"
+      suggested_tier: tier1
+      suggested_role: contract
+      confidence: high
+      
+    - pattern: "Packages/*Core/Sources*"
+      suggested_tier: tier2
+      suggested_role: runtime
+      confidence: medium
+      
+    - pattern: "Packages/*Module/Sources*"
+      suggested_tier: tier3
+      suggested_role: unknown
+      confidence: medium
+      
+    - pattern: "Packages/Daemon*"
+      suggested_tier: tier3
+      suggested_role: daemon
+      confidence: high
+      
+    - pattern: "Packages/Sidecar*"
+      suggested_tier: tier3
+      suggested_role: sidecar
+      confidence: high
+      
+    - pattern: "Tests/*"
+      suggested_role: test
+      confidence: high
+      
+    - pattern: "Plugins/*"
+      suggested_role: plugin
+      confidence: high
+
+  # Tier suggestions based on name patterns
+  name_patterns:
+    - pattern: "*Contracts"
+      suggested_tier: tier1
+      suggested_role: contract
+      confidence: high
+      
+    - pattern: "*Contract*"
+      suggested_tier: tier1
+      suggested_role: contract
+      confidence: medium
+      
+    - pattern: "*Core"
+      suggested_tier: tier2
+      suggested_role: runtime
+      confidence: medium
+      
+    - pattern: "*Foundation"
+      suggested_tier: tier2
+      suggested_role: runtime
+      confidence: high
+      
+    - pattern: "*Daemon*"
+      suggested_tier: tier3
+      suggested_role: daemon
+      confidence: high
+      
+    - pattern: "*Sidecar*"
+      suggested_tier: tier3
+      suggested_role: sidecar
+      confidence: high
+      
+    - pattern: "*App*"
+      suggested_tier: tier3
+      suggested_role: app
+      confidence: high
+      
+    - pattern: "*Test*"
+      suggested_role: test
+      confidence: high
+
+  # Test target detection
+  test_detection:
+    - target_type: test
+      suggested_role: test
+      confidence: absolute
+    
+  # Plugin target detection
+  plugin_detection:
+    - target_type: plugin
+      suggested_role: plugin
+      confidence: absolute
