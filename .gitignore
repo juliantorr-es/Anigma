@@ -96,3 +96,10 @@ __MACOSX/
 # Hide all hidden directories (agent meta, etc.)
 .*
 !/.git/
+
+# Archive and legacy/test files in root
+*.zip
+*.txt
+*.json
+*.py
+*.sh
