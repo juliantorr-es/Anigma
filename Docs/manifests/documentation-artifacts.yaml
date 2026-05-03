@@ -284,6 +284,24 @@ categories:
   description: Architecture and code governance documentation
   primary_tool: python3
   artifacts:
+  - path: Docs/governance/TESTING_DOCTRINE.md
+    type: doctrine
+    status: active
+    required: true
+    description: Testing philosophy, framework migration policy, JSON receipt contract, proof artifact policy
+    verification_commands: []
+  - path: Docs/governance/BUILD_TOOLING_DOCTRINE.md
+    type: doctrine
+    status: draft
+    required: false
+    description: Build tooling doctrine placeholder for SwiftPM, llbuild, driver, and SwiftSyntax research
+    verification_commands: []
+  - path: Docs/governance/CODE_DOCTRINE.md
+    type: doctrine
+    status: draft
+    required: false
+    description: Code doctrine placeholder for source-grounded build and validator policy
+    verification_commands: []
   - path: Docs/governance/VERIFICATION_PROFILES.md
     type: doctrine
     status: active
@@ -493,24 +511,37 @@ categories:
     required: true
     description: Proof artifact for TD Research State and Timeline System
     gc_policy: retain_all
+  - path: Docs/proofs/testing-doctrine-created.md
+    type: proof_artifact
+    status: active
+    required: true
+    description: Proof artifact for Anigma Testing Doctrine creation
+    gc_policy: retain_all
+  - path: Docs/proofs/swift-tooling-research-doctrine-update.md
+    type: proof_artifact
+    status: active
+    required: true
+    description: Setup proof for the Swift tooling research doctrine task
+    gc_policy: retain_all
 statistics:
-  total_artifacts: 66
+  total_artifacts: 70
   by_category:
     Architecture Diagrams: 3
     Architecture Maps: 10
     JSON Schemas: 8
     YAML Manifests: 4
-    Governance Doctrines: 4
+    Governance Doctrines: 7
     Governance Scripts: 11
     TD Descriptors: 1
     Timeline Artifacts: 6
-    Proof Artifacts: 5
+    Proof Artifacts: 7
   by_status:
-    active: 63
+    active: 64
     legacy: 1
     referenced: 1
-  required_artifacts: 65
-  optional_artifacts: 1
+    draft: 2
+  required_artifacts: 66
+  optional_artifacts: 3
 validation:
   all_artifacts_parse: true
   validation_commands:

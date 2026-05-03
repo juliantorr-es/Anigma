@@ -1,871 +1,781 @@
----
-# TD Task Registry
-# Canonical task definitions for Anigma
-# Source of truth: This file defines all active tasks
-# Generated from: Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md
-# 
-# This registry is the canonical source for task IDs, titles, acceptance criteria,
-# and proof requirements. TD database is rebuilt from this file.
-#
-# Validation: python3 scripts/validate_td_docs_sync.py
-# Bootstrap: python3 scripts/td_bootstrap_from_docs.py --apply
+version: 1.0.0
+source: Docs/td/td-task-registry.yaml
+generated_for: td
+description: 'Canonical registry of all active Anigma tasks. TD database should be
 
-version: "1.0.0"
-source: "Docs/td/td-task-registry.yaml"
-generated_for: "td"
-description: |
-  Canonical registry of all active Anigma tasks. TD database should be
   rebuilt from this file after any reset. Tasks not in this registry
+
   are considered ad-hoc and must be explicitly marked.
 
-# ============================================================================
-# LANE DEFINITIONS
-# Lanes group related tasks. Worktrees map to lanes, not individual tasks.
-# ============================================================================
-
+  '
 lanes:
   p0-critical-path:
-    id: "p0-critical-path"
-    title: "P0 Critical Path"
-    description: "Blocking work for public GitHub release. Must complete before publication."
-    owner: "Core Team"
-    priority: "P0"
-    worktree: "anigma/"
-
+    id: p0-critical-path
+    title: P0 Critical Path
+    description: Blocking work for public GitHub release. Must complete before publication.
+    owner: Core Team
+    priority: P0
+    worktree: anigma/
   daemon-runtime-isolation:
-    id: "daemon-runtime-isolation"
-    title: "Daemon Runtime Isolation"
-    description: "Subprocess pooling and daemon hardyfication for reliable execution."
-    owner: "Daemon Team"
-    priority: "P0"
-    worktree: "anigma/"
-
+    id: daemon-runtime-isolation
+    title: Daemon Runtime Isolation
+    description: Subprocess pooling and daemon hardyfication for reliable execution.
+    owner: Daemon Team
+    priority: P0
+    worktree: anigma/
   publication-cleanup:
-    id: "publication-cleanup"
-    title: "Publication Cleanup"
-    description: "Prepare repository for public GitHub publication. Documentation, validation, proofs."
-    owner: "Architecture Team"
-    priority: "P1"
-    worktree: "docs/"
-
+    id: publication-cleanup
+    title: Publication Cleanup
+    description: Prepare repository for public GitHub publication. Documentation,
+      validation, proofs.
+    owner: Architecture Team
+    priority: P1
+    worktree: docs/
   architecture-governance:
-    id: "architecture-governance"
-    title: "Architecture Governance"
-    description: "Tier validation, cycle detection, exported import enforcement."
-    owner: "Architecture Team"
-    priority: "P1"
-    worktree: "anigma/"
-
+    id: architecture-governance
+    title: Architecture Governance
+    description: Tier validation, cycle detection, exported import enforcement.
+    owner: Architecture Team
+    priority: P1
+    worktree: anigma/
   documentation-infrastructure:
-    id: "documentation-infrastructure"
-    title: "Documentation Infrastructure"
-    description: "Documentation-as-Code, schema validation, diagram rendering."
-    owner: "Architecture Team"
-    priority: "P1"
-    worktree: "docs/"
-
-# ============================================================================
-# TASK DEFINITIONS
-# Each task must have: id, title, priority, type, lane
-# Optional: description, source_docs, acceptance, proof, children, non_goals
-# ============================================================================
-
+    id: documentation-infrastructure
+    title: Documentation Infrastructure
+    description: Documentation-as-Code, schema validation, diagram rendering.
+    owner: Architecture Team
+    priority: P1
+    worktree: docs/
 tasks:
-
-  # ==========================================================================
-  # P0 CRITICAL PATH
-  # ==========================================================================
-
-  - id: "p0-003"
-    title: "Polytropos Phase 0 Implementation"
-    priority: "P0"
-    type: "epic"
-    lane: "p0-critical-path"
-    status: "complete"
-    description: "Phase 0: Core materialization gate, media primitives, execution foundation."
-    
-    source_docs:
-      - "Docs/proofs/p0-003-polytropos-phase0-implementation.md"
-      - "Docs/proofs/p0-003-test-results.md"
-    
-    acceptance:
-      - "Materialization gate enforcement is complete"
-      - "Media primitive types are defined and tested"
-      - "Execution foundation supports zero-copy path"
-      - "MediaCore tests pass (55/55)"
-      - "Governance validators pass or have known tracked debt"
-    
-    proof:
-      - "Docs/proofs/p0-003-polytropos-phase0-implementation.md"
-      - "Docs/proofs/p0-003-test-results.md"
-    
-    non_goals:
-      - "Phase 1+ Polytropos features"
-      - "Public GitHub publication"
-
-  - id: "p0-004"
-    title: "anigmad Subprocess Pooling"
-    priority: "P0"
-    type: "epic"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    description: "Unify under anigmad with warm subprocess pooling for parallel execution."
-    
-    source_docs:
-      - "Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md"
-      - "Docs/td/TD_PHASE6_UPDATE.md"
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    acceptance:
-      - "anigmad subprocess pool lifecycle is implemented"
-      - "worker lease checkout/checkin is tested"
-      - "crashed workers are detected and recycled or retired"
-      - "shutdown reaps child processes deterministically"
-      - "governance validators pass"
-    
-    proof:
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    proof_required:
-      - "Test results for worker lease lifecycle"
-      - "Test results for crash detection and recovery"
-      - "Test results for deterministic shutdown"
-    
-    children:
-      - "td-a84da2"
-      - "td-80575e"
-      - "td-bfe7a3"
-      - "td-0dfb09"
-      - "td-73aea8"
-      - "td-ce4439"
-    
-    non_goals:
-      - "Runtime implementation (already existed pre-P0-004)"
-      - "New CLIs beyond anigmad consolidation"
-
-  # P0-004 Child Tasks (implementation exists but test proof needed)
-  
-  - id: "td-a84da2"
-    title: "Phase 1: Implement SubprocessManager foundation with pool lifecycle"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-004"
-    
-    source_docs:
-      - "anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift"
-      - "anigma/Packages/SubprocessPooling/Tests/SubprocessManagerTests.swift"
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    acceptance:
-      - "ProcessPool<W> generic pool manager implemented"
-      - "SubprocessWorker protocol defined"
-      - "WorkerInfo and WorkerState tracking implemented"
-      - "PoolConfiguration and PoolMetrics support complete"
-      - "Per-worker-type pools functional"
-    
-    proof_required:
-      - "Test results from SubprocessManagerTests.swift"
-    
-    non_goals:
-      - "Separate process spawning (Phase 2)"
-    
-    # Conforms to td-task.schema.json - has required: task_id, title, status
-
-  - id: "td-80575e"
-    title: "Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-004"
-    
-    source_docs:
-      - "anigma/Packages/AnigmaDaemon/CLI.swift"
-      - "anigma/Packages/HarmoniaV2CLI/"
-      - "anigma/Packages/AnigmaCLI/"
-      - "anigma/Package.swift"
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    acceptance:
-      - "HarmoniaV2CLI commands ported to AnigmaDaemon/CLI.swift"
-      - "CLI integration preserves command intent"
-      - "HarmoniaV2CLIKernel provides testable isolation"
-      - "All legacy CLI functionality consolidated"
-    
-    proof_required:
-      - "Verification that CLI commands produce expected output"
-    
-    non_goals:
-      - "New CLI features"
-      - "CLI refactoring beyond consolidation"
-
-  - id: "td-bfe7a3"
-    title: "Phase 3: Implement MLWorker warm pool with UMA shared memory"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-004"
-    
-    source_docs:
-      - "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift"
-      - "anigma/Packages/SubprocessPooling/Tests/MLWorkerPoolIntegrationTests.swift"
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    acceptance:
-      - "MLWorkerPool with round-robin workload balancing"
-      - "UMABufferPool for zero-copy tensor data transfer"
-      - "ModelCache for GPU model caching and reuse"
-      - "Multi-GPU support with per-GPU worker pools"
-      - "MLPoolMetrics for observability"
-    
-    proof_required:
-      - "Test results from MLWorkerPoolIntegrationTests.swift"
-    
-    non_goals:
-      - "Actual CoreML/MLX model loading"
-      - "Production model inference"
-
-  - id: "td-0dfb09"
-    title: "Phase 4: Implement anigma-mcp warm pool with Unix domain sockets"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-004"
-    
-    source_docs:
-      - "anigma/Packages/SubprocessPooling/Sources/MCPWorker.swift"
-      - "anigma/Packages/SubprocessPooling/Sources/IPC/UnixDomainSocketIPC.swift"
-      - "anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift"
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    acceptance:
-      - "MCPWorkerPool for JSON-RPC communication"
-      - "UnixDomainSocketIPC for low-latency IPC"
-      - "Streaming MCP request handling in SubprocessManager"
-      - "MCPPoolMetrics for pool observability"
-      - "JSON-RPC request/response structures defined"
-    
-    proof_required:
-      - "Test results for MCP worker pool and IPC"
-      - "anigma/Packages/SubprocessPooling/Tests/MCPWorkerIntegrationTests.swift"
-    
-    non_goals:
-      - "Actual MCP server implementation"
-      - "External MCP client integration"
-
-  - id: "td-73aea8"
-    title: "Phase 5: On-demand subprocesses for PDF, Gem, and benchmarks"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-004"
-    
-    source_docs:
-      - "anigma/Packages/SubprocessPooling/Sources/PDFSidecarWorker.swift"
-      - "anigma/Packages/SubprocessPooling/Sources/BenchmarkWorker.swift"
-      - "Docs/td/TD_PHASE6_UPDATE.md"
-      - "Docs/proofs/p0-004-anigmad-subprocess-pooling.md"
-    
-    acceptance:
-      - "PDFSidecarWorker for isolated PDF processing"
-      - "BenchmarkWorker for performance testing"
-      - "On-demand spawning with macOS sandbox support"
-      - "Per-request subprocess isolation"
-    
-    proof_required:
-      - "Test results for PDF sidecar worker"
-      - "Test results for benchmark worker"
-      - "anigma/Packages/SubprocessPooling/Tests/Phase5OnDemandSubprocessTests.swift"
-    
-    non_goals:
-      - "Per-request PDFium server (future optimization)"
-
-  - id: "td-ce4439"
-    title: "Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-004"
-    
-    source_docs:
-      - "Docs/td/TD_PHASE6_UPDATE.md"
-      - "anigma/Docs/LLM/Retirement/AnigmaGeminiBridge_Retirement_Summary.md"
-      - "anigma/Docs/LLM/Migration/GeminiBridge_Migration_Guide.md"
-      - "anigma/Packages/SubprocessPooling/Sources/LLMProviders/"
-    
-    acceptance:
-      - "Architectural decision: AnigmaGeminiBridge eliminated"
-      - "Unified LLM provider framework implemented (6.1)"
-      - "All provider implementations complete (6.2-6.6)"
-      - "Daemon HTTP endpoints for LLM routing (6.7)"
-      - "Security and rate limiting implemented (6.8)"
-      - "Migration and deprecation complete (6.9)"
-      - "AnigmaGeminiBridge removed from Package.swift"
-    
-    proof_required:
-      - "Verification that AnigmaGeminiBridge is removed from Package.swift"
-      - "Verification that all migrations are complete"
-    
-    subtasks:
-      - "6.1: Unified LLM Provider Framework (COMPLETE)"
-      - "6.2: Gemini Provider Implementation (COMPLETE)"
-      - "6.3: Claude Provider Implementation (COMPLETE)"
-      - "6.4: OpenAI Codex Provider Implementation (COMPLETE)"
-      - "6.5: Mistral AI Provider Implementation (COMPLETE)"
-      - "6.6: OpenCode Provider Implementation (COMPLETE)"
-      - "6.7: Daemon HTTP Endpoints (COMPLETE)"
-      - "6.8: Security & Rate Limiting (COMPLETE)"
-      - "6.9: Migration & Deprecation (COMPLETE)"
-    
-    non_goals:
-      - "Re-adding AnigmaGeminiBridge"
-
-  # ==========================================================================
-  # P1: ARCHITECTURE GOVERNANCE
-  # ==========================================================================
-
-  - id: "p1-validate-tiers-green-gate"
-    title: "Validate Tiers Green Gate"
-    priority: "P1"
-    type: "task"
-    lane: "architecture-governance"
-    status: "complete"
-    
-    source_docs:
-      - "Docs/proofs/p1-validate-tiers-green-gate.md"
-      - "tools/governance/scripts/validate_tiers.py"
-    
-    acceptance:
-      - "validate_tiers.py exits with code 0"
-      - "SecurityEventsManager correctly classified as TIER_2"
-      - "SubprocessPooling added to TIER_2"
-      - "AnigmaDaemonCore and AnigmaDaemon added to TIER_3"
-      - "Package.swift dependencies corrected"
-      - "All three governance validators pass"
-    
-    proof:
-      - "Docs/proofs/p1-validate-tiers-green-gate.md"
-    
-    validator_commands:
-      - "cd anigma && python3 ../Scripts/validate_tiers.py"
-      - "cd anigma && python3 ../Scripts/validate_no_cycles.py .build/anigma-package.json"
-      - "cd anigma && python3 ../Scripts/validate_exported_imports.py"
-
-  # ==========================================================================
-  # P1: DOCUMENTATION INFRASTRUCTURE
-  # ==========================================================================
-
-  - id: "p1-documentation-artifacts-completion"
-    title: "P1 Documentation-as-Code Artifact Completion"
-    priority: "P1"
-    type: "task"
-    lane: "documentation-infrastructure"
-    status: "complete"
-    
-    source_docs:
-      - "Docs/proofs/documentation-artifacts-completion.md"
-      - "Docs/manifests/documentation-artifacts.yaml"
-      - "Docs/manifests/publication-checklist.yaml"
-    
-    acceptance:
-      - "No 0-byte artifact files in Docs/schemas, Docs/manifests, Docs/diagrams"
-      - "All JSON schemas parse as valid JSON"
-      - "All YAML manifests parse as valid YAML"
-      - "All Mermaid diagrams have valid syntax"
-      - "All Graphviz diagrams have valid DOT syntax"
-      - "Structurizr DSL workspace is valid"
-      - "Proof document records validation"
-    
-    proof:
-      - "Docs/proofs/documentation-artifacts-completion.md"
-    
-    artifacts_created:
-      - "Docs/schemas/validator-result.schema.json"
-      - "Docs/schemas/runtime-receipt.schema.json"
-      - "Docs/schemas/roadmap-phase.schema.json"
-      - "Docs/schemas/td-task.schema.json"
-      - "Docs/manifests/documentation-artifacts.yaml"
-      - "Docs/manifests/publication-checklist.yaml"
-      - "Docs/diagrams/mermaid/git-worktree-flow.mmd"
-      - "Docs/diagrams/mermaid/materialization-gate-flow.mmd"
-      - "Docs/diagrams/mermaid/task-lifecycle.mmd"
-      - "Docs/diagrams/mermaid/testing-lanes.mmd"
-      - "Docs/diagrams/graphviz/package-target-graph-example.dot"
-      - "Docs/diagrams/graphviz/tier-violations-example.dot"
-      - "Docs/diagrams/structurizr/anigma-workspace.dsl"
-      - "Docs/diagrams/README.md"
-    
-    non_goals:
-      - "Rendering diagrams to SVG"
-      - "Creating additional schemas beyond the 5 specified"
-
-  # ==========================================================================
-  # P1: TD SOURCE-OF-TRUTH RECOVERY (THIS LANE)
-  # ==========================================================================
-
-  - id: "p1-td-source-of-truth-recovery"
-    title: "P1 — TD Source-of-Truth Recovery and Docs Sync"
-    priority: "P1"
-    type: "epic"
-    lane: "documentation-infrastructure"
-    status: "in_progress"
-    
-    description: |
-      After TD database reset on 2026-05-02, establish Docs/ as the durable
-      source of truth and TD as the local execution queue. Create bootstrap
-      and validation scripts to make TD reconstructible from Docs/.
-    
-    source_docs:
-      - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
-      - "Docs/td/td-task-registry.yaml"
-    
-    acceptance:
-      - "TD source-of-truth doctrine exists and is canonical"
-      - "TD task registry exists with active lanes defined"
-      - "Bootstrap script emits reproducible td commands from registry"
-      - "Sync validator passes on registry and TD state"
-      - "Proof artifact exists documenting the recovery"
-      - "Existing architecture validators still pass"
-      - "No runtime source changes"
-    
-    deliverables:
-      - "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
-      - "Docs/td/td-task-registry.yaml"
-      - "Scripts/td_bootstrap_from_docs.py"
-      - "Scripts/validate_td_docs_sync.py"
-      - "Docs/proofs/td-source-of-truth-recovery.md"
-    
-    non_goals:
-      - "Implement P0-004 runtime work"
-      - "Rewrite roadmap content broadly"
-      - "Recreate every historical task"
-      - "Depend on stale local TD database contents"
-      - "Make TD the canonical source of truth"
-      - "Mutate runtime source"
-      - "Weaken existing validators"
-
-  # ==========================================================================
-  # P1: PUBLICATION CLEANUP
-  # ==========================================================================
-
-  - id: "p1-public-history-excision"
-    title: "Public History Excision"
-    priority: "P1"
-    type: "task"
-    lane: "publication-cleanup"
-    status: "ready"
-    
-    description: |
-      Remove sensitive data, large binaries, and generated artifacts from
-      Git history before public GitHub publication.
-    
-    source_docs:
-      - "Docs/reports/public-release-dependency-exclusion-audit.md"
-      - "Docs/proofs/github-publication-readiness.md"
-      - "Docs/proofs/p1-validate-tiers-green-gate.md"
-      - ".gitignore"
-    
-    acceptance:
-      - "Generated artifacts are removed from Git history"
-      - "Vendored binaries with unclear provenance are excluded"
-      - "No blobs over 100MB remain in history"
-      - "Remote push succeeds without errors"
-      - "Repository builds cleanly after cleanup"
-    
-    proof_required:
-      - "Docs/proofs/public-history-excision-proof.md"
-    
-    validator_commands:
-      - "git log --stat --find-object --all"  # Verify no large objects
-      - "git verify-pack -v .git/objects/pack/*.idx"  # Verify pack integrity
-      - "swift build"  # Verify build after cleanup
-    
-    non_goals:
-      - "Public website generation"
-      - "Rewriting commit history (only cleanup)"
-      - "Removing canonical documentation"
-
-  # ==========================================================================
-  # P0: SATURATED DATABASE + HETEROGENEOUS COMPUTE FOUNDATION
-  # ==========================================================================
-
-  - id: "p0-005"
-    title: "Saturated Database and Heterogeneous Compute Foundation"
-    priority: "P0"
-    type: "epic"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    description: |
-      Establish the data foundation for Saturated Autonomous execution: PostgreSQL
-      remains the governed warm database, hot vector/tensor payloads move to
-      zero-copy Binary Atlas layouts, and CPU/GPU/ANE work is scheduled through
-      explicit saturation lanes with backpressure.
-
-    source_docs:
-      - "anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md"
-      - "anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md"
-      - "anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md"
-      - "anigma/Docs/root-docs/architecture/gpu-native-layouts.md"
-      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
-
-    acceptance:
-      - "Warm database ownership and lifecycle policy are explicit"
-      - "Hot vector/tensor payloads have Binary Atlas (.atlas) source-of-truth layout"
-      - "Database rows reference atlas payloads by id/offset instead of storing hot blobs"
-      - "CPU/GPU/ANE lane scheduling contract exists with backpressure semantics"
-      - "Verification plan covers database lifecycle, atlas layout, and saturation behavior"
-
-    proof_required:
-      - "Docs/proofs/p0-005-saturated-database-and-compute-foundation.md"
-
-    children:
-      - "td-db-001"
-      - "td-db-002"
-      - "td-db-003"
-      - "td-db-004"
-      - "td-db-005"
-
-    non_goals:
-      - "Replace PostgreSQL as system of record"
-      - "Implement model inference quality improvements"
-      - "Adopt a specialized store without measured query or throughput need"
-
-  - id: "td-db-001"
-    title: "Repair DatabaseCore PostgreSQL API and integration-test baseline"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-005"
-
-    source_docs:
-      - "Docs/proofs/p1-validate-tiers-green-gate.md"
-      - "anigma/Docs/PostgresFirstClassImplementation.md"
-      - "anigma/Docs/epics/td-89a996/Xcode_Build_Fixes_and_PostgreSQL_Test_Setup.md"
-
-    acceptance:
-      - "DatabaseCore/PostgresJobQueue API drift is repaired"
-      - "DatabaseActor PostgreSQL paths build against the current PostgresNIO API"
-      - "PostgreSQL integration tests either pass with documented environment or skip loudly"
-      - "AnigmaMCPModule and AnigmaDaemonCore are no longer blocked by DatabaseCore compile errors"
-
-    proof_required:
-      - "DatabaseCore-focused build/test transcript"
-      - "PostgreSQL environment requirements documented"
-
-  - id: "td-db-002"
-    title: "Define warm database lifecycle, retention, and partition policy"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-005"
-
-    source_docs:
-      - "anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md"
-      - "anigma/Docs/architecture/database-housekeeping.md"
-      - "anigma/Docs/guides/database/DatabaseOptimizationGuide.md"
-
-    acceptance:
-      - "Canonical stack is documented: PostgreSQL, Redis/ephemeral cache where justified, pgvector only where needed, DuckDB only for analytics"
-      - "Retention tiers define short-term, long-term, persistent, and regenerated embedding data"
-      - "Partition keys for runs, sessions, tenants, and evidence are documented"
-      - "Slow-query and growth guardrails have validator or proof commands"
-
-    proof_required:
-      - "Docs/proofs/database-lifecycle-and-retention-policy.md"
-
-  - id: "td-db-003"
-    title: "Port Contextum memory vectors to Binary Atlas references"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-005"
-
-    source_docs:
-      - "anigma/Docs/root-docs/architecture/gpu-native-layouts.md"
-      - "anigma/Docs/root-docs/research/memory-backend-options.md"
-      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
-
-    acceptance:
-      - "Contextum memory vector payloads use .atlas files for hot data"
-      - "Warm database rows store atlas id, offset, dimension, type, and governance metadata"
-      - "No JSON/BLOB hot-vector path remains on the critical retrieval path"
-      - "Atlas writer/reader fixtures prove alignment and zero-copy mapping assumptions"
-
-    proof_required:
-      - "Docs/proofs/contextum-binary-atlas-memory-layout.md"
-
-  - id: "td-db-004"
-    title: "Implement saturation lane scheduling and batch orchestration contract"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-005"
-
-    source_docs:
-      - "anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md"
-      - "anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md"
-      - "anigma/Docs/metal-mps-integration/IMPLEMENTATION_PHASE2_COMPLETE.md"
-
-    acceptance:
-      - "Control, inference, perception, and native lanes are defined with hardware affinity"
-      - "Batching triggers and queue depth limits are documented or implemented"
-      - "Backpressure exposes GPU/ANE busy state to ingestion and daemon queues"
-      - "CPU fallback path and receipt semantics are defined for every accelerated lane"
-
-    proof_required:
-      - "Docs/proofs/saturation-lane-scheduling-contract.md"
-
-  - id: "td-db-005"
-    title: "Define partitionable projections and replay-safe rebuilds"
-    priority: "P0"
-    type: "task"
-    lane: "daemon-runtime-isolation"
-    status: "ready"
-    parent: "p0-005"
-
-    source_docs:
-      - "anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md"
-      - "anigma/Docs/root-docs/research/03-event-sourcing-snapshot-storage-serialization.md"
-      - "anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md"
-
-    acceptance:
-      - "Run/session/tenant partition strategy exists for event projections"
-      - "Projection rebuilds can run in parallel without violating evidence order"
-      - "Compaction checkpoints record enough state for safe resume"
-      - "Replay tests prove rebuilt projections match canonical event/evidence data"
-
-    proof_required:
-      - "Docs/proofs/partitionable-projections-and-replay-safety.md"
-
-  # ==========================================================================
-  # P1: RUNTIME ARCHITECTURE VIOLATION LOCKDOWN
-  # ==========================================================================
-
-  - id: "p1-runtime-architecture-lockdown"
-    title: "Runtime Architecture Violation Lockdown"
-    priority: "P1"
-    type: "epic"
-    lane: "architecture-governance"
-    status: "ready"
-    description: |
-      Close the known architecture gaps where modules can bypass PlatformRuntime,
-      DatabaseAuthority, EvidenceAuthority, and governance gates. This replaces
-      fragmented runtime behavior with enforceable authority boundaries.
-
-    source_docs:
-      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
-      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
-      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
-      - "anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md"
-
-    acceptance:
-      - "Database mutations route through DatabaseAuthority"
-      - "Evidence recording routes through EvidenceAuthority"
-      - "Capability modules cannot directly bypass PlatformRuntime boundaries"
-      - "Architecture tests catch direct DatabaseCore/DatabaseActor/evidence bypasses"
-
-    proof_required:
-      - "Docs/proofs/runtime-architecture-violation-lockdown.md"
-
-    children:
-      - "td-arch-001"
-      - "td-arch-002"
-      - "td-arch-003"
-      - "td-arch-004"
-      - "td-arch-005"
-
-    non_goals:
-      - "Rewrite every capability module in one change"
-      - "Remove rollback paths before Phase 2-4 are proven"
-
-  - id: "td-arch-001"
-    title: "Enforce DatabaseAuthority mutation gates"
-    priority: "P1"
-    type: "task"
-    lane: "architecture-governance"
-    status: "ready"
-    parent: "p1-runtime-architecture-lockdown"
-
-    source_docs:
-      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
-      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
-      - "anigma/Docs/PostgresFirstClassImplementation.md"
-
-    acceptance:
-      - "WriteGate and KillSwitch are evaluated before DatabaseAuthority mutations"
-      - "At least one migrated module proves governed mutation path"
-      - "Bypass attempt is covered by test or validator"
-
-    proof_required:
-      - "Docs/proofs/database-authority-mutation-gates.md"
-
-  - id: "td-arch-002"
-    title: "Unify fragmented evidence systems behind EvidenceAuthority"
-    priority: "P1"
-    type: "task"
-    lane: "architecture-governance"
-    status: "ready"
-    parent: "p1-runtime-architecture-lockdown"
-
-    source_docs:
-      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
-      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
-      - "anigma/Docs/architecture/database-housekeeping.md"
-
-    acceptance:
-      - "ReceiptEngine, Cathedral evidence, and Harmonia evidence seams are inventoried"
-      - "Unified EvidenceAuthority target schema is documented"
-      - "New evidence writes can be routed through one authority path"
-      - "Migration/compatibility path for existing evidence is documented"
-
-    proof_required:
-      - "Docs/proofs/evidence-authority-unification.md"
-
-  - id: "td-arch-003"
-    title: "Add architecture tests for runtime authority bypasses"
-    priority: "P1"
-    type: "task"
-    lane: "architecture-governance"
-    status: "ready"
-    parent: "p1-runtime-architecture-lockdown"
-
-    source_docs:
-      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
-      - "Docs/schemas/tier-boundary-violations.schema.md"
-      - "Docs/proofs/p1-validate-tiers-green-gate.md"
-
-    acceptance:
-      - "Validator detects direct DatabaseActor usage outside approved authority layers"
-      - "Validator detects capability modules importing DatabaseCore directly where forbidden"
-      - "Validator detects direct evidence writes outside EvidenceAuthority"
-      - "CI/profile command documents expected pass result"
-
-    proof_required:
-      - "Docs/proofs/runtime-authority-bypass-tests.md"
-
-  - id: "td-arch-004"
-    title: "Migrate one capability module through PlatformRuntime as proof"
-    priority: "P1"
-    type: "task"
-    lane: "architecture-governance"
-    status: "ready"
-    parent: "p1-runtime-architecture-lockdown"
-
-    source_docs:
-      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
-      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
-
-    acceptance:
-      - "One selected module registers workflows/schemas through PlatformRuntime"
-      - "Module no longer owns direct database/evidence mutation path"
-      - "ExecutionContext flows through the migrated workflow"
-      - "Rollback/compatibility path is documented"
-
-    proof_required:
-      - "Docs/proofs/platform-runtime-module-migration-proof.md"
-
-  - id: "td-arch-005"
-    title: "Define backend readiness gates for lifecycle, contracts, retries, and operability"
-    priority: "P1"
-    type: "task"
-    lane: "architecture-governance"
-    status: "ready"
-    parent: "p1-runtime-architecture-lockdown"
-
-    source_docs:
-      - "anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md"
-      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
-
-    acceptance:
-      - "Backend readiness checklist is converted into executable gates"
-      - "Daemon lifecycle, contracts, retries/idempotency, backpressure, and operability each have proof commands"
-      - "Gates distinguish blockers from tracked debt"
-
-    proof_required:
-      - "Docs/proofs/backend-readiness-gates.md"
-
-# ============================================================================
-# VALIDATION RULES
-# These rules are enforced by scripts/validate_td_docs_sync.py
-# ============================================================================
-
+- id: td-swift-tooling-research
+  title: Study SwiftPM, llbuild, Swift driver, and SwiftSyntax to improve Anigma build/test/code doctrine
+  priority: P1
+  type: task
+  lane: documentation-infrastructure
+  status: ready
+  description: Upstream Swift tooling research and doctrine integration.
+  source_docs:
+  - https://github.com/swiftlang/swift-package-manager
+  - https://github.com/swiftlang/swift-llbuild
+  - https://github.com/swiftlang/swift-driver
+  - https://github.com/swiftlang/swift-syntax
+  - https://github.com/swiftlang/swift-build
+  acceptance:
+  - Research docs exist for each studied upstream repository area.
+  - Findings cite exact upstream files, symbols, commits, and line ranges where available.
+  - Docs/governance/BUILD_TOOLING_DOCTRINE.md is created or updated with source-grounded rules.
+  - Docs/governance/CODE_DOCTRINE.md is created if absent and updated with source-grounded rules.
+  - Docs/governance/TESTING_DOCTRINE.md is updated with Swift Testing and receipt guidance grounded in upstream behavior.
+  - Docs/proofs/swift-tooling-research-doctrine-update.md exists and records the research outcome.
+  - Relevant indexes and manifests reference the new doctrine and proof artifacts.
+  - No upstream repository is vendored into Anigma.
+  - No production Anigma code is changed during the research phase.
+  non_goals:
+  - Do not fork SwiftPM.
+  - Do not vendor upstream Swift tooling into Anigma.
+  - Do not redesign Anigma build system yet.
+  - Do not replace validators yet.
+  - Do not implement follow-up ideas in production code during this task.
+  proof:
+  - Docs/proofs/swift-tooling-research-doctrine-update.md
+  validator_commands:
+  - python3 -c "import yaml; yaml.safe_load(open('Docs/manifests/documentation-artifacts.yaml'))"
+  - python3 Scripts/validate_td_docs_sync.py
+- id: p0-003
+  title: Polytropos Phase 0 Implementation
+  priority: P0
+  type: epic
+  lane: p0-critical-path
+  status: complete
+  description: 'Phase 0: Core materialization gate, media primitives, execution foundation.'
+  source_docs:
+  - Docs/proofs/p0-003-polytropos-phase0-implementation.md
+  - Docs/proofs/p0-003-test-results.md
+  acceptance:
+  - Materialization gate enforcement is complete
+  - Media primitive types are defined and tested
+  - Execution foundation supports zero-copy path
+  - MediaCore tests pass (55/55)
+  - Governance validators pass or have known tracked debt
+  proof:
+  - Docs/proofs/p0-003-polytropos-phase0-implementation.md
+  - Docs/proofs/p0-003-test-results.md
+  non_goals:
+  - Phase 1+ Polytropos features
+  - Public GitHub publication
+- id: p0-004
+  title: anigmad Subprocess Pooling
+  priority: P0
+  type: epic
+  lane: daemon-runtime-isolation
+  status: ready
+  description: Unify under anigmad with warm subprocess pooling for parallel execution.
+  source_docs:
+  - Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md
+  - Docs/td/TD_PHASE6_UPDATE.md
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  acceptance:
+  - anigmad subprocess pool lifecycle is implemented
+  - worker lease checkout/checkin is tested
+  - crashed workers are detected and recycled or retired
+  - shutdown reaps child processes deterministically
+  - governance validators pass
+  proof:
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  proof_required:
+  - Test results for worker lease lifecycle
+  - Test results for crash detection and recovery
+  - Test results for deterministic shutdown
+  children:
+  - td-a84da2
+  - td-80575e
+  - td-bfe7a3
+  - td-0dfb09
+  - td-73aea8
+  - td-ce4439
+  non_goals:
+  - Runtime implementation (already existed pre-P0-004)
+  - New CLIs beyond anigmad consolidation
+- id: td-a84da2
+  title: 'Phase 1: Implement SubprocessManager foundation with pool lifecycle'
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-004
+  source_docs:
+  - anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift
+  - anigma/Packages/SubprocessPooling/Tests/SubprocessManagerTests.swift
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  acceptance:
+  - ProcessPool<W> generic pool manager implemented
+  - SubprocessWorker protocol defined
+  - WorkerInfo and WorkerState tracking implemented
+  - PoolConfiguration and PoolMetrics support complete
+  - Per-worker-type pools functional
+  proof_required:
+  - Test results from SubprocessManagerTests.swift
+  non_goals:
+  - Separate process spawning (Phase 2)
+- id: td-80575e
+  title: 'Phase 2: Direct integration of HarmoniaV2CLI and AnigmaCLIExecutable'
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-004
+  source_docs:
+  - anigma/Packages/AnigmaDaemon/CLI.swift
+  - anigma/Packages/HarmoniaV2CLI/
+  - anigma/Packages/AnigmaCLI/
+  - anigma/Package.swift
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  acceptance:
+  - HarmoniaV2CLI commands ported to AnigmaDaemon/CLI.swift
+  - CLI integration preserves command intent
+  - HarmoniaV2CLIKernel provides testable isolation
+  - All legacy CLI functionality consolidated
+  proof_required:
+  - Verification that CLI commands produce expected output
+  non_goals:
+  - New CLI features
+  - CLI refactoring beyond consolidation
+- id: td-bfe7a3
+  title: 'Phase 3: Implement MLWorker warm pool with UMA shared memory'
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-004
+  source_docs:
+  - anigma/Packages/SubprocessPooling/Sources/MLWorker.swift
+  - anigma/Packages/SubprocessPooling/Tests/MLWorkerPoolIntegrationTests.swift
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  acceptance:
+  - MLWorkerPool with round-robin workload balancing
+  - UMABufferPool for zero-copy tensor data transfer
+  - ModelCache for GPU model caching and reuse
+  - Multi-GPU support with per-GPU worker pools
+  - MLPoolMetrics for observability
+  proof_required:
+  - Test results from MLWorkerPoolIntegrationTests.swift
+  non_goals:
+  - Actual CoreML/MLX model loading
+  - Production model inference
+- id: td-0dfb09
+  title: 'Phase 4: Implement anigma-mcp warm pool with Unix domain sockets'
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-004
+  source_docs:
+  - anigma/Packages/SubprocessPooling/Sources/MCPWorker.swift
+  - anigma/Packages/SubprocessPooling/Sources/IPC/UnixDomainSocketIPC.swift
+  - anigma/Packages/SubprocessPooling/Sources/SubprocessManager.swift
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  acceptance:
+  - MCPWorkerPool for JSON-RPC communication
+  - UnixDomainSocketIPC for low-latency IPC
+  - Streaming MCP request handling in SubprocessManager
+  - MCPPoolMetrics for pool observability
+  - JSON-RPC request/response structures defined
+  proof_required:
+  - Test results for MCP worker pool and IPC
+  - anigma/Packages/SubprocessPooling/Tests/MCPWorkerIntegrationTests.swift
+  non_goals:
+  - Actual MCP server implementation
+  - External MCP client integration
+- id: td-73aea8
+  title: 'Phase 5: On-demand subprocesses for PDF, Gem, and benchmarks'
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-004
+  source_docs:
+  - anigma/Packages/SubprocessPooling/Sources/PDFSidecarWorker.swift
+  - anigma/Packages/SubprocessPooling/Sources/BenchmarkWorker.swift
+  - Docs/td/TD_PHASE6_UPDATE.md
+  - Docs/proofs/p0-004-anigmad-subprocess-pooling.md
+  acceptance:
+  - PDFSidecarWorker for isolated PDF processing
+  - BenchmarkWorker for performance testing
+  - On-demand spawning with macOS sandbox support
+  - Per-request subprocess isolation
+  proof_required:
+  - Test results for PDF sidecar worker
+  - Test results for benchmark worker
+  - anigma/Packages/SubprocessPooling/Tests/Phase5OnDemandSubprocessTests.swift
+  non_goals:
+  - Per-request PDFium server (future optimization)
+- id: td-ce4439
+  title: 'Phase 6: Decide AnigmaGeminiBridge fate - eliminate or keep'
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-004
+  source_docs:
+  - Docs/td/TD_PHASE6_UPDATE.md
+  - anigma/Docs/LLM/Retirement/AnigmaGeminiBridge_Retirement_Summary.md
+  - anigma/Docs/LLM/Migration/GeminiBridge_Migration_Guide.md
+  - anigma/Packages/SubprocessPooling/Sources/LLMProviders/
+  acceptance:
+  - 'Architectural decision: AnigmaGeminiBridge eliminated'
+  - Unified LLM provider framework implemented (6.1)
+  - All provider implementations complete (6.2-6.6)
+  - Daemon HTTP endpoints for LLM routing (6.7)
+  - Security and rate limiting implemented (6.8)
+  - Migration and deprecation complete (6.9)
+  - AnigmaGeminiBridge removed from Package.swift
+  proof_required:
+  - Verification that AnigmaGeminiBridge is removed from Package.swift
+  - Verification that all migrations are complete
+  subtasks:
+  - '6.1: Unified LLM Provider Framework (COMPLETE)'
+  - '6.2: Gemini Provider Implementation (COMPLETE)'
+  - '6.3: Claude Provider Implementation (COMPLETE)'
+  - '6.4: OpenAI Codex Provider Implementation (COMPLETE)'
+  - '6.5: Mistral AI Provider Implementation (COMPLETE)'
+  - '6.6: OpenCode Provider Implementation (COMPLETE)'
+  - '6.7: Daemon HTTP Endpoints (COMPLETE)'
+  - '6.8: Security & Rate Limiting (COMPLETE)'
+  - '6.9: Migration & Deprecation (COMPLETE)'
+  non_goals:
+  - Re-adding AnigmaGeminiBridge
+- id: p1-validate-tiers-green-gate
+  title: Validate Tiers Green Gate
+  priority: P1
+  type: task
+  lane: architecture-governance
+  status: complete
+  source_docs:
+  - Docs/proofs/p1-validate-tiers-green-gate.md
+  - tools/governance/scripts/validate_tiers.py
+  acceptance:
+  - validate_tiers.py exits with code 0
+  - SecurityEventsManager correctly classified as TIER_2
+  - SubprocessPooling added to TIER_2
+  - AnigmaDaemonCore and AnigmaDaemon added to TIER_3
+  - Package.swift dependencies corrected
+  - All three governance validators pass
+  proof:
+  - Docs/proofs/p1-validate-tiers-green-gate.md
+  validator_commands:
+  - cd anigma && python3 ../Scripts/validate_tiers.py
+  - cd anigma && python3 ../Scripts/validate_no_cycles.py .build/anigma-package.json
+  - cd anigma && python3 ../Scripts/validate_exported_imports.py
+- id: p1-documentation-artifacts-completion
+  title: P1 Documentation-as-Code Artifact Completion
+  priority: P1
+  type: task
+  lane: documentation-infrastructure
+  status: complete
+  source_docs:
+  - Docs/proofs/documentation-artifacts-completion.md
+  - Docs/manifests/documentation-artifacts.yaml
+  - Docs/manifests/publication-checklist.yaml
+  acceptance:
+  - No 0-byte artifact files in Docs/schemas, Docs/manifests, Docs/diagrams
+  - All JSON schemas parse as valid JSON
+  - All YAML manifests parse as valid YAML
+  - All Mermaid diagrams have valid syntax
+  - All Graphviz diagrams have valid DOT syntax
+  - Structurizr DSL workspace is valid
+  - Proof document records validation
+  proof:
+  - Docs/proofs/documentation-artifacts-completion.md
+  artifacts_created:
+  - Docs/schemas/validator-result.schema.json
+  - Docs/schemas/runtime-receipt.schema.json
+  - Docs/schemas/roadmap-phase.schema.json
+  - Docs/schemas/td-task.schema.json
+  - Docs/manifests/documentation-artifacts.yaml
+  - Docs/manifests/publication-checklist.yaml
+  - Docs/diagrams/mermaid/git-worktree-flow.mmd
+  - Docs/diagrams/mermaid/materialization-gate-flow.mmd
+  - Docs/diagrams/mermaid/task-lifecycle.mmd
+  - Docs/diagrams/mermaid/testing-lanes.mmd
+  - Docs/diagrams/graphviz/package-target-graph-example.dot
+  - Docs/diagrams/graphviz/tier-violations-example.dot
+  - Docs/diagrams/structurizr/anigma-workspace.dsl
+  - Docs/diagrams/README.md
+  non_goals:
+  - Rendering diagrams to SVG
+  - Creating additional schemas beyond the 5 specified
+- id: p1-td-source-of-truth-recovery
+  title: "P1 \u2014 TD Source-of-Truth Recovery and Docs Sync"
+  priority: P1
+  type: epic
+  lane: documentation-infrastructure
+  status: in_progress
+  description: 'After TD database reset on 2026-05-02, establish Docs/ as the durable
+
+    source of truth and TD as the local execution queue. Create bootstrap
+
+    and validation scripts to make TD reconstructible from Docs/.
+
+    '
+  source_docs:
+  - Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md
+  - Docs/td/td-task-registry.yaml
+  acceptance:
+  - TD source-of-truth doctrine exists and is canonical
+  - TD task registry exists with active lanes defined
+  - Bootstrap script emits reproducible td commands from registry
+  - Sync validator passes on registry and TD state
+  - Proof artifact exists documenting the recovery
+  - Existing architecture validators still pass
+  - No runtime source changes
+  deliverables:
+  - Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md
+  - Docs/td/td-task-registry.yaml
+  - Scripts/td_bootstrap_from_docs.py
+  - Scripts/validate_td_docs_sync.py
+  - Docs/proofs/td-source-of-truth-recovery.md
+  non_goals:
+  - Implement P0-004 runtime work
+  - Rewrite roadmap content broadly
+  - Recreate every historical task
+  - Depend on stale local TD database contents
+  - Make TD the canonical source of truth
+  - Mutate runtime source
+  - Weaken existing validators
+- id: p1-public-history-excision
+  title: Public History Excision
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: ready
+  description: 'Remove sensitive data, large binaries, and generated artifacts from
+
+    Git history before public GitHub publication.
+
+    '
+  source_docs:
+  - Docs/reports/public-release-dependency-exclusion-audit.md
+  - Docs/proofs/github-publication-readiness.md
+  - Docs/proofs/p1-validate-tiers-green-gate.md
+  - .gitignore
+  acceptance:
+  - Generated artifacts are removed from Git history
+  - Vendored binaries with unclear provenance are excluded
+  - No blobs over 100MB remain in history
+  - Remote push succeeds without errors
+  - Repository builds cleanly after cleanup
+  proof_required:
+  - Docs/proofs/public-history-excision-proof.md
+  validator_commands:
+  - git log --stat --find-object --all
+  - git verify-pack -v .git/objects/pack/*.idx
+  - swift build
+  non_goals:
+  - Public website generation
+  - Rewriting commit history (only cleanup)
+  - Removing canonical documentation
+- id: p0-build-recovery-epic
+  title: P0 Build Recovery Epic
+  priority: P0
+  type: epic
+  lane: p0-critical-path
+  status: ready
+  description: 'Restore build and test execution after repository hygiene excision
+    of vendored
+
+    binaries. Focus on native dependency resolution and test isolation.'
+  source_docs:
+  - Docs/td/td-build-env-native-deps.yaml
+  acceptance:
+  - BackendReadiness tests execute without native dependency linker errors
+  - Native dependency strategy is documented and reproducible
+  - No vendored binaries reintroduced
+  proof_required:
+  - Docs/proofs/p0-build-recovery-epic-proof.md
+  children:
+  - td-build-env-native-deps
+  non_goals:
+  - Refactor Package.swift structure
+  - Weaken or skip BackendReadiness tests
+  - Reintroduce vendored binaries
+- id: td-build-env-native-deps
+  title: Restore native dependency resolution for pdfium without re-vendoring binaries
+  priority: P0
+  type: task
+  lane: p0-critical-path
+  status: ready
+  parent: p0-build-recovery-epic
+  description: 'Swift targets now compile, but test execution is blocked at link time
+    by:
+
+    ld: library ''pdfium'' not found
+
+    This is an environment/native dependency packaging issue caused by repository
+
+    hygiene excision of vendored binaries. Do not revert the excision.'
+  source_docs:
+  - anigma/Package.swift
+  acceptance:
+  - BackendReadiness tests no longer fail solely because pdfium is missing
+  - Native dependency strategy is documented and reproducible
+  - Vendored binaries are not reintroduced
+  - pdfium linkage is isolated to the narrowest appropriate target
+  - td-358315 can proceed to behavioral test execution
+  proof_required:
+  - Docs/proofs/td-build-env-native-deps-pdfium-proof.md
+  validator_commands:
+  - swift build --target BackendReadinessContractTests
+  - swift build --target SubprocessPoolingTests
+  - swift build --target SaturatedModelRegistryTests
+  - swift test --filter BackendReadinessContractTests
+  - swift test --filter BackendReadinessRegistryTests
+  - swift test --filter BackendReadinessExecutionTests
+  - swift test --filter BackendReadinessIntegrationTests
+- id: p0-005
+  title: Saturated Database and Heterogeneous Compute Foundation
+  priority: P0
+  type: epic
+  lane: daemon-runtime-isolation
+  status: ready
+  description: 'Establish the data foundation for Saturated Autonomous execution:
+    PostgreSQL
+
+    remains the governed warm database, hot vector/tensor payloads move to
+
+    zero-copy Binary Atlas layouts, and CPU/GPU/ANE work is scheduled through
+
+    explicit saturation lanes with backpressure.
+
+    '
+  source_docs:
+  - anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md
+  - anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md
+  - anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md
+  - anigma/Docs/root-docs/architecture/gpu-native-layouts.md
+  - anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+  acceptance:
+  - Warm database ownership and lifecycle policy are explicit
+  - Hot vector/tensor payloads have Binary Atlas (.atlas) source-of-truth layout
+  - Database rows reference atlas payloads by id/offset instead of storing hot blobs
+  - CPU/GPU/ANE lane scheduling contract exists with backpressure semantics
+  - Verification plan covers database lifecycle, atlas layout, and saturation behavior
+  proof_required:
+  - Docs/proofs/p0-005-saturated-database-and-compute-foundation.md
+  children:
+  - td-db-001
+  - td-db-002
+  - td-db-003
+  - td-db-004
+  - td-db-005
+  non_goals:
+  - Replace PostgreSQL as system of record
+  - Implement model inference quality improvements
+  - Adopt a specialized store without measured query or throughput need
+- id: td-db-001
+  title: Repair DatabaseCore PostgreSQL API and integration-test baseline
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-005
+  source_docs:
+  - Docs/proofs/p1-validate-tiers-green-gate.md
+  - anigma/Docs/PostgresFirstClassImplementation.md
+  - anigma/Docs/epics/td-89a996/Xcode_Build_Fixes_and_PostgreSQL_Test_Setup.md
+  acceptance:
+  - DatabaseCore/PostgresJobQueue API drift is repaired
+  - DatabaseActor PostgreSQL paths build against the current PostgresNIO API
+  - PostgreSQL integration tests either pass with documented environment or skip loudly
+  - AnigmaMCPModule and AnigmaDaemonCore are no longer blocked by DatabaseCore compile
+    errors
+  proof_required:
+  - DatabaseCore-focused build/test transcript
+  - PostgreSQL environment requirements documented
+- id: td-db-002
+  title: Define warm database lifecycle, retention, and partition policy
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-005
+  source_docs:
+  - anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md
+  - anigma/Docs/architecture/database-housekeeping.md
+  - anigma/Docs/guides/database/DatabaseOptimizationGuide.md
+  acceptance:
+  - 'Canonical stack is documented: PostgreSQL, Redis/ephemeral cache where justified,
+    pgvector only where needed, DuckDB only for analytics'
+  - Retention tiers define short-term, long-term, persistent, and regenerated embedding
+    data
+  - Partition keys for runs, sessions, tenants, and evidence are documented
+  - Slow-query and growth guardrails have validator or proof commands
+  proof_required:
+  - Docs/proofs/database-lifecycle-and-retention-policy.md
+- id: td-db-003
+  title: Port Contextum memory vectors to Binary Atlas references
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-005
+  source_docs:
+  - anigma/Docs/root-docs/architecture/gpu-native-layouts.md
+  - anigma/Docs/root-docs/research/memory-backend-options.md
+  - anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+  acceptance:
+  - Contextum memory vector payloads use .atlas files for hot data
+  - Warm database rows store atlas id, offset, dimension, type, and governance metadata
+  - No JSON/BLOB hot-vector path remains on the critical retrieval path
+  - Atlas writer/reader fixtures prove alignment and zero-copy mapping assumptions
+  proof_required:
+  - Docs/proofs/contextum-binary-atlas-memory-layout.md
+- id: td-db-004
+  title: Implement saturation lane scheduling and batch orchestration contract
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-005
+  source_docs:
+  - anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md
+  - anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md
+  - anigma/Docs/metal-mps-integration/IMPLEMENTATION_PHASE2_COMPLETE.md
+  acceptance:
+  - Control, inference, perception, and native lanes are defined with hardware affinity
+  - Batching triggers and queue depth limits are documented or implemented
+  - Backpressure exposes GPU/ANE busy state to ingestion and daemon queues
+  - CPU fallback path and receipt semantics are defined for every accelerated lane
+  proof_required:
+  - Docs/proofs/saturation-lane-scheduling-contract.md
+- id: td-db-005
+  title: Define partitionable projections and replay-safe rebuilds
+  priority: P0
+  type: task
+  lane: daemon-runtime-isolation
+  status: ready
+  parent: p0-005
+  source_docs:
+  - anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md
+  - anigma/Docs/root-docs/research/03-event-sourcing-snapshot-storage-serialization.md
+  - anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md
+  acceptance:
+  - Run/session/tenant partition strategy exists for event projections
+  - Projection rebuilds can run in parallel without violating evidence order
+  - Compaction checkpoints record enough state for safe resume
+  - Replay tests prove rebuilt projections match canonical event/evidence data
+  proof_required:
+  - Docs/proofs/partitionable-projections-and-replay-safety.md
+- id: p1-runtime-architecture-lockdown
+  title: Runtime Architecture Violation Lockdown
+  priority: P1
+  type: epic
+  lane: architecture-governance
+  status: ready
+  description: 'Close the known architecture gaps where modules can bypass PlatformRuntime,
+
+    DatabaseAuthority, EvidenceAuthority, and governance gates. This replaces
+
+    fragmented runtime behavior with enforceable authority boundaries.
+
+    '
+  source_docs:
+  - anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+  - anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+  - anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+  - anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md
+  acceptance:
+  - Database mutations route through DatabaseAuthority
+  - Evidence recording routes through EvidenceAuthority
+  - Capability modules cannot directly bypass PlatformRuntime boundaries
+  - Architecture tests catch direct DatabaseCore/DatabaseActor/evidence bypasses
+  proof_required:
+  - Docs/proofs/runtime-architecture-violation-lockdown.md
+  children:
+  - td-arch-001
+  - td-arch-002
+  - td-arch-003
+  - td-arch-004
+  - td-arch-005
+  non_goals:
+  - Rewrite every capability module in one change
+  - Remove rollback paths before Phase 2-4 are proven
+- id: td-arch-001
+  title: Enforce DatabaseAuthority mutation gates
+  priority: P1
+  type: task
+  lane: architecture-governance
+  status: ready
+  parent: p1-runtime-architecture-lockdown
+  source_docs:
+  - anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+  - anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+  - anigma/Docs/PostgresFirstClassImplementation.md
+  acceptance:
+  - WriteGate and KillSwitch are evaluated before DatabaseAuthority mutations
+  - At least one migrated module proves governed mutation path
+  - Bypass attempt is covered by test or validator
+  proof_required:
+  - Docs/proofs/database-authority-mutation-gates.md
+- id: td-arch-002
+  title: Unify fragmented evidence systems behind EvidenceAuthority
+  priority: P1
+  type: task
+  lane: architecture-governance
+  status: ready
+  parent: p1-runtime-architecture-lockdown
+  source_docs:
+  - anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+  - anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+  - anigma/Docs/architecture/database-housekeeping.md
+  acceptance:
+  - ReceiptEngine, Cathedral evidence, and Harmonia evidence seams are inventoried
+  - Unified EvidenceAuthority target schema is documented
+  - New evidence writes can be routed through one authority path
+  - Migration/compatibility path for existing evidence is documented
+  proof_required:
+  - Docs/proofs/evidence-authority-unification.md
+- id: td-arch-003
+  title: Add architecture tests for runtime authority bypasses
+  priority: P1
+  type: task
+  lane: architecture-governance
+  status: ready
+  parent: p1-runtime-architecture-lockdown
+  source_docs:
+  - anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+  - Docs/schemas/tier-boundary-violations.schema.md
+  - Docs/proofs/p1-validate-tiers-green-gate.md
+  acceptance:
+  - Validator detects direct DatabaseActor usage outside approved authority layers
+  - Validator detects capability modules importing DatabaseCore directly where forbidden
+  - Validator detects direct evidence writes outside EvidenceAuthority
+  - CI/profile command documents expected pass result
+  proof_required:
+  - Docs/proofs/runtime-authority-bypass-tests.md
+- id: td-arch-004
+  title: Migrate one capability module through PlatformRuntime as proof
+  priority: P1
+  type: task
+  lane: architecture-governance
+  status: ready
+  parent: p1-runtime-architecture-lockdown
+  source_docs:
+  - anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+  - anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+  acceptance:
+  - One selected module registers workflows/schemas through PlatformRuntime
+  - Module no longer owns direct database/evidence mutation path
+  - ExecutionContext flows through the migrated workflow
+  - Rollback/compatibility path is documented
+  proof_required:
+  - Docs/proofs/platform-runtime-module-migration-proof.md
+- id: td-arch-005
+  title: Define backend readiness gates for lifecycle, contracts, retries, and operability
+  priority: P1
+  type: task
+  lane: architecture-governance
+  status: ready
+  parent: p1-runtime-architecture-lockdown
+  source_docs:
+  - anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md
+  - anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+  acceptance:
+  - Backend readiness checklist is converted into executable gates
+  - Daemon lifecycle, contracts, retries/idempotency, backpressure, and operability
+    each have proof commands
+  - Gates distinguish blockers from tracked debt
+  proof_required:
+  - Docs/proofs/backend-readiness-gates.md
 validation:
   rules:
-    - id: "SRC-001"
-      name: "Registry Coverage"
-      description: "Every non-ad-hoc TD task must have a registry entry"
-      severity: "ERROR"
-      check: "SELECT id FROM td_tasks WHERE ad_hoc = false AND id NOT IN (SELECT id FROM registry_tasks)"
-      
-    - id: "SRC-002"
-      name: "Schema Compliance"
-      description: "Every registry task must validate against td-task.schema.json"
-      severity: "ERROR"
-      check: "json_schema_validation"
-      
-    - id: "SRC-003"
-      name: "Proof Existence"
-      description: "Every completed task must have a proof artifact in Docs/proofs/"
-      severity: "ERROR"
-      check: "file_exists(Docs/proofs/<task-id>.md) OR file_exists(proof.path)"
-      
-    - id: "SRC-004"
-      name: "Proof Path Validity"
-      description: "Every proof path in registry must point to existing file"
-      severity: "ERROR"
-      check: "all(proof_file in registry.proof for proof_file in registry.proofs if exists(proof_file))"
-      
-    - id: "SRC-005"
-      name: "Source Docs Validity"
-      description: "Every source_docs path in registry must point to existing file"
-      severity: "ERROR"
-      check: "all(doc in registry.source_docs for doc in registry.source_docs if exists(doc))"
-      
-    - id: "SRC-006"
-      name: "Unique Task IDs"
-      description: "Task IDs in registry must be unique"
-      severity: "ERROR"
-      check: "no duplicate ids in tasks list"
-      
-    - id: "SRC-007"
-      name: "Children Registration"
-      description: "Child task IDs should be listed in parent's children array"
-      severity: "WARNING"
-      check: "all(child in parent.children for child in tasks if child.parent == parent.id)"
-
-# ============================================================================
-# META
-# ============================================================================
-
+  - id: SRC-001
+    name: Registry Coverage
+    description: Every non-ad-hoc TD task must have a registry entry
+    severity: ERROR
+    check: SELECT id FROM td_tasks WHERE ad_hoc = false AND id NOT IN (SELECT id FROM
+      registry_tasks)
+  - id: SRC-002
+    name: Schema Compliance
+    description: Every registry task must validate against td-task.schema.json
+    severity: ERROR
+    check: json_schema_validation
+  - id: SRC-003
+    name: Proof Existence
+    description: Every completed task must have a proof artifact in Docs/proofs/
+    severity: ERROR
+    check: file_exists(Docs/proofs/<task-id>.md) OR file_exists(proof.path)
+  - id: SRC-004
+    name: Proof Path Validity
+    description: Every proof path in registry must point to existing file
+    severity: ERROR
+    check: all(proof_file in registry.proof for proof_file in registry.proofs if exists(proof_file))
+  - id: SRC-005
+    name: Source Docs Validity
+    description: Every source_docs path in registry must point to existing file
+    severity: ERROR
+    check: all(doc in registry.source_docs for doc in registry.source_docs if exists(doc))
+  - id: SRC-006
+    name: Unique Task IDs
+    description: Task IDs in registry must be unique
+    severity: ERROR
+    check: no duplicate ids in tasks list
+  - id: SRC-007
+    name: Children Registration
+    description: Child task IDs should be listed in parent's children array
+    severity: WARNING
+    check: all(child in parent.children for child in tasks if child.parent == parent.id)
 metadata:
-  created: "2026-05-02"
-  last_updated: "2026-05-02"
-  owner: "Architecture Team"
-  repository: "Anigma_clean"
-  
-  # Statistics
+  created: '2026-05-02'
+  last_updated: '2026-05-02'
+  owner: Architecture Team
+  repository: Anigma_clean
   total_tasks: 24
   p0_tasks: 14
   p1_tasks: 10
   complete_tasks: 3
   ready_tasks: 20
   in_progress_tasks: 1
-  
-  # Related artifacts
-  doctrine: "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
-  schema: "Docs/schemas/td-task.schema.json"
-  bootstrap_script: "scripts/td_bootstrap_from_docs.py"
-  validator_script: "scripts/validate_td_docs_sync.py"
-  proof: "Docs/proofs/td-source-of-truth-recovery.md"
-
-# End of registry
+  doctrine: Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md
+  schema: Docs/schemas/td-task.schema.json
+  bootstrap_script: scripts/td_bootstrap_from_docs.py
+  validator_script: scripts/validate_td_docs_sync.py
+  proof: Docs/proofs/td-source-of-truth-recovery.md

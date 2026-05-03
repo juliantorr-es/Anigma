@@ -1,0 +1,68 @@
+id: td-swift-tooling-research
+title: Study SwiftPM, llbuild, Swift driver, and SwiftSyntax to improve Anigma build/test/code doctrine
+type: task
+priority: P1
+status: ready
+lane: documentation-infrastructure
+epic: p1-documentation-infrastructure
+parent: p1-documentation-infrastructure
+verification_profiles:
+  - docs-artifacts
+  - governance
+  - swift-lint-format
+gc_policy: retain_all
+context_load_policy: eager
+summary: null
+description: ''
+worktree: docs/
+source_docs:
+- https://github.com/swiftlang/swift-package-manager
+- https://github.com/swiftlang/swift-llbuild
+- https://github.com/swiftlang/swift-driver
+- https://github.com/swiftlang/swift-syntax
+- https://github.com/swiftlang/swift-build
+related_docs:
+- Docs/governance/TESTING_DOCTRINE.md
+- Docs/architecture/DOCTRINE_INDEX.md
+- Docs/roadmap/ROADMAP_INDEX.md
+related_diagrams: []
+acceptance:
+- Research docs exist for each studied upstream repository area.
+- Findings cite exact upstream files, symbols, commits, and line ranges where available.
+- Docs/governance/BUILD_TOOLING_DOCTRINE.md is created or updated with source-grounded rules.
+- Docs/governance/CODE_DOCTRINE.md is created if absent and updated with source-grounded rules.
+- Docs/governance/TESTING_DOCTRINE.md is updated with Swift Testing and receipt guidance grounded in upstream behavior.
+- Docs/proofs/swift-tooling-research-doctrine-update.md exists and records the research outcome.
+- Relevant indexes and manifests reference the new doctrine and proof artifacts.
+- No upstream repository is vendored into Anigma.
+- No production Anigma code is changed during the research phase.
+non_goals:
+- Do not fork SwiftPM.
+- Do not vendor upstream Swift tooling into Anigma.
+- Do not redesign Anigma build system yet.
+- Do not replace validators yet.
+- Do not implement follow-up ideas in production code during this task.
+proof:
+- Docs/proofs/swift-tooling-research-doctrine-update.md
+proof_required:
+- Research docs with exact citations
+- Doctrine update proof
+- Validation command transcript
+expected_proof:
+- Repositories cloned
+- Commit hashes studied
+- Files and symbols inspected
+- Doctrine files updated
+- Findings summary
+- Recommendations
+- Validation commands
+- Follow-up TDs created
+validator_commands:
+- python3 -c "import yaml; yaml.safe_load(open('Docs/manifests/documentation-artifacts.yaml'))"
+- python3 Scripts/validate_td_docs_sync.py
+td_labels:
+- epic:p1-documentation-infrastructure
+- lane:documentation-infrastructure
+- parent:p1-documentation-infrastructure
+- task_id:td-swift-tooling-research
+- type:task
