@@ -92,3 +92,7 @@ __MACOSX/
 
 # Repository infrastructure
 .git/
+
+# Hide all hidden directories (agent meta, etc.)
+.*
+!/.git/
