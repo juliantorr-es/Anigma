@@ -1,0 +1,33 @@
+id: td-arch-004
+title: Migrate one capability module through PlatformRuntime as proof
+type: task
+priority: P1
+status: ready
+lane: architecture-governance
+epic: p1-runtime-architecture-lockdown
+parent: p1-runtime-architecture-lockdown
+summary: null
+description: ''
+worktree: null
+source_docs:
+- anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+- anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+related_docs: []
+related_diagrams: []
+acceptance:
+- One selected module registers workflows/schemas through PlatformRuntime
+- Module no longer owns direct database/evidence mutation path
+- ExecutionContext flows through the migrated workflow
+- Rollback/compatibility path is documented
+non_goals: []
+proof: []
+proof_required:
+- Docs/proofs/platform-runtime-module-migration-proof.md
+expected_proof: []
+validator_commands: []
+td_labels:
+- epic:p1-runtime-architecture-lockdown
+- lane:architecture-governance
+- parent:p1-runtime-architecture-lockdown
+- task_id:td-arch-004
+- type:task

@@ -1,0 +1,33 @@
+id: td-arch-005
+title: Define backend readiness gates for lifecycle, contracts, retries, and operability
+type: task
+priority: P1
+status: ready
+lane: architecture-governance
+epic: p1-runtime-architecture-lockdown
+parent: p1-runtime-architecture-lockdown
+summary: null
+description: ''
+worktree: null
+source_docs:
+- anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+- anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md
+related_docs: []
+related_diagrams: []
+acceptance:
+- Backend readiness checklist is converted into executable gates
+- Daemon lifecycle, contracts, retries/idempotency, backpressure, and operability
+  each have proof commands
+- Gates distinguish blockers from tracked debt
+non_goals: []
+proof: []
+proof_required:
+- Docs/proofs/backend-readiness-gates.md
+expected_proof: []
+validator_commands: []
+td_labels:
+- epic:p1-runtime-architecture-lockdown
+- lane:architecture-governance
+- parent:p1-runtime-architecture-lockdown
+- task_id:td-arch-005
+- type:task

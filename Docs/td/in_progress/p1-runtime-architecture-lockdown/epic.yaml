@@ -1,0 +1,43 @@
+id: p1-runtime-architecture-lockdown
+title: Runtime Architecture Violation Lockdown
+type: epic
+priority: P1
+status: ready
+lane: architecture-governance
+summary: Close the known architecture gaps where modules can bypass PlatformRuntime,
+description: 'Close the known architecture gaps where modules can bypass PlatformRuntime,
+
+  DatabaseAuthority, EvidenceAuthority, and governance gates. This replaces
+
+  fragmented runtime behavior with enforceable authority boundaries.
+
+  '
+recommended_worktree: anigma/
+source_docs:
+- anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+- anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+- anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+- anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md
+related_docs: []
+proofs: []
+proof_required:
+- Docs/proofs/runtime-architecture-violation-lockdown.md
+expected_proof: []
+tasks: &id001
+- td-arch-001
+- td-arch-002
+- td-arch-003
+- td-arch-004
+- td-arch-005
+children: *id001
+acceptance:
+- Database mutations route through DatabaseAuthority
+- Evidence recording routes through EvidenceAuthority
+- Capability modules cannot directly bypass PlatformRuntime boundaries
+- Architecture tests catch direct DatabaseCore/DatabaseActor/evidence bypasses
+non_goals:
+- Rewrite every capability module in one change
+- Remove rollback paths before Phase 2-4 are proven
+td_labels:
+- lane:architecture-governance
+- type:epic

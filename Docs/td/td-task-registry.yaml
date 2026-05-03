@@ -7,8 +7,8 @@
 # This registry is the canonical source for task IDs, titles, acceptance criteria,
 # and proof requirements. TD database is rebuilt from this file.
 #
-# Validation: python3 Scripts/validate_td_docs_sync.py
-# Bootstrap: python3 Scripts/td_bootstrap_from_docs.py --apply
+# Validation: python3 scripts/validate_td_docs_sync.py
+# Bootstrap: python3 scripts/td_bootstrap_from_docs.py --apply
 
 version: "1.0.0"
 source: "Docs/td/td-task-registry.yaml"
@@ -491,9 +491,312 @@ tasks:
       - "Rewriting commit history (only cleanup)"
       - "Removing canonical documentation"
 
+  # ==========================================================================
+  # P0: SATURATED DATABASE + HETEROGENEOUS COMPUTE FOUNDATION
+  # ==========================================================================
+
+  - id: "p0-005"
+    title: "Saturated Database and Heterogeneous Compute Foundation"
+    priority: "P0"
+    type: "epic"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    description: |
+      Establish the data foundation for Saturated Autonomous execution: PostgreSQL
+      remains the governed warm database, hot vector/tensor payloads move to
+      zero-copy Binary Atlas layouts, and CPU/GPU/ANE work is scheduled through
+      explicit saturation lanes with backpressure.
+
+    source_docs:
+      - "anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md"
+      - "anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md"
+      - "anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md"
+      - "anigma/Docs/root-docs/architecture/gpu-native-layouts.md"
+      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
+
+    acceptance:
+      - "Warm database ownership and lifecycle policy are explicit"
+      - "Hot vector/tensor payloads have Binary Atlas (.atlas) source-of-truth layout"
+      - "Database rows reference atlas payloads by id/offset instead of storing hot blobs"
+      - "CPU/GPU/ANE lane scheduling contract exists with backpressure semantics"
+      - "Verification plan covers database lifecycle, atlas layout, and saturation behavior"
+
+    proof_required:
+      - "Docs/proofs/p0-005-saturated-database-and-compute-foundation.md"
+
+    children:
+      - "td-db-001"
+      - "td-db-002"
+      - "td-db-003"
+      - "td-db-004"
+      - "td-db-005"
+
+    non_goals:
+      - "Replace PostgreSQL as system of record"
+      - "Implement model inference quality improvements"
+      - "Adopt a specialized store without measured query or throughput need"
+
+  - id: "td-db-001"
+    title: "Repair DatabaseCore PostgreSQL API and integration-test baseline"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-005"
+
+    source_docs:
+      - "Docs/proofs/p1-validate-tiers-green-gate.md"
+      - "anigma/Docs/PostgresFirstClassImplementation.md"
+      - "anigma/Docs/epics/td-89a996/Xcode_Build_Fixes_and_PostgreSQL_Test_Setup.md"
+
+    acceptance:
+      - "DatabaseCore/PostgresJobQueue API drift is repaired"
+      - "DatabaseActor PostgreSQL paths build against the current PostgresNIO API"
+      - "PostgreSQL integration tests either pass with documented environment or skip loudly"
+      - "AnigmaMCPModule and AnigmaDaemonCore are no longer blocked by DatabaseCore compile errors"
+
+    proof_required:
+      - "DatabaseCore-focused build/test transcript"
+      - "PostgreSQL environment requirements documented"
+
+  - id: "td-db-002"
+    title: "Define warm database lifecycle, retention, and partition policy"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-005"
+
+    source_docs:
+      - "anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md"
+      - "anigma/Docs/architecture/database-housekeeping.md"
+      - "anigma/Docs/guides/database/DatabaseOptimizationGuide.md"
+
+    acceptance:
+      - "Canonical stack is documented: PostgreSQL, Redis/ephemeral cache where justified, pgvector only where needed, DuckDB only for analytics"
+      - "Retention tiers define short-term, long-term, persistent, and regenerated embedding data"
+      - "Partition keys for runs, sessions, tenants, and evidence are documented"
+      - "Slow-query and growth guardrails have validator or proof commands"
+
+    proof_required:
+      - "Docs/proofs/database-lifecycle-and-retention-policy.md"
+
+  - id: "td-db-003"
+    title: "Port Contextum memory vectors to Binary Atlas references"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-005"
+
+    source_docs:
+      - "anigma/Docs/root-docs/architecture/gpu-native-layouts.md"
+      - "anigma/Docs/root-docs/research/memory-backend-options.md"
+      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
+
+    acceptance:
+      - "Contextum memory vector payloads use .atlas files for hot data"
+      - "Warm database rows store atlas id, offset, dimension, type, and governance metadata"
+      - "No JSON/BLOB hot-vector path remains on the critical retrieval path"
+      - "Atlas writer/reader fixtures prove alignment and zero-copy mapping assumptions"
+
+    proof_required:
+      - "Docs/proofs/contextum-binary-atlas-memory-layout.md"
+
+  - id: "td-db-004"
+    title: "Implement saturation lane scheduling and batch orchestration contract"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-005"
+
+    source_docs:
+      - "anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md"
+      - "anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md"
+      - "anigma/Docs/metal-mps-integration/IMPLEMENTATION_PHASE2_COMPLETE.md"
+
+    acceptance:
+      - "Control, inference, perception, and native lanes are defined with hardware affinity"
+      - "Batching triggers and queue depth limits are documented or implemented"
+      - "Backpressure exposes GPU/ANE busy state to ingestion and daemon queues"
+      - "CPU fallback path and receipt semantics are defined for every accelerated lane"
+
+    proof_required:
+      - "Docs/proofs/saturation-lane-scheduling-contract.md"
+
+  - id: "td-db-005"
+    title: "Define partitionable projections and replay-safe rebuilds"
+    priority: "P0"
+    type: "task"
+    lane: "daemon-runtime-isolation"
+    status: "ready"
+    parent: "p0-005"
+
+    source_docs:
+      - "anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md"
+      - "anigma/Docs/root-docs/research/03-event-sourcing-snapshot-storage-serialization.md"
+      - "anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md"
+
+    acceptance:
+      - "Run/session/tenant partition strategy exists for event projections"
+      - "Projection rebuilds can run in parallel without violating evidence order"
+      - "Compaction checkpoints record enough state for safe resume"
+      - "Replay tests prove rebuilt projections match canonical event/evidence data"
+
+    proof_required:
+      - "Docs/proofs/partitionable-projections-and-replay-safety.md"
+
+  # ==========================================================================
+  # P1: RUNTIME ARCHITECTURE VIOLATION LOCKDOWN
+  # ==========================================================================
+
+  - id: "p1-runtime-architecture-lockdown"
+    title: "Runtime Architecture Violation Lockdown"
+    priority: "P1"
+    type: "epic"
+    lane: "architecture-governance"
+    status: "ready"
+    description: |
+      Close the known architecture gaps where modules can bypass PlatformRuntime,
+      DatabaseAuthority, EvidenceAuthority, and governance gates. This replaces
+      fragmented runtime behavior with enforceable authority boundaries.
+
+    source_docs:
+      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
+      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
+      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
+      - "anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md"
+
+    acceptance:
+      - "Database mutations route through DatabaseAuthority"
+      - "Evidence recording routes through EvidenceAuthority"
+      - "Capability modules cannot directly bypass PlatformRuntime boundaries"
+      - "Architecture tests catch direct DatabaseCore/DatabaseActor/evidence bypasses"
+
+    proof_required:
+      - "Docs/proofs/runtime-architecture-violation-lockdown.md"
+
+    children:
+      - "td-arch-001"
+      - "td-arch-002"
+      - "td-arch-003"
+      - "td-arch-004"
+      - "td-arch-005"
+
+    non_goals:
+      - "Rewrite every capability module in one change"
+      - "Remove rollback paths before Phase 2-4 are proven"
+
+  - id: "td-arch-001"
+    title: "Enforce DatabaseAuthority mutation gates"
+    priority: "P1"
+    type: "task"
+    lane: "architecture-governance"
+    status: "ready"
+    parent: "p1-runtime-architecture-lockdown"
+
+    source_docs:
+      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
+      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
+      - "anigma/Docs/PostgresFirstClassImplementation.md"
+
+    acceptance:
+      - "WriteGate and KillSwitch are evaluated before DatabaseAuthority mutations"
+      - "At least one migrated module proves governed mutation path"
+      - "Bypass attempt is covered by test or validator"
+
+    proof_required:
+      - "Docs/proofs/database-authority-mutation-gates.md"
+
+  - id: "td-arch-002"
+    title: "Unify fragmented evidence systems behind EvidenceAuthority"
+    priority: "P1"
+    type: "task"
+    lane: "architecture-governance"
+    status: "ready"
+    parent: "p1-runtime-architecture-lockdown"
+
+    source_docs:
+      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
+      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
+      - "anigma/Docs/architecture/database-housekeeping.md"
+
+    acceptance:
+      - "ReceiptEngine, Cathedral evidence, and Harmonia evidence seams are inventoried"
+      - "Unified EvidenceAuthority target schema is documented"
+      - "New evidence writes can be routed through one authority path"
+      - "Migration/compatibility path for existing evidence is documented"
+
+    proof_required:
+      - "Docs/proofs/evidence-authority-unification.md"
+
+  - id: "td-arch-003"
+    title: "Add architecture tests for runtime authority bypasses"
+    priority: "P1"
+    type: "task"
+    lane: "architecture-governance"
+    status: "ready"
+    parent: "p1-runtime-architecture-lockdown"
+
+    source_docs:
+      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
+      - "Docs/schemas/tier-boundary-violations.schema.md"
+      - "Docs/proofs/p1-validate-tiers-green-gate.md"
+
+    acceptance:
+      - "Validator detects direct DatabaseActor usage outside approved authority layers"
+      - "Validator detects capability modules importing DatabaseCore directly where forbidden"
+      - "Validator detects direct evidence writes outside EvidenceAuthority"
+      - "CI/profile command documents expected pass result"
+
+    proof_required:
+      - "Docs/proofs/runtime-authority-bypass-tests.md"
+
+  - id: "td-arch-004"
+    title: "Migrate one capability module through PlatformRuntime as proof"
+    priority: "P1"
+    type: "task"
+    lane: "architecture-governance"
+    status: "ready"
+    parent: "p1-runtime-architecture-lockdown"
+
+    source_docs:
+      - "anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md"
+      - "anigma/Docs/ADR/0006-three-tier-runtime-architecture.md"
+
+    acceptance:
+      - "One selected module registers workflows/schemas through PlatformRuntime"
+      - "Module no longer owns direct database/evidence mutation path"
+      - "ExecutionContext flows through the migrated workflow"
+      - "Rollback/compatibility path is documented"
+
+    proof_required:
+      - "Docs/proofs/platform-runtime-module-migration-proof.md"
+
+  - id: "td-arch-005"
+    title: "Define backend readiness gates for lifecycle, contracts, retries, and operability"
+    priority: "P1"
+    type: "task"
+    lane: "architecture-governance"
+    status: "ready"
+    parent: "p1-runtime-architecture-lockdown"
+
+    source_docs:
+      - "anigma/Docs/status-reports/BACKEND_READINESS_AUDIT_2026-04-09.md"
+      - "anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md"
+
+    acceptance:
+      - "Backend readiness checklist is converted into executable gates"
+      - "Daemon lifecycle, contracts, retries/idempotency, backpressure, and operability each have proof commands"
+      - "Gates distinguish blockers from tracked debt"
+
+    proof_required:
+      - "Docs/proofs/backend-readiness-gates.md"
+
 # ============================================================================
 # VALIDATION RULES
-# These rules are enforced by Scripts/validate_td_docs_sync.py
+# These rules are enforced by scripts/validate_td_docs_sync.py
 # ============================================================================
 
 validation:
@@ -551,18 +854,18 @@ metadata:
   repository: "Anigma_clean"
   
   # Statistics
-  total_tasks: 13
-  p0_tasks: 7
-  p1_tasks: 6
-  complete_tasks: 10
-  ready_tasks: 1
+  total_tasks: 24
+  p0_tasks: 14
+  p1_tasks: 10
+  complete_tasks: 3
+  ready_tasks: 20
   in_progress_tasks: 1
   
   # Related artifacts
   doctrine: "Docs/governance/TD_SOURCE_OF_TRUTH_DOCTRINE.md"
   schema: "Docs/schemas/td-task.schema.json"
-  bootstrap_script: "Scripts/td_bootstrap_from_docs.py"
-  validator_script: "Scripts/validate_td_docs_sync.py"
+  bootstrap_script: "scripts/td_bootstrap_from_docs.py"
+  validator_script: "scripts/validate_td_docs_sync.py"
   proof: "Docs/proofs/td-source-of-truth-recovery.md"
 
 # End of registry

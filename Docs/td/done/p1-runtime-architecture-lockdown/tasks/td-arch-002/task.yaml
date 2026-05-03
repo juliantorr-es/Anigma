@@ -1,0 +1,34 @@
+id: td-arch-002
+title: Unify fragmented evidence systems behind EvidenceAuthority
+type: task
+priority: P1
+status: ready
+lane: architecture-governance
+epic: p1-runtime-architecture-lockdown
+parent: p1-runtime-architecture-lockdown
+summary: null
+description: ''
+worktree: null
+source_docs:
+- anigma/Docs/ADR/0006-three-tier-runtime-architecture.md
+- anigma/Docs/architecture-guides/THREE_TIER_MIGRATION_ROADMAP.md
+- anigma/Docs/architecture/database-housekeeping.md
+related_docs: []
+related_diagrams: []
+acceptance:
+- ReceiptEngine, Cathedral evidence, and Harmonia evidence seams are inventoried
+- Unified EvidenceAuthority target schema is documented
+- New evidence writes can be routed through one authority path
+- Migration/compatibility path for existing evidence is documented
+non_goals: []
+proof: []
+proof_required:
+- Docs/proofs/evidence-authority-unification.md
+expected_proof: []
+validator_commands: []
+td_labels:
+- epic:p1-runtime-architecture-lockdown
+- lane:architecture-governance
+- parent:p1-runtime-architecture-lockdown
+- task_id:td-arch-002
+- type:task

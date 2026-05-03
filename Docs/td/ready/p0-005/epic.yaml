@@ -1,0 +1,48 @@
+id: p0-005
+title: Saturated Database and Heterogeneous Compute Foundation
+type: epic
+priority: P0
+status: ready
+lane: daemon-runtime-isolation
+summary: 'Establish the data foundation for Saturated Autonomous execution: PostgreSQL'
+description: 'Establish the data foundation for Saturated Autonomous execution: PostgreSQL
+
+  remains the governed warm database, hot vector/tensor payloads move to
+
+  zero-copy Binary Atlas layouts, and CPU/GPU/ANE work is scheduled through
+
+  explicit saturation lanes with backpressure.
+
+  '
+recommended_worktree: anigma/
+source_docs:
+- anigma/Docs/root-docs/architecture/gpu-native-layouts.md
+- anigma/Docs/root-docs/research/Hardware_Accelerated_Compute.md
+- anigma/Docs/root-docs/research/Hardware_Saturation_Strategies.md
+- anigma/Docs/root-docs/research/ops-gaps/05-database-consolidation-and-memory-lifecycle.md
+- anigma/Docs/status-reports/BACKEND_BLIND_SPOTS_AUDIT_2026-04-09.md
+related_docs: []
+proofs: []
+proof_required:
+- Docs/proofs/p0-005-saturated-database-and-compute-foundation.md
+expected_proof: []
+tasks: &id001
+- td-db-001
+- td-db-002
+- td-db-003
+- td-db-004
+- td-db-005
+children: *id001
+acceptance:
+- Warm database ownership and lifecycle policy are explicit
+- Hot vector/tensor payloads have Binary Atlas (.atlas) source-of-truth layout
+- Database rows reference atlas payloads by id/offset instead of storing hot blobs
+- CPU/GPU/ANE lane scheduling contract exists with backpressure semantics
+- Verification plan covers database lifecycle, atlas layout, and saturation behavior
+non_goals:
+- Replace PostgreSQL as system of record
+- Implement model inference quality improvements
+- Adopt a specialized store without measured query or throughput need
+td_labels:
+- lane:daemon-runtime-isolation
+- type:epic
