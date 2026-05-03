@@ -91,6 +91,7 @@ let coreProducts: [Product] = [
   .library(name: "IntelligenceContracts", targets: ["IntelligenceContracts"]),
   .library(name: "GovernanceContracts", targets: ["GovernanceContracts"]),
   .library(name: "EvidenceContracts", targets: ["EvidenceContracts"]),
+  .library(name: "PersistenceContracts", targets: ["PersistenceContracts"]),
   .library(name: "MessagingContracts", targets: ["MessagingContracts"]),
   .library(name: "MediaPipelineContracts", targets: ["MediaPipelineContracts"]),
   .library(name: "ContractsCore", targets: ["ContractsCore"]),
@@ -184,7 +185,7 @@ let coreProducts: [Product] = [
   // Canvas Engine Modules
   .library(name: "RuntimeOrchestrator", targets: ["RuntimeOrchestrator"]),
   .library(name: "PlatformAdapters", targets: ["PlatformAdapters"]),
-  .library(name: "AnigmaUI", targets: ["AnigmaUI"])
+  // .library(name: "AnigmaUI", targets: ["AnigmaUI"])
 ]
 
 let executableProducts: [Product] = [
@@ -246,6 +247,11 @@ let nativeTargets: [Target] = [
     path: "Packages/CHarfBuzz",
     publicHeadersPath: ".",
     cSettings: [
+  .target(
+    name: "PersistenceContracts",
+    dependencies: ["FoundationContracts"],
+    path: "Packages/ContractsCore/Sources/PersistenceContracts"
+  ),
       .headerSearchPath("include/harfbuzz"),
       .headerSearchPath("include/freetype2")
     ],
@@ -697,7 +703,12 @@ let coreTargets: [Target] = [
     dependencies: ["AnigmaNativeShims", .product(name: "Crypto", package: "swift-crypto")],
     path: "Packages/AnigmaPrimitives", exclude: [],
     swiftSettings: strictConcurrencySettings),
+  ),
   .target(
+    name: "PersistenceContracts",
+    dependencies: ["FoundationContracts"],
+    path: "Packages/ContractsCore/Sources/PersistenceContracts"
+    .target(
     name: "AnigmaEvents", dependencies: ["AnigmaPrimitives"], path: "Packages/AnigmaEvents",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
@@ -1306,7 +1317,7 @@ let coreTargets: [Target] = [
 
   // Subprocess Pooling Package (Phase 1-5: td-12f9d2)
   .target(
-    name: "SubprocessPooling", dependencies: ["AnigmaPrimitives"],
+    name: "SubprocessPooling", dependencies: [],
     path: "Packages/SubprocessPooling/Sources",
     swiftSettings: strictConcurrencySettings),
   .testTarget(
@@ -1403,17 +1414,17 @@ let coreTargets: [Target] = [
   ),
   // Canonical UI implementation lives under Sources/AnigmaUI.
   // Legacy tree Packages/AnigmaUI is intentionally unbound.
-  .target(
-    name: "AnigmaUI",
-    dependencies: ["PlatformAdapters", "RuntimeOrchestrator"],
-    path: "Sources/AnigmaUI",
-    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
-      + debugPerformanceSettings,
-    linkerSettings: [
-      .linkedFramework("SwiftUI"),
-      .linkedFramework("CoreAudio")
-    ]
-  ),
+  // .target(
+  //   name: "AnigmaUI",
+  //   dependencies: ["PlatformAdapters", "RuntimeOrchestrator"],
+  //   path: "Sources/AnigmaUI",
+  //   swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
+  //     + debugPerformanceSettings,
+  //   linkerSettings: [
+  //     .linkedFramework("SwiftUI"),
+  //     .linkedFramework("CoreAudio")
+  //   ]
+  // )
   .target(
     name: "GoldenKit", dependencies: ["ContractsCore"], path: "Packages/AnigmaTestSupport/Sources/GoldenKit",
     exclude: [],
@@ -1941,7 +1952,7 @@ let executableTargets: [Target] = [
       "AnigmaWork",
       "RuntimeOrchestrator",
       "PlatformAdapters",
-      "AnigmaUI",
+      // "AnigmaUI",
       .product(name: "SwiftUICharts", package: "SwiftUICharts")
     ],
     path: "Sources/AnigmaAppMac",
@@ -2138,6 +2149,42 @@ let executableTargets: [Target] = [
 ]
 
 let baseTestTargets: [Target] = [
+  .testTarget(
+    name: "BackendReadinessContractTests",
+    dependencies: [
+      "AnigmaCore"
+    ],
+    path: "Packages/AnigmaCore/Tests/BackendReadinessTests/ContractTests",
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)],
+    linkerSettings: testRuntimeLinkerSettings
+  ),
+  .testTarget(
+    name: "BackendReadinessRegistryTests",
+    dependencies: [
+      "AnigmaCore"
+    ],
+    path: "Packages/AnigmaCore/Tests/BackendReadinessTests/RegistryTests",
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)],
+    linkerSettings: testRuntimeLinkerSettings
+  ),
+  .testTarget(
+    name: "BackendReadinessExecutionTests",
+    dependencies: [
+      "AnigmaCore"
+    ],
+    path: "Packages/AnigmaCore/Tests/BackendReadinessTests/ExecutionTests",
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)],
+    linkerSettings: testRuntimeLinkerSettings
+  ),
+  .testTarget(
+    name: "BackendReadinessIntegrationTests",
+    dependencies: [
+      "AnigmaCore"
+    ],
+    path: "Packages/AnigmaCore/Tests/BackendReadinessTests/IntegrationTests",
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)],
+    linkerSettings: testRuntimeLinkerSettings
+  ),
   .testTarget(
     name: "MediaCoreTests",
     dependencies: [
