@@ -2,12 +2,13 @@
 
 ## Purpose
 
-`Docs/td/` is the **canonical, durable source of truth** for all Anigma task definitions. The local TD database is the **executable queue** derived from this documentation.
+`Docs/td/` is the **canonical, durable source of truth** for all Anigma task definitions and task progress. The local TD database is the **executable queue** derived from this documentation.
 
 ## Doctrine
 
 - **Docs/ is the source of truth** - Task definitions, acceptance criteria, and proofs are durable documentation
 - **TD is the execution queue** - The local `td` CLI database is rebuilt from Docs/td/ after any reset
+- **Database loss is not task deletion** - Empty, missing, stale, locked, or reset `.todos/issues.db` means rebuild TD from Docs/td/, never prune Docs/td/
 - ** human-navigable** - Organized by status for easy browsing
 - **Agent-executable** - Machine-readable YAML descriptors enable scripted task management
 
@@ -116,7 +117,7 @@ See `Docs/schemas/td-epic.schema.json`. Key fields:
 To rebuild the TD database from Docs/td/:
 
 ```bash
-python3 Scripts/td_bootstrap_from_docs.py --apply
+python3 scripts/td_bootstrap_from_docs.py --apply
 ```
 
 This:
@@ -124,13 +125,16 @@ This:
 - Reads `*.yaml` files for machine-readable task data
 - Creates TD entries with `task_id:<id>` labels for tracking
 - Skips tasks that already exist (idempotent)
+- Reconciles local TD status from canonical docs status where possible
+
+It never deletes `Docs/td/` content to match TD database state.
 
 ### Sync Validation
 
 To validate Docs/td/ ↔ TD database synchronization:
 
 ```bash
-python3 Scripts/validate_td_docs_sync.py
+python3 scripts/validate_td_docs_sync.py
 ```
 
 This validates:
@@ -194,10 +198,12 @@ A task is considered complete when:
 If the TD database is lost or reset:
 
 1. Ensure `Docs/td/` is intact (check git status)
-2. Run `python3 Scripts/td_bootstrap_from_docs.py --apply`
-3. Verify with `python3 Scripts/validate_td_docs_sync.py`
+2. Run `python3 scripts/td_bootstrap_from_docs.py --apply`
+3. Verify with `python3 scripts/validate_td_docs_sync.py`
 
 The bootstrap is **idempotent** - running it multiple times will not duplicate tasks (detected by `task_id:<id>` labels).
+
+Never delete, archive, or mark tasks complete in `Docs/td/` just because the TD database is empty. Database state is disposable; `Docs/td/` is not.
 
 ## Adding New Tasks
 
@@ -210,8 +216,8 @@ The bootstrap is **idempotent** - running it multiple times will not duplicate t
    - Create `task.yaml` with structured descriptor
    - Create `task.md` with narrative context
 6. Update `Docs/td/td-task-registry.yaml` (can be auto-generated)
-7. Run validation: `python3 Scripts/validate_td_docs_sync.py`
-8. Bootstrap TD: `python3 Scripts/td_bootstrap_from_docs.py --apply`
+7. Run validation: `python3 scripts/validate_td_docs_sync.py`
+8. Bootstrap TD: `python3 scripts/td_bootstrap_from_docs.py --apply`
 
 ## Research and Timeline System
 
@@ -282,19 +288,19 @@ To create research/timeline scaffolding for active epics and tasks:
 
 ```bash
 # Dry-run: show what would be created
-python3 Scripts/generate_td_research_scaffold.py --dry-run
+python3 scripts/generate_td_research_scaffold.py --dry-run
 
 # Write: create missing files
-python3 Scripts/generate_td_research_scaffold.py --write
+python3 scripts/generate_td_research_scaffold.py --write
 
 # Force overwrite (use with caution)
-python3 Scripts/generate_td_research_scaffold.py --write --overwrite
+python3 scripts/generate_td_research_scaffold.py --write --overwrite
 
 # Specific epic only
-python3 Scripts/generate_td_research_scaffold.py --write --epic p0-004
+python3 scripts/generate_td_research_scaffold.py --write --epic p0-004
 
 # Specific status only
-python3 Scripts/generate_td_research_scaffold.py --write --status ready
+python3 scripts/generate_td_research_scaffold.py --write --status ready
 ```
 
 The generator uses **conservative placeholders**:
@@ -356,6 +362,7 @@ Canonical doc effects roll up to `Docs/timeline/canonical-doc-changes.yaml`.
 - ❌ Store canonical task data only in TD database
 - ❌ Commit TD database files to git
 - ❌ Create tasks without corresponding Docs/td/ entries
+- ❌ Delete or prune Docs/td/ because TD database was deleted, reset, empty, or locked
 - ❌ Mark tasks complete without proof artifacts
 - ❌ Move or duplicate `Docs/proofs/` content into task folders
 - ❌ Invent inspected files, symbols, or line numbers in research artifacts
