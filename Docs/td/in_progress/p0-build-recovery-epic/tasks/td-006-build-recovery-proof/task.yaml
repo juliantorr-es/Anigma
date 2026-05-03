@@ -1,0 +1,5 @@
+id: td-006-build-recovery-proof
+epic: p0-build-recovery-epic
+title: "Add build recovery proof artifact"
+priority: P1
+status: ready

@@ -1,0 +1,5 @@
+id: td-005-fix-constructor-drift
+epic: p0-build-recovery-epic
+title: "Repair constructor/dependency injection drift"
+priority: P1
+status: ready

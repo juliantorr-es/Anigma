@@ -1,0 +1,5 @@
+id: td-001-break-cycle
+epic: p0-build-recovery-epic
+title: "Break DatabaseCore <-> AnigmaFoundation circular dependency"
+priority: P0
+status: ready

@@ -1,0 +1,6 @@
+id: p0-build-recovery-epic
+title: "Build Recovery: Break Database/Foundation Cycle and Align Evidence Contracts"
+status: in_progress
+priority: P0
+tags: [architecture, build, compliance]
+description: "Resolving systemic build failures (114 total) caused by circular dependencies and evidence contract drift."

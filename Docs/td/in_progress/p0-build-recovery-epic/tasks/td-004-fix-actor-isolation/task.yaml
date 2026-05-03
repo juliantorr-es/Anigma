@@ -1,0 +1,5 @@
+id: td-004-fix-actor-isolation
+epic: p0-build-recovery-epic
+title: "Fix DatabaseCore actor isolation violations"
+priority: P1
+status: ready
