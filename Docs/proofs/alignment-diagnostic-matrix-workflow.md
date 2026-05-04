@@ -10,34 +10,42 @@ The research phase of `td-backend-normalization-heterogeneous-overlap` identifie
    - Added `alignment-matrix` subcommand.
    - Generates JSON, CSV, and Markdown summaries.
    - Supports `--task-id` and `--label` for snapshots.
+   - Ensures repo-relative paths and deterministic IDs.
 3. **Outputs**:
    - `.build/anigma-graph/current/anigma-alignment-diagnostic-matrix.json`
    - `.build/anigma-graph/current/anigma-alignment-diagnostic-matrix.csv`
    - `.build/anigma-graph/current/anigma-alignment-diagnostic-summary.md`
 
-## Diagnostic Classes Verified
-- [x] **Sidecar Readiness Gap**: P0 findings for sidecar executables lacking receipts.
-- [x] **Native Linker Leakage**: P1 findings for generic targets reaching native executors.
-- [x] **Zero-copy Overclaim**: Captures unverified performance claims in Docs and Packages.
-- [x] **Deterministic Snapshotting**: Verified compatible with TD task snapshots.
+## Review Findings
+The initial baseline was generated and reviewed for false positives.
+
+### P0 Findings: Sidecar Readiness Gap
+- **Count**: 5
+- **Subjects**: `AnigmaSidecar`, `SidecarOfficeService`, `SidecarPDFService`, `SidecarTranslateService`, `PDFSidecarExecutable`.
+- **Assessment**: **REAL**. These sidecars are currently treated as build dependencies but lack the mandated runtime readiness receipts.
+- **Ownership**: To be resolved in `td-7c0153-01` (PDF) and follow-up sidecar readiness TDs.
+
+### P1 Findings: Samples & False Positives
+- **Count**: 204
+- **Native Leakage**: **REAL**. `ExecutionCore` was confirmed to reach `HardwareAuthority` via actual graph analysis.
+- **Claim Overclaims**: **MIXED / HIGH NOISE**. The automated scanner flags mentions of "zero-copy" in research docs and doctrine files that are actually citing or discussing the rule (self-references).
+- **Paths**: Verified repo-relative paths are used.
 
 ## Command Summary
 ```bash
-python3 Scripts/anigma_package_graph_audit.py alignment-matrix
+python3 Scripts/anigma_package_graph_audit.py alignment-matrix --fail-on-p0
 ```
-Output:
-- P0: 5 (Sidecar gaps)
-- P1: 201 (Native leaks / zero-copy claims)
-- P2: 0
-- Informational: 0
+- **Exit Code 1**: Correctly fails if P0 diagnostics exist.
+- **Snapshot Support**: Verified with `--task-id` snapshots.
 
-## Findings Summary
-- **Critical Misalignment**: Sidecar products (PDFSidecarExecutable, anigma-mcp) are treated as build dependencies rather than governed capabilities with readiness receipts.
-- **Widespread Leakage**: Many Tier 2 targets carry native dependency paths that must be isolated.
-- **Doctrine Enforcement**: Casually used "zero-copy" terminology has been captured and flagged for downgrade.
+## Follow-up Recommended
+1. **Calibration TD**: Calibrate `alignment-diagnostic-rules.yaml` to exclude meta-mentions of zero-copy in Docs/governance and research folders.
+2. **Readiness Implementation**: Resolve the 5 P0 readiness gaps.
 
 ## Compliance
-- No production Swift code changes.
-- No `Package.swift` changes.
-- No architecture repairs were performed (diagnostics only).
-- Doctrine updated in `BUILD_TOOLING_DOCTRINE.md`.
+- alignment-matrix subcommand implemented.
+- outputs JSON, CSV, and Markdown.
+- generated matrix is canonical review evidence.
+- initial baseline is diagnostic, not automatically confirmed defects.
+- no production code changed.
+- no Package.swift architecture changes made.
