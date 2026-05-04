@@ -1,7 +1,7 @@
 # Doctrine Index - Canonical Architecture References
 
 **Document ID:** DOCTRINE-INDEX-2026-001  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** ACTIVE  
 **Owner:** Architecture Team  
 
@@ -25,3 +25,8 @@ This document is the **single source of truth** for which architecture documents
 | [../governance/TESTING_DOCTRINE.md](../governance/TESTING_DOCTRINE.md) | Testing philosophy, framework policy, receipts | **CANONICAL** | Defines Swift Testing migration, JSON receipt policy, evidence standards. |
 | [../governance/BUILD_TOOLING_DOCTRINE.md](../governance/BUILD_TOOLING_DOCTRINE.md) | Build and compiler evidence, driver/llbuild doctrine | **CANONICAL** | Defines source-grounded build evidence, Swift driver, llbuild, and `anigma doctor` rules. |
 | [../governance/WORKTREE_DOCTRINE.md](../governance/WORKTREE_DOCTRINE.md) | Worktree workflow | **CANONICAL** | Standardizes Git worktree usage. |
+
+### Architecture Capabilities (Future)
+| Document | Scope | Status | Notes |
+|----------|-------|--------|-------|
+| [../roadmap/future-capabilities/architecture-operations-capability.md](../roadmap/future-capabilities/architecture-operations-capability.md) | Architecture cockpit, validation lanes, evidence indexes, publishing | **FUTURE** | Roadmap for ArchitectureOperationsCapability. Blocked until anigma-app Debug builds reliably. |
