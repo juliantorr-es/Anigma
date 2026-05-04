@@ -1,0 +1,69 @@
+id: td-backend-normalization-heterogeneous-overlap
+title: Map backend normalization against heterogeneous saturated architecture assumptions
+type: task
+priority: P1
+status: in_progress
+lane: architecture-diagnostics
+epic: p1-architecture
+parent: p1-architecture
+verification_profiles:
+  - docs-artifacts
+  - governance
+gc_policy: retain_all
+context_load_policy: eager
+summary: Diagnose misaligned assumptions between the backend/executable consolidation work and the newer heterogeneous saturated architecture, ECS-inspired data runtime, chunk/SoA receipt, and sidecar isolation doctrine.
+description: ''
+worktree: docs/
+source_docs:
+- Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md
+- Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md
+- Docs/schemas/chunk-storage-receipt.schema.json
+- Docs/research/heterogeneous-saturated-architecture/
+- Docs/proofs/heterogeneous-saturated-architecture-research.md
+- Docs/proofs/chunk-storage-receipt-schema.md
+- Docs/proofs/td-358315-backend-readiness-triage.md
+- Docs/proofs/td-358315-02-layout-contract-extraction-proof.md
+- Docs/proofs/td-7c0153-pdf-sidecar-native-shim-isolation-proof.md
+- Docs/governance/BUILD_TOOLING_DOCTRINE.md
+- Docs/governance/package-graph-rules.yaml
+- Scripts/anigma_package_graph_audit.py
+- Package.swift
+related_docs: []
+related_diagrams: []
+acceptance:
+- Backend/executable consolidation assumptions are mapped against heterogeneous saturated architecture doctrine.
+- Sidecar/executable/readiness boundaries are explicitly classified.
+- Contract/executor/native boundaries are explicitly classified.
+- ECS/dataflow overlap is documented.
+- Zero-copy/copy-minimized claim audit is documented.
+- Misaligned assumptions are turned into prioritized follow-up TD candidates.
+- No implementation changes are made.
+- No Package.swift changes are made.
+- No production Swift code changes are made.
+- Context7, if used, is documented as corroborating only.
+non_goals:
+- Do not modify production Swift code.
+- Do not change Package.swift.
+- Do not move targets.
+- Do not create new runtime modules.
+- Do not reopen completed TDs.
+- Do not implement ECS runtime logic.
+- Do not implement sidecar product readiness.
+- Do not vendor Swift tooling.
+- Do not claim zero-copy without receipts.
+proof:
+- Docs/proofs/backend-normalization-heterogeneous-overlap-research.md
+proof_required:
+- Research output docs in Docs/research/backend-normalization-heterogeneous-overlap/
+- Proof artifact recording graph snapshots and findings
+expected_proof:
+- Graph snapshot captured
+- Misalignment findings table populated
+- Follow-up TD plan created
+validator_commands:
+- python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml'))"
+td_labels:
+- epic:p1-architecture
+- lane:architecture-diagnostics
+- task_id:td-backend-normalization-heterogeneous-overlap
+- type:task
