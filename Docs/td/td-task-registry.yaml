@@ -854,6 +854,36 @@ tasks:
   - Docs/proofs/backend-normalization-heterogeneous-overlap-research.md
   validator_commands:
   - python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml'))"
+- id: td-alignment-matrix-calibration
+  title: Calibrate alignment diagnostic matrix rules and deduplicate findings
+  priority: P1
+  type: task
+  lane: architecture-diagnostics
+  status: ready
+  description: Reduce diagnostic noise in the alignment diagnostic matrix by deduplicating findings and separating doctrine rule definitions from actual performance overclaims.
+  source_docs:
+  - Docs/governance/alignment-diagnostic-rules.yaml
+  - Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md
+  - Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md
+  - Docs/research/backend-normalization-heterogeneous-overlap/
+  - Docs/proofs/alignment-diagnostic-matrix-workflow.md
+  acceptance:
+  - P1 noise is reduced.
+  - P0 findings remain visible and actionable.
+  - Zero-copy doctrine/meta-discussion is not flagged as an overclaim.
+  - Real zero-copy claims without receipts remain flagged.
+  - Native leakage graph findings remain graph-backed.
+  - Output stays deterministic.
+  non_goals:
+  - Do not fix the actual P0/P1 architecture findings.
+  - Do not suppress all zero-copy scans.
+  - Do not change production Swift code.
+  - Do not remove the alignment-matrix workflow.
+  proof:
+  - Docs/proofs/alignment-diagnostic-matrix-calibration.md
+  validator_commands:
+  - python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-alignment-matrix-calibration/task.yaml'))"
+  - python3 Scripts/anigma_package_graph_audit.py alignment-matrix
 validation:
   rules:
   - id: SRC-001

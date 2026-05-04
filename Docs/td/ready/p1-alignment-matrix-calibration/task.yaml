@@ -1,0 +1,54 @@
+id: td-alignment-matrix-calibration
+title: Calibrate alignment diagnostic matrix rules and deduplicate findings
+type: task
+priority: P1
+status: ready
+lane: architecture-diagnostics
+epic: p1-architecture
+parent: td-backend-normalization-heterogeneous-overlap
+verification_profiles:
+  - docs-artifacts
+  - governance
+gc_policy: retain_all
+context_load_policy: eager
+summary: Reduce diagnostic noise in the alignment diagnostic matrix by deduplicating findings and separating doctrine rule definitions from actual performance overclaims.
+description: ''
+worktree: docs/
+source_docs:
+- Docs/governance/alignment-diagnostic-rules.yaml
+- Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md
+- Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md
+- Docs/research/backend-normalization-heterogeneous-overlap/
+- Docs/proofs/alignment-diagnostic-matrix-workflow.md
+related_docs:
+- .build/anigma-graph/current/anigma-alignment-diagnostic-matrix.json
+related_diagrams: []
+acceptance:
+- P1 noise is reduced (specifically meta-discussion of zero-copy in doctrine/research).
+- P0 findings remain visible and actionable.
+- Native leakage findings remain graph-backed and preserved.
+- Findings are deduplicated by subject + rule + path.
+- JSON/CSV outputs remain deterministic.
+- No production code or Package.swift architecture changes.
+non_goals:
+- Do not fix the actual P0/P1 architecture findings.
+- Do not suppress legitimate zero-copy overclaim scans in production targets.
+- Do not remove the alignment-matrix workflow.
+proof:
+- Docs/proofs/alignment-diagnostic-matrix-calibration.md
+proof_required:
+- Updated rules YAML
+- Command output showing reduced counts
+- P0 owner mapping
+expected_proof:
+- Before/After diagnostic counts
+- False-positive filters documented
+- Actionable high-signal findings list
+validator_commands:
+- python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-alignment-matrix-calibration/task.yaml'))"
+- python3 Scripts/anigma_package_graph_audit.py alignment-matrix
+td_labels:
+- epic:p1-architecture
+- lane:architecture-diagnostics
+- task_id:td-alignment-matrix-calibration
+- type:task
