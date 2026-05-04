@@ -1,0 +1,63 @@
+id: td-heterogeneous-architecture-research
+title: Research heterogeneous saturated architecture principles against official sources and Context7
+type: task
+priority: P1
+status: in_review
+lane: architecture-research
+epic: p1-architecture
+parent: p1-architecture
+verification_profiles:
+  - docs-artifacts
+  - governance
+gc_policy: retain_all
+context_load_policy: eager
+summary: Validate, refine, and source-ground Anigma’s heterogeneous saturated architecture doctrine against official sources for Apple Silicon/Metal, NVIDIA CUDA, AMD ROCm, SwiftPM/tooling boundaries, Unity ECS/DOTS, and Context7-assisted documentation retrieval.
+description: ''
+worktree: docs/
+source_docs:
+- https://developer.apple.com/metal/
+- https://developer.apple.com/videos/
+- https://docs.nvidia.com/cuda/cuda-programming-guide/
+- https://rocm.docs.amd.com/
+- https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/index.html
+- https://developer.apple.com/documentation/metal/mtldevice/makebuffer(bytesnocopy:length:options:deallocator:)
+related_docs:
+- Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md
+- Docs/architecture/DOCTRINE_INDEX.md
+- Docs/roadmap/ROADMAP_INDEX.md
+related_diagrams: []
+acceptance:
+- ECS/data-oriented zero-copy research is added to the heterogeneous architecture TD.
+- Official sources are cited for ECS chunks/archetypes and Metal no-copy/shared-memory boundaries.
+- Context7 corroboration is documented but not treated as doctrine authority.
+- Doctrine proposal distinguishes zero-copy from copy-minimized.
+- Doctrine proposal distinguishes ECS-inspired from full ECS.
+- Research defines evidence required to prove zero-copy/chunk-resident/hardware-resident claims.
+- Research proposes doctrine changes in Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md.
+- Research creates follow-up TDs for specific receipt and proof strategies.
+- No production Swift code changes, no new dependencies, no vendoring.
+non_goals:
+- Do not modify production Swift code.
+- Do not make Package.swift changes.
+- Do not add new runtime dependencies.
+- Do not vendor upstream dependencies.
+- Do not use Context7 as the primary or final authority (corroborating only).
+proof:
+- Docs/proofs/heterogeneous-saturated-architecture-research.md
+proof_required:
+- Research docs with exact citations
+- Doctrine update proof
+- Validation command transcript
+expected_proof:
+- Context7 usage logged
+- Source discipline recorded
+- Doctrine files updated
+- Findings summary
+- Follow-up TDs created
+validator_commands:
+- python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-heterogeneous-architecture-research/task.yaml'))"
+td_labels:
+- epic:p1-architecture
+- lane:architecture-research
+- task_id:td-heterogeneous-architecture-research
+- type:task

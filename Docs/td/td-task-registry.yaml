@@ -755,6 +755,36 @@ tasks:
   - ExternalResearch/swift-tooling/swift-driver
   - ExternalResearch/swift-tooling/swift-llbuild
   - ExternalResearch/swift-tooling/swift-build
+- id: td-heterogeneous-architecture-research
+  title: Research heterogeneous saturated architecture principles against official sources and Context7
+  priority: P1
+  type: task
+  lane: architecture-research
+  status: in_review
+  description: Validate, refine, and source-ground Anigma’s heterogeneous saturated architecture doctrine against official sources for Apple Silicon/Metal, NVIDIA CUDA, AMD ROCm, SwiftPM/tooling boundaries, and Context7-assisted documentation retrieval.
+  source_docs:
+  - https://developer.apple.com/metal/
+  - https://developer.apple.com/videos/
+  - https://docs.nvidia.com/cuda/cuda-programming-guide/
+  - https://rocm.docs.amd.com/
+  acceptance:
+  - Research identifies which Anigma heterogeneous/saturated claims are official-source-backed.
+  - Research identifies which claims are Anigma-specific doctrine.
+  - Research softens or rejects overclaims.
+  - Research produces precise definitions for zero-copy, copy-minimized, hardware-resident, sidecar-isolated, governed fallback, portable contract, and native executor.
+  - Research proposes doctrine changes in Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md.
+  - Research creates follow-up TDs for specific receipt and proof strategies.
+  - No production Swift code changes, no new dependencies, no vendoring.
+  non_goals:
+  - Do not modify production Swift code.
+  - Do not make Package.swift changes.
+  - Do not add new runtime dependencies.
+  - Do not vendor upstream dependencies.
+  - Do not use Context7 as the primary or final authority (corroborating only).
+  proof:
+  - Docs/proofs/heterogeneous-saturated-architecture-research.md
+  validator_commands:
+  - python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-heterogeneous-architecture-research/task.yaml'))"
 validation:
   rules:
   - id: SRC-001
