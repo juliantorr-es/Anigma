@@ -1,0 +1,30 @@
+id: td-swift-tooling-integration-strategy
+title: Research Swift tooling integration strategy for self-hosted Anigma agents
+priority: P1
+type: task
+status: blocked
+lane: architecture-governance
+dependencies:
+  - backend-normalization-lane
+description: |
+  Vendor concepts, not the whole toolchain.
+  Use SwiftPM CLI / JSON as governed evidence input.
+  Use SwiftSyntax for validator/tooling targets where justified.
+  Keep libSwiftPM, swift-driver, llbuild, and compiler internals out of runtime targets unless a later proof says otherwise.
+  
+  Determine whether Anigma should vendor, depend on, wrap, or shell out to Swift tooling so self-hosted Anigma agents can perform Swift development with reliable internal tools.
+acceptance:
+  - Research explains why vendoring the whole Swift toolchain is not recommended unless a specific future need is proven.
+  - Research identifies SwiftSyntax as the strongest candidate for library dependency in tooling/validator targets.
+  - Research identifies SwiftPM CLI JSON as the preferred stable graph evidence path.
+  - Research defines runtime/tooling/sidecar boundaries.
+  - Research defines self-hosted agent tool access through governed executors and receipts.
+  - Follow-up TDs are created for the 5 specified prototypes and executors.
+proof:
+  - Docs/proofs/swift-tooling-integration-research.md
+source_docs:
+  - ExternalResearch/swift-tooling/swift-package-manager
+  - ExternalResearch/swift-tooling/swift-syntax
+  - ExternalResearch/swift-tooling/swift-driver
+  - ExternalResearch/swift-tooling/swift-llbuild
+  - ExternalResearch/swift-tooling/swift-build
