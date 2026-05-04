@@ -1,75 +1,17 @@
-# Local agent/tool state
-.codex/
-.codex-orch/
-.gemini/
-.vibe/
-.continue/
-.aider*/
-.adal/
-.opencode/
-.claude/
-.cursor/
-.windsurf/
-
-# Local scratch / generated diagnostics
-*.log
-*.tmp
-*.bak
-anigma/build_*.txt
-
-# OS metadata
-.DS_Store
-
-# Build artifacts
-.build/
-# Local agent/tool state
-.codex/
-.codex-orch/
-.gemini/
-.vibe/
-.continue/
-.aider*/
-.adal/
-.opencode/
-.claude/
-.cursor/
-.windsurf/
-
-# Local scratch / generated diagnostics
-*.log
-*.tmp
-*.bak
-anigma/build_*.txt
-anigma-worktrees/
-.worktrees/
-
-# Generated build artifacts
+# Build and Diagnostic Artifacts
 .build/
 .build-check/
-anigma/.build/
-anigma/.build-check/
-anigma/.venv_tools/
+.build/anigma-diagnostics/
+.build/anigma-graph/
 DerivedData/
 
-# Cscope
-cscope.out
-cscope.po.out
+# Repository infrastructure
+.git/
+.github/
+.gitignore
+.gitattributes
 
-# Local packages/installers
-*.dmg
-*.pkg
-*.app
-
-# Vendored native binaries excluded from public source repo
-anigma/Vendor/lib/
-
-# macOS archive metadata
-.DS_Store
-__MACOSX/
-._*
-*.zip
-
-# Agent & Environment configuration
+# Local agent/tool state (grouped)
 .agents/
 .augment/
 .bob/
@@ -83,24 +25,45 @@ __MACOSX/
 .devin/
 .auto-claude/
 .codegraph/
-
-# Local configuration
-.DS_Store
-.env*
+.codex/
+.codex-orch/
+.gemini/
+.vibe/
+.continue/
+.aider*/
+.adal/
+.opencode/
+.claude/
+.cursor/
+.windsurf/
 .vscode/
 .idea/
+.env*
 
-# Repository infrastructure
-.git/
+# OS metadata
+.DS_Store
+__MACOSX/
+._*
 
-# Hide all hidden directories (agent meta, etc.)
-.*
-!/.git/
+# Log/Scratch files
+*.log
+*.tmp
+*.bak
+anigma/build_*.txt
+anigma-worktrees/
+.worktrees/
 
-# Archive and legacy/test files in root
+# Cscope
+cscope.out
+cscope.po.out
+
+# Local packages/installers
+*.dmg
+*.pkg
+*.app
+
+# Vendored native binaries
+anigma/Vendor/lib/
+
+# Archives
 *.zip
-*.txt
-*.json
-*.py
-*.sh
-ExternalResearch/
