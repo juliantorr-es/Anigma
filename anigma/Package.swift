@@ -104,6 +104,7 @@ let coreProducts: [Product] = [
   .library(name: "MessagingContracts", targets: ["MessagingContracts"]),
   .library(name: "MediaPipelineContracts", targets: ["MediaPipelineContracts"]),
   .library(name: "RendererBackendContracts", targets: ["RendererBackendContracts"]),
+  .library(name: "SecurityEventsContracts", targets: ["SecurityEventsContracts"]),
   .library(name: "ContractsCore", targets: ["ContractsCore"]),
   .library(name: "LayoutEngineContracts", targets: ["LayoutEngineContracts"]),
   .library(name: "PDFLayoutExtract", targets: ["PDFLayoutExtract"]),
@@ -744,12 +745,19 @@ let coreTargets: [Target] = [
     path: "Packages/ContractsCore/Sources/PersistenceContracts"
   ),
   .target(
+    name: "SecurityEventsContracts",
+    dependencies: ["FoundationContracts"],
+    path: "Packages/ContractsCore/Sources/SecurityEventsContracts",
+    swiftSettings: strictConcurrencySettings
+  ),
+  .target(
     name: "AnigmaEvents", dependencies: ["AnigmaPrimitives"], path: "Packages/AnigmaEvents",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
     name: "DatabaseCore",
     dependencies: [
       "FoundationContracts", "EvidenceContracts", "GovernanceContracts", "VectorIndexCapsule",
+      "SecurityEventsContracts",
       .product(name: "PostgresNIO", package: "postgres-nio")
     ], path: "Packages/DatabaseCore",
     exclude: [
@@ -795,7 +803,8 @@ let coreTargets: [Target] = [
       "FoundationContracts",
       "GovernanceContracts",
       "EvidenceContracts",
-      "IntelligenceContracts"
+      "IntelligenceContracts",
+      "SecurityEventsContracts"
     ],
     path: "Packages/ContractsCore/Sources/ContractsCore",
     swiftSettings: strictConcurrencySettings
@@ -971,7 +980,7 @@ let coreTargets: [Target] = [
     ], path: "Packages/AnigmaASTServices", exclude: ["main.swift"],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
-    name: "SecurityEventsManager", dependencies: ["DatabaseCore"],
+    name: "SecurityEventsManager", dependencies: ["SecurityEventsContracts"],
     path: "Packages/SecurityEventsManager",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
