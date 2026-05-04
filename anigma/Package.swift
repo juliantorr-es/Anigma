@@ -896,7 +896,7 @@ let coreTargets: [Target] = [
   .target(
     name: "ExecutionCore",
     dependencies: [
-      "TelemetryCore", "AnigmaPrimitives", "MLWorkerCommon", "DatabaseCore", "HardwareAuthority"
+      "TelemetryCore", "AnigmaPrimitives", "MLWorkerCommon", "DatabaseCore", "HardwareAuthorityContracts"
     ], path: "Packages/ExecutionCore",
     exclude: [],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
@@ -1018,7 +1018,11 @@ let coreTargets: [Target] = [
     exclude: [],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
-    name: "HardwareAuthority", dependencies: ["AnigmaPrimitives"],
+    name: "HardwareAuthorityContracts", dependencies: ["AnigmaPrimitives"],
+    path: "Packages/HardwareAuthorityContracts",
+    swiftSettings: strictConcurrencySettings),
+  .target(
+    name: "HardwareAuthority", dependencies: ["AnigmaPrimitives", "HardwareAuthorityContracts"],
     path: "Packages/HardwareAuthority",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
@@ -2425,7 +2429,7 @@ let baseTestTargets: [Target] = [
       dependencies: [
           "AnigmaPrimitives",
           "DatabaseCore",
-          "HardwareAuthority",
+          "HardwareAuthorityContracts",
           "ExecutionCore",
           "GovernanceCore"
       ],

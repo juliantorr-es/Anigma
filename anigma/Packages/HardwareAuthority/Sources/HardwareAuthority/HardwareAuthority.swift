@@ -8,35 +8,7 @@
 
 import Foundation
 import AnigmaPrimitives
-
-public enum HardwareLaneType: String, Sendable, Codable {
-    case control    // CPU: Governance, Auth, State
-    case inference  // GPU: Tensor Ops, LLM
-    case perception // ANE: OCR, Layout, Embeddings
-    case native     // CPU/SIMD: Deterministic fallback
-}
-
-public struct ComputeTask: Sendable {
-    public let type: HardwareLaneType
-    public let priority: TaskPriority
-    public let projectID: ProjectID
-    public let buffer: Data // Placeholder for SharedBuffer
-    
-    public init(type: HardwareLaneType, priority: TaskPriority, projectID: ProjectID, buffer: Data) {
-        self.type = type
-        self.priority = priority
-        self.projectID = projectID
-        self.buffer = buffer
-    }
-}
-
-public protocol HardwareAuthority: Actor {
-    /// The authority signals when specific lanes have capacity.
-    func capacityStream(for lane: HardwareLaneType) -> AsyncStream<Int>
-    
-    /// Dispatches a task to the optimal hardware lane.
-    func dispatch(_ task: ComputeTask) async throws -> Data
-}
+import HardwareAuthorityContracts
 
 public actor SaturationHardwareAuthority: HardwareAuthority {
     private var laneCapacities: [HardwareLaneType: Int] = [
@@ -105,16 +77,5 @@ public actor SaturationHardwareAuthority: HardwareAuthority {
     private func notifyCapacityChange(for lane: HardwareLaneType) {
         let newCapacity = laneCapacities[lane] ?? 0
         continuations[lane]?.forEach { $0.yield(newCapacity) }
-    }
-}
-
-public enum HardwareError: Error, LocalizedError {
-    case saturated(lane: HardwareLaneType)
-    
-    public var errorDescription: String? {
-        switch self {
-        case .saturated(let lane):
-            return "Hardware Saturated: No available slots in \(lane.rawValue) lane."
-        }
     }
 }

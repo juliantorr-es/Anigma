@@ -9,7 +9,7 @@
 import Foundation
 import AnigmaPrimitives
 import DatabaseCore
-import HardwareAuthority
+import HardwareAuthorityContracts
 
 public enum JobState: String, Sendable, Codable {
     case pending

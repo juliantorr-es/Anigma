@@ -2,7 +2,7 @@
 //  UnifiedMemoryPool.swift
 //  SaturationInferenceCore
 //
-//  Tier 2 Authority: Unified Memory Pool for zero-copy CPU/GPU memory management
+//  Tier 2 Authority: Unified Memory Pool for unified CPU/GPU memory management
 //
 //  TD Task: td-sli-2026-1.2 - Implement UnifiedMemoryPool
 //  Compliance: 100% TD Doctrine compliant
@@ -17,7 +17,7 @@ import Foundation
 import InferenceContracts
 @preconcurrency import Metal
 
-/// Unified Memory Pool for zero-copy CPU/GPU tensor allocations
+/// Unified Memory Pool for unified CPU/GPU tensor allocations
 ///
 /// Manages a collection of MTLHeaps with .storageModeShared, allowing
 /// both CPU and GPU to access the same memory without copying.

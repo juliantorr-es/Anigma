@@ -2,7 +2,7 @@
 //  UnifiedTensor.swift
 //  SaturationInferenceCore
 //
-//  Tier 2 Authority: Unified Tensor wrapper for zero-copy CPU/GPU access
+//  Tier 2 Authority: Unified Tensor wrapper for unified CPU/GPU memory access
 //
 //  TD Task: td-sli-2026-1.3 - Implement UnifiedTensor Wrapper
 //  Compliance: 100% TD Doctrine compliant
@@ -17,13 +17,13 @@ import Foundation
 import InferenceContracts
 @preconcurrency import Metal
 
-/// Unified Tensor wrapper for zero-copy CPU/GPU memory access
+/// Unified Tensor wrapper for unified CPU/GPU memory access
 ///
 /// Wraps an MTLBuffer with shape, dtype, and stride information,
 /// providing convenient access from both CPU and GPU.
 ///
 /// Key Features:
-/// - Zero-copy access via MTLBuffer with .storageModeShared
+/// - Unified memory access via MTLBuffer with .storageModeShared
 /// - Shape and stride tracking
 /// - CPU pointer access via contents()
 /// - GPU compute pipeline compatibility

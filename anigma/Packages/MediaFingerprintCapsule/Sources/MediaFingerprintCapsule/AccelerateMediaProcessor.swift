@@ -3,7 +3,7 @@
 //  MediaFingerprintCapsule
 //
 //  Native media processing using AVFoundation + Accelerate framework.
-//  Zero-copy frame extraction and perceptual hashing without FFmpeg.
+//  Direct frame extraction and perceptual hashing without FFmpeg.
 //
 
 import Foundation
@@ -13,7 +13,7 @@ import Accelerate
 // MARK: - Protocol
 
 public protocol MediaProcessor {
-    /// Extract frames from media at specified timestamps (zero-copy CVPixelBuffer)
+    /// Extract frames from media at specified timestamps (direct CVPixelBuffer access)
     func extractFrames(from url: URL, timestamps: [CMTime]) throws -> [CVPixelBuffer]
     
     /// Compute perceptual hash of frame data using SIMD/Accelerate

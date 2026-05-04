@@ -116,7 +116,7 @@ public actor VectorIndexCapsuleWrapper {
         return count
     }
     
-    /// Zero-copy bulk vector retrieval for GPU processing
+    /// Bulk vector retrieval for GPU processing
     /// Returns all vectors flattened for Metal GPU processing
     public func getBulkVectors(count vectorCount: Int) async throws -> [Float] {
         guard let handle = handle else { throw VectorIndexError.emptyIndex }
@@ -129,7 +129,7 @@ public actor VectorIndexCapsuleWrapper {
             let dim = config.dimension
             let totalFloats = Int(actualCount) * dim
             
-            // Allocate buffer - zero-copy will be used in GPU via storageModeShared
+            // Allocate buffer - GPU-accessible via storageModeShared
             var vectors = [Float](repeating: 0, count: totalFloats)
             
             let returnedCount = vectors.withUnsafeMutableBufferPointer { ptr in

@@ -40,7 +40,7 @@ public enum GlyphAtlasError: Error, Sendable {
 }
 
 /// High-level interface for glyph atlas management.
-/// Integrates with DSLMemoryBridge for zero-copy GPU access and HarfBuzz for text shaping.
+/// Integrates with DSLMemoryBridge for mapped GPU buffer access and HarfBuzz for text shaping.
 public final class GlyphAtlasCapsule {
     private var atlasTexture: Texture?
     private var atlasMTLBuffer: MTLBuffer?
@@ -48,7 +48,7 @@ public final class GlyphAtlasCapsule {
     
     public init() {}
     
-    /// Loads a pre-computed glyph atlas from disk via DSLMemoryBridge (zero-copy).
+    /// Loads a pre-computed glyph atlas from disk via DSLMemoryBridge (mapped memory).
     /// Maps the atlas file directly to GPU memory, eliminating serialization overhead.
     public func loadAtlas(from url: URL, device: MTLDevice) throws {
         let dslBridge = DSLMemoryBridge()
@@ -119,7 +119,7 @@ public final class GlyphAtlasCapsule {
         return fontMetrics[key]
     }
     
-    /// Returns the zero-copy mapped MTLBuffer for direct GPU access.
+    /// Returns the mapped MTLBuffer for direct GPU access.
     public func getMappedBuffer() -> MTLBuffer? {
         return atlasMTLBuffer
     }

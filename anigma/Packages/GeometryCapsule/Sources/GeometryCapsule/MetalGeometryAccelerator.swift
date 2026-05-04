@@ -3,7 +3,7 @@
 //  GeometryCapsule
 //
 //  Metal-accelerated geometry operations for path offsetting, union, intersection.
-//  Implements GeometryAccelerator protocol with Zero-copy MetalBuffer geometry.
+//  Implements GeometryAccelerator protocol with MetalBuffer geometry (copy-minimized where supported by hardware).
 //  Validates results against CPU reference (Clipper2).
 //
 
