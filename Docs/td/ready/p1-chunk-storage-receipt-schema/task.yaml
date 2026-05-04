@@ -1,0 +1,54 @@
+id: td-chunk-storage-receipt-schema
+title: Define chunk/SoA storage receipt schema for ECS-inspired data runtime
+type: task
+priority: P1
+status: ready
+lane: architecture-research
+epic: p1-architecture
+parent: td-heterogeneous-architecture-research
+verification_profiles:
+  - docs-artifacts
+  - governance
+gc_policy: retain_all
+context_load_policy: eager
+summary: Define the receipt schema Anigma will use to prove chunk/SoA data layout, materialization events, copy-minimized execution, and zero-copy claims before implementing runtime storage logic.
+description: ''
+worktree: docs/
+source_docs:
+- Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md
+- Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md
+- Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md
+- Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md
+- Docs/proofs/heterogeneous-saturated-architecture-research.md
+related_docs:
+- Docs/schemas/chunk-storage-receipt.schema.json
+- Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md
+related_diagrams: []
+acceptance:
+- Schema distinguishes zero-copy from copy-minimized.
+- Schema does not rely on native handles.
+- Schema can represent Metal/CPU/shared/sidecar memory without exposing platform APIs.
+- Schema supports materialization gate evidence.
+- Schema supports fallback evidence.
+- Doctrine forbids zero-copy claims unless receipt movementClassification is zero_copy_proven or no_copy_wrap with proof.
+- No production code changes.
+non_goals:
+- Do not implement runtime ECS storage.
+- Do not add Metal/CUDA/ROCm code.
+- Do not modify Package.swift.
+- Do not add dependencies.
+- Do not claim zero-copy without instrumentation.
+- Do not expose native handles in portable contracts.
+proof:
+- Docs/proofs/chunk-storage-receipt-schema.md
+proof_required:
+- Docs/schemas/chunk-storage-receipt.schema.json
+- Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md
+validator_commands:
+- python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml'))"
+- python3 -c "import json; json.load(open('Docs/schemas/chunk-storage-receipt.schema.json'))"
+td_labels:
+- epic:p1-architecture
+- lane:architecture-research
+- task_id:td-chunk-storage-receipt-schema
+- type:task
