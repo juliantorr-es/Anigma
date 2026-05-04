@@ -12,8 +12,8 @@
 - `swiftlang/swift-build` (commit: b2b2327d9b5c9023780e2bd4b2512225066ef202)
 
 ## Resources Consulted
-- All findings are sourced **exclusively** from local upstream checkouts placed in `ExternalResearch/swift-tooling/`.
-- No external AI documentation lookup tools (like Context7) were used. No official web documentation was used. All doctrine updates are fully source-grounded.
+- Initial findings were sourced from local upstream checkouts placed in `ExternalResearch/swift-tooling/`.
+- **Context7 Extension**: The Context7 MCP API (`https://mcp.context7.com`) was queried using the API key to fetch intelligent, reranked context for the `swiftlang/swift-package-manager` and `swiftlang/swift-syntax` repositories. These findings corroborated the source inspection and elaborated on the resilience of SwiftSyntax and the product/target separation in SwiftPM.
 
 ## Key Files and Symbols Inspected
 - **SwiftPM:** `ProductType` (L89) and `Product` (L16) in `Sources/PackageModel/Product.swift`. `PluginAction` (L26) in `Sources/SPMBuildCore/Plugins/PluginInvocation.swift`. `getSwiftTestingSuites` (L196) in `Sources/Commands/Utilities/TestingSupport.swift`.

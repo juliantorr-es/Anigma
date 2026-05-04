@@ -11,6 +11,12 @@ SwiftPM explicitly distinguishes between modules (targets) and products. In `Sou
 ## 2. Target and Product Distinction
 The source explicitly enumerates `ProductType` at L89, supporting `.library`, `.executable`, `.snippet`, `.plugin`, `.test`, and `.macro`. This model demonstrates that regexing `Package.swift` strings is lossy because it misses the resolved logic binding these entities together.
 
+## 3. Context7 API Documentation Insights
+Querying the Context7 API for `swiftlang/swift-package-manager` confirms the source-grounded findings:
+- The Swift Package configuration explicitly separates `targets` from `products`, defining products as collections of targets (`.library(name: "MyLibrary", targets: ["MyLibrary"])`).
+- Target dependencies are highly structured (`Target.Dependency`), allowing references like `.target(name:condition:)` or `.product(name:package:condition:)`. 
+- Context7 emphasizes that "each product is made up of one or more Targets, the basic building block of a Swift package," reinforcing the Anigma doctrine rule against conflating targets and products.
+
 ## Anigma Doctrine Takeaways
 - **Hygiene Rule:** Do not conflate targets and products in documentation or tooling.
 - **Dependency Paths:** Anigma's tier validators should analyze the resolved package graph (via SwiftPM manifest/package description outputs, package graph source research, or a dedicated Anigma graph extractor) rather than relying solely on regex over `Package.swift`.
