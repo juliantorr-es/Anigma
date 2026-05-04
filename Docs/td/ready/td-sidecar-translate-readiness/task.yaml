@@ -1,0 +1,16 @@
+td_id: td-sidecar-translate-readiness
+summary: Implement SidecarTranslateService readiness lane and receipt
+priority: P0
+status: ready
+type: architecture
+parent:
+  - td-p0-sidecar-readiness-gap-triage
+related:
+  - td-master-diagnostic-harness
+goal: Add deterministic readiness validation for SidecarTranslateService as a governed sidecar service.
+acceptance:
+  - Dedicated readiness lane exists.
+  - Service dependencies are checked deterministically.
+  - Missing environment is classified explicitly.
+  - Generic BackendReadiness remains independent.
+  - No new cycles/tier violations.

@@ -1,6 +1,13 @@
 # Anigma
 
+[Public Docs](https://anigma-documentation.notion.site/Anigma-Docs-356524d6b84c805c9ab9fc6ada38f37b) · [Repository README](https://github.com/juliantorr-es/Anigma)
+
 **Anigma is a governance-first local orchestration platform for document processing, cognitive workflows, and evidence-backed automation.**
+
+## Public Documentation
+For a plain-English overview and curated reading path, start here:
+**Anigma Docs:** https://anigma-documentation.notion.site/Anigma-Docs-356524d6b84c805c9ab9fc6ada38f37b
+The GitHub repository is the technical source of truth. The Notion site is the public landing page for readers who want the project context before reading the architecture docs.
 
 Anigma explores how autonomous systems can perform work while also leaving behind verifiable evidence: what changed, why it changed, which tools ran, and which architectural boundaries were crossed.
 

@@ -142,14 +142,39 @@ It turns SwiftPM graph facts plus architecture doctrine into reviewable diagnost
 
 The alignment matrix is **generated evidence**, not a hand-authored artifact. It turns SwiftPM graph facts plus architecture doctrine into reviewable diagnostics.
 
+### Calibration Status
+**td-alignment-matrix-calibration: DONE**
+
+The alignment diagnostic matrix workflow calibration is complete. Results:
+- **Before**: P0=5, P1=213, P2=0 (high noise from meta-discussion)
+- **After**: P0=5, P1=24, P2=0 (88.7% noise reduction)
+
+**Key improvement**: Zero-copy claim scanning now excludes doctrine/research/proof meta-discussion via path and context filters. Remaining P1 findings are actionable:
+- 1 graph-backed native leakage finding (`ExecutionCore` → `HardwareAuthority`)
+- 22 production Swift zero-copy claims requiring receipt evidence
+- 1 hardware-resident claim in `MediaGovernance.swift`
+
+**Matrix state**: Strict for P0 sidecar readiness gaps and graph-backed native leakage. Zero-copy flags now exclusively target production code with actual claims.
+
+See:
+- `Docs/proofs/alignment-diagnostic-matrix-calibration.md` for calibration proof
+- `Docs/proofs/alignment-diagnostic-matrix-workflow.md` for workflow details
+- `Docs/governance/alignment-diagnostic-rules.yaml` for rule configuration
+
 ## 7. Master Diagnostic Harness
 
-The master diagnostic harness (`Scripts/anigma_diagnose.py`) is the canonical entrypoint for task evidence collection. Architecture-sensitive tasks must capture:
-- **baseline** before implementation
-- **validation** after implementation
-- **review bundle** before task closure
+The master diagnostic harness (`Scripts/anigma_diagnose.py`) is the canonical entrypoint for task evidence collection. It integrates local CLI tools (`git`, `rg`, `swift`, `shellcheck`, `py_compile`) to produce deterministic, categorized evidence bundles.
 
-Manual summaries are not sufficient if the harness can run. The diagnostic harness is not another report. It is the evidence intake system for agent work.
+Architecture-sensitive tasks must capture:
+- **baseline**: Captures tool availability, git metadata, changed files, graph/alignment snapshots, and Docs artifact hygiene.
+- **validate**: Executes build/test commands, captures logs, extracts warnings/errors, and classifies build status and Docs artifacts.
+- **review**: Scans for forbidden findings, runs validation hooks, and performs in-depth Docs artifact validation (schemas, registries, manifests).
+- **diff**: Generates risk summaries and compares artifact states, including Docs artifact changes.
+- **index**: Lists and queries diagnostic history from `index.jsonl`.
+
+Manual summaries are secondary to generated bundles. The harness enforces deterministic classification: **CLEAN**, **FAILED**, **CONTAMINATED**, or **PASSED**.
+
+Generated `.build` JSON/CSV files are raw evidence. Curated `Docs/` JSON/CSV/YAML files are documentation artifacts and may carry governance or schema meaning.
 
 ## 8. TD Workflow Gate: Package Graph Audit Requirement
 

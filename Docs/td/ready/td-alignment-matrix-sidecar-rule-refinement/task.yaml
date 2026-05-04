@@ -1,0 +1,18 @@
+td_id: td-alignment-matrix-sidecar-rule-refinement
+summary: Refine alignment matrix sidecar readiness detection for resolved products and exceptions
+priority: P1
+status: ready
+type: architecture
+parent:
+  - td-p0-sidecar-readiness-gap-triage
+  - td-alignment-matrix-calibration
+related:
+  - td-master-diagnostic-harness
+goal: Update alignment matrix detection logic so resolved/exception sidecar products are not emitted as active P0.
+acceptance:
+  - alignment-matrix output no longer reports resolved PDFSidecarExecutable as active P0.
+  - anigma-mcp diagnostic reason is corrected or moved to correct severity.
+  - real missing sidecar readiness lanes remain P0.
+  - JSON/CSV output remains deterministic.
+  - No production Swift code changes.
+  - No Package.swift architecture changes.

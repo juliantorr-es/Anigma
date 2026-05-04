@@ -1,0 +1,6 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -scheme Anigma -configuration Debug build
+
+2026-05-02 20:20:34.162 xcodebuild[70317:15194907] Writing error result bundle to /var/folders/72/cyz7gwcd5jsg_71j09s7pnmm0000gn/T/ResultBundle_2026-02-05_20-20-0034.xcresult
+xcodebuild: error: The directory /Users/user/Developer/GitHub/Anigma_clean does not contain an Xcode project, workspace or package.
+

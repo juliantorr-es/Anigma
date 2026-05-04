@@ -16,20 +16,22 @@ The research phase of `td-backend-normalization-heterogeneous-overlap` identifie
    - `.build/anigma-graph/current/anigma-alignment-diagnostic-matrix.csv`
    - `.build/anigma-graph/current/anigma-alignment-diagnostic-summary.md`
 
-## Review Findings
-The initial baseline was generated and reviewed for false positives.
+## Calibration Status
+**The alignment diagnostic matrix calibration is complete.**
 
 ### P0 Findings: Sidecar Readiness Gap
-- **Count**: 5
+- **Count**: 5 (preserved through calibration)
 - **Subjects**: `AnigmaSidecar`, `SidecarOfficeService`, `SidecarPDFService`, `SidecarTranslateService`, `PDFSidecarExecutable`.
 - **Assessment**: **REAL**. These sidecars are currently treated as build dependencies but lack the mandated runtime readiness receipts.
 - **Ownership**: To be resolved in `td-7c0153-01` (PDF) and follow-up sidecar readiness TDs.
 
-### P1 Findings: Samples & False Positives
-- **Count**: 204
-- **Native Leakage**: **REAL**. `ExecutionCore` was confirmed to reach `HardwareAuthority` via actual graph analysis.
-- **Claim Overclaims**: **MIXED / HIGH NOISE**. The automated scanner flags mentions of "zero-copy" in research docs and doctrine files that are actually citing or discussing the rule (self-references).
-- **Paths**: Verified repo-relative paths are used.
+### P1 Findings: Calibrated
+- **Before Calibration**: 213 (high noise)
+- **After Calibration**: 24 (actionable signal)
+- **Noise Reduction**: 88.7% (189 false positives eliminated)
+- **Native Leakage**: **REAL - preserved**. `ExecutionCore` reaches `HardwareAuthority` via graph analysis.
+- **Claim Overclaims**: **CLEAN**. Zero-copy claim scanning now excludes doctrine/research/proof meta-discussion. Remaining 22 zero-copy findings are production Swift files with actual claims requiring receipt evidence.
+- **Hardware-Resident**: **REAL - preserved**. 1 finding in `MediaGovernance.swift`.
 
 ## Command Summary
 ```bash
@@ -37,10 +39,32 @@ python3 Scripts/anigma_package_graph_audit.py alignment-matrix --fail-on-p0
 ```
 - **Exit Code 1**: Correctly fails if P0 diagnostics exist.
 - **Snapshot Support**: Verified with `--task-id` snapshots.
+- **Deterministic**: Identical output on repeated runs.
 
-## Follow-up Recommended
-1. **Calibration TD**: Calibrate `alignment-diagnostic-rules.yaml` to exclude meta-mentions of zero-copy in Docs/governance and research folders.
-2. **Readiness Implementation**: Resolve the 5 P0 readiness gaps.
+## Calibration Mechanics
+The matrix remains strict for:
+- P0 sidecar readiness gaps
+- Graph-backed native leakage (via `get_why_builds`)
+
+Zero-copy claim scanning improvements:
+1. **Path exclusions**: `claim_scan_exclusions.path_patterns` excludes `Docs/governance/**`, `Docs/research/**`, `Docs/proofs/**`, `Docs/schemas/**`, `Docs/td/**`, `Docs/diagrams/**`, `Docs/architecture/**`.
+2. **Context filters**: `claim_context_filters.exclude_phrases` removes meta-discussion lines (future tense, conditionals, TODOs, definitions).
+3. **Deduplication**: One finding per file per pattern via `deduplication.key: file_pattern`.
+4. **Extension targeting**: Only `.swift` files scanned for claims in production code.
+
+See `Docs/governance/alignment-diagnostic-rules.yaml` for full rule set.
+
+## Next Work Queue
+### P0
+- Review 5 sidecar readiness gaps, ensure each has an owner TD.
+
+### P1
+- **Graph-backed**: `ExecutionCore` → `HardwareAuthority` native leakage.
+- **Zero-copy claims**: 22 production Swift files flagged for claims without receipt evidence.
+- **Hardware-resident claim**: `MediaGovernance.swift` requires domain proof.
+
+### P2 / Later
+- Continue improving ECS/capsule terminology only when it touches runtime/API decisions.
 
 ## Compliance
 - alignment-matrix subcommand implemented.

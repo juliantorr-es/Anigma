@@ -96,6 +96,7 @@ let coreProducts: [Product] = [
   .library(name: "AnigmaEvents", targets: ["AnigmaEvents"]),
   .library(name: "CapsuleCore", targets: ["CapsuleCore"]),
   .library(name: "DatabaseCore", targets: ["DatabaseCore"]),
+  .library(name: "RuntimeCore", targets: ["RuntimeCore"]),
   .library(name: "FoundationContracts", targets: ["FoundationContracts"]),
   .library(name: "IntelligenceContracts", targets: ["IntelligenceContracts"]),
   .library(name: "GovernanceContracts", targets: ["GovernanceContracts"]),
@@ -547,7 +548,18 @@ let coreTargets: [Target] = [
       "MLWorkerInterfaces", "RendererBackendContracts"
     ],
     path: "Packages/AnigmaCore/Sources/AnigmaFoundation",
-    exclude: ["AnigmaFoundation.swift"],
+    exclude: ["AnigmaFoundation.swift", "Runtime/"],
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
+  ),
+
+  .target(
+    name: "RuntimeCore",
+    dependencies: [
+      "AnigmaFoundation", "DatabaseCore", "ContractsCore", "FoundationContracts",
+      "GovernanceContracts", "EvidenceContracts", "IntelligenceContracts",
+      "PersistenceContracts", "AnigmaPrimitives"
+    ],
+    path: "Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
   ),
 
@@ -2126,6 +2138,7 @@ let executableTargets: [Target] = [
       "AnigmaGovernance",
       "AnigmaJobs",
       "DatabaseCore",
+      "RuntimeCore",
       "ContractsCore",
       "GovernanceCore"
     ], path: "Packages/HarmoniaV2CLI", exclude: ["CutoverCommands.swift", "Main.swift"],
@@ -2144,6 +2157,7 @@ let executableTargets: [Target] = [
       "AnigmaGovernance",
       "AnigmaJobs",
       "DatabaseCore",
+      "RuntimeCore",
       "ContractsCore",
       "GovernanceCore",
       .product(name: "ArgumentParser", package: "swift-argument-parser")

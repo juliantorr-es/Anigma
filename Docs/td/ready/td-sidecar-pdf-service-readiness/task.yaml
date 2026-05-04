@@ -1,0 +1,17 @@
+td_id: td-sidecar-pdf-service-readiness
+summary: Complete SidecarPDFService readiness lane and service-level receipt
+priority: P0
+status: ready
+type: architecture
+parent:
+  - td-7c0153-01
+related:
+  - td-p0-sidecar-readiness-gap-triage
+  - td-master-diagnostic-harness
+goal: Extend PDF sidecar readiness beyond PDFSidecarExecutable product build to cover SidecarPDFService service-level readiness.
+acceptance:
+  - PDFSidecarExecutable remains CLEAN.
+  - SidecarPDFService has service readiness evidence.
+  - PDFium vendoring/provenance remains documented.
+  - Generic BackendReadiness remains independent of PDFium/PDF sidecar targets.
+  - No new cycles/tier violations.

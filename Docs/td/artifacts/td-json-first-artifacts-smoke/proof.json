@@ -1,0 +1,43 @@
+{
+  "schema": "https://anigma.io/schemas/td-proof-artifact.schema.json",
+  "taskId": "td-json-first-artifacts-smoke",
+  "title": "Smoke Test Proof Artifact (Rich)",
+  "status": "DONE",
+  "artifactType": "proof",
+  "summary": "This artifact proves the rich JSON-first pipeline is operational.",
+  "frontmatter": {
+    "tags": ["anigma", "proof", "architecture"]
+  },
+  "diagrams": [
+    {
+      "type": "mermaid",
+      "title": "Pipeline Architecture",
+      "content": "graph TD\n  A[JSON Proof] --> B{Renderer}\n  B --> C[Markdown Proof]"
+    }
+  ],
+  "changedFiles": [
+    {
+      "path": "Scripts/anigma_artifact_render.py",
+      "changeType": "added",
+      "risk": "medium",
+      "category": "scripts_python",
+      "reason": "Initial renderer implementation"
+    }
+  ],
+  "validationResults": [
+    {
+      "command": "python3 Scripts/anigma_artifact_render.py validate --task-id td-json-first-artifacts-smoke",
+      "exitCode": 0,
+      "buildStatus": "CLEAN",
+      "classification": "CLEAN"
+    }
+  ],
+  "graphInvariants": [
+    {
+      "claim": "JSON-first renderer is operational",
+      "command": "python3 Scripts/anigma_artifact_render.py render",
+      "result": "Success",
+      "status": "PASSED"
+    }
+  ]
+}

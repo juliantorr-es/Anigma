@@ -1,0 +1,3708 @@
+{
+  "diagnostics": [
+    {
+      "currentRole": "executable",
+      "currentTarget": "AnigmaSidecar",
+      "diagnosticId": "ADM-0001",
+      "doctrineRule": "sidecar executable products require sidecar readiness receipts",
+      "expectedRole": "sidecar_executable",
+      "followupTd": "",
+      "misalignment": "Product build/readiness is not equivalent to governed sidecar health.",
+      "recommendedAction": "Implement sidecar readiness receipt and governance gate.",
+      "severity": "P0",
+      "sourceEvidence": [],
+      "status": "open",
+      "subject": "AnigmaSidecar",
+      "subjectType": "executable_product"
+    },
+    {
+      "currentRole": "executable",
+      "currentTarget": "SidecarOfficeService",
+      "diagnosticId": "ADM-0002",
+      "doctrineRule": "sidecar executable products require sidecar readiness receipts",
+      "expectedRole": "sidecar_executable",
+      "followupTd": "",
+      "misalignment": "Product build/readiness is not equivalent to governed sidecar health.",
+      "recommendedAction": "Implement sidecar readiness receipt and governance gate.",
+      "severity": "P0",
+      "sourceEvidence": [],
+      "status": "open",
+      "subject": "SidecarOfficeService",
+      "subjectType": "executable_product"
+    },
+    {
+      "currentRole": "executable",
+      "currentTarget": "SidecarPDFService",
+      "diagnosticId": "ADM-0003",
+      "doctrineRule": "sidecar executable products require sidecar readiness receipts",
+      "expectedRole": "sidecar_executable",
+      "followupTd": "",
+      "misalignment": "Product build/readiness is not equivalent to governed sidecar health.",
+      "recommendedAction": "Implement sidecar readiness receipt and governance gate.",
+      "severity": "P0",
+      "sourceEvidence": [],
+      "status": "open",
+      "subject": "SidecarPDFService",
+      "subjectType": "executable_product"
+    },
+    {
+      "currentRole": "executable",
+      "currentTarget": "SidecarTranslateService",
+      "diagnosticId": "ADM-0004",
+      "doctrineRule": "sidecar executable products require sidecar readiness receipts",
+      "expectedRole": "sidecar_executable",
+      "followupTd": "",
+      "misalignment": "Product build/readiness is not equivalent to governed sidecar health.",
+      "recommendedAction": "Implement sidecar readiness receipt and governance gate.",
+      "severity": "P0",
+      "sourceEvidence": [],
+      "status": "open",
+      "subject": "SidecarTranslateService",
+      "subjectType": "executable_product"
+    },
+    {
+      "currentRole": "executable",
+      "currentTarget": "PDFSidecarExecutable",
+      "diagnosticId": "ADM-0006",
+      "doctrineRule": "sidecar executable products require sidecar readiness receipts",
+      "expectedRole": "sidecar_executable",
+      "followupTd": "",
+      "misalignment": "Product build/readiness is not equivalent to governed sidecar health.",
+      "recommendedAction": "Implement sidecar readiness receipt and governance gate.",
+      "severity": "P0",
+      "sourceEvidence": [],
+      "status": "open",
+      "subject": "PDFSidecarExecutable",
+      "subjectType": "executable_product"
+    },
+    {
+      "currentRole": "Substrate / Execution Layer - Platform capabilities and infrastructure",
+      "currentTarget": "ExecutionCore",
+      "diagnosticId": "ADM-0007",
+      "doctrineRule": "native linker settings must be isolated from portable targets",
+      "expectedRole": "portable_runtime",
+      "followupTd": "",
+      "misalignment": "Generic target reaches native dependency 'HardwareAuthority'.",
+      "recommendedAction": "Isolate 'HardwareAuthority' behind a portable contract or sidecar.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Dependency path: ExecutionCore -> ... -> HardwareAuthority"
+      ],
+      "status": "open",
+      "subject": "ExecutionCore",
+      "subjectType": "target"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0008",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:5"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0009",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:5"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0010",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:6"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0011",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0012",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:8"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0013",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:9"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "diagnosticId": "ADM-0014",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md:12"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/materialization-and-copy-claims.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/misalignment-findings.md",
+      "diagnosticId": "ADM-0015",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/misalignment-findings.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/misalignment-findings.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/misalignment-findings.md",
+      "diagnosticId": "ADM-0016",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/misalignment-findings.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/misalignment-findings.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/assumption-map.md",
+      "diagnosticId": "ADM-0017",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/assumption-map.md:8"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/assumption-map.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/assumption-map.md",
+      "diagnosticId": "ADM-0018",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/assumption-map.md:8"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/assumption-map.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/backend-normalization-heterogeneous-overlap/followup-td-plan.md",
+      "diagnosticId": "ADM-0019",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/backend-normalization-heterogeneous-overlap/followup-td-plan.md:14"
+      ],
+      "status": "open",
+      "subject": "Docs/research/backend-normalization-heterogeneous-overlap/followup-td-plan.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "diagnosticId": "ADM-0020",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'No-Copy' at Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md:14"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "diagnosticId": "ADM-0021",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md:14"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "diagnosticId": "ADM-0022",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md:18"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "diagnosticId": "ADM-0023",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md:18"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/apple-silicon-metal.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/cuda-unified-memory.md",
+      "diagnosticId": "ADM-0024",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/cuda-unified-memory.md:10"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/cuda-unified-memory.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/README.md",
+      "diagnosticId": "ADM-0025",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/README.md:3"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/README.md",
+      "diagnosticId": "ADM-0026",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/research/heterogeneous-saturated-architecture/README.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/README.md",
+      "diagnosticId": "ADM-0027",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/README.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/example-receipts.md",
+      "diagnosticId": "ADM-0028",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/example-receipts.md:29"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/example-receipts.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/example-receipts.md",
+      "diagnosticId": "ADM-0029",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'No-Copy' at Docs/research/heterogeneous-saturated-architecture/example-receipts.md:52"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/example-receipts.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/example-receipts.md",
+      "diagnosticId": "ADM-0030",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/research/heterogeneous-saturated-architecture/example-receipts.md:75"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/example-receipts.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0031",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:27"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0032",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:30"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0033",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:31"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0034",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:34"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0035",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:51"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0036",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:51"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0037",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:52"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0038",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:53"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "diagnosticId": "ADM-0039",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md:53"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/anigma-doctrine-gap-analysis.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md",
+      "diagnosticId": "ADM-0040",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md:1"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md",
+      "diagnosticId": "ADM-0041",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md:24"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md",
+      "diagnosticId": "ADM-0042",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md:24"
+      ],
+      "status": "open",
+      "subject": "Docs/research/heterogeneous-saturated-architecture/ecs-data-oriented-zero-copy.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/diagrams/likec4/README.md",
+      "diagnosticId": "ADM-0043",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/diagrams/likec4/README.md:58"
+      ],
+      "status": "open",
+      "subject": "Docs/diagrams/likec4/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/diagrams/likec4/README.md",
+      "diagnosticId": "ADM-0044",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/diagrams/likec4/README.md:77"
+      ],
+      "status": "open",
+      "subject": "Docs/diagrams/likec4/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/chunk-storage-receipt-schema.md",
+      "diagnosticId": "ADM-0045",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/chunk-storage-receipt-schema.md:6"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/chunk-storage-receipt-schema.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/chunk-storage-receipt-schema.md",
+      "diagnosticId": "ADM-0046",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/chunk-storage-receipt-schema.md:13"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/chunk-storage-receipt-schema.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/chunk-storage-receipt-schema.md",
+      "diagnosticId": "ADM-0047",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/chunk-storage-receipt-schema.md:17"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/chunk-storage-receipt-schema.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/architecture-map-and-file-role-index.md",
+      "diagnosticId": "ADM-0048",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/architecture-map-and-file-role-index.md:123"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/architecture-map-and-file-role-index.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/alignment-diagnostic-matrix-workflow.md",
+      "diagnosticId": "ADM-0049",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/alignment-diagnostic-matrix-workflow.md:31"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/alignment-diagnostic-matrix-workflow.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/alignment-diagnostic-matrix-workflow.md",
+      "diagnosticId": "ADM-0050",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/alignment-diagnostic-matrix-workflow.md:42"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/alignment-diagnostic-matrix-workflow.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/backend-normalization-heterogeneous-overlap-research.md",
+      "diagnosticId": "ADM-0051",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/backend-normalization-heterogeneous-overlap-research.md:23"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/backend-normalization-heterogeneous-overlap-research.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "diagnosticId": "ADM-0052",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/heterogeneous-saturated-architecture-research.md:5"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "diagnosticId": "ADM-0053",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/heterogeneous-saturated-architecture-research.md:10"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "diagnosticId": "ADM-0054",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/heterogeneous-saturated-architecture-research.md:17"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "diagnosticId": "ADM-0055",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/proofs/heterogeneous-saturated-architecture-research.md:23"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "diagnosticId": "ADM-0056",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/proofs/heterogeneous-saturated-architecture-research.md:30"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/heterogeneous-saturated-architecture-research.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/likec4-architecture-model-adoption.md",
+      "diagnosticId": "ADM-0057",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/likec4-architecture-model-adoption.md:67"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/likec4-architecture-model-adoption.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/likec4-architecture-model-adoption.md",
+      "diagnosticId": "ADM-0058",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/likec4-architecture-model-adoption.md:74"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/likec4-architecture-model-adoption.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/proofs/likec4-architecture-model-adoption.md",
+      "diagnosticId": "ADM-0059",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/proofs/likec4-architecture-model-adoption.md:104"
+      ],
+      "status": "open",
+      "subject": "Docs/proofs/likec4-architecture-model-adoption.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_TASK_REFINEMENT_SUMMARY_20260430.md",
+      "diagnosticId": "ADM-0060",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/td/TD_TASK_REFINEMENT_SUMMARY_20260430.md:71"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_TASK_REFINEMENT_SUMMARY_20260430.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md",
+      "diagnosticId": "ADM-0061",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md:46"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_PRIORITY_REORGANIZATION_20260430.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0062",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:96"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0063",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:195"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0064",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:484"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0065",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:568"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0066",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:774"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0067",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:794"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0068",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:797"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0069",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:802"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0070",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:807"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0071",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:814"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0072",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/td-task-registry.yaml:847"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0073",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/td-task-registry.yaml:873"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0074",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:874"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/td-task-registry.yaml",
+      "diagnosticId": "ADM-0075",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/td-task-registry.yaml:879"
+      ],
+      "status": "open",
+      "subject": "Docs/td/td-task-registry.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0076",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:34"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0077",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:40"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0078",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:59"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0079",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:98"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0080",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:219"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0081",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:231"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "diagnosticId": "ADM-0082",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md:233"
+      ],
+      "status": "open",
+      "subject": "Docs/td/TD_SATURATED_LOCAL_INFERENCE_EPIC_2026.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "diagnosticId": "ADM-0083",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml:14"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "diagnosticId": "ADM-0084",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml:19"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "diagnosticId": "ADM-0085",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml:28"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "diagnosticId": "ADM-0086",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml:33"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "diagnosticId": "ADM-0087",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml:40"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "diagnosticId": "ADM-0088",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.md:9"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "diagnosticId": "ADM-0089",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.md:18"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "diagnosticId": "ADM-0090",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.md:26"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "diagnosticId": "ADM-0091",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.md:39"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "diagnosticId": "ADM-0092",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.md:44"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "diagnosticId": "ADM-0093",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-chunk-storage-receipt-schema/task.md:52"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-chunk-storage-receipt-schema/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml",
+      "diagnosticId": "ADM-0094",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml:38"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml",
+      "diagnosticId": "ADM-0095",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml:53"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "diagnosticId": "ADM-0096",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md:17"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "diagnosticId": "ADM-0097",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md:39"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "diagnosticId": "ADM-0098",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md:61"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "diagnosticId": "ADM-0099",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md:70"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-backend-normalization-heterogeneous-overlap/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.yaml",
+      "diagnosticId": "ADM-0100",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.yaml:27"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.yaml",
+      "diagnosticId": "ADM-0101",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.yaml:35"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "diagnosticId": "ADM-0102",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.md:9"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "diagnosticId": "ADM-0103",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.md:31"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "diagnosticId": "ADM-0104",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.md:38"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "diagnosticId": "ADM-0105",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.md:39"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "diagnosticId": "ADM-0106",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p1-alignment-matrix-calibration/task.md:45"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p1-alignment-matrix-calibration/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.yaml",
+      "diagnosticId": "ADM-0107",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-004/tasks/td-bfe7a3/task.yaml:27"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.md",
+      "diagnosticId": "ADM-0108",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-004/tasks/td-bfe7a3/task.md:25"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.md",
+      "diagnosticId": "ADM-0109",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-004/tasks/td-bfe7a3/task.md:53"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-004/tasks/td-bfe7a3/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-005/epic.yaml",
+      "diagnosticId": "ADM-0110",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-005/epic.yaml:12"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-005/epic.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-005/epic.md",
+      "diagnosticId": "ADM-0111",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-005/epic.md:15"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-005/epic.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-005/tasks/td-db-003/task.yaml",
+      "diagnosticId": "ADM-0112",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-005/tasks/td-db-003/task.yaml:22"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-005/tasks/td-db-003/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-005/tasks/td-db-003/task.md",
+      "diagnosticId": "ADM-0113",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-005/tasks/td-db-003/task.md:27"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-005/tasks/td-db-003/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/ready/p0-005/tasks/td-db-003/task.md",
+      "diagnosticId": "ADM-0114",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/ready/p0-005/tasks/td-db-003/task.md:53"
+      ],
+      "status": "open",
+      "subject": "Docs/td/ready/p0-005/tasks/td-db-003/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/done/p0-003/epic.yaml",
+      "diagnosticId": "ADM-0115",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/done/p0-003/epic.yaml:22"
+      ],
+      "status": "open",
+      "subject": "Docs/td/done/p0-003/epic.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/done/p0-003/epic.md",
+      "diagnosticId": "ADM-0116",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/done/p0-003/epic.md:30"
+      ],
+      "status": "open",
+      "subject": "Docs/td/done/p0-003/epic.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "diagnosticId": "ADM-0117",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml:30"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "diagnosticId": "ADM-0118",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml:31"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "diagnosticId": "ADM-0119",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml:33"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "diagnosticId": "ADM-0120",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml:35"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0121",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:12"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0122",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:18"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0123",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:54"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0124",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:54"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0125",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:54"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0126",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:55"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0127",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:56"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0128",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:92"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0129",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:108"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0130",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:129"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0131",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:146"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0132",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:147"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0133",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:164"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0134",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:172"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0135",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:173"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0136",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:177"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0137",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:226"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0138",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:227"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0139",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:229"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0140",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:231"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "diagnosticId": "ADM-0141",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/td/in_review/p1-heterogeneous-architecture-research/task.md:235"
+      ],
+      "status": "open",
+      "subject": "Docs/td/in_review/p1-heterogeneous-architecture-research/task.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/schemas/file-role-index.schema.json",
+      "diagnosticId": "ADM-0142",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/schemas/file-role-index.schema.json:112"
+      ],
+      "status": "open",
+      "subject": "Docs/schemas/file-role-index.schema.json",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/schemas/file-role-index.schema.json",
+      "diagnosticId": "ADM-0143",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/schemas/file-role-index.schema.json:122"
+      ],
+      "status": "open",
+      "subject": "Docs/schemas/file-role-index.schema.json",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/schemas/module-role-index.schema.json",
+      "diagnosticId": "ADM-0144",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/schemas/module-role-index.schema.json:70"
+      ],
+      "status": "open",
+      "subject": "Docs/schemas/module-role-index.schema.json",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/schemas/chunk-storage-receipt.schema.json",
+      "diagnosticId": "ADM-0145",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/schemas/chunk-storage-receipt.schema.json:5"
+      ],
+      "status": "open",
+      "subject": "Docs/schemas/chunk-storage-receipt.schema.json",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/file-role-index.yaml",
+      "diagnosticId": "ADM-0146",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/architecture/maps/file-role-index.yaml:27"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/file-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/file-role-index.yaml",
+      "diagnosticId": "ADM-0147",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/file-role-index.yaml:32"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/file-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/file-role-index.yaml",
+      "diagnosticId": "ADM-0148",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/architecture/maps/file-role-index.yaml:59"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/file-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/file-role-index.yaml",
+      "diagnosticId": "ADM-0149",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/file-role-index.yaml:409"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/file-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/file-role-index.yaml",
+      "diagnosticId": "ADM-0150",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/architecture/maps/file-role-index.yaml:526"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/file-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/file-role-index.yaml",
+      "diagnosticId": "ADM-0151",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/file-role-index.yaml:529"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/file-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/README.md",
+      "diagnosticId": "ADM-0152",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/architecture/maps/README.md:74"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/module-role-index.yaml",
+      "diagnosticId": "ADM-0153",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/module-role-index.yaml:39"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/module-role-index.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/logic-flows/README.md",
+      "diagnosticId": "ADM-0154",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/logic-flows/README.md:27"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/logic-flows/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/logic-flows/README.md",
+      "diagnosticId": "ADM-0155",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/logic-flows/README.md:40"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/logic-flows/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/logic-flows/README.md",
+      "diagnosticId": "ADM-0156",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/logic-flows/README.md:54"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/logic-flows/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/logic-flows/README.md",
+      "diagnosticId": "ADM-0157",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/architecture/maps/logic-flows/README.md:55"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/logic-flows/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/architecture/maps/logic-flows/README.md",
+      "diagnosticId": "ADM-0158",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/architecture/maps/logic-flows/README.md:77"
+      ],
+      "status": "open",
+      "subject": "Docs/architecture/maps/logic-flows/README.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "diagnosticId": "ADM-0159",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/governance/alignment-diagnostic-rules.yaml:87"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "diagnosticId": "ADM-0160",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/alignment-diagnostic-rules.yaml:91"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "diagnosticId": "ADM-0161",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero copy' at Docs/governance/alignment-diagnostic-rules.yaml:91"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "diagnosticId": "ADM-0162",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'no-copy' at Docs/governance/alignment-diagnostic-rules.yaml:91"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "diagnosticId": "ADM-0163",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/governance/alignment-diagnostic-rules.yaml:93"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/alignment-diagnostic-rules.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "diagnosticId": "ADM-0164",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "diagnosticId": "ADM-0165",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md:15"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "diagnosticId": "ADM-0166",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md:17"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "diagnosticId": "ADM-0167",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md:17"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "diagnosticId": "ADM-0168",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md:17"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/VERIFICATION_PROFILES.md",
+      "diagnosticId": "ADM-0169",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at Docs/governance/VERIFICATION_PROFILES.md:393"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/VERIFICATION_PROFILES.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/TESTING_DOCTRINE.md",
+      "diagnosticId": "ADM-0170",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/TESTING_DOCTRINE.md:83"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/TESTING_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "diagnosticId": "ADM-0171",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md:7"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "diagnosticId": "ADM-0172",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md:9"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "diagnosticId": "ADM-0173",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-Copy' at Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md:10"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "diagnosticId": "ADM-0174",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md:10"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "diagnosticId": "ADM-0175",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md:12"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "diagnosticId": "ADM-0176",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md:20"
+      ],
+      "status": "open",
+      "subject": "Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "Docs/manifests/documentation-artifacts.yaml",
+      "diagnosticId": "ADM-0177",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at Docs/manifests/documentation-artifacts.yaml:95"
+      ],
+      "status": "open",
+      "subject": "Docs/manifests/documentation-artifacts.yaml",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift",
+      "diagnosticId": "ADM-0178",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift:5"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift",
+      "diagnosticId": "ADM-0179",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift:20"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift",
+      "diagnosticId": "ADM-0180",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift:26"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedTensor.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedMemoryPool.swift",
+      "diagnosticId": "ADM-0181",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedMemoryPool.swift:5"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedMemoryPool.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedMemoryPool.swift",
+      "diagnosticId": "ADM-0182",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedMemoryPool.swift:20"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/UnifiedMemoryPool.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/CPUInferenceDispatcher.swift",
+      "diagnosticId": "ADM-0183",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/CPUInferenceDispatcher.swift:31"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationInferenceCore/Sources/SaturationInferenceCore/CPUInferenceDispatcher.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift",
+      "diagnosticId": "ADM-0184",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift:32"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift",
+      "diagnosticId": "ADM-0185",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift:35"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift",
+      "diagnosticId": "ADM-0186",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift:45"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/DSLMemoryBridge.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/TextProjection.swift",
+      "diagnosticId": "ADM-0187",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/TextProjection.swift:8"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/TextProjection.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/TextProjection.swift",
+      "diagnosticId": "ADM-0188",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/TextProjection.swift:26"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/TextProjection.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift",
+      "diagnosticId": "ADM-0189",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift:12"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift",
+      "diagnosticId": "ADM-0190",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift:19"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift",
+      "diagnosticId": "ADM-0191",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift:123"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturationKit/Sources/SaturationKit/BinaryAtlasStandard.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/CapsuleCore/Sources/CapsuleCore/CapsuleBuffer.swift",
+      "diagnosticId": "ADM-0192",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/CapsuleCore/Sources/CapsuleCore/CapsuleBuffer.swift:4"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/CapsuleCore/Sources/CapsuleCore/CapsuleBuffer.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift",
+      "diagnosticId": "ADM-0193",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift:43"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift",
+      "diagnosticId": "ADM-0194",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift:51"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift",
+      "diagnosticId": "ADM-0195",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift:122"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasCapsule/GlyphAtlasCapsule.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/TurboQuantKVCache/Sources/TurboQuantKVCache/GPUCacheTier.swift",
+      "diagnosticId": "ADM-0196",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/TurboQuantKVCache/Sources/TurboQuantKVCache/GPUCacheTier.swift:72"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/TurboQuantKVCache/Sources/TurboQuantKVCache/GPUCacheTier.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+      "diagnosticId": "ADM-0197",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift:892"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+      "diagnosticId": "ADM-0198",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift:995"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+      "diagnosticId": "ADM-0199",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift:1013"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule/AccelerateMediaProcessor.swift",
+      "diagnosticId": "ADM-0200",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule/AccelerateMediaProcessor.swift:6"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule/AccelerateMediaProcessor.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule/AccelerateMediaProcessor.swift",
+      "diagnosticId": "ADM-0201",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule/AccelerateMediaProcessor.swift:16"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule/AccelerateMediaProcessor.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/AnigmaSidecar/SharedMemoryAuthority.swift",
+      "diagnosticId": "ADM-0202",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/AnigmaSidecar/SharedMemoryAuthority.swift:5"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/AnigmaSidecar/SharedMemoryAuthority.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift",
+      "diagnosticId": "ADM-0203",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift:495"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift",
+      "diagnosticId": "ADM-0204",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift:501"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift",
+      "diagnosticId": "ADM-0205",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift:513"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/EvidenceContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/NativeWire.swift",
+      "diagnosticId": "ADM-0206",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/EvidenceContracts/NativeWire.swift:92"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/NativeWire.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift",
+      "diagnosticId": "ADM-0207",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift:5"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift",
+      "diagnosticId": "ADM-0208",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift:11"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift",
+      "diagnosticId": "ADM-0209",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift:13"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/SurfaceContracts.swift",
+      "diagnosticId": "ADM-0210",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/SurfaceContracts.swift:61"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/SurfaceContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaExecutorContracts.swift",
+      "diagnosticId": "ADM-0211",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaExecutorContracts.swift:5"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaExecutorContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/AudioBufferContracts.swift",
+      "diagnosticId": "ADM-0212",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/AudioBufferContracts.swift:37"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/AudioBufferContracts.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaSubstrate/MediaPrimitives.swift",
+      "diagnosticId": "ADM-0213",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaSubstrate/MediaPrimitives.swift:14"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaSubstrate/MediaPrimitives.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/MediaFabricComponent.swift",
+      "diagnosticId": "ADM-0214",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/MediaFabricComponent.swift:6"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/MediaFabricComponent.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift",
+      "diagnosticId": "ADM-0215",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SubprocessPooling/Sources/MLWorker.swift:324"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift",
+      "diagnosticId": "ADM-0216",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/SubprocessPooling/Sources/MLWorker.swift:438"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/GeometryCapsule/Sources/GeometryCapsule/MetalGeometryAccelerator.swift",
+      "diagnosticId": "ADM-0217",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at anigma/Packages/GeometryCapsule/Sources/GeometryCapsule/MetalGeometryAccelerator.swift:6"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/GeometryCapsule/Sources/GeometryCapsule/MetalGeometryAccelerator.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/VectorIndexCapsule/Sources/VectorIndexCapsule/VectorIndexCapsuleWrapper.swift",
+      "diagnosticId": "ADM-0218",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'Zero-copy' at anigma/Packages/VectorIndexCapsule/Sources/VectorIndexCapsule/VectorIndexCapsuleWrapper.swift:119"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/VectorIndexCapsule/Sources/VectorIndexCapsule/VectorIndexCapsuleWrapper.swift",
+      "subjectType": "file"
+    },
+    {
+      "currentRole": "documentation",
+      "currentTarget": "anigma/Packages/VectorIndexCapsule/Sources/VectorIndexCapsule/VectorIndexCapsuleWrapper.swift",
+      "diagnosticId": "ADM-0219",
+      "doctrineRule": "do not claim zero-copy without receipt evidence",
+      "expectedRole": "doctrine",
+      "followupTd": "",
+      "misalignment": "Zero-copy claim without proven instrumentation.",
+      "recommendedAction": "Standardize on 'copy-minimized' unless receipt is proven.",
+      "severity": "P1",
+      "sourceEvidence": [
+        "Found 'zero-copy' at anigma/Packages/VectorIndexCapsule/Sources/VectorIndexCapsule/VectorIndexCapsuleWrapper.swift:132"
+      ],
+      "status": "open",
+      "subject": "anigma/Packages/VectorIndexCapsule/Sources/VectorIndexCapsule/VectorIndexCapsuleWrapper.swift",
+      "subjectType": "file"
+    }
+  ],
+  "schema": "anigma.alignment_diagnostic_matrix.v1",
+  "summary": {
+    "diagnosticCount": 218,
+    "informationalCount": 0,
+    "p0Count": 5,
+    "p1Count": 213,
+    "p2Count": 0
+  }
+}

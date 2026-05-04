@@ -8,7 +8,14 @@
 
 2. **TD: Implement Sidecar Readiness Receipt and Governance Gate**
    - Goal: Ensure `PDFSidecarExecutable` is healthy and version-compatible before starting daemon ingestion.
-   - Status: Candidate
+   - Status: **DONE** - td-7c0153-01 completed
+   - Follow-up TDs created:
+     - td-sidecar-anigma-readiness (AnigmaSidecar)
+     - td-sidecar-office-readiness (SidecarOfficeService)
+     - td-sidecar-pdf-service-readiness (SidecarPDFService library)
+     - td-sidecar-translate-readiness (SidecarTranslateService)
+     - td-alignment-matrix-sidecar-rule-refinement (matrix logic improvements)
+   - See: `Docs/td/ready/td-sidecar-*` for individual sidecar readiness TDs
 
 3. **TD: Instrument MediaCore and SaturationKit with Chunk Storage Receipts**
    - Goal: Downgrade overclaims to `copy_minimized` and prove zero-copy where it exists.

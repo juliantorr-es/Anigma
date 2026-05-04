@@ -1,0 +1,5 @@
+graph TD
+    Source[Markdown/YAML/JSON/Source] -->|Canonical Store| Git[Git Repository]
+    Git -->|Pipeline Tool| Artifacts[Derived Artifacts: SVG/PNG]
+    Git -->|Publisher| Notion[Notion Cockpit]
+    Artifacts -->|Embed| Notion

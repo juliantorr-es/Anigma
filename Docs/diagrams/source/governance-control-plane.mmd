@@ -1,0 +1,8 @@
+graph LR
+    Dev[Developer/Agent] -->|Proposes TD| Governance[Governance Plane]
+    Governance -->|Validates| Tools[anigma doctor / Validators]
+    Tools -->|Produces| Proof[Proof Artifacts]
+    Proof -->|Updates| Index[TD Registry/Notion]
+    Governance -->|Execution Gate| Runtime[Production Runtime]
+    Runtime -->|Emits| Logs[Receipts/Logs]
+    Logs -->|Audits| Governance

@@ -30,3 +30,11 @@ This document is the **single source of truth** for which architecture documents
 | Document | Scope | Status | Notes |
 |----------|-------|--------|-------|
 | [../roadmap/future-capabilities/architecture-operations-capability.md](../roadmap/future-capabilities/architecture-operations-capability.md) | Architecture cockpit, validation lanes, evidence indexes, publishing | **FUTURE** | Roadmap for ArchitectureOperationsCapability. Blocked until anigma-app Debug builds reliably. |
+
+---
+
+## Architectural Diagrams
+
+- **[System Tiering](../diagrams/source/system-tiering.mmd)**: Illustrates the mandatory dependency direction (Tier 3 → Tier 2 → Tier 1) and defines forbidden cyclic dependencies that the package graph audit must enforce.
+- **[Governance Control Plane](../diagrams/source/governance-control-plane.mmd)**: Visualizes the flow of documentation and governance: from developer proposal through tool-based validation and registry update to production runtime logs.
+- **[Document Artifact Pipeline](../diagrams/source/document-artifact-pipeline.mmd)**: Shows the canonical flow of documentation from Git source to both derived architecture diagrams and the Notion display surface.

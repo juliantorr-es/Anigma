@@ -25,9 +25,35 @@ Every task lifecycle must include:
 
 ## 5. Build Status Classification
 - **FAILED**: Nonzero exit code from validation command.
-- **CLEAN**: Exit code 0 and zero warnings.
-- **CONTAMINATED**: Exit code 0 but with one or more warnings.
-- **PASSED**: Exit code 0 but warning status is unknown or unverified.
+- **CLEAN**: Exit code 0 and zero warnings detected in command log.
+- **CONTAMINATED**: Exit code 0 but with one or more warnings (case-insensitive "warning:" match).
+- **PASSED**: Exit code 0 but warning status was not verified (legacy or external).
 
-## 6. Curated Proofs
+## 6. Local CLI Tool Integration
+The diagnostic harness prioritizes fast, local CLI tools for evidence collection:
+- **git**: Mandatory for status, diff, and file change detection.
+- **rg**: Mandatory for efficient pattern scanning (forbidden findings).
+- **python3**: Mandatory for harness execution and Python script validation (`py_compile`).
+- **shellcheck**: Optional but recommended for shell script validation.
+- **jq**: Optional but recommended for JSON post-processing.
+- **swift**: Mandatory for package graph snapshots and build validation.
+
+Missing required tools result in a **FAILED** diagnostic state for affected modes.
+
+## 7. Diagnostic Index
+The diagnostic harness maintains a lightweight JSONL index of diagnostic bundles at `.build/anigma-diagnostics/index.jsonl`.
+- **Purpose**: Artifact locator and review aid.
+- **Source of Truth**: Underling generated bundle artifacts and curated Docs proof artifacts. The index is derivative.
+- **Querying**: Use `python3 Scripts/anigma_diagnose.py index` to list and filter diagnostic history.
+
+## 8. Docs Artifact Validation
+JSON, CSV, and YAML files under `Docs/` are **first-class documentation artifacts**.
+- **Validation**: The harness parses and summarizes these artifacts whenever they are changed or during review mode.
+- **Classification**:
+    - **CLEAN**: All discovered Docs artifacts parse successfully.
+    - **CONTAMINATED**: Parse succeeds but structural warnings exist (e.g., empty CSV, ragged rows).
+    - **FAILED**: Any parse failure detected.
+- **High-Risk**: Changes to schemas, registries, and manifests are flagged for elevated review.
+
+## 9. Curated Proofs
 While `.build` contains the raw evidence, `Docs/proofs/` should contain **curated summaries** and pointers to the raw data. Do not dump multi-megabyte log files into the `Docs/` directory.

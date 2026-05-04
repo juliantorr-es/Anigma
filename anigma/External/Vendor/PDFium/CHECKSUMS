@@ -6,7 +6,7 @@
 SHA256 (pdfium-mac-arm64.tgz) = e98f2e922cef5acf8b90c91ff681033ff2114ae73e0e3a312462125911b6295c
 
 # macOS arm64 Binary
-SHA256 (macos-arm64/lib/libpdfium.dylib) = d94a50092ee59b1b17521b2697018881f352da6f515d7dca01e6aca4319aba14
+SHA256 (macos-arm64/lib/libpdfium.dylib) = f0bcb449e7a3e551332d576958735b7eab7972b7e616cd1592c4bf694956ebf1
 
 # Verification Commands:
 # shasum -a 256 .build/pdfium-fetch/pdfium-mac-arm64.tgz

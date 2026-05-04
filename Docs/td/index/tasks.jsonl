@@ -1,0 +1,4 @@
+{"task_id": "td-executioncore-hardwareauthority-native-leakage", "name": "Native leakage in HardwareAuthority", "status": "RESEARCH", "priority": "P0", "kind": "task", "risk": "high"}
+{"task_id": "td-zero-copy-hardware-resident-claim-audit", "name": "Zero-copy claim audit", "status": "RESEARCH", "priority": "P1", "kind": "task", "risk": "medium"}
+{"task_id": "td-alignment-diagnostic-zero-copy-claim-classification", "name": "Zero-copy classification", "status": "RESEARCH", "priority": "P1", "kind": "task", "risk": "medium"}
+{"task_id": "td-8f2e57-decouple-anigmapipeline-mediacore", "name": "Decouple AnigmaPipeline/MediaCore", "status": "DONE", "priority": "P0", "kind": "task", "risk": "high"}

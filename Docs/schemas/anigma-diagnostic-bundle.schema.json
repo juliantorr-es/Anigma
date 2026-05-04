@@ -55,6 +55,73 @@
         }
       }
     },
+    "changedFileCategories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string" },
+            "risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] }
+          }
+        }
+      }
+    },
+    "docsArtifactValidation": {
+      "type": "object",
+      "properties": {
+        "docsJsonCount": { "type": "integer" },
+        "docsCsvCount": { "type": "integer" },
+        "docsYamlCount": { "type": "integer" },
+        "invalidJsonCount": { "type": "integer" },
+        "invalidCsvCount": { "type": "integer" },
+        "invalidYamlCount": { "type": "integer" },
+        "validationStatus": {
+          "type": "string",
+          "enum": ["FAILED", "CLEAN", "CONTAMINATED", "PASSED", "NOT_APPLICABLE"]
+        }
+      }
+    },
+    "docsJsonFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "category": { "type": "string" },
+          "parseStatus": { "type": "string" },
+          "schemaId": { "type": "string", "nullable": true },
+          "validationNotes": { "type": "string" }
+        }
+      }
+    },
+    "docsCsvFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "header": { "type": "array", "items": { "type": "string" }, "nullable": true },
+          "rowCount": { "type": "integer" },
+          "columnCount": { "type": "integer" },
+          "parseStatus": { "type": "string" },
+          "validationNotes": { "type": "string" }
+        }
+      }
+    },
+    "docsYamlFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "parseStatus": { "type": "string" },
+          "topLevelType": { "type": "string", "nullable": true },
+          "validationNotes": { "type": "string" }
+        }
+      }
+    },
     "graphSnapshot": {
       "type": "object",
       "properties": {

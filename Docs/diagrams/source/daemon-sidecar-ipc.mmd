@@ -1,0 +1,5 @@
+graph LR
+    Daemon[Daemon] -->|SHM Packet| Sidecar[Sidecar]
+    Sidecar -->|Attestation| Daemon
+    Sidecar -->|Heartbeat| Daemon
+    Daemon -->|Validation| Sidecar

@@ -1,0 +1,4 @@
+flowchart LR
+  AP["AnigmaPipeline"] --> MPC["MediaPipelineContracts"]
+  MC["MediaCore"] --> MPC["MediaPipelineContracts"]
+  FC["FoundationContracts"] -.->|should not expose native| MPC["MediaPipelineContracts"]

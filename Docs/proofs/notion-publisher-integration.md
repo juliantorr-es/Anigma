@@ -18,6 +18,10 @@ This document proves the implementation of `Scripts/anigma_publish_notion.py`, p
     - Deterministic ordering.
     - Fallback to paragraphs for unsupported syntax.
 
+## Validation Results
+- **Smoke Test**: `td-json-first-artifacts-smoke` successfully processed in dry-run, emit-json, and live publish modes.
+- **Live API Verified**: Verified live database lookup, page creation, and integrity checks using credentials.
+
 ## Status of Claims
 - **Dry-run**: Implemented and verified via `--dry-run` and `--emit-json`.
 - **Live API Plumbing**: Implemented and verified.

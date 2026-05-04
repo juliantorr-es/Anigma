@@ -1,0 +1,11 @@
+graph TD
+    Tier3[Tier 3: Execution/Runtime] -->|depends| Tier2[Tier 2: Governance/Services]
+    Tier2 -->|depends| Tier1[Tier 1: Core/Interfaces]
+    Tier1 -.->|FORBIDDEN| Tier2
+    Tier2 -.->|FORBIDDEN| Tier3
+    classDef tier3 fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef tier2 fill:#ff9,stroke:#333,stroke-width:2px;
+    classDef tier1 fill:#9f9,stroke:#333,stroke-width:2px;
+    class Tier3 tier3
+    class Tier2 tier2
+    class Tier1 tier1

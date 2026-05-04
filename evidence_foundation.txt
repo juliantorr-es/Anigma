@@ -1,0 +1,141 @@
+    }
+}
+
+// MARK: - Evidence Sources
+
+/// A source of evidence for control implementation.
+public struct EvidenceSource: Sendable, Codable, Hashable {
+    /// Type of evidence.
+    public let evidenceType: EvidenceType
+
+    /// Identifier for the evidence source.
+    public let sourceId: String
+
+    /// Human-readable description.
+    public let description: String
+
+    /// How to collect this evidence.
+    public let collectionMethod: EvidenceCollectionMethod
+
+    /// How often this evidence should be collected.
+    public let frequency: EvidenceFrequency
+
+    public init(
+        evidenceType: EvidenceType,
+        sourceId: String,
+        description: String,
+        collectionMethod: EvidenceCollectionMethod = .automated,
+        frequency: EvidenceFrequency = .continuous
+    ) {
+        self.evidenceType = evidenceType
+        self.sourceId = sourceId
+        self.description = description
+        self.collectionMethod = collectionMethod
+        self.frequency = frequency
+    }
+}
+
+/// Types of compliance evidence.
+public enum EvidenceType: String, Sendable, Codable, Hashable {
+    /// Audit log entries.
+    case auditLog = "audit_log"
+
+    /// System configuration.
+    case configuration = "configuration"
+
+    /// Metrics and telemetry.
+    case metrics = "metrics"
+
+    /// Policy documents.
+    case policy = "policy"
+
+    /// Test results.
+    case testResults = "test_results"
+
+    /// Manual assessment.
+    case assessment = "assessment"
+
+    /// Scan results (vulnerability, accessibility).
+    case scanResults = "scan_results"
+
+    /// Training records.
+    case trainingRecords = "training_records"
+
+    /// Incident reports.
+    case incidentReport = "incident_report"
+
+    /// Change records.
+    case changeRecord = "change_record"
+}
+
+/// How evidence is collected.
+public enum EvidenceCollectionMethod: String, Sendable, Codable, Hashable {
+    /// Collected automatically by the system.
+    case automated = "automated"
+
+    /// Collected through manual processes.
+    case manual = "manual"
+
+    /// Combination of automated and manual.
+    case hybrid = "hybrid"
+}
+
+/// Frequency of evidence collection.
+public enum EvidenceFrequency: String, Sendable, Codable, Hashable {
+    /// Real-time or near-real-time.
+    case continuous = "continuous"
+
+    /// Daily collection.
+    case daily = "daily"
+
+    /// Weekly collection.
+    case weekly = "weekly"
+
+    /// Monthly collection.
+    case monthly = "monthly"
+
+    /// Quarterly collection.
+    case quarterly = "quarterly"
+
+    /// Annual collection.
+    case annual = "annual"
+
+    /// On-demand or as needed.
+    case onDemand = "on_demand"
+}
+
+// MARK: - Evidence Artifacts
+
+/// A collected evidence artifact.
+public struct EvidenceArtifact: Sendable, Codable, Identifiable {
+    /// Unique artifact ID.
+    public let artifactId: UUID
+
+    /// Which control this is evidence for.
+    public let controlId: String
+
+    /// Framework ID.
+    public let frameworkId: String
+
+    /// The implementation this supports.
+    public let implementationId: UUID
+
+    /// Type of evidence.
+    public let evidenceType: EvidenceType
+
+    /// When this evidence was collected.
+    public let collectedAt: Date
+
+    /// Time period this evidence covers.
+    public let periodStart: Date
+
+    /// End of coverage period.
+    public let periodEnd: Date
+
+    /// Summary of what the evidence shows.
+    public let summary: String
+
+    /// Structured data (JSON-encodable).
+    public let data: [String: ComplianceValue]
+
+    /// Hash of the evidence for integrity.

@@ -1,0 +1,22 @@
+td_id: td-sidecar-anigma-readiness
+summary: Implement AnigmaSidecar readiness lane and receipt
+priority: P0
+status: ready
+type: architecture
+parent:
+  - td-p0-sidecar-readiness-gap-triage
+  - td-7c0153-01
+related:
+  - td-master-diagnostic-harness
+goal: Add deterministic readiness validation for AnigmaSidecar as a governed sidecar capability.
+non_goals:
+  - Do not merge AnigmaSidecar into generic BackendReadiness.
+  - Do not remove sidecar isolation.
+  - Do not add native dependencies to contract modules.
+  - Do not create fake stubs.
+acceptance:
+  - Dedicated readiness command/script exists.
+  - Readiness result emits or documents receipt/proof.
+  - Generic BackendReadiness does not require AnigmaSidecar.
+  - Graph invariants hold.
+  - No new cycles/tier violations.

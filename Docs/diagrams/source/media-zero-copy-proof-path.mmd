@@ -1,0 +1,5 @@
+graph TD
+    Frame[FrameReference] -->|Passes| MaterializationGate[Materialization Gate]
+    MaterializationGate -->|Verifies| ZeroCopyProof[ZeroCopyProof]
+    ZeroCopyProof -->|Allowed| Hardware[Hardware-Resident Buffer]
+    ZeroCopyProof -.->|Denied| Fallback[Governed Fallback]
