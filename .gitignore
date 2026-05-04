@@ -1,17 +1,42 @@
-# Build and Diagnostic Artifacts
+# Swift / SwiftPM
 .build/
 .build-check/
+DerivedData/
+.swiftpm/
+# .resolved files are tracked for deterministic reproducibility
+
+# Xcode / macOS local state
+*.xcuserstate
+*.xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Anigma generated diagnostics and evidence outputs
 .build/anigma-diagnostics/
 .build/anigma-graph/
-DerivedData/
+.build/anigma-test-artifacts/
+Docs/proofs/generated/
+anigma/build_*.txt
 
-# Repository infrastructure
-.git/
-.github/
-.gitignore
-.gitattributes
+# Local databases / task runtime state
+.todos/
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
 
-# Local agent/tool state (grouped)
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mobileprovision
+
+# Local agent/tool state
 .agents/
 .augment/
 .bob/
@@ -38,32 +63,58 @@ DerivedData/
 .windsurf/
 .vscode/
 .idea/
-.env*
+
+# Node / web tooling, if any docs tooling uses it
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+.turbo/
+.next/
+dist/
+coverage/
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
 
 # OS metadata
 .DS_Store
 __MACOSX/
 ._*
 
-# Log/Scratch files
+# Logs / scratch files
 *.log
 *.tmp
 *.bak
-anigma/build_*.txt
+*.swp
+*.swo
+
+# Local worktrees and scratch clones
 anigma-worktrees/
 .worktrees/
 
-# Cscope
+# Cscope / indexing
 cscope.out
 cscope.po.out
+tags
 
 # Local packages/installers
 *.dmg
 *.pkg
 *.app
 
-# Vendored native binaries
+# Vendored native binaries / local native drops
 anigma/Vendor/lib/
 
 # Archives
 *.zip
+*.tar
+*.tar.gz
+*.tgz

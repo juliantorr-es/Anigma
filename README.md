@@ -8,6 +8,36 @@ The project is experimental and under active architecture, governance, and runti
 
 ---
 
+## Plain-English Summary
+
+Anigma is a self-directed systems project about making complex work easier to manage, verify, and hand off.
+
+The project asks a practical question:
+> If AI tools and local automation are going to help with real work, how do we make sure the work is structured, reviewable, and accountable?
+
+Anigma turns messy technical work into a disciplined operating system:
+- Tasks have source-of-truth records.
+- Decisions are documented.
+- Tests and scripts produce evidence.
+- Architectural rules are written down.
+- Changes are validated before they are treated as done.
+
+The repository is both a software project and a portfolio of systems work. It shows how I structure ambiguity, coordinate complex workflows, document decisions, and build repeatable processes.
+
+---
+
+## What This Demonstrates
+
+This project demonstrates skills that apply beyond software engineering:
+- turning ambiguous goals into organized workstreams
+- creating documentation systems people and tools can follow
+- tracking decisions, risks, and follow-ups
+- building validation workflows instead of relying on memory
+- coordinating AI-assisted work without losing accountability
+- making complex systems easier to inspect, review, and improve
+
+---
+
 ## What Anigma Is
 
 Anigma is a local-first runtime and architecture framework for governed automation.
@@ -21,19 +51,21 @@ It combines:
 
 ---
 
-## Project Status
+## Current Status
 
-Anigma is currently **experimental / research-stage**.
+Anigma is an experimental, research-stage project under active development.
+
+The current focus is not shipping a commercial product. The current focus is building the operating system around the work: documentation, validation, architecture boundaries, proof artifacts, and repeatable development workflows.
 
 Active work includes:
 - backend readiness normalization
-- SwiftPM package graph diagnostics
+- Swift package graph diagnostics
 - contract / executor / sidecar boundary enforcement
 - deterministic test and build receipts
 - local document and media processing pipelines
-- heterogeneous / copy-minimized execution research
+- copy-minimized execution research
 
-Known architectural debt is tracked in `Docs/` rather than hidden.
+Known architectural debt is tracked openly in `Docs/` rather than hidden.
 
 ---
 
@@ -54,6 +86,16 @@ Native functionality belongs in implementation targets, governed executors, or s
 ### Copy-Minimized by Default
 Anigma avoids casual “zero-copy” claims.
 The default claim is **copy-minimized**. A path is only called **zero-copy** when receipts or instrumentation prove no materialized copy occurred across the relevant boundary.
+
+---
+
+## Suggested Reading Path
+If you are reviewing this as a portfolio, start here:
+1. This README — project overview and purpose
+2. `Docs/architecture/DOCTRINE_INDEX.md` — how canonical decisions are organized
+3. `Docs/governance/TESTING_DOCTRINE.md` — how validation and evidence are handled
+4. `Docs/governance/BUILD_TOOLING_DOCTRINE.md` — how build and dependency evidence is managed
+5. `Docs/proofs/` — examples of completed work with validation notes
 
 ---
 
@@ -78,19 +120,6 @@ anigma/
   Package.swift        Swift package manifest
   Packages/            Modular Swift targets and implementation packages
 ```
-
----
-
-## Documentation
-
-Start here:
-
-* [Docs/architecture/DOCTRINE_INDEX.md](Docs/architecture/DOCTRINE_INDEX.md)
-* [Docs/governance/BUILD_TOOLING_DOCTRINE.md](Docs/governance/BUILD_TOOLING_DOCTRINE.md)
-* [Docs/governance/TESTING_DOCTRINE.md](Docs/governance/TESTING_DOCTRINE.md)
-* [Docs/proofs/](Docs/proofs/)
-
-The documentation is part of the system. It is not an afterthought.
 
 ---
 
