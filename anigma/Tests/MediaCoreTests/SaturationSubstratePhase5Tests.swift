@@ -45,7 +45,8 @@ struct SaturationSubstratePhase5Tests {
     
     @Test("SaturationRequest initialization with all properties")
     func testSaturationRequestInitialization() {
-        let surface = MediaSurface.pixelBuffer(createTestPixelBuffer(width: 100, height: 100))
+        let pixelBuffer = createTestPixelBuffer(width: 100, height: 100)
+        let surface = SurfaceRegistry.shared.createMediaSurface(from: pixelBuffer)
         let contract = VideoScaleContract(
             sourceFrame: FrameReference(token: SurfaceToken(), width: 100, height: 100, format: "bgra"),
             targetWidth: 50,
@@ -65,7 +66,8 @@ struct SaturationSubstratePhase5Tests {
     
     @Test("SaturationRequest default priority is zero")
     func testSaturationRequestDefaultPriority() {
-        let surface = MediaSurface.pixelBuffer(createTestPixelBuffer(width: 100, height: 100))
+        let pixelBuffer = createTestPixelBuffer(width: 100, height: 100)
+        let surface = SurfaceRegistry.shared.createMediaSurface(from: pixelBuffer)
         let contract = VideoScaleContract(
             sourceFrame: FrameReference(token: SurfaceToken(), width: 100, height: 100, format: "bgra"),
             targetWidth: 50,
@@ -128,7 +130,8 @@ struct SaturationSubstratePhase5Tests {
     
     @Test("Enqueue request increases queued count")
     func testEnqueueIncreasesQueuedCount() async throws {
-        let surface = MediaSurface.pixelBuffer(createTestPixelBuffer(width: 100, height: 100))
+        let pixelBuffer = createTestPixelBuffer(width: 100, height: 100)
+        let surface = SurfaceRegistry.shared.createMediaSurface(from: pixelBuffer)
         let contract = VideoScaleContract(
             sourceFrame: FrameReference(token: SurfaceToken(), width: 100, height: 100, format: "bgra"),
             targetWidth: 50,
@@ -149,7 +152,8 @@ struct SaturationSubstratePhase5Tests {
     @Test("Multiple enqueue operations")
     func testMultipleEnqueueOperations() async throws {
         for i in 0..<3 {
-            let surface = MediaSurface.pixelBuffer(createTestPixelBuffer(width: 100, height: 100))
+            let pixelBuffer = createTestPixelBuffer(width: 100, height: 100)
+            let surface = SurfaceRegistry.shared.createMediaSurface(from: pixelBuffer)
             let contract = VideoScaleContract(
                 sourceFrame: FrameReference(token: SurfaceToken(), width: 100, height: 100, format: "bgra"),
                 targetWidth: 50,

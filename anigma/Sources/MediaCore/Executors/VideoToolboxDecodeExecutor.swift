@@ -6,6 +6,7 @@ import FoundationContracts
 import SaturationKit
 import AnigmaPrimitives
 import ContractsCore
+import MediaPipelineContracts
 
 /// A Tier 3 Backend Executor that uses VideoToolbox for H.264 zero-copy decoding.
 /// Produces IOSurface-backed FrameReferences and emits governance telemetry.
@@ -227,12 +228,13 @@ extension VideoToolboxDecodeExecutor: Saturable {
         
         let output = try await decode(sampleBuffer: sampleBuffer)
         
-        // Return the decoded frame as MediaSurface
+        // Return the decoded frame as portable MediaSurface
         let lease = try await surfaceAuthority.acquireLease(for: output.frame)
         defer { Task { await surfaceAuthority.releaseLease(lease) } }
         let pixelBuffer = try await surfaceAuthority.resolvePixelBuffer(for: lease)
         
-        return .pixelBuffer(pixelBuffer)
+        // Create portable MediaSurface from native CVPixelBuffer via registry
+        return SurfaceRegistry.shared.createMediaSurface(from: pixelBuffer)
     }
 }
 

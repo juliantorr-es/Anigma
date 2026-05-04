@@ -5,6 +5,7 @@ import MediaPipelineContracts
 import EvidenceContracts
 import SaturationKit
 import AnigmaPrimitives
+import CoreVideo
 
 /// Phase 4: GovernanceLogger implementation that adapts to SaturatedLoggingRing
 /// For now, uses a no-op implementation since full governance integration
@@ -229,17 +230,27 @@ public actor MediaSubstrateOrchestrator {
             let native = try await surfaceAuth.resolveNativeSurface(for: lease) as! CVPixelBuffer
             
             // Create and register MetalTransformExecutor as a Saturable node
-            let executor = MetalTransformExecutor(surfaceAuthority: surfaceAuth)
+            let executor = MetalTransformExecutor(surfaceAuthority: surfaceAuth, surfaceRegistry: .shared)
             await saturationSubstrate.register(node: executor)
             
+            // Wrap native CVPixelBuffer in portable MediaSurface
+            let surfaceToken = SurfaceRegistry.shared.register(pixelBuffer: native)
+            let inputSurface = MediaSurface(
+                token: surfaceToken,
+                kind: .pixelBuffer,
+                width: CVPixelBufferGetWidth(native),
+                height: CVPixelBufferGetHeight(native),
+                byteCount: CVPixelBufferGetByteCount(native)
+            )
+            
             let result = try await saturationSubstrate.process(
-                surface: .pixelBuffer(native),
+                surface: inputSurface,
                 lane: .transform,
                 contract: contract
             )
             
             // Map surface back to MediaReference
-            if case .pixelBuffer(let buffer) = result {
+            if let buffer = result.resolveToPixelBuffer() {
                 let frame = await surfaceAuth.registerInternal(
                     nativeSurface: buffer,
                     width: videoContract.targetWidth,

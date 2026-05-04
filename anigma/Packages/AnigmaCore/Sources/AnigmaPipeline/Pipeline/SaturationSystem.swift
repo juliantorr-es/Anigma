@@ -2,6 +2,7 @@ import Foundation
 import AnigmaPrimitives
 import FoundationContracts
 import ContractsCore
+import MediaPipelineContracts
 import AnigmaFoundation
 
 /// System that orchestrates media transformation through the SaturationSubstrate.

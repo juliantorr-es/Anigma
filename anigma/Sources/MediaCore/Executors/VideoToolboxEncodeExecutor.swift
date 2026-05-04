@@ -3,6 +3,7 @@ import VideoToolbox
 import CoreMedia
 import FoundationContracts
 import ContractsCore
+import MediaPipelineContracts
 
 /// A Tier 3 Backend Executor that uses VideoToolbox for hardware-accelerated video encoding.
 /// Consumes managed FrameReferences and produces PacketStreamReferences.

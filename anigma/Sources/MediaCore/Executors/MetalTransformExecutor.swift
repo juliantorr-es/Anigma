@@ -3,12 +3,14 @@ import Metal
 import MetalPerformanceShaders
 import CoreVideo
 import FoundationContracts
+import MediaPipelineContracts
 // Primitives are in same target
 
 public actor MetalTransformExecutor: Saturable {
 
     public let lane: MediaLane = .transform
     private let surfaceAuthority: SurfaceAuthority
+    private let surfaceRegistry: SurfaceRegistry
     private let device: MTLDevice?
     private let commandQueue: MTLCommandQueue?
 
@@ -17,8 +19,9 @@ public actor MetalTransformExecutor: Saturable {
         case transformFailed(String)
     }
 
-    public init(surfaceAuthority: SurfaceAuthority) {
+    public init(surfaceAuthority: SurfaceAuthority, surfaceRegistry: SurfaceRegistry = .shared) {
         self.surfaceAuthority = surfaceAuthority
+        self.surfaceRegistry = surfaceRegistry
         self.device = MTLCreateSystemDefaultDevice()
         self.commandQueue = device?.makeCommandQueue()
     }
@@ -32,8 +35,8 @@ public actor MetalTransformExecutor: Saturable {
             throw TransformError.deviceInitializationFailed
         }
         
-        guard case .pixelBuffer(let source) = surface else {
-             throw TransformError.transformFailed("Unsupported surface type")
+        guard let source = surface.resolveToPixelBuffer() else {
+             throw TransformError.transformFailed("Unsupported surface type or unregistered surface")
         }
         
         let outputPixelBuffer = try await performMPSScaling(
@@ -44,7 +47,7 @@ public actor MetalTransformExecutor: Saturable {
             commandQueue: commandQueue
         )
         
-        return .pixelBuffer(outputPixelBuffer)
+        return surfaceRegistry.createMediaSurface(from: outputPixelBuffer)
     }
     
     private func performMPSScaling(

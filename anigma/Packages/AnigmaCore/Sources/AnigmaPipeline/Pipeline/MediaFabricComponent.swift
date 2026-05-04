@@ -1,6 +1,7 @@
 import Foundation
 import AnigmaPrimitives
 import ContractsCore
+import MediaPipelineContracts
 
 /// Component that maps an ECS entity to a hardware-accelerated media surface.
 /// Managed within the Saturated Fabric for copy-minimized continuity.

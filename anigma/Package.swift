@@ -641,6 +641,7 @@ let coreTargets: [Target] = [
       "InferenceCore",
       "TextChunkingCapsule",
       "LayoutEngineContracts",
+      "MediaPipelineContracts",
       "StorageCore",
       "MLWorkerInterfaces",
       "NativeKernel",

@@ -3,6 +3,7 @@ import Foundation
 import AVFoundation
 import CoreVideo
 import ContractsCore
+import MediaPipelineContracts
 @testable import MediaCore
 
 @Suite("Phase 3: Transform Engine Tests")
@@ -38,9 +39,10 @@ struct Phase3TransformTests {
         let sourceRef = await surfaceAuthority.register(pixelBuffer: pb)
         let contract = VideoScaleContract(sourceFrame: sourceRef, targetWidth: 200, targetHeight: 200)
         
-        let result = try await executor.process(surface: .pixelBuffer(pb), contract: contract)
+        let inputSurface = SurfaceRegistry.shared.createMediaSurface(from: pb)
+        let result = try await executor.process(surface: inputSurface, contract: contract)
         
-        if case .pixelBuffer(let output) = result {
+        if let output = result.resolveToPixelBuffer() {
             #expect(CVPixelBufferGetWidth(output) == 200)
             #expect(CVPixelBufferGetHeight(output) == 200)
         } else {

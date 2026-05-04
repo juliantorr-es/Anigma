@@ -1,6 +1,7 @@
 import Foundation
 import EvidenceContracts
 import FoundationContracts
+import MediaPipelineContracts
 
 /// Phase 5: Request for saturation pipeline processing
 public struct SaturationRequest: Sendable {
