@@ -50,7 +50,7 @@ let pdfiumVendorPath = "\(packageRoot)/External/Vendor/PDFium/macos-arm64"
 let pdfiumLinkerSettings: [LinkerSetting] = [
   .unsafeFlags(["-L", "\(pdfiumVendorPath)/lib"]),
   .unsafeFlags(["-I", "\(pdfiumVendorPath)/include"]),
-  .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "@loader_path/../../../../../External/Vendor/PDFium/macos-arm64/lib"])
+  .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "@loader_path/../../../External/Vendor/PDFium/macos-arm64/lib"])
 ]
 let pdfiumHeaderSearchPath = "../../../External/Vendor/PDFium/macos-arm64/include"
 
