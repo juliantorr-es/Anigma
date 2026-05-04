@@ -16,6 +16,7 @@ import AnigmaFoundation
 import AnigmaGovernance
 import AnigmaJobs
 import ContractsCore
+import DatabaseCore
 import InferenceCore
 import Foundation
 import AnigmaPrimitives
@@ -34,17 +35,24 @@ public actor MetopticonRunner {
     ///   - store: Optional workload store (creates default if nil).
     ///   - engine: Optional Graphene engine (creates default if nil).
     ///   - accessEnforcer: Optional RBAC enforcer (creates default if nil).
+    ///   - database: DatabaseExecutor to use for pipeline persistence.
+    ///   - mlWorkerPath: The file path to the MLWorkerExecutable binary.
+    /// 
+    /// IMPORTANT: Callers must provide a DatabaseExecutor.
+    /// Composition roots should create DatabaseActor and pass it via this parameter.
+    /// See ADR-0018 and td-317bbb.
     public init(
         world: World? = nil,
         store: MetopticonWorkloadStore? = nil,
         engine: GrapheneEngine? = nil,
         accessEnforcer: MetopticonAccessEnforcer? = nil,
+        database: any DatabaseExecutor,
         mlWorkerPath: String
     ) async throws {
         self.world = world
         let store = store ?? MetopticonWorkloadStore()
         self.adapter = MetopticonRunnerAdapter(store: store, world: world)
-        self.pipelineRunner = try await ModulePipelineFactory.createRunner(engine: engine, mlWorkerPath: mlWorkerPath)
+        self.pipelineRunner = try await ModulePipelineFactory.createRunner(engine: engine, mlWorkerPath: mlWorkerPath, database: database)
         self.accessEnforcer = accessEnforcer ?? MetopticonAccessEnforcer()
     }
 

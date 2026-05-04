@@ -293,6 +293,42 @@ public enum EvidencePayload: Sendable {
         }
         return data
     }
+
+    /// Extract inputs for hashing (works with AnigmaCore CoreReceipt type)
+    public var inputs: [String: String] {
+        switch self {
+        case .workflowExecution(let workflowType, let inputIds, _):
+            return ["workflowType": workflowType, "inputIds": inputIds.map { $0.raw.uuidString }.joined(separator: ",")]
+        case .databaseMutation(let sql, _):
+            return ["sql": sql]
+        case .mlInference(let model, let prompt, _):
+            return ["model": model, "prompt": prompt]
+        case .artifactStorage(let artifactId, _):
+            return ["artifactId": artifactId]
+        case .hardwareHeartbeat(let missionID, _, _, _):
+            return ["missionID": missionID.uuidString]
+        case .custom(_, let data):
+            return data
+        }
+    }
+
+    /// Extract outputs for hashing (works with AnigmaCore CoreReceipt type)
+    public var outputs: [String: String] {
+        switch self {
+        case .workflowExecution(_, _, let outputIds):
+            return ["outputIds": outputIds.map { $0.raw.uuidString }.joined(separator: ",")]
+        case .databaseMutation(_, let rowsAffected):
+            return ["rowsAffected": String(rowsAffected)]
+        case .mlInference(_, _, let response):
+            return ["response": response]
+        case .artifactStorage(_, let size):
+            return ["size": String(size)]
+        case .hardwareHeartbeat(_, let powerWatts, let opsPerJoule, _):
+            return ["powerWatts": String(powerWatts), "opsPerJoule": String(opsPerJoule)]
+        case .custom(_, let data):
+            return data
+        }
+    }
 }
 
 // MARK: - Module Schema
@@ -545,7 +581,7 @@ public enum RuntimeInitializationError: Error, LocalizedError, Sendable {
         case .governanceViolation(let details):
             return "Governance violation: \(details)"
         case .writeBlocked(violation: let violation):
-            return "Write blocked: \(violation.humanReadableMessage)"
+            return "Write blocked: \(violation.summaryMessage)"
         case .evidenceRecordingFailed(let details):
             return "Evidence recording failed: \(details)"
         case .databaseError(let details):

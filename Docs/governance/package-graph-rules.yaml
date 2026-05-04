@@ -242,16 +242,25 @@ rules:
     upgrade_to_error_threshold: 0.95  # 95% classification coverage
 
 # ============================================================================
+# ============================================================================
 # PLANNED RULES (NOT YET IMPLEMENTED)
 # ============================================================================
 planned_rules:
   - id: sidecar_reachable_from_generic_readiness
-    severity: warning
+    severity: error
     status: planned
     description: "Sidecar executables must not be reachable from generic readiness lanes. Required for td-7c0153 PDFSidecarExecutable readiness lane."
-    reason: "PDFSidecarExecutable should only be validated by dedicated sidecar readiness lane, not generic BackendReadiness"
-    implementation_note: "Requires reachability analysis from BackendReadiness test targets to sidecar executables"
-
+    reason: "PDFSidecarExecutable should only be validated by dedicated sidecar readiness lane, not generic BackendReadiness. Open question: shared dependency through AnigmaNativeShims - may be target reachability leak, native-shim contamination, or overbroad test script."
+    implementation_note: "Requires reachability analysis from BackendReadiness test targets to sidecar executables. Root cause classification required before implementation. See Docs/td/hypotheses/td-7c0153/td-7c0153-root-cause-classification.md"
+    research_artifact: "Docs/td/hypotheses/td-7c0153/td-7c0153-root-cause-classification.md"
+    pre_change_snapshot: ".build/anigma-graph/td-7c0153-pre/"
+  
+  - id: dump_symbol_graph_for_contract_drift
+    severity: warning
+    status: planned
+    description: "Use swift package dump-symbol-graph to detect API surface drift in Tier 1 contract modules."
+    reason: "Symbol graphs are useful for tracking API surface changes in contract layers to prevent breaking changes."
+    implementation_note: "Requires integration of symbol graph dumping and diffing into the audit workflow."
 # ============================================================================
 # ALLOWLIST
 # ============================================================================

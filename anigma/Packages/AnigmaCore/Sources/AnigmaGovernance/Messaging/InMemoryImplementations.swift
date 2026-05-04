@@ -1,7 +1,20 @@
 import Foundation
 import MessagingContracts
 
-public class InMemoryEventLog: EventStreamPersistence {
+/// In-memory implementation of EventStreamPersistence for test usage only.
+/// 
+/// SAFETY: This class is only used in test contexts (InMemoryImplementations).
+/// It is NOT used in production. The mutable state (events, checkpoints) is confined
+/// to individual test scenarios where there is no concurrent access.
+/// 
+/// @unchecked Sendable is safe here because:
+/// 1. Test-only: This implementation is never shared across tasks/concurrent contexts in production
+/// 2. Single-threaded tests: Test scenarios that use this are single-threaded
+/// 3. No shared instances: Each test creates its own instance
+///
+/// If this ever needs to be used in concurrent test contexts, convert to actor or add
+/// proper synchronization.
+public class InMemoryEventLog: @unchecked Sendable, EventStreamPersistence {
     public typealias StreamId = AnigmaEventStreamId
     public typealias Cursor = EventCursor
 

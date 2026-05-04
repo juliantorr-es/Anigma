@@ -20,7 +20,6 @@ public func registerPDFPipelineContracts(into registry: ContractRegistry) async 
     await registry.register(PDFIngestContract.self)
     await registry.register(PDFSegmentContract.self)
     await registry.register(PDFExtractContract.self)
-    await registry.register(PDFLayoutExtractContract.self)
     await registry.register(PDFQACheckContract.self)
     await registry.register(EmbedTextContract.self)
     await registry.register(IndexEmbeddingsContract.self)

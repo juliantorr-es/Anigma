@@ -17,6 +17,8 @@
 import XCTest
 import Metal
 @testable import SaturatedModelRegistry
+@testable import SaturationInferenceCore
+@testable import InferenceContracts
 
 final class SaturatedModelRegistryTests: XCTestCase {
 

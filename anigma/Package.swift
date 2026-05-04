@@ -45,6 +45,15 @@ let testOnlyLinkerSettings: [LinkerSetting] = [
   .unsafeFlags(["-Xlinker", "-no_warn_duplicate_libraries"])
 ]
 
+// PDFium-specific paths (relative to package root)
+let pdfiumVendorPath = "\(packageRoot)/External/Vendor/PDFium/macos-arm64"
+let pdfiumLinkerSettings: [LinkerSetting] = [
+  .unsafeFlags(["-L", "\(pdfiumVendorPath)/lib"]),
+  .unsafeFlags(["-I", "\(pdfiumVendorPath)/include"]),
+  .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "@loader_path/../../../../../External/Vendor/PDFium/macos-arm64/lib"])
+]
+let pdfiumHeaderSearchPath = "../../../External/Vendor/PDFium/macos-arm64/include"
+
 let strictConcurrencySettings: [SwiftSetting] = [
   .unsafeFlags(["-strict-concurrency=targeted"])
 ]
@@ -94,7 +103,10 @@ let coreProducts: [Product] = [
   .library(name: "PersistenceContracts", targets: ["PersistenceContracts"]),
   .library(name: "MessagingContracts", targets: ["MessagingContracts"]),
   .library(name: "MediaPipelineContracts", targets: ["MediaPipelineContracts"]),
+  .library(name: "RendererBackendContracts", targets: ["RendererBackendContracts"]),
   .library(name: "ContractsCore", targets: ["ContractsCore"]),
+  .library(name: "LayoutEngineContracts", targets: ["LayoutEngineContracts"]),
+  .library(name: "PDFLayoutExtract", targets: ["PDFLayoutExtract"]),
   .library(name: "DaemonFeatureContracts", targets: ["DaemonFeatureContracts"]),
   .library(name: "DaemonKernel", targets: ["DaemonKernel"]),
   .library(name: "ModelRegistryDaemonFeature", targets: ["ModelRegistryDaemonFeature"]),
@@ -247,11 +259,6 @@ let nativeTargets: [Target] = [
     path: "Packages/CHarfBuzz",
     publicHeadersPath: ".",
     cSettings: [
-  .target(
-    name: "PersistenceContracts",
-    dependencies: ["FoundationContracts"],
-    path: "Packages/ContractsCore/Sources/PersistenceContracts"
-  ),
       .headerSearchPath("include/harfbuzz"),
       .headerSearchPath("include/freetype2")
     ],
@@ -287,9 +294,9 @@ let nativeTargets: [Target] = [
     path: "Packages/PDFCapsule/Sources/PDFNative",
 
     cxxSettings: [
-      .headerSearchPath("../../../../Vendor/include")
+      .headerSearchPath(pdfiumHeaderSearchPath)
     ],
-    linkerSettings: [.linkedLibrary("pdfium")] + vendorLinkerSettings
+    linkerSettings: [.linkedLibrary("pdfium")] + pdfiumLinkerSettings
   ),
   .target(
     name: "MarkdownNative",
@@ -536,7 +543,7 @@ let coreTargets: [Target] = [
     dependencies: [
       "AnigmaPrimitives", "FoundationContracts", "GovernanceContracts", "EvidenceContracts",
       "IntelligenceContracts", "GovernanceCore", "StorageCore", "TelemetryCore",
-      "MLWorkerInterfaces"
+      "MLWorkerInterfaces", "RendererBackendContracts"
     ],
     path: "Packages/AnigmaCore/Sources/AnigmaFoundation",
     exclude: ["AnigmaFoundation.swift"],
@@ -594,6 +601,34 @@ let coreTargets: [Target] = [
     name: "MLWorkerInterfaces",
     dependencies: ["ContractsCore", "AnigmaPrimitives", "InferenceCore"],
     path: "Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline",
+    exclude: [
+      "AINodes.swift",
+      "ArtifactStore.swift",
+      "Contracts",
+      "GrapheneCore.swift",
+      "GrapheneEngine.swift",
+      "GrapheneInferenceBridge.swift",
+      "GraphenePrimitives.swift",
+      "GrapheneProfiling.swift",
+      "GrapheneRegistry.swift",
+      "GrapheneStreaming.swift",
+      "GrapheneSubgraph.swift",
+      "GrapheneVerticalSlice.swift",
+      "InferencePlaneAdapter.swift",
+      "MediaFabricComponent.swift",
+      "Metopticon",
+      "MLWorkerEmbeddingComputer.swift",
+      "PDFProcessing.swift",
+      "PipelineContractRegistry.swift",
+      "PipelineECS.swift",
+      "PipelineGraph.swift",
+      "PipelineModule.swift",
+      "PipelineRunner.swift",
+      "PipelineStatus.swift",
+      "PipelineStatusSerializer.swift",
+      "PluginSystem.swift",
+      "SaturationSystem.swift"
+    ],
     sources: ["MLWorkerInterface.swift"],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
   ),
@@ -605,13 +640,14 @@ let coreTargets: [Target] = [
       "AnigmaJobs",
       "InferenceCore",
       "TextChunkingCapsule",
-      "LayoutEngineCapsule",
+      "LayoutEngineContracts",
       "StorageCore",
       "MLWorkerInterfaces",
       "NativeKernel",
       "SaturationKit"
     ],
     path: "Packages/AnigmaCore/Sources/AnigmaPipeline",
+    exclude: ["Pipeline/MLWorkerInterface.swift"],
     sources: [
       "Automation/Automation.swift",
       "Components/BoundedMemoryBenchmark.swift",
@@ -633,11 +669,9 @@ let coreTargets: [Target] = [
       "Pipeline/Contracts/IndexEmbeddingsContract.swift",
       "Pipeline/Contracts/PDFExtractContract.swift",
       "Pipeline/Contracts/PDFIngestContract.swift",
-      "Pipeline/Contracts/PDFLayoutExtractContract.swift",
       "Pipeline/Contracts/PDFQACheckContract.swift",
       "Pipeline/Contracts/PDFSegmentContract.swift",
       "Pipeline/Contracts/RunSwiftTestsContract.swift",
-      "Pipeline/Contracts/SharedPDFTypes.swift",
       "Pipeline/GrapheneCore.swift",
       "Pipeline/GrapheneEngine.swift",
       "Pipeline/GrapheneInferenceBridge.swift",
@@ -703,12 +737,12 @@ let coreTargets: [Target] = [
     dependencies: ["AnigmaNativeShims", .product(name: "Crypto", package: "swift-crypto")],
     path: "Packages/AnigmaPrimitives", exclude: [],
     swiftSettings: strictConcurrencySettings),
-  ),
   .target(
     name: "PersistenceContracts",
     dependencies: ["FoundationContracts"],
     path: "Packages/ContractsCore/Sources/PersistenceContracts"
-    .target(
+  ),
+  .target(
     name: "AnigmaEvents", dependencies: ["AnigmaPrimitives"], path: "Packages/AnigmaEvents",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
@@ -825,6 +859,18 @@ let coreTargets: [Target] = [
     name: "SaturationKitCore",
     dependencies: ["AnigmaPrimitives", "AnigmaNativeShims"],
     path: "Packages/SaturationKit/Sources/SaturationKit",
+    exclude: [
+      "BinaryAtlasStandard.swift",
+      "DSLMemoryBridge.swift",
+      "MetalBlake3Compression.swift",
+      "MetalSaturatedSearchMegakernel.swift",
+      "SaturatedHeartbeatPacket.swift",
+      "SaturatedLoggingRing.swift",
+      "SaturatedSearch.metal",
+      "SaturationKitExports.swift",
+      "SearchMegakernel.swift",
+      "TextProjection.swift"
+    ],
     sources: [
       "Blake3CompressionCore.swift",
       "Blake3Digest.swift",
@@ -841,9 +887,9 @@ let coreTargets: [Target] = [
       "Blake3CompressionCore.swift",
       "Blake3Digest.swift",
       "LanePriorityScheduler.swift",
-      "WriteCombineBuffer.swift",
-      "SaturatedSearch.metal",
+      "WriteCombineBuffer.swift"
     ],
+    resources: [.copy("SaturatedSearch.metal")],
     swiftSettings: strictConcurrencySettings,
     linkerSettings: [.linkedFramework("Metal")]
   ),
@@ -1179,6 +1225,31 @@ let coreTargets: [Target] = [
       "AnigmaNativeShims", "AnigmaPrimitives", "CapsuleCore", "TelemetryCore", "LayoutEngineNative",
       "PDFNative"
     ], path: "Packages/LayoutEngineCapsule/Sources/LayoutEngineCapsule",
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
+  .target(
+    name: "LayoutEngineContracts",
+    dependencies: [
+      "AnigmaPrimitives",
+      "FoundationContracts",
+      "EvidenceContracts"
+    ],
+    path: "Packages/LayoutEngineContracts/Sources/LayoutEngineContracts",
+    swiftSettings: strictConcurrencySettings
+  ),
+  .target(
+    name: "PDFLayoutExtract",
+    dependencies: [
+      "AnigmaFoundation",
+      "AnigmaGovernance",
+      "AnigmaJobs",
+      "AnigmaPrimitives",
+      "InferenceCore",
+      "LayoutEngineContracts",
+      "LayoutEngineCapsule",
+      "FoundationContracts",
+      "EvidenceContracts"
+    ],
+    path: "Packages/PDFLayoutExtract/Sources/PDFLayoutExtract",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
     name: "VizAggregationCapsule",
@@ -1540,7 +1611,7 @@ let coreTargets: [Target] = [
   .target(
     name: "PraxisModule", dependencies: ["PraxisCore", "ContractsCore"],
     path: "Packages/PraxisModule",
-    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)])
+    swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
 ]
 
 let moduleTargets: [Target] = [
@@ -1577,6 +1648,12 @@ let moduleTargets: [Target] = [
     name: "MediaPipelineContracts",
     dependencies: ["ContractsCore", "FoundationContracts"],
     path: "Packages/ContractsCore/Sources/MediaPipelineContracts"
+  ),
+  .target(
+    name: "RendererBackendContracts",
+    dependencies: [],
+    path: "Packages/RendererBackendContracts/Sources/RendererBackendContracts",
+    swiftSettings: strictConcurrencySettings
   ),
   .target(
     name: "HarmoniaWorkflowContracts",
@@ -1742,7 +1819,7 @@ let moduleTargets: [Target] = [
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   .target(
     name: "TranscriptumModule",
-    dependencies: ["AnigmaPrimitives", "AnigmaCore"],
+    dependencies: ["AnigmaPrimitives", "AnigmaCore", "AnigmaSystemSpine"],
     path: "Packages/TranscriptumModule",
     exclude: [],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
@@ -1758,7 +1835,7 @@ let moduleTargets: [Target] = [
     name: "PolytroposModule",
     dependencies: [
       "AnigmaCore", "AnigmaPrimitives", "MediaContainerCapsule", "ArtifactStoreModule",
-      "MediaFingerprintCapsule", "DatabaseCore"
+      "MediaFingerprintCapsule", "DatabaseCore", "RendererBackendContracts"
     ], path: "Packages/PolytroposModule/Sources/PolytroposModule",
     swiftSettings: [.unsafeFlags(["-strict-concurrency=minimal"]), .interoperabilityMode(.Cxx)]),
   .target(
@@ -2037,7 +2114,8 @@ let executableTargets: [Target] = [
       "DatabaseCore",
       "ContractsCore",
       "GovernanceCore"
-    ], path: "Packages/HarmoniaV2CLI", sources: ["CLIKernel.swift"],
+    ], path: "Packages/HarmoniaV2CLI", exclude: ["CutoverCommands.swift", "Main.swift"],
+    sources: ["CLIKernel.swift"],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]),
   // HarmoniaV2CLI - Standalone proof-of-concept (pure V2, no legacy dependencies)
   .executableTarget(
@@ -2055,7 +2133,8 @@ let executableTargets: [Target] = [
       "ContractsCore",
       "GovernanceCore",
       .product(name: "ArgumentParser", package: "swift-argument-parser")
-    ], path: "Packages/HarmoniaV2CLI", sources: ["CutoverCommands.swift", "Main.swift"],
+    ], path: "Packages/HarmoniaV2CLI", exclude: ["CLIKernel.swift"],
+    sources: ["CutoverCommands.swift", "Main.swift"],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)],
     linkerSettings: testRuntimeLinkerSettings),
   /*

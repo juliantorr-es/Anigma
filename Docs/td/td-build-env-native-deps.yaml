@@ -1,0 +1,56 @@
+canonical_id: td-build-env-native-deps
+parent: p0-build-recovery-epic
+status: ready
+priority: P0
+title: Restore native dependency resolution for pdfium without re-vendoring binaries
+created: 2024-10-16
+updated: 2024-10-16
+context:
+  - Docs/td/p0-build-recovery-epic.yaml
+  - Package.swift
+  - Sources/BackendReadiness/
+  - Tests/BackendReadiness/
+problem: |
+  Swift targets now compile, but test execution is blocked at link time by:
+  
+  ld: library 'pdfium' not found
+  
+  This is an environment/native dependency packaging issue caused by repository hygiene excision of vendored binaries. Do not revert the excision.
+
+goal: |
+  Restore a reproducible, public-repo-safe way for local and CI builds to resolve native dependencies such as pdfium.
+
+non_goals:
+  - Do not re-add vendored pdfium binaries to the repository.
+  - Do not commit large binary artifacts directly.
+  - Do not weaken or skip BackendReadiness tests to avoid linking.
+  - Do not remove pdfium-dependent targets unless they are truly optional and gated.
+  - Do not mix this with EvidenceAuthority wiring or td-358315 implementation.
+
+approved_solution_options:
+  - SwiftPM binaryTarget artifact bundle, if license/distribution constraints allow.
+  - Documented local install path with pkg-config/modulemap support.
+  - Build script or setup script that fetches/verifies native dependency artifacts.
+  - Optional feature flag / target gating if pdfium is not required for BackendReadiness tests.
+  - CI cache/bootstrap step that installs pdfium before test execution.
+
+implementation_sequence:
+  - Identify why BackendReadiness tests link pdfium.
+  - Determine which target pulls pdfium transitively.
+  - Determine whether BackendReadiness tests truly need that target.
+  - Inspect Package.swift target dependencies.
+  - Identify whether pdfium should be optional, isolated, or moved behind a sidecar/backend target.
+  - Classify pdfium dependency.
+  - Choose the narrowest fix.
+  - Implement only the selected native dependency fix.
+  - Validate.
+  - Proof artifact.
+
+acceptance:
+  - BackendReadiness tests no longer fail solely because pdfium is missing.
+  - Native dependency strategy is documented and reproducible.
+  - Vendored binaries are not reintroduced.
+  - pdfium linkage is isolated to the narrowest appropriate target.
+  - td-358315 can proceed to behavioral test execution.
+
+proof_artifact: Docs/proofs/td-build-env-native-deps-pdfium-proof.md

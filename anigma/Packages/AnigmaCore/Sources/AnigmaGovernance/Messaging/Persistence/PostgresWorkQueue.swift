@@ -17,6 +17,7 @@ public actor PostgresWorkQueue: WorkQueuePersistence {
 
         let retryPolicyData = try JSONEncoder().encode(envelope.retryPolicy)
 
+        // queryOne returns Optional<JobIdResult>; guard let unwraps it safely
         guard let result = try await connection.queryOne(sql, [
             envelope.jobId,
             envelope.payload,
@@ -26,9 +27,7 @@ public actor PostgresWorkQueue: WorkQueuePersistence {
             throw MessagingError.insertFailed
         }
 
-        guard let result else {
-            throw MessagingError.jobNotFound
-        }
+        // result is already unwrapped above; no second guard needed
 
         return JobOperationReceipt(
             jobId: result.job_id,

@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://anigma.io/schemas/anigma-diagnostic-bundle.schema.json",
+  "title": "Anigma Diagnostic Bundle Schema",
+  "description": "Schema for deterministic diagnostic evidence bundles captured during task lifecycles.",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "anigma.diagnostic_bundle.v1"
+    },
+    "taskId": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["baseline", "validate", "review", "diff", "final"]
+    },
+    "commitHash": {
+      "type": "string"
+    },
+    "repoRoot": {
+      "type": "string"
+    },
+    "generatedArtifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "commandResults": {
+      "type": "object",
+      "properties": {
+        "command": { "type": "string" },
+        "exitCode": { "type": "integer" },
+        "stdout": { "type": "string" },
+        "stderr": { "type": "string" }
+      }
+    },
+    "buildStatus": {
+      "type": "string",
+      "enum": ["FAILED", "CLEAN", "CONTAMINATED", "PASSED"]
+    },
+    "warningCount": { "type": "integer" },
+    "errorCount": { "type": "integer" },
+    "changedFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": { "type": "string" },
+          "status": { "type": "string" },
+          "risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "graphSnapshot": {
+      "type": "object",
+      "properties": {
+        "targetGraph": { "type": "string" },
+        "productGraph": { "type": "string" },
+        "violations": { "type": "string" }
+      }
+    },
+    "alignmentMatrix": {
+      "type": "object",
+      "properties": {
+        "json": { "type": "string" },
+        "csv": { "type": "string" },
+        "summary": { "type": "string" }
+      }
+    },
+    "graphDiff": {
+      "type": "object",
+      "properties": {
+        "errorDelta": { "type": "integer" },
+        "warningDelta": { "type": "integer" }
+      }
+    },
+    "validationResults": {
+      "type": "object"
+    },
+    "riskFindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "type": "string" },
+          "message": { "type": "string" },
+          "file": { "type": "string" }
+        }
+      }
+    },
+    "forbiddenFindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule": { "type": "string" },
+          "finding": { "type": "string" }
+        }
+      }
+    },
+    "followupRecommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["schema", "taskId", "phase", "commitHash", "generatedArtifacts"]
+}

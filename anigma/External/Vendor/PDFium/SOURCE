@@ -1,0 +1,16 @@
+Architecture: macOS arm64 (Apple Silicon)
+Binary Type: Dynamic library (dylib)
+Binary Source: Third-party prebuilt from bblanchon/pdfium-binaries
+Source Repository: https://github.com/bblanchon/pdfium-binaries
+Release Tag: chromium/7630
+Download URL: https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F7630/pdfium-mac-arm64.tgz
+Archive Filename: pdfium-mac-arm64.tgz
+Archive SHA256: e98f2e922cef5acf8b90c91ff681033ff2114ae73e0e3a312462125911b6295c
+Binary Version: 145.0.7630.0 (derived from PDFium chromium/7630 branch)
+Official PDFium Repository: https://pdfium.googlesource.com/pdfium/
+Official PDFium Branch: chromium/7630
+Build System: Chromium depot_tools (third-party build by bblanchon)
+Built: NO (pre-built binary from third-party source)
+
+Note: This is a THIRD-PARTY pre-built binary, NOT an official Google/PDFium binary.
+The binaries are built from official PDFium source but are not distributed by Google.

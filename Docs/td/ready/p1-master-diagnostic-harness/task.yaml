@@ -1,0 +1,57 @@
+id: td-master-diagnostic-harness
+title: Create master Anigma diagnostic harness for baseline, validation, review, and diff artifacts
+type: task
+priority: P1
+status: ready
+lane: tooling-governance
+epic: p1-tooling
+parent: p1-tooling
+verification_profiles:
+  - docs-artifacts
+  - governance
+gc_policy: retain_all
+context_load_policy: eager
+summary: Create a single deterministic diagnostic script that standardizes baseline capture, validation, and review bundles for architecture-sensitive TDs.
+description: ''
+worktree: scripts/
+source_docs:
+- Docs/governance/BUILD_TOOLING_DOCTRINE.md
+- Docs/governance/DIAGNOSTIC_ARTIFACT_DOCTRINE.md
+- Docs/schemas/anigma-diagnostic-bundle.schema.json
+related_docs:
+- Docs/governance/HETEROGENEOUS_SATURATED_ARCHITECTURE_DOCTRINE.md
+- Docs/governance/CHUNK_STORAGE_RECEIPT_DOCTRINE.md
+- Docs/proofs/alignment-diagnostic-matrix-workflow.md
+related_diagrams: []
+acceptance:
+- Scripts/anigma_diagnose.py exists and supports baseline, validate, review, and diff modes.
+- Script produces a deterministic artifact bundle in .build/anigma-diagnostics/tasks/<td-id>/<commit-hash>/<phase>/.
+- Diagnostic bundle JSON validates against Docs/schemas/anigma-diagnostic-bundle.schema.json.
+- Review mode generates review-bundle.md with categorized risk findings and forbidden change checks.
+- Baseline mode captures git status, diff summaries, and graph/alignment snapshots.
+- Validate mode captures command output, exit code, and build status (CLEAN/CONTAMINATED/FAILED).
+- No production Swift code changes, no Package.swift architecture changes.
+- Doctrine updated in BUILD_TOOLING_DOCTRINE.md.
+non_goals:
+- Do not modify production Swift code.
+- Do not change Package.swift target dependencies.
+- Do not implement sidecar readiness receipts or ECS storage logic.
+- Do not stage or commit files automatically.
+proof:
+- Docs/proofs/master-diagnostic-harness-created.md
+proof_required:
+- Scripts/anigma_diagnose.py
+- Docs/schemas/anigma-diagnostic-bundle.schema.json
+- Docs/governance/DIAGNOSTIC_ARTIFACT_DOCTRINE.md
+expected_proof:
+- Script execution logs for baseline, validate, and review modes.
+- Example review-bundle.md output.
+- Schema validation confirmation.
+validator_commands:
+- python3 Scripts/anigma_diagnose.py baseline --task-id td-master-diagnostic-harness
+- python3 -c "import json; json.load(open('Docs/schemas/anigma-diagnostic-bundle.schema.json'))"
+td_labels:
+- epic:p1-tooling
+- lane:tooling-governance
+- task_id:td-master-diagnostic-harness
+- type:task

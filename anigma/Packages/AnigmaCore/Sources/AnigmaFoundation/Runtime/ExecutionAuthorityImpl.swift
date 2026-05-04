@@ -281,14 +281,12 @@ extension WriteGateDecision {
         }
 
         return GovernanceViolation(
-            id: UUID(),
             principal: proposal.principal,
             projectId: proposal.context["projectId"],
             operation: proposal.operation,
             module: proposal.module,
-            evaluatedModeSource: evaluatedModeSource,
-            failedChecks: failedCheckStructs,
-            timestamp: self.evaluatedAt
+            evaluatedModeSource: evaluatedModeSource ?? "unknown",
+            failedChecks: failedCheckStructs
         )
     }
 }

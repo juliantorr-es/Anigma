@@ -119,6 +119,25 @@ public struct PostgresConnection: Sendable {
         try await manager.executeStatement(sql, parameters: parameters, rlsContext: rlsContext)
     }
 
+    // MARK: - Savepoint Management
+
+    /// Create a savepoint with a generated name
+    public func createSavepoint() async throws -> String {
+        let name = "sp_" + UUID().uuidString.replacingOccurrences(of: "-", with: "_")
+        try await manager.createSavepoint(name: name)
+        return name
+    }
+
+    /// Rollback to a specific savepoint
+    public func rollback(to savepointName: String) async throws {
+        try await manager.rollbackToSavepoint(name: savepointName)
+    }
+
+    /// Release a savepoint
+    public func releaseSavepoint(_ savepointName: String) async throws {
+        try await manager.releaseSavepoint(name: savepointName)
+    }
+
     // MARK: - Prepared Statement Execution
 
     /// Execute a query using a prepared statement with parameters

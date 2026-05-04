@@ -142,7 +142,16 @@ It turns SwiftPM graph facts plus architecture doctrine into reviewable diagnost
 
 The alignment matrix is **generated evidence**, not a hand-authored artifact. It turns SwiftPM graph facts plus architecture doctrine into reviewable diagnostics.
 
-## 7. TD Workflow Gate: Package Graph Audit Requirement
+## 7. Master Diagnostic Harness
+
+The master diagnostic harness (`Scripts/anigma_diagnose.py`) is the canonical entrypoint for task evidence collection. Architecture-sensitive tasks must capture:
+- **baseline** before implementation
+- **validation** after implementation
+- **review bundle** before task closure
+
+Manual summaries are not sufficient if the harness can run. The diagnostic harness is not another report. It is the evidence intake system for agent work.
+
+## 8. TD Workflow Gate: Package Graph Audit Requirement
 
 **MANDATORY:** Any TD touching the following areas MUST include package graph audit as part of the workflow:
 
@@ -215,7 +224,7 @@ See `Docs/td/tasing/td-7c0153/td-7c0153-hypothesis.md` for a complete example of
 
 ---
 
-## 8. Future: Symbol Graph Integration
+## 9. Future: Symbol Graph Integration
 
 **PLANNED:** Integrate `swift package dump-symbol-graph` for API surface drift detection in Tier 1 contract modules.
 

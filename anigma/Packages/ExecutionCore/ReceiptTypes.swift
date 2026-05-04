@@ -299,18 +299,10 @@ public struct PhaseTransitionWire: Codable, Sendable {
 
 // MARK: - Protocol Interfaces for Runtime
 
-/// Protocol for cryptographic signing of receipts.
-/// Implementation is injected, not defined in ExecutionCore.
-public protocol ReceiptSigner: Sendable {
-    /// Signs the data and returns base64-encoded signature
-    func sign(data: Data) async throws -> String
-
-    /// Verifies the signature for the provided data.
-    func verify(data: Data, signature: String) async throws -> Bool
-
-    /// Unique identifier for this signer
-    var signerID: String { get }
-}
+// NOTE: ReceiptSigner protocol has been moved to EvidenceContracts (Tier 1)
+// to break the dependency cycle between ExecutionCore and AnigmaFoundation.
+// This typealias preserves the fully-qualified ExecutionCore.ReceiptSigner name
+// for existing code.
 
 /// Protocol for receipt persistence/storage.
 /// Implementation is injected, not defined in ExecutionCore.

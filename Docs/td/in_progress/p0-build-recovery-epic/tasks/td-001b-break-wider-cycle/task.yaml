@@ -1,0 +1,12 @@
+id: td-001b-break-wider-cycle
+epic: p0-build-recovery-epic
+title: "Break DatabaseCore → GovernanceCore → AnigmaFoundation → AnigmaCore cycle"
+priority: P0
+status: open
+lane: architecture-governance
+assignee: ""
+dependencies: []
+blockers: []
+started: ""
+completed: ""
+proof: ""

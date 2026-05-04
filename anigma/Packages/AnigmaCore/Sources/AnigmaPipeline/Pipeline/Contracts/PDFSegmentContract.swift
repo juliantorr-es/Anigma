@@ -10,6 +10,7 @@ import AnigmaGovernance
 import AnigmaJobs
 import AnigmaPrimitives
 import InferenceCore
+import LayoutEngineContracts
 import FoundationContracts
 import EvidenceContracts
 import Foundation

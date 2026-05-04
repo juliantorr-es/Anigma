@@ -37,7 +37,11 @@ public actor PostgresEventLog: EventStreamPersistence {
         )
     }
 
-    public func subscribe(to streamId: AnigmaEventStreamId, from cursor: EventCursor?) -> AsyncThrowingStream<EventEnvelope, Error> {
+    /// nonisolated: This method creates its own Task and does not modify actor-isolated state.
+    /// It only reads from the database via connection (which is safe for concurrent reads).
+    /// The actor's mutable state (cursors) is NOT accessed by this method.
+    /// This allows PostgresEventLog (actor) to conform to EventStreamPersistence (Sendable protocol).
+    public nonisolated func subscribe(to streamId: AnigmaEventStreamId, from cursor: EventCursor?) -> AsyncThrowingStream<EventEnvelope, Error> {
         AsyncThrowingStream { continuation in
             Task {
                 let streamKey = self.streamKey(streamId)
@@ -124,7 +128,9 @@ public actor PostgresEventLog: EventStreamPersistence {
         )
     }
 
-    private func streamKey(_ streamId: AnigmaEventStreamId) -> String {
+    /// nonisolated: Pure function, no actor state access.
+    /// Only performs string formatting on input parameters.
+    private nonisolated func streamKey(_ streamId: AnigmaEventStreamId) -> String {
         return "stream:{\(streamId.projectId)}:{\(streamId.topic)}:{\(streamId.partitionKey ?? "default")}"
     }
 

@@ -8,6 +8,7 @@
 
 import Foundation
 import TelemetryCore
+import EvidenceContracts
 
 // MARK: - Core Types
 
@@ -20,6 +21,10 @@ public typealias CommandEntry = CommandLedgerWire
 // Export protocol types  
 public typealias PolicyProvider = PolicyEvaluator
 public typealias TransportInterface = TransportProtocol
+
+// Re-export ReceiptSigner from EvidenceContracts (Tier 1)
+// This protocol was moved to break the dependency cycle between ExecutionCore and AnigmaFoundation
+public typealias ReceiptSigner = EvidenceContracts.ReceiptSigner
 
 // MARK: - Compatibility Shims for Existing Code
 
@@ -158,9 +163,10 @@ public enum ExecutionCoreInfo {
     ]
 
     /// External dependencies (protocols, not direct imports)
+    /// Note: ReceiptSigner was moved to EvidenceContracts (Tier 1) to break dependency cycle
     public static let externalDependencies: [String] = [
         "PolicyEvaluator (implemented by HarmoniaModule)",
-        "ReceiptSigner (injected)",
+        "ReceiptSigner (from EvidenceContracts, Tier 1)",
         "ReceiptStore (injected)"
     ]
 }

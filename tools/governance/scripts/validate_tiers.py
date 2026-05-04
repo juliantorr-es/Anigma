@@ -15,8 +15,8 @@ BOLD = '\033[1m'
 NC = '\033[0m'
 
 # TIER DEFINITIONS (Per ADR-0006)
-TIER_1 = {"GovernanceCore", "DoctrineCore", "AnigmaPrimitives", "ContractsCore", "SecurityEventsManager", "TelemetryCore"}
-TIER_2 = {"AnigmaCore", "PlatformCore", "DatabaseCore", "StorageCore", "ExecutionCore", "InferenceCore", "CathedralModule", "CapabilityCore", "AnigmaSystemSpine", "GovernedMigrationCore"}
+TIER_1 = {"GovernanceCore", "DoctrineCore", "AnigmaPrimitives", "ContractsCore", "SecurityEventsManager", "TelemetryCore", "LayoutEngineContracts"}
+TIER_2 = {"AnigmaCore", "PlatformCore", "DatabaseCore", "StorageCore", "ExecutionCore", "InferenceCore", "CathedralModule", "CapabilityCore", "AnigmaSystemSpine", "GovernedMigrationCore", "LayoutEngineCapsule", "PDFLayoutExtract"}
 TIER_3 = {"HarmoniaModule", "DiaplasionModule", "AccessumModule", "OutlineumModule", "PragmaModule", "ConexusModule", "CodexModule", "TranscriptumModule", "ObservatoriumModule", "PolytroposModule", "VectorumModule", "PraxisModule"}
 
 def get_dependencies(target_name, package_content):

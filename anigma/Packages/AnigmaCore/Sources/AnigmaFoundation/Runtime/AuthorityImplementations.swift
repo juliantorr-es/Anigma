@@ -170,7 +170,8 @@ public actor DatabaseAuthorityImpl: DatabaseAuthority {
 // MARK: - Evidence Authority Implementation
 
 /// Phase 1 implementation of EvidenceAuthority
-public actor EvidenceAuthorityImpl: EvidenceAuthority {
+/// NOTE: Renamed from EvidenceAuthorityImpl to avoid collision with EvidenceAuthorityImpl.swift
+public actor EvidenceAuthorityImplPhase1: EvidenceAuthority {
     private let databaseAuthority: any DatabaseAuthority
     private let governance: any GoverningController
     private var sinks: [any EvidenceSink] = []

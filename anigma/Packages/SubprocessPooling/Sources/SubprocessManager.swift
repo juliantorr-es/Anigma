@@ -180,6 +180,20 @@ public struct WorkerInfo: Sendable {
             lastUsedAt: lastUsedAt
         )
     }
+
+    /// Check if the worker state matches a specific case (ignoring associated values)
+    public func isInState(_ expectedState: WorkerState) -> Bool {
+        switch (state, expectedState) {
+        case (.notStarted, .notStarted): return true
+        case (.initializing, .initializing): return true
+        case (.ready, .ready): return true
+        case (.busy, .busy): return true
+        case (.recycling, .recycling): return true
+        case (.terminated, .terminated): return true
+        case (.failed, .failed): return true
+        default: return false
+        }
+    }
 }
 
 // MARK: - Pool Metrics

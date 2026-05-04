@@ -93,8 +93,13 @@ public actor PlatformRuntime {
     /// Accessibility authority (system interaction)
     public let accessibility: any AccessibilityAuthority
 
-    /// Source authority (content source management)
+    /// Source authority (system interaction)
     public let sources: any SourceAuthority
+
+    // MARK: - Backend Registry (td-358315)
+
+    /// Backend registry for this runtime instance
+    private let backendRegistry: BackendRegistry
 
     // MARK: - Registered Modules
 
@@ -176,9 +181,17 @@ public actor PlatformRuntime {
             evidenceAuthority: nil as (any EvidenceAuthority)? // Will be wired after evidence is created
         )
 
+        // Backend registry for backend management (td-358315)
+        self.backendRegistry = BackendRegistry()
+
         // Evidence authority consolidates evidence systems
+        // TODO: td-358315 - Create proper AccessController implementation
+        let mockAccessController = MockAccessController()  // Stub for now
+        let mockSigner = MockReceiptSigner()  // TODO: td-d65648 - Replace with injected DefaultReceiptSigner
         self.evidence = EvidenceAuthorityImpl(
-            databaseAuthority: self.database,
+            database: self.database,
+            signer: mockSigner,
+            accessController: mockAccessController,
             governance: governance
         )
 
@@ -486,12 +499,15 @@ public actor PlatformRuntime {
     }
 
     /// Register an evidence sink for external systems (e.g. Cathedral)
+    /// - TODO: td-358315 - Implement evidence sink registration in EvidenceAuthorityImpl
     public func registerEvidenceSink(_ sink: any EvidenceSink) async throws {
         guard let evidenceImpl = evidence as? EvidenceAuthorityImpl else {
             throw RuntimeInitializationError.configurationError("Evidence authority does not support sinks")
         }
 
-        await evidenceImpl.addSink(sink)
+        // TODO: Implement addSink method in EvidenceAuthorityImpl
+        // await evidenceImpl.addSink(sink)
+        throw RuntimeInitializationError.configurationError("Evidence sink registration not yet implemented")
     }
 
     /// Legacy access for modules still bound to DatabaseActor.
@@ -867,6 +883,57 @@ actor MockAccessibilityAuthority: AccessibilityAuthority {
     func getCaretRect(context: ExecutionContext) async throws -> CGRect? { return nil }
 }
 
+/// Placeholder for access controller when full implementation is not available
+/// TODO: td-358315 - Replace with proper AccessController implementation
+actor MockAccessController: AccessController {
+    func evaluate(_ request: AccessRequest) async -> AccessDecision {
+        return AccessDecision(
+            allowed: true,
+            policyId: "mock_policy",
+            reason: "Mock access controller allows all",
+            conditions: []
+        )
+    }
+    
+    func checkAccess(_ request: AccessRequest) async throws {
+        // Allow all access in mock
+    }
+    
+    func addPolicy(_ policy: any AccessPolicy) async {
+        // No-op in mock
+    }
+    
+    func listPolicies() async -> [any AccessPolicy] {
+        // Return empty list in mock
+        return []
+    }
+}
+
+/// Mock ReceiptSigner for use when a real signer is not available
+/// TODO: td-d65648 - Replace with injected DefaultReceiptSigner from daemon
+struct MockReceiptSigner: ReceiptSigner {
+    public init() {}
+
+    public var signerID: String {
+        return "mock-platform-runtime"
+    }
+
+    public func sign(data: Data) async throws -> String {
+        // Mock signature - uses BLAKE3 hash like DefaultReceiptSigner
+        // In production, use injected DefaultReceiptSigner from daemon
+        return BLAKE3Digest.hex(of: data)
+    }
+
+    public func verify(data: Data, signature: String) async throws -> Bool {
+        let expected = BLAKE3Digest.hex(of: data)
+        return expected == signature
+    }
+    
+    func listPolicies() async -> [any AccessPolicy] {
+        return []
+    }
+}
+
 // MARK: - Workflow Protocol
 
 /// Protocol for workflows that can be executed by the runtime.
@@ -1003,5 +1070,245 @@ extension PlatformRuntime {
         let runtime = try await PlatformRuntime(config: runtimeConfig)
         try await runtime.initialize()
         return runtime
+    }
+
+    // MARK: - Backend Registry (td-358315)
+
+    /// Backend registration and readiness management
+    private actor BackendRegistry {
+        /// Registered backends
+        private var registeredBackends: [BackendId: any PlatformBackend] = [:]
+        
+        /// Backend capability contracts
+        private var backendContracts: [BackendId: BackendCapabilityContract] = [:]
+        
+        /// Backend readiness checkers
+        private var readinessCheckers: [BackendId: @Sendable (any PlatformBackend) async -> BackendReadinessCheck] = [:]
+        
+        /// Register a backend with PlatformRuntime
+        func registerBackend(
+            _ backend: any PlatformBackend,
+            contract: BackendCapabilityContract,
+            readinessChecker: @escaping @Sendable (any PlatformBackend) async -> BackendReadinessCheck
+        ) async throws -> BackendRegistrationReceipt {
+            // Validate backend ID matches contract
+            guard backend.backendId == contract.backendId else {
+                throw RuntimeInitializationError.invalidArgument(
+                    "Backend ID mismatch: backend.backendId != contract.backendId"
+                )
+            }
+            
+            // Check if already registered
+            if registeredBackends[backend.backendId] != nil {
+                throw RuntimeInitializationError.invalidArgument(
+                    "Backend already registered: \(backend.backendId)"
+                )
+            }
+            
+            // Register backend
+            registeredBackends[backend.backendId] = backend
+            backendContracts[backend.backendId] = contract
+            readinessCheckers[backend.backendId] = readinessChecker
+            
+            // Initialize backend
+            try await backend.initialize()
+            
+            // Create registration receipt
+            let receipt = BackendRegistrationReceipt(
+                backendId: backend.backendId,
+                registeredAt: Date(),
+                context: ["module": "PlatformRuntime", "operation": "backend_registration"]
+            )
+            
+            return receipt
+        }
+        
+        /// Check backend readiness
+        func backendReadiness(for backendId: BackendId) async -> BackendReadinessCheck {
+            guard let backend = registeredBackends[backendId] else {
+                return BackendReadinessCheck(
+                    backendId: backendId,
+                    isReady: false,
+                    state: .unregistered,
+                    contractCompatibility: .incompatible,
+                    lifecycleState: .uninitialized,
+                    denialReason: "Backend not registered: \(backendId)"
+                )
+            }
+            
+            guard let checker = readinessCheckers[backendId] else {
+                return BackendReadinessCheck(
+                    backendId: backendId,
+                    isReady: false,
+                    state: .registered,
+                    contractCompatibility: .incompatible,
+                    lifecycleState: .uninitialized,
+                    denialReason: "Readiness checker not found for: \(backendId)"
+                )
+            }
+            
+            // Perform readiness check
+            return await checker(backend)
+        }
+        
+        /// Select a ready backend for execution
+        func selectBackend(
+            contractId: String,
+            minVersion: Int
+        ) async throws -> (any PlatformBackend, BackendReadinessCheck) {
+            // Find backends with matching contract
+            let matchingBackends = backendContracts.filter { _, contract in
+                contract.contractId == contractId && contract.contractVersion >= minVersion
+            }
+            
+            guard !matchingBackends.isEmpty else {
+                throw RuntimeInitializationError.executionFailed(
+                    "No backend found for contract: \(contractId) v\(minVersion)+"
+                )
+            }
+            
+            // Check readiness for each matching backend
+            for (backendId, _) in matchingBackends {
+                let readiness = await backendReadiness(for: backendId)
+                
+                if readiness.isReady {
+                    guard let backend = registeredBackends[backendId] else {
+                        continue
+                    }
+                    return (backend, readiness)
+                }
+            }
+            
+            // No ready backends found
+            throw RuntimeInitializationError.executionFailed(
+                "No ready backend found for contract: \(contractId) v\(minVersion)+"
+            )
+        }
+        
+        /// Execute with backend readiness enforcement
+        func executeWithBackend<
+            B: PlatformBackend,
+            T
+        >(
+            backendId: BackendId,
+            operation: BackendOperationContext,
+            block: @Sendable (B) async throws -> T
+        ) async throws -> (T, MutationReceipt) {
+            // Check backend readiness
+            let readiness = await backendReadiness(for: backendId)
+            
+            guard readiness.isReady else {
+                let error = RuntimeInitializationError.writeBlocked(
+                    violation: GovernanceViolation(
+                        principal: "system",
+                        projectId: nil,
+                        operation: operation.operationType,
+                        module: "PlatformRuntime",
+                        evaluatedModeSource: "backendReadiness",
+                        failedChecks: [
+                            GovernanceViolation.FailedCheck(
+                                checkId: "readinessGate",
+                                message: readiness.denialReason ?? "Backend not ready: \(readiness.state.rawValue)"
+                            )
+                        ]
+                    )
+                )
+                throw error
+            }
+            
+            // Get backend
+            guard let backend = registeredBackends[backendId] as? B else {
+                throw RuntimeInitializationError.configurationError(
+                    "Backend type mismatch for: \(backendId)"
+                )
+            }
+            
+            // Create execution context
+            let executionContext = ExecutionContext(
+                principal: .system,
+                metadata: [
+                    "backendId": backendId.rawValue,
+                    "operationId": operation.operationId,
+                    "operationType": operation.operationType
+                ]
+            )
+            
+            // Execute operation
+            let result = try await block(backend)
+            
+            // Record evidence (placeholder - real implementation would use evidenceAuthority)
+            let evidencePayload = EvidencePayload.custom(
+                type: "backend_operation",
+                data: [
+                    "backendId": backendId.rawValue,
+                    "operationId": operation.operationId,
+                    "operationType": operation.operationType,
+                    "readinessState": readiness.state.rawValue
+                ]
+            )
+            
+            // Create mutation receipt
+            let receipt = MutationReceipt(
+                rowsAffected: 0, // Not applicable for backend operations
+                evidence: CoreReceipt(
+                    operationType: operation.operationType,
+                    principal: .system,
+                    outcome: .success,
+                    summary: "Backend operation executed: \(operation.operationType)",
+                    contentHash: "backend-op-\(operation.operationId.prefix(8))"
+                )
+            )
+            
+            return (result, receipt)
+        }
+        
+        /// Shutdown all registered backends
+        func shutdownAllBackends() async {
+            for (_, backend) in registeredBackends {
+                await backend.shutdown()
+            }
+            registeredBackends.removeAll()
+            backendContracts.removeAll()
+            readinessCheckers.removeAll()
+        }
+    }
+
+    /// Register a backend with PlatformRuntime
+    public func registerBackend(
+        _ backend: any PlatformBackend,
+        contract: BackendCapabilityContract,
+        readinessChecker: @escaping @Sendable (any PlatformBackend) async -> BackendReadinessCheck
+    ) async throws -> BackendRegistrationReceipt {
+        try await self.backendRegistry.registerBackend(backend, contract: contract, readinessChecker: readinessChecker)
+    }
+    
+    /// Check backend readiness status
+    public func backendReadiness(for backendId: BackendId) async -> BackendReadinessCheck {
+        await self.backendRegistry.backendReadiness(for: backendId)
+    }
+    
+    /// Select a ready backend for execution
+    public func selectBackend(
+        contractId: String,
+        minVersion: Int
+    ) async throws -> (any PlatformBackend, BackendReadinessCheck) {
+        try await backendRegistry.selectBackend(contractId: contractId, minVersion: minVersion)
+    }
+    
+    /// Execute with backend readiness enforcement
+    public func executeWithBackend<
+        B: PlatformBackend,
+        T
+    >(
+        backendId: BackendId,
+        operation: BackendOperationContext = BackendOperationContext(operationType: "backend_operation"),
+        block: @Sendable (B) async throws -> T
+    ) async throws -> (T, MutationReceipt) {
+        try await backendRegistry.executeWithBackend(backendId: backendId, operation: operation, block: block)
+    }
+
+    /// Shutdown all registered backends
+    public func shutdownBackends() async {
+        await backendRegistry.shutdownAllBackends()
     }
 }

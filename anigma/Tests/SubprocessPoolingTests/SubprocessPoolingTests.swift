@@ -15,16 +15,16 @@ struct SubprocessPoolingTests {
     @Test("TestWorker conforms to SubprocessWorker")
     func testWorkerConformance() {
         let worker = TestWorker()
-        #expect(worker.workerName == "TestWorker")
+        #expect(TestWorker.workerName == "TestWorker")
         #expect(worker.isHealthy() == true)
     }
     
     @Test("SubprocessTask creation")
     func testSubprocessTask() {
         let input = "test input"
-        let task = SubprocessTask(input: input)
+        let task = SubprocessTask<String, String>(input: input)
         #expect(task.input == input)
-        #expect(task.id != UUID.zero)
+        #expect(task.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000"))
     }
     
     @Test("SubprocessResult success case")
@@ -98,11 +98,11 @@ struct SubprocessPoolingTests {
             tasksCompleted: 10
         )
         
-        #expect(info.state == .ready)
+        #expect(info.isInState(.ready))
         #expect(info.tasksCompleted == 10)
         
         let updated = info.withUpdatedState(.busy)
-        #expect(updated.state == .busy)
+        #expect(updated.isInState(.busy))
         #expect(updated.tasksCompleted == 10)
         
         let withLastUsed = updated.withUpdatedLastUsed(.now)
@@ -122,6 +122,10 @@ public struct TestWorker: SubprocessWorker {
     public static var workerName: String = "TestWorker"
     public static var executablePath: String = "/usr/bin/echo"
     public static var executableArguments: [String] = ["test"]
+    
+    public init() {
+        // Test worker initialization
+    }
     
     public func initialize() async throws {
         // No initialization needed for test worker

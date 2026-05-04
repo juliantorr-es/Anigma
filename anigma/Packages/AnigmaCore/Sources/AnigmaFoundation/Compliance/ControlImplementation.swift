@@ -165,7 +165,7 @@ public enum ImplementationStatus: String, Sendable, Codable {
 /// A source of evidence for control implementation.
 public struct EvidenceSource: Sendable, Codable, Hashable {
     /// Type of evidence.
-    public let evidenceType: EvidenceType
+    public let evidenceType: ComplianceEvidenceType
 
     /// Identifier for the evidence source.
     public let sourceId: String
@@ -180,7 +180,7 @@ public struct EvidenceSource: Sendable, Codable, Hashable {
     public let frequency: EvidenceFrequency
 
     public init(
-        evidenceType: EvidenceType,
+        evidenceType: ComplianceEvidenceType,
         sourceId: String,
         description: String,
         collectionMethod: EvidenceCollectionMethod = .automated,
@@ -195,7 +195,8 @@ public struct EvidenceSource: Sendable, Codable, Hashable {
 }
 
 /// Types of compliance evidence.
-public enum EvidenceType: String, Sendable, Codable, Hashable {
+/// NOTE: Renamed from EvidenceType to avoid collision with EvidenceAuthorityImpl.EvidenceType
+public enum ComplianceEvidenceType: String, Sendable, Codable, Hashable {
     /// Audit log entries.
     case auditLog = "audit_log"
 
@@ -280,7 +281,7 @@ public struct EvidenceArtifact: Sendable, Codable, Identifiable {
     public let implementationId: UUID
 
     /// Type of evidence.
-    public let evidenceType: EvidenceType
+    public let evidenceType: ComplianceEvidenceType
 
     /// When this evidence was collected.
     public let collectedAt: Date
@@ -313,7 +314,7 @@ public struct EvidenceArtifact: Sendable, Codable, Identifiable {
         controlId: String,
         frameworkId: String,
         implementationId: UUID,
-        evidenceType: EvidenceType,
+        evidenceType: ComplianceEvidenceType,
         periodStart: Date,
         periodEnd: Date,
         summary: String,

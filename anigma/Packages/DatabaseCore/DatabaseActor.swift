@@ -340,16 +340,16 @@ public actor DatabaseActor: DatabaseExecutor {
 
             do {
                 // Begin the outer transaction
-                _ = try await connection.executeStatement("BEGIN ISOLATION LEVEL \(isolation)")
+                _ = try await connection.executeStatement("BEGIN ISOLATION LEVEL \(isolation)", parameters: [], rlsContext: nil)
 
                 do {
                     try await block()
                     
                     // Commit the transaction
-                    _ = try await connection.executeStatement("COMMIT")
+                    _ = try await connection.executeStatement("COMMIT", parameters: [], rlsContext: nil)
                 } catch {
                     // Rollback the entire transaction on error
-                    _ = try? await connection.executeStatement("ROLLBACK")
+                    _ = try? await connection.executeStatement("ROLLBACK", parameters: [], rlsContext: nil)
                     throw error
                 }
             } catch let error as PostgresError {
@@ -391,7 +391,12 @@ public actor DatabaseActor: DatabaseExecutor {
         savepointName: String? = nil,
         _ block: @Sendable @escaping () async throws -> Void
     ) async throws {
-        let actualSavepointName = try await savepointName ?? connection.createSavepoint()
+        let actualSavepointName: String
+        if let providedName = try await savepointName {
+            actualSavepointName = providedName
+        } else {
+            actualSavepointName = try await connection.createSavepoint()
+        }
         
         do {
             try await block()
@@ -418,7 +423,12 @@ public actor DatabaseActor: DatabaseExecutor {
             Task { await connectionManager.releaseConnection(connection) }
         }
 
-        let actualSavepointName = try await savepointName ?? connection.createSavepoint()
+        let actualSavepointName: String
+        if let providedName = try await savepointName {
+            actualSavepointName = providedName
+        } else {
+            actualSavepointName = try await connection.createSavepoint()
+        }
         
         do {
             try await block(connection)
@@ -627,5 +637,9 @@ public struct DatabaseRow: Sendable {
 
     public subscript(column: String) -> DatabaseValue? {
         value(for: column)
+    }
+
+    public func date(for column: String) -> Date? {
+        value(for: column)?.dateValue
     }
 }

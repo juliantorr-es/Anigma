@@ -884,6 +884,34 @@ tasks:
   validator_commands:
   - python3 -c "import yaml; yaml.safe_load(open('Docs/td/ready/p1-alignment-matrix-calibration/task.yaml'))"
   - python3 Scripts/anigma_package_graph_audit.py alignment-matrix
+- id: td-master-diagnostic-harness
+  title: Create master Anigma diagnostic harness for baseline, validation, review, and diff artifacts
+  priority: P1
+  type: task
+  lane: tooling-governance
+  status: ready
+  description: Create a single deterministic diagnostic script that standardizes baseline capture, validation, and review bundles for architecture-sensitive TDs.
+  source_docs:
+  - Docs/governance/BUILD_TOOLING_DOCTRINE.md
+  - Docs/governance/DIAGNOSTIC_ARTIFACT_DOCTRINE.md
+  - Docs/schemas/anigma-diagnostic-bundle.schema.json
+  acceptance:
+  - Scripts/anigma_diagnose.py exists and supports all mandated modes.
+  - Script produces deterministic artifact bundles.
+  - Diagnostic bundle JSON validates against schema.
+  - Review mode generates review-bundle.md with risk analysis and forbidden change checks.
+  - Doctrine updated in BUILD_TOOLING_DOCTRINE.md.
+  - No production Swift or Package.swift changes.
+  non_goals:
+  - Do not modify production Swift code.
+  - Do not change Package.swift target dependencies.
+  - Do not implement sidecar readiness receipts or ECS storage logic.
+  - Do not stage or commit files automatically.
+  proof:
+  - Docs/proofs/master-diagnostic-harness-created.md
+  validator_commands:
+  - python3 Scripts/anigma_diagnose.py baseline --task-id td-master-diagnostic-harness
+  - python3 -c "import json; json.load(open('Docs/schemas/anigma-diagnostic-bundle.schema.json'))"
 validation:
   rules:
   - id: SRC-001

@@ -573,3 +573,24 @@ public protocol EvidenceRingProvider: Sendable {
     func verifyProof(_ proof: EvidenceInclusionProof, rootHash: String) async throws -> Bool
 }
 
+// MARK: - Receipt Signing Contract
+
+/// Protocol for cryptographic signing of receipts.
+/// This is the Tier 1 contract surface extracted from ExecutionCore.
+/// Concrete implementations live in appropriate runtime/execution layers.
+///
+/// This protocol is safe for Tier 1 because:
+/// - Uses only portable Foundation types (Data, String)
+/// - Uses only Swift standard conformances (Sendable)
+/// - No runtime, Apple, database, daemon, or execution-layer types
+public protocol ReceiptSigner: Sendable {
+    /// Signs the data and returns base64-encoded signature
+    func sign(data: Data) async throws -> String
+
+    /// Verifies the signature for the provided data.
+    func verify(data: Data, signature: String) async throws -> Bool
+
+    /// Unique identifier for this signer
+    var signerID: String { get }
+}
+

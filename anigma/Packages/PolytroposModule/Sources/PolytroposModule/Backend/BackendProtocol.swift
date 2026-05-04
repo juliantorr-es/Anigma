@@ -9,12 +9,16 @@
 import AnigmaCore
 import Foundation
 import AnigmaPrimitives
+import RendererBackendContracts
 
 // MARK: - Renderer Backend Protocol
 
 /// Abstract protocol for video/audio rendering backends.
 /// Implementations can use native Metal/AVFoundation or external tools like MLT/FFmpeg.
-public protocol RendererBackend: Sendable {
+/// 
+/// This protocol conforms to `RendererBackendContract` to allow AnigmaFoundation
+/// to reference renderer backends through a Tier 1-safe contract.
+public protocol RendererBackend: RendererBackendContract {
     /// Backend identifier.
     var backendId: RendererBackendId { get }
 

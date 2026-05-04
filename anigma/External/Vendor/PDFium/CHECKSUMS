@@ -1,0 +1,13 @@
+# PDFium Third-Party Binary Checksums
+# Format: SHA256 (filename) = checksum
+# Generated using: shasum -a 256 filename
+
+# Archive
+SHA256 (pdfium-mac-arm64.tgz) = e98f2e922cef5acf8b90c91ff681033ff2114ae73e0e3a312462125911b6295c
+
+# macOS arm64 Binary
+SHA256 (macos-arm64/lib/libpdfium.dylib) = d94a50092ee59b1b17521b2697018881f352da6f515d7dca01e6aca4319aba14
+
+# Verification Commands:
+# shasum -a 256 .build/pdfium-fetch/pdfium-mac-arm64.tgz
+# shasum -a 256 anigma/External/Vendor/PDFium/macos-arm64/lib/libpdfium.dylib

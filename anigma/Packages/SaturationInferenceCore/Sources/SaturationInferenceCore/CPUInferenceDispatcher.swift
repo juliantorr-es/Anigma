@@ -37,7 +37,7 @@ public final class CPUInferenceDispatcher: Sendable {
   // MARK: - Public Types
 
   /// Operation type for inference
-  public enum OperationType: Sendable {
+  public enum OperationType: Sendable, Equatable {
     case matmul
     case matmulTransposeA
     case matmulTransposeB
