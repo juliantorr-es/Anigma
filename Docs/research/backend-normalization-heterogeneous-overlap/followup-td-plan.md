@@ -1,5 +1,7 @@
 # Follow-up TD Plan
 
+> **Note**: The alignment diagnostic matrix for this research is now **generated evidence** produced by the `Scripts/anigma_package_graph_audit.py alignment-matrix` tool. Hand-written tables in these research docs are for initial mapping only; the generated JSON/CSV outputs in `.build/anigma-graph/current/` are the canonical sources for review.
+
 1. **TD: Isolate PDFNative and HardwareAuthority behind Portable Contracts**
    - Goal: Break the direct dependency from `AnigmaFoundation` and `PDFLayoutExtract` to native linkers.
    - Status: Candidate

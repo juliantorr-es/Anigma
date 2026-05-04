@@ -1,0 +1,116 @@
+# Alignment Diagnostic Rules for Anigma SwiftPM Workflow
+
+# Target Role Classifications
+# Maps target names or patterns to their expected role in the heterogeneous doctrine.
+roles:
+  targets:
+    AnigmaPrimitives: portable_contract
+    GovernanceCore: governance_runtime
+    ContractsCore: portable_contract
+    EvidenceContracts: portable_contract
+    FoundationContracts: portable_contract
+    GovernanceContracts: portable_contract
+    IntelligenceContracts: portable_contract
+    LayoutEngineContracts: portable_contract
+    RendererBackendContracts: portable_contract
+    MediaPipelineContracts: portable_contract
+    AnigmaFoundation: substrate_runtime
+    AnigmaGovernance: substrate_runtime
+    AnigmaPipeline: governance_runtime
+    AnigmaCore: substrate_runtime
+    DatabaseCore: substrate_runtime
+    StorageCore: substrate_runtime
+    ExecutionCore: substrate_runtime
+    InferenceCore: substrate_runtime
+    HardwareAuthority: native_executor
+    PDFNative: native_executor
+    PDFLayoutExtract: native_executor
+    LayoutEngineCapsule: native_executor
+    PDFSidecarClient: sidecar_client
+    PDFSidecarExecutable: sidecar_executable
+    AnigmaMCPExecutable: sidecar_executable
+    AnigmaDaemon: app_entrypoint
+    HarmoniaV2CLI: cli_entrypoint
+    BackendReadinessContractTests: test_readiness
+
+# Native Executor Markers
+# Targets that are considered native and must be isolated.
+native_markers:
+  targets:
+    - HardwareAuthority
+    - PDFNative
+    - PDFLayoutExtract
+    - LayoutEngineCapsule
+    - PDFSidecarExecutable
+    - MediaCore
+  path_patterns:
+    - "*/Native/*"
+    - "*NativeShims*"
+  linker_settings:
+    - "-Xlinker"
+    - "Accelerate"
+    - "Metal"
+    - "MPS"
+    - "PDFium"
+
+# Sidecar Executable Markers
+sidecar_markers:
+  product_names:
+    - "*Sidecar*"
+    - "anigma-mcp"
+  target_names:
+    - "*SidecarExecutable"
+    - "AnigmaMCPExecutable"
+
+# Contract Target Markers
+contract_markers:
+  target_names:
+    - "*Contracts"
+    - "*Contract"
+    - "AnigmaPrimitives"
+
+# Receipt Requirements
+# Maps roles/types to the receipt schema they must reference or emit.
+receipt_requirements:
+  native_executor: "executor_receipt"
+  sidecar_executable: "sidecar_readiness_receipt"
+  materialization_gate: "materialization_gate"
+  chunk_storage: "chunk_storage_receipt"
+
+# Forbidden Generic Readiness Reachability
+# Targets in generic BackendReadiness should not depend on these.
+forbidden_readiness_reachability:
+  - PDFNative
+  - HardwareAuthority
+  - PDFSidecarExecutable
+
+# Zero-Copy Claim Audit Patterns
+# Regex patterns to scan for in Docs/ and Packages/
+claim_audit_patterns:
+  zero_copy:
+    pattern: "zero-copy|zero copy|no-copy"
+    severity: P1
+    message: "Zero-copy claim without proven instrumentation."
+  hardware_resident:
+    pattern: "hardware-resident|hardware resident"
+    severity: P1
+    message: "Hardware-resident claim requires domain proof."
+  copy_minimized:
+    pattern: "copy-minimized|copy minimized"
+    severity: informational
+    message: "Standard optimized path claim."
+  materialization_gate:
+    pattern: "materialization gate"
+    severity: informational
+    message: "Enforcement point identified."
+
+# Known Accepted Exceptions
+# (diagnostic_id -> reason)
+exceptions:
+  - id: "ADM-0005"
+    reason: "AnigmaFoundation currently depends on HardwareAuthority for legacy bootstrap."
+
+# Pre-existing Violations (Baseline)
+pre_existing_violations:
+  - "AnigmaFoundation -> HardwareAuthority"
+  - "PDFLayoutExtract -> PDFNative"

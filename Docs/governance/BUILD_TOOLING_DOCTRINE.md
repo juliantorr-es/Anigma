@@ -129,3 +129,97 @@ Current baseline:
 The graph audit now detects 24 error-severity architecture violations. These are baseline findings and must be triaged separately.
 
 Target: 95%+ coverage before upgrading `no_unclassified_target` to error-severity.
+
+## 6. Alignment Diagnostic Matrix
+
+The alignment diagnostic matrix is generated from SwiftPM graph evidence plus Anigma doctrine. It is not a hand-authored spreadsheet. Reviewers should use it to identify where backend normalization assumptions conflict with heterogeneous saturated architecture doctrine, ECS-inspired data runtime doctrine, sidecar readiness doctrine, or receipt/evidence requirements. 
+
+The alignment matrix is produced by:
+```bash
+python3 Scripts/anigma_package_graph_audit.py alignment-matrix
+```
+It turns SwiftPM graph facts plus architecture doctrine into reviewable diagnostics (JSON, CSV, Markdown).
+
+The alignment matrix is **generated evidence**, not a hand-authored artifact. It turns SwiftPM graph facts plus architecture doctrine into reviewable diagnostics.
+
+## 7. TD Workflow Gate: Package Graph Audit Requirement
+
+**MANDATORY:** Any TD touching the following areas MUST include package graph audit as part of the workflow:
+
+- Package.swift changes
+- Import statement changes
+- Target dependency changes
+- Contract extraction
+- Sidecar definitions/executables
+- Test target dependencies
+- Readiness lane definitions
+- Executable product definitions
+
+### Required Artifacts
+
+| Phase | Command | Purpose | Output |
+|-------|---------|---------|--------|
+| Pre-change | `python3 Scripts/anigma_package_graph_audit.py snapshot --output-dir .build/anigma-graph/<td-id>-pre` | Capture baseline graph state | Internal and external graph snapshots |
+| Hypothesis | `python3 Scripts/anigma_package_graph_audit.py [explain-target\|explain-edge\|why-builds]` | Document graph hypothesis | Human-readable analysis |
+| Post-change | `python3 Scripts/anigma_package_graph_audit.py snapshot --output-dir .build/anigma-graph/<td-id>-post` | Capture modified graph state | Internal and external graph snapshots |
+| Diff | `python3 Scripts/anigma_package_graph_audit.py --output-dir .build/anigma-graph/<td-id>-diff` (both) | Compare pre/post | Violation delta, coverage delta |
+| Validation | `python3 Scripts/anigma_package_graph_audit.py --fail-on-violation` | Final gate | Exit 0 = pass, Exit 1 = fail |
+
+### TD Template Integration
+
+Add to every relevant TD document:
+
+```markdown
+## Package Graph Audit
+
+### Pre-Change Snapshot
+```bash
+python3 Scripts/anigma_package_graph_audit.py \
+  --output-dir .build/anigma-graph/<td-id>-pre snapshot
+```
+Output: `.build/anigma-graph/<td-id>-pre/`
+
+### Graph Hypothesis
+[Document the specific graph change hypothesis]
+
+### Post-Change Snapshot
+```bash
+python3 Scripts/anigma_package_graph_audit.py \
+  --output-dir .build/anigma-graph/<td-id>-post snapshot
+```
+Output: `.build/anigma-graph/<td-id>-post/`
+
+### Graph Diff
+```bash
+# Compare violations
+python3 -c "
+import json
+pre = json.load(open('.build/anigma-graph/<td-id>-pre/anigma-dependency-violations.json'))
+post = json.load(open('.build/anigma-graph/<td-id>-post/anigma-dependency-violations.json'))
+print(f'Pre errors: {pre[\"summary\"][\"errorCount\"]}')
+print(f'Post errors: {post[\"summary\"][\"errorCount\"]}')
+print(f'Delta: {post[\"summary\"][\"errorCount\"] - pre[\"summary\"][\"errorCount\"]}')
+"
+```
+
+### Final Validation
+```bash
+python3 Scripts/anigma_package_graph_audit.py --fail-on-violation
+# Exit code must be 0
+```
+```
+
+### Example: td-7c0153
+
+See `Docs/td/tasing/td-7c0153/td-7c0153-hypothesis.md` for a complete example of graph-driven TD research.
+
+---
+
+## 8. Future: Symbol Graph Integration
+
+**PLANNED:** Integrate `swift package dump-symbol-graph` for API surface drift detection in Tier 1 contract modules.
+
+- **Purpose:** Detect breaking changes in contract layer APIs
+- **Integration:** Add as optional subcommand to audit script
+- **Use Case:** Tier 1 contract modules where API stability is critical
+- **Status:** Documented in `package-graph-rules.yaml` planned_rules

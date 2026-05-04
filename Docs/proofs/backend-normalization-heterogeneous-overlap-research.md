@@ -17,6 +17,7 @@
    - `followup-td-plan.md`
 
 ## Key Findings
+- **Alignment Matrix**: The alignment diagnostic matrix is now **generated evidence** produced by the SwiftPM diagnosis workflow (`Scripts/anigma_package_graph_audit.py alignment-matrix`). Hand-authored spreadsheets are not canonical.
 - **Consolidation Overclaim**: "Backend normalization" assumed sidecars were simple executable dependencies, but the architecture requires **Governed Sidecar Capabilities** with readiness receipts.
 - **Linker Leakage**: `PDFLayoutExtract` and `AnigmaFoundation` currently leak native dependencies (`PDFNative`, `HardwareAuthority`) into generic paths.
 - **Claim Downgrade**: Casual "zero-copy" claims in `MediaCore` and `SaturationKit` must be downgraded to `copy-minimized` until receipt evidence is added.
