@@ -889,7 +889,7 @@ tasks:
   priority: P1
   type: task
   lane: tooling-governance
-  status: ready
+  status: done
   description: Create a single deterministic diagnostic script that standardizes baseline capture, validation, and review bundles for architecture-sensitive TDs.
   source_docs:
   - Docs/governance/BUILD_TOOLING_DOCTRINE.md
