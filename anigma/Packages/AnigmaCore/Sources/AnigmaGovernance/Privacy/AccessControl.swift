@@ -280,7 +280,7 @@ public struct AttributeBasedPolicy: AccessPolicy, Sendable {
 
 /// Central access controller that evaluates policies.
 /// Thread-safe actor for concurrent access decisions.
-public actor AccessController: AnigmaFoundation.AccessController {
+public actor AccessController: GovernanceContracts.AccessController {
     private var policies: [any AccessPolicy] = []
     private var auditLog: (any AuditLogging)?
 
@@ -375,8 +375,8 @@ public actor AccessController: AnigmaFoundation.AccessController {
     }
 
     /// Lists all registered policies.
-    public func listPolicies() async -> [any AnigmaFoundation.AccessPolicy] {
-        policies.map { $0 as any AnigmaFoundation.AccessPolicy }
+    public func listPolicies() async -> [any GovernanceContracts.AccessPolicy] {
+        policies.map { $0 as any GovernanceContracts.AccessPolicy }
     }
 
     /// Lists policy metadata.

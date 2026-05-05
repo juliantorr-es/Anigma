@@ -354,12 +354,16 @@ public enum HarmoniaError: Error, LocalizedError, Sendable {
     case notImplemented(String)
     case internalError(String)
     case vaultError(String)
+    case invalidArgument(String)
+    case embeddingDimensionMismatch(String)
 
     public var errorDescription: String? {
         switch self {
         case .notImplemented(let msg): return "Not implemented: \(msg)"
         case .internalError(let msg): return "Internal error: \(msg)"
         case .vaultError(let msg): return "Vault error: \(msg)"
+        case .invalidArgument(let msg): return "Invalid argument: \(msg)"
+        case .embeddingDimensionMismatch(let msg): return "Embedding dimension mismatch: \(msg)"
         }
     }
 }

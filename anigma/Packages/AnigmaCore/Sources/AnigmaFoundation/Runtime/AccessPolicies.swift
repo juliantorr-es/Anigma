@@ -7,6 +7,7 @@
 
 import Foundation
 import AnigmaPrimitives
+import GovernanceContracts
 
 /// Policy that grants access based on roles.
 public struct RoleBasedPolicy: AccessPolicy, Sendable {

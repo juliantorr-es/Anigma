@@ -1,4 +1,3 @@
-import AnigmaFoundation
 import Foundation
 import GovernanceContracts
 import AnigmaPrimitives
@@ -8,7 +7,7 @@ import SecurityEventsManager
 /// The Write Gate ensures quality checks pass before writes are allowed.
 /// This actor lives in Tier 2 (Platform Runtime) as it manages state.
 public actor WriteGate: RuntimeWriteGateAPI {
-    private var checks: [WriteCheck] = []
+    private var checks: [GovernanceContracts.WriteCheck] = []
     private var auditLog: AuditLogging?
 
     public init() {}
@@ -17,7 +16,7 @@ public actor WriteGate: RuntimeWriteGateAPI {
         self.auditLog = log
     }
 
-    public func registerCheck(_ check: any WriteCheck) async {
+    public func registerCheck(_ check: any GovernanceContracts.WriteCheck) async {
         checks.append(check)
     }
 
@@ -25,8 +24,8 @@ public actor WriteGate: RuntimeWriteGateAPI {
         checks.removeAll { $0.id == id }
     }
 
-    public func evaluate(_ proposal: WriteProposal) async -> WriteGateDecision {
-        var results: [WriteCheckResult] = []
+    public func evaluate(_ proposal: GovernanceContracts.WriteProposal) async -> GovernanceContracts.WriteGateDecision {
+        var results: [GovernanceContracts.WriteCheckResult] = []
         var allPassed = true
 
         for check in checks {
@@ -40,7 +39,7 @@ public actor WriteGate: RuntimeWriteGateAPI {
             }
         }
 
-        let decision = WriteGateDecision(
+        let decision = GovernanceContracts.WriteGateDecision(
             allowed: allPassed,
             checkResults: results,
             evaluatedAt: Date()

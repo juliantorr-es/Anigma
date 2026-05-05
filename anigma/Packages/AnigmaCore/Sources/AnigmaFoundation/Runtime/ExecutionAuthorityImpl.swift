@@ -15,6 +15,7 @@ import GovernanceCore
 import InferenceCore
 import DatabaseCore
 import AnigmaPrimitives
+import AnigmaFoundation
 
 /// Phase 1 implementation of ExecutionAuthority
 public actor ExecutionAuthorityImpl: ExecutionAuthority {

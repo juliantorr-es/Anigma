@@ -548,7 +548,7 @@ let coreTargets: [Target] = [
       "MLWorkerInterfaces", "RendererBackendContracts"
     ],
     path: "Packages/AnigmaCore/Sources/AnigmaFoundation",
-    exclude: ["AnigmaFoundation.swift", "Runtime/"],
+    exclude: ["AnigmaFoundation.swift", "Runtime/", "Integration/", "Backend/", "Tenant/", "Identity/", "Updates/"],
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
   ),
 

@@ -17,48 +17,10 @@ import IntelligenceContracts
 import DatabaseCore
 import GovernanceCore
 
-// MARK: - Principal
+// MARK: - Typealiases for extracted contract types
 
-/// Represents an authenticated identity performing operations.
-/// Used for access control and audit trails.
-public struct Principal: Sendable, Codable, Hashable {
-    /// Unique identifier for the principal (user ID, service account, etc.)
-    public let id: String
-
-    /// Display name for audit logs
-    public let displayName: String
-
-    /// Attributes for ABAC (Attribute-Based Access Control)
-    public let attributes: [String: String]
-
-    /// Roles for RBAC (Role-Based Access Control)
-    public let roles: Set<String>
-
-    public init(
-        id: String,
-        displayName: String,
-        attributes: [String: String] = [:],
-        roles: Set<String> = []
-    ) {
-        self.id = id
-        self.displayName = displayName
-        self.attributes = attributes
-        self.roles = roles
-    }
-
-    /// System principal for internal operations
-    public static let system = Principal(
-        id: "system",
-        displayName: "Anigma System",
-        roles: ["system"]
-    )
-
-    /// Anonymous principal for unauthenticated operations
-    public static let anonymous = Principal(
-        id: "anonymous",
-        displayName: "Anonymous User"
-    )
-}
+/// Principal type extracted to GovernanceContracts
+public typealias Principal = GovernanceContracts.Principal
 
 // MARK: - Execution Context
 

@@ -30,10 +30,10 @@ public extension GoverningController {
             let modeSource = await modeSource(for: projectId)
             
             let failedChecks = decision.failedChecks.map { 
-                GovernanceViolation.FailedCheck(checkId: $0.checkId, message: $0.message) 
+                GovernanceCore.GovernanceViolation.FailedCheck(checkId: $0.checkId, message: $0.message) 
             }
             
-            let violation = GovernanceViolation(
+            let violation = GovernanceCore.GovernanceViolation(
                 principal: principal.id,
                 projectId: projectId,
                 operation: "database_mutation",
@@ -45,11 +45,16 @@ public extension GoverningController {
             let auditLog = await self.auditLog
             try? await auditLog.recordEvent(
                 id: UUID(),
-                type: AuditEventType.policyViolation,
+                type: .policyViolation,
                 principal: principal.id,
                 module: "Governance",
                 description: "Write blocked: \(violation.summaryMessage)",
-                metadata: violation.auditMetadata
+                metadata: [
+                    "principal": violation.principal,
+                    "operation": violation.operation,
+                    "module": violation.module ?? "unknown",
+                    "modeSource": violation.evaluatedModeSource ?? "unknown"
+                ]
             )
             
             throw GovernanceError.writeBlocked(violation: violation)
@@ -115,44 +120,7 @@ public extension GoverningController {
 
 // MARK: - Governance Violation Types
 
-/// Extension type for governance violation handling in AnigmaFoundation.
-/// NOTE: Renamed from GovernanceViolation to avoid collision with GovernanceCore.GovernanceViolation
-public struct AnigmaGovernanceViolation: Sendable {
-    public let principal: String
-    public let projectId: String?
-    public let operation: String
-    public let module: String
-    public let evaluatedModeSource: String
-    public let failedChecks: [FailedCheck]
-    
-    public var summaryMessage: String {
-        "Governance violation by \(principal) in \(module): \(operation)"
-    }
-    
-    public var auditMetadata: [String: String] {
-        var metadata: [String: String] = [
-            "principal": principal,
-            "operation": operation,
-            "module": module,
-            "modeSource": evaluatedModeSource
-        ]
-        
-        if let projectId = projectId {
-            metadata["projectId"] = projectId
-        }
-        
-        for (index, check) in failedChecks.enumerated() {
-            metadata["failedCheck_\(index)"] = "\(check.checkId): \(check.message)"
-        }
-        
-        return metadata
-    }
-    
-    public struct FailedCheck: Sendable {
-        public let checkId: String
-        public let message: String
-    }
-}
-
-// Keep typealias for backward compatibility if needed
-public typealias GovernanceViolation = AnigmaGovernanceViolation
+// Use GovernanceCore.GovernanceViolation directly instead of local copy
+// to avoid type conflicts between RuntimeCore and GovernanceCore.
+// The local AnigmaGovernanceViolation type has been removed to prevent
+// shadowing of the GovernanceCore type.

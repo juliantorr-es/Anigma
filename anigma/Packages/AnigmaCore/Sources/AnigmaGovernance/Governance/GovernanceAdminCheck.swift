@@ -2,6 +2,7 @@ import AnigmaFoundation
 import AnigmaPrimitives
 import Foundation
 import GovernanceCore
+import GovernanceContracts
 
 /// Admin carveout for governance operations.
 /// Allows governance-admin principals to change governance state (mode, kill switch)
