@@ -1,0 +1,8 @@
+[
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemon/main.swift:77:configuration.ingress.argv",
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemon/main.swift:359:lifecycle.signal.handler",
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemon/main.swift:360:lifecycle.signal.handler",
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Verification/DaemonVerifierHarness.swift:399:runtime.cwd.direct",
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift:33:configuration.ingress.argv",
+  "/Users/user/Developer/GitHub/Anigma_clean/anigma/Packages/AnigmaDaemonCore/Jobs/ContextumWorkerBootstrap.swift:100:runtime.cwd.direct"
+]

@@ -266,6 +266,9 @@ public protocol AccessController: Sendable {
 
     /// Lists all registered policies.
     func listPolicies() async -> [any AccessPolicy]
+
+    /// Sets the audit log for recording access decisions.
+    func setAuditLog(_ log: any AuditLogging) async
 }
 
 /// Protocol defining the interface for an Access Policy.

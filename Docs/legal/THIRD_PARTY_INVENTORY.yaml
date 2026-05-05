@@ -1,0 +1,255 @@
+# Third Party Dependency Inventory
+# This file tracks all dependencies to ensure licensing and App Store compliance.
+
+dependencies:
+  # --- Python Tooling (Dev/Ops) ---
+  - name: "python-requests"
+    version: "unknown / needs_review"
+    license: "Apache 2.0"
+    used_as: "dev_tool"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used in the Notion documentation publishing scripts."
+
+  - name: "python-pyyaml"
+    version: "unknown / needs_review"
+    license: "MIT"
+    used_as: "dev_tool"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used in various validation and sync scripts."
+
+  - name: "python-jsonschema"
+    version: "unknown / needs_review"
+    license: "MIT"
+    used_as: "dev_tool"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for governance index validation."
+
+  # --- JS/Frontend Tooling (Dev/Ops) ---
+  - name: "mermaid"
+    version: "unknown / needs_review"
+    license: "MIT"
+    used_as: "dev_tool"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Documentation diagram visualization."
+
+  - name: "vitepress"
+    version: "unknown / needs_review"
+    license: "MIT"
+    used_as: "dev_tool"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Static site generation for documentation."
+
+  # --- Swift Package Dependencies ---
+  - name: "swift-argument-parser"
+    version: "1.3.0"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/apple/swift-argument-parser.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for CLI commands and sidecar daemons."
+
+  - name: "swift-syntax"
+    version: "510.0.0"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/apple/swift-syntax.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used in SyntaxCapsule and other parsing targets."
+
+  - name: "SwiftUICharts"
+    version: "unknown / needs_review"
+    license: "MIT"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/mecid/SwiftUICharts.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for metrics and visualization UI."
+
+  - name: "mlx-swift"
+    version: "0.29.1"
+    license: "MIT"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/ml-explore/mlx-swift.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Apple MLX framework bindings for local ML."
+
+  - name: "mlx-swift-lm"
+    version: "2.29.2"
+    license: "MIT"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/ml-explore/mlx-swift-lm.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Language model extensions for MLX."
+
+  - name: "swift-numerics"
+    version: "1.0.2"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/apple/swift-numerics.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used in vector and ML operations."
+
+  - name: "swift-toml"
+    version: "1.0.0"
+    license: "MIT"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/jdfergason/swift-toml.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for configuration parsing."
+
+  - name: "swift-crypto"
+    version: "3.0.0"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/apple/swift-crypto.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used in security and hashing layers."
+
+  - name: "swift-cmark"
+    version: "0.5.0"
+    license: "MIT"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/apple/swift-cmark.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for Markdown rendering and chunking."
+
+  - name: "hummingbird"
+    version: "2.0.0"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/hummingbird-project/hummingbird.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for the Anigma Daemon HTTP service."
+
+  - name: "async-http-client"
+    version: "1.19.0"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/swift-server/async-http-client.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used for network calls and API clients."
+
+  - name: "swift-sdk (MCP)"
+    version: "0.4.1"
+    license: "MIT"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/modelcontextprotocol/swift-sdk.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Model Context Protocol for integrating Anigma context into IDEs and Agents."
+
+  - name: "postgres-nio"
+    version: "1.29.0"
+    license: "Apache 2.0"
+    used_as: "runtime_bundled"
+    distributed_in_app_store_build: true
+    source_url: "https://github.com/vapor/postgres-nio.git"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Database driver for Postgres."
+
+  # --- Vendored / C Libraries (Sidecar Candidates) ---
+  - name: "PDFium"
+    version: "unknown / needs_review"
+    license: "Apache 2.0 / BSD 3-clause"
+    used_as: "bundled_sidecar_non_app_store"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: false
+    app_store_status: "excluded_from_app_store_profile"
+    notes: "Vendored binary in External/Vendor/PDFium/macos-arm64. Excluded from App Store builds until exact binary provenance and transitive notices are complete. PDFKit is the App Store fallback/default path. PDFSidecarExecutable must not be packaged into the App Store profile."
+    replacement_path: "PDFKit"
+    validation_gate: "Scripts/validate_app_store_dependency_boundaries.py"
+
+  - name: "FFmpeg"
+    version: "unknown / needs_review"
+    license: "LGPL / GPL"
+    used_as: "optional_external_tool"
+    distributed_in_app_store_build: false
+    source_url: "unknown / needs_review"
+    notice_required: true
+    copyleft_risk: true
+    app_store_status: "high_risk"
+    notes: "Conditionally linked via ENABLE_FFMPEG_LINKING. Extreme App Store risk if bundled directly due to LGPL/GPL dynamic linking conflicts."
+    replacement_path: "AVFoundation, VideoToolbox, CoreMedia, CoreVideo, Metal"
+    validation_gate: "Scripts/validate_app_store_dependency_boundaries.py"
+
+  # --- Apple System Frameworks ---
+  - name: "Apple System Frameworks"
+    version: "OS-provided"
+    license: "Proprietary / Apple"
+    used_as: "runtime_system_framework"
+    distributed_in_app_store_build: true
+    source_url: "n/a"
+    notice_required: false
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Metal, MetalKit, Accelerate, CoreVideo, AVFoundation, ImageIO, CoreGraphics, CoreText, CoreAudio, etc."
+
+  # --- External Services ---
+  - name: "Notion API"
+    version: "n/a"
+    license: "Proprietary API"
+    used_as: "external_service"
+    distributed_in_app_store_build: false
+    source_url: "https://api.notion.com"
+    notice_required: false
+    copyleft_risk: false
+    app_store_status: "safe"
+    notes: "Used by publisher scripts."

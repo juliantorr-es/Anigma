@@ -1,0 +1,20 @@
+name: backend-regularization
+description: Backend module graph and focused build readiness lane.
+continue_on_known_blocked_required: false
+steps:
+  - id: atlas-build
+    command: python3 scripts/anigma_build_repo_atlas.py
+    required: true
+    description: Build atlas.
+  - id: dead-code-gate
+    command: python3 scripts/anigma_dead_code_audit.py --mode gate --baseline Docs/baselines/dead-code-baseline.json
+    required: true
+    description: Dead-code gate.
+  - id: executable-gate
+    command: python3 scripts/anigma_executable_consolidation_audit.py --mode gate --baseline Docs/baselines/executable-consolidation-baseline.json --focus anigmad
+    required: true
+    description: Executable consolidation gate.
+  - id: focused-build
+    command: swift build --target {target}
+    required: false
+    description: Focused build.

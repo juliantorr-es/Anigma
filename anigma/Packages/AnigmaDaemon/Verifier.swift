@@ -2,12 +2,12 @@ import AnigmaDaemonCore
 import Foundation
 
 enum Verifier {
-    static func run() async throws {
+    static func run(configuration: DaemonConfiguration) async throws {
         let executablePath = Bundle.main.executablePath ?? "./anigmad"
-        let configuration = DaemonVerifierHarnessConfiguration(
+        let harnessConfig = DaemonVerifierHarnessConfiguration(
             daemonExecutablePath: executablePath,
-            evidenceDirectory: ProcessInfo.processInfo.environment["ANIGMA_EVIDENCE_DIR"]
+            evidenceDirectory: configuration.daemon.evidenceDirectory
         )
-        _ = try await DaemonVerifierHarness.run(configuration: configuration)
+        _ = try await DaemonVerifierHarness.run(configuration: harnessConfig)
     }
 }

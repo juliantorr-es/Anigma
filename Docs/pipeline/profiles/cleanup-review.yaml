@@ -1,0 +1,24 @@
+name: cleanup-review
+description: Review lane for cleanup task readiness.
+continue_on_known_blocked_required: false
+steps:
+  - id: dead-code-gate
+    command: python3 scripts/anigma_dead_code_audit.py --mode gate --baseline Docs/baselines/dead-code-baseline.json
+    required: true
+    description: Dead-code gate.
+  - id: executable-gate
+    command: python3 scripts/anigma_executable_consolidation_audit.py --mode gate --baseline Docs/baselines/executable-consolidation-baseline.json --focus anigmad
+    required: true
+    description: Executable consolidation gate.
+  - id: atlas-build
+    command: python3 scripts/anigma_build_repo_atlas.py
+    required: true
+    description: Build atlas.
+  - id: atlas-check
+    command: python3 scripts/anigma_context_query.py --check
+    required: true
+    description: Verify atlas.
+  - id: scope-check
+    command: python3 scripts/anigma_validate_scope.py --task {task} --allowed-path scripts --allowed-path Docs --allow-empty
+    required: true
+    description: Validate changed-file scope.

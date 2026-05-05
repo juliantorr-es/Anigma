@@ -1,13 +1,16 @@
 //
 //  PlatformBackend.swift
-//  AnigmaCore
+//  RuntimeCore
 //
 //  PlatformBackend protocol for PlatformRuntime governance.
 //  Part of td-358315: Define backend readiness gates.
+//  Tier 2 - Runtime layer: Concrete backend orchestration.
 //
 
 import Foundation
 import AnigmaFoundation
+import BackendReadinessContracts
+import PersistenceContracts
 import RendererBackendContracts
 
 /// Protocol for backends that integrate with PlatformRuntime
@@ -62,7 +65,7 @@ public struct ConcretePlatformBackend: PlatformBackend {
     public func execute<Operation: BackendOperation, Result>(_ operation: Operation, context: ExecutionContext) async throws -> Result {
         // Execute operation with governance context
         // In real implementation, this would call backend-specific logic
-        fatalError("execute(operation:context:) must be implemented by concrete backend")
+        throw RuntimeLifecycleError.unimplemented(message: "execute(operation:context:) must be implemented by concrete backend")
     }
 }
 
@@ -95,7 +98,7 @@ public struct DatabasePlatformBackend: PlatformBackend {
     public func execute<Operation: BackendOperation, Result>(_ operation: Operation, context: ExecutionContext) async throws -> Result {
         // This would be implemented based on specific operation type
         // For now, this is a placeholder implementation
-        fatalError("DatabasePlatformBackend.execute(operation:context:) not yet implemented for operation type: \(operation.operationType)")
+        throw RuntimeLifecycleError.unimplemented(message: "DatabasePlatformBackend.execute(operation:context:) not yet implemented for operation type: \(operation.operationType)")
     }
 }
 

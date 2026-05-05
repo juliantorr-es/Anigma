@@ -20,7 +20,7 @@ import CommonCrypto
 /// Only composition roots (AnigmaDaemon, AnigmaApp, CLI tools) should create DatabaseActor directly.
 /// See ADR-0018 and td-317bbb for details.
 public actor ModelRegistryStore: ModelRegistryProtocol {
-    private let database: any DatabaseExecutor
+    internal let database: any DatabaseExecutor
 
     /// Preferred initializer - receives DatabaseExecutor via dependency injection.
     /// Use this when ModelRegistryStore is created by feature modules.
@@ -294,7 +294,7 @@ public actor ModelRegistryStore: ModelRegistryProtocol {
         ])
     }
 
-    private func decodeEntry(from row: DatabaseRow) throws -> ModelRegistryEntry? {
+    internal func decodeEntry(from row: DatabaseRow) throws -> ModelRegistryEntry? {
         guard
             let id = row.string(for: "id"),
             let specJSON = row.string(for: "spec_json"),

@@ -112,4 +112,12 @@ else
     echo "❌ FAIL: xcodebuild Debug ${ACTION} failed (exit code ${EXIT_CODE})"
 fi
 
+echo ""
+echo "=== Advisory: Dead Code Audit ==="
+python3 "${REPO_ROOT}/scripts/anigma_dead_code_audit.py" --mode advisory --no-proof || true
+
+echo ""
+echo "=== Advisory: Executable Consolidation Audit ==="
+python3 "${REPO_ROOT}/scripts/anigma_executable_consolidation_audit.py" --mode advisory --focus anigmad --no-proof || true
+
 exit ${EXIT_CODE}

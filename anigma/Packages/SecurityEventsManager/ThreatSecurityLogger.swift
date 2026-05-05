@@ -1,4 +1,5 @@
 import Foundation
+import SecurityEventsContracts
 
 /// Specialized logger for threat and attack-related security events.
 public struct ThreatSecurityLogger {

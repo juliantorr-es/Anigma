@@ -7,6 +7,7 @@
 
 import Foundation
 import AnigmaPrimitives
+import AnigmaFoundation
 
 // MARK: - Workflow Registry Protocol
 

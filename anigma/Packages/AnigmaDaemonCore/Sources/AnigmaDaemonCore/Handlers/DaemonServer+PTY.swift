@@ -7,6 +7,7 @@
 
 import Foundation
 import AnigmaPrimitives
+import AnigmaCore
 
 extension DaemonServer {
     
@@ -16,7 +17,7 @@ extension DaemonServer {
         let session = try await sessionManager.createSession(
             command: request.command ?? "/bin/bash",
             args: request.args ?? [],
-            workdir: request.workdir ?? FileManager.default.currentDirectoryPath,
+            workdir: request.workdir ?? RuntimeAuthority.shared.workingDirectory,
             env: request.env ?? [:]
         )
         return await session.getInfo()

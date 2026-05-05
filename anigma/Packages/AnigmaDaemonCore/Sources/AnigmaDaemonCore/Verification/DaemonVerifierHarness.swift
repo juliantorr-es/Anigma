@@ -14,12 +14,13 @@ public struct DaemonVerifierHarnessConfiguration: Sendable {
         daemonExecutablePath: String,
         evidenceDirectory: String? = nil,
         sessionPrefix: String = "verify",
-        socketPath: String = "/tmp/anigmad-test.sock"
+        socketPath: String? = nil
     ) {
         self.daemonExecutablePath = daemonExecutablePath
         self.evidenceDirectory = evidenceDirectory
         self.sessionPrefix = sessionPrefix
-        self.socketPath = socketPath
+        // Alignment: Derive default socket path from runtime authority to avoid /tmp collisions
+        self.socketPath = socketPath ?? "\(RuntimeAuthority.shared.workingDirectory)/.anigmad-verify.sock"
     }
 }
 
@@ -396,7 +397,8 @@ private final class FileVerifierEvidenceRecorder: LoopEvidenceRecorder, @uncheck
     private let eventEncoder: JSONEncoder
 
     init(evidenceDirectory: String? = nil, sessionId: String) {
-        let defaultPath = FileManager.default.currentDirectoryPath + "/.evidence"
+        // Alignment: Use governed runtime authority for paths
+        let defaultPath = RuntimeAuthority.shared.workingDirectory + "/.evidence"
         self.evidenceDirectory = evidenceDirectory ?? defaultPath
         self.sessionId = sessionId
         self.bundleEncoder = JSONEncoder()

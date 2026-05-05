@@ -54,20 +54,31 @@ public protocol SecurityEventWriteStore: Sendable {
 /// Implementations must conform to both read and write capabilities.
 public protocol SecurityEventStore: SecurityEventReadStore, SecurityEventWriteStore {}
 
+/// A date range for filtering events.
+public struct DateRange: Sendable, Codable {
+    public let from: Date
+    public let to: Date
+
+    public init(from: Date, to: Date) {
+        self.from = from
+        self.to = to
+    }
+}
+
 /// Query filter for security events.
 /// Used by more advanced query operations that may be added in the future.
 public struct SecurityEventQuery: Sendable, Codable {
     public let type: String?
     public let severity: String?
     public let engineId: String?
-    public let dateRange: (from: Date, to: Date)?
+    public let dateRange: DateRange?
     public let limit: Int?
     
     public init(
         type: String? = nil,
         severity: String? = nil,
         engineId: String? = nil,
-        dateRange: (from: Date, to: Date)? = nil,
+        dateRange: DateRange? = nil,
         limit: Int? = nil
     ) {
         self.type = type

@@ -18,7 +18,7 @@ private struct JobQueueCompatibilityJobRecord: Sendable {
     var clientId: String
 }
 
-private final class JobQueueCompatibilityState {
+private actor JobQueueCompatibilityState {
     static let shared = JobQueueCompatibilityState()
 
     struct State: Sendable {
@@ -27,13 +27,9 @@ private final class JobQueueCompatibilityState {
         var jobs: [String: JobQueueCompatibilityJobRecord] = [:]
     }
 
-    private let lock = NSLock()
     private var states: [ObjectIdentifier: State] = [:]
 
     func withState<T>(for queue: JobQueue, _ body: (inout State) -> T) -> T {
-        lock.lock()
-        defer { lock.unlock() }
-
         let key = ObjectIdentifier(queue)
         var state = states[key] ?? State()
         let result = body(&state)
@@ -42,9 +38,6 @@ private final class JobQueueCompatibilityState {
     }
 
     func readState<T>(for queue: JobQueue, _ body: (State) -> T) -> T {
-        lock.lock()
-        defer { lock.unlock() }
-
         let key = ObjectIdentifier(queue)
         return body(states[key] ?? State())
     }

@@ -15,12 +15,14 @@ import Foundation
 
 @main
 struct DaemonControl {
-    static func main() async {
+    static func main() async throws {
+        // Alignment: Inject arguments via governed configuration boundary
+        // In a full consolidation, this would come from a Registry or RuntimeAuthority
         let args = CommandLine.arguments
 
         guard args.count >= 2 else {
             printUsage()
-            exit(1)
+            throw DaemonLifecycleError.binaryNotFound("Missing command") // Reusing existing error for alignment
         }
 
         let command = args[1]
@@ -39,11 +41,11 @@ struct DaemonControl {
             default:
                 print("Unknown command: \(command)")
                 printUsage()
-                exit(1)
+                throw DaemonLifecycleError.binaryNotFound("Unknown command: \(command)")
             }
         } catch {
             print("Error: \(error.localizedDescription)")
-            exit(1)
+            throw error
         }
     }
 

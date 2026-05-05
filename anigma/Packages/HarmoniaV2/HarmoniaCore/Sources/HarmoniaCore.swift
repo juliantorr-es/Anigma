@@ -6,6 +6,7 @@
 
 import Foundation
 import AnigmaFoundation
+import HarmoniaV2Contracts
 
 /// Shared types and protocols across all Harmonia modules
 

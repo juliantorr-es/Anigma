@@ -35,12 +35,13 @@ private func daemonStartupCheckpoint(_ message: String) {
     logInfo(message, category: "DaemonServer")
 }
 
-private func resolveMLWorkerPath() -> String {
-    if let envPath = ProcessInfo.processInfo.environment["ML_WORKER_PATH"], !envPath.isEmpty {
-        return envPath
+private func resolveMLWorkerPath(configuration: DaemonConfiguration) -> String {
+    if let configPath = configuration.daemon.mlWorkerPath, !configPath.isEmpty {
+        return configPath
     }
 
-    let currentDir = FileManager.default.currentDirectoryPath
+    // Alignment: Use governed runtime authority for paths
+    let currentDir = RuntimeAuthority.shared.workingDirectory
     return "\(currentDir)/.build/debug/ml-worker"
 }
 
@@ -250,7 +251,7 @@ public actor DaemonServer {
 
         let embeddingComputing = AcceleratedContextumEmbeddingComputing(
             backend: AnigmaCore.MLWorkerEmbeddingComputer(
-                mlWorkerPath: resolveMLWorkerPath()
+                mlWorkerPath: resolveMLWorkerPath(configuration: configuration)
             )
         )
         let contextumModelRegistry = ConcreteModelRegistry(registry: modelRegistry)
@@ -317,10 +318,12 @@ public actor DaemonServer {
         let evidenceAuthority = DaemonEvidenceAuthority(receiptEngine: receiptEngine)
         let parityReport = await DaemonWorkerRegistry.registerCanonicalWorkers(
             on: jobRegistry,
-            database: self.database,
-            artifactAuthority: artifactAuthority,
-            evidenceAuthority: evidenceAuthority
+            database: database,
+            artifactAuthority: runtimeArtifactAuthority,
+            evidenceAuthority: evidenceAuthority,
+            configuration: configuration
         )
+
         precondition(
             parityReport.isInParity,
             "Worker registry drift detected in DaemonServer. Missing: \(parityReport.missingKinds). Extra: \(parityReport.extraKinds)"
@@ -558,7 +561,8 @@ extension DaemonServer {
         Self.logger.info("Initiating graceful shutdown")
         await performShutdown()
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        exit(0)
+        // Alignment: Controlled shutdown via authority
+        RuntimeAuthority.shared.shutdown(exitCode: 0)
     }
 
     private func handleConfigurationReload() async {

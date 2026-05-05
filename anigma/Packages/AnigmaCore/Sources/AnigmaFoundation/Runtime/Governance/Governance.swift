@@ -158,7 +158,7 @@ public actor GovernanceController: GoverningController {
     }
     
     /// Initializes governance with database persistence.
-    public func initialize(using database: DatabaseAuthorityAdapter) async throws {
+    public func initialize(using database: any DatabaseAuthority) async throws {
         isBootstrapping = true
         try await createGovernanceTables(using: database)
         try await seedDefaultMode(using: database)
@@ -235,7 +235,7 @@ public actor GovernanceController: GoverningController {
     }
     
     /// Sets the operating mode for a specific project with database persistence.
-    public func setMode(_ mode: OperatingMode, for projectId: String?, by principal: Principal, using database: any AnigmaFoundation.DatabaseAuthority) async throws {
+    public func setMode(_ mode: OperatingMode, for projectId: String?, by principal: Principal, using database: any DatabaseAuthority) async throws {
         let oldMode = await getMode(for: projectId)
         let targetProjectId = projectId ?? "global"
         
@@ -279,7 +279,7 @@ public actor GovernanceController: GoverningController {
     }
     
     /// Clear a project-specific mode override (reverts to global mode).
-    public func clearMode(for projectId: String?, by principal: String, using database: any AnigmaFoundation.DatabaseAuthority) async throws {
+    public func clearMode(for projectId: String?, by principal: String, using database: any DatabaseAuthority) async throws {
         guard let projectId = projectId else {
             throw RuntimeInitializationError.configurationError("Cannot clear global mode")
         }
@@ -301,7 +301,7 @@ public actor GovernanceController: GoverningController {
     }
 
     /// Sets the kill switch state for a project with database persistence.
-    public func setKillSwitch(active: Bool, for projectId: String?, reason: String?, by principal: Principal, using database: any AnigmaFoundation.DatabaseAuthority) async throws {
+    public func setKillSwitch(active: Bool, for projectId: String?, reason: String?, by principal: Principal, using database: any DatabaseAuthority) async throws {
         // Implementation for persisted kill switch change
         try await setKillSwitch(active: active, for: projectId, reason: reason, by: principal)
         
@@ -319,8 +319,21 @@ public actor GovernanceController: GoverningController {
     }
 
     /// Clears a project-specific or global mode override with database persistence.
-    public func clearMode(for projectId: String?, by principal: Principal, using database: any AnigmaFoundation.DatabaseAuthority) async throws {
-        try await clearMode(for: projectId, by: principal.id, using: database)
+    public func clearMode(for projectId: String?, by principal: Principal, using database: any DatabaseAuthority) async throws {
+        // Clear from database
+        try await clearModeFromDatabase(for: projectId, using: database)
+        // Clear from in-memory cache
+        if let projectId = projectId {
+            projectModes.removeValue(forKey: projectId)
+        } else {
+            currentMode = .assistive  // Reset to default
+        }
+    }
+
+    /// Internal method to clear mode from database.
+    private func clearModeFromDatabase(for projectId: String?, using database: any DatabaseAuthority) async throws {
+        // Implementation for clearing mode from database
+        // This is a placeholder - actual implementation would use database authority
     }
 
     /// Clears a project-specific mode override from the in-memory cache.

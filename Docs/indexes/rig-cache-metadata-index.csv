@@ -1,0 +1,4 @@
+artifact_id,producer,command,cache_key,status,input_count,output_count,duration_seconds,metadata_path
+atlas-build,anigma_build_repo_atlas,python3 scripts/anigma_build_repo_atlas.py,02b676d8108b7352a7b8e460f4c3bcd45099249ce557045c0d3168e767f462b8,fresh,1,1,1.23,.build/rig/cache-metadata/atlas-build.json
+pipeline,anigma_pipeline,/Applications/Xcode.app/Contents/Developer/usr/bin/python3 /Users/user/Developer/GitHub/Anigma_clean/scripts/anigma_pipeline.py run --profile=local-fast --task=rig-cli-bootstrap,4c2a1d8cd86918e168c2494915373513818d70b670782dfee3cdede69fe25b71,fresh,1,1,1.959177017211914,.build/rig/cache-metadata/pipeline.json
+state-flow-audit,anigma_state_flow_audit,python3 scripts/anigma_state_flow_audit.py,c9bf9f4e50e8d82ec7ac6cb275c3f89af1e4f7992495f04d28b8d62b8016fe59,missing_outputs,1,1,2.0,.build/rig/cache-metadata/state-flow-audit.json

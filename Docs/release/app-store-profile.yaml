@@ -1,0 +1,26 @@
+name: "Anigma App Store Build Profile"
+ffmpeg_allowed: false
+pdfium_allowed: false
+pdf_backend: "PDFKit"
+allowed_native_backends:
+  - "AVFoundation"
+  - "VideoToolbox"
+  - "AudioToolbox"
+  - "CoreMedia"
+  - "CoreGraphics"
+  - "PDFKit"
+  - "Metal"
+  - "MetalPerformanceShaders"
+  - "Accelerate"
+forbidden_runtime_binaries:
+  - "libavcodec"
+  - "libavformat"
+  - "libavutil"
+  - "libswscale"
+  - "libswresample"
+  - "ffmpeg"
+  - "ffprobe"
+  - "libpdfium"
+  - "PDFSidecarExecutable"
+required_validators:
+  - "Scripts/validate_app_store_build_profile.py"

@@ -1,0 +1,2 @@
+run_id,task,target,command,exit_code,status,diagnostic_count,error_count,warning_count,categories,known_blocker_id,latest_json,latest_md
+,,AnigmaDaemonCore,swift build --package-path anigma --target AnigmaDaemonCore,1,failed,2,2,0,missing_import;unknown,build-anigmacore-runtimecore-001,.build/rig/swift-diagnostics/latest.json,.build/rig/swift-diagnostics/latest.md

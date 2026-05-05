@@ -3,6 +3,7 @@ import Foundation
 import System
 import Darwin
 import OSLog
+import AnigmaCore
 import AnigmaDaemonCore
 import TelemetryCore
 @preconcurrency import UserNotifications
@@ -899,7 +900,9 @@ try data.write(to: configURL)
 
 private static func getConfigURL() -> URL {
 guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-fatalError("Application Support directory is unavailable")
+    // Alignment: Controlled shutdown via authority instead of fatalError
+    print("CRITICAL: Application Support directory is unavailable. anigmad cannot continue.")
+    RuntimeAuthority.shared.shutdown(exitCode: 1)
 }
 let appFolder = appSupport.appendingPathComponent("AnigmaDaemon")
 
@@ -1125,7 +1128,9 @@ rotateLogsIfNeeded()
 
 private func getLogURL() -> URL {
 guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-fatalError("Application Support directory is unavailable")
+    // Alignment: Controlled shutdown via authority instead of fatalError
+    print("CRITICAL: Application Support directory is unavailable. anigmad cannot continue.")
+    RuntimeAuthority.shared.shutdown(exitCode: 1)
 }
 let appFolder = appSupport.appendingPathComponent("AnigmaDaemon")
 return appFolder.appendingPathComponent("anigmad.log")

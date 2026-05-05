@@ -48,10 +48,10 @@ public struct IndexingWorker: JobWorker {
     private let vectorDatabase: (any VectorAvailabilityDatabase)?
     private let useRealEmbeddings: Bool
     
-    public init(database: any DatabaseExecutor) {
+    public init(database: any DatabaseExecutor, configuration: DaemonConfiguration? = nil) {
         self.db = database
         self.vectorDatabase = database as? any VectorAvailabilityDatabase
-        self.useRealEmbeddings = ProcessInfo.processInfo.environment["ANIGMA_INDEX_USE_REAL_ML"] == "1"
+        self.useRealEmbeddings = configuration?.daemon.useMockML == false
     }
     
     public func execute(

@@ -75,17 +75,18 @@ public actor CoreImageTransformExecutor: MediaExecutor {
     
     private func applyFilter(contract: ImageFilterContract) async throws -> MediaReference {
         // Resolve the source image surface to a CIImage
-        let lease = try await surfaceAuthority.acquireLease(for: contract.sourceImage)
-        guard let native = try await surfaceAuthority.resolveNativeSurface(for: lease) else {
-            throw TransformError.surfaceConversionFailed
-        }
+        let imageLease = try await surfaceAuthority.acquireImageLease(for: contract.sourceImage)
+        let native = try await surfaceAuthority.resolveNativeSurface(for: imageLease)
+       
         
         let ciImage: CIImage
         
         // Convert various surface types to CIImage
-        if let cgImage = native as? CGImage {
+        if native is CGImage {
+            let cgImage = native as! CGImage
             ciImage = CIImage(cgImage: cgImage)
-        } else if let pixelBuffer = native as? CVPixelBuffer {
+        } else if native is CVPixelBuffer {
+            let pixelBuffer = native as! CVPixelBuffer
             ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         } else {
             throw TransformError.surfaceConversionFailed
@@ -105,7 +106,7 @@ public actor CoreImageTransformExecutor: MediaExecutor {
             format: "bgra",
             metadata: ["executor": "CoreImageTransformExecutor", "filter": contract.filterName]
         )
-        await surfaceAuthority.releaseLease(lease)
+        await surfaceAuthority.releaseImageLease(imageLease)
         
         return .videoFrame(frame)
     }
@@ -128,16 +129,16 @@ public actor CoreImageTransformExecutor: MediaExecutor {
     
     private func applyResize(contract: ImageResizeContract) async throws -> MediaReference {
         // Resolve the source image
-        let lease = try await surfaceAuthority.acquireLease(for: contract.sourceImage)
-        guard let native = try await surfaceAuthority.resolveNativeSurface(for: lease) else {
-            throw TransformError.surfaceConversionFailed
-        }
+        let imageLease = try await surfaceAuthority.acquireImageLease(for: contract.sourceImage)
+        let native = try await surfaceAuthority.resolveNativeSurface(for: imageLease)
         
         let ciImage: CIImage
         
-        if let cgImage = native as? CGImage {
+        if native is CGImage {
+            let cgImage = native as! CGImage
             ciImage = CIImage(cgImage: cgImage)
-        } else if let pixelBuffer = native as? CVPixelBuffer {
+        } else if native is CVPixelBuffer {
+            let pixelBuffer = native as! CVPixelBuffer
             ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         } else {
             throw TransformError.surfaceConversionFailed
@@ -163,7 +164,7 @@ public actor CoreImageTransformExecutor: MediaExecutor {
             format: "bgra",
             metadata: ["executor": "CoreImageTransformExecutor", "operation": "resize"]
         )
-        await surfaceAuthority.releaseLease(lease)
+        await surfaceAuthority.releaseImageLease(imageLease)
         
         return .videoFrame(frame)
     }
@@ -171,16 +172,16 @@ public actor CoreImageTransformExecutor: MediaExecutor {
     // MARK: - Color Adjustment
     
     private func applyColorAdjustment(contract: ImageColorAdjustmentContract) async throws -> MediaReference {
-        let lease = try await surfaceAuthority.acquireLease(for: contract.sourceImage)
-        guard let native = try await surfaceAuthority.resolveNativeSurface(for: lease) else {
-            throw TransformError.surfaceConversionFailed
-        }
+        let imageLease = try await surfaceAuthority.acquireImageLease(for: contract.sourceImage)
+        let native = try await surfaceAuthority.resolveNativeSurface(for: imageLease)
         
         let ciImage: CIImage
         
-        if let cgImage = native as? CGImage {
+        if native is CGImage {
+            let cgImage = native as! CGImage
             ciImage = CIImage(cgImage: cgImage)
-        } else if let pixelBuffer = native as? CVPixelBuffer {
+        } else if native is CVPixelBuffer {
+            let pixelBuffer = native as! CVPixelBuffer
             ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         } else {
             throw TransformError.surfaceConversionFailed
@@ -227,7 +228,7 @@ public actor CoreImageTransformExecutor: MediaExecutor {
             format: "bgra",
             metadata: ["executor": "CoreImageTransformExecutor", "operation": "color_adjust"]
         )
-        await surfaceAuthority.releaseLease(lease)
+        await surfaceAuthority.releaseImageLease(imageLease)
         
         return .videoFrame(frame)
     }

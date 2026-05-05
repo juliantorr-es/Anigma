@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rig Supervisor Loop Run",
+  "type": "object",
+  "required": ["schema_version", "run_id", "task", "mode", "status", "started_at", "finished_at", "duration_seconds", "max_steps", "steps", "event_path", "result_path", "artifacts", "stop_reason", "warnings", "authoritative"],
+  "properties": {
+    "schema_version": {"const": "rig.loop_run.v1"},
+    "run_id": {"type": "string"},
+    "task": {"type": "string"},
+    "mode": {"type": "string"},
+    "status": {"type": "string"},
+    "started_at": {"type": "string"},
+    "finished_at": {"type": "string"},
+    "duration_seconds": {"type": "number"},
+    "max_steps": {"type": "integer"},
+    "steps": {"type": "array"},
+    "event_path": {"type": "string"},
+    "result_path": {"type": "string"},
+    "artifacts": {"type": "array", "items": {"type": "string"}},
+    "stop_reason": {"type": "string"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "authoritative": {"type": "boolean", "const": false}
+  },
+  "additionalProperties": true
+}

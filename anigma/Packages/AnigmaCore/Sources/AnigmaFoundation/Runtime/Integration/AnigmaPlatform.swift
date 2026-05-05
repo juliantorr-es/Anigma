@@ -21,6 +21,7 @@
 import AnigmaPrimitives
 import Foundation
 import ContractsCore
+import AnigmaFoundation
 
 // Placeholder types for missing audit/compliance structures
 public struct AuditIntegrityReport: Sendable {

@@ -33,7 +33,6 @@ public typealias AccessType = GovernanceContracts.AccessType
 public typealias AccessPrincipal = GovernanceContracts.AccessPrincipal
 public typealias AccessRequest = GovernanceContracts.AccessRequest
 public typealias AccessDecision = GovernanceContracts.AccessDecision
-public typealias AccessController = GovernanceContracts.AccessController
 public typealias AccessPolicy = GovernanceContracts.AccessPolicy
 
 // Write gate types
@@ -110,7 +109,7 @@ public protocol GoverningController: RuntimeGovernanceAPI, RuntimeKillSwitchAPI,
     var killSwitch: any RuntimeKillSwitchAPI { get async }
 
     /// Gets the access controller.
-    var accessController: any AccessController { get async }
+    var accessController: any GovernanceContracts.AccessController { get async }
 
     /// Gets the current mode source for a project.
     func modeSource(for projectId: String?) async -> ModeSource

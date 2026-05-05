@@ -1,4 +1,5 @@
 import Foundation
+import SecurityEventsContracts
 
 /// Specialized logger for doctrine and governance-related security events.
 public struct DoctrineSecurityLogger {

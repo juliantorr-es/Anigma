@@ -9,6 +9,7 @@
 import Foundation
 import HarmoniaV2Core
 import AnigmaFoundation
+import RuntimeCore
 
 /// CoreML-based embedding backend
 public actor CoreMLEmbeddingBackend: EmbeddingBackend {

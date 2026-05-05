@@ -12,6 +12,7 @@ import EvidenceContracts
 import IntelligenceContracts
 import Foundation
 import AnigmaPrimitives
+import AnigmaFoundation
 
 public actor MCPConductor {
     private var clients: [String: MCPClient] = [:]
@@ -70,7 +71,7 @@ public actor MCPConductor {
 
         let data = try JSONSerialization.data(withJSONObject: request)
         guard let message = String(data: data, encoding: .utf8) else {
-            fatalError("Failed to unwrap message")
+            throw RuntimeLifecycleError.fatal(message: "Failed to unwrap message")
         }
 
         return try await withCheckedThrowingContinuation { continuation in
@@ -106,7 +107,7 @@ public final class StdioMCPTransport: MCPTransport {
 
     public func send(_ message: String) async throws {
         guard let data = (message + "\n").data(using: .utf8) else {
-            fatalError("Failed to unwrap data")
+            throw RuntimeLifecycleError.fatal(message: "Failed to unwrap data")
         }
         try inputPipe.fileHandleForReading.write(contentsOf: data)
     }

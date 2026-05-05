@@ -1,0 +1,242 @@
+version: 1
+status: descriptive_only
+enforcement: none
+validators:
+  - path: Scripts/anigma_diagnose.py
+    authority_class: diagnostic_aggregator
+    mutates: false
+    phases:
+      - baseline
+      - validate
+      - review
+      - diff
+      - index
+    canonical_inputs:
+      - Docs/governance/
+      - Docs/baselines/
+      - Scripts/
+    generated_outputs:
+      - .build/anigma-diagnostics/
+      - .build/anigma-diagnostics/index.jsonl
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Canonical diagnostic entrypoint; orchestrates validators and evidence bundles.
+
+  - path: Scripts/anigma_executable_consolidation_audit.py
+    authority_class: gate_validator
+    mutates: false
+    phases:
+      - validate
+      - review
+    canonical_inputs:
+      - anigma/
+      - Docs/baselines/executable-consolidation-baseline.json
+    generated_outputs:
+      - .build/anigma-executable-consolidation-audit.json
+    baseline_behavior: reads_only
+    dangerous_modes:
+      - --update-baseline
+    proof_required_for_changes: true
+    notes: Gate validator with baseline comparison and audit output; baseline update mode must stay explicit.
+
+  - path: Scripts/anigma_dead_code_audit.py
+    authority_class: advisory_analyzer
+    mutates: false
+    phases:
+      - local
+      - validate
+      - review
+    canonical_inputs:
+      - anigma/
+      - Docs/
+    generated_outputs:
+      - .build/anigma-dead-code-audit.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Broad dead-code analysis; treated as advisory unless a specific gate mode exists.
+
+  - path: Scripts/anigma_state_flow_audit.py
+    authority_class: advisory_analyzer
+    mutates: false
+    phases:
+      - local
+      - validate
+      - review
+    canonical_inputs:
+      - anigma/
+      - Docs/atlas/
+      - Docs/proofs/
+    generated_outputs:
+      - .build/anigma-state-flow-audit.json
+      - Docs/atlas/state-map.json
+      - Docs/atlas/data-flow-map.json
+      - Docs/atlas/cohesion-index.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Advisory architecture-mapping audit; output is derived evidence for state and flow cohesion.
+
+  - path: Scripts/anigma_build_repo_atlas.py
+    authority_class: renderer_generator
+    mutates: false
+    phases:
+      - render
+      - check
+    canonical_inputs:
+      - anigma/
+      - Scripts/atlas/
+      - Docs/atlas/
+    generated_outputs:
+      - Docs/atlas/
+      - .build/anigma-atlas/
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Generates atlas views and derived indexes from source and script inputs.
+
+  - path: Scripts/generate_governance_index.py
+    authority_class: renderer_generator
+    mutates: false
+    phases:
+      - render
+      - check
+    canonical_inputs:
+      - Docs/governance/
+      - Scripts/
+    generated_outputs:
+      - Docs/governance/index.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Governance index generator; derived documentation artifact.
+
+  - path: Scripts/validate_governance_index.py
+    authority_class: gate_validator
+    mutates: false
+    phases:
+      - validate
+      - review
+    canonical_inputs:
+      - Docs/governance/index.json
+      - Docs/governance/
+    generated_outputs:
+      - .build/validate-governance-index.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Validates the governance index and related documentation structure.
+
+  - path: Scripts/validate_td_docs_sync.py
+    authority_class: gate_validator
+    mutates: false
+    phases:
+      - validate
+      - review
+    canonical_inputs:
+      - Docs/td/
+      - Docs/proofs/
+      - Scripts/
+    generated_outputs:
+      - .build/validate-td-docs-sync.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Read-only TD docs sync validator; classified as gate because it validates coherence rather than mutating state.
+
+  - path: Scripts/validate_verification_profiles.py
+    authority_class: gate_validator
+    mutates: false
+    phases:
+      - validate
+      - review
+    canonical_inputs:
+      - Docs/governance/VERIFICATION_PROFILES.md
+      - Scripts/
+    generated_outputs:
+      - .build/validate-verification-profiles.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Validates profile definitions and related verification policy.
+
+  - path: Scripts/validate_release_readiness.py
+    authority_class: gate_validator
+    mutates: false
+    phases:
+      - validate
+      - review
+    canonical_inputs:
+      - Docs/
+      - Scripts/
+    generated_outputs:
+      - .build/validate-release-readiness.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Release-readiness validator; conservative classification as gate because of its name and role.
+
+  - path: Scripts/validate_public_project_readiness.py
+    authority_class: gate_validator
+    mutates: false
+    phases:
+      - validate
+      - review
+    canonical_inputs:
+      - Docs/
+      - Scripts/
+    generated_outputs:
+      - .build/validate-public-project-readiness.json
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Public-project readiness gate; conservative classification based on naming and existing proof artifacts.
+
+  - path: Scripts/anigma_generate_task_brief.py
+    authority_class: renderer_generator
+    mutates: false
+    phases:
+      - render
+      - check
+    canonical_inputs:
+      - Docs/td/
+      - Scripts/task_brief_templates/
+    generated_outputs:
+      - Docs/td/briefs/
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Generates task briefs from templates and repo evidence; derived artifact producer.
+
+  - path: Scripts/td_bootstrap_from_docs.py
+    authority_class: state_synchronizer
+    mutates: false
+    phases:
+      - sync
+      - reconcile
+    canonical_inputs:
+      - Docs/td/
+      - Docs/proofs/
+    generated_outputs:
+      - .build/td-bootstrap/
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Appears to bridge docs into TD state; conservative sync classification pending behavior-specific enforcement.
+
+  - path: Scripts/td_docs_from_receipts.py
+    authority_class: renderer_generator
+    mutates: false
+    phases:
+      - render
+      - check
+    canonical_inputs:
+      - .build/
+      - Docs/proofs/
+    generated_outputs:
+      - Docs/td/
+    baseline_behavior: reads_only
+    dangerous_modes: []
+    proof_required_for_changes: true
+    notes: Appears to derive docs from receipt/evidence artifacts; kept conservative as a renderer.

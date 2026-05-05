@@ -1,0 +1,2 @@
+task,mode,changed_file_count,directly_affected_targets,affected_risk_count,recommended_profiles,files_json,targets_json,risks_json,profiles_json,summary_md,result_path
+td-cleanup-005,stdin,4,AnigmaDaemonCore,37,daemon-runtime;cleanup-review;backend-regularization,.build/rig/affected/files.json,.build/rig/affected/targets.json,.build/rig/affected/risks.json,.build/rig/affected/profiles.json,.build/rig/affected/summary.md,.build/rig/affected/files.json;.build/rig/affected/profiles.json;.build/rig/affected/risks.json;.build/rig/affected/targets.json

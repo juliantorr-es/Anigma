@@ -11,14 +11,17 @@
 import Foundation
 import FoundationContracts
 import GovernanceContracts
+import BackendReadinessContracts
 import EvidenceContracts
 import IntelligenceContracts
 import DatabaseCore
 import InferenceCore
 import AnigmaPrimitives
+import AnigmaFoundation
 import MLWorkerInterfaces     // For MLWorkerInterface protocol
 import OSLog
 // Note: RuntimeGovernanceAPI is now in Governance.swift (same target)
+// Note: PlatformBackend is available from Runtime/Backend/ in the same target
 
 // MARK: - Platform Runtime
 
@@ -906,6 +909,10 @@ actor MockAccessController: AccessController {
     func listPolicies() async -> [any AccessPolicy] {
         // Return empty list in mock
         return []
+    }
+
+    func setAuditLog(_ log: any AuditLogging) async {
+        // No-op in mock
     }
 }
 

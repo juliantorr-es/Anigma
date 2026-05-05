@@ -1,0 +1,11 @@
+blockers:
+  - id: build-anigmacore-runtimecore-001
+    status: open
+    command: swift build --target AnigmaDaemonCore
+    signature:
+      - AnigmaCore
+      - RuntimeCore
+    owner_task: td-backend-regularization
+    unrelated_to:
+      - td-cleanup-004
+    notes: Known unrelated AnigmaCore/RuntimeCore compile blocker.

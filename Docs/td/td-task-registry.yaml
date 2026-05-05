@@ -912,6 +912,110 @@ tasks:
   validator_commands:
   - python3 Scripts/anigma_diagnose.py baseline --task-id td-master-diagnostic-harness
   - python3 -c "import json; json.load(open('Docs/schemas/anigma-diagnostic-bundle.schema.json'))"
+- id: p1-codebase-cleanup-runtime-alignment
+  title: "[P1] Codebase Cleanup & Runtime Alignment"
+  priority: P1
+  type: epic
+  lane: publication-cleanup
+  status: in_progress
+  description: "Govern cleanup as evidence-backed alignment work: dead code removal and executable-consolidation repair."
+  source_docs:
+  - Docs/governance/CLEANUP_ALIGNMENT_DOCTRINE.md
+  - Docs/proofs/dead-code-audit-calibration-2026-05-05.md
+  acceptance:
+  - Cleanup doctrine is established and followed.
+  - Dead-code audit lane is calibrated and ratcheted.
+  - Executable-consolidation triage is complete for anigmad.
+  - Cleanup batch 001 is proposed and verified.
+  children:
+  - td-cleanup-001
+  - td-cleanup-002
+  - td-cleanup-003
+  - td-cleanup-004
+  - td-cleanup-005
+  - td-cleanup-006
+- id: td-cleanup-001
+  title: Calibrate and ratchet dead-code audit lane
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: in_review
+  parent: p1-codebase-cleanup-runtime-alignment
+  source_docs:
+  - Docs/proofs/dead-code-audit-calibration-2026-05-05.md
+  acceptance:
+  - Audit lane calibrated to < 5% false positive for high-confidence candidates.
+  - Stable baseline keys established.
+  - Gate mode verified against baseline.
+- id: td-cleanup-002
+  title: Triage anigmad executable-consolidation critical/high findings
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: in_review
+  parent: p1-codebase-cleanup-runtime-alignment
+  source_docs:
+  - scripts/anigma_executable_consolidation_audit.py
+  - .build/executable-consolidation-audit.json
+  acceptance:
+  - Top 50 critical/high findings for anigmad triaged.
+  - Proof artifact records triage results.
+- id: td-cleanup-003
+  title: "Batch 002: anigmad process configuration alignment"
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: in_review
+  parent: p1-codebase-cleanup-runtime-alignment
+  description: "Centralize anigmad process configuration ingress and remove direct ambient state reads."
+  proof: Docs/proofs/td-cleanup-003-batch-002-process-configuration-alignment.md
+- id: td-cleanup-004
+  title: "Batch 003: anigmad IPC/socket/PID/lock ownership alignment"
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: in_review
+  parent: p1-codebase-cleanup-runtime-alignment
+  description: "Align IPC/socket/PID/lock ownership and remove hardcoded paths."
+  proof: Docs/proofs/td-cleanup-004-batch-003-ipc-ownership.md
+- id: td-cleanup-008
+  title: Create cleanup/alignment doctrine
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: done
+  parent: p1-codebase-cleanup-runtime-alignment
+  description: "Doctrine defines principles, priorities, and workflows for cleanup."
+  proof: Docs/governance/CLEANUP_ALIGNMENT_DOCTRINE.md
+- id: td-cleanup-005
+  title: "Batch 004: anigmad singleton/global state triage"
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: ready
+  parent: p1-codebase-cleanup-runtime-alignment
+  description: "Triage singleton_global_state findings in AnigmaDaemonCore for mutable/reachable safety."
+  acceptance:
+  - Triage distinguishes authority singletons, mutable globals, and false positives.
+  - Repair is limited to mutable, daemon-reachable, and unsafe state.
+- id: td-cleanup-006
+  title: Consider enabling hard ratchet gates after calibration
+  priority: P2
+  type: task
+  lane: publication-cleanup
+  status: ready
+  parent: p1-codebase-cleanup-runtime-alignment
+  acceptance:
+  - Architectural review of gate promotion completed.
+- id: td-cleanup-007
+  title: Refine cleanup audit scripts and diagnostic integration
+  priority: P1
+  type: task
+  lane: publication-cleanup
+  status: complete
+  parent: p1-codebase-cleanup-runtime-alignment
+  description: "Harden scanners, improve baseline stability, and fix shell integration bugs."
+  proof: Docs/proofs/cleanup-audit-script-refinement-2026-05-05.md
 validation:
   rules:
   - id: SRC-001

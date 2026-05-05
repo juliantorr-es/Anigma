@@ -1,0 +1,1856 @@
+[
+  {
+    "language": "swift",
+    "name": "CapsuleRegistry",
+    "path": "anigma/Anigma/Packages/CoreUtilities/Sources/CapsuleRegistry/CapsuleRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CapsuleRegistryEvents",
+    "path": "anigma/Anigma/Packages/CoreUtilities/Sources/CapsuleRegistry/CapsuleRegistryEvents.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "Worker",
+    "path": "anigma/Anigma/Packages/CoreUtilities/Sources/QueueManager/Worker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceDiscovery",
+    "path": "anigma/Anigma/Packages/CoreUtilities/Sources/ServiceDiscovery/ServiceDiscovery.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceDiscoveryEvents",
+    "path": "anigma/Anigma/Packages/CoreUtilities/Sources/ServiceDiscovery/ServiceDiscoveryEvents.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkerShell",
+    "path": "anigma/App/MacApp/Roles/Worker/WorkerShell.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AuthenticationService",
+    "path": "anigma/App/MacApp/Services/AuthenticationService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BookmarkStore",
+    "path": "anigma/App/MacApp/Services/BookmarkStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ChangesetParser",
+    "path": "anigma/App/MacApp/Services/ChangesetParser.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "GitService",
+    "path": "anigma/App/MacApp/Services/GitService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkspaceService",
+    "path": "anigma/App/MacApp/Services/WorkspaceService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "Adopting ServiceLifecycle in applications",
+    "path": "anigma/Docs/archive/Adopting ServiceLifecycle in applications.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "Adopting ServiceLifecycle in libraries",
+    "path": "anigma/Docs/archive/Adopting ServiceLifecycle in libraries.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "AnyServiceContextKey",
+    "path": "anigma/Docs/archive/AnyServiceContextKey.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "Service",
+    "path": "anigma/Docs/archive/Service.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceConfiguration",
+    "path": "anigma/Docs/archive/ServiceConfiguration.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceContext",
+    "path": "anigma/Docs/archive/ServiceContext.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceContextKey",
+    "path": "anigma/Docs/archive/ServiceContextKey.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceGroup",
+    "path": "anigma/Docs/archive/ServiceGroup.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceGroupConfiguration",
+    "path": "anigma/Docs/archive/ServiceGroupConfiguration.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceGroupError-Code",
+    "path": "anigma/Docs/archive/ServiceGroupError-Code.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "ServiceGroupError",
+    "path": "anigma/Docs/archive/ServiceGroupError.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "SURFACE.ExecutorProfileProviding",
+    "path": "anigma/Docs/governance/contract-artifacts/SURFACE.ExecutorProfileProviding.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "SURFACE.MLWorkerBackends",
+    "path": "anigma/Docs/governance/contract-artifacts/SURFACE.MLWorkerBackends.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "MLWorkerArchitecture",
+    "path": "anigma/Docs/guides/ml-worker/MLWorkerArchitecture.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "MLWorkerDocumentationSummary",
+    "path": "anigma/Docs/guides/ml-worker/MLWorkerDocumentationSummary.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "MLWorkerFinalSummary",
+    "path": "anigma/Docs/guides/ml-worker/MLWorkerFinalSummary.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "MLWorkerIntegration",
+    "path": "anigma/Docs/guides/ml-worker/MLWorkerIntegration.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "Hardware_Authority_Design",
+    "path": "anigma/Docs/root-docs/Design/Hardware_Authority_Design.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "Governance_Authority_Patterns",
+    "path": "anigma/Docs/root-docs/research/Governance_Authority_Patterns.md",
+    "responsibility": null
+  },
+  {
+    "language": "manifest",
+    "name": "KernelABIContract",
+    "path": "anigma/Docs/root-docs/runtime/KernelABIContract.md",
+    "responsibility": null
+  },
+  {
+    "language": "cpp",
+    "name": "kernel_context",
+    "path": "anigma/Native/Kernel/include/kernel_context.hpp",
+    "responsibility": null
+  },
+  {
+    "language": "cpp",
+    "name": "kernel_context",
+    "path": "anigma/Native/Kernel/src/kernel_context.cpp",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ANECapabilityRegistry",
+    "path": "anigma/Packages/ANECapabilityCatalog/Sources/ANECapabilityCatalog/ANECapabilityRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ANEServicesCore",
+    "path": "anigma/Packages/ANEServicesCore/Sources/ANEServicesCore/ANEServicesCore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "OCREngineCoordinator",
+    "path": "anigma/Packages/AccessumModule/Services/OCREngineCoordinator.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "OCREngineCoordinator",
+    "path": "anigma/Packages/AccessumModule/Sources/AccessumModule/Services/OCREngineCoordinator.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTVisitorRegistry",
+    "path": "anigma/Packages/AnigmaASTServices/ASTVisitorRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTWorker",
+    "path": "anigma/Packages/AnigmaASTServices/ASTWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTWorkerMetrics",
+    "path": "anigma/Packages/AnigmaASTServices/ASTWorkerMetrics.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTWorkerTypes",
+    "path": "anigma/Packages/AnigmaASTServices/ASTWorkerTypes.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AgSearchService",
+    "path": "anigma/Packages/AnigmaASTServices/AgSearchService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AnigmaASTServices",
+    "path": "anigma/Packages/AnigmaASTServices/AnigmaASTServices.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AnigmaASTServicesCLI",
+    "path": "anigma/Packages/AnigmaASTServicesCLI/AnigmaASTServicesCLI.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AIRegistry",
+    "path": "anigma/Packages/AnigmaAgents/AIRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CLIToolExecutor",
+    "path": "anigma/Packages/AnigmaCLI/Database/CLIToolExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerService",
+    "path": "anigma/Packages/AnigmaCLI/ML/MLWorkerService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ProviderRegistry",
+    "path": "anigma/Packages/AnigmaCLI/Providers/ProviderRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CloudProviderRegistry",
+    "path": "anigma/Packages/AnigmaCLI/Sources/CloudProviders/CloudProviderRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AuthorityImplementations",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/AuthorityImplementations.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DatabaseAuthorityAdapter",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/DatabaseAuthorityAdapter.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DatabaseExecutor",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/DatabaseExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "EvidenceAuthorityImpl",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/EvidenceAuthorityImpl.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ExecutionAuthorityImpl",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/ExecutionAuthorityImpl.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SandboxAuthorityImpl",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/SandboxAuthorityImpl.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "UpdateService",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime/Updates/UpdateService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "RuntimeAuthority",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaFoundation/System/RuntimeAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AgenticLoopExecutor",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaJobs/Jobs/AgenticLoopExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ContextCompressionService",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaJobs/Jobs/ContextCompressionService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TranslatorRegistry",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Inference/TranslatorRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "GrapheneRegistry",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/GrapheneRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerEmbeddingComputer",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/MLWorkerEmbeddingComputer.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerInterface",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/MLWorkerInterface.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PipelineContractRegistry",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline/PipelineContractRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "IRService",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Reasoning/IRService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ReasoningKernel",
+    "path": "anigma/Packages/AnigmaCore/Sources/AnigmaPipeline/Reasoning/ReasoningKernel.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BackendReadinessRegistryTests",
+    "path": "anigma/Packages/AnigmaCore/Tests/BackendReadinessTests/RegistryTests/BackendReadinessRegistryTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceNowConnector",
+    "path": "anigma/Packages/AnigmaCorporate/Connectors/ServiceNowConnector.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "NativeWorkers",
+    "path": "anigma/Packages/AnigmaDaemon/NativeWorkers.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTAnalysisWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/ASTAnalysisWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTTransformWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/ASTTransformWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccessumWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/AccessumWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BiberWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/BiberWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CPUBurnWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/CPUBurnWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CodeGenerationWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/CodeGenerationWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CodeSearchWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/CodeSearchWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ContextumWorkerBootstrap",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/ContextumWorkerBootstrap.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CtagsWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/CtagsWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonWorkerRegistry",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/DaemonWorkerRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DiaplasionWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/DiaplasionWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "FFmpegWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/FFmpegWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "GnuPGWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/GnuPGWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "GovernanceWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/GovernanceWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HarmoniaWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/HarmoniaWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ImageMagickWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/ImageMagickWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "IndexingWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "InkscapeWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/InkscapeWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "JobRegistry",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/JobRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "JobWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/JobWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "LaTeXWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/LaTeXWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "LibassWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/LibassWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLInferWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/MLInferWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MemoryLeakWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/MemoryLeakWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "NoOpWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/NoOpWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PDFWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/PDFWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PandocWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/PandocWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SemanticChunkingWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/SemanticChunkingWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TechDebtWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/TechDebtWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TesseractWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/TesseractWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TextChunkingWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/TextChunkingWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorktreeWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Jobs/WorktreeWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonServer+Services",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Services.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AntigravityInferenceAdapter",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/AntigravityInferenceAdapter.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AntigravityModels",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/AntigravityModels.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AntigravityService",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/AntigravityService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HTTPServer",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/HTTPServer.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "RingBuffer",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/PTY/RingBuffer.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SessionManager",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/PTY/SessionManager.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ShellSession",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/PTY/ShellSession.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VFSWatcherService",
+    "path": "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/VFSWatcherService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTAuthority",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/ASTAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonASTAuthority",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/DaemonASTAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonArtifactAuthority",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/DaemonArtifactAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonEvidenceAuthority",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/DaemonEvidenceAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonInferenceAuthority",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/DaemonInferenceAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonMLWorkerInterface",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/DaemonMLWorkerInterface.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MockInferenceAuthority",
+    "path": "anigma/Packages/AnigmaDaemonCore/Utils/MockInferenceAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ArtifactCopyWorker",
+    "path": "anigma/Packages/AnigmaDaemonCore/Workers/ArtifactCopyWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkerPool",
+    "path": "anigma/Packages/AnigmaDaemonCore/Workers/WorkerPool.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkerProcess",
+    "path": "anigma/Packages/AnigmaDaemonCore/Workers/WorkerProcess.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkerTooling",
+    "path": "anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AnigmaAuthority",
+    "path": "anigma/Packages/AnigmaHostKit/AnigmaAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTServicesClient",
+    "path": "anigma/Packages/AnigmaHostMac/ASTServicesClient.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccessibilityAuthorityImpl",
+    "path": "anigma/Packages/AnigmaHostMac/AccessibilityAuthorityImpl.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerClient",
+    "path": "anigma/Packages/AnigmaHostMac/MLWorkerClient.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CompositeSecretAuthority",
+    "path": "anigma/Packages/AnigmaPrimitives/CompositeSecretAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "KeychainSecretAuthority",
+    "path": "anigma/Packages/AnigmaPrimitives/KeychainSecretAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SecretAuthority",
+    "path": "anigma/Packages/AnigmaPrimitives/SecretAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SharedMemoryAuthority",
+    "path": "anigma/Packages/AnigmaSidecar/SharedMemoryAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CapabilityRegistry",
+    "path": "anigma/Packages/CapabilityCore/CapabilityRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CathedralFusedKernel",
+    "path": "anigma/Packages/CathedralModule/CathedralFusedKernel.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CathedralMLServices",
+    "path": "anigma/Packages/CathedralModule/CathedralMLServices.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CodexService",
+    "path": "anigma/Packages/CodexModule/Services/CodexService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CodexService",
+    "path": "anigma/Packages/CodexModule/Sources/CodexModule/Services/CodexService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AuditLoggingService",
+    "path": "anigma/Packages/ComplianceAuditModule/Sources/ComplianceAuditModule/AuditLoggingService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AuditReportGenerationService",
+    "path": "anigma/Packages/ComplianceAuditModule/Sources/ComplianceAuditModule/AuditReportGenerationService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ConexusService",
+    "path": "anigma/Packages/ConexusModule/Sources/ConexusModule/Services/ConexusService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ContractRegistry",
+    "path": "anigma/Packages/ContractsCore/Sources/EvidenceContracts/ContractRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MediaExecutorContracts",
+    "path": "anigma/Packages/ContractsCore/Sources/FoundationContracts/MediaExecutorContracts.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ArtifactRegistry",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/ArtifactRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ExecutorProfileModels",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/ExecutorProfileModels.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ExecutorProfileProviding",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/ExecutorProfileProviding.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerContracts",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/MLWorkerContracts.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerTypes",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/MLWorkerTypes.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistry",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/ModelRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SimpleToolRegistry",
+    "path": "anigma/Packages/ContractsCore/Sources/IntelligenceContracts/SimpleToolRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CapsuleRegistry",
+    "path": "anigma/Packages/CoreUtilities/Sources/CapsuleRegistry/CapsuleRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CapsuleRegistryEvents",
+    "path": "anigma/Packages/CoreUtilities/Sources/CapsuleRegistry/CapsuleRegistryEvents.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "Worker",
+    "path": "anigma/Packages/CoreUtilities/Sources/QueueManager/Worker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceDiscovery",
+    "path": "anigma/Packages/CoreUtilities/Sources/ServiceDiscovery/ServiceDiscovery.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceDiscoveryEvents",
+    "path": "anigma/Packages/CoreUtilities/Sources/ServiceDiscovery/ServiceDiscoveryEvents.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DaemonKernel",
+    "path": "anigma/Packages/DaemonKernel/Sources/DaemonKernel/DaemonKernel.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DatabaseAuthority",
+    "path": "anigma/Packages/DatabaseCore/DatabaseAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DatabaseExecutor",
+    "path": "anigma/Packages/DatabaseCore/DatabaseExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MigrationRegistry",
+    "path": "anigma/Packages/DatabaseCore/MigrationRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SchemaRegistry",
+    "path": "anigma/Packages/DatabaseCore/SchemaRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DevelopumArtifactService",
+    "path": "anigma/Packages/DevelopumModule/Services/DevelopumArtifactService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DevelopumDatabaseService",
+    "path": "anigma/Packages/DevelopumModule/Services/DevelopumDatabaseService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DevelopumHistoryService",
+    "path": "anigma/Packages/DevelopumModule/Services/DevelopumHistoryService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DevelopumLSPBridge",
+    "path": "anigma/Packages/DevelopumModule/Services/DevelopumLSPBridge.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DevelopumReceiptService",
+    "path": "anigma/Packages/DevelopumModule/Services/DevelopumReceiptService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "IndexCapsule",
+    "path": "anigma/Packages/DevelopumModule/Services/IndexCapsule.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "QualityEnforcementService",
+    "path": "anigma/Packages/DevelopumModule/Services/QualityEnforcementService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TelemetryClient+Developum",
+    "path": "anigma/Packages/DevelopumModule/Services/TelemetryClient+Developum.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ExecutionAuthority",
+    "path": "anigma/Packages/ExecutionCore/ExecutionAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "InferenceAuthority",
+    "path": "anigma/Packages/GovernanceCore/Sources/GovernanceCore/InferenceAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HardwareAuthority",
+    "path": "anigma/Packages/HardwareAuthority/Sources/HardwareAuthority/HardwareAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HardwareAuthorityProtocol",
+    "path": "anigma/Packages/HardwareAuthorityContracts/Sources/HardwareAuthorityContracts/HardwareAuthorityProtocol.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceRegistry",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaCore/Services/ServiceRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkflowExecutor",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaCore/Services/WorkflowExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerDispatchSystem",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaCore/Systems/MLWorkerDispatchSystem.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "InferenceService",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaInference/Inference/InferenceService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistry",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaInference/Inference/ModelRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerTypes",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaInference/ML/MLWorkerTypes.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "RetrievalService",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaInference/Retrieval/RetrievalService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DoctrinalRegistry",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaSecurity/Doctrine/DoctrinalRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DoctrinalRegistryCompat",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaSecurity/Doctrine/DoctrinalRegistryCompat.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccessumServiceAdapter",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaServices/Adapters/AccessumServiceAdapter.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ObservatoriumServiceAdapter",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaServices/Adapters/ObservatoriumServiceAdapter.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceAdapterFactory",
+    "path": "anigma/Packages/HarmoniaModule/Sources/HarmoniaServices/Adapters/ServiceAdapterFactory.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerBackendsScenario",
+    "path": "anigma/Packages/HarmoniaSurface/MLWorkerBackendsScenario.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CLIKernel",
+    "path": "anigma/Packages/HarmoniaV2CLI/CLIKernel.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceContracts",
+    "path": "anigma/Packages/HarmoniaWorkflowContracts/Sources/HarmoniaWorkflowContracts/ServiceContracts.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorker",
+    "path": "anigma/Packages/MLWorkerCommon/MLWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerBackend",
+    "path": "anigma/Packages/MLWorkerCommon/MLWorkerBackend.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerCommon",
+    "path": "anigma/Packages/MLWorkerCommon/MLWorkerCommon.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelGovernanceService",
+    "path": "anigma/Packages/ModelRegistry/Sources/ModelGovernanceService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistry+Events",
+    "path": "anigma/Packages/ModelRegistry/Sources/ModelRegistry+Events.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryStore",
+    "path": "anigma/Packages/ModelRegistry/Sources/ModelRegistryStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryTests",
+    "path": "anigma/Packages/ModelRegistry/Sources/ModelRegistryTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryTypedQueries",
+    "path": "anigma/Packages/ModelRegistry/Sources/ModelRegistryTypedQueries.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryDaemonFeature",
+    "path": "anigma/Packages/ModelRegistryDaemonFeature/Sources/ModelRegistryDaemonFeature/ModelRegistryDaemonFeature.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AlertService",
+    "path": "anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/AlertService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "FeedbackService",
+    "path": "anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/FeedbackService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TelemetryService",
+    "path": "anigma/Packages/ObservatoriumModule/Sources/ObservatoriumModule/Services/TelemetryService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MusicGenerationService",
+    "path": "anigma/Packages/PolytroposModule/Music/MusicGenerationService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HarmoniaPolytroposIntegration",
+    "path": "anigma/Packages/PolytroposModule/Services/HarmoniaPolytroposIntegration.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PolytroposService",
+    "path": "anigma/Packages/PolytroposModule/Services/PolytroposService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AutoEditEngine",
+    "path": "anigma/Packages/PolytroposModule/Services/Specialized/AutoEditEngine.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ExportService",
+    "path": "anigma/Packages/PolytroposModule/Services/Specialized/ExportService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SyncService",
+    "path": "anigma/Packages/PolytroposModule/Services/Specialized/SyncService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MusicGenerationService",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Music/MusicGenerationService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ArtifactStoreIntegration",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/ArtifactStoreIntegration.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HarmoniaPolytroposIntegration",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/HarmoniaPolytroposIntegration.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PolytroposCoordinator",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/PolytroposCoordinator.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PolytroposService",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/PolytroposService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AutoEditEngine",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/Specialized/AutoEditEngine.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ExportService",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/Specialized/ExportService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SyncService",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/Specialized/SyncService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VideoIngestionService",
+    "path": "anigma/Packages/PolytroposModule/Sources/PolytroposModule/Services/VideoIngestionService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkBoardService",
+    "path": "anigma/Packages/PragmaModule/Sources/PragmaModule/Capability/WorkBoard/WorkBoardService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AutomationService",
+    "path": "anigma/Packages/PragmaModule/Sources/PragmaModule/Services/AutomationService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ViewService",
+    "path": "anigma/Packages/PragmaModule/Sources/PragmaModule/Services/ViewService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkService",
+    "path": "anigma/Packages/PragmaModule/Sources/PragmaModule/Services/WorkService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BoundaryTicketService",
+    "path": "anigma/Packages/PraxisCore/BoundaryTicketService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistry",
+    "path": "anigma/Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry/ModelRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SaturatedModelRegistryTests",
+    "path": "anigma/Packages/SaturatedModelRegistry/Tests/SaturatedModelRegistryTests/SaturatedModelRegistryTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SidecarOfficeService",
+    "path": "anigma/Packages/SidecarOfficeService/Sources/SidecarOfficeService/SidecarOfficeService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SidecarPDFService",
+    "path": "anigma/Packages/SidecarPDFService/Sources/SidecarPDFService/SidecarPDFService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SidecarTranslateService",
+    "path": "anigma/Packages/SidecarTranslateService/Sources/SidecarTranslateService/SidecarTranslateService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VaultAuthority",
+    "path": "anigma/Packages/StorageCore/VaultAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BenchmarkWorker",
+    "path": "anigma/Packages/SubprocessPooling/Sources/BenchmarkWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MCPWorker",
+    "path": "anigma/Packages/SubprocessPooling/Sources/MCPWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorker",
+    "path": "anigma/Packages/SubprocessPooling/Sources/MLWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PDFSidecarWorker",
+    "path": "anigma/Packages/SubprocessPooling/Sources/PDFSidecarWorker.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MCPWorkerIntegrationTests",
+    "path": "anigma/Packages/SubprocessPooling/Tests/MCPWorkerIntegrationTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerPoolIntegrationTests",
+    "path": "anigma/Packages/SubprocessPooling/Tests/MLWorkerPoolIntegrationTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "TranscriptumService",
+    "path": "anigma/Packages/TranscriptumModule/Services/TranscriptumService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "KernelBridge",
+    "path": "anigma/RuntimeCore/Sources/KernelBridge.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerStatusView",
+    "path": "anigma/Sources/AnigmaAppMac/Components/MLWorkerStatusView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerTaskMonitorView",
+    "path": "anigma/Sources/AnigmaAppMac/Components/MLWorkerTaskMonitorView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerTaskSubmissionView",
+    "path": "anigma/Sources/AnigmaAppMac/Components/MLWorkerTaskSubmissionView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryCard",
+    "path": "anigma/Sources/AnigmaAppMac/Components/ModelRegistryCard.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DevelopumArtifactService",
+    "path": "anigma/Sources/AnigmaAppMac/DevelopumArtifactService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryAppStore",
+    "path": "anigma/Sources/AnigmaAppMac/Model/Registry/ModelRegistryAppStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryIntegration",
+    "path": "anigma/Sources/AnigmaAppMac/Model/Registry/ModelRegistryIntegration.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryStore",
+    "path": "anigma/Sources/AnigmaAppMac/Model/Registry/ModelRegistryStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryTypes",
+    "path": "anigma/Sources/AnigmaAppMac/Model/Registry/ModelRegistryTypes.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkerShell",
+    "path": "anigma/Sources/AnigmaAppMac/Roles/Worker/WorkerShell.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccessControlView",
+    "path": "anigma/Sources/AnigmaAppMac/Services/AccessControlView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccessibilityService",
+    "path": "anigma/Sources/AnigmaAppMac/Services/AccessibilityService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AppFocusSystem",
+    "path": "anigma/Sources/AnigmaAppMac/Services/AppFocusSystem.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AppStoreModelExtensions",
+    "path": "anigma/Sources/AnigmaAppMac/Services/AppStoreModelExtensions.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AssistantConversationStore",
+    "path": "anigma/Sources/AnigmaAppMac/Services/AssistantConversationStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AuthenticationService",
+    "path": "anigma/Sources/AnigmaAppMac/Services/AuthenticationService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BinaryManager",
+    "path": "anigma/Sources/AnigmaAppMac/Services/BinaryManager.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "BookmarkStore",
+    "path": "anigma/Sources/AnigmaAppMac/Services/BookmarkStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CanvasController",
+    "path": "anigma/Sources/AnigmaAppMac/Services/CanvasController.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ChangesetParser",
+    "path": "anigma/Sources/AnigmaAppMac/Services/ChangesetParser.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CodeAnalysisView",
+    "path": "anigma/Sources/AnigmaAppMac/Services/CodeAnalysisView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ContractAnalytics",
+    "path": "anigma/Sources/AnigmaAppMac/Services/ContractAnalytics.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ConversationSessionManager",
+    "path": "anigma/Sources/AnigmaAppMac/Services/ConversationSessionManager.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "DocumentGenerationView",
+    "path": "anigma/Sources/AnigmaAppMac/Services/DocumentGenerationView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "GitService",
+    "path": "anigma/Sources/AnigmaAppMac/Services/GitService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "GoogleOAuthService",
+    "path": "anigma/Sources/AnigmaAppMac/Services/GoogleOAuthService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HarmoniaBackgroundSync",
+    "path": "anigma/Sources/AnigmaAppMac/Services/HarmoniaBackgroundSync.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HarmoniaCliSession",
+    "path": "anigma/Sources/AnigmaAppMac/Services/HarmoniaCliSession.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HarmoniaCommandHistory",
+    "path": "anigma/Sources/AnigmaAppMac/Services/HarmoniaCommandHistory.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HuggingFaceAdapter",
+    "path": "anigma/Sources/AnigmaAppMac/Services/HuggingFaceAdapter.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HuggingFaceAuthService",
+    "path": "anigma/Sources/AnigmaAppMac/Services/HuggingFaceAuthService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistry",
+    "path": "anigma/Sources/AnigmaAppMac/Services/ModelRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PipelineManagerView",
+    "path": "anigma/Sources/AnigmaAppMac/Services/PipelineManagerView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SurfaceManagerView",
+    "path": "anigma/Sources/AnigmaAppMac/Services/SurfaceManagerView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VaultManagementView",
+    "path": "anigma/Sources/AnigmaAppMac/Services/VaultManagementView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "WorkspaceService",
+    "path": "anigma/Sources/AnigmaAppMac/Services/WorkspaceService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ASTServicesStore",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/ASTServicesStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ServiceIntegrationStore",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/ServiceIntegrationStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryView",
+    "path": "anigma/Sources/AnigmaAppMac/Surfaces/ModelRegistry/ModelRegistryView.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ProviderRegistry",
+    "path": "anigma/Sources/AnigmaCLI/Providers/ProviderRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "RuntimeModelRegistryStore",
+    "path": "anigma/Sources/AnigmaMCPModule/RuntimeModelRegistryStore.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CathedralMLServices",
+    "path": "anigma/Sources/CathedralModule.duplicate2/CathedralMLServices.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MLWorkerEmbeddingExecutor",
+    "path": "anigma/Sources/ContextumModule/Integration/MLWorkerEmbeddingExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CoreMLExecutor",
+    "path": "anigma/Sources/IntelligenceCore/CoreMLExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MediaTypeAuthority+UTType",
+    "path": "anigma/Sources/MediaCore/Backends/MediaTypeAuthority+UTType.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SurfaceAuthority+CVPixelBuffer",
+    "path": "anigma/Sources/MediaCore/Backends/SurfaceAuthority+CVPixelBuffer.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccelerateDSPExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/AccelerateDSPExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AccelerateValidationLane",
+    "path": "anigma/Sources/MediaCore/Executors/AccelerateValidationLane.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AudioToolboxDecodeExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/AudioToolboxDecodeExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CameraCaptureExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/CameraCaptureExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CoreImageTransformExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/CoreImageTransformExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ImageIODecodeExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/ImageIODecodeExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MetalTransformExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/MetalTransformExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MicrophoneCaptureExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/MicrophoneCaptureExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MockMediaExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/MockMediaExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VideoToolboxDecodeExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/VideoToolboxDecodeExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VideoToolboxEncodeExecutor",
+    "path": "anigma/Sources/MediaCore/Executors/VideoToolboxEncodeExecutor.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AudioBufferAuthority",
+    "path": "anigma/Sources/MediaCore/Governance/AudioBufferAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CaptureAuthority",
+    "path": "anigma/Sources/MediaCore/Governance/CaptureAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MediaMemoryAuthority",
+    "path": "anigma/Sources/MediaCore/Governance/MediaMemoryAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MediaTypeAuthority",
+    "path": "anigma/Sources/MediaCore/Governance/MediaTypeAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PacketStreamAuthority",
+    "path": "anigma/Sources/MediaCore/Governance/PacketStreamAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SurfaceAuthority",
+    "path": "anigma/Sources/MediaCore/Governance/SurfaceAuthority.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CapturePermissionService",
+    "path": "anigma/Sources/MediaCore/Services/CapturePermissionService.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "HardwareCapabilityProbe",
+    "path": "anigma/Sources/MediaCore/Services/HardwareCapabilityProbe.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MediaBackendRegistry",
+    "path": "anigma/Sources/MediaCore/Services/MediaBackendRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SurfaceRegistry",
+    "path": "anigma/Sources/MediaCore/Substrate/SurfaceRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryDatabase",
+    "path": "anigma/Sources/ModelRegistryModule/ModelRegistryDatabase.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistryModule",
+    "path": "anigma/Sources/ModelRegistryModule/ModelRegistryModule.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "ModelRegistrySystem",
+    "path": "anigma/Sources/ModelRegistryModule/ModelRegistrySystem.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CoreMLExecutorTests",
+    "path": "anigma/Tests/IntelligenceCoreTests/CoreMLExecutorTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "AudioBufferAuthorityTests",
+    "path": "anigma/Tests/MediaCoreTests/AudioBufferAuthorityTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "CaptureExecutorsTests",
+    "path": "anigma/Tests/MediaCoreTests/CaptureExecutorsTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "MediaTypeAuthorityTests",
+    "path": "anigma/Tests/MediaCoreTests/MediaTypeAuthorityTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "PacketStreamAuthorityTests",
+    "path": "anigma/Tests/MediaCoreTests/PacketStreamAuthorityTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "SurfaceAuthorityTests",
+    "path": "anigma/Tests/MediaCoreTests/SurfaceAuthorityTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VideoToolboxDecodeExecutorTests",
+    "path": "anigma/Tests/MediaCoreTests/VideoToolboxDecodeExecutorTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "VideoToolboxEncodeExecutorTests",
+    "path": "anigma/Tests/MediaCoreTests/VideoToolboxEncodeExecutorTests.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "RefactoringRegistry",
+    "path": "anigma/Tools/Vendor/swift-syntax/EditorExtension/SwiftRefactorExtension/RefactoringRegistry.swift",
+    "responsibility": null
+  },
+  {
+    "language": "swift",
+    "name": "RuntimeAuthority",
+    "path": "scripts/fixtures/executable/RuntimeAuthority.swift",
+    "responsibility": null
+  }
+]

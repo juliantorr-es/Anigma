@@ -1,0 +1,17 @@
+[
+  {
+    "categories": "missing_import;unknown",
+    "command": "swift build --package-path anigma --target AnigmaDaemonCore",
+    "diagnostic_count": 2,
+    "error_count": 2,
+    "exit_code": 1,
+    "known_blocker_id": "build-anigmacore-runtimecore-001",
+    "latest_json": ".build/rig/swift-diagnostics/latest.json",
+    "latest_md": ".build/rig/swift-diagnostics/latest.md",
+    "run_id": null,
+    "status": "failed",
+    "target": "AnigmaDaemonCore",
+    "task": null,
+    "warning_count": 0
+  }
+]

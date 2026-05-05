@@ -63,7 +63,8 @@ public enum DaemonWorkerRegistry {
         on registry: JobRegistry,
         database: any DatabaseExecutor,
         artifactAuthority: (any ArtifactAuthority)? = nil,
-        evidenceAuthority: (any EvidenceAuthority)? = nil
+        evidenceAuthority: (any EvidenceAuthority)? = nil,
+        configuration: DaemonConfiguration? = nil
     ) async -> WorkerRegistryParityReport {
         await registry.register(worker: ArtifactCopyWorker())
         await registry.register(worker: MemoryLeakWorker())
@@ -76,13 +77,13 @@ public enum DaemonWorkerRegistry {
         await registry.register(worker: ASTAnalysisWorker())
         await registry.register(worker: ASTTransformWorker())
         await registry.register(worker: CodeSearchWorker())
-        await registry.register(worker: IndexingWorker(database: database))
+        await registry.register(worker: IndexingWorker(database: database, configuration: configuration))
         await registry.register(worker: TechDebtWorker())
         await registry.register(worker: AccessumWorker())
         await registry.register(worker: DiaplasionWorker())
         await registry.register(worker: WorktreeWorker())
         await registry.register(worker: GovernanceWorker())
-        await registry.register(worker: MLInferWorker())
+        await registry.register(worker: MLInferWorker(configuration: configuration))
         await registry.register(worker: FFmpegWorker())
         await registry.register(worker: PandocWorker())
         await registry.register(worker: GnuPGWorker())

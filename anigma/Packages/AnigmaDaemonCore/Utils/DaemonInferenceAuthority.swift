@@ -38,26 +38,39 @@ actor DaemonInferenceAuthority: InferenceAuthority {
     private let executionMode: MLExecutionMode
     private let inProcessWorker: MLWorker
     private let fallbackAuthority: MockInferenceAuthority?
+    private let configuration: DaemonConfiguration?
     
     init(
+        configuration: DaemonConfiguration? = nil,
         mlWorkerPath: String? = nil,
         timeoutSeconds: Int = 120,
         defaultEngine: MLWorkerCommon.MLWorkerEngine = .llama,
         executionMode: MLExecutionMode = .inProcess
     ) {
-        // Resolve ml-worker path for subprocess mode
+        // Resolve ml-worker path
         let resolvedPath: String
         if let path = mlWorkerPath {
             resolvedPath = path
-        } else if let envPath = ProcessInfo.processInfo.environment["ML_WORKER_PATH"] {
-            resolvedPath = envPath
+        } else if let configPath = configuration?.daemon.mlWorkerPath {
+            resolvedPath = configPath
         } else {
-            // Default to build directory
-            let currentDir = FileManager.default.currentDirectoryPath
+            // Alignment: Use governed runtime authority for paths
+            let currentDir = RuntimeAuthority.shared.workingDirectory
             resolvedPath = "\(currentDir)/.build/debug/ml-worker"
         }
         self.mlWorkerPath = resolvedPath
-        self.executionMode = executionMode
+        
+        // Use configuration timeout if available
+        let finalTimeout = configuration?.resources.timeoutSeconds ?? timeoutSeconds
+        self.timeoutSeconds = finalTimeout
+        
+        // Determine execution mode from configuration if provided
+        if let configMode = configuration?.daemon.executionMode {
+            self.executionMode = (configMode == .subprocess) ? .subprocess : .inProcess
+        } else {
+            self.executionMode = executionMode
+        }
+        self.configuration = configuration
         
         // Initialize in-process worker
         self.inProcessWorker = MLWorker(engine: defaultEngine)
@@ -413,7 +426,11 @@ actor DaemonInferenceAuthority: InferenceAuthority {
         }
         
         // Set environment
-        process.environment = ProcessInfo.processInfo.environment
+        if let configEnv = configuration?.environment {
+            process.environment = configEnv
+        } else {
+            process.environment = ProcessInfo.processInfo.environment
+        }
         
         try process.run()
         

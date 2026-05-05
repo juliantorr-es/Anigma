@@ -1,0 +1,15 @@
+[
+  {
+    "affected_count": 1,
+    "coupling_rationale": "High score driven by repeated risks/state/flow/diagnostic correlation",
+    "coupling_score": 2,
+    "diagnostic_count": 1,
+    "fan_in": 0,
+    "fan_out": 0,
+    "flow_count": 0,
+    "risk_count": 0,
+    "schema_version": "rig.coupling_index.v1",
+    "state_count": 0,
+    "target": "AnigmaDaemonCore"
+  }
+]

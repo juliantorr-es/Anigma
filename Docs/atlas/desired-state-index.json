@@ -1,0 +1,25 @@
+[
+  {
+    "blocked_by": [
+      "Do not move process exit into shared authority."
+    ],
+    "confidence": "medium",
+    "current_shape": {
+      "evidence_file_count": 50,
+      "signals": [
+        "copy_flow",
+        "runtimeauthority",
+        "shutdown_and_exit",
+        "singleton_global_state"
+      ]
+    },
+    "desired_shape": {
+      "boundary": "explicit authority / typed lifecycle owner"
+    },
+    "recommended_next_projection_ids": [
+      "projection.AnigmaDaemonCore.e591b3208e16b6c1"
+    ],
+    "schema_version": "rig.desired_state_index.v1",
+    "target": "AnigmaDaemonCore"
+  }
+]

@@ -22,6 +22,7 @@ import Foundation
 import AnigmaPrimitives
 import ContractsCore
 import GovernanceCore
+import AnigmaFoundation
 
 // MARK: - Secured World
 

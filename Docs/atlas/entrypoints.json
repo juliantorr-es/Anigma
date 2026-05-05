@@ -1,0 +1,1452 @@
+[
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Anigma/Benchmarks/BenchmarkHarness/Sources/anigma-bench/main.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Anigma/Benchmarks/BenchmarkHarness/Sources/anigma-capsule-bench/main.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Anigma/OSLogSwiftSyntaxConverter/Sources/OSLogConverter/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/App/MacApp/AnigmaApp.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/CLI/verify-receipt.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Docs/archive/CathedralEvidenceDemo.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/archive/scripts/verify-docs.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/analyze_capsule_maturity.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/analyze_compilation.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/analyze_typealiases.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/check_build.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/check_stubs.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/cohesive_strategy.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/final_verification.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/fix_codebase_v11.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/fix_python.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/freeze_phase3.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/test_capsule_functionality.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/test_compilation_check.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/test_mcp_env.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/update_cascaded_tasks.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/verify_integration.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Docs/root-docs/root-cleanup/maintenance-scripts/verify_phase3_build.sh"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Native/Shims/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Native/Shims/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Native/Shims/include/wasm_store.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Native/Shims/src/viz_aggregation_capsule/anigma_viz_aggregation_capsule.cpp"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/OSLogSwiftSyntaxConverter/Sources/OSLogConverter/main.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AccessumFlow/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/AccessumModule/demo.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaASTServices/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaASTServicesCLI/AnigmaASTServicesCLI.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaCLI/Executable/Main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaCLI/Sources/TestMLX.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaDaemon/main.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaDaemonControl/main.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaDaemonVerifier/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaExtensions/Widgets/AnigmaWidgets.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaGeminiBridge/Sources/AnigmaGeminiBridge/main.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/AnigmaNativeShims/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/AnigmaNativeShims/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/AnigmaNativeShims/include/wasm_store.h"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaStatusBar/Sources/AnigmaStatusBar/AnigmaStatusBarApp.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/AnigmaTUI/Sources/AnigmaTUIDemo/main.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/AudioRenderCapsule/Sources/AudioRenderCapsuleNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/AudioRenderCapsule/Sources/AudioRenderCapsuleNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/AudioRenderCapsule/Sources/AudioRenderCapsuleNative/include/wasm_store.h"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/BuildIngest/main.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/BenchMark/GetIntersectPtBenchmark.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/BenchMark/PointInPolygonBenchmark.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/BenchMark/StripDuplicateBenchmark.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/Benchmarks/Benchmarks.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/Inflate/Inflate.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/MemLeakTest/MemLeakTest.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/PolygonSamples/PolygonSamples.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/RandomClipping/RandomClipping.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/RectClipping/RectClipping.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/SimpleClipping/SimpleClipping.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/Triangulation/Triangulation.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/UnionClipping/UnionClipping.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/UsingZ/UsingZ.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Examples/VariableOffset/VariableOffset.cpp"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/Clipper2/CPP/Utils/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/CClipper2/example.c"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/Demo/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/DiaplasionPipeline/DiaplasionPipeline.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GeometryCapsule/Sources/GeometryCapsuleNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GeometryCapsule/Sources/GeometryCapsuleNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GeometryCapsule/Sources/GeometryCapsuleNative/include/wasm_store.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GeometryCapsule/Sources/GeometryNative/src/Utils/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/GlyphAtlasCapsule/Sources/GlyphAtlasNative/include/wasm_store.h"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/HarmoniaCLI/Main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/HarmoniaSurface/HarmoniaSurface.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/HarmoniaV2CLI/Main.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/ImageDecodeCapsule/Sources/ImageDecodeNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/ImageDecodeCapsule/Sources/ImageDecodeNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/ImageDecodeCapsule/Sources/ImageDecodeNative/include/wasm_store.h"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/MLWorkerExecutable/main.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/MediaContainerCapsule/Sources/MediaContainerCapsuleNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/MediaContainerCapsule/Sources/MediaContainerCapsuleNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/MediaContainerCapsule/Sources/MediaContainerCapsuleNative/include/wasm_store.h"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/MediaFingerprintCapsule/Examples/MediaFingerprintExample.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/MediaFingerprintCapsule/Sources/MediaFingerprintNative/stb_image.h"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Packages/ModelRegistry/Scripts/coreml_conversion.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Packages/ModelRegistry/Scripts/coreml_conversion_simple.py"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/ModelRegistry/Sources/CLI/main.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Packages/NativeBenchmarks/scripts/analyze_results.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Packages/NativeBenchmarks/scripts/build.sh"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/NativeBenchmarks/src/main.cpp"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/OutlineumZine/OutlineumZine.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/OutlineumZine/OutlineumZineStub.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/RenderIntentCapsule/Sources/RenderIntentCapsule/TestCanonicalEncoding.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Packages/Scripts/verify_contract_shape_drift.sh"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/SidecarPDFService/Sources/PDFSidecarExecutable/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Packages/SmokeTestRenderer/SmokeTestRenderer.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/SyntaxCapsule/Sources/SyntaxNative/src/parser.c"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/SyntaxCapsule/Sources/SyntaxNative/src/wasm_store.c"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/SyntaxCapsule/Sources/SyntaxNative/src/wasm_store.h"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Packages/TestVizAggregation/Sources/main.swift"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VectorStoreCapsule/Sources/VectorStoreCapsuleNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VectorStoreCapsule/Sources/VectorStoreCapsuleNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VectorStoreCapsule/Sources/VectorStoreCapsuleNative/include/wasm_store.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VizAggregationCapsule/Sources/VizAggregationCapsuleNative/include/Timer.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VizAggregationCapsule/Sources/VizAggregationCapsuleNative/include/stb_image.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VizAggregationCapsule/Sources/VizAggregationCapsuleNative/include/wasm_store.h"
+  },
+  {
+    "kind": "main",
+    "language": "cpp",
+    "path": "anigma/Packages/VizAggregationCapsule/Sources/VizAggregationNative/src/anigma_viz_aggregation_capsule.cpp"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Scripts/run_governed_tests.sh"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Sources/AnigmaAppMac/AnigmaApp.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Sources/AnigmaAppMac/AssistantIntegrationExample.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/analyze_build_errors.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/capture_build_errors.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/debug_build.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/setup_debug_tools.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Sources/AnigmaAppMac/Stores/suggest_fixes.sh"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Sources/AnigmaCLI/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Sources/AnigmaDaemonSimple/AnigmaDaemonSimpleApp.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Sources/AnigmaMCPExecutable/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Sources/anigmad/UI.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Sources/anigmad/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/AdvancedLayoutBenchmark.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Tools/NativeBuild/bootstrap_native.py"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/CodeGeneration/Sources/generate-swift-syntax/GenerateSwiftSyntax.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/EditorExtension/Host/HostApp.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Examples/Sources/AddOneToIntegerLiterals/AddOneToIntegerLiterals.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Examples/Sources/CodeGenerationUsingSwiftSyntaxBuilder/CodeGenerationUsingSwiftSyntaxBuilder.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Examples/Sources/MacroExamples/Implementation/Plugin.swift"
+  },
+  {
+    "kind": "main.swift",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Examples/Sources/MacroExamples/Playground/main.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftCompilerPluginMessageHandling/CompilerPluginMessageHandler.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step1.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step10.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step11.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step2.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step3.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step4.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step5.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step6.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step7.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step8.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Sources/SwiftSyntax/Documentation.docc/Resources/Formatter.step9.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/SwiftParserCLI/Sources/swift-parser-cli/swift-parser-cli.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/SwiftSyntaxDevUtils/Sources/swift-syntax-dev-utils/SwiftSyntaxDevUtils.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Tests/SwiftParserTest/LexerTests.swift"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "anigma/Tools/Vendor/swift-syntax/Tests/SwiftParserTest/translated/ModuleSelectorTests.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/Tools/build.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/analyze_indexing_impact.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/audit_oslog.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/build-app.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/build_installer.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/convert_print_to_oslog.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/disable_debug_stats.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/installer/daemon-simple/build_daemon.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/installer/daemon-simple/build_daemon_fallback.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/installer/daemon-simple/install.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/installer/daemon-simple/one_command_install.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/installer/daemon-simple/uninstall.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/optimize_xcode_indexing 2.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/optimize_xcode_indexing.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/setup_indexing_tools.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/show_quick_reference.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "anigma/swiftsyntax_converter.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/agentic_tools_audit_install.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_agent_context.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_artifact_render.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_dead_code_audit.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_diagnose.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_executable_consolidation_audit.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_generate_task_brief.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_git_hygiene.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_package_graph_audit.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_pipeline.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_publish_notion_v2.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_state_flow_audit.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/anigma_validate_scope.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/cleanup_inspiration_repos.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/cleanup_repos_simple.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/copilot_vibe_orchestrator.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/digestion_pipeline.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/enable_sccache.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/generate_governance_index.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/generate_td_descriptors.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/generate_td_research_scaffold.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/harmonia_orchestrator.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/install-git-hooks.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/render_documentation_diagrams.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/rig.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/rig_cli/main.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/roadmap_plan_end.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/roadmap_plan_start.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/roadmap_weekly_scan.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_agent_memory_sync.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_bootstrap_from_docs.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_context_gc.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_docs_from_receipts.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_finish_or_block.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_milestone_progress.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/td_stale_tasks.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test-governance.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_affected.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_anigma_git_hygiene.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_anigma_pipeline.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_anigma_sidecar_readiness.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_backend_readiness.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_cache_metadata.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_cleanup_audits.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_office_sidecar_readiness.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_pdf_sidecar_readiness.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_result_index.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_rig_cli.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_rig_events.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_schema_validation.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_state_flow_audit.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_swift_log_parser.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_task_brief_generator.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_translate_sidecar_readiness.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/test_workflow.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate-docs.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_alpha_release_readiness.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_app_store_build_profile.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_app_store_dependency_boundaries.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_gates.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_governance_index.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_notion_publisher.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_platform_portability.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_public_project_readiness.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_release_readiness.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_td_docs_sync.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_td_folder_system.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_verification_profiles.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "scripts/validate_xcodebuild_debug.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/analyze-warnings.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/anigmad-stress-test.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/build_installer.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/build_mac_app.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/bundle_binaries.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/check_ghosts.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/analyze_concurrency_patterns.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/benchmark-capsules.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-accessibility.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-capsule-abi.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-concurrency.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-daemon-kernel-boundary.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-design-tokens.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-determinism.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-performance-budgets.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/check-type-authority.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/detect_runtime_orphans.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/run-swiftlint-capsule.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci/run-swiftlint.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/ci_gate.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/compare_benchmarks.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/create_extension_icons.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/create_test_bundle.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/diagnose.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/generate_capsule.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/generate_docs.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/generate_gemini_tools.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/generate_maturity_matrix.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/generate_test_receipt.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/harmonia-contract-bridge.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/harmonia-surface.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/install_anigma_cli.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/migrate_test.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/package_extension.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/pre-commit-hygiene.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/pre-commit.sh"
+  },
+  {
+    "kind": "@main",
+    "language": "swift",
+    "path": "tools/governance/scripts/register_frontier_models.swift"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/remediation/detect-accessibility-violations.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/remediation/fix-button-styles.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/remediation/fix-color-tokens.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/remediation/fix-font-tokens.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/remediation/verify_accessibility.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/run_benchmarks.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/run_cli_tests.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/run_integration_tests.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/run_performance_guardrails.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/scaffold_module.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/setup_claude_desktop.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/setup_gemini_extension.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_authority_bypasses.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_authority_bypasses_enhanced.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_build_hygiene.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_exported_imports.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_gates.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_no_cycles.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_surface_compliance.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/validate_tiers.py"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/verify_coreml_pipeline.sh"
+  },
+  {
+    "kind": "script",
+    "language": "script",
+    "path": "tools/governance/scripts/verify_native_deps.sh"
+  }
+]

@@ -1,0 +1,16 @@
+name: daemon-runtime
+description: Daemon runtime lane for context and executable consolidation.
+continue_on_known_blocked_required: false
+steps:
+  - id: executable-advisory
+    command: python3 scripts/anigma_executable_consolidation_audit.py --mode advisory --focus anigmad --json-out .build/anigma-executable-consolidation-audit.json
+    required: true
+    description: Advisory executable consolidation scan.
+  - id: context-query
+    command: python3 scripts/anigma_context_query.py --risk daemon_ipc_binding --target AnigmaDaemonCore --limit 10
+    required: true
+    description: Focused context query.
+  - id: atlas-build
+    command: python3 scripts/anigma_build_repo_atlas.py
+    required: true
+    description: Build atlas.

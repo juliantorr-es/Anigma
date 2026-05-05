@@ -1738,13 +1738,13 @@ let moduleTargets: [Target] = [
   ),
   .target(
     name: "HarmoniaV2Inference",
-    dependencies: ["HarmoniaV2Core"],
+    dependencies: ["HarmoniaV2Core", "RuntimeCore"],
     path: "Packages/HarmoniaV2/HarmoniaInference/Sources",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
   ),
   .target(
     name: "HarmoniaV2Memory",
-    dependencies: ["HarmoniaV2Core"],
+    dependencies: ["HarmoniaV2Core", "RuntimeCore"],
     path: "Packages/HarmoniaV2/HarmoniaMemory/Sources",
     swiftSettings: strictConcurrencySettings + [.interoperabilityMode(.Cxx)]
   ),

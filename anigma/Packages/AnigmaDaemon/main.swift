@@ -8,6 +8,7 @@
 import AnigmaDaemonCore
 import AnigmaCLIDatabase
 import AnigmaSidecar
+import AnigmaCore
 import DatabaseCore
 import Foundation
 import AnigmaNativeShims
@@ -55,14 +56,15 @@ enum WorkerRegistryBuildError: Error, CustomStringConvertible {
     }
 }
 
-func buildCanonicalWorkerRegistryForCLI() async -> Result<JobRegistry, WorkerRegistryBuildError> {
+func buildCanonicalWorkerRegistryForCLI(configuration: DaemonConfiguration) async -> Result<JobRegistry, WorkerRegistryBuildError> {
     let registry = JobRegistry()
     // PostgreSQL is now the first-class database - SQLite is deprecated
     let dbPath = CLIDatabaseConfig.defaultDatabasePath()
     let database = DatabaseActor(path: dbPath)
     let report = await DaemonWorkerRegistry.registerCanonicalWorkers(
         on: registry,
-        database: database
+        database: database,
+        configuration: configuration
     )
     guard report.isInParity else {
         return .failure(.parityFailure(parityFailureMessage(report)))
@@ -70,173 +72,30 @@ func buildCanonicalWorkerRegistryForCLI() async -> Result<JobRegistry, WorkerReg
     return .success(registry)
 }
 
-/// Update configuration with command-line arguments
-func updateConfigurationWithCommandLineArguments(
-    _ configuration: DaemonConfiguration,
-    arguments: [String]
-) -> DaemonConfiguration {
-    var config = configuration
-    var daemonConfig = config.daemon
 
-    if let socketIndex = arguments.firstIndex(of: "--socket"),
-       socketIndex + 1 < arguments.count {
-        let socketPath = arguments[socketIndex + 1]
-        daemonConfig = DaemonConfig(
-            bindHost: daemonConfig.bindHost,
-            bindPort: daemonConfig.bindPort,
-            unixSocket: socketPath,
-            tcpEnabled: daemonConfig.tcpEnabled,
-            tlsEnabled: daemonConfig.tlsEnabled,
-            tlsCertificatePath: daemonConfig.tlsCertificatePath,
-            tlsPrivateKeyPath: daemonConfig.tlsPrivateKeyPath,
-            corsAllowedOrigins: daemonConfig.corsAllowedOrigins,
-            executionMode: daemonConfig.executionMode,
-            maxClients: daemonConfig.maxClients,
-            shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-            apiKeysEnabled: daemonConfig.apiKeysEnabled,
-            aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-            requireContractValidation: daemonConfig.requireContractValidation
-        )
-    }
-    
-    // Parse TCP enabled
-    if arguments.contains("--tcp-enabled") {
-            daemonConfig = DaemonConfig(
-                bindHost: daemonConfig.bindHost,
-                bindPort: daemonConfig.bindPort,
-                unixSocket: daemonConfig.unixSocket,
-                tcpEnabled: true,
-                tlsEnabled: daemonConfig.tlsEnabled,
-                tlsCertificatePath: daemonConfig.tlsCertificatePath,
-                tlsPrivateKeyPath: daemonConfig.tlsPrivateKeyPath,
-                corsAllowedOrigins: daemonConfig.corsAllowedOrigins,
-                executionMode: daemonConfig.executionMode,
-                maxClients: daemonConfig.maxClients,
-                shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-                apiKeysEnabled: daemonConfig.apiKeysEnabled,
-                aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-                requireContractValidation: daemonConfig.requireContractValidation
-            )
-        }
-    
-    // Parse TLS enabled
-    if arguments.contains("--tls-enabled") {
-        // Ensure TCP is also enabled
-        if !daemonConfig.tcpEnabled {
-            daemonConfig = DaemonConfig(
-                bindHost: daemonConfig.bindHost,
-                bindPort: daemonConfig.bindPort,
-                unixSocket: daemonConfig.unixSocket,
-                tcpEnabled: true,
-                tlsEnabled: true,
-                tlsCertificatePath: daemonConfig.tlsCertificatePath,
-                tlsPrivateKeyPath: daemonConfig.tlsPrivateKeyPath,
-                corsAllowedOrigins: daemonConfig.corsAllowedOrigins,
-                executionMode: daemonConfig.executionMode,
-                maxClients: daemonConfig.maxClients,
-                shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-                apiKeysEnabled: daemonConfig.apiKeysEnabled,
-                aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-                requireContractValidation: daemonConfig.requireContractValidation
-            )
-        } else {
-            daemonConfig = DaemonConfig(
-                bindHost: daemonConfig.bindHost,
-                bindPort: daemonConfig.bindPort,
-                unixSocket: daemonConfig.unixSocket,
-                tcpEnabled: daemonConfig.tcpEnabled,
-                tlsEnabled: true,
-                tlsCertificatePath: daemonConfig.tlsCertificatePath,
-                tlsPrivateKeyPath: daemonConfig.tlsPrivateKeyPath,
-                corsAllowedOrigins: daemonConfig.corsAllowedOrigins,
-                executionMode: daemonConfig.executionMode,
-                maxClients: daemonConfig.maxClients,
-                shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-                apiKeysEnabled: daemonConfig.apiKeysEnabled,
-                aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-                requireContractValidation: daemonConfig.requireContractValidation
-            )
-        }
-    }
-    
-    // Parse TLS certificate path
-    if let certIndex = arguments.firstIndex(of: "--tls-cert"),
-       certIndex + 1 < arguments.count {
-        let certPath = arguments[certIndex + 1]
-            daemonConfig = DaemonConfig(
-                bindHost: daemonConfig.bindHost,
-                bindPort: daemonConfig.bindPort,
-                unixSocket: daemonConfig.unixSocket,
-                tcpEnabled: daemonConfig.tcpEnabled,
-                tlsEnabled: daemonConfig.tlsEnabled,
-                tlsCertificatePath: certPath,
-                tlsPrivateKeyPath: daemonConfig.tlsPrivateKeyPath,
-                corsAllowedOrigins: daemonConfig.corsAllowedOrigins,
-                executionMode: daemonConfig.executionMode,
-                maxClients: daemonConfig.maxClients,
-                shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-                apiKeysEnabled: daemonConfig.apiKeysEnabled,
-                aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-                requireContractValidation: daemonConfig.requireContractValidation
-            )
-        }
-    
-    // Parse TLS private key path
-    if let keyIndex = arguments.firstIndex(of: "--tls-key"),
-       keyIndex + 1 < arguments.count {
-        let keyPath = arguments[keyIndex + 1]
-            daemonConfig = DaemonConfig(
-                bindHost: daemonConfig.bindHost,
-                bindPort: daemonConfig.bindPort,
-                unixSocket: daemonConfig.unixSocket,
-                tcpEnabled: daemonConfig.tcpEnabled,
-                tlsEnabled: daemonConfig.tlsEnabled,
-                tlsCertificatePath: daemonConfig.tlsCertificatePath,
-                tlsPrivateKeyPath: keyPath,
-                corsAllowedOrigins: daemonConfig.corsAllowedOrigins,
-                executionMode: daemonConfig.executionMode,
-                maxClients: daemonConfig.maxClients,
-                shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-                apiKeysEnabled: daemonConfig.apiKeysEnabled,
-                aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-                requireContractValidation: daemonConfig.requireContractValidation
-            )
-        }
-    
-    // Parse CORS origins (comma-separated)
-    if let corsIndex = arguments.firstIndex(of: "--cors-origins"),
-       corsIndex + 1 < arguments.count {
-        let originsString = arguments[corsIndex + 1]
-        let origins = originsString.split(separator: ",").map(String.init)
-            daemonConfig = DaemonConfig(
-                bindHost: daemonConfig.bindHost,
-                bindPort: daemonConfig.bindPort,
-                unixSocket: daemonConfig.unixSocket,
-                tcpEnabled: daemonConfig.tcpEnabled,
-                tlsEnabled: daemonConfig.tlsEnabled,
-                tlsCertificatePath: daemonConfig.tlsCertificatePath,
-                tlsPrivateKeyPath: daemonConfig.tlsPrivateKeyPath,
-                corsAllowedOrigins: origins,
-                executionMode: daemonConfig.executionMode,
-                maxClients: daemonConfig.maxClients,
-                shutdownTimeoutSeconds: daemonConfig.shutdownTimeoutSeconds,
-                apiKeysEnabled: daemonConfig.apiKeysEnabled,
-                aneSchedulingEnabled: daemonConfig.aneSchedulingEnabled,
-                requireContractValidation: daemonConfig.requireContractValidation
-            )
-        }
-    
-    config.daemon = daemonConfig
-    return config
+// Capture ambient process state once at the top-level boundary
+let processArguments = CommandLine.arguments
+let processEnvironment = ProcessInfo.processInfo.environment
+
+// Initialize configuration from ambient process state
+var configuration: DaemonConfiguration
+do {
+    configuration = try DaemonConfiguration.from(
+        arguments: processArguments,
+        environment: processEnvironment
+    )
+} catch {
+    fputs("Fatal: Failed to initialize configuration: \(error)\n", stderr)
+    RuntimeAuthority.shared.shutdown(exitCode: 1)
 }
 
-if shouldShowHelp(CommandLine.arguments) {
+if shouldShowHelp(processArguments) {
     printUsage()
-    exit(0)
+    RuntimeAuthority.shared.shutdown(exitCode:0)
 }
 
 // Check for worker mode
-if CommandLine.arguments.contains("--worker") {
+if processArguments.contains("--worker") {
     fputs("Anigma worker starting...\n", stderr)
 
     // Apply resource limits
@@ -244,12 +103,12 @@ if CommandLine.arguments.contains("--worker") {
 
     // Initialize canonical runtime registry and validate parity
     let registry: JobRegistry
-    switch await buildCanonicalWorkerRegistryForCLI() {
+    switch await buildCanonicalWorkerRegistryForCLI(configuration: configuration) {
     case .success(let builtRegistry):
         registry = builtRegistry
     case .failure(let message):
         fputs("\(message)\n", stderr)
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 
 
@@ -264,7 +123,7 @@ if CommandLine.arguments.contains("--worker") {
         // Resolve worker
         guard let worker = await registry.worker(for: payload.spec.kind) else {
             fputs("Worker: unknown job kind \(payload.spec.kind)\n", stderr)
-            exit(1)
+            RuntimeAuthority.shared.shutdown(exitCode:1)
         }
 
         // Execute
@@ -280,34 +139,34 @@ if CommandLine.arguments.contains("--worker") {
         let resultData = try encoder.encode(outputs)
         FileHandle.standardOutput.write(resultData)
         fputs("\nWorker: job \(payload.jobId) completed successfully\n", stderr)
-        exit(0)
+        RuntimeAuthority.shared.shutdown(exitCode:0)
 
     } catch {
         fputs("Worker: fatal error: \(error)\n", stderr)
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 }
 
 // Check for verification mode
-if CommandLine.arguments.contains("--verify") {
+if processArguments.contains("--verify") {
     do {
-        try await Verifier.run()
-        exit(0)
+        try await Verifier.run(configuration: configuration)
+        RuntimeAuthority.shared.shutdown(exitCode:0)
     } catch {
         fputs("Verification failed: \(error)\n", stderr)
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 }
 
 // Check for list-jobs mode
-if CommandLine.arguments.contains("--list-jobs") {
+if processArguments.contains("--list-jobs") {
     let registry: JobRegistry
-    switch await buildCanonicalWorkerRegistryForCLI() {
+    switch await buildCanonicalWorkerRegistryForCLI(configuration: configuration) {
     case .success(let builtRegistry):
         registry = builtRegistry
     case .failure(let message):
         fputs("\(message)\n", stderr)
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 
     let kinds = await registry.registeredKinds()
@@ -315,11 +174,11 @@ if CommandLine.arguments.contains("--list-jobs") {
     for kind in kinds {
         print("  - \(kind)")
     }
-    exit(0)
+    RuntimeAuthority.shared.shutdown(exitCode:0)
 }
 
 // Check for vault-summary mode
-if CommandLine.arguments.contains("--vault-summary") {
+if processArguments.contains("--vault-summary") {
     do {
         // PostgreSQL is now the first-class database - SQLite is deprecated
         let dbActor = DatabaseActor(path: DatabaseConfiguration.defaultDatabasePath())
@@ -352,30 +211,20 @@ if CommandLine.arguments.contains("--vault-summary") {
         for (kind, count) in typeCounts.sorted(by: { $0.key < $1.key }) {
             print("    - \(kind): \(count)")
         }
-        exit(0)
+        RuntimeAuthority.shared.shutdown(exitCode:0)
     } catch {
         fputs("Failed to get vault summary: \(error)\n", stderr)
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 }
 
 // Check for status mode
-if CommandLine.arguments.contains("--status") {
+if processArguments.contains("--status") {
     do {
-        // Load configuration to get socket path
-        var configuration = DaemonConfiguration.default
-        if let configIndex = CommandLine.arguments.firstIndex(of: "--config"),
-            configIndex + 1 < CommandLine.arguments.count {
-            let configPath = CommandLine.arguments[configIndex + 1]
-            let url = URL(fileURLWithPath: configPath)
-            let data = try Data(contentsOf: url)
-            configuration = try JSONDecoder().decode(DaemonConfiguration.self, from: data)
-        }
-
         let socketPath = (configuration.daemon.unixSocket as NSString).expandingTildeInPath
         if !FileManager.default.fileExists(atPath: socketPath) {
             print("Error: Daemon is not running (socket not found at \(socketPath))")
-            exit(1)
+            RuntimeAuthority.shared.shutdown(exitCode:1)
         }
 
         // Connect via HTTP SidecarBridge
@@ -436,36 +285,25 @@ if CommandLine.arguments.contains("--status") {
                 }
             }
         }
-        exit(0)
+        RuntimeAuthority.shared.shutdown(exitCode:0)
     } catch {
         print("Error getting status: \(error)")
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 }
 
 // Check for verify-chain mode (Pass 7)
-if let verifyIndex = CommandLine.arguments.firstIndex(of: "--verify-chain"),
-   verifyIndex + 1 < CommandLine.arguments.count {
+if let verifyIndex = processArguments.firstIndex(of: "--verify-chain"),
+    verifyIndex + 1 < processArguments.count {
 
-    let hash = CommandLine.arguments[verifyIndex + 1]
+    let hash = processArguments[verifyIndex + 1]
 
     // Connect to daemon
-    // Use default socket or from config
-    var configuration = DaemonConfiguration.default
-    if let configIndex = CommandLine.arguments.firstIndex(of: "--config"),
-        configIndex + 1 < CommandLine.arguments.count {
-        let configPath = CommandLine.arguments[configIndex + 1]
-        let url = URL(fileURLWithPath: configPath)
-        let data = try Data(contentsOf: url)
-        configuration = try JSONDecoder().decode(DaemonConfiguration.self, from: data)
-    }
-
     let socketPath = (configuration.daemon.unixSocket as NSString).expandingTildeInPath
     if !FileManager.default.fileExists(atPath: socketPath) {
         print("Error: Daemon is not running (socket not found at \(socketPath))")
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
-
     // Connect via HTTP SidecarBridge
     let bridge = try await SidecarBridge.create(
         socketPath: socketPath,
@@ -477,14 +315,14 @@ if let verifyIndex = CommandLine.arguments.firstIndex(of: "--verify-chain"),
     if response.ok {
         print("VERIFICATION SUCCESS: Chain ending at \(hash) is valid.")
         print("Message: \(response.message)")
-        exit(0)
+        RuntimeAuthority.shared.shutdown(exitCode:0)
     } else {
         print("VERIFICATION FAILURE: Chain ending at \(hash) is INVALID.")
         print("Message: \(response.message)")
         if let error = response.error {
             print("Error: \(error.code) - \(error.message)")
         }
-        exit(1)
+        RuntimeAuthority.shared.shutdown(exitCode:1)
     }
 }
 
@@ -493,22 +331,6 @@ print("Anigma Sidecar Daemon starting...")
 fflush(stdout)
 
 do {
-    // Load configuration
-    var configuration = DaemonConfiguration.default
-
-    if let configIndex = CommandLine.arguments.firstIndex(of: "--config"),
-        configIndex + 1 < CommandLine.arguments.count {
-        let configPath = CommandLine.arguments[configIndex + 1]
-        let url = URL(fileURLWithPath: configPath)
-        let data = try Data(contentsOf: url)
-        let decoder = JSONDecoder()
-        configuration = try decoder.decode(DaemonConfiguration.self, from: data)
-        print("Loaded config from \(configPath)")
-    }
-
-    // Apply command-line overrides for TCP/TLS/CORS
-    configuration = updateConfigurationWithCommandLineArguments(configuration, arguments: CommandLine.arguments)
-
     print("Config socket: \(configuration.daemon.unixSocket)")
     if configuration.daemon.tcpEnabled {
         print("Config TCP: enabled on \(configuration.daemon.bindHost):\(configuration.daemon.bindPort)")
@@ -560,10 +382,10 @@ do {
     print("Stopping daemon services...")
     await daemon.stop()
     print("Daemon stopped gracefully.")
-    exit(0)
+    RuntimeAuthority.shared.shutdown(exitCode: 0)
 
 } catch {
     print("Fatal error: \(error)")
     fflush(stdout)
-    exit(1)
+    RuntimeAuthority.shared.shutdown(exitCode: 1)
 }

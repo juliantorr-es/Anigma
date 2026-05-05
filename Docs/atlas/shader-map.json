@@ -1,0 +1,72 @@
+[
+  {
+    "file": "anigma/Packages/SaturationKit/Sources/SaturationKit/SaturatedSearch.metal",
+    "functions": [
+      {
+        "access": null,
+        "attributes": [
+          "kernel"
+        ],
+        "enclosing_type": null,
+        "file": "anigma/Packages/SaturationKit/Sources/SaturationKit/SaturatedSearch.metal",
+        "kind": "kernel_function",
+        "language": "metal",
+        "line": 22,
+        "name": "saturated_vector_search",
+        "risk_tags": [
+          "metal_kernel_string_reference"
+        ],
+        "signature": "kernel void saturated_vector_search("
+      }
+    ],
+    "language": "metal",
+    "risk_tags": [
+      "metal_address_space",
+      "metal_buffer_index_contract",
+      "metal_threadgroup_assumption"
+    ]
+  },
+  {
+    "file": "anigma/Sources/PlatformAdapters/Shaders.metal",
+    "functions": [
+      {
+        "access": null,
+        "attributes": [
+          "vertex"
+        ],
+        "enclosing_type": null,
+        "file": "anigma/Sources/PlatformAdapters/Shaders.metal",
+        "kind": "vertex_function",
+        "language": "metal",
+        "line": 16,
+        "name": "vertex_main",
+        "risk_tags": [
+          "metal_kernel_string_reference"
+        ],
+        "signature": "vertex VertexOut vertex_main(uint vertexID [[vertex_id]],"
+      },
+      {
+        "access": null,
+        "attributes": [
+          "fragment"
+        ],
+        "enclosing_type": null,
+        "file": "anigma/Sources/PlatformAdapters/Shaders.metal",
+        "kind": "fragment_function",
+        "language": "metal",
+        "line": 27,
+        "name": "fragment_main",
+        "risk_tags": [
+          "metal_kernel_string_reference"
+        ],
+        "signature": "fragment float4 fragment_main(VertexOut in [[stage_in]],"
+      }
+    ],
+    "language": "metal",
+    "risk_tags": [
+      "metal_address_space",
+      "metal_buffer_index_contract",
+      "metal_texture_index_contract"
+    ]
+  }
+]

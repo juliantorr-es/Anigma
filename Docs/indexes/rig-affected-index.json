@@ -1,0 +1,16 @@
+[
+  {
+    "affected_risk_count": 37,
+    "changed_file_count": 4,
+    "directly_affected_targets": "AnigmaDaemonCore",
+    "files_json": ".build/rig/affected/files.json",
+    "mode": "stdin",
+    "profiles_json": ".build/rig/affected/profiles.json",
+    "recommended_profiles": "daemon-runtime;cleanup-review;backend-regularization",
+    "result_path": ".build/rig/affected/files.json;.build/rig/affected/profiles.json;.build/rig/affected/risks.json;.build/rig/affected/targets.json",
+    "risks_json": ".build/rig/affected/risks.json",
+    "summary_md": ".build/rig/affected/summary.md",
+    "targets_json": ".build/rig/affected/targets.json",
+    "task": "td-cleanup-005"
+  }
+]

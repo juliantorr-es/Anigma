@@ -5,34 +5,35 @@
 import Foundation
 import HarmoniaV2Core
 import AnigmaFoundation
+import RuntimeCore
 
 // MARK: - Public API
 
 /// Memory manager for retrieval and context
 public actor MemoryManager {
     private let registry: ModuleRegistry
-    private let store: (any MemoryStore)?
+    private let _store: (any RuntimeCore.MemoryStore)?
     
     /// Initialize with optional storage backend.
     /// If store is nil, operations throw notImplemented (for testing/stubs).
-    public init(registry: ModuleRegistry = ModuleRegistry(), store: (any MemoryStore)? = nil) {
+    public init(registry: ModuleRegistry = ModuleRegistry(), store: (any RuntimeCore.MemoryStore)? = nil) {
         self.registry = registry
-        self.store = store
+        self._store = store
         Task { await registry.register(module: "HarmoniaMemory") }
     }
 
     public var isConfigured: Bool {
-        store != nil
+        _store != nil
     }
 
     public func backendConfigurationState() -> String {
-        store == nil ? "NOT_CONFIGURED" : "CONFIGURED"
+        _store == nil ? "NOT_CONFIGURED" : "CONFIGURED"
     }
     
     /// Store memory item through governed storage authority
     public func store(_ item: ShortTermMemory) async throws -> String {
-        guard let store = store else {
-            throw MemoryStoreError.invalidConfiguration("MemoryManager.store() - not configured with a storage backend")
+        guard let store = _store else {
+            throw RuntimeCore.MemoryStoreError.invalidConfiguration("MemoryManager.store() - not configured with a storage backend")
         }
         
         // Convert ShortTermMemory to storage format
@@ -58,8 +59,8 @@ public actor MemoryManager {
     
     /// Retrieve memory items matching query
     public func retrieve(matching query: MemoryQuery) async throws -> [ShortTermMemory] {
-        guard let store = store else {
-            throw MemoryStoreError.invalidConfiguration("MemoryManager.retrieve() - not configured with a storage backend")
+        guard let store = _store else {
+            throw RuntimeCore.MemoryStoreError.invalidConfiguration("MemoryManager.retrieve() - not configured with a storage backend")
         }
         
         let records = try await store.retrieve(
@@ -105,8 +106,8 @@ public actor MemoryManager {
         threshold: Float? = 0.7,
         scanLimit: Int? = nil
     ) async throws -> [VectorSearchResult] {
-        guard let store = store else {
-            throw MemoryStoreError.invalidConfiguration("MemoryManager.searchSimilar() - not configured with a storage backend")
+        guard let store = _store else {
+            throw RuntimeCore.MemoryStoreError.invalidConfiguration("MemoryManager.searchSimilar() - not configured with a storage backend")
         }
         
         let results = try await store.searchSimilar(

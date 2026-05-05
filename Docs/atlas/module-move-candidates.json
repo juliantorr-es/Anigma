@@ -1,0 +1,36 @@
+[
+  {
+    "candidate_id": "candidate.projection.AnigmaDaemonCore.e591b3208e16b6c1",
+    "coupling_effect": "reduce",
+    "current_target": "AnigmaDaemonCore",
+    "evidence": {
+      "signals": [
+        "copy_flow",
+        "runtimeauthority",
+        "shutdown_and_exit",
+        "singleton_global_state"
+      ],
+      "sources": [
+        "authority-map.json",
+        "cohesion-index.json",
+        "data-flow-map.json",
+        "dependencies.json",
+        "repo-map.json",
+        "risk-index.json",
+        "state-map.json",
+        "symbols.json",
+        "targets.json"
+      ]
+    },
+    "move_kind": "move_lifecycle_to_daemon_owner",
+    "proposed_target": "explicit authority / typed lifecycle owner",
+    "risk": "high",
+    "schema_version": "rig.module_move_candidate.v1",
+    "symbol_or_file": "AnigmaDaemonCore",
+    "validation_plan": [
+      "rig affected summary",
+      "rig swift build",
+      "schema validate result/event"
+    ]
+  }
+]

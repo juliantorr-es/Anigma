@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AnigmaCore
 
 public actor ShellSession {
     public let id: String
@@ -23,7 +24,7 @@ public actor ShellSession {
         id: String,
         command: String = "/bin/bash",
         args: [String] = [],
-        workdir: String = FileManager.default.currentDirectoryPath,
+        workdir: String = RuntimeAuthority.shared.workingDirectory,
         env: [String: String] = [:],
         bufferSize: Int = 1024 * 1024
     ) {

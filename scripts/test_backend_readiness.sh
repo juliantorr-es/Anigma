@@ -59,9 +59,17 @@ fi
 
 echo ""
 echo "=== Quick Checks ==="
-echo "PDFium errors: $(grep -c "pdfium" "$LOG_FILE")"
+echo "PDFium errors: $(grep -c "pdfium" "$LOG_FILE" || true)"
 echo "Compilation errors: $(grep -c "error:" "$LOG_FILE" || true)"
 echo "Test failures: $(grep -c "FAILED" "$LOG_FILE" || true)"
+
+echo ""
+echo "=== Advisory: Dead Code Audit ==="
+python3 "$REPO_ROOT/scripts/anigma_dead_code_audit.py" --mode advisory --no-proof || true
+
+echo ""
+echo "=== Advisory: Executable Consolidation Audit ==="
+python3 "$REPO_ROOT/scripts/anigma_executable_consolidation_audit.py" --mode advisory --focus anigmad --no-proof || true
 
 echo ""
 echo "Done."

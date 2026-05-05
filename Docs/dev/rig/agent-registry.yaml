@@ -1,0 +1,64 @@
+{
+  "agents": [
+    {
+      "agent_id": "codex",
+      "executable": "codex",
+      "enabled": true,
+      "display_name": "Codex",
+      "command_template": "codex exec {prompt_file}",
+      "supports_json": true,
+      "supports_jsonl": true,
+      "supports_dry_run": true,
+      "mutates_files": false,
+      "default_mode": "review",
+      "requires_confirm": true,
+      "danger_level": "medium",
+      "notes": "Allowlisted non-interactive execution. Mutating mode requires confirmation."
+    },
+    {
+      "agent_id": "gemini",
+      "executable": "gemini",
+      "enabled": true,
+      "display_name": "Gemini",
+      "command_template": "gemini -p {prompt} --output-format stream-json",
+      "supports_json": true,
+      "supports_jsonl": true,
+      "supports_dry_run": true,
+      "mutates_files": false,
+      "default_mode": "review",
+      "requires_confirm": false,
+      "danger_level": "medium",
+      "notes": "Headless prompt mode via CLI."
+    },
+    {
+      "agent_id": "claude",
+      "executable": "claude",
+      "enabled": true,
+      "display_name": "Claude Code",
+      "command_template": "claude -p {prompt}",
+      "supports_json": true,
+      "supports_jsonl": true,
+      "supports_dry_run": true,
+      "mutates_files": false,
+      "default_mode": "review",
+      "requires_confirm": false,
+      "danger_level": "medium",
+      "notes": "Headless print mode via CLI."
+    },
+    {
+      "agent_id": "vibe",
+      "executable": "vibe",
+      "enabled": false,
+      "display_name": "Vibe",
+      "command_template": "vibe --prompt {prompt}",
+      "supports_json": false,
+      "supports_jsonl": false,
+      "supports_dry_run": true,
+      "mutates_files": false,
+      "default_mode": "review",
+      "requires_confirm": true,
+      "danger_level": "high",
+      "notes": "Disabled by default. Programmatic mode may auto-approve; require explicit opt-in."
+    }
+  ]
+}

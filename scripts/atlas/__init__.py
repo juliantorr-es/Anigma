@@ -1,0 +1,2 @@
+"""Atlas indexer package."""
+

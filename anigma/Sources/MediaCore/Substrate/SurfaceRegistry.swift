@@ -57,7 +57,7 @@ public final class SurfaceRegistry: Sendable {
     public func createMediaSurface(from pixelBuffer: CVPixelBuffer) -> MediaSurface {
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
-        let byteCount = CVPixelBufferGetByteCount(pixelBuffer)
+        let byteCount = CVPixelBufferGetDataSize(pixelBuffer)
         return MediaSurface(
             token: register(pixelBuffer: pixelBuffer),
             kind: .pixelBuffer,

@@ -240,7 +240,7 @@ public actor MediaSubstrateOrchestrator {
                 kind: .pixelBuffer,
                 width: CVPixelBufferGetWidth(native),
                 height: CVPixelBufferGetHeight(native),
-                byteCount: CVPixelBufferGetByteCount(native)
+                byteCount: CVPixelBufferGetDataSize(native)
             )
             
             let result = try await saturationSubstrate.process(

@@ -11,6 +11,7 @@ import MCP
 import AnigmaPrimitives
 import AnigmaEvents
 import TelemetryCore
+import AnigmaCore
 
 /// Execution context for a tool call
 public struct MCPExecutionContext: Sendable {
@@ -108,7 +109,7 @@ public actor MCPExecutionCoordinator {
 
                 // Return first result (cancels other task)
                 guard let result = try await group.next() else {
-                    fatalError("Failed to unwrap result")
+                    throw RuntimeLifecycleError.fatal(message: "Failed to unwrap result")
                 }
                 group.cancelAll()
                 return result

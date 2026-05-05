@@ -1,0 +1,179 @@
+[
+  {
+    "evidence_sources": [
+      "atlas",
+      "source"
+    ],
+    "files": [
+      "anigma/Package.swift",
+      "anigma/Packages/AnigmaDaemon/main.swift",
+      "anigma/Packages/AnigmaDaemonCore/Jobs/ContextumWorkerBootstrap.swift",
+      "anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift",
+      "anigma/Packages/AnigmaDaemonCore/Jobs/MLInferWorker.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/DaemonConfigurationStub.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Assistant.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/PTY/ShellSession.swift",
+      "anigma/Packages/AnigmaDaemonCore/Utils/DaemonInferenceAuthority.swift",
+      "anigma/Packages/AnigmaDaemonCore/Utils/DaemonMLWorkerInterface.swift",
+      "anigma/Packages/AnigmaDaemonCore/Workers/WorkerProcess.swift",
+      "anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift",
+      "anigma/Packages/AnigmaDaemonVerifier/main.swift",
+      "anigma/Packages/HarmoniaCLI/DaemonCommand.swift",
+      "scripts/anigma_state_flow_audit.py",
+      "scripts/rig_tools/architecture_projector.py",
+      "scripts/test_architecture_projector.py",
+      "scripts/test_state_flow_audit.py"
+    ],
+    "overlap_id": "overlap.AnigmaDaemonCore.duplicate_config.fd9ab62329b5d37e",
+    "overlap_type": "duplicate_config",
+    "rationale": "Evidence of repeated responsibility signals across files",
+    "responsibility_phrase": "duplicate config",
+    "risk": "medium",
+    "schema_version": "rig.overlap_index.v1",
+    "symbols": [],
+    "targets": [
+      "AnigmaDaemonCore"
+    ]
+  },
+  {
+    "evidence_sources": [
+      "atlas",
+      "source"
+    ],
+    "files": [
+      "anigma/.build/arm64-apple-macosx/debug/AnigmaDaemonCore.build/DerivedSources/resource_bundle_accessor.swift",
+      "anigma/Docs/root-docs/reference/stubs/hardening.md",
+      "anigma/Docs/root-docs/reference/stubs/inventory-audit.md",
+      "anigma/Docs/root-docs/reference/stubs/inventory-complete.md",
+      "anigma/Docs/root-docs/reference/stubs/visibility-audit.md",
+      "anigma/Packages/AnigmaDaemonCore/Workers/WorkerProcess.swift",
+      "anigma/Packages/AnigmaDaemonCore/Workers/WorkerTooling.swift",
+      "anigma/Packages/AnigmaDaemonVerifier/main.swift",
+      "anigma/Packages/HarmoniaCLI/DaemonCommand.swift",
+      "scripts/anigma_generate_task_brief.py",
+      "scripts/anigma_state_flow_audit.py",
+      "scripts/generate_td_research_scaffold.py",
+      "scripts/rig_tools/architecture_projector.py",
+      "scripts/test_affected.py",
+      "scripts/test_architecture_projector.py",
+      "scripts/test_result_index.py",
+      "scripts/test_rig_cli.py",
+      "scripts/test_schema_validation.py",
+      "scripts/test_state_flow_audit.py",
+      "scripts/test_swift_log_parser.py"
+    ],
+    "overlap_id": "overlap.AnigmaDaemonCore.duplicate_lifecycle.f494b4f4fe839174",
+    "overlap_type": "duplicate_lifecycle",
+    "rationale": "Evidence of repeated responsibility signals across files",
+    "responsibility_phrase": "duplicate lifecycle",
+    "risk": "medium",
+    "schema_version": "rig.overlap_index.v1",
+    "symbols": [],
+    "targets": [
+      "AnigmaDaemonCore"
+    ]
+  },
+  {
+    "evidence_sources": [
+      "atlas",
+      "source"
+    ],
+    "files": [
+      "anigma/Packages/AnigmaCLI/Executable/SearchCommand.swift",
+      "anigma/Packages/AnigmaDaemon/main.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Session.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/HTTPServer.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Verification/DaemonVerifierHarness.swift",
+      "anigma/Packages/AnigmaDaemonVerifier/main.swift",
+      "anigma/Packages/AnigmaHostKit/AnigmaAuthority.swift",
+      "anigma/Packages/HarmoniaCLI/DaemonCommand.swift",
+      "anigma/Sources/anigmad/main.swift",
+      "scripts/anigma_state_flow_audit.py",
+      "scripts/rig_tools/architecture_projector.py",
+      "scripts/test_architecture_projector.py",
+      "scripts/test_state_flow_audit.py"
+    ],
+    "overlap_id": "overlap.AnigmaDaemonCore.duplicate_socket_ownership.fe92de9055c3205a",
+    "overlap_type": "duplicate_socket_ownership",
+    "rationale": "Evidence of repeated responsibility signals across files",
+    "responsibility_phrase": "duplicate socket ownership",
+    "risk": "medium",
+    "schema_version": "rig.overlap_index.v1",
+    "symbols": [],
+    "targets": [
+      "AnigmaDaemonCore"
+    ]
+  },
+  {
+    "evidence_sources": [
+      "atlas",
+      "source"
+    ],
+    "files": [
+      "anigma/Docs/architecture/PDF-Exporter-Specification.md",
+      "anigma/Docs/archive/ANE_SCHEDULING_IMPLEMENTATION_SUMMARY.md",
+      "anigma/Docs/archive/FINAL_ANE_SCHEDULING_IMPLEMENTATION.md",
+      "anigma/Docs/archive/INTEGRATION.md",
+      "anigma/Docs/guides/BACKEND_LOGGING_MIGRATION_PLAN.md",
+      "anigma/Docs/root-docs/reference/stubs/hardening.md",
+      "anigma/Docs/root-docs/reference/stubs/implementation.md",
+      "anigma/Docs/root-docs/reference/stubs/inventory-audit.md",
+      "anigma/Docs/root-docs/reference/stubs/inventory-complete.md",
+      "anigma/Docs/root-docs/reference/stubs/inventory-quick-ref.md",
+      "anigma/Docs/root-docs/reference/stubs/remediation.md",
+      "anigma/Packages/AnigmaCLI/Executable/SearchCommand.swift",
+      "anigma/Packages/AnigmaDaemon/main.swift",
+      "anigma/Packages/AnigmaDaemonCore/Jobs/IndexingWorker.swift",
+      "anigma/Packages/AnigmaDaemonCore/Processing/DaemonServer+Processing.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/DaemonCompatibility.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/DaemonServer.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+Assistant.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+HTTPRouting.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+LLM.swift"
+    ],
+    "overlap_id": "overlap.AnigmaDaemonCore.duplicate_logging.a34398c0fa240d57",
+    "overlap_type": "duplicate_logging",
+    "rationale": "Evidence of repeated responsibility signals across files",
+    "responsibility_phrase": "duplicate logging",
+    "risk": "medium",
+    "schema_version": "rig.overlap_index.v1",
+    "symbols": [],
+    "targets": [
+      "AnigmaDaemonCore"
+    ]
+  },
+  {
+    "evidence_sources": [
+      "atlas",
+      "source"
+    ],
+    "files": [
+      "anigma/.build/arm64-apple-macosx/debug/description.json",
+      "anigma/.build/arm64-apple-macosx/debug/plugin-tools-description.json",
+      "anigma/Packages/AnigmaDaemon/main.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/DaemonServer.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Handlers/DaemonServer+PTY.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Services/PTY/ShellSession.swift",
+      "anigma/Packages/AnigmaDaemonCore/Sources/AnigmaDaemonCore/Verification/DaemonVerifierHarness.swift",
+      "anigma/Packages/AnigmaDaemonCore/Utils/DaemonInferenceAuthority.swift",
+      "anigma/Packages/AnigmaDaemonCore/Utils/DaemonMLWorkerInterface.swift",
+      "anigma/Sources/anigmad/main.swift",
+      "scripts/anigma_state_flow_audit.py",
+      "scripts/rig_tools/architecture_projector.py",
+      "scripts/rig_tools/loop_actions.py",
+      "scripts/task_brief_templates/cleanup_singleton_triage.md",
+      "scripts/test_architecture_projector.py",
+      "scripts/test_state_flow_audit.py"
+    ],
+    "overlap_id": "overlap.AnigmaDaemonCore.duplicate_runtime_authority.04fdde809cf98249",
+    "overlap_type": "duplicate_runtime_authority",
+    "rationale": "Evidence of repeated responsibility signals across files",
+    "responsibility_phrase": "duplicate runtime authority",
+    "risk": "high",
+    "schema_version": "rig.overlap_index.v1",
+    "symbols": [],
+    "targets": [
+      "AnigmaDaemonCore"
+    ]
+  }
+]

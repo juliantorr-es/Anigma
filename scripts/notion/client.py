@@ -50,3 +50,20 @@ def retrieve_page(page_id):
 
 def get_block(block_id):
     return notion_request(f"blocks/{block_id}", "GET")
+
+def get_block_children(block_id, cursor=None):
+    params = f"?start_cursor={cursor}" if cursor else ""
+    return notion_request(f"blocks/{block_id}/children{params}", "GET")
+
+def archive_block(block_id):
+    return notion_request(f"blocks/{block_id}", "PATCH", {"archived": True})
+
+def delete_block(block_id):
+    return notion_request(f"blocks/{block_id}", "DELETE")
+def update_table_row_cells(row_block_id, cells_payload):
+    """
+    Updates row cells. Notion API requires updating the table_row object, 
+    with a 'cells' property which is an array of cell objects.
+    """
+    return notion_request(f"blocks/{row_block_id}", "PATCH", {"table_row": {"cells": cells_payload}})
+

@@ -30,6 +30,9 @@ public struct DaemonConfiguration: Codable, Sendable {
         public var aneSchedulingEnabled: Bool
         public var requireContractValidation: Bool
         public var cacheEnabled: Bool?
+        public var mlWorkerPath: String?
+        public var evidenceDirectory: String?
+        public var useMockML: Bool
 
         public init(
             bindHost: String,
@@ -46,7 +49,10 @@ public struct DaemonConfiguration: Codable, Sendable {
             apiKeysEnabled: Bool,
             aneSchedulingEnabled: Bool,
             requireContractValidation: Bool,
-            cacheEnabled: Bool? = true
+            cacheEnabled: Bool? = true,
+            mlWorkerPath: String? = nil,
+            evidenceDirectory: String? = nil,
+            useMockML: Bool = false
         ) {
             self.bindHost = bindHost
             self.bindPort = bindPort
@@ -63,6 +69,9 @@ public struct DaemonConfiguration: Codable, Sendable {
             self.aneSchedulingEnabled = aneSchedulingEnabled
             self.requireContractValidation = requireContractValidation
             self.cacheEnabled = cacheEnabled
+            self.mlWorkerPath = mlWorkerPath
+            self.evidenceDirectory = evidenceDirectory
+            self.useMockML = useMockML
         }
     }
 
@@ -98,23 +107,63 @@ public struct DaemonConfiguration: Codable, Sendable {
     public var resources: ResourcesConfig
     public var antigravity: AntigravityConfig
     public var governance: GovernanceConfig
+    
+    /// Ambient environment variables captured at startup.
+    public var environment: [String: String]
 
     public init(
         vault: VaultConfig,
         daemon: DaemonConfig,
         resources: ResourcesConfig,
         antigravity: AntigravityConfig,
-        governance: GovernanceConfig
+        governance: GovernanceConfig,
+        environment: [String: String] = [:]
     ) {
         self.vault = vault
         self.daemon = daemon
         self.resources = resources
         self.antigravity = antigravity
         self.governance = governance
+        self.environment = environment
+    }
+
+    /// Creates a configuration from command line arguments and environment variables.
+    /// This is the preferred way to initialize configuration from ambient process state.
+    public static func from(arguments: [String], environment: [String: String] = [:]) throws -> DaemonConfiguration {
+        logInfo("[DaemonConfiguration] Initializing from \(arguments.count) arguments and \(environment.count) env vars", category: "DaemonConfiguration")
+        
+        var config = DaemonConfiguration.developmentDefault(environment: environment)
+        config.environment = environment
+        
+        // 1. Environment variables (Internal precedence: Env > Default)
+        if let mlPath = environment["ML_WORKER_PATH"] {
+            config.daemon.mlWorkerPath = mlPath
+        }
+        if let evidenceDir = environment["ANIGMA_EVIDENCE_DIR"] {
+            config.daemon.evidenceDirectory = evidenceDir
+        }
+        if environment["ML_WORKER_MOCK_MODE"] == "true" || environment["ANIGMA_INDEX_USE_REAL_ML"] == "0" {
+            config.daemon.useMockML = true
+        }
+
+        // 2. Command line arguments (Internal precedence: Argv > Env > Default)
+        // Simple manual override for socket path if provided as 2nd arg (legacy behavior)
+        if arguments.count >= 3 && !arguments[2].hasPrefix("-") {
+            config.daemon.unixSocket = arguments[2]
+        }
+
+        // Search for --config (though loading logic remains in the entry point currently)
+        if let configIndex = arguments.firstIndex(of: "--config"),
+           configIndex + 1 < arguments.count {
+            // Path found, but actual loading happens in the executable currently.
+            // We just record it if needed.
+        }
+        
+        return config
     }
 
     /// Development-friendly default configuration.
-    public static func developmentDefault(rootPath: String = "~/AnigmaDaemon") -> DaemonConfiguration {
+    public static func developmentDefault(rootPath: String = "~/AnigmaDaemon", environment: [String: String] = [:]) -> DaemonConfiguration {
         logWarning("[DaemonConfiguration stub] developmentDefault() called; this configuration is a stub and not fully implemented.", category: "DaemonConfiguration")
         return DaemonConfiguration(
             vault: VaultConfig(rootPath: rootPath, maxSizeGB: 10),
@@ -125,7 +174,7 @@ public struct DaemonConfiguration: Codable, Sendable {
                     #if os(macOS)
                         return NSString(string: "~/Library/Caches/anigma/anigmad.sock").expandingTildeInPath
                     #elseif os(Linux)
-                        if let xdgRuntime = ProcessInfo.processInfo.environment["XDG_RUNTIME_DIR"] {
+                        if let xdgRuntime = environment["XDG_RUNTIME_DIR"] {
                             return "\(xdgRuntime)/anigmad.sock"
                         }
                         return NSString(string: "~/.cache/anigma/anigmad.sock").expandingTildeInPath
@@ -143,7 +192,10 @@ public struct DaemonConfiguration: Codable, Sendable {
                 shutdownTimeoutSeconds: 30,
                 apiKeysEnabled: false,
                 aneSchedulingEnabled: false,
-                requireContractValidation: false
+                requireContractValidation: false,
+                mlWorkerPath: nil,
+                evidenceDirectory: nil,
+                useMockML: false
             ),
             resources: ResourcesConfig(
                 maxConcurrentJobs: 4,
@@ -161,12 +213,15 @@ public struct DaemonConfiguration: Codable, Sendable {
                 receiptStoreMode: .vault,
                 generateExecutionReceipts: true,
                 auditAllOperations: false
-            )
+            ),
+            environment: [:]
         )
     }
 
     public static var `default`: DaemonConfiguration {
-        developmentDefault()
+        // Alignment: In a global static context, we may have to read ambient state once if not injected.
+        // But prefer calling .from(arguments:environment:) instead.
+        developmentDefault(environment: ProcessInfo.processInfo.environment)
     }
 }
 

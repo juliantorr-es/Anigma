@@ -1,0 +1,156 @@
+[
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Anigma/Packages/TextRenderKit/Sources/TextRenderKit/Rasterization/Rasterizer.swift",
+    "symbol": "rasterizationFragmentShader"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Anigma/Packages/TextRenderKit/Sources/TextRenderKit/Rasterization/Rasterizer.swift",
+    "symbol": "rasterizationVertexShader"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_ARCHITECTURE.md",
+    "symbol": "hashEvidenceBatch"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_PROTOTYPE.md",
+    "symbol": "generateValidationProof"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_PROTOTYPE.md",
+    "symbol": "hashEvidenceBatch"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_PROTOTYPE.md",
+    "symbol": "validateChainBatch"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_SKETCH.md",
+    "symbol": "computeChainRoot"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_SKETCH.md",
+    "symbol": "hashEvidenceBatch"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Docs/root-docs/architecture/dsl/cathedral/CATHEDRAL_DSL_SKETCH.md",
+    "symbol": "validateChainBatch"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/CosineSimilarityCapsule/Sources/CosineMetal/CosineSimilarityMetal.swift",
+    "symbol": "compute_cosine_similarity"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/CosineSimilarityCapsule/Sources/CosineSimilarityCapsule/CosineSimilarityMetalBackend.swift",
+    "symbol": "cosine_batch"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/CosineSimilarityCapsule/Sources/CosineSimilarityCapsule/CosineSimilarityMetalBackend.swift",
+    "symbol": "cosine_batch_threshold"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/RenderPlanCapsule/Sources/RenderPlanCapsule/TextRenderer.swift",
+    "symbol": "textFragmentShader"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/RenderPlanCapsule/Sources/RenderPlanCapsule/TextRenderer.swift",
+    "symbol": "textVertexShader"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/SaturationKit/Sources/SaturationKit/MetalSaturatedSearchMegakernel.swift",
+    "symbol": "saturated_vector_search"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/SaturationKit/Sources/SaturationKit/MetalSaturatedSearchMegakernel.swift",
+    "symbol": "saturated_vector_search"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/VectorOpsKit/Sources/VectorOpsKit/VectorumMetalLane.swift",
+    "symbol": "vectorum_elementwise"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Packages/VectorOpsKit/Sources/VectorOpsKit/VectorumMetalLane.swift",
+    "symbol": "vectorum_reduce_sum"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/PlatformAdapters/Sources/MetalRenderAdapter.swift",
+    "symbol": "fragmentShader"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/PlatformAdapters/Sources/MetalRenderAdapter.swift",
+    "symbol": "vertexShader"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Sources/PlatformAdapters/MetalRenderAdapter.swift",
+    "symbol": "fragment_main"
+  },
+  {
+    "bridge_type": "metal_pipeline_function",
+    "native_file": null,
+    "risk": "shader name string reference must match .metal function",
+    "swift_file": "anigma/Sources/PlatformAdapters/MetalRenderAdapter.swift",
+    "symbol": "vertex_main"
+  }
+]

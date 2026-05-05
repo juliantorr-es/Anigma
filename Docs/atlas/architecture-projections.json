@@ -1,0 +1,56 @@
+[
+  {
+    "cohesion_effect": "improve",
+    "confidence": "medium",
+    "counterarguments": [
+      "Do not move process exit into shared authority."
+    ],
+    "coupling_effect": "reduce",
+    "current_shape": {
+      "evidence_file_count": 50,
+      "signals": [
+        "copy_flow",
+        "runtimeauthority",
+        "shutdown_and_exit",
+        "singleton_global_state"
+      ]
+    },
+    "evidence": {
+      "signals": [
+        "copy_flow",
+        "runtimeauthority",
+        "shutdown_and_exit",
+        "singleton_global_state"
+      ],
+      "sources": [
+        "authority-map.json",
+        "cohesion-index.json",
+        "data-flow-map.json",
+        "dependencies.json",
+        "repo-map.json",
+        "risk-index.json",
+        "state-map.json",
+        "symbols.json",
+        "targets.json"
+      ]
+    },
+    "kind": "move_lifecycle_to_daemon_owner",
+    "projection_id": "projection.AnigmaDaemonCore.e591b3208e16b6c1",
+    "recommended_shape": {
+      "boundary": "explicit authority / typed lifecycle owner"
+    },
+    "recommended_task_type": "task-brief",
+    "risk_of_god_object": "medium",
+    "risk_of_tight_coupling": "high",
+    "schema_version": "rig.architecture_projection.v1",
+    "suggested_task_brief_seed": "Review AnigmaDaemonCore for move_lifecycle_to_daemon_owner concerns",
+    "target": "AnigmaDaemonCore",
+    "title": "AnigmaDaemonCore projection",
+    "validation_plan": [
+      "rig affected summary",
+      "rig swift build",
+      "schema validate result/event"
+    ],
+    "zero_copy_effect": "unknown"
+  }
+]

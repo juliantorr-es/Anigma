@@ -1,0 +1,2612 @@
+{
+  "products": [
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaFoundation",
+      "targets": [
+        "AnigmaFoundation"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaCore",
+      "targets": [
+        "AnigmaCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaGovernance",
+      "targets": [
+        "AnigmaGovernance"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaJobs",
+      "targets": [
+        "AnigmaJobs"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaPipeline",
+      "targets": [
+        "AnigmaPipeline"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaPrimitives",
+      "targets": [
+        "AnigmaPrimitives"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaEvents",
+      "targets": [
+        "AnigmaEvents"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CapsuleCore",
+      "targets": [
+        "CapsuleCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DatabaseCore",
+      "targets": [
+        "DatabaseCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RuntimeCore",
+      "targets": [
+        "RuntimeCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "FoundationContracts",
+      "targets": [
+        "FoundationContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "IntelligenceContracts",
+      "targets": [
+        "IntelligenceContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "GovernanceContracts",
+      "targets": [
+        "GovernanceContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "EvidenceContracts",
+      "targets": [
+        "EvidenceContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PersistenceContracts",
+      "targets": [
+        "PersistenceContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "MessagingContracts",
+      "targets": [
+        "MessagingContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "MediaPipelineContracts",
+      "targets": [
+        "MediaPipelineContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RendererBackendContracts",
+      "targets": [
+        "RendererBackendContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SecurityEventsContracts",
+      "targets": [
+        "SecurityEventsContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ContractsCore",
+      "targets": [
+        "ContractsCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "LayoutEngineContracts",
+      "targets": [
+        "LayoutEngineContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PDFLayoutExtract",
+      "targets": [
+        "PDFLayoutExtract"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DaemonFeatureContracts",
+      "targets": [
+        "DaemonFeatureContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DaemonKernel",
+      "targets": [
+        "DaemonKernel"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ModelRegistryDaemonFeature",
+      "targets": [
+        "ModelRegistryDaemonFeature"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DaemonStatusDaemonFeature",
+      "targets": [
+        "DaemonStatusDaemonFeature"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "InferenceContracts",
+      "targets": [
+        "InferenceContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SaturationInferenceCore",
+      "targets": [
+        "SaturationInferenceCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SaturatedModelRegistry",
+      "targets": [
+        "SaturatedModelRegistry"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "GovernanceCore",
+      "targets": [
+        "GovernanceCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "StorageCore",
+      "targets": [
+        "StorageCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CapabilityCore",
+      "targets": [
+        "CapabilityCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DoctrineCore",
+      "targets": [
+        "DoctrineCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SecurityEventsManager",
+      "targets": [
+        "SecurityEventsManager"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TelemetryCore",
+      "targets": [
+        "TelemetryCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SaturationKitCore",
+      "targets": [
+        "SaturationKitCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SaturationKit",
+      "targets": [
+        "SaturationKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CHarfBuzz",
+      "targets": [
+        "CHarfBuzz"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ExecutionCore",
+      "targets": [
+        "ExecutionCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "InferenceCore",
+      "targets": [
+        "InferenceCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CanonicalTokenizer",
+      "targets": [
+        "CanonicalTokenizer"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PlatformCore",
+      "targets": [
+        "PlatformCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaClientKit",
+      "targets": [
+        "AnigmaClientKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaSidecar",
+      "targets": [
+        "AnigmaSidecar"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaSystemSpine",
+      "targets": [
+        "AnigmaSystemSpine"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "GoldenKit",
+      "targets": [
+        "GoldenKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DataCore",
+      "targets": [
+        "DataCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DataEngine",
+      "targets": [
+        "DataEngine"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RendererKit",
+      "targets": [
+        "RendererKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DataUI",
+      "targets": [
+        "DataUI"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaTUI",
+      "targets": [
+        "AnigmaTUI"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "Workflows",
+      "targets": [
+        "Workflows"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ExportCore",
+      "targets": [
+        "ExportCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ExportUI",
+      "targets": [
+        "ExportUI"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaWork",
+      "targets": [
+        "AnigmaWork"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaCorporate",
+      "targets": [
+        "AnigmaCorporate"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaEducation",
+      "targets": [
+        "AnigmaEducation"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ANEServicesCore",
+      "targets": [
+        "ANEServicesCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ANECapsuleContracts",
+      "targets": [
+        "ANECapsuleContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ANECapabilityCatalog",
+      "targets": [
+        "ANECapabilityCatalog"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ANEExecutionReceipts",
+      "targets": [
+        "ANEExecutionReceipts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ANEPlacementCoreML",
+      "targets": [
+        "ANEPlacementCoreML"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ANECapsuleIntegration",
+      "targets": [
+        "ANECapsuleIntegration"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DocumentIRKit",
+      "targets": [
+        "DocumentIRKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ContainerKit",
+      "targets": [
+        "ContainerKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "OOXMLKit",
+      "targets": [
+        "OOXMLKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DocumentRenderKit",
+      "targets": [
+        "DocumentRenderKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TypographyKit",
+      "targets": [
+        "TypographyKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TextRenderKit",
+      "targets": [
+        "TextRenderKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ColorKit",
+      "targets": [
+        "ColorKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TessellationCapsule",
+      "targets": [
+        "TessellationCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "VectorOpsKit",
+      "targets": [
+        "VectorOpsKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CompressionKit",
+      "targets": [
+        "CompressionKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SyntaxCapsule",
+      "targets": [
+        "SyntaxCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "GeometryCapsule",
+      "targets": [
+        "GeometryCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TextChunkingCapsule",
+      "targets": [
+        "TextChunkingCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "VizAggregationCapsule",
+      "targets": [
+        "VizAggregationCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "MediaFingerprintCapsule",
+      "targets": [
+        "MediaFingerprintCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "VectorCapsule",
+      "targets": [
+        "VectorCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TextPipelineCapsule",
+      "targets": [
+        "TextPipelineCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "VectorIndexCapsule",
+      "targets": [
+        "VectorIndexCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CosineSimilarityCapsule",
+      "targets": [
+        "CosineSimilarityCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RankFusionCapsule",
+      "targets": [
+        "RankFusionCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnimationKit",
+      "targets": [
+        "AnimationKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SceneGraphCapsule",
+      "targets": [
+        "SceneGraphCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RenderIntentCapsule",
+      "targets": [
+        "RenderIntentCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RenderGraphCapsule",
+      "targets": [
+        "RenderGraphCapsule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ObservabilityKit",
+      "targets": [
+        "ObservabilityKit"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SidecarOfficeService",
+      "targets": [
+        "SidecarOfficeService"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SidecarPDFService",
+      "targets": [
+        "SidecarPDFService"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SidecarTranslateService",
+      "targets": [
+        "SidecarTranslateService"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "SubprocessPooling",
+      "targets": [
+        "SubprocessPooling"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaNativeShims",
+      "targets": [
+        "AnigmaNativeShims"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "RuntimeOrchestrator",
+      "targets": [
+        "RuntimeOrchestrator"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PlatformAdapters",
+      "targets": [
+        "PlatformAdapters"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "anigma-mcp",
+      "targets": [
+        "AnigmaMCPExecutable"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "anigma-app",
+      "targets": [
+        "AnigmaAppMacExecutable"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "anigmad",
+      "targets": [
+        "AnigmaDaemon"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "harmonia",
+      "targets": [
+        "HarmoniaV2CLI"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaAPIContracts",
+      "targets": [
+        "HarmoniaAPIContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaInferenceContracts",
+      "targets": [
+        "HarmoniaInferenceContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaWorkflowContracts",
+      "targets": [
+        "HarmoniaWorkflowContracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2Contracts",
+      "targets": [
+        "HarmoniaV2Contracts"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2Surface",
+      "targets": [
+        "HarmoniaV2Surface"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaRuntime",
+      "targets": [
+        "HarmoniaRuntime"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaCLIIntegration",
+      "targets": [
+        "HarmoniaCLIIntegration"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaContractsIntegration",
+      "targets": [
+        "HarmoniaContractsIntegration"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaDataIntegration",
+      "targets": [
+        "HarmoniaDataIntegration"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaANEIntegration",
+      "targets": [
+        "HarmoniaANEIntegration"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2Core",
+      "targets": [
+        "HarmoniaV2Core"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2Inference",
+      "targets": [
+        "HarmoniaV2Inference"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2Memory",
+      "targets": [
+        "HarmoniaV2Memory"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2Orchestration",
+      "targets": [
+        "HarmoniaV2Orchestration"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "DiaplasionModule",
+      "targets": [
+        "DiaplasionModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AccessumModule",
+      "targets": [
+        "AccessumModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "OutlineumModule",
+      "targets": [
+        "OutlineumModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PragmaModule",
+      "targets": [
+        "PragmaModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ConexusModule",
+      "targets": [
+        "ConexusModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CodexModule",
+      "targets": [
+        "CodexModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "TranscriptumModule",
+      "targets": [
+        "TranscriptumModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ObservatoriumModule",
+      "targets": [
+        "ObservatoriumModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PolytroposModule",
+      "targets": [
+        "PolytroposModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "VectorumModule",
+      "targets": [
+        "VectorumModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "PraxisCore",
+      "targets": [
+        "PraxisCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "CathedralModule",
+      "targets": [
+        "CathedralModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ContextumModule",
+      "targets": [
+        "ContextumModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "IntelligenceCore",
+      "targets": [
+        "IntelligenceCore"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ArtifactStoreModule",
+      "targets": [
+        "ArtifactStoreModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "ModelRegistryModule",
+      "targets": [
+        "ModelRegistryModule"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaAgents",
+      "targets": [
+        "AnigmaAgents"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "AnigmaAIConsole",
+      "targets": [
+        "AnigmaAIConsole"
+      ]
+    },
+    {
+      "kind": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "name": "HarmoniaV2CLIKernel",
+      "targets": [
+        "HarmoniaV2CLIKernel"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "PDFSidecarExecutable",
+      "targets": [
+        "PDFSidecarExecutable"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "AnigmaStatusBar",
+      "targets": [
+        "AnigmaStatusBar"
+      ]
+    },
+    {
+      "kind": {
+        "executable": null
+      },
+      "name": "AnigmaDaemonSimple",
+      "targets": [
+        "AnigmaDaemonSimple"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "kind": "library",
+      "name": "Workflows",
+      "source_paths": "Packages/Workflows"
+    },
+    {
+      "kind": "library",
+      "name": "VizAggregationNative",
+      "source_paths": "Packages/VizAggregationCapsule/Sources/VizAggregationNative"
+    },
+    {
+      "kind": "library",
+      "name": "VizAggregationCapsule",
+      "source_paths": "Packages/VizAggregationCapsule/Sources/VizAggregationCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "VectorumModule",
+      "source_paths": "Packages/VectorumModule"
+    },
+    {
+      "kind": "library",
+      "name": "VectorOpsKit",
+      "source_paths": "Packages/VectorOpsKit"
+    },
+    {
+      "kind": "library",
+      "name": "VectorNative",
+      "source_paths": "Packages/VectorCapsule/Sources/VectorNative"
+    },
+    {
+      "kind": "library",
+      "name": "VectorIndexNative",
+      "source_paths": "Packages/VectorIndexCapsule/Sources/VectorIndexNative"
+    },
+    {
+      "kind": "test",
+      "name": "VectorIndexCapsuleTests",
+      "source_paths": "Packages/VectorIndexCapsule/Tests/VectorIndexCapsuleTests"
+    },
+    {
+      "kind": "library",
+      "name": "VectorIndexCapsuleBenchmarks",
+      "source_paths": "Packages/VectorIndexCapsule/Benchmarks"
+    },
+    {
+      "kind": "library",
+      "name": "VectorIndexCapsule",
+      "source_paths": "Packages/VectorIndexCapsule/Sources/VectorIndexCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "VectorCapsule",
+      "source_paths": "Packages/VectorCapsule/Sources/VectorCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "TypographyKit",
+      "source_paths": "Packages/TypographyKit"
+    },
+    {
+      "kind": "library",
+      "name": "TranscriptumModule",
+      "source_paths": "Packages/TranscriptumModule"
+    },
+    {
+      "kind": "library",
+      "name": "TextRenderKit",
+      "source_paths": "Anigma/Packages/TextRenderKit"
+    },
+    {
+      "kind": "library",
+      "name": "TextPipelineNative",
+      "source_paths": "Packages/TextPipelineCapsule/Sources/TextPipelineNative"
+    },
+    {
+      "kind": "test",
+      "name": "TextPipelineCapsuleTests",
+      "source_paths": "Packages/TextPipelineCapsule/Tests/TextPipelineCapsuleTests"
+    },
+    {
+      "kind": "library",
+      "name": "TextPipelineCapsule",
+      "source_paths": "Packages/TextPipelineCapsule/Sources/TextPipelineCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "TextChunkingNative",
+      "source_paths": "Packages/TextChunkingCapsule/Sources/TextChunkingNative"
+    },
+    {
+      "kind": "library",
+      "name": "TextChunkingCapsuleBenchmarks",
+      "source_paths": "Packages/TextChunkingCapsule/Benchmarks"
+    },
+    {
+      "kind": "library",
+      "name": "TextChunkingCapsule",
+      "source_paths": "Packages/TextChunkingCapsule/Sources/TextChunkingCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "TessellationCapsule",
+      "source_paths": "Packages/TessellationCapsule/Sources/TessellationCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "TelemetryCore",
+      "source_paths": "Packages/TelemetryCore"
+    },
+    {
+      "kind": "library",
+      "name": "TechDebtAudit",
+      "source_paths": "Packages/TechDebtAudit"
+    },
+    {
+      "kind": "library",
+      "name": "TableExtractionNative",
+      "source_paths": "Packages/TableExtractionCapsule/Native"
+    },
+    {
+      "kind": "library",
+      "name": "SyntaxNative",
+      "source_paths": "Packages/SyntaxCapsule/Sources/SyntaxNative"
+    },
+    {
+      "kind": "library",
+      "name": "SyntaxCapsule",
+      "source_paths": "Packages/SyntaxCapsule/Sources/SyntaxCapsule"
+    },
+    {
+      "kind": "test",
+      "name": "SubprocessPoolingTests",
+      "source_paths": "Tests/SubprocessPoolingTests"
+    },
+    {
+      "kind": "library",
+      "name": "SubprocessPooling",
+      "source_paths": "Packages/SubprocessPooling/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "StorageCore",
+      "source_paths": "Packages/StorageCore"
+    },
+    {
+      "kind": "library",
+      "name": "SidecarTranslateService",
+      "source_paths": "Packages/SidecarTranslateService"
+    },
+    {
+      "kind": "library",
+      "name": "SidecarPDFService",
+      "source_paths": "Packages/SidecarPDFService/Sources/SidecarPDFService"
+    },
+    {
+      "kind": "library",
+      "name": "SidecarOfficeService",
+      "source_paths": "Packages/SidecarOfficeService"
+    },
+    {
+      "kind": "library",
+      "name": "SecurityEventsManager",
+      "source_paths": "Packages/SecurityEventsManager"
+    },
+    {
+      "kind": "library",
+      "name": "SecurityEventsContracts",
+      "source_paths": "Packages/ContractsCore/Sources/SecurityEventsContracts"
+    },
+    {
+      "kind": "library",
+      "name": "SceneGraphNative",
+      "source_paths": "Packages/SceneGraphCapsule/Sources/SceneGraphNative"
+    },
+    {
+      "kind": "library",
+      "name": "SceneGraphCapsule",
+      "source_paths": "Packages/SceneGraphCapsule/Sources/SceneGraphCapsule"
+    },
+    {
+      "kind": "test",
+      "name": "SaturationKitTests",
+      "source_paths": "Tests/SaturationKitTests"
+    },
+    {
+      "kind": "library",
+      "name": "SaturationKitCore",
+      "source_paths": "Packages/SaturationKit/Sources/SaturationKit"
+    },
+    {
+      "kind": "library",
+      "name": "SaturationKit",
+      "source_paths": "Packages/SaturationKit/Sources/SaturationKit"
+    },
+    {
+      "kind": "test",
+      "name": "SaturationInferenceCoreTests",
+      "source_paths": "Packages/SaturationInferenceCore/Tests/SaturationInferenceCoreTests"
+    },
+    {
+      "kind": "library",
+      "name": "SaturationInferenceCore",
+      "source_paths": "Packages/SaturationInferenceCore/Sources/SaturationInferenceCore"
+    },
+    {
+      "kind": "test",
+      "name": "SaturatedModelRegistryTests",
+      "source_paths": "Packages/SaturatedModelRegistry/Tests/SaturatedModelRegistryTests"
+    },
+    {
+      "kind": "library",
+      "name": "SaturatedModelRegistry",
+      "source_paths": "Packages/SaturatedModelRegistry/Sources/SaturatedModelRegistry"
+    },
+    {
+      "kind": "library",
+      "name": "RuntimeOrchestrator",
+      "source_paths": "Sources/RuntimeOrchestrator"
+    },
+    {
+      "kind": "library",
+      "name": "RuntimeCore",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaFoundation/Runtime"
+    },
+    {
+      "kind": "library",
+      "name": "RendererKit",
+      "source_paths": "Packages/RendererKit"
+    },
+    {
+      "kind": "library",
+      "name": "RendererBackendContracts",
+      "source_paths": "Packages/RendererBackendContracts/Sources/RendererBackendContracts"
+    },
+    {
+      "kind": "library",
+      "name": "RenderPlanNative",
+      "source_paths": "Packages/RenderPlanCapsule/Sources/RenderPlanNative"
+    },
+    {
+      "kind": "library",
+      "name": "RenderPlanCapsule",
+      "source_paths": "Packages/RenderPlanCapsule/Sources/RenderPlanCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "RenderIntentCapsule",
+      "source_paths": "Packages/RenderIntentCapsule/Sources/RenderIntentCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "RenderGraphCapsule",
+      "source_paths": "Packages/RenderGraphCapsule/Sources/RenderGraphCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "RenderBackendCapsule",
+      "source_paths": "Packages/RenderBackendCapsule/Sources/RenderBackendCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "ReferenceResolutionNative",
+      "source_paths": "Packages/ReferenceResolutionCapsule/Native"
+    },
+    {
+      "kind": "library",
+      "name": "RankFusionNative",
+      "source_paths": "Packages/RankFusionCapsule/Sources/RankFusionNative"
+    },
+    {
+      "kind": "test",
+      "name": "RankFusionCapsuleTests",
+      "source_paths": "Packages/RankFusionCapsule/Tests/RankFusionCapsuleTests"
+    },
+    {
+      "kind": "library",
+      "name": "RankFusionCapsuleBenchmarks",
+      "source_paths": "Packages/RankFusionCapsule/Benchmarks"
+    },
+    {
+      "kind": "library",
+      "name": "RankFusionCapsule",
+      "source_paths": "Packages/RankFusionCapsule/Sources/RankFusionCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "RLMModule",
+      "source_paths": "Sources/RLMModule"
+    },
+    {
+      "kind": "library",
+      "name": "PraxisModule",
+      "source_paths": "Packages/PraxisModule"
+    },
+    {
+      "kind": "library",
+      "name": "PraxisCore",
+      "source_paths": "Packages/PraxisCore"
+    },
+    {
+      "kind": "library",
+      "name": "PragmaModule",
+      "source_paths": "Packages/PragmaModule/Sources/PragmaModule"
+    },
+    {
+      "kind": "library",
+      "name": "PolytroposModule",
+      "source_paths": "Packages/PolytroposModule/Sources/PolytroposModule"
+    },
+    {
+      "kind": "library",
+      "name": "PlatformCore",
+      "source_paths": "Packages/PlatformCore"
+    },
+    {
+      "kind": "library",
+      "name": "PlatformAdapters",
+      "source_paths": "Sources/PlatformAdapters"
+    },
+    {
+      "kind": "library",
+      "name": "PersistenceContracts",
+      "source_paths": "Packages/ContractsCore/Sources/PersistenceContracts"
+    },
+    {
+      "kind": "executable",
+      "name": "PDFSidecarExecutable",
+      "source_paths": "Packages/SidecarPDFService/Sources/PDFSidecarExecutable"
+    },
+    {
+      "kind": "library",
+      "name": "PDFSidecarClient",
+      "source_paths": "Packages/SidecarPDFService/Sources/PDFSidecarClient"
+    },
+    {
+      "kind": "library",
+      "name": "PDFNative",
+      "source_paths": "Packages/PDFCapsule/Sources/PDFNative"
+    },
+    {
+      "kind": "library",
+      "name": "PDFLayoutExtract",
+      "source_paths": "Packages/PDFLayoutExtract/Sources/PDFLayoutExtract"
+    },
+    {
+      "kind": "library",
+      "name": "OutlineumModule",
+      "source_paths": "Packages/OutlineumModule"
+    },
+    {
+      "kind": "library",
+      "name": "ObservatoriumModule",
+      "source_paths": "Packages/ObservatoriumModule"
+    },
+    {
+      "kind": "library",
+      "name": "ObservabilityKit",
+      "source_paths": "Packages/ObservabilityKit"
+    },
+    {
+      "kind": "library",
+      "name": "OOXMLKit",
+      "source_paths": "Packages/OOXMLKit"
+    },
+    {
+      "kind": "library",
+      "name": "NativeKernel",
+      "source_paths": "Native/Kernel"
+    },
+    {
+      "kind": "library",
+      "name": "ModelRegistryModule",
+      "source_paths": "Sources/ModelRegistryModule"
+    },
+    {
+      "kind": "library",
+      "name": "ModelRegistryDaemonFeature",
+      "source_paths": "Packages/ModelRegistryDaemonFeature/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "ModelRegistry",
+      "source_paths": "Packages/ModelRegistry/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "ModelManagement",
+      "source_paths": "Packages/AnigmaCLI/Sources/ModelManagement"
+    },
+    {
+      "kind": "library",
+      "name": "MessagingContracts",
+      "source_paths": "Packages/ContractsCore/Sources/MessagingContracts"
+    },
+    {
+      "kind": "library",
+      "name": "MediaPipelineContracts",
+      "source_paths": "Packages/ContractsCore/Sources/MediaPipelineContracts"
+    },
+    {
+      "kind": "library",
+      "name": "MediaFingerprintNative",
+      "source_paths": "Packages/MediaFingerprintCapsule/Sources/MediaFingerprintNative"
+    },
+    {
+      "kind": "test",
+      "name": "MediaFingerprintCapsuleTests",
+      "source_paths": "Packages/MediaFingerprintCapsule/Tests/MediaFingerprintCapsuleTests"
+    },
+    {
+      "kind": "library",
+      "name": "MediaFingerprintCapsule",
+      "source_paths": "Packages/MediaFingerprintCapsule/Sources/MediaFingerprintCapsule"
+    },
+    {
+      "kind": "test",
+      "name": "MediaCoreTests",
+      "source_paths": "Tests/MediaCoreTests"
+    },
+    {
+      "kind": "library",
+      "name": "MediaCore",
+      "source_paths": "Sources/MediaCore"
+    },
+    {
+      "kind": "library",
+      "name": "MediaContainerNative",
+      "source_paths": "Packages/MediaContainerCapsule/Sources/MediaContainerNative"
+    },
+    {
+      "kind": "library",
+      "name": "MediaContainerCapsule",
+      "source_paths": "Packages/MediaContainerCapsule/Sources/MediaContainerCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "MathOCRNative",
+      "source_paths": "Packages/MathOCRCapsule/Native"
+    },
+    {
+      "kind": "library",
+      "name": "MarkdownNative",
+      "source_paths": "Packages/MarkdownCapsule/Sources/MarkdownNative"
+    },
+    {
+      "kind": "library",
+      "name": "MarkdownCapsule",
+      "source_paths": "Packages/MarkdownCapsule/Sources/MarkdownCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "MLWorkerInterfaces",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaPipeline/Pipeline"
+    },
+    {
+      "kind": "library",
+      "name": "MLWorkerCommon",
+      "source_paths": "Packages/MLWorkerCommon"
+    },
+    {
+      "kind": "library",
+      "name": "LayoutEngineNative",
+      "source_paths": "Packages/LayoutEngineCapsule/Sources/LayoutEngineNative"
+    },
+    {
+      "kind": "library",
+      "name": "LayoutEngineContracts",
+      "source_paths": "Packages/LayoutEngineContracts/Sources/LayoutEngineContracts"
+    },
+    {
+      "kind": "test",
+      "name": "LayoutEngineCapsuleTests",
+      "source_paths": "Packages/LayoutEngineCapsule/Tests/LayoutEngineCapsuleTests"
+    },
+    {
+      "kind": "library",
+      "name": "LayoutEngineCapsule",
+      "source_paths": "Packages/LayoutEngineCapsule/Sources/LayoutEngineCapsule"
+    },
+    {
+      "kind": "test",
+      "name": "IntelligenceCoreTests",
+      "source_paths": "Tests/IntelligenceCoreTests"
+    },
+    {
+      "kind": "library",
+      "name": "IntelligenceCore",
+      "source_paths": "Sources/IntelligenceCore"
+    },
+    {
+      "kind": "library",
+      "name": "IntelligenceContracts",
+      "source_paths": "Packages/ContractsCore/Sources/IntelligenceContracts"
+    },
+    {
+      "kind": "library",
+      "name": "InferenceCore",
+      "source_paths": "Packages/InferenceCore"
+    },
+    {
+      "kind": "test",
+      "name": "InferenceContractsTests",
+      "source_paths": "Packages/InferenceContracts/Tests/InferenceContractsTests"
+    },
+    {
+      "kind": "library",
+      "name": "InferenceContracts",
+      "source_paths": "Packages/InferenceContracts/Sources/InferenceContracts"
+    },
+    {
+      "kind": "library",
+      "name": "HitTestNative",
+      "source_paths": "Packages/HitTestCapsule/Sources/HitTestNative"
+    },
+    {
+      "kind": "library",
+      "name": "HitTestCapsule",
+      "source_paths": "Packages/HitTestCapsule/Sources/HitTestCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaWorkflowContracts",
+      "source_paths": "Packages/HarmoniaWorkflowContracts/Sources/HarmoniaWorkflowContracts"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2Surface",
+      "source_paths": "Packages/HarmoniaV2/HarmoniaSurface/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2Orchestration",
+      "source_paths": "Packages/HarmoniaV2/HarmoniaOrchestration/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2Memory",
+      "source_paths": "Packages/HarmoniaV2/HarmoniaMemory/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2Inference",
+      "source_paths": "Packages/HarmoniaV2/HarmoniaInference/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2Core",
+      "source_paths": "Packages/HarmoniaV2/HarmoniaCore/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2Contracts",
+      "source_paths": "Packages/HarmoniaV2/HarmoniaContracts/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaV2CLIKernel",
+      "source_paths": "Packages/HarmoniaV2CLI"
+    },
+    {
+      "kind": "executable",
+      "name": "HarmoniaV2CLI",
+      "source_paths": "Packages/HarmoniaV2CLI"
+    },
+    {
+      "kind": "test",
+      "name": "HarmoniaRuntimeTests",
+      "source_paths": "Tests/HarmoniaRuntimeTests"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaRuntime",
+      "source_paths": "Packages/HarmoniaRuntime/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaMemory",
+      "source_paths": "Packages/HarmoniaMemory"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaInferenceContracts",
+      "source_paths": "Packages/HarmoniaInferenceContracts/Sources/HarmoniaInferenceContracts"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaDataIntegration",
+      "source_paths": "Packages/HarmoniaDataIntegration/Sources/HarmoniaDataIntegration"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaContractsIntegration",
+      "source_paths": "Packages/HarmoniaContractsIntegration/Sources/HarmoniaContractsIntegration"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaCLIIntegration",
+      "source_paths": "Packages/HarmoniaCLIIntegration/Sources/HarmoniaCLIIntegration"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaAPIContracts",
+      "source_paths": "Packages/HarmoniaAPIContracts/Sources/HarmoniaAPIContracts"
+    },
+    {
+      "kind": "library",
+      "name": "HarmoniaANEIntegration",
+      "source_paths": "Packages/HarmoniaANEIntegration/Sources/HarmoniaANEIntegration"
+    },
+    {
+      "kind": "library",
+      "name": "HardwareAuthorityContracts",
+      "source_paths": "Packages/HardwareAuthorityContracts"
+    },
+    {
+      "kind": "library",
+      "name": "HardwareAuthority",
+      "source_paths": "Packages/HardwareAuthority"
+    },
+    {
+      "kind": "library",
+      "name": "GovernedMigrationCore",
+      "source_paths": "Packages/GovernedMigrationCore"
+    },
+    {
+      "kind": "library",
+      "name": "GovernanceCore",
+      "source_paths": "Packages/GovernanceCore"
+    },
+    {
+      "kind": "library",
+      "name": "GovernanceContracts",
+      "source_paths": "Packages/ContractsCore/Sources/GovernanceContracts"
+    },
+    {
+      "kind": "library",
+      "name": "GoldenKit",
+      "source_paths": "Packages/AnigmaTestSupport/Sources/GoldenKit"
+    },
+    {
+      "kind": "library",
+      "name": "GeometryNative",
+      "source_paths": "Packages/GeometryCapsule/Sources/GeometryNative"
+    },
+    {
+      "kind": "library",
+      "name": "GeometryCapsule",
+      "source_paths": "Packages/GeometryCapsule/Sources/GeometryCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "FoundationContracts",
+      "source_paths": "Packages/ContractsCore/Sources/FoundationContracts"
+    },
+    {
+      "kind": "library",
+      "name": "ExportUI",
+      "source_paths": "Packages/ExportUI"
+    },
+    {
+      "kind": "library",
+      "name": "ExportCore",
+      "source_paths": "Packages/ExportCore"
+    },
+    {
+      "kind": "library",
+      "name": "ExecutionCore",
+      "source_paths": "Packages/ExecutionCore"
+    },
+    {
+      "kind": "library",
+      "name": "EvidenceContracts",
+      "source_paths": "Packages/ContractsCore/Sources/EvidenceContracts"
+    },
+    {
+      "kind": "library",
+      "name": "DocumentRenderKit",
+      "source_paths": "Packages/DocumentRenderKit"
+    },
+    {
+      "kind": "library",
+      "name": "DocumentIRKit",
+      "source_paths": "Packages/DocumentIRKit"
+    },
+    {
+      "kind": "library",
+      "name": "DoctrineCore",
+      "source_paths": "Packages/DoctrineCore"
+    },
+    {
+      "kind": "library",
+      "name": "DiffNative",
+      "source_paths": "Packages/DiffCapsule/Native"
+    },
+    {
+      "kind": "library",
+      "name": "DiaplasionModule",
+      "source_paths": "Packages/DiaplasionModule"
+    },
+    {
+      "kind": "test",
+      "name": "DatabaseCoreTests",
+      "source_paths": "Tests/DatabaseCoreTests"
+    },
+    {
+      "kind": "library",
+      "name": "DatabaseCore",
+      "source_paths": "Packages/DatabaseCore"
+    },
+    {
+      "kind": "library",
+      "name": "DataUI",
+      "source_paths": "Packages/DataUI"
+    },
+    {
+      "kind": "library",
+      "name": "DataEngine",
+      "source_paths": "Packages/DataEngine"
+    },
+    {
+      "kind": "library",
+      "name": "DataCore",
+      "source_paths": "Packages/DataCore"
+    },
+    {
+      "kind": "library",
+      "name": "DaemonStatusDaemonFeature",
+      "source_paths": "Packages/DaemonStatusDaemonFeature/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "DaemonKernel",
+      "source_paths": "Packages/DaemonKernel/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "DaemonFeatureContracts",
+      "source_paths": "Packages/DaemonFeatureContracts/Sources"
+    },
+    {
+      "kind": "library",
+      "name": "CosineSimilarityCapsule",
+      "source_paths": "Packages/CosineSimilarityCapsule/Sources/CosineSimilarityCapsule"
+    },
+    {
+      "kind": "library",
+      "name": "CosineNative",
+      "source_paths": "Packages/CosineSimilarityCapsule/Sources/CosineNative"
+    },
+    {
+      "kind": "library",
+      "name": "ContractsCore",
+      "source_paths": "Packages/ContractsCore/Sources/ContractsCore"
+    },
+    {
+      "kind": "library",
+      "name": "ContextumModule",
+      "source_paths": "Sources/ContextumModule"
+    },
+    {
+      "kind": "library",
+      "name": "ContainerKit",
+      "source_paths": "Packages/ContainerKit"
+    },
+    {
+      "kind": "library",
+      "name": "ConexusModule",
+      "source_paths": "Packages/ConexusModule/Sources/ConexusModule"
+    },
+    {
+      "kind": "test",
+      "name": "CompressionKitTests",
+      "source_paths": "Packages/CompressionKit/Tests/CompressionKitTests"
+    },
+    {
+      "kind": "library",
+      "name": "CompressionKit",
+      "source_paths": "Packages/CompressionKit/Sources/CompressionKit"
+    },
+    {
+      "kind": "library",
+      "name": "ComplianceAuditModule",
+      "source_paths": "Packages/ComplianceAuditModule/Sources/ComplianceAuditModule"
+    },
+    {
+      "kind": "library",
+      "name": "ColorKit",
+      "source_paths": "Packages/ColorKit"
+    },
+    {
+      "kind": "library",
+      "name": "CodexModule",
+      "source_paths": "Packages/CodexModule/Sources/CodexModule"
+    },
+    {
+      "kind": "library",
+      "name": "CitationExtractionNative",
+      "source_paths": "Packages/CitationExtractionCapsule/Native"
+    },
+    {
+      "kind": "library",
+      "name": "CathedralModule",
+      "source_paths": "Packages/CathedralModule"
+    },
+    {
+      "kind": "library",
+      "name": "CapsuleCore",
+      "source_paths": "Packages/CapsuleCore/Sources/CapsuleCore"
+    },
+    {
+      "kind": "library",
+      "name": "CapabilityCore",
+      "source_paths": "Packages/CapabilityCore"
+    },
+    {
+      "kind": "library",
+      "name": "CanonicalTokenizer",
+      "source_paths": "Packages/CanonicalTokenizer"
+    },
+    {
+      "kind": "library",
+      "name": "CHarfBuzz",
+      "source_paths": "Packages/CHarfBuzz"
+    },
+    {
+      "kind": "library",
+      "name": "CFreeType",
+      "source_paths": "Packages/CFreeType"
+    },
+    {
+      "kind": "library",
+      "name": "CClipper2",
+      "source_paths": "Packages/CClipper2"
+    },
+    {
+      "kind": "library",
+      "name": "BenchmarkHarness",
+      "source_paths": "Anigma/Benchmarks/BenchmarkHarness/Sources/BenchmarkHarness"
+    },
+    {
+      "kind": "test",
+      "name": "BackendReadinessRegistryTests",
+      "source_paths": "Packages/AnigmaCore/Tests/BackendReadinessTests/RegistryTests"
+    },
+    {
+      "kind": "test",
+      "name": "BackendReadinessIntegrationTests",
+      "source_paths": "Packages/AnigmaCore/Tests/BackendReadinessTests/IntegrationTests"
+    },
+    {
+      "kind": "test",
+      "name": "BackendReadinessExecutionTests",
+      "source_paths": "Packages/AnigmaCore/Tests/BackendReadinessTests/ExecutionTests"
+    },
+    {
+      "kind": "test",
+      "name": "BackendReadinessContractTests",
+      "source_paths": "Packages/AnigmaCore/Tests/BackendReadinessTests/ContractTests"
+    },
+    {
+      "kind": "library",
+      "name": "ArtifactStoreModule",
+      "source_paths": "Sources/ArtifactStoreModule"
+    },
+    {
+      "kind": "library",
+      "name": "AnimationNative",
+      "source_paths": "Packages/AnimationKit/Sources/AnimationNative"
+    },
+    {
+      "kind": "library",
+      "name": "AnimationKit",
+      "source_paths": "Packages/AnimationKit/Sources/AnimationKit"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaWork",
+      "source_paths": "Packages/AnigmaWork"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaTestSupport",
+      "source_paths": "Packages/AnigmaTestSupport/Sources/AnigmaTestSupport"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaTUI",
+      "source_paths": "Packages/AnigmaTUI/Sources/AnigmaTUI"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaSystemSpine",
+      "source_paths": "Packages/AnigmaSystemSpine"
+    },
+    {
+      "kind": "executable",
+      "name": "AnigmaStatusBar",
+      "source_paths": "Packages/AnigmaStatusBar"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaSidecar",
+      "source_paths": "Packages/AnigmaSidecar"
+    },
+    {
+      "kind": "test",
+      "name": "AnigmaPrimitivesTests",
+      "source_paths": "Tests/Constitutional/AnigmaPrimitivesTests"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaPrimitives",
+      "source_paths": "Packages/AnigmaPrimitives"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaPipeline",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaPipeline"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaNativeShims",
+      "source_paths": "Packages/AnigmaNativeShims"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaMCPModule",
+      "source_paths": "Sources/AnigmaMCPModule"
+    },
+    {
+      "kind": "executable",
+      "name": "AnigmaMCPExecutable",
+      "source_paths": "Sources/AnigmaMCPExecutable"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaJobs",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaJobs"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaHostMac",
+      "source_paths": "Packages/AnigmaHostMac"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaHostKit",
+      "source_paths": "Packages/AnigmaHostKit"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaGovernance",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaGovernance"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaFoundation",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaFoundation"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaEvents",
+      "source_paths": "Packages/AnigmaEvents"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaEducation",
+      "source_paths": "Packages/AnigmaEducation"
+    },
+    {
+      "kind": "executable",
+      "name": "AnigmaDaemonSimple",
+      "source_paths": "Sources/AnigmaDaemonSimple"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaDaemonCore",
+      "source_paths": "Packages/AnigmaDaemonCore"
+    },
+    {
+      "kind": "executable",
+      "name": "AnigmaDaemon",
+      "source_paths": "Packages/AnigmaDaemon"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCorporate",
+      "source_paths": "Packages/AnigmaCorporate"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCore",
+      "source_paths": "Packages/AnigmaCore/Sources/AnigmaCoreUmbrella"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaClientKit",
+      "source_paths": "Packages/AnigmaClientKit"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIUI",
+      "source_paths": "Packages/AnigmaCLI/UI"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLITUI",
+      "source_paths": "Packages/AnigmaCLI/Sources/TUI"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIRouter",
+      "source_paths": "Packages/AnigmaCLI/Router"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIRAG",
+      "source_paths": "Packages/AnigmaCLI/RAG"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIProviders",
+      "source_paths": "Packages/AnigmaCLI/Providers"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIOrchestrator",
+      "source_paths": "Packages/AnigmaCLI/Orchestrator"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIOnboarding",
+      "source_paths": "Packages/AnigmaCLI/Onboarding"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIMLIntegration",
+      "source_paths": "Packages/AnigmaCLI/MLIntegration"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIML",
+      "source_paths": "Packages/AnigmaCLI/ML"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIMCP",
+      "source_paths": "Packages/AnigmaCLIMCP"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLILocalInference",
+      "source_paths": "Packages/AnigmaCLI/Sources/LocalInference"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIGovernance",
+      "source_paths": "Packages/AnigmaCLI/Governance"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIEventing",
+      "source_paths": "Packages/AnigmaCLI/Eventing"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLIDatabase",
+      "source_paths": "Packages/AnigmaCLI/Database"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaCLICore",
+      "source_paths": "Packages/AnigmaCLI/Core"
+    },
+    {
+      "kind": "executable",
+      "name": "AnigmaAppMacExecutable",
+      "source_paths": "Sources/AnigmaAppMac"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaAgents",
+      "source_paths": "Packages/AnigmaAgents"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaASTServicesCore",
+      "source_paths": "Packages/AnigmaASTServices"
+    },
+    {
+      "kind": "library",
+      "name": "AnigmaAIConsole",
+      "source_paths": "Packages/AnigmaAIConsole"
+    },
+    {
+      "kind": "library",
+      "name": "AccessumModule",
+      "source_paths": "Packages/AccessumModule/Sources/AccessumModule"
+    },
+    {
+      "kind": "library",
+      "name": "ANEServicesCore",
+      "source_paths": "Packages/ANEServicesCore/Sources/ANEServicesCore"
+    },
+    {
+      "kind": "library",
+      "name": "ANEPlacementCoreML",
+      "source_paths": "Packages/ANEPlacementCoreML/Sources/ANEPlacementCoreML"
+    },
+    {
+      "kind": "library",
+      "name": "ANEExecutionReceipts",
+      "source_paths": "Packages/ANEExecutionReceipts/Sources/ANEExecutionReceipts"
+    },
+    {
+      "kind": "library",
+      "name": "ANECapsuleIntegrationInternal",
+      "source_paths": "Packages/ANECapsuleIntegration/Sources/ANECapsuleIntegrationInternal"
+    },
+    {
+      "kind": "library",
+      "name": "ANECapsuleIntegration",
+      "source_paths": "Packages/ANECapsuleIntegration/Sources/ANECapsuleIntegration"
+    },
+    {
+      "kind": "library",
+      "name": "ANECapsuleContracts",
+      "source_paths": "Packages/ANECapsuleContracts/Sources/ANECapsuleContracts"
+    },
+    {
+      "kind": "library",
+      "name": "ANECapabilityCatalog",
+      "source_paths": "Packages/ANECapabilityCatalog/Sources/ANECapabilityCatalog"
+    }
+  ]
+}

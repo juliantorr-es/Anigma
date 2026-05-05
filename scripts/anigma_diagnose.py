@@ -47,6 +47,33 @@ def run_cmd(cmd, cwd=None, capture_output=True):
     except Exception as e:
         return None, 0
 
+def run_validator_registry_check(path):
+    log_path = path / "logs"
+    log_path.mkdir(exist_ok=True)
+    json_path = log_path / "validator-registry-check.json"
+    text_path = log_path / "validator-registry-check.log"
+    cmd = ["python3", "Scripts/validate_validator_registry.py", "--check", "--format", "json", "--registry", "Docs/governance/validator-registry.yaml"]
+    result, duration = run_cmd(cmd)
+    stdout = result.stdout if result else ""
+    with open(text_path, "w") as f:
+        f.write(stdout)
+    try:
+        data = json.loads(stdout) if stdout.strip() else {}
+    except Exception:
+        data = {}
+    with open(json_path, "w") as f:
+        json.dump(data, f, indent=2)
+    return {
+        "command": " ".join(cmd),
+        "exitCode": result.returncode if result else 3,
+        "duration": duration,
+        "outputPath": str(json_path.relative_to(REPO_ROOT)),
+        "logPath": str(text_path.relative_to(REPO_ROOT)),
+        "failureCount": len(data.get("violations", [])) if isinstance(data, dict) else 0,
+        "warningCount": len(data.get("warnings", [])) if isinstance(data, dict) else 0,
+        "status": data.get("status") if isinstance(data, dict) else None,
+    }
+
 def check_tools():
     availability = {}
     for tool in REQUIRED_TOOLS + OPTIONAL_TOOLS:
@@ -425,9 +452,15 @@ def baseline(args):
         json.dump(categorized, f, indent=2)
 
     # Capture Graph/Alignment
-    run_cmd(["python3", "Scripts/anigma_package_graph_audit.py", "--output-dir", str(path / "package-graph"), "snapshot"])
-    run_cmd(["python3", "Scripts/anigma_package_graph_audit.py", "--output-dir", str(path / "alignment"), "alignment-matrix"])
+    run_cmd(["python3", "scripts/anigma_package_graph_audit.py", "--output-dir", str(path / "package-graph"), "snapshot"])
+    run_cmd(["python3", "scripts/anigma_package_graph_audit.py", "--output-dir", str(path / "alignment"), "alignment-matrix"])
     
+    # Run Dead Code Audit (Advisory)
+    dead_code_res = run_dead_code_audit(path)
+    
+    # Run Executable Consolidation Audit (Advisory)
+    executable_consolidation_res = run_executable_consolidation_audit(path)
+
     docs_val, _, _, _ = validate_docs_artifacts(path)
 
     extra = {
@@ -435,7 +468,9 @@ def baseline(args):
         "changedFileCategories": categorized,
         "graphSnapshot": str(path / "package-graph"),
         "alignmentMatrix": str(path / "alignment"),
-        "docsArtifactValidation": docs_val
+        "docsArtifactValidation": docs_val,
+        "deadCodeAudit": dead_code_res,
+        "executableConsolidationAudit": executable_consolidation_res
     }
     
     artifacts = [
@@ -443,11 +478,43 @@ def baseline(args):
         "git-status.txt", "git-diff.patch", "git-diff-stat.txt",
         "changed-files.json", "changed-files-by-category.json",
         "package-graph/", "alignment/",
-        "docs-artifacts/"
+        "docs-artifacts/",
+        "dead-code-audit/",
+        "executable-consolidation-audit/"
     ]
     save_artifact_manifest(path, args.task_id, "baseline", commit_hash, artifacts, extra)
     
     print(f"Baseline captured: {path}")
+
+def run_dead_code_audit(path, mode="advisory"):
+    audit_path = path / "dead-code-audit"
+    audit_path.mkdir(exist_ok=True)
+    json_out = audit_path / "findings.json"
+    proof_out = audit_path / "report.md"
+    
+    cmd = ["python3", "scripts/anigma_dead_code_audit.py", "--mode", mode, "--json-out", str(json_out), "--proof-out", str(proof_out)]
+    res, _ = run_cmd(cmd)
+    
+    return {
+        "exitCode": res.returncode if res else 2,
+        "jsonOut": str(json_out.relative_to(REPO_ROOT)),
+        "proofOut": str(proof_out.relative_to(REPO_ROOT))
+    }
+
+def run_executable_consolidation_audit(path, mode="advisory"):
+    audit_path = path / "executable-consolidation-audit"
+    audit_path.mkdir(exist_ok=True)
+    json_out = audit_path / "findings.json"
+    proof_out = audit_path / "report.md"
+    
+    cmd = ["python3", "scripts/anigma_executable_consolidation_audit.py", "--mode", mode, "--json-out", str(json_out), "--proof-out", str(proof_out), "--focus", "anigmad"]
+    res, _ = run_cmd(cmd)
+    
+    return {
+        "exitCode": res.returncode if res else 2,
+        "jsonOut": str(json_out.relative_to(REPO_ROOT)),
+        "proofOut": str(proof_out.relative_to(REPO_ROOT))
+    }
 
 def validate(args):
     commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()[:8]
@@ -457,6 +524,7 @@ def validate(args):
     tools = check_tools()
     save_tool_availability(path, tools)
     get_git_metadata(path)
+    registry_check = run_validator_registry_check(path)
     
     # Run command and capture
     print(f"Executing: {args.command}")
@@ -476,7 +544,11 @@ def validate(args):
         f.write("\n".join(errors))
     
     exit_code = result.returncode if result else 1
+    registry_failed = registry_check["exitCode"] != 0
+
     if exit_code != 0:
+        status = STATUS_FAILED
+    elif registry_failed:
         status = STATUS_FAILED
     elif len(warnings) > 0:
         status = STATUS_CONTAMINATED
@@ -488,12 +560,19 @@ def validate(args):
         "status": status,
         "duration": duration,
         "warningCount": len(warnings),
-        "errorCount": len(errors)
+        "errorCount": len(errors),
+        "validatorRegistryCheck": registry_check
     }
     with open(log_path / "build-status.json", "w") as f:
         json.dump(status_data, f, indent=2)
     
     docs_val, _, _, _ = validate_docs_artifacts(path)
+
+    # Run Dead Code Audit (Advisory)
+    dead_code_res = run_dead_code_audit(path)
+    
+    # Run Executable Consolidation Audit (Advisory)
+    executable_consolidation_res = run_executable_consolidation_audit(path)
 
     extra = {
         "commandResults": {
@@ -503,18 +582,28 @@ def validate(args):
         "buildStatus": status,
         "warningCount": len(warnings),
         "errorCount": len(errors),
-        "docsArtifactValidation": docs_val
+        "validator_registry_check_status": registry_check["status"],
+        "validator_registry_check_command": registry_check["command"],
+        "validator_registry_check_exit_code": registry_check["exitCode"],
+        "validator_registry_check_output_path": registry_check["outputPath"],
+        "validator_registry_check_failure_count": registry_check["failureCount"],
+        "docsArtifactValidation": docs_val,
+        "deadCodeAudit": dead_code_res,
+        "executableConsolidationAudit": executable_consolidation_res
     }
     
     artifacts = [
         "tool-availability.json", "tool-availability.md",
         "git-status.txt", "git-diff.patch", "git-diff-stat.txt",
         "logs/command.log", "logs/warnings.txt", "logs/errors.txt", "logs/build-status.json",
-        "docs-artifacts/"
+        "docs-artifacts/",
+        "dead-code-audit/",
+        "executable-consolidation-audit/"
     ]
     save_artifact_manifest(path, args.task_id, "validate", commit_hash, artifacts, extra)
     
     print(f"Validation completed: {path} (Status: {status})")
+    return 1 if registry_failed or exit_code != 0 else 0
 
 def review(args):
     commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()[:8]
@@ -524,6 +613,17 @@ def review(args):
     tools = check_tools()
     save_tool_availability(path, tools)
     get_git_metadata(path)
+    registry_check = run_validator_registry_check(path)
+    registry_failed = registry_check["exitCode"] != 0
+
+    review_command_result = None
+    if getattr(args, "command", None):
+        review_command_result, review_command_duration = run_cmd(args.command.split())
+        review_command_log = path / "logs" / "review-command.log"
+        with open(review_command_log, "w") as f:
+            f.write(review_command_result.stdout if review_command_result else "ERROR: Command execution failed")
+    else:
+        review_command_duration = 0
     
     changed_files = get_changed_files()
     categorized = categorize_changes(changed_files)
@@ -538,6 +638,12 @@ def review(args):
     
     docs_val, docs_json, docs_csv, docs_yaml = validate_docs_artifacts(path)
 
+    # Run Dead Code Audit (Advisory)
+    dead_code_res = run_dead_code_audit(path)
+    
+    # Run Executable Consolidation Audit (Advisory)
+    executable_consolidation_res = run_executable_consolidation_audit(path)
+
     with open(path / "review-bundle.md", "w") as f:
         f.write(f"# Review Bundle: {args.task_id}\n\n")
         f.write(f"Commit: `{commit_hash}`\n\n")
@@ -548,6 +654,14 @@ def review(args):
             for item in items:
                 f.write(f"- `{item['path']}` (Risk: {item['risk']})\n")
         
+        f.write("\n## Dead Code Audit\n")
+        f.write(f"Status: **Advisory**\n")
+        f.write(f"Report: [dead-code-audit/report.md](dead-code-audit/report.md)\n")
+        
+        f.write("\n## Executable Consolidation Audit\n")
+        f.write(f"Status: **Advisory**\n")
+        f.write(f"Report: [executable-consolidation-audit/report.md](executable-consolidation-audit/report.md)\n")
+
         f.write("\n## Forbidden Findings\n")
         if not findings:
             f.write("✅ No forbidden findings detected.\n")
@@ -583,18 +697,33 @@ def review(args):
         "changedFileCategories": categorized,
         "forbiddenFindings": findings,
         "validationResults": hook_results,
-        "docsArtifactValidation": docs_val
+        "reviewCommand": {
+            "command": getattr(args, "command", None),
+            "exitCode": review_command_result.returncode if review_command_result else None,
+            "duration": review_command_duration,
+        } if getattr(args, "command", None) else None,
+        "validator_registry_check_status": registry_check["status"],
+        "validator_registry_check_command": registry_check["command"],
+        "validator_registry_check_exit_code": registry_check["exitCode"],
+        "validator_registry_check_output_path": registry_check["outputPath"],
+        "validator_registry_check_failure_count": registry_check["failureCount"],
+        "docsArtifactValidation": docs_val,
+        "deadCodeAudit": dead_code_res,
+        "executableConsolidationAudit": executable_consolidation_res
     }
-    
+
     artifacts = [
         "tool-availability.json", "tool-availability.md",
         "git-status.txt", "git-diff.patch", "git-diff-stat.txt",
         "forbidden-findings.json", "logs/validation-hooks.json", "review-bundle.md",
-        "docs-artifacts/"
+        "docs-artifacts/",
+        "dead-code-audit/",
+        "executable-consolidation-audit/"
     ]
     save_artifact_manifest(path, args.task_id, "review", commit_hash, artifacts, extra)
     
     print(f"Review bundle generated: {path}")
+    return 1 if registry_failed else 0
 
 def diff(args):
     commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()[:8]
@@ -673,6 +802,7 @@ def main():
     # Review Parser
     rev = subparsers.add_parser("review")
     rev.add_argument("--task-id", required=True)
+    rev.add_argument("--command", required=False)
     
     # Diff Parser
     df = subparsers.add_parser("diff")
@@ -689,9 +819,9 @@ def main():
     if args.mode == "baseline":
         baseline(args)
     elif args.mode == "validate":
-        validate(args)
+        raise SystemExit(validate(args) or 0)
     elif args.mode == "review":
-        review(args)
+        raise SystemExit(review(args) or 0)
     elif args.mode == "diff":
         diff(args)
     elif args.mode == "index":

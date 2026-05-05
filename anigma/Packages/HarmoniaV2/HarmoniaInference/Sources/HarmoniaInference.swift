@@ -6,6 +6,7 @@ import Foundation
 import HarmoniaV2Core
 import AnigmaFoundation
 import InferenceCore
+import RuntimeCore
 import OSLog
 
 private let inferenceLogger = Logger(subsystem: "com.anigma.HarmoniaV2", category: "InferenceEngine")

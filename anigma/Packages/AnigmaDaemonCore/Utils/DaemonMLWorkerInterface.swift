@@ -13,22 +13,24 @@ import MLWorkerInterfaces
 public struct DaemonMLWorkerInterface: MLWorkerInterface, Sendable {
     private let mlWorkerPath: String
     private let timeoutSeconds: Int
+    private let configuration: DaemonConfiguration?
     
-    public init(mlWorkerPath: String? = nil, timeoutSeconds: Int = 120) {
+    public init(configuration: DaemonConfiguration? = nil, mlWorkerPath: String? = nil, timeoutSeconds: Int = 120) {
         // Resolve ml-worker path:
         // 1. Use provided path
-        // 2. Check ML_WORKER_PATH environment variable
-        // 3. Default to .build/debug/ml-worker relative to current directory
+        // 2. Check configuration
+        // 3. Default to .build/debug/ml-worker relative to current directory (governed)
         if let path = mlWorkerPath {
             self.mlWorkerPath = path
-        } else if let envPath = ProcessInfo.processInfo.environment["ML_WORKER_PATH"] {
-            self.mlWorkerPath = envPath
+        } else if let configPath = configuration?.daemon.mlWorkerPath {
+            self.mlWorkerPath = configPath
         } else {
-            // Default to build directory
-            let currentDir = FileManager.default.currentDirectoryPath
+            // Default to build directory via governed authority
+            let currentDir = RuntimeAuthority.shared.workingDirectory
             self.mlWorkerPath = "\(currentDir)/.build/debug/ml-worker"
         }
-        self.timeoutSeconds = timeoutSeconds
+        self.timeoutSeconds = configuration?.resources.timeoutSeconds ?? timeoutSeconds
+        self.configuration = configuration
     }
     
     public func performMLTask(
@@ -125,7 +127,11 @@ public struct DaemonMLWorkerInterface: MLWorkerInterface, Sendable {
         }
         
         // Set environment
-        process.environment = ProcessInfo.processInfo.environment
+        if let configEnv = configuration?.environment {
+            process.environment = configEnv
+        } else {
+            process.environment = ProcessInfo.processInfo.environment
+        }
         
         try process.run()
         

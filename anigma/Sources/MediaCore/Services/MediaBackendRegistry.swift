@@ -22,14 +22,14 @@ public actor MediaBackendRegistry {
         case ffmpegFallback = "fallback.ffmpeg"
     }
     
-    private let capabilityProbe: HardwareCapabilityProbe
+    private let _capabilityProbe: HardwareCapabilityProbe
     
     /// Creates a new MediaBackendRegistry with a hardware capability probe.
     /// 
     /// - Parameter capabilityProbe: The probe for checking hardware capabilities.
     ///   Defaults to a new HardwareCapabilityProbe instance.
     public init(capabilityProbe: HardwareCapabilityProbe = HardwareCapabilityProbe()) {
-        self.capabilityProbe = capabilityProbe
+        self._capabilityProbe = capabilityProbe
     }
     
     /// Selects the best executor for a given contract.
@@ -40,9 +40,9 @@ public actor MediaBackendRegistry {
     /// - Parameter contract: The media contract to select an executor for
     /// - Returns: The optimal ExecutorKind for the contract
     /// - Throws: RegistryError if no executor is available or hardware requirements are not met
-    public func selectExecutor<C: MediaContract>(for contract: C) throws -> ExecutorKind {
+    public func selectExecutor<C: MediaContract>(for contract: C) async throws -> ExecutorKind {
         if let decodeContract = contract as? VideoDecodeContract {
-            return try selectVideoDecoder(codec: decodeContract.codec)
+            return try await selectVideoDecoder(codec: decodeContract.codec)
         }
         
         if contract is VideoEncodeContract {
@@ -51,7 +51,7 @@ public actor MediaBackendRegistry {
         
         if contract is VideoScaleContract {
             // Check if Metal is available for GPU processing
-            if capabilityProbe.supportsMetalPerformanceShaders() {
+            if await _capabilityProbe.supportsMetalPerformanceShaders() {
                 return .metal
             }
             // Fall back to CPU-based scaling
@@ -60,7 +60,7 @@ public actor MediaBackendRegistry {
         
         if contract is AudioMixContract {
             // Check if Accelerate DSP is available
-            if capabilityProbe.supportsAudioDSP() {
+            if await _capabilityProbe.supportsAudioDSP() {
                 return .accelerate
             }
             throw RegistryError.hardwareRequirementNotMet("Accelerate framework not available")
@@ -83,7 +83,7 @@ public actor MediaBackendRegistry {
     /// 
     /// - Parameter codec: The video codec identifier
     /// - Returns: The optimal ExecutorKind for the codec
-    private func selectVideoDecoder(codec: String) throws -> ExecutorKind {
+    private func selectVideoDecoder(codec: String) async throws -> ExecutorKind {
         let codecLower = codec.lowercased()
         
         // Check hardware support for specific codecs
@@ -94,7 +94,7 @@ public actor MediaBackendRegistry {
             
         case "av1":
             // AV1 requires explicit capability check (Phase 2)
-            if capabilityProbe.supportsHardwareDecode(for: codecLower) {
+            if await _capabilityProbe.supportsHardwareDecode(for: codecLower) {
                 return .videoToolbox
             } else {
                 // Fall through to FFmpeg
@@ -103,7 +103,7 @@ public actor MediaBackendRegistry {
             
         case "prores":
             // ProRes requires checking if available
-            if capabilityProbe.supportsHardwareDecode(for: codecLower) {
+            if await _capabilityProbe.supportsHardwareDecode(for: codecLower) {
                 return .videoToolbox
             } else {
                 return .ffmpegFallback
@@ -111,7 +111,7 @@ public actor MediaBackendRegistry {
             
         case "vp9":
             // VP9 hardware decode on Apple Silicon M2+
-            if capabilityProbe.supportsHardwareDecode(for: codecLower) {
+            if await _capabilityProbe.supportsHardwareDecode(for: codecLower) {
                 return .videoToolbox
             } else {
                 return .ffmpegFallback
@@ -125,7 +125,7 @@ public actor MediaBackendRegistry {
     }
     
     /// Returns the HardwareCapabilityProbe used by this registry.
-    public func capabilityProbe() -> HardwareCapabilityProbe {
-        return capabilityProbe
+    public func getCapabilityProbe() -> HardwareCapabilityProbe {
+        return _capabilityProbe
     }
 }

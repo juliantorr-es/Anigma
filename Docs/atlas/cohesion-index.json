@@ -1,0 +1,28 @@
+[
+  {
+    "authority_count": 0,
+    "bottleneck_score": 416049,
+    "flow_count": 14431,
+    "hardcoded_path_config_count": 590,
+    "high_risk_state_count": 13996,
+    "risk_density": 33.688,
+    "singleton_count": 5,
+    "state_count": 92056,
+    "target_or_module": "Workflows",
+    "typealias_count": 673,
+    "worker_service_count": 0
+  },
+  {
+    "authority_count": 0,
+    "bottleneck_score": 929,
+    "flow_count": 235,
+    "hardcoded_path_config_count": 5,
+    "high_risk_state_count": 1,
+    "risk_density": 72.5,
+    "singleton_count": 0,
+    "state_count": 55,
+    "target_or_module": "VizAggregationNative",
+    "typealias_count": 0,
+    "worker_service_count": 0
+  }
+]

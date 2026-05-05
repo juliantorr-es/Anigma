@@ -1,0 +1,20 @@
+name: local-fast
+description: Quick local validation lane for script and atlas health.
+continue_on_known_blocked_required: false
+steps:
+  - id: git-hygiene-status
+    command: python3 scripts/anigma_git_hygiene.py status
+    required: false
+    description: Capture Git hygiene status.
+  - id: py-compile
+    command: python3 -m py_compile scripts/anigma_pipeline.py scripts/anigma_validate_scope.py scripts/anigma_result_contract.py scripts/anigma_common/*.py
+    required: true
+    description: Syntax-check core pipeline scripts.
+  - id: task-brief-tests
+    command: python3 scripts/test_task_brief_generator.py
+    required: true
+    description: Validate task brief generation.
+  - id: atlas-check
+    command: python3 scripts/anigma_context_query.py --check
+    required: true
+    description: Verify atlas presence.
